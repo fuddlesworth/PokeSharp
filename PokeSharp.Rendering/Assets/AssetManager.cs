@@ -1,5 +1,5 @@
-using Microsoft.Xna.Framework.Graphics;
 using System.Text.Json;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace PokeSharp.Rendering.Assets;
 
@@ -43,7 +43,8 @@ public class AssetManager : IDisposable
 
         // Use case-insensitive deserialization to match lowercase JSON keys with PascalCase C# properties
         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        _manifest = JsonSerializer.Deserialize<AssetManifest>(json, options)
+        _manifest =
+            JsonSerializer.Deserialize<AssetManifest>(json, options)
             ?? throw new InvalidOperationException("Failed to deserialize asset manifest");
 
         Console.WriteLine($"🔍 Deserialized manifest:");
@@ -59,7 +60,9 @@ public class AssetManager : IDisposable
             {
                 try
                 {
-                    Console.WriteLine($"   → Loading tileset '{tileset.Id}' from '{tileset.Path}'...");
+                    Console.WriteLine(
+                        $"   → Loading tileset '{tileset.Id}' from '{tileset.Path}'..."
+                    );
                     LoadTexture(tileset.Id, tileset.Path);
                     Console.WriteLine($"   ✅ Tileset '{tileset.Id}' loaded successfully");
                 }
@@ -126,7 +129,9 @@ public class AssetManager : IDisposable
             return texture;
         }
 
-        throw new KeyNotFoundException($"Texture '{id}' not loaded. Available textures: {string.Join(", ", _textures.Keys)}");
+        throw new KeyNotFoundException(
+            $"Texture '{id}' not loaded. Available textures: {string.Join(", ", _textures.Keys)}"
+        );
     }
 
     /// <summary>
@@ -147,7 +152,9 @@ public class AssetManager : IDisposable
     {
         if (!_textures.ContainsKey(id))
         {
-            throw new KeyNotFoundException($"Cannot hot-reload texture '{id}' - not originally loaded");
+            throw new KeyNotFoundException(
+                $"Cannot hot-reload texture '{id}' - not originally loaded"
+            );
         }
 
         if (_manifest == null)
@@ -159,7 +166,9 @@ public class AssetManager : IDisposable
         var tilesetEntry = _manifest.Tilesets?.FirstOrDefault(t => t.Id == id);
         var spriteEntry = _manifest.Sprites?.FirstOrDefault(s => s.Id == id);
 
-        var path = tilesetEntry?.Path ?? spriteEntry?.Path
+        var path =
+            tilesetEntry?.Path
+            ?? spriteEntry?.Path
             ?? throw new KeyNotFoundException($"Texture '{id}' not found in manifest");
 
         // Dispose old texture

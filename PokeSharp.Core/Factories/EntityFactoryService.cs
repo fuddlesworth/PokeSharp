@@ -14,9 +14,7 @@ public sealed class EntityFactoryService : IEntityFactoryService
     private readonly TemplateCache _templateCache;
     private readonly ILogger<EntityFactoryService> _logger;
 
-    public EntityFactoryService(
-        TemplateCache templateCache,
-        ILogger<EntityFactoryService> logger)
+    public EntityFactoryService(TemplateCache templateCache, ILogger<EntityFactoryService> logger)
     {
         _templateCache = templateCache ?? throw new ArgumentNullException(nameof(templateCache));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -27,7 +25,8 @@ public sealed class EntityFactoryService : IEntityFactoryService
         string templateId,
         World world,
         EntitySpawnContext? context = null,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(templateId, nameof(templateId));
         ArgumentNullException.ThrowIfNull(world, nameof(world));
@@ -37,17 +36,24 @@ public sealed class EntityFactoryService : IEntityFactoryService
         if (template == null)
         {
             _logger.LogError("Template not found: {TemplateId}", templateId);
-            throw new ArgumentException($"Template '{templateId}' not found in cache", nameof(templateId));
+            throw new ArgumentException(
+                $"Template '{templateId}' not found in cache",
+                nameof(templateId)
+            );
         }
 
         // Validate template before spawning
         var validationResult = ValidateTemplateInternal(template);
         if (!validationResult.IsValid)
         {
-            _logger.LogError("Template validation failed for {TemplateId}: {Errors}",
-                templateId, string.Join(", ", validationResult.Errors));
+            _logger.LogError(
+                "Template validation failed for {TemplateId}: {Errors}",
+                templateId,
+                string.Join(", ", validationResult.Errors)
+            );
             throw new InvalidOperationException(
-                $"Template '{templateId}' is invalid: {string.Join(", ", validationResult.Errors)}");
+                $"Template '{templateId}' is invalid: {string.Join(", ", validationResult.Errors)}"
+            );
         }
 
         // Build component array from template
@@ -56,8 +62,12 @@ public sealed class EntityFactoryService : IEntityFactoryService
         // Create entity with components
         var entity = world.Create(components.ToArray());
 
-        _logger.LogDebug("Spawned entity {EntityId} from template {TemplateId} with {ComponentCount} components",
-            entity.Id, templateId, components.Count);
+        _logger.LogDebug(
+            "Spawned entity {EntityId} from template {TemplateId} with {ComponentCount} components",
+            entity.Id,
+            templateId,
+            components.Count
+        );
 
         return await Task.FromResult(entity);
     }
@@ -67,7 +77,8 @@ public sealed class EntityFactoryService : IEntityFactoryService
         string templateId,
         World world,
         Action<EntityBuilder> configure,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(templateId, nameof(templateId));
         ArgumentNullException.ThrowIfNull(world, nameof(world));
@@ -84,7 +95,8 @@ public sealed class EntityFactoryService : IEntityFactoryService
             Tag = builder.Tag,
             Overrides = builder.ComponentOverrides.ToDictionary(
                 kvp => kvp.Key.Name,
-                kvp => kvp.Value)
+                kvp => kvp.Value
+            ),
         };
 
         // Add custom properties if any
@@ -92,7 +104,8 @@ public sealed class EntityFactoryService : IEntityFactoryService
         {
             context.Metadata = builder.CustomProperties.ToDictionary(
                 kvp => kvp.Key,
-                kvp => kvp.Value);
+                kvp => kvp.Value
+            );
         }
 
         return await SpawnFromTemplateAsync(templateId, world, context, cancellationToken);
@@ -102,7 +115,8 @@ public sealed class EntityFactoryService : IEntityFactoryService
     public async Task<IEnumerable<Entity>> SpawnBatchAsync(
         IEnumerable<string> templateIds,
         World world,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         ArgumentNullException.ThrowIfNull(templateIds, nameof(templateIds));
         ArgumentNullException.ThrowIfNull(world, nameof(world));
@@ -118,12 +132,21 @@ public sealed class EntityFactoryService : IEntityFactoryService
 
             try
             {
-                var entity = await SpawnFromTemplateAsync(templateId, world, (EntitySpawnContext?)null, cancellationToken);
+                var entity = await SpawnFromTemplateAsync(
+                    templateId,
+                    world,
+                    (EntitySpawnContext?)null,
+                    cancellationToken
+                );
                 entities.Add(entity);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to spawn entity from template {TemplateId}", templateId);
+                _logger.LogError(
+                    ex,
+                    "Failed to spawn entity from template {TemplateId}",
+                    templateId
+                );
                 throw;
             }
         }
@@ -140,8 +163,7 @@ public sealed class EntityFactoryService : IEntityFactoryService
         var template = _templateCache.Get(templateId);
         if (template == null)
         {
-            return TemplateValidationResult.Failure(
-                $"Template '{templateId}' not found in cache");
+            return TemplateValidationResult.Failure($"Template '{templateId}' not found in cache");
         }
 
         return ValidateTemplateInternal(template);
@@ -171,7 +193,10 @@ public sealed class EntityFactoryService : IEntityFactoryService
             : TemplateValidationResult.Failure(template.TemplateId, errors.ToArray());
     }
 
-    private static List<object> BuildComponentArray(EntityTemplate template, EntitySpawnContext? context)
+    private static List<object> BuildComponentArray(
+        EntityTemplate template,
+        EntitySpawnContext? context
+    )
     {
         var components = new List<object>();
 
@@ -179,8 +204,10 @@ public sealed class EntityFactoryService : IEntityFactoryService
         {
             // Check if context has override for this component
             var componentTypeName = componentTemplate.ComponentType.Name;
-            if (context?.Overrides != null &&
-                context.Overrides.TryGetValue(componentTypeName, out var overrideData))
+            if (
+                context?.Overrides != null
+                && context.Overrides.TryGetValue(componentTypeName, out var overrideData)
+            )
             {
                 // Use override data
                 components.Add(overrideData);

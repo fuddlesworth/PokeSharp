@@ -21,7 +21,8 @@ public interface IEntityFactoryService
         string templateId,
         World world,
         EntitySpawnContext? context = null,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default
+    );
 
     /// <summary>
     /// Spawn an entity with fluent configuration.
@@ -36,7 +37,8 @@ public interface IEntityFactoryService
         string templateId,
         World world,
         Action<EntityBuilder> configure,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default
+    );
 
     /// <summary>
     /// Spawn multiple entities from templates in batch (optimized).
@@ -49,7 +51,8 @@ public interface IEntityFactoryService
     Task<IEnumerable<Entity>> SpawnBatchAsync(
         IEnumerable<string> templateIds,
         World world,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default
+    );
 
     /// <summary>
     /// Validate a template before spawning.

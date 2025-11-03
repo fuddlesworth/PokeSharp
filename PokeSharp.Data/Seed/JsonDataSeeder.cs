@@ -14,30 +14,35 @@ public sealed class JsonDataSeeder : IDataSeeder
     private readonly JsonSerializerOptions _jsonOptions;
     private readonly string _defaultDataPath;
 
-    public JsonDataSeeder(
-        ILogger<JsonDataSeeder> logger,
-        string defaultDataPath = "data")
+    public JsonDataSeeder(ILogger<JsonDataSeeder> logger, string defaultDataPath = "data")
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _defaultDataPath = defaultDataPath ?? throw new ArgumentNullException(nameof(defaultDataPath));
+        _defaultDataPath =
+            defaultDataPath ?? throw new ArgumentNullException(nameof(defaultDataPath));
 
         _jsonOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
             ReadCommentHandling = JsonCommentHandling.Skip,
             AllowTrailingCommas = true,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         };
     }
 
     /// <inheritdoc/>
     public async Task<int> SeedAsync(CancellationToken cancellationToken = default)
     {
-        _logger.LogInformation("Starting data seeding from default path: {DataPath}", _defaultDataPath);
+        _logger.LogInformation(
+            "Starting data seeding from default path: {DataPath}",
+            _defaultDataPath
+        );
 
         if (!Directory.Exists(_defaultDataPath))
         {
-            _logger.LogWarning("Data directory not found: {DataPath}. Creating empty directory.", _defaultDataPath);
+            _logger.LogWarning(
+                "Data directory not found: {DataPath}. Creating empty directory.",
+                _defaultDataPath
+            );
             Directory.CreateDirectory(_defaultDataPath);
             return 0;
         }
@@ -48,7 +53,8 @@ public sealed class JsonDataSeeder : IDataSeeder
     /// <inheritdoc/>
     public async Task<int> SeedFromDirectoryAsync(
         string directoryPath,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(directoryPath, nameof(directoryPath));
 
@@ -59,7 +65,11 @@ public sealed class JsonDataSeeder : IDataSeeder
         }
 
         var jsonFiles = Directory.GetFiles(directoryPath, "*.json", SearchOption.AllDirectories);
-        _logger.LogInformation("Found {FileCount} JSON files in {DirectoryPath}", jsonFiles.Length, directoryPath);
+        _logger.LogInformation(
+            "Found {FileCount} JSON files in {DirectoryPath}",
+            jsonFiles.Length,
+            directoryPath
+        );
 
         var totalSeeded = 0;
 
@@ -79,14 +89,18 @@ public sealed class JsonDataSeeder : IDataSeeder
             }
         }
 
-        _logger.LogInformation("Seeding complete. Total entities seeded: {TotalSeeded}", totalSeeded);
+        _logger.LogInformation(
+            "Seeding complete. Total entities seeded: {TotalSeeded}",
+            totalSeeded
+        );
         return totalSeeded;
     }
 
     /// <inheritdoc/>
     public async Task<int> SeedFromFileAsync(
         string filePath,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(filePath, nameof(filePath));
 
@@ -122,7 +136,8 @@ public sealed class JsonDataSeeder : IDataSeeder
     /// <inheritdoc/>
     public async Task<DataValidationResult> ValidateAsync(
         string directoryPath,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(directoryPath, nameof(directoryPath));
 
@@ -146,11 +161,14 @@ public sealed class JsonDataSeeder : IDataSeeder
                 var json = await File.ReadAllTextAsync(jsonFile, cancellationToken);
 
                 // Try to parse JSON to validate syntax
-                using var document = JsonDocument.Parse(json, new JsonDocumentOptions
-                {
-                    AllowTrailingCommas = true,
-                    CommentHandling = JsonCommentHandling.Skip
-                });
+                using var document = JsonDocument.Parse(
+                    json,
+                    new JsonDocumentOptions
+                    {
+                        AllowTrailingCommas = true,
+                        CommentHandling = JsonCommentHandling.Skip,
+                    }
+                );
 
                 // Additional validation can be added here
                 // For example, checking required fields, data types, etc.
@@ -173,8 +191,11 @@ public sealed class JsonDataSeeder : IDataSeeder
         }
         else
         {
-            _logger.LogWarning("Validation found {ErrorCount} errors in {FileCount} files",
-                errors.Count, jsonFiles.Length);
+            _logger.LogWarning(
+                "Validation found {ErrorCount} errors in {FileCount} files",
+                errors.Count,
+                jsonFiles.Length
+            );
         }
 
         return new DataValidationResult
@@ -182,7 +203,7 @@ public sealed class JsonDataSeeder : IDataSeeder
             IsValid = isValid,
             Errors = errors,
             Warnings = warnings,
-            FilesChecked = jsonFiles.Length
+            FilesChecked = jsonFiles.Length,
         };
     }
 
@@ -191,7 +212,8 @@ public sealed class JsonDataSeeder : IDataSeeder
     private async Task<int> SeedArrayAsync(
         string json,
         string filePath,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         // For now, just parse and count
         // In a real implementation, this would deserialize to specific entity types
@@ -199,8 +221,11 @@ public sealed class JsonDataSeeder : IDataSeeder
         using var document = JsonDocument.Parse(json);
         var arrayLength = document.RootElement.GetArrayLength();
 
-        _logger.LogDebug("Parsed array with {Count} entities from {FilePath}",
-            arrayLength, Path.GetFileName(filePath));
+        _logger.LogDebug(
+            "Parsed array with {Count} entities from {FilePath}",
+            arrayLength,
+            Path.GetFileName(filePath)
+        );
 
         return await Task.FromResult(arrayLength);
     }
@@ -208,15 +233,15 @@ public sealed class JsonDataSeeder : IDataSeeder
     private async Task<int> SeedSingleAsync(
         string json,
         string filePath,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         // For now, just parse and validate
         // In a real implementation, this would deserialize to specific entity type
         // and insert into the database
         using var document = JsonDocument.Parse(json);
 
-        _logger.LogDebug("Parsed single entity from {FilePath}",
-            Path.GetFileName(filePath));
+        _logger.LogDebug("Parsed single entity from {FilePath}", Path.GetFileName(filePath));
 
         return await Task.FromResult(1);
     }

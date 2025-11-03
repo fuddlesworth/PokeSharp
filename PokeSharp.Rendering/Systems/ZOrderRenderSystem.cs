@@ -21,7 +21,7 @@ public class ZOrderRenderSystem : BaseSystem
 {
     private const int TileSize = 16;
     private const float MaxRenderDistance = 10000f; // Maximum Y coordinate for normalization
-    
+
     // Layer indices where sprites should be rendered (between object and overhead layers)
     private const int SpriteRenderAfterLayer = 1; // Render sprites after layer index 1 (Objects)
 
@@ -37,7 +37,11 @@ public class ZOrderRenderSystem : BaseSystem
     /// <param name="graphicsDevice">The graphics device for rendering.</param>
     /// <param name="assetManager">Asset manager for texture loading.</param>
     /// <param name="logger">Optional logger for debug output.</param>
-    public ZOrderRenderSystem(GraphicsDevice graphicsDevice, AssetManager assetManager, ILogger<ZOrderRenderSystem>? logger = null)
+    public ZOrderRenderSystem(
+        GraphicsDevice graphicsDevice,
+        AssetManager assetManager,
+        ILogger<ZOrderRenderSystem>? logger = null
+    )
     {
         _graphicsDevice = graphicsDevice ?? throw new ArgumentNullException(nameof(graphicsDevice));
         _assetManager = assetManager ?? throw new ArgumentNullException(nameof(assetManager));
@@ -57,25 +61,36 @@ public class ZOrderRenderSystem : BaseSystem
             _frameCounter++;
 
             _logger?.LogDebug("═══════════════════════════════════════════════════");
-            _logger?.LogDebug("ZOrderRenderSystem - Frame {FrameCounter} - Starting Z-order rendering", _frameCounter);
+            _logger?.LogDebug(
+                "ZOrderRenderSystem - Frame {FrameCounter} - Starting Z-order rendering",
+                _frameCounter
+            );
             _logger?.LogDebug("═══════════════════════════════════════════════════");
 
             // Get camera transform matrix (if camera exists)
             Matrix cameraTransform = Matrix.Identity;
             var cameraQuery = new QueryDescription().WithAll<Player, Camera>();
-            world.Query(in cameraQuery, (ref Camera camera) =>
-            {
-                cameraTransform = camera.GetTransformMatrix();
-                _logger?.LogDebug("Camera transform applied: Position=({X:F1}, {Y:F1}), Zoom={Zoom:F2}x",
-                    camera.Position.X, camera.Position.Y, camera.Zoom);
-            });
+            world.Query(
+                in cameraQuery,
+                (ref Camera camera) =>
+                {
+                    cameraTransform = camera.GetTransformMatrix();
+                    _logger?.LogDebug(
+                        "Camera transform applied: Position=({X:F1}, {Y:F1}), Zoom={Zoom:F2}x",
+                        camera.Position.X,
+                        camera.Position.Y,
+                        camera.Zoom
+                    );
+                }
+            );
 
             // Begin sprite batch with BackToFront sorting for proper Z-ordering
             _spriteBatch.Begin(
                 sortMode: SpriteSortMode.BackToFront,
                 blendState: BlendState.AlphaBlend,
                 samplerState: SamplerState.PointClamp,
-                transformMatrix: cameraTransform);
+                transformMatrix: cameraTransform
+            );
 
             _logger?.LogDebug("SpriteBatch started (BackToFront, AlphaBlend, PointClamp)");
 
@@ -83,33 +98,52 @@ public class ZOrderRenderSystem : BaseSystem
             int tileMapCount = 0;
             int totalTilesRendered = 0;
             var tileMapQuery = new QueryDescription().WithAll<TileMap>();
-            
-            world.Query(in tileMapQuery, (ref TileMap tileMap) =>
-            {
-                tileMapCount++;
-                totalTilesRendered += RenderTileMap(ref tileMap);
-            });
 
-            _logger?.LogDebug("Rendered {TileMapCount} tile maps with {TotalTiles} tiles", tileMapCount, totalTilesRendered);
+            world.Query(
+                in tileMapQuery,
+                (ref TileMap tileMap) =>
+                {
+                    tileMapCount++;
+                    totalTilesRendered += RenderTileMap(ref tileMap);
+                }
+            );
+
+            _logger?.LogDebug(
+                "Rendered {TileMapCount} tile maps with {TotalTiles} tiles",
+                tileMapCount,
+                totalTilesRendered
+            );
 
             // Render all sprites (player, NPCs, objects)
             int spriteCount = 0;
-            
+
             // Query for entities WITH GridMovement (moving entities)
-            var movingSpriteQuery = new QueryDescription().WithAll<Position, Sprite, GridMovement>();
-            world.Query(in movingSpriteQuery, (ref Position position, ref Sprite sprite, ref GridMovement movement) =>
-            {
-                spriteCount++;
-                RenderMovingSprite(ref position, ref sprite, ref movement);
-            });
-            
+            var movingSpriteQuery = new QueryDescription().WithAll<
+                Position,
+                Sprite,
+                GridMovement
+            >();
+            world.Query(
+                in movingSpriteQuery,
+                (ref Position position, ref Sprite sprite, ref GridMovement movement) =>
+                {
+                    spriteCount++;
+                    RenderMovingSprite(ref position, ref sprite, ref movement);
+                }
+            );
+
             // Query for entities WITHOUT GridMovement (static sprites)
-            var staticSpriteQuery = new QueryDescription().WithAll<Position, Sprite>().WithNone<GridMovement>();
-            world.Query(in staticSpriteQuery, (ref Position position, ref Sprite sprite) =>
-            {
-                spriteCount++;
-                RenderStaticSprite(ref position, ref sprite);
-            });
+            var staticSpriteQuery = new QueryDescription()
+                .WithAll<Position, Sprite>()
+                .WithNone<GridMovement>();
+            world.Query(
+                in staticSpriteQuery,
+                (ref Position position, ref Sprite sprite) =>
+                {
+                    spriteCount++;
+                    RenderStaticSprite(ref position, ref sprite);
+                }
+            );
 
             _logger?.LogDebug("Rendered {SpriteCount} sprites", spriteCount);
 
@@ -117,12 +151,19 @@ public class ZOrderRenderSystem : BaseSystem
             _spriteBatch.End();
 
             _logger?.LogDebug("───────────────────────────────────────────────────");
-            _logger?.LogDebug("ZOrderRenderSystem - Frame {FrameCounter} - Completed", _frameCounter);
+            _logger?.LogDebug(
+                "ZOrderRenderSystem - Frame {FrameCounter} - Completed",
+                _frameCounter
+            );
             _logger?.LogDebug("═══════════════════════════════════════════════════");
         }
         catch (Exception ex)
         {
-            _logger?.LogError(ex, "❌ CRITICAL ERROR in ZOrderRenderSystem.Update (Frame {FrameCounter})", _frameCounter);
+            _logger?.LogError(
+                ex,
+                "❌ CRITICAL ERROR in ZOrderRenderSystem.Update (Frame {FrameCounter})",
+                _frameCounter
+            );
             throw;
         }
     }
@@ -131,13 +172,20 @@ public class ZOrderRenderSystem : BaseSystem
     {
         try
         {
-            _logger?.LogDebug("  → TileMap: TilesetId='{TilesetId}', Size={Width}x{Height} tiles",
-                tileMap.TilesetId, tileMap.Width, tileMap.Height);
+            _logger?.LogDebug(
+                "  → TileMap: TilesetId='{TilesetId}', Size={Width}x{Height} tiles",
+                tileMap.TilesetId,
+                tileMap.Width,
+                tileMap.Height
+            );
 
             // Get tileset texture
             if (!_assetManager.HasTexture(tileMap.TilesetId))
             {
-                _logger?.LogWarning("    ⚠️  Tileset '{TilesetId}' NOT FOUND in AssetManager - skipping", tileMap.TilesetId);
+                _logger?.LogWarning(
+                    "    ⚠️  Tileset '{TilesetId}' NOT FOUND in AssetManager - skipping",
+                    tileMap.TilesetId
+                );
                 return 0;
             }
 
@@ -152,27 +200,62 @@ public class ZOrderRenderSystem : BaseSystem
 
             // Layer 0: Ground (rendered flat)
             _logger?.LogDebug("    Rendering GROUND layer (flat, at back)...");
-            tilesRendered += RenderFlatLayer(tileMap.GroundLayer, tileMap.Width, tileMap.Height, tilesetTexture, tilesPerRow, 0.95f, "Ground");
+            tilesRendered += RenderFlatLayer(
+                tileMap.GroundLayer,
+                tileMap.Width,
+                tileMap.Height,
+                tilesetTexture,
+                tilesPerRow,
+                0.95f,
+                "Ground"
+            );
 
             // Layer 1: Objects (Y-sorted, will be rendered with sprites)
             _logger?.LogDebug("    Rendering OBJECT layer (Y-sorted with sprites)...");
-            tilesRendered += RenderYSortedLayer(tileMap.ObjectLayer, tileMap.Width, tileMap.Height, tilesetTexture, tilesPerRow, "Object");
+            tilesRendered += RenderYSortedLayer(
+                tileMap.ObjectLayer,
+                tileMap.Width,
+                tileMap.Height,
+                tilesetTexture,
+                tilesPerRow,
+                "Object"
+            );
 
             // Layer 2: Overhead (rendered flat on top)
             _logger?.LogDebug("    Rendering OVERHEAD layer (flat, on top)...");
-            tilesRendered += RenderFlatLayer(tileMap.OverheadLayer, tileMap.Width, tileMap.Height, tilesetTexture, tilesPerRow, 0.05f, "Overhead");
+            tilesRendered += RenderFlatLayer(
+                tileMap.OverheadLayer,
+                tileMap.Width,
+                tileMap.Height,
+                tilesetTexture,
+                tilesPerRow,
+                0.05f,
+                "Overhead"
+            );
 
             _logger?.LogDebug("    ✓ TileMap rendered: {TilesRendered} tiles", tilesRendered);
             return tilesRendered;
         }
         catch (Exception ex)
         {
-            _logger?.LogError(ex, "    ❌ ERROR rendering tilemap with TilesetId '{TilesetId}'", tileMap.TilesetId);
+            _logger?.LogError(
+                ex,
+                "    ❌ ERROR rendering tilemap with TilesetId '{TilesetId}'",
+                tileMap.TilesetId
+            );
             return 0;
         }
     }
 
-    private int RenderFlatLayer(int[,] layer, int mapWidth, int mapHeight, Texture2D tilesetTexture, int tilesPerRow, float layerDepth, string layerName)
+    private int RenderFlatLayer(
+        int[,] layer,
+        int mapWidth,
+        int mapHeight,
+        Texture2D tilesetTexture,
+        int tilesPerRow,
+        float layerDepth,
+        string layerName
+    )
     {
         int tilesRendered = 0;
 
@@ -181,10 +264,12 @@ public class ZOrderRenderSystem : BaseSystem
             for (int x = 0; x < mapWidth; x++)
             {
                 int tileId = layer[y, x];
-                if (tileId == 0) continue; // Skip empty tiles
+                if (tileId == 0)
+                    continue; // Skip empty tiles
 
                 var sourceRect = GetTileSourceRect(tileId, TileSize, tilesPerRow);
-                if (sourceRect.IsEmpty) continue;
+                if (sourceRect.IsEmpty)
+                    continue;
 
                 var position = new Vector2(x * TileSize, y * TileSize);
 
@@ -198,19 +283,31 @@ public class ZOrderRenderSystem : BaseSystem
                     origin: Vector2.Zero,
                     scale: 1f,
                     effects: SpriteEffects.None,
-                    layerDepth: layerDepth);
+                    layerDepth: layerDepth
+                );
 
                 tilesRendered++;
             }
         }
 
-        _logger?.LogDebug("      {LayerName} layer: {Rendered} tiles rendered at layerDepth={LayerDepth:F2}",
-            layerName, tilesRendered, layerDepth);
+        _logger?.LogDebug(
+            "      {LayerName} layer: {Rendered} tiles rendered at layerDepth={LayerDepth:F2}",
+            layerName,
+            tilesRendered,
+            layerDepth
+        );
 
         return tilesRendered;
     }
 
-    private int RenderYSortedLayer(int[,] layer, int mapWidth, int mapHeight, Texture2D tilesetTexture, int tilesPerRow, string layerName)
+    private int RenderYSortedLayer(
+        int[,] layer,
+        int mapWidth,
+        int mapHeight,
+        Texture2D tilesetTexture,
+        int tilesPerRow,
+        string layerName
+    )
     {
         int tilesRendered = 0;
 
@@ -219,18 +316,24 @@ public class ZOrderRenderSystem : BaseSystem
             for (int x = 0; x < mapWidth; x++)
             {
                 int tileId = layer[y, x];
-                if (tileId == 0) continue; // Skip empty tiles
+                if (tileId == 0)
+                    continue; // Skip empty tiles
 
                 var sourceRect = GetTileSourceRect(tileId, TileSize, tilesPerRow);
                 if (sourceRect.IsEmpty)
                 {
-                    _logger?.LogWarning("      ⚠️  Invalid tile ID {TileId} at ({X}, {Y}) in {LayerName} layer",
-                        tileId, x, y, layerName);
+                    _logger?.LogWarning(
+                        "      ⚠️  Invalid tile ID {TileId} at ({X}, {Y}) in {LayerName} layer",
+                        tileId,
+                        x,
+                        y,
+                        layerName
+                    );
                     continue;
                 }
 
                 var position = new Vector2(x * TileSize, y * TileSize);
-                
+
                 // Calculate layer depth based on Y position (bottom of tile)
                 // This makes tiles sort with sprites based on Y position
                 float yBottom = position.Y + TileSize;
@@ -245,33 +348,51 @@ public class ZOrderRenderSystem : BaseSystem
                     origin: Vector2.Zero,
                     scale: 1f,
                     effects: SpriteEffects.None,
-                    layerDepth: layerDepth);
+                    layerDepth: layerDepth
+                );
 
                 tilesRendered++;
 
                 // Log first few tiles for debugging
                 if (tilesRendered <= 2)
                 {
-                    _logger?.LogDebug("      {LayerName} Tile: ID={TileId}, Pos=({X},{Y}), YBottom={YBottom}, LayerDepth={LayerDepth:F4}",
-                        layerName, tileId, x, y, yBottom, layerDepth);
+                    _logger?.LogDebug(
+                        "      {LayerName} Tile: ID={TileId}, Pos=({X},{Y}), YBottom={YBottom}, LayerDepth={LayerDepth:F4}",
+                        layerName,
+                        tileId,
+                        x,
+                        y,
+                        yBottom,
+                        layerDepth
+                    );
                 }
             }
         }
 
-        _logger?.LogDebug("      {LayerName} layer: {Rendered} tiles rendered (Y-sorted)",
-            layerName, tilesRendered);
+        _logger?.LogDebug(
+            "      {LayerName} layer: {Rendered} tiles rendered (Y-sorted)",
+            layerName,
+            tilesRendered
+        );
 
         return tilesRendered;
     }
 
-    private void RenderMovingSprite(ref Position position, ref Sprite sprite, ref GridMovement movement)
+    private void RenderMovingSprite(
+        ref Position position,
+        ref Sprite sprite,
+        ref GridMovement movement
+    )
     {
         try
         {
             // Get texture from AssetManager
             if (!_assetManager.HasTexture(sprite.TextureId))
             {
-                _logger?.LogWarning("    ⚠️  Texture '{TextureId}' NOT FOUND in AssetManager - skipping sprite", sprite.TextureId);
+                _logger?.LogWarning(
+                    "    ⚠️  Texture '{TextureId}' NOT FOUND in AssetManager - skipping sprite",
+                    sprite.TextureId
+                );
                 return;
             }
 
@@ -304,7 +425,7 @@ public class ZOrderRenderSystem : BaseSystem
                 // Use current grid position
                 groundY = (position.Y + 1) * TileSize;
             }
-            
+
             float layerDepth = CalculateYSortDepth(groundY);
 
             // Draw sprite
@@ -317,15 +438,27 @@ public class ZOrderRenderSystem : BaseSystem
                 origin: sprite.Origin,
                 scale: sprite.Scale,
                 effects: SpriteEffects.None,
-                layerDepth: layerDepth);
+                layerDepth: layerDepth
+            );
 
-            _logger?.LogDebug("    Moving Sprite: TextureId='{TextureId}', RenderPos=({X:F1},{Y:F1}), GroundY={GroundY:F1}, LayerDepth={LayerDepth:F4}",
-                sprite.TextureId, position.PixelX, position.PixelY, groundY, layerDepth);
+            _logger?.LogDebug(
+                "    Moving Sprite: TextureId='{TextureId}', RenderPos=({X:F1},{Y:F1}), GroundY={GroundY:F1}, LayerDepth={LayerDepth:F4}",
+                sprite.TextureId,
+                position.PixelX,
+                position.PixelY,
+                groundY,
+                layerDepth
+            );
         }
         catch (Exception ex)
         {
-            _logger?.LogError(ex, "    ❌ ERROR rendering moving sprite with TextureId '{TextureId}' at position ({X}, {Y})",
-                sprite.TextureId, position.PixelX, position.PixelY);
+            _logger?.LogError(
+                ex,
+                "    ❌ ERROR rendering moving sprite with TextureId '{TextureId}' at position ({X}, {Y})",
+                sprite.TextureId,
+                position.PixelX,
+                position.PixelY
+            );
         }
     }
 
@@ -336,7 +469,10 @@ public class ZOrderRenderSystem : BaseSystem
             // Get texture from AssetManager
             if (!_assetManager.HasTexture(sprite.TextureId))
             {
-                _logger?.LogWarning("    ⚠️  Texture '{TextureId}' NOT FOUND in AssetManager - skipping sprite", sprite.TextureId);
+                _logger?.LogWarning(
+                    "    ⚠️  Texture '{TextureId}' NOT FOUND in AssetManager - skipping sprite",
+                    sprite.TextureId
+                );
                 return;
             }
 
@@ -374,15 +510,27 @@ public class ZOrderRenderSystem : BaseSystem
                 origin: sprite.Origin,
                 scale: sprite.Scale,
                 effects: SpriteEffects.None,
-                layerDepth: layerDepth);
+                layerDepth: layerDepth
+            );
 
-            _logger?.LogDebug("    Sprite: TextureId='{TextureId}', RenderPos=({X:F1},{Y:F1}), GroundY={GroundY:F1}, LayerDepth={LayerDepth:F4}",
-                sprite.TextureId, position.PixelX, position.PixelY, groundY, layerDepth);
+            _logger?.LogDebug(
+                "    Sprite: TextureId='{TextureId}', RenderPos=({X:F1},{Y:F1}), GroundY={GroundY:F1}, LayerDepth={LayerDepth:F4}",
+                sprite.TextureId,
+                position.PixelX,
+                position.PixelY,
+                groundY,
+                layerDepth
+            );
         }
         catch (Exception ex)
         {
-            _logger?.LogError(ex, "    ❌ ERROR rendering sprite with TextureId '{TextureId}' at position ({X}, {Y})",
-                sprite.TextureId, position.PixelX, position.PixelY);
+            _logger?.LogError(
+                ex,
+                "    ❌ ERROR rendering sprite with TextureId '{TextureId}' at position ({X}, {Y})",
+                sprite.TextureId,
+                position.PixelX,
+                position.PixelY
+            );
         }
     }
 
@@ -399,11 +547,11 @@ public class ZOrderRenderSystem : BaseSystem
     {
         // Normalize Y position to 0.0-1.0 range
         float normalized = yPosition / MaxRenderDistance;
-        
+
         // Map to Y-sort range: 0.6 (back/top) to 0.4 (front/bottom)
         // Lower Y = 0.6, Higher Y = 0.4
         float layerDepth = 0.6f - (normalized * 0.2f);
-        
+
         // Clamp to Y-sort range
         return MathHelper.Clamp(layerDepth, 0.4f, 0.6f);
     }
@@ -424,4 +572,3 @@ public class ZOrderRenderSystem : BaseSystem
         return new Rectangle(sourceX, sourceY, tileSize, tileSize);
     }
 }
-

@@ -68,7 +68,8 @@ public sealed class EntityTemplate
     /// <param name="initialData">Initial component data</param>
     /// <param name="scriptId">Optional script ID</param>
     /// <returns>This template for chaining</returns>
-    public EntityTemplate WithComponent<T>(T initialData, string? scriptId = null) where T : struct
+    public EntityTemplate WithComponent<T>(T initialData, string? scriptId = null)
+        where T : struct
     {
         AddComponent(ComponentTemplate.Create(initialData, scriptId));
         return this;
@@ -84,7 +85,8 @@ public sealed class EntityTemplate
     /// </summary>
     /// <typeparam name="T">Component type to check</typeparam>
     /// <returns>True if component exists in template</returns>
-    public bool HasComponent<T>() where T : struct
+    public bool HasComponent<T>()
+        where T : struct
     {
         return Components.Any(c => c.ComponentType == typeof(T));
     }
@@ -94,7 +96,8 @@ public sealed class EntityTemplate
     /// </summary>
     /// <typeparam name="T">Component type</typeparam>
     /// <returns>Component template or null if not found</returns>
-    public ComponentTemplate? GetComponent<T>() where T : struct
+    public ComponentTemplate? GetComponent<T>()
+        where T : struct
     {
         return Components.FirstOrDefault(c => c.ComponentType == typeof(T));
     }

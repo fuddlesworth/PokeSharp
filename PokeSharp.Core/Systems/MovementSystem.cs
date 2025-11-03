@@ -24,51 +24,73 @@ public class MovementSystem : BaseSystem
         // Query all entities with Position and GridMovement components
         var query = new QueryDescription().WithAll<Position, GridMovement>();
 
-        world.Query(in query, (Entity entity, ref Position position, ref GridMovement movement) =>
-        {
-            if (movement.IsMoving)
+        world.Query(
+            in query,
+            (Entity entity, ref Position position, ref GridMovement movement) =>
             {
-                // Update movement progress based on speed and delta time
-                movement.MovementProgress += movement.MovementSpeed * deltaTime;
-
-                if (movement.MovementProgress >= 1.0f)
+                if (movement.IsMoving)
                 {
-                    // Movement complete - snap to target position
-                    movement.MovementProgress = 1.0f;
-                    position.PixelX = movement.TargetPosition.X;
-                    position.PixelY = movement.TargetPosition.Y;
+                    // Update movement progress based on speed and delta time
+                    movement.MovementProgress += movement.MovementSpeed * deltaTime;
 
-                    // Update grid coordinates
-                    position.X = (int)(movement.TargetPosition.X / TileSize);
-                    position.Y = (int)(movement.TargetPosition.Y / TileSize);
-
-                    movement.CompleteMovement();
-
-                    // Switch to idle animation if entity has Animation component
-                    if (entity.Has<Animation>())
+                    if (movement.MovementProgress >= 1.0f)
                     {
-                        ref var animation = ref entity.Get<Animation>();
-                        animation.ChangeAnimation(movement.FacingDirection.ToIdleAnimation());
+                        // Movement complete - snap to target position
+                        movement.MovementProgress = 1.0f;
+                        position.PixelX = movement.TargetPosition.X;
+                        position.PixelY = movement.TargetPosition.Y;
+
+                        // Update grid coordinates
+                        position.X = (int)(movement.TargetPosition.X / TileSize);
+                        position.Y = (int)(movement.TargetPosition.Y / TileSize);
+
+                        movement.CompleteMovement();
+
+                        // Switch to idle animation if entity has Animation component
+                        if (entity.Has<Animation>())
+                        {
+                            ref var animation = ref entity.Get<Animation>();
+                            animation.ChangeAnimation(movement.FacingDirection.ToIdleAnimation());
+                        }
+                    }
+                    else
+                    {
+                        // Interpolate between start and target positions
+                        position.PixelX = MathHelper.Lerp(
+                            movement.StartPosition.X,
+                            movement.TargetPosition.X,
+                            movement.MovementProgress
+                        );
+
+                        position.PixelY = MathHelper.Lerp(
+                            movement.StartPosition.Y,
+                            movement.TargetPosition.Y,
+                            movement.MovementProgress
+                        );
+
+                        // Ensure walk animation is playing if entity has Animation component
+                        if (entity.Has<Animation>())
+                        {
+                            ref var animation = ref entity.Get<Animation>();
+                            var expectedAnimation = movement.FacingDirection.ToWalkAnimation();
+
+                            if (animation.CurrentAnimation != expectedAnimation)
+                            {
+                                animation.ChangeAnimation(expectedAnimation);
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    // Interpolate between start and target positions
-                    position.PixelX = MathHelper.Lerp(
-                        movement.StartPosition.X,
-                        movement.TargetPosition.X,
-                        movement.MovementProgress);
+                    // Ensure pixel position matches grid position when not moving
+                    position.SyncPixelsToGrid();
 
-                    position.PixelY = MathHelper.Lerp(
-                        movement.StartPosition.Y,
-                        movement.TargetPosition.Y,
-                        movement.MovementProgress);
-
-                    // Ensure walk animation is playing if entity has Animation component
+                    // Ensure idle animation is playing if entity has Animation component
                     if (entity.Has<Animation>())
                     {
                         ref var animation = ref entity.Get<Animation>();
-                        var expectedAnimation = movement.FacingDirection.ToWalkAnimation();
+                        var expectedAnimation = movement.FacingDirection.ToIdleAnimation();
 
                         if (animation.CurrentAnimation != expectedAnimation)
                         {
@@ -77,24 +99,6 @@ public class MovementSystem : BaseSystem
                     }
                 }
             }
-            else
-            {
-                // Ensure pixel position matches grid position when not moving
-                position.SyncPixelsToGrid();
-
-                // Ensure idle animation is playing if entity has Animation component
-                if (entity.Has<Animation>())
-                {
-                    ref var animation = ref entity.Get<Animation>();
-                    var expectedAnimation = movement.FacingDirection.ToIdleAnimation();
-
-                    if (animation.CurrentAnimation != expectedAnimation)
-                    {
-                        animation.ChangeAnimation(expectedAnimation);
-                    }
-                }
-            }
-        });
+        );
     }
 }
-

@@ -24,9 +24,13 @@ public class AnimationSystem : BaseSystem
     /// </summary>
     /// <param name="animationLibrary">The animation library containing all animation definitions.</param>
     /// <param name="logger">Optional logger for diagnostics.</param>
-    public AnimationSystem(AnimationLibrary animationLibrary, ILogger<AnimationSystem>? logger = null)
+    public AnimationSystem(
+        AnimationLibrary animationLibrary,
+        ILogger<AnimationSystem>? logger = null
+    )
     {
-        _animationLibrary = animationLibrary ?? throw new ArgumentNullException(nameof(animationLibrary));
+        _animationLibrary =
+            animationLibrary ?? throw new ArgumentNullException(nameof(animationLibrary));
         _logger = logger;
     }
 
@@ -44,14 +48,21 @@ public class AnimationSystem : BaseSystem
             // Query all entities with Animation + Sprite components
             var query = new QueryDescription().WithAll<AnimationComponent, Sprite>();
 
-            world.Query(in query, (Entity entity, ref AnimationComponent animation, ref Sprite sprite) =>
-            {
-                UpdateAnimation(entity, ref animation, ref sprite, deltaTime);
-            });
+            world.Query(
+                in query,
+                (Entity entity, ref AnimationComponent animation, ref Sprite sprite) =>
+                {
+                    UpdateAnimation(entity, ref animation, ref sprite, deltaTime);
+                }
+            );
         }
         catch (Exception ex)
         {
-            _logger?.LogError(ex, "Error in AnimationSystem.Update (Frame {FrameCounter})", _frameCounter);
+            _logger?.LogError(
+                ex,
+                "Error in AnimationSystem.Update (Frame {FrameCounter})",
+                _frameCounter
+            );
             throw;
         }
     }
@@ -59,7 +70,12 @@ public class AnimationSystem : BaseSystem
     /// <summary>
     /// Updates a single animation and its corresponding sprite.
     /// </summary>
-    private void UpdateAnimation(Entity entity, ref AnimationComponent animation, ref Sprite sprite, float deltaTime)
+    private void UpdateAnimation(
+        Entity entity,
+        ref AnimationComponent animation,
+        ref Sprite sprite,
+        float deltaTime
+    )
     {
         // Skip if animation is not playing
         if (!animation.IsPlaying || animation.IsComplete)
@@ -70,14 +86,20 @@ public class AnimationSystem : BaseSystem
         // Get the animation definition
         if (!_animationLibrary.TryGetAnimation(animation.CurrentAnimation, out var animDef))
         {
-            _logger?.LogWarning("Animation '{AnimationName}' not found in library", animation.CurrentAnimation);
+            _logger?.LogWarning(
+                "Animation '{AnimationName}' not found in library",
+                animation.CurrentAnimation
+            );
             return;
         }
 
         // Safety check for empty animations
         if (animDef!.FrameCount == 0)
         {
-            _logger?.LogWarning("Animation '{AnimationName}' has no frames", animation.CurrentAnimation);
+            _logger?.LogWarning(
+                "Animation '{AnimationName}' has no frames",
+                animation.CurrentAnimation
+            );
             return;
         }
 
@@ -127,8 +149,12 @@ public class AnimationSystem : BaseSystem
         }
         catch (ArgumentOutOfRangeException ex)
         {
-            _logger?.LogError(ex, "Frame index {FrameIndex} out of range for animation '{AnimationName}'",
-                animation.CurrentFrame, animation.CurrentAnimation);
+            _logger?.LogError(
+                ex,
+                "Frame index {FrameIndex} out of range for animation '{AnimationName}'",
+                animation.CurrentFrame,
+                animation.CurrentAnimation
+            );
 
             // Reset to first frame to recover
             animation.CurrentFrame = 0;
@@ -144,10 +170,18 @@ public class AnimationSystem : BaseSystem
     /// <param name="frameIndex">The frame index to check for events.</param>
     /// <param name="animDef">The animation definition containing the events.</param>
     /// <param name="animation">The animation component to track triggered events.</param>
-    private void TriggerFrameEvents(Entity entity, int frameIndex, AnimationDefinition animDef, ref AnimationComponent animation)
+    private void TriggerFrameEvents(
+        Entity entity,
+        int frameIndex,
+        AnimationDefinition animDef,
+        ref AnimationComponent animation
+    )
     {
         // Check if this frame has events and hasn't been triggered yet
-        if (!animDef.HasEventsOnFrame(frameIndex) || animation.TriggeredEventFrames.Contains(frameIndex))
+        if (
+            !animDef.HasEventsOnFrame(frameIndex)
+            || animation.TriggeredEventFrames.Contains(frameIndex)
+        )
         {
             return;
         }
@@ -160,15 +194,24 @@ public class AnimationSystem : BaseSystem
         {
             try
             {
-                _logger?.LogDebug("Triggering animation event '{EventName}' at frame {FrameIndex} for animation '{AnimationName}'",
-                    animEvent.EventName, frameIndex, animation.CurrentAnimation);
+                _logger?.LogDebug(
+                    "Triggering animation event '{EventName}' at frame {FrameIndex} for animation '{AnimationName}'",
+                    animEvent.EventName,
+                    frameIndex,
+                    animation.CurrentAnimation
+                );
 
                 animEvent.Trigger(entity);
             }
             catch (Exception ex)
             {
-                _logger?.LogError(ex, "Error triggering animation event '{EventName}' at frame {FrameIndex} for animation '{AnimationName}'",
-                    animEvent.EventName, frameIndex, animation.CurrentAnimation);
+                _logger?.LogError(
+                    ex,
+                    "Error triggering animation event '{EventName}' at frame {FrameIndex} for animation '{AnimationName}'",
+                    animEvent.EventName,
+                    frameIndex,
+                    animation.CurrentAnimation
+                );
             }
         }
 

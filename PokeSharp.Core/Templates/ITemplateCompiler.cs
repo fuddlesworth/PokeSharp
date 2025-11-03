@@ -5,7 +5,8 @@ namespace PokeSharp.Core.Templates;
 /// Acts as the bridge between static data (EF Core) and runtime templates.
 /// </summary>
 /// <typeparam name="TEntity">Data layer entity type</typeparam>
-public interface ITemplateCompiler<TEntity> where TEntity : class
+public interface ITemplateCompiler<TEntity>
+    where TEntity : class
 {
     /// <summary>
     /// Compile a single entity from the data layer into an EntityTemplate.
@@ -13,7 +14,10 @@ public interface ITemplateCompiler<TEntity> where TEntity : class
     /// <param name="entity">Entity to compile</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>Compiled entity template</returns>
-    Task<EntityTemplate> CompileAsync(TEntity entity, CancellationToken cancellationToken = default);
+    Task<EntityTemplate> CompileAsync(
+        TEntity entity,
+        CancellationToken cancellationToken = default
+    );
 
     /// <summary>
     /// Compile multiple entities into templates efficiently (batch operation).
@@ -21,7 +25,10 @@ public interface ITemplateCompiler<TEntity> where TEntity : class
     /// <param name="entities">Entities to compile</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>Compiled templates</returns>
-    Task<IEnumerable<EntityTemplate>> CompileBatchAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
+    Task<IEnumerable<EntityTemplate>> CompileBatchAsync(
+        IEnumerable<TEntity> entities,
+        CancellationToken cancellationToken = default
+    );
 
     /// <summary>
     /// Validate that a data layer entity can be compiled into a valid template.
@@ -35,7 +42,8 @@ public interface ITemplateCompiler<TEntity> where TEntity : class
     /// </summary>
     /// <typeparam name="T">Entity type to check</typeparam>
     /// <returns>True if compilation is supported</returns>
-    bool SupportsType<T>() where T : class;
+    bool SupportsType<T>()
+        where T : class;
 
     /// <summary>
     /// Register a custom compiler for this entity type.

@@ -37,13 +37,14 @@ public sealed class ComponentTemplate
     /// <param name="initialData">Initial component data</param>
     /// <param name="scriptId">Optional script ID</param>
     /// <returns>Configured component template</returns>
-    public static ComponentTemplate Create<T>(T initialData, string? scriptId = null) where T : struct
+    public static ComponentTemplate Create<T>(T initialData, string? scriptId = null)
+        where T : struct
     {
         return new ComponentTemplate
         {
             ComponentType = typeof(T),
             InitialData = initialData,
-            ScriptId = scriptId
+            ScriptId = scriptId,
         };
     }
 

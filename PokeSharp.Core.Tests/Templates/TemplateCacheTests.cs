@@ -1,6 +1,6 @@
+using FluentAssertions;
 using PokeSharp.Core.Templates;
 using Xunit;
-using FluentAssertions;
 
 namespace PokeSharp.Core.Tests.Templates;
 
@@ -61,7 +61,7 @@ public class TemplateCacheTests
         {
             CreateTestTemplate("test/one"),
             CreateTestTemplate("test/two"),
-            CreateTestTemplate("test/three")
+            CreateTestTemplate("test/three"),
         };
 
         // Act
@@ -159,11 +159,13 @@ public class TemplateCacheTests
         for (int i = 0; i < 100; i++)
         {
             var index = i;
-            tasks.Add(Task.Run(() =>
-            {
-                cache.Register(CreateTestTemplate($"test/{index}"));
-                cache.Get($"test/{index}");
-            }));
+            tasks.Add(
+                Task.Run(() =>
+                {
+                    cache.Register(CreateTestTemplate($"test/{index}"));
+                    cache.Get($"test/{index}");
+                })
+            );
         }
 
         // Assert
@@ -179,7 +181,7 @@ public class TemplateCacheTests
         {
             TemplateId = id,
             Name = $"Template {id}",
-            Tag = tag
+            Tag = tag,
         }.WithComponent(new TestComponent { Value = 42 });
     }
 

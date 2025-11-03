@@ -8,7 +8,8 @@ namespace PokeSharp.Core.Templates;
 /// Supports template validation, base template inheritance, and component mapping.
 /// </summary>
 /// <typeparam name="TEntity">Data layer entity type</typeparam>
-public class TemplateCompiler<TEntity> : ITemplateCompiler<TEntity> where TEntity : class
+public class TemplateCompiler<TEntity> : ITemplateCompiler<TEntity>
+    where TEntity : class
 {
     private readonly Dictionary<Type, Func<TEntity, EntityTemplate>> _compilers = new();
     private readonly ILogger<TemplateCompiler<TEntity>> _logger;
@@ -19,7 +20,10 @@ public class TemplateCompiler<TEntity> : ITemplateCompiler<TEntity> where TEntit
     }
 
     /// <inheritdoc/>
-    public async Task<EntityTemplate> CompileAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public async Task<EntityTemplate> CompileAsync(
+        TEntity entity,
+        CancellationToken cancellationToken = default
+    )
     {
         ArgumentNullException.ThrowIfNull(entity, nameof(entity));
 
@@ -30,8 +34,9 @@ public class TemplateCompiler<TEntity> : ITemplateCompiler<TEntity> where TEntit
         {
             _logger.LogError("No compiler registered for type {EntityType}", entityType.Name);
             throw new InvalidOperationException(
-                $"No compiler registered for entity type '{entityType.Name}'. " +
-                $"Use RegisterCompiler<{entityType.Name}>() to register a compilation function.");
+                $"No compiler registered for entity type '{entityType.Name}'. "
+                    + $"Use RegisterCompiler<{entityType.Name}>() to register a compilation function."
+            );
         }
 
         // Compile entity to template
@@ -40,14 +45,20 @@ public class TemplateCompiler<TEntity> : ITemplateCompiler<TEntity> where TEntit
         // Validate compiled template
         if (!template.Validate(out var errors))
         {
-            _logger.LogError("Template compilation validation failed: {Errors}",
-                string.Join(", ", errors));
+            _logger.LogError(
+                "Template compilation validation failed: {Errors}",
+                string.Join(", ", errors)
+            );
             throw new InvalidOperationException(
-                $"Compiled template is invalid: {string.Join(", ", errors)}");
+                $"Compiled template is invalid: {string.Join(", ", errors)}"
+            );
         }
 
-        _logger.LogDebug("Compiled template {TemplateId} from entity {EntityType}",
-            template.TemplateId, entityType.Name);
+        _logger.LogDebug(
+            "Compiled template {TemplateId} from entity {EntityType}",
+            template.TemplateId,
+            entityType.Name
+        );
 
         return await Task.FromResult(template);
     }
@@ -55,15 +66,19 @@ public class TemplateCompiler<TEntity> : ITemplateCompiler<TEntity> where TEntit
     /// <inheritdoc/>
     public async Task<IEnumerable<EntityTemplate>> CompileBatchAsync(
         IEnumerable<TEntity> entities,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         ArgumentNullException.ThrowIfNull(entities, nameof(entities));
 
         var templates = new List<EntityTemplate>();
         var entityList = entities.ToList();
 
-        _logger.LogDebug("Batch compiling {Count} entities of type {EntityType}",
-            entityList.Count, typeof(TEntity).Name);
+        _logger.LogDebug(
+            "Batch compiling {Count} entities of type {EntityType}",
+            entityList.Count,
+            typeof(TEntity).Name
+        );
 
         foreach (var entity in entityList)
         {
@@ -76,13 +91,20 @@ public class TemplateCompiler<TEntity> : ITemplateCompiler<TEntity> where TEntit
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to compile entity of type {EntityType}", typeof(TEntity).Name);
+                _logger.LogError(
+                    ex,
+                    "Failed to compile entity of type {EntityType}",
+                    typeof(TEntity).Name
+                );
                 throw;
             }
         }
 
-        _logger.LogInformation("Successfully compiled {Count} templates from {EntityType}",
-            templates.Count, typeof(TEntity).Name);
+        _logger.LogInformation(
+            "Successfully compiled {Count} templates from {EntityType}",
+            templates.Count,
+            typeof(TEntity).Name
+        );
 
         return templates;
     }
@@ -105,7 +127,8 @@ public class TemplateCompiler<TEntity> : ITemplateCompiler<TEntity> where TEntit
     }
 
     /// <inheritdoc/>
-    public bool SupportsType<T>() where T : class
+    public bool SupportsType<T>()
+        where T : class
     {
         return typeof(T) == typeof(TEntity);
     }
@@ -141,7 +164,8 @@ public sealed class TemplateCompilerRegistry
     /// </summary>
     /// <typeparam name="TEntity">Entity type</typeparam>
     /// <param name="compiler">Compiler instance</param>
-    public void RegisterCompiler<TEntity>(ITemplateCompiler<TEntity> compiler) where TEntity : class
+    public void RegisterCompiler<TEntity>(ITemplateCompiler<TEntity> compiler)
+        where TEntity : class
     {
         ArgumentNullException.ThrowIfNull(compiler, nameof(compiler));
 
@@ -156,7 +180,8 @@ public sealed class TemplateCompilerRegistry
     /// </summary>
     /// <typeparam name="TEntity">Entity type</typeparam>
     /// <returns>Compiler instance or null if not found</returns>
-    public ITemplateCompiler<TEntity>? GetCompiler<TEntity>() where TEntity : class
+    public ITemplateCompiler<TEntity>? GetCompiler<TEntity>()
+        where TEntity : class
     {
         var entityType = typeof(TEntity);
         return _compilers.TryGetValue(entityType, out var compiler)
@@ -169,7 +194,8 @@ public sealed class TemplateCompilerRegistry
     /// </summary>
     /// <typeparam name="TEntity">Entity type</typeparam>
     /// <returns>True if compiler exists</returns>
-    public bool HasCompiler<TEntity>() where TEntity : class
+    public bool HasCompiler<TEntity>()
+        where TEntity : class
     {
         return _compilers.ContainsKey(typeof(TEntity));
     }

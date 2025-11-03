@@ -26,7 +26,9 @@ public class SystemManager
         {
             if (_systems.Contains(system))
             {
-                throw new InvalidOperationException($"System {system.GetType().Name} is already registered.");
+                throw new InvalidOperationException(
+                    $"System {system.GetType().Name} is already registered."
+                );
             }
 
             _systems.Add(system);
@@ -83,7 +85,9 @@ public class SystemManager
 
         if (!_initialized)
         {
-            throw new InvalidOperationException("SystemManager has not been initialized. Call Initialize() first.");
+            throw new InvalidOperationException(
+                "SystemManager has not been initialized. Call Initialize() first."
+            );
         }
 
         lock (_lock)

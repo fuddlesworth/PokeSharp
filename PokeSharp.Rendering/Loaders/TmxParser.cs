@@ -24,7 +24,8 @@ public static class TmxParser
         }
 
         var doc = XDocument.Load(tmxPath);
-        var mapElement = doc.Root
+        var mapElement =
+            doc.Root
             ?? throw new InvalidOperationException("Invalid TMX file: missing root element");
 
         var tmxDoc = new TmxDocument
@@ -37,7 +38,7 @@ public static class TmxParser
             TileHeight = ParseInt(mapElement, "tileheight"),
             Tilesets = ParseTilesets(mapElement, tmxPath),
             Layers = ParseLayers(mapElement),
-            ObjectGroups = ParseObjectGroups(mapElement)
+            ObjectGroups = ParseObjectGroups(mapElement),
         };
 
         return tmxDoc;
@@ -57,7 +58,7 @@ public static class TmxParser
                 Source = tilesetElement.Attribute("source")?.Value,
                 TileWidth = ParseInt(tilesetElement, "tilewidth", 16),
                 TileHeight = ParseInt(tilesetElement, "tileheight", 16),
-                TileCount = ParseInt(tilesetElement, "tilecount", 0)
+                TileCount = ParseInt(tilesetElement, "tilecount", 0),
             };
 
             // Parse embedded image
@@ -68,7 +69,7 @@ public static class TmxParser
                 {
                     Source = imageElement.Attribute("source")?.Value ?? string.Empty,
                     Width = ParseInt(imageElement, "width"),
-                    Height = ParseInt(imageElement, "height")
+                    Height = ParseInt(imageElement, "height"),
                 };
             }
 
@@ -105,7 +106,7 @@ public static class TmxParser
             {
                 Source = imageElement.Attribute("source")?.Value ?? string.Empty,
                 Width = ParseInt(imageElement, "width"),
-                Height = ParseInt(imageElement, "height")
+                Height = ParseInt(imageElement, "height"),
             };
         }
     }
@@ -123,7 +124,7 @@ public static class TmxParser
                 Width = ParseInt(layerElement, "width"),
                 Height = ParseInt(layerElement, "height"),
                 Visible = ParseInt(layerElement, "visible", 1) == 1,
-                Opacity = ParseFloat(layerElement, "opacity", 1.0f)
+                Opacity = ParseFloat(layerElement, "opacity", 1.0f),
             };
 
             // Parse tile data
@@ -157,12 +158,14 @@ public static class TmxParser
     {
         var data = new int[height, width];
         var values = csv.Split(',', StringSplitOptions.RemoveEmptyEntries)
-                       .Select(s => int.Parse(s.Trim(), CultureInfo.InvariantCulture))
-                       .ToArray();
+            .Select(s => int.Parse(s.Trim(), CultureInfo.InvariantCulture))
+            .ToArray();
 
         if (values.Length != width * height)
         {
-            throw new InvalidOperationException($"CSV data length mismatch. Expected {width * height}, got {values.Length}");
+            throw new InvalidOperationException(
+                $"CSV data length mismatch. Expected {width * height}, got {values.Length}"
+            );
         }
 
         for (int y = 0; y < height; y++)
@@ -201,7 +204,7 @@ public static class TmxParser
             {
                 Id = ParseInt(groupElement, "id"),
                 Name = groupElement.Attribute("name")?.Value ?? string.Empty,
-                Objects = ParseObjects(groupElement)
+                Objects = ParseObjects(groupElement),
             };
 
             objectGroups.Add(group);
@@ -225,7 +228,7 @@ public static class TmxParser
                 Height = ParseFloat(objElement, "height"),
                 Type = objElement.Attribute("type")?.Value,
                 Name = objElement.Attribute("name")?.Value,
-                Properties = ParseProperties(objElement)
+                Properties = ParseProperties(objElement),
             };
 
             objects.Add(obj);
@@ -261,7 +264,7 @@ public static class TmxParser
                 "int" => int.Parse(value, CultureInfo.InvariantCulture),
                 "float" => float.Parse(value, CultureInfo.InvariantCulture),
                 "string" => value,
-                _ => value
+                _ => value,
             };
         }
 
@@ -271,7 +274,8 @@ public static class TmxParser
     private static int ParseInt(XElement element, string attributeName, int defaultValue = 0)
     {
         var attr = element.Attribute(attributeName);
-        return attr != null && int.TryParse(attr.Value, CultureInfo.InvariantCulture, out var result)
+        return
+            attr != null && int.TryParse(attr.Value, CultureInfo.InvariantCulture, out var result)
             ? result
             : defaultValue;
     }
@@ -279,7 +283,8 @@ public static class TmxParser
     private static float ParseFloat(XElement element, string attributeName, float defaultValue = 0f)
     {
         var attr = element.Attribute(attributeName);
-        return attr != null && float.TryParse(attr.Value, CultureInfo.InvariantCulture, out var result)
+        return
+            attr != null && float.TryParse(attr.Value, CultureInfo.InvariantCulture, out var result)
             ? result
             : defaultValue;
     }

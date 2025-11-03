@@ -179,5 +179,3 @@ public readonly struct InputCommand
     /// </summary>
     public override string ToString() => $"InputCommand({Direction} @ {Timestamp:F3}s)";
 }
-
-

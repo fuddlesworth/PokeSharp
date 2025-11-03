@@ -14,9 +14,7 @@ public sealed class CacheService
     private readonly ILogger<CacheService> _logger;
     private readonly MemoryCacheEntryOptions _defaultOptions;
 
-    public CacheService(
-        IMemoryCache memoryCache,
-        ILogger<CacheService> logger)
+    public CacheService(IMemoryCache memoryCache, ILogger<CacheService> logger)
     {
         _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -25,7 +23,7 @@ public sealed class CacheService
         _defaultOptions = new MemoryCacheEntryOptions
         {
             SlidingExpiration = TimeSpan.FromMinutes(5),
-            Priority = CacheItemPriority.Normal
+            Priority = CacheItemPriority.Normal,
         };
     }
 
@@ -61,7 +59,8 @@ public sealed class CacheService
     public async Task<T> GetOrCreateAsync<T>(
         string key,
         Func<Task<T>> factory,
-        MemoryCacheEntryOptions? options = null)
+        MemoryCacheEntryOptions? options = null
+    )
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(key, nameof(key));
         ArgumentNullException.ThrowIfNull(factory, nameof(factory));
@@ -115,11 +114,15 @@ public sealed class CacheService
         var options = new MemoryCacheEntryOptions
         {
             SlidingExpiration = expiration,
-            Priority = CacheItemPriority.Normal
+            Priority = CacheItemPriority.Normal,
         };
 
         _memoryCache.Set(key, value, options);
-        _logger.LogTrace("Set cache value for key: {CacheKey} with expiration: {Expiration}", key, expiration);
+        _logger.LogTrace(
+            "Set cache value for key: {CacheKey} with expiration: {Expiration}",
+            key,
+            expiration
+        );
     }
 
     /// <summary>
@@ -142,8 +145,10 @@ public sealed class CacheService
     {
         // MemoryCache doesn't have a built-in Clear method
         // We would need to track keys separately for this
-        _logger.LogWarning("Clear() called but MemoryCache doesn't support bulk clear. " +
-                          "Consider disposing and recreating the cache instead.");
+        _logger.LogWarning(
+            "Clear() called but MemoryCache doesn't support bulk clear. "
+                + "Consider disposing and recreating the cache instead."
+        );
     }
 
     /// <summary>

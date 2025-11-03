@@ -28,9 +28,7 @@ public class AnimationEvent
     /// <summary>
     /// Initializes a new instance of the AnimationEvent class.
     /// </summary>
-    public AnimationEvent()
-    {
-    }
+    public AnimationEvent() { }
 
     /// <summary>
     /// Initializes a new instance of the AnimationEvent class with a name and callback.
@@ -114,5 +112,3 @@ public static class AnimationEventTypes
     /// </summary>
     public const string Custom = "custom";
 }
-
-

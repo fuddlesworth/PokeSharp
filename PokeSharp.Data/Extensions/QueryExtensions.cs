@@ -24,7 +24,8 @@ public static class QueryExtensions
         int id,
         CacheService cache,
         Func<int, string> cacheKeyFunc,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
         where TEntity : class
     {
         ArgumentNullException.ThrowIfNull(cache, nameof(cache));
@@ -37,8 +38,9 @@ public static class QueryExtensions
             async () => await dbSet.FindAsync(new object[] { id }, cancellationToken),
             new Microsoft.Extensions.Caching.Memory.MemoryCacheEntryOptions
             {
-                SlidingExpiration = TimeSpan.FromMinutes(10)
-            });
+                SlidingExpiration = TimeSpan.FromMinutes(10),
+            }
+        );
     }
 
     /// <summary>
@@ -55,7 +57,8 @@ public static class QueryExtensions
         this IQueryable<TEntity> query,
         CacheService cache,
         string cacheKey,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
         where TEntity : class
     {
         ArgumentNullException.ThrowIfNull(cache, nameof(cache));
@@ -66,8 +69,9 @@ public static class QueryExtensions
             async () => await query.ToListAsync(cancellationToken),
             new Microsoft.Extensions.Caching.Memory.MemoryCacheEntryOptions
             {
-                SlidingExpiration = TimeSpan.FromMinutes(15)
-            });
+                SlidingExpiration = TimeSpan.FromMinutes(15),
+            }
+        );
     }
 
     /// <summary>
@@ -82,11 +86,14 @@ public static class QueryExtensions
         this IQueryable<TEntity> query,
         int pageNumber,
         int pageSize,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
         where TEntity : class
     {
-        if (pageNumber < 1) throw new ArgumentException("Page number must be >= 1", nameof(pageNumber));
-        if (pageSize < 1 || pageSize > 100) throw new ArgumentException("Page size must be between 1 and 100", nameof(pageSize));
+        if (pageNumber < 1)
+            throw new ArgumentException("Page number must be >= 1", nameof(pageNumber));
+        if (pageSize < 1 || pageSize > 100)
+            throw new ArgumentException("Page size must be between 1 and 100", nameof(pageSize));
 
         var totalCount = await query.CountAsync(cancellationToken);
         var items = await query
@@ -100,7 +107,7 @@ public static class QueryExtensions
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalCount = totalCount,
-            TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
+            TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize),
         };
     }
 }

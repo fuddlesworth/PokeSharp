@@ -1,6 +1,6 @@
+using FluentAssertions;
 using PokeSharp.Core.Templates;
 using Xunit;
-using FluentAssertions;
 
 namespace PokeSharp.Core.Tests.Templates;
 
@@ -14,7 +14,7 @@ public class EntityTemplateTests
         {
             TemplateId = "test/template",
             Name = "Test Template",
-            Tag = "test"
+            Tag = "test",
         };
 
         // Assert
@@ -29,7 +29,12 @@ public class EntityTemplateTests
     public void AddComponent_ShouldAddComponentToList()
     {
         // Arrange
-        var template = new EntityTemplate { TemplateId = "test", Name = "Test", Tag = "test" };
+        var template = new EntityTemplate
+        {
+            TemplateId = "test",
+            Name = "Test",
+            Tag = "test",
+        };
         var component = ComponentTemplate.Create(new TestComponent { Value = 42 });
 
         // Act
@@ -57,7 +62,12 @@ public class EntityTemplateTests
     public void WithComponent_ShouldAddComponentAndReturnThis()
     {
         // Arrange
-        var template = new EntityTemplate { TemplateId = "test", Name = "Test", Tag = "test" };
+        var template = new EntityTemplate
+        {
+            TemplateId = "test",
+            Name = "Test",
+            Tag = "test",
+        };
         var data = new TestComponent { Value = 42 };
 
         // Act
@@ -73,7 +83,12 @@ public class EntityTemplateTests
     public void WithComponent_ShouldSupportMethodChaining()
     {
         // Arrange & Act
-        var template = new EntityTemplate { TemplateId = "test", Name = "Test", Tag = "test" }
+        var template = new EntityTemplate
+        {
+            TemplateId = "test",
+            Name = "Test",
+            Tag = "test",
+        }
             .WithComponent(new TestComponent { Value = 1 })
             .WithComponent(new TestComponent2 { Name = "Test" });
 
@@ -85,7 +100,12 @@ public class EntityTemplateTests
     public void ComponentCount_ShouldReturnCorrectCount()
     {
         // Arrange
-        var template = new EntityTemplate { TemplateId = "test", Name = "Test", Tag = "test" }
+        var template = new EntityTemplate
+        {
+            TemplateId = "test",
+            Name = "Test",
+            Tag = "test",
+        }
             .WithComponent(new TestComponent { Value = 1 })
             .WithComponent(new TestComponent2 { Name = "Test" });
 
@@ -100,8 +120,12 @@ public class EntityTemplateTests
     public void HasComponent_WithExistingComponent_ShouldReturnTrue()
     {
         // Arrange
-        var template = new EntityTemplate { TemplateId = "test", Name = "Test", Tag = "test" }
-            .WithComponent(new TestComponent { Value = 42 });
+        var template = new EntityTemplate
+        {
+            TemplateId = "test",
+            Name = "Test",
+            Tag = "test",
+        }.WithComponent(new TestComponent { Value = 42 });
 
         // Act
         var has = template.HasComponent<TestComponent>();
@@ -114,8 +138,12 @@ public class EntityTemplateTests
     public void HasComponent_WithNonExistingComponent_ShouldReturnFalse()
     {
         // Arrange
-        var template = new EntityTemplate { TemplateId = "test", Name = "Test", Tag = "test" }
-            .WithComponent(new TestComponent { Value = 42 });
+        var template = new EntityTemplate
+        {
+            TemplateId = "test",
+            Name = "Test",
+            Tag = "test",
+        }.WithComponent(new TestComponent { Value = 42 });
 
         // Act
         var has = template.HasComponent<TestComponent2>();
@@ -128,8 +156,12 @@ public class EntityTemplateTests
     public void GetComponent_WithExistingComponent_ShouldReturnComponent()
     {
         // Arrange
-        var template = new EntityTemplate { TemplateId = "test", Name = "Test", Tag = "test" }
-            .WithComponent(new TestComponent { Value = 42 });
+        var template = new EntityTemplate
+        {
+            TemplateId = "test",
+            Name = "Test",
+            Tag = "test",
+        }.WithComponent(new TestComponent { Value = 42 });
 
         // Act
         var component = template.GetComponent<TestComponent>();
@@ -143,8 +175,12 @@ public class EntityTemplateTests
     public void GetComponent_WithNonExistingComponent_ShouldReturnNull()
     {
         // Arrange
-        var template = new EntityTemplate { TemplateId = "test", Name = "Test", Tag = "test" }
-            .WithComponent(new TestComponent { Value = 42 });
+        var template = new EntityTemplate
+        {
+            TemplateId = "test",
+            Name = "Test",
+            Tag = "test",
+        }.WithComponent(new TestComponent { Value = 42 });
 
         // Act
         var component = template.GetComponent<TestComponent2>();
@@ -161,7 +197,7 @@ public class EntityTemplateTests
         {
             TemplateId = "test/valid",
             Name = "Valid Template",
-            Tag = "test"
+            Tag = "test",
         }.WithComponent(new TestComponent { Value = 42 });
 
         // Act
@@ -176,11 +212,9 @@ public class EntityTemplateTests
     public void Validate_WithMissingTemplateId_ShouldReturnFalse()
     {
         // Arrange
-        var template = new EntityTemplate
-        {
-            Name = "Test",
-            Tag = "test"
-        }.WithComponent(new TestComponent { Value = 42 });
+        var template = new EntityTemplate { Name = "Test", Tag = "test" }.WithComponent(
+            new TestComponent { Value = 42 }
+        );
 
         // Act
         var isValid = template.Validate(out var errors);
@@ -197,7 +231,7 @@ public class EntityTemplateTests
         var template = new EntityTemplate
         {
             TemplateId = "test/template",
-            Tag = "test"
+            Tag = "test",
         }.WithComponent(new TestComponent { Value = 42 });
 
         // Act
@@ -216,7 +250,7 @@ public class EntityTemplateTests
         {
             TemplateId = "test/template",
             Name = "Test",
-            Tag = "test"
+            Tag = "test",
         };
 
         // Act
@@ -235,7 +269,7 @@ public class EntityTemplateTests
         {
             TemplateId = "test/template",
             Name = "Test",
-            Tag = "test"
+            Tag = "test",
         };
         template.AddComponent(ComponentTemplate.Create(new TestComponent { Value = 1 }));
         template.AddComponent(ComponentTemplate.Create(new TestComponent { Value = 2 }));

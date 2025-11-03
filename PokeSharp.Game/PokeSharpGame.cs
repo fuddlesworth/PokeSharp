@@ -5,14 +5,14 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PokeSharp.Core.Components;
 using PokeSharp.Core.Systems;
+using PokeSharp.Game.Diagnostics;
 using PokeSharp.Input.Components;
 using PokeSharp.Input.Systems;
+using PokeSharp.Rendering.Animation;
 using PokeSharp.Rendering.Assets;
+using PokeSharp.Rendering.Components;
 using PokeSharp.Rendering.Loaders;
 using PokeSharp.Rendering.Systems;
-using PokeSharp.Rendering.Animation;
-using PokeSharp.Rendering.Components;
-using PokeSharp.Game.Diagnostics;
 
 namespace PokeSharp.Game;
 
@@ -86,7 +86,9 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game
 
         // Create animation library with default player animations
         _animationLibrary = new AnimationLibrary(logger: null);
-        System.Console.WriteLine($"✅ AnimationLibrary initialized with {_animationLibrary.Count} animations");
+        System.Console.WriteLine(
+            $"✅ AnimationLibrary initialized with {_animationLibrary.Count} animations"
+        );
 
         // Create and register systems in priority order
         // InputSystem with Pokemon-style input buffering (5 inputs, 200ms timeout)
@@ -172,10 +174,13 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game
 
             // Set camera bounds from map dimensions
             var mapQuery = new QueryDescription().WithAll<TileMap>();
-            _world.Query(in mapQuery, (ref TileMap tileMap) =>
-            {
-                SetCameraMapBounds(tileMap.Width, tileMap.Height);
-            });
+            _world.Query(
+                in mapQuery,
+                (ref TileMap tileMap) =>
+                {
+                    SetCameraMapBounds(tileMap.Width, tileMap.Height);
+                }
+            );
         }
         catch (Exception ex)
         {
@@ -190,22 +195,35 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game
     private void CreateTestPlayer()
     {
         // Create camera component with viewport and initial settings
-        var viewport = new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
+        var viewport = new Rectangle(
+            0,
+            0,
+            _graphics.PreferredBackBufferWidth,
+            _graphics.PreferredBackBufferHeight
+        );
         var camera = new Camera(viewport, smoothingSpeed: 0.2f, leadDistance: 1.5f)
         {
             Zoom = 3.0f,
             TargetZoom = 3.0f,
             ZoomTransitionSpeed = 0.1f,
-            Position = new Vector2(10 * 16, 8 * 16) // Start at player's position (grid to pixels)
+            Position = new Vector2(10 * 16, 8 * 16), // Start at player's position (grid to pixels)
         };
 
         // Set map bounds on camera from the loaded tilemap
         var mapQuery = new QueryDescription().WithAll<TileMap>();
-        _world.Query(in mapQuery, (ref TileMap tileMap) =>
-        {
-            const int tileSize = 16;
-            camera.MapBounds = new Rectangle(0, 0, tileMap.Width * tileSize, tileMap.Height * tileSize);
-        });
+        _world.Query(
+            in mapQuery,
+            (ref TileMap tileMap) =>
+            {
+                const int tileSize = 16;
+                camera.MapBounds = new Rectangle(
+                    0,
+                    0,
+                    tileMap.Width * tileSize,
+                    tileMap.Height * tileSize
+                );
+            }
+        );
 
         // Create player entity with all required components including Camera
         var playerEntity = _world.Create(
@@ -214,7 +232,7 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game
             new Sprite("player-spritesheet") // Use spritesheet for animations
             {
                 Tint = Color.White,
-                Scale = 1f
+                Scale = 1f,
             },
             new GridMovement(4.0f), // 4 tiles per second movement speed
             Direction.Down, // Initial facing direction
@@ -224,7 +242,9 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game
         );
 
         System.Console.WriteLine($"✅ Created player entity: {playerEntity}");
-        System.Console.WriteLine("   Components: Player, Position, Sprite, GridMovement, Direction, Animation, InputState, Camera");
+        System.Console.WriteLine(
+            "   Components: Player, Position, Sprite, GridMovement, Direction, Animation, InputState, Camera"
+        );
         System.Console.WriteLine("🎮 Use WASD or Arrow Keys to move!");
         System.Console.WriteLine("🔍 Zoom controls: +/- to zoom in/out, 1=GBA, 2=NDS, 3=Default");
     }
@@ -239,43 +259,52 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game
         var currentKeyboardState = Keyboard.GetState();
 
         var query = new QueryDescription().WithAll<Player, Camera>();
-        _world.Query(in query, (ref Camera camera) =>
-        {
-            // Zoom in with + or = key (since + requires shift)
-            if (IsKeyPressed(currentKeyboardState, Keys.OemPlus) || IsKeyPressed(currentKeyboardState, Keys.Add))
+        _world.Query(
+            in query,
+            (ref Camera camera) =>
             {
-                camera.SetZoomSmooth(camera.TargetZoom + 0.5f);
-                System.Console.WriteLine($"🔍 Zoom: {camera.TargetZoom:F1}x");
-            }
+                // Zoom in with + or = key (since + requires shift)
+                if (
+                    IsKeyPressed(currentKeyboardState, Keys.OemPlus)
+                    || IsKeyPressed(currentKeyboardState, Keys.Add)
+                )
+                {
+                    camera.SetZoomSmooth(camera.TargetZoom + 0.5f);
+                    System.Console.WriteLine($"🔍 Zoom: {camera.TargetZoom:F1}x");
+                }
 
-            // Zoom out with - key
-            if (IsKeyPressed(currentKeyboardState, Keys.OemMinus) || IsKeyPressed(currentKeyboardState, Keys.Subtract))
-            {
-                camera.SetZoomSmooth(camera.TargetZoom - 0.5f);
-                System.Console.WriteLine($"🔍 Zoom: {camera.TargetZoom:F1}x");
-            }
+                // Zoom out with - key
+                if (
+                    IsKeyPressed(currentKeyboardState, Keys.OemMinus)
+                    || IsKeyPressed(currentKeyboardState, Keys.Subtract)
+                )
+                {
+                    camera.SetZoomSmooth(camera.TargetZoom - 0.5f);
+                    System.Console.WriteLine($"🔍 Zoom: {camera.TargetZoom:F1}x");
+                }
 
-            // Preset zoom levels
-            if (IsKeyPressed(currentKeyboardState, Keys.D1))
-            {
-                var gbaZoom = camera.CalculateGbaZoom();
-                camera.SetZoomSmooth(gbaZoom);
-                System.Console.WriteLine($"🔍 GBA Preset: {gbaZoom:F1}x (240x160)");
-            }
+                // Preset zoom levels
+                if (IsKeyPressed(currentKeyboardState, Keys.D1))
+                {
+                    var gbaZoom = camera.CalculateGbaZoom();
+                    camera.SetZoomSmooth(gbaZoom);
+                    System.Console.WriteLine($"🔍 GBA Preset: {gbaZoom:F1}x (240x160)");
+                }
 
-            if (IsKeyPressed(currentKeyboardState, Keys.D2))
-            {
-                var ndsZoom = camera.CalculateNdsZoom();
-                camera.SetZoomSmooth(ndsZoom);
-                System.Console.WriteLine($"🔍 NDS Preset: {ndsZoom:F1}x (256x192)");
-            }
+                if (IsKeyPressed(currentKeyboardState, Keys.D2))
+                {
+                    var ndsZoom = camera.CalculateNdsZoom();
+                    camera.SetZoomSmooth(ndsZoom);
+                    System.Console.WriteLine($"🔍 NDS Preset: {ndsZoom:F1}x (256x192)");
+                }
 
-            if (IsKeyPressed(currentKeyboardState, Keys.D3))
-            {
-                camera.SetZoomSmooth(3.0f);
-                System.Console.WriteLine($"🔍 Default Preset: 3.0x");
+                if (IsKeyPressed(currentKeyboardState, Keys.D3))
+                {
+                    camera.SetZoomSmooth(3.0f);
+                    System.Console.WriteLine($"🔍 Default Preset: 3.0x");
+                }
             }
-        });
+        );
 
         _previousKeyboardState = currentKeyboardState;
     }
@@ -300,16 +329,26 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game
     private void SetCameraMapBounds(int mapWidthInTiles, int mapHeightInTiles)
     {
         const int tileSize = 16;
-        var mapBounds = new Rectangle(0, 0, mapWidthInTiles * tileSize, mapHeightInTiles * tileSize);
+        var mapBounds = new Rectangle(
+            0,
+            0,
+            mapWidthInTiles * tileSize,
+            mapHeightInTiles * tileSize
+        );
 
         var query = new QueryDescription().WithAll<Player, Camera>();
 
-        _world.Query(in query, (ref Camera camera) =>
-        {
-            camera.MapBounds = mapBounds;
-        });
+        _world.Query(
+            in query,
+            (ref Camera camera) =>
+            {
+                camera.MapBounds = mapBounds;
+            }
+        );
 
-        System.Console.WriteLine($"🎥 Camera bounds set: {mapBounds.Width}x{mapBounds.Height} pixels");
+        System.Console.WriteLine(
+            $"🎥 Camera bounds set: {mapBounds.Width}x{mapBounds.Height} pixels"
+        );
     }
 
     /// <summary>

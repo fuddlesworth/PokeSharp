@@ -29,7 +29,10 @@ public sealed class TemplateCache
 
         // Validate template before caching
         if (!template.Validate(out var errors))
-            throw new ArgumentException($"Template validation failed: {string.Join(", ", errors)}", nameof(template));
+            throw new ArgumentException(
+                $"Template validation failed: {string.Join(", ", errors)}",
+                nameof(template)
+            );
 
         _templates[template.TemplateId] = template;
         _lastModified[template.TemplateId] = DateTime.UtcNow;
@@ -152,8 +155,8 @@ public sealed class TemplateCache
         if (string.IsNullOrWhiteSpace(tag))
             return Enumerable.Empty<EntityTemplate>();
 
-        return _templates.Values
-            .Where(t => t.Tag.Equals(tag, StringComparison.OrdinalIgnoreCase))
+        return _templates
+            .Values.Where(t => t.Tag.Equals(tag, StringComparison.OrdinalIgnoreCase))
             .ToList(); // Snapshot
     }
 
@@ -179,11 +182,15 @@ public sealed class TemplateCache
         return new CacheStatistics
         {
             TotalTemplates = _templates.Count,
-            TemplatesByTag = _templates.Values
-                .GroupBy(t => t.Tag)
+            TemplatesByTag = _templates
+                .Values.GroupBy(t => t.Tag)
                 .ToDictionary(g => g.Key, g => g.Count()),
-            OldestTemplate = _lastModified.Values.Any() ? _lastModified.Values.Min() : (DateTime?)null,
-            NewestTemplate = _lastModified.Values.Any() ? _lastModified.Values.Max() : (DateTime?)null
+            OldestTemplate = _lastModified.Values.Any()
+                ? _lastModified.Values.Min()
+                : (DateTime?)null,
+            NewestTemplate = _lastModified.Values.Any()
+                ? _lastModified.Values.Max()
+                : (DateTime?)null,
         };
     }
 
@@ -228,8 +235,8 @@ public sealed class CacheStatistics
 
     public override string ToString()
     {
-        return $"Templates: {TotalTemplates}, Tags: {TemplatesByTag.Count}, " +
-               $"Oldest: {OldestTemplate?.ToString() ?? "N/A"}, " +
-               $"Newest: {NewestTemplate?.ToString() ?? "N/A"}";
+        return $"Templates: {TotalTemplates}, Tags: {TemplatesByTag.Count}, "
+            + $"Oldest: {OldestTemplate?.ToString() ?? "N/A"}, "
+            + $"Newest: {NewestTemplate?.ToString() ?? "N/A"}";
     }
 }

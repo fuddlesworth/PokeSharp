@@ -8,7 +8,7 @@ namespace PokeSharp.Core.Components;
 /// <remarks>
 /// Properties are stored as key-value pairs where keys come from Tiled editor.
 /// This allows mods and data files to define new tile behaviors without code changes.
-/// 
+///
 /// Example Tiled properties:
 /// - "passable": true/false
 /// - "encounter_rate": 10
@@ -41,8 +41,8 @@ public struct TileProperties
     /// <returns>Properties dictionary for the tile, or empty if none.</returns>
     public readonly Dictionary<string, object> GetPropertiesForTile(int tileGid)
     {
-        return TilePropertyMap.TryGetValue(tileGid, out var props) 
-            ? props 
+        return TilePropertyMap.TryGetValue(tileGid, out var props)
+            ? props
             : new Dictionary<string, object>();
     }
 
@@ -54,8 +54,8 @@ public struct TileProperties
     /// <returns>True if the property exists; otherwise, false.</returns>
     public readonly bool HasProperty(int tileGid, string propertyName)
     {
-        return TilePropertyMap.TryGetValue(tileGid, out var props) && 
-               props.ContainsKey(propertyName);
+        return TilePropertyMap.TryGetValue(tileGid, out var props)
+            && props.ContainsKey(propertyName);
     }
 
     /// <summary>
@@ -113,7 +113,9 @@ public struct TileProperties
 
         try
         {
-            value = objValue is T typedValue ? typedValue : (T)Convert.ChangeType(objValue, typeof(T));
+            value = objValue is T typedValue
+                ? typedValue
+                : (T)Convert.ChangeType(objValue, typeof(T));
             return true;
         }
         catch
@@ -148,5 +150,3 @@ public struct TileProperties
     /// </summary>
     public readonly IEnumerable<int> TileGids => TilePropertyMap.Keys;
 }
-
-

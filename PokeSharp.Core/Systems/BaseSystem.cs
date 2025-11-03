@@ -34,7 +34,9 @@ public abstract class BaseSystem : ISystem
     {
         if (World == null)
         {
-            throw new InvalidOperationException($"System {GetType().Name} has not been initialized. Call Initialize() first.");
+            throw new InvalidOperationException(
+                $"System {GetType().Name} has not been initialized. Call Initialize() first."
+            );
         }
     }
 }

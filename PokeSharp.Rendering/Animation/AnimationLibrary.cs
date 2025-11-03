@@ -1,5 +1,5 @@
-using Microsoft.Xna.Framework;
 using Microsoft.Extensions.Logging;
+using Microsoft.Xna.Framework;
 
 namespace PokeSharp.Rendering.Animation;
 
@@ -67,12 +67,18 @@ public class AnimationLibrary
     {
         if (string.IsNullOrWhiteSpace(animation.Name))
         {
-            throw new ArgumentException("Animation name cannot be null or empty.", nameof(animation));
+            throw new ArgumentException(
+                "Animation name cannot be null or empty.",
+                nameof(animation)
+            );
         }
 
         _animations[animation.Name] = animation;
-        _logger?.LogDebug("Registered animation: '{AnimationName}' with {FrameCount} frames",
-            animation.Name, animation.FrameCount);
+        _logger?.LogDebug(
+            "Registered animation: '{AnimationName}' with {FrameCount} frames",
+            animation.Name,
+            animation.FrameCount
+        );
     }
 
     /// <summary>
@@ -97,30 +103,86 @@ public class AnimationLibrary
         _logger?.LogInformation("Initializing default player animations...");
 
         // Walk animations (4 frames each)
-        RegisterAnimation(AnimationDefinition.CreateFromGrid(
-            "walk_down", 0, 0, frameWidth, frameHeight, 4, walkFrameDuration, loop: true));
+        RegisterAnimation(
+            AnimationDefinition.CreateFromGrid(
+                "walk_down",
+                0,
+                0,
+                frameWidth,
+                frameHeight,
+                4,
+                walkFrameDuration,
+                loop: true
+            )
+        );
 
-        RegisterAnimation(AnimationDefinition.CreateFromGrid(
-            "walk_left", 0, frameHeight, frameWidth, frameHeight, 4, walkFrameDuration, loop: true));
+        RegisterAnimation(
+            AnimationDefinition.CreateFromGrid(
+                "walk_left",
+                0,
+                frameHeight,
+                frameWidth,
+                frameHeight,
+                4,
+                walkFrameDuration,
+                loop: true
+            )
+        );
 
-        RegisterAnimation(AnimationDefinition.CreateFromGrid(
-            "walk_right", 0, frameHeight * 2, frameWidth, frameHeight, 4, walkFrameDuration, loop: true));
+        RegisterAnimation(
+            AnimationDefinition.CreateFromGrid(
+                "walk_right",
+                0,
+                frameHeight * 2,
+                frameWidth,
+                frameHeight,
+                4,
+                walkFrameDuration,
+                loop: true
+            )
+        );
 
-        RegisterAnimation(AnimationDefinition.CreateFromGrid(
-            "walk_up", 0, frameHeight * 3, frameWidth, frameHeight, 4, walkFrameDuration, loop: true));
+        RegisterAnimation(
+            AnimationDefinition.CreateFromGrid(
+                "walk_up",
+                0,
+                frameHeight * 3,
+                frameWidth,
+                frameHeight,
+                4,
+                walkFrameDuration,
+                loop: true
+            )
+        );
 
         // Idle animations (single frame - first frame of each walk cycle)
-        RegisterAnimation(AnimationDefinition.CreateSingleFrame(
-            "idle_down", new Rectangle(0, 0, frameWidth, frameHeight)));
+        RegisterAnimation(
+            AnimationDefinition.CreateSingleFrame(
+                "idle_down",
+                new Rectangle(0, 0, frameWidth, frameHeight)
+            )
+        );
 
-        RegisterAnimation(AnimationDefinition.CreateSingleFrame(
-            "idle_left", new Rectangle(0, frameHeight, frameWidth, frameHeight)));
+        RegisterAnimation(
+            AnimationDefinition.CreateSingleFrame(
+                "idle_left",
+                new Rectangle(0, frameHeight, frameWidth, frameHeight)
+            )
+        );
 
-        RegisterAnimation(AnimationDefinition.CreateSingleFrame(
-            "idle_right", new Rectangle(0, frameHeight * 2, frameWidth, frameHeight)));
+        RegisterAnimation(
+            AnimationDefinition.CreateSingleFrame(
+                "idle_right",
+                new Rectangle(0, frameHeight * 2, frameWidth, frameHeight)
+            )
+        );
 
-        RegisterAnimation(AnimationDefinition.CreateSingleFrame(
-            "idle_up", new Rectangle(0, frameHeight * 3, frameWidth, frameHeight)));
+        RegisterAnimation(
+            AnimationDefinition.CreateSingleFrame(
+                "idle_up",
+                new Rectangle(0, frameHeight * 3, frameWidth, frameHeight)
+            )
+        );
 
         _logger?.LogInformation("Registered {Count} default animations", _animations.Count);
     }

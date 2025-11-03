@@ -45,62 +45,79 @@ public class InputSystem : BaseSystem
         var gamepadState = GamePad.GetState(PlayerIndex.One);
 
         // Query player entities with input state and direction component
-        var query = new QueryDescription()
-            .WithAll<Player, Position, GridMovement, InputState, Direction>();
+        var query = new QueryDescription().WithAll<
+            Player,
+            Position,
+            GridMovement,
+            InputState,
+            Direction
+        >();
 
-        world.Query(in query, (Entity entity, ref Position position, ref GridMovement movement, ref InputState input) =>
-        {
-            if (!input.InputEnabled)
+        world.Query(
+            in query,
+            (
+                Entity entity,
+                ref Position position,
+                ref GridMovement movement,
+                ref InputState input
+            ) =>
             {
-                return;
-            }
-
-            // Get current input direction
-            var currentDirection = GetInputDirection(keyboardState, gamepadState);
-
-            // Update pressed direction if input detected
-            if (currentDirection != Direction.None)
-            {
-                input.PressedDirection = currentDirection;
-
-                // Synchronize Direction component with input direction
-                ref var direction = ref entity.Get<Direction>();
-                direction = currentDirection;
-
-                // Buffer input if:
-                // 1. Not currently moving (allows holding keys for continuous movement), OR
-                // 2. Direction changed (allows queuing direction changes during movement)
-                // But only if we haven't buffered this exact direction very recently (prevents duplicates)
-                bool shouldBuffer = !movement.IsMoving || 
-                                   (currentDirection != _lastBufferedDirection);
-                
-                // Also prevent buffering the same direction multiple times per frame
-                bool isDifferentTiming = _totalTime != _lastBufferTime || 
-                                        currentDirection != _lastBufferedDirection;
-                
-                if (shouldBuffer && isDifferentTiming)
+                if (!input.InputEnabled)
                 {
-                    if (_inputBuffer.AddInput(currentDirection, _totalTime))
+                    return;
+                }
+
+                // Get current input direction
+                var currentDirection = GetInputDirection(keyboardState, gamepadState);
+
+                // Update pressed direction if input detected
+                if (currentDirection != Direction.None)
+                {
+                    input.PressedDirection = currentDirection;
+
+                    // Synchronize Direction component with input direction
+                    ref var direction = ref entity.Get<Direction>();
+                    direction = currentDirection;
+
+                    // Buffer input if:
+                    // 1. Not currently moving (allows holding keys for continuous movement), OR
+                    // 2. Direction changed (allows queuing direction changes during movement)
+                    // But only if we haven't buffered this exact direction very recently (prevents duplicates)
+                    bool shouldBuffer =
+                        !movement.IsMoving || (currentDirection != _lastBufferedDirection);
+
+                    // Also prevent buffering the same direction multiple times per frame
+                    bool isDifferentTiming =
+                        _totalTime != _lastBufferTime || currentDirection != _lastBufferedDirection;
+
+                    if (shouldBuffer && isDifferentTiming)
                     {
-                        _lastBufferedDirection = currentDirection;
-                        _lastBufferTime = _totalTime;
+                        if (_inputBuffer.AddInput(currentDirection, _totalTime))
+                        {
+                            _lastBufferedDirection = currentDirection;
+                            _lastBufferTime = _totalTime;
+                        }
                     }
                 }
-            }
 
-            // Check for action button
-            input.ActionPressed = keyboardState.IsKeyDown(Keys.Space) ||
-                                 keyboardState.IsKeyDown(Keys.Enter) ||
-                                 keyboardState.IsKeyDown(Keys.Z) ||
-                                 gamepadState.Buttons.A == ButtonState.Pressed;
+                // Check for action button
+                input.ActionPressed =
+                    keyboardState.IsKeyDown(Keys.Space)
+                    || keyboardState.IsKeyDown(Keys.Enter)
+                    || keyboardState.IsKeyDown(Keys.Z)
+                    || gamepadState.Buttons.A == ButtonState.Pressed;
 
-            // Try to consume buffered input if not currently moving
-            if (!movement.IsMoving && _inputBuffer.TryConsumeInput(_totalTime, out var bufferedDirection))
-            {
-                StartMovement(world, ref position, ref movement, bufferedDirection);
-                _lastBufferedDirection = Direction.None; // Reset after consuming
+                // Try to consume buffered input if not currently moving
+                if (
+                    !movement.IsMoving
+                    && _inputBuffer.TryConsumeInput(_totalTime, out var bufferedDirection)
+                )
+                {
+                    StartMovement(world, ref position, ref movement, bufferedDirection);
+                    _lastBufferedDirection = Direction.None; // Reset after consuming
+                }
             }
-        });
+        );
     }
 
     private static Direction GetInputDirection(KeyboardState keyboard, GamePadState gamepad)
@@ -129,7 +146,12 @@ public class InputSystem : BaseSystem
         return Direction.None;
     }
 
-    private static void StartMovement(World world, ref Position position, ref GridMovement movement, Direction direction)
+    private static void StartMovement(
+        World world,
+        ref Position position,
+        ref GridMovement movement,
+        Direction direction
+    )
     {
         // Calculate target grid position
         int targetX = position.X;
@@ -155,7 +177,11 @@ public class InputSystem : BaseSystem
         if (CollisionSystem.IsLedge(world, targetX, targetY))
         {
             // Get the allowed jump direction for this ledge
-            Direction allowedJumpDir = CollisionSystem.GetLedgeJumpDirection(world, targetX, targetY);
+            Direction allowedJumpDir = CollisionSystem.GetLedgeJumpDirection(
+                world,
+                targetX,
+                targetY
+            );
 
             // Only allow jumping in the specified direction
             if (direction == allowedJumpDir)
@@ -181,7 +207,9 @@ public class InputSystem : BaseSystem
                 }
 
                 // Check if landing position is valid
-                if (!CollisionSystem.IsPositionWalkable(world, jumpLandX, jumpLandY, Direction.None))
+                if (
+                    !CollisionSystem.IsPositionWalkable(world, jumpLandX, jumpLandY, Direction.None)
+                )
                 {
                     return; // Can't jump if landing is blocked
                 }

@@ -89,8 +89,9 @@ public struct RectangleF
     /// <returns>True if the rectangles intersect; otherwise, false.</returns>
     public bool Intersects(RectangleF other)
     {
-        return !(Right <= other.Left || Left >= other.Right ||
-                 Bottom <= other.Top || Top >= other.Bottom);
+        return !(
+            Right <= other.Left || Left >= other.Right || Bottom <= other.Top || Top >= other.Bottom
+        );
     }
 
     /// <summary>
@@ -100,8 +101,7 @@ public struct RectangleF
     /// <returns>True if the rectangle contains the point; otherwise, false.</returns>
     public bool Contains(Vector2 point)
     {
-        return point.X >= Left && point.X <= Right &&
-               point.Y >= Top && point.Y <= Bottom;
+        return point.X >= Left && point.X <= Right && point.Y >= Top && point.Y <= Bottom;
     }
 
     /// <summary>
@@ -111,8 +111,10 @@ public struct RectangleF
     /// <returns>True if this rectangle entirely contains the other; otherwise, false.</returns>
     public bool Contains(RectangleF other)
     {
-        return other.Left >= Left && other.Right <= Right &&
-               other.Top >= Top && other.Bottom <= Bottom;
+        return other.Left >= Left
+            && other.Right <= Right
+            && other.Top >= Top
+            && other.Bottom <= Bottom;
     }
 
     /// <summary>
@@ -122,12 +124,7 @@ public struct RectangleF
     /// <returns>A Rectangle with integer coordinates.</returns>
     public Rectangle ToRectangle()
     {
-        return new Rectangle(
-            (int)X,
-            (int)Y,
-            (int)Width,
-            (int)Height
-        );
+        return new Rectangle((int)X, (int)Y, (int)Width, (int)Height);
     }
 
     /// <summary>
@@ -156,9 +153,11 @@ public struct RectangleF
     /// <returns>True if the rectangles are equal; otherwise, false.</returns>
     public override bool Equals(object? obj)
     {
-        return obj is RectangleF other &&
-               X == other.X && Y == other.Y &&
-               Width == other.Width && Height == other.Height;
+        return obj is RectangleF other
+            && X == other.X
+            && Y == other.Y
+            && Width == other.Width
+            && Height == other.Height;
     }
 
     /// <summary>
@@ -186,4 +185,3 @@ public struct RectangleF
         return !left.Equals(right);
     }
 }
-

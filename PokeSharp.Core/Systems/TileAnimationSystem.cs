@@ -36,20 +36,23 @@ public class TileAnimationSystem : BaseSystem
         // Query all entities with TileMap component
         var query = new QueryDescription().WithAll<TileMap>();
 
-        world.Query(in query, (ref TileMap tileMap) =>
-        {
-            // Check if this map has animated tiles
-            if (tileMap.AnimatedTiles == null || tileMap.AnimatedTiles.Length == 0)
+        world.Query(
+            in query,
+            (ref TileMap tileMap) =>
             {
-                return;
-            }
+                // Check if this map has animated tiles
+                if (tileMap.AnimatedTiles == null || tileMap.AnimatedTiles.Length == 0)
+                {
+                    return;
+                }
 
-            // Update each animated tile in the array
-            for (int i = 0; i < tileMap.AnimatedTiles!.Length; i++)
-            {
-                UpdateTileAnimation(ref tileMap, ref tileMap.AnimatedTiles[i], deltaTime);
+                // Update each animated tile in the array
+                for (int i = 0; i < tileMap.AnimatedTiles!.Length; i++)
+                {
+                    UpdateTileAnimation(ref tileMap, ref tileMap.AnimatedTiles[i], deltaTime);
+                }
             }
-        });
+        );
     }
 
     /// <summary>
@@ -58,11 +61,19 @@ public class TileAnimationSystem : BaseSystem
     /// <param name="tileMap">The tile map containing the animated tiles.</param>
     /// <param name="animatedTile">The animated tile data.</param>
     /// <param name="deltaTime">Time elapsed since last frame in seconds.</param>
-    private static void UpdateTileAnimation(ref TileMap tileMap, ref AnimatedTile animatedTile, float deltaTime)
+    private static void UpdateTileAnimation(
+        ref TileMap tileMap,
+        ref AnimatedTile animatedTile,
+        float deltaTime
+    )
     {
         // Validate animation data
-        if (animatedTile.FrameTileIds == null || animatedTile.FrameTileIds.Length == 0 ||
-            animatedTile.FrameDurations == null || animatedTile.FrameDurations.Length == 0)
+        if (
+            animatedTile.FrameTileIds == null
+            || animatedTile.FrameTileIds.Length == 0
+            || animatedTile.FrameDurations == null
+            || animatedTile.FrameDurations.Length == 0
+        )
         {
             return;
         }

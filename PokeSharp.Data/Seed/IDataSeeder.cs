@@ -21,7 +21,10 @@ public interface IDataSeeder
     /// <param name="directoryPath">Absolute path to directory containing data files</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>Number of entities seeded</returns>
-    Task<int> SeedFromDirectoryAsync(string directoryPath, CancellationToken cancellationToken = default);
+    Task<int> SeedFromDirectoryAsync(
+        string directoryPath,
+        CancellationToken cancellationToken = default
+    );
 
     /// <summary>
     /// Seed data from a single file.
@@ -38,7 +41,10 @@ public interface IDataSeeder
     /// <param name="directoryPath">Directory to validate</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>Validation result with errors</returns>
-    Task<DataValidationResult> ValidateAsync(string directoryPath, CancellationToken cancellationToken = default);
+    Task<DataValidationResult> ValidateAsync(
+        string directoryPath,
+        CancellationToken cancellationToken = default
+    );
 }
 
 /// <summary>
@@ -51,15 +57,9 @@ public sealed class DataValidationResult
     public List<string> Warnings { get; init; } = new();
     public int FilesChecked { get; init; }
 
-    public static DataValidationResult Success(int filesChecked) => new()
-    {
-        IsValid = true,
-        FilesChecked = filesChecked
-    };
+    public static DataValidationResult Success(int filesChecked) =>
+        new() { IsValid = true, FilesChecked = filesChecked };
 
-    public static DataValidationResult Failure(params string[] errors) => new()
-    {
-        IsValid = false,
-        Errors = errors.ToList()
-    };
+    public static DataValidationResult Failure(params string[] errors) =>
+        new() { IsValid = false, Errors = errors.ToList() };
 }

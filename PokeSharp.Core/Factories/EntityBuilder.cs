@@ -1,5 +1,5 @@
-using Arch.Core;
 using System.Numerics;
+using Arch.Core;
 
 namespace PokeSharp.Core.Factories;
 
@@ -54,7 +54,8 @@ public sealed class EntityBuilder
     /// <typeparam name="T">Component type</typeparam>
     /// <param name="component">Component data to override</param>
     /// <returns>This builder for chaining</returns>
-    public EntityBuilder OverrideComponent<T>(T component) where T : struct
+    public EntityBuilder OverrideComponent<T>(T component)
+        where T : struct
     {
         _componentOverrides[typeof(T)] = component;
         return this;
@@ -89,11 +90,10 @@ public sealed class EntityBuilder
     /// </summary>
     /// <typeparam name="T">Component type</typeparam>
     /// <returns>Component data or null if not overridden</returns>
-    internal T? GetComponentOverride<T>() where T : struct
+    internal T? GetComponentOverride<T>()
+        where T : struct
     {
-        return _componentOverrides.TryGetValue(typeof(T), out var component)
-            ? (T)component
-            : null;
+        return _componentOverrides.TryGetValue(typeof(T), out var component) ? (T)component : null;
     }
 
     /// <summary>
@@ -113,9 +113,7 @@ public sealed class EntityBuilder
     /// <returns>Component data or null if not overridden</returns>
     internal object? GetComponentOverride(Type componentType)
     {
-        return _componentOverrides.TryGetValue(componentType, out var component)
-            ? component
-            : null;
+        return _componentOverrides.TryGetValue(componentType, out var component) ? component : null;
     }
 
     /// <summary>

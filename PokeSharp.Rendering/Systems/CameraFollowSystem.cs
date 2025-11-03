@@ -23,8 +23,7 @@ public class CameraFollowSystem : BaseSystem
         base.Initialize(world);
 
         // Query for player with camera
-        _playerQuery = new QueryDescription()
-            .WithAll<Player, Position, Camera>();
+        _playerQuery = new QueryDescription().WithAll<Player, Position, Camera>();
     }
 
     /// <inheritdoc/>
@@ -36,11 +35,14 @@ public class CameraFollowSystem : BaseSystem
         EnsureInitialized();
 
         // Process each camera-equipped player
-        world.Query(in _playerQuery, (ref Position position, ref Camera camera) =>
-        {
-            // Set follow target and let Camera.Update() handle the rest
-            camera.FollowTarget = new Vector2(position.PixelX, position.PixelY);
-            camera.Update(deltaTime);
-        });
+        world.Query(
+            in _playerQuery,
+            (ref Position position, ref Camera camera) =>
+            {
+                // Set follow target and let Camera.Update() handle the rest
+                camera.FollowTarget = new Vector2(position.PixelX, position.PixelY);
+                camera.Update(deltaTime);
+            }
+        );
     }
 }

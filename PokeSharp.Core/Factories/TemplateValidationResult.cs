@@ -36,11 +36,7 @@ public sealed class TemplateValidationResult
     /// </summary>
     public static TemplateValidationResult Success(string templateId)
     {
-        return new TemplateValidationResult
-        {
-            TemplateId = templateId,
-            IsValid = true
-        };
+        return new TemplateValidationResult { TemplateId = templateId, IsValid = true };
     }
 
     /// <summary>
@@ -52,7 +48,7 @@ public sealed class TemplateValidationResult
         {
             TemplateId = templateId,
             IsValid = false,
-            Errors = errors.ToList()
+            Errors = errors.ToList(),
         };
     }
 
@@ -65,7 +61,7 @@ public sealed class TemplateValidationResult
         {
             TemplateId = templateId,
             IsValid = true,
-            Warnings = warnings.ToList()
+            Warnings = warnings.ToList(),
         };
     }
 

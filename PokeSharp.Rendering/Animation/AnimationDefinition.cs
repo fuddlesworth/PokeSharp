@@ -48,9 +48,7 @@ public class AnimationDefinition
     /// <summary>
     /// Initializes a new instance of the AnimationDefinition class.
     /// </summary>
-    public AnimationDefinition()
-    {
-    }
+    public AnimationDefinition() { }
 
     /// <summary>
     /// Initializes a new instance of the AnimationDefinition class with specified parameters.
@@ -59,7 +57,12 @@ public class AnimationDefinition
     /// <param name="frames">The frame source rectangles.</param>
     /// <param name="frameDuration">Duration of each frame in seconds.</param>
     /// <param name="loop">Whether the animation loops.</param>
-    public AnimationDefinition(string name, Rectangle[] frames, float frameDuration = 0.15f, bool loop = true)
+    public AnimationDefinition(
+        string name,
+        Rectangle[] frames,
+        float frameDuration = 0.15f,
+        bool loop = true
+    )
     {
         Name = name;
         Frames = frames;
@@ -76,8 +79,10 @@ public class AnimationDefinition
     {
         if (frameIndex < 0 || frameIndex >= FrameCount)
         {
-            throw new ArgumentOutOfRangeException(nameof(frameIndex),
-                $"Frame index {frameIndex} is out of range. Valid range: 0-{FrameCount - 1}");
+            throw new ArgumentOutOfRangeException(
+                nameof(frameIndex),
+                $"Frame index {frameIndex} is out of range. Valid range: 0-{FrameCount - 1}"
+            );
         }
 
         return Frames[frameIndex];
@@ -104,8 +109,10 @@ public class AnimationDefinition
     {
         if (frameIndex < 0 || frameIndex >= FrameCount)
         {
-            throw new ArgumentOutOfRangeException(nameof(frameIndex),
-                $"Frame index {frameIndex} is out of range. Valid range: 0-{FrameCount - 1}");
+            throw new ArgumentOutOfRangeException(
+                nameof(frameIndex),
+                $"Frame index {frameIndex} is out of range. Valid range: 0-{FrameCount - 1}"
+            );
         }
 
         if (!Events.ContainsKey(frameIndex))
@@ -179,17 +186,13 @@ public class AnimationDefinition
         int frameHeight,
         int frameCount,
         float frameDuration = 0.15f,
-        bool loop = true)
+        bool loop = true
+    )
     {
         var frames = new Rectangle[frameCount];
         for (int i = 0; i < frameCount; i++)
         {
-            frames[i] = new Rectangle(
-                startX + (i * frameWidth),
-                startY,
-                frameWidth,
-                frameHeight
-            );
+            frames[i] = new Rectangle(startX + (i * frameWidth), startY, frameWidth, frameHeight);
         }
 
         return new AnimationDefinition(name, frames, frameDuration, loop);

@@ -142,10 +142,10 @@ public struct Camera
     /// </summary>
     public readonly Matrix GetTransformMatrix()
     {
-        return Matrix.CreateTranslation(-Position.X, -Position.Y, 0) *
-               Matrix.CreateRotationZ(Rotation) *
-               Matrix.CreateScale(Zoom, Zoom, 1) *
-               Matrix.CreateTranslation(Viewport.Width / 2f, Viewport.Height / 2f, 0);
+        return Matrix.CreateTranslation(-Position.X, -Position.Y, 0)
+            * Matrix.CreateRotationZ(Rotation)
+            * Matrix.CreateScale(Zoom, Zoom, 1)
+            * Matrix.CreateTranslation(Viewport.Width / 2f, Viewport.Height / 2f, 0);
     }
 
     /// <summary>
@@ -243,7 +243,7 @@ public struct Camera
         if (Math.Abs(Zoom - TargetZoom) > 0.001f)
         {
             Zoom = MathHelper.Lerp(Zoom, TargetZoom, ZoomTransitionSpeed);
-            
+
             // Snap to target when very close
             if (Math.Abs(Zoom - TargetZoom) < 0.001f)
             {
@@ -255,7 +255,7 @@ public struct Camera
         if (FollowTarget.HasValue)
         {
             var targetPosition = FollowTarget.Value;
-            
+
             // Apply smoothing if enabled
             if (SmoothingSpeed > 0)
             {
@@ -265,7 +265,7 @@ public struct Camera
             {
                 Position = targetPosition;
             }
-            
+
             // Clamp to map bounds
             if (MapBounds != Rectangle.Empty)
             {
@@ -282,7 +282,7 @@ public struct Camera
     {
         const int gbaWidth = 240;
         const int gbaHeight = 160;
-        
+
         var zoomX = (float)Viewport.Width / gbaWidth;
         var zoomY = (float)Viewport.Height / gbaHeight;
         return Math.Min(zoomX, zoomY); // Use smaller zoom to fit entirely
@@ -296,7 +296,7 @@ public struct Camera
     {
         const int ndsWidth = 256;
         const int ndsHeight = 192;
-        
+
         var zoomX = (float)Viewport.Width / ndsWidth;
         var zoomY = (float)Viewport.Height / ndsHeight;
         return Math.Min(zoomX, zoomY); // Use smaller zoom to fit entirely

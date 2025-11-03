@@ -11,14 +11,14 @@ namespace PokeSharp.Core.Systems;
 /// <remarks>
 /// This system doesn't update each frame - it's a query helper.
 /// Other systems (EncounterSystem, FootstepSystem, etc.) use this to query tile data.
-/// 
+///
 /// Example properties from Tiled:
 /// - "passable": true/false
 /// - "encounter_rate": 10 (0-255)
 /// - "terrain_type": "grass", "water", "sand"
 /// - "script": "triggers/heal_tile.csx"
 /// - "sound": "footstep_sand"
-/// 
+///
 /// Mods can add unlimited custom properties without code changes!
 /// </remarks>
 public class TilePropertySystem : BaseSystem
@@ -47,23 +47,26 @@ public class TilePropertySystem : BaseSystem
 
         int tileGid = 0;
 
-        world.Query(in mapQuery, (ref TileMap map) =>
-        {
-            // Check bounds
-            if (gridX < 0 || gridX >= map.Width || gridY < 0 || gridY >= map.Height)
+        world.Query(
+            in mapQuery,
+            (ref TileMap map) =>
             {
-                return;
-            }
+                // Check bounds
+                if (gridX < 0 || gridX >= map.Width || gridY < 0 || gridY >= map.Height)
+                {
+                    return;
+                }
 
-            // Get tile from appropriate layer
-            tileGid = layer.ToLowerInvariant() switch
-            {
-                "ground" => map.GroundLayer[gridY, gridX],
-                "objects" => map.ObjectLayer[gridY, gridX],
-                "overhead" => map.OverheadLayer[gridY, gridX],
-                _ => map.GroundLayer[gridY, gridX]
-            };
-        });
+                // Get tile from appropriate layer
+                tileGid = layer.ToLowerInvariant() switch
+                {
+                    "ground" => map.GroundLayer[gridY, gridX],
+                    "objects" => map.ObjectLayer[gridY, gridX],
+                    "overhead" => map.OverheadLayer[gridY, gridX],
+                    _ => map.GroundLayer[gridY, gridX],
+                };
+            }
+        );
 
         return tileGid;
     }
@@ -76,7 +79,12 @@ public class TilePropertySystem : BaseSystem
     /// <param name="gridY">Grid Y coordinate.</param>
     /// <param name="layer">Which layer to query ("ground", "objects", "overhead").</param>
     /// <returns>Properties dictionary for the tile, or empty if no properties.</returns>
-    public static Dictionary<string, object> GetTilePropertiesAt(World world, int gridX, int gridY, string layer = "ground")
+    public static Dictionary<string, object> GetTilePropertiesAt(
+        World world,
+        int gridX,
+        int gridY,
+        string layer = "ground"
+    )
     {
         // Get the tile GID at this position
         int tileGid = GetTileGidAt(world, gridX, gridY, layer);
@@ -90,10 +98,13 @@ public class TilePropertySystem : BaseSystem
         var propsQuery = new QueryDescription().WithAll<TileProperties>();
         var result = new Dictionary<string, object>();
 
-        world.Query(in propsQuery, (ref TileProperties props) =>
-        {
-            result = props.GetPropertiesForTile(tileGid);
-        });
+        world.Query(
+            in propsQuery,
+            (ref TileProperties props) =>
+            {
+                result = props.GetPropertiesForTile(tileGid);
+            }
+        );
 
         return result;
     }
@@ -107,10 +118,16 @@ public class TilePropertySystem : BaseSystem
     /// <param name="propertyName">The property name to check (e.g., "passable", "encounter_rate").</param>
     /// <param name="layer">Which layer to query.</param>
     /// <returns>True if the tile has the property; otherwise, false.</returns>
-    public static bool TileHasProperty(World world, int gridX, int gridY, string propertyName, string layer = "ground")
+    public static bool TileHasProperty(
+        World world,
+        int gridX,
+        int gridY,
+        string propertyName,
+        string layer = "ground"
+    )
     {
         int tileGid = GetTileGidAt(world, gridX, gridY, layer);
-        
+
         if (tileGid == 0)
         {
             return false;
@@ -119,10 +136,13 @@ public class TilePropertySystem : BaseSystem
         var propsQuery = new QueryDescription().WithAll<TileProperties>();
         bool hasProperty = false;
 
-        world.Query(in propsQuery, (ref TileProperties props) =>
-        {
-            hasProperty = props.HasProperty(tileGid, propertyName);
-        });
+        world.Query(
+            in propsQuery,
+            (ref TileProperties props) =>
+            {
+                hasProperty = props.HasProperty(tileGid, propertyName);
+            }
+        );
 
         return hasProperty;
     }
@@ -138,10 +158,17 @@ public class TilePropertySystem : BaseSystem
     /// <param name="defaultValue">Default value if property doesn't exist.</param>
     /// <param name="layer">Which layer to query.</param>
     /// <returns>The property value, or default if not found.</returns>
-    public static T GetTileProperty<T>(World world, int gridX, int gridY, string propertyName, T defaultValue = default!, string layer = "ground")
+    public static T GetTileProperty<T>(
+        World world,
+        int gridX,
+        int gridY,
+        string propertyName,
+        T defaultValue = default!,
+        string layer = "ground"
+    )
     {
         int tileGid = GetTileGidAt(world, gridX, gridY, layer);
-        
+
         if (tileGid == 0)
         {
             return defaultValue;
@@ -150,10 +177,13 @@ public class TilePropertySystem : BaseSystem
         var propsQuery = new QueryDescription().WithAll<TileProperties>();
         T result = defaultValue;
 
-        world.Query(in propsQuery, (ref TileProperties props) =>
-        {
-            result = props.GetProperty(tileGid, propertyName, defaultValue);
-        });
+        world.Query(
+            in propsQuery,
+            (ref TileProperties props) =>
+            {
+                result = props.GetProperty(tileGid, propertyName, defaultValue);
+            }
+        );
 
         return result;
     }
@@ -169,11 +199,18 @@ public class TilePropertySystem : BaseSystem
     /// <param name="value">The property value if found.</param>
     /// <param name="layer">Which layer to query.</param>
     /// <returns>True if the property was found; otherwise, false.</returns>
-    public static bool TryGetTileProperty<T>(World world, int gridX, int gridY, string propertyName, out T value, string layer = "ground")
+    public static bool TryGetTileProperty<T>(
+        World world,
+        int gridX,
+        int gridY,
+        string propertyName,
+        out T value,
+        string layer = "ground"
+    )
     {
         value = default!;
         int tileGid = GetTileGidAt(world, gridX, gridY, layer);
-        
+
         if (tileGid == 0)
         {
             return false;
@@ -183,13 +220,15 @@ public class TilePropertySystem : BaseSystem
         bool found = false;
         T localValue = default!;
 
-        world.Query(in propsQuery, (ref TileProperties props) =>
-        {
-            found = props.TryGetProperty(tileGid, propertyName, out localValue);
-        });
+        world.Query(
+            in propsQuery,
+            (ref TileProperties props) =>
+            {
+                found = props.TryGetProperty(tileGid, propertyName, out localValue);
+            }
+        );
 
         value = localValue;
         return found;
     }
 }
-
