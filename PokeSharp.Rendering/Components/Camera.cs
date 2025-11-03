@@ -30,6 +30,17 @@ public struct Camera
     public float Zoom { get; set; }
 
     /// <summary>
+    /// Gets or sets the target zoom level for smooth transitions.
+    /// </summary>
+    public float TargetZoom { get; set; }
+
+    /// <summary>
+    /// Gets or sets the zoom transition speed (0-1, where 1 = instant).
+    /// Default: 0.1 for smooth transitions.
+    /// </summary>
+    public float ZoomTransitionSpeed { get; set; }
+
+    /// <summary>
     /// Gets or sets the camera rotation in radians (clockwise).
     /// Use for camera shake effects, isometric views, or cinematic angles.
     /// </summary>
@@ -55,6 +66,13 @@ public struct Camera
     public float LeadDistance { get; set; }
 
     /// <summary>
+    /// Gets or sets the target position for camera following.
+    /// When set, the camera will smoothly follow this position.
+    /// Set to null to disable following.
+    /// </summary>
+    public Vector2? FollowTarget { get; set; }
+
+    /// <summary>
     /// Gets or sets the map bounds for camera clamping (in pixels).
     /// Prevents the camera from showing areas outside the map.
     /// Set to Rectangle.Empty to disable bounds checking.
@@ -68,10 +86,13 @@ public struct Camera
     {
         Position = Vector2.Zero;
         Zoom = 1.0f;
+        TargetZoom = 1.0f;
+        ZoomTransitionSpeed = 0.1f;
         Rotation = 0f;
         Viewport = Rectangle.Empty;
         SmoothingSpeed = 0.2f;
         LeadDistance = 1.5f;
+        FollowTarget = null;
         MapBounds = Rectangle.Empty;
     }
 
@@ -85,10 +106,13 @@ public struct Camera
     {
         Position = Vector2.Zero;
         Zoom = 1.0f;
+        TargetZoom = 1.0f;
+        ZoomTransitionSpeed = 0.1f;
         Rotation = 0f;
         Viewport = viewport;
         SmoothingSpeed = smoothingSpeed;
         LeadDistance = leadDistance;
+        FollowTarget = null;
         MapBounds = Rectangle.Empty;
     }
 
@@ -206,5 +230,130 @@ public struct Camera
     public Rectangle GetWorldViewBounds()
     {
         return BoundingRectangle.ToRectangle();
+    }
+
+    /// <summary>
+    /// Updates the camera's zoom and position based on FollowTarget and TargetZoom.
+    /// Call this each frame to enable smooth zoom transitions and camera following.
+    /// </summary>
+    /// <param name="deltaTime">Time elapsed since last frame (for frame-independent smoothing).</param>
+    public void Update(float deltaTime)
+    {
+        // 1. Smooth zoom transition
+        if (Math.Abs(Zoom - TargetZoom) > 0.001f)
+        {
+            Zoom = MathHelper.Lerp(Zoom, TargetZoom, ZoomTransitionSpeed);
+            
+            // Snap to target when very close
+            if (Math.Abs(Zoom - TargetZoom) < 0.001f)
+            {
+                Zoom = TargetZoom;
+            }
+        }
+
+        // 2. Follow target if set
+        if (FollowTarget.HasValue)
+        {
+            var targetPosition = FollowTarget.Value;
+            
+            // Apply smoothing if enabled
+            if (SmoothingSpeed > 0)
+            {
+                Position = Vector2.Lerp(Position, targetPosition, SmoothingSpeed);
+            }
+            else
+            {
+                Position = targetPosition;
+            }
+            
+            // Clamp to map bounds
+            if (MapBounds != Rectangle.Empty)
+            {
+                Position = ClampPositionToMapBounds(Position);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Calculates the zoom level to match GBA native resolution (240x160).
+    /// </summary>
+    /// <returns>The calculated zoom factor.</returns>
+    public readonly float CalculateGbaZoom()
+    {
+        const int gbaWidth = 240;
+        const int gbaHeight = 160;
+        
+        var zoomX = (float)Viewport.Width / gbaWidth;
+        var zoomY = (float)Viewport.Height / gbaHeight;
+        return Math.Min(zoomX, zoomY); // Use smaller zoom to fit entirely
+    }
+
+    /// <summary>
+    /// Calculates the zoom level to match NDS native resolution (256x192).
+    /// </summary>
+    /// <returns>The calculated zoom factor.</returns>
+    public readonly float CalculateNdsZoom()
+    {
+        const int ndsWidth = 256;
+        const int ndsHeight = 192;
+        
+        var zoomX = (float)Viewport.Width / ndsWidth;
+        var zoomY = (float)Viewport.Height / ndsHeight;
+        return Math.Min(zoomX, zoomY); // Use smaller zoom to fit entirely
+    }
+
+    /// <summary>
+    /// Sets the target zoom level for smooth transition.
+    /// Automatically clamped between MinZoom and MaxZoom.
+    /// </summary>
+    /// <param name="targetZoom">The desired zoom level.</param>
+    public void SetZoomSmooth(float targetZoom)
+    {
+        TargetZoom = MathHelper.Clamp(targetZoom, MinZoom, MaxZoom);
+    }
+
+    /// <summary>
+    /// Sets the zoom level instantly without transition.
+    /// Automatically clamped between MinZoom and MaxZoom.
+    /// </summary>
+    /// <param name="zoom">The zoom level to set.</param>
+    public void SetZoomInstant(float zoom)
+    {
+        Zoom = MathHelper.Clamp(zoom, MinZoom, MaxZoom);
+        TargetZoom = Zoom;
+    }
+
+    /// <summary>
+    /// Clamps the camera position to prevent showing areas outside the map.
+    /// </summary>
+    /// <param name="position">The desired camera position.</param>
+    /// <returns>The clamped camera position.</returns>
+    private readonly Vector2 ClampPositionToMapBounds(Vector2 position)
+    {
+        // Calculate half viewport dimensions in world coordinates (accounting for zoom)
+        var halfViewportWidth = Viewport.Width / (2f * Zoom);
+        var halfViewportHeight = Viewport.Height / (2f * Zoom);
+
+        // Calculate the bounds where the camera should stop
+        var minX = MapBounds.Left + halfViewportWidth;
+        var maxX = MapBounds.Right - halfViewportWidth;
+        var minY = MapBounds.Top + halfViewportHeight;
+        var maxY = MapBounds.Bottom - halfViewportHeight;
+
+        // Handle cases where viewport is larger than map (center the camera)
+        if (maxX < minX)
+        {
+            minX = maxX = (MapBounds.Left + MapBounds.Right) / 2f;
+        }
+        if (maxY < minY)
+        {
+            minY = maxY = (MapBounds.Top + MapBounds.Bottom) / 2f;
+        }
+
+        // Clamp position
+        return new Vector2(
+            MathHelper.Clamp(position.X, minX, maxX),
+            MathHelper.Clamp(position.Y, minY, maxY)
+        );
     }
 }

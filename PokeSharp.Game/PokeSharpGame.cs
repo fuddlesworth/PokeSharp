@@ -12,7 +12,6 @@ using PokeSharp.Rendering.Loaders;
 using PokeSharp.Rendering.Systems;
 using PokeSharp.Rendering.Animation;
 using PokeSharp.Rendering.Components;
-using PokeSharp.Rendering.Services;
 using PokeSharp.Game.Diagnostics;
 
 namespace PokeSharp.Game;
@@ -30,7 +29,6 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game
     private MapLoader _mapLoader = null!;
     private AnimationLibrary _animationLibrary = null!;
     private ZOrderRenderSystem _renderSystem = null!;
-    private ViewportScaleManager _viewportScaleManager = null!;
 
     // Keyboard state for zoom controls
     private KeyboardState _previousKeyboardState;
@@ -90,14 +88,6 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game
         _animationLibrary = new AnimationLibrary(logger: null);
         System.Console.WriteLine($"✅ AnimationLibrary initialized with {_animationLibrary.Count} animations");
 
-        // Initialize ViewportScaleManager with game viewport dimensions
-        _viewportScaleManager = new ViewportScaleManager(
-            _graphics.PreferredBackBufferWidth,
-            _graphics.PreferredBackBufferHeight,
-            initialZoom: 3.0f // Start with 3x zoom for pixel-perfect look
-        );
-        System.Console.WriteLine($"✅ ViewportScaleManager initialized: {_viewportScaleManager.ViewportSize.X}x{_viewportScaleManager.ViewportSize.Y}, Zoom: {_viewportScaleManager.CurrentZoom}x");
-
         // Create and register systems in priority order
         // InputSystem with Pokemon-style input buffering (5 inputs, 200ms timeout)
         _systemManager.RegisterSystem(new InputSystem(maxBufferSize: 5, bufferTimeout: 0.2f));
@@ -149,12 +139,6 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game
 
         // Handle zoom controls
         HandleZoomControls(deltaTime);
-
-        // Update ViewportScaleManager for smooth zoom transitions
-        _viewportScaleManager.Update(deltaTime);
-
-        // Update camera zoom from ViewportScaleManager
-        UpdateCameraZoom();
 
         // Clear the screen BEFORE systems render
         GraphicsDevice.Clear(Color.CornflowerBlue);
@@ -219,7 +203,9 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game
         var viewport = new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
         var camera = new Camera(viewport, smoothingSpeed: 0.2f, leadDistance: 1.5f)
         {
-            Zoom = _viewportScaleManager.CurrentZoom,
+            Zoom = 3.0f,
+            TargetZoom = 3.0f,
+            ZoomTransitionSpeed = 0.1f,
             Position = new Vector2(10 * 16, 8 * 16) // Start at player's position (grid to pixels)
         };
 
@@ -262,42 +248,44 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game
     {
         var currentKeyboardState = Keyboard.GetState();
 
-        // Zoom in with + or = key (since + requires shift)
-        if (IsKeyPressed(currentKeyboardState, Keys.OemPlus) || IsKeyPressed(currentKeyboardState, Keys.Add))
+        var query = new QueryDescription().WithAll<Player, Camera>();
+        _world.Query(in query, (ref Camera camera) =>
         {
-            var newZoom = MathHelper.Clamp(_viewportScaleManager.TargetZoom + 0.5f, 1.0f, 6.0f);
-            _viewportScaleManager.SetTargetZoom(newZoom);
-            System.Console.WriteLine($"🔍 Zoom: {newZoom:F1}x");
-        }
+            // Zoom in with + or = key (since + requires shift)
+            if (IsKeyPressed(currentKeyboardState, Keys.OemPlus) || IsKeyPressed(currentKeyboardState, Keys.Add))
+            {
+                camera.SetZoomSmooth(camera.TargetZoom + 0.5f);
+                System.Console.WriteLine($"🔍 Zoom: {camera.TargetZoom:F1}x");
+            }
 
-        // Zoom out with - key
-        if (IsKeyPressed(currentKeyboardState, Keys.OemMinus) || IsKeyPressed(currentKeyboardState, Keys.Subtract))
-        {
-            var newZoom = MathHelper.Clamp(_viewportScaleManager.TargetZoom - 0.5f, 1.0f, 6.0f);
-            _viewportScaleManager.SetTargetZoom(newZoom);
-            System.Console.WriteLine($"🔍 Zoom: {newZoom:F1}x");
-        }
+            // Zoom out with - key
+            if (IsKeyPressed(currentKeyboardState, Keys.OemMinus) || IsKeyPressed(currentKeyboardState, Keys.Subtract))
+            {
+                camera.SetZoomSmooth(camera.TargetZoom - 0.5f);
+                System.Console.WriteLine($"🔍 Zoom: {camera.TargetZoom:F1}x");
+            }
 
-        // Preset zoom levels
-        if (IsKeyPressed(currentKeyboardState, Keys.D1))
-        {
-            var gbaZoom = _viewportScaleManager.CalculateGbaZoom();
-            _viewportScaleManager.SetTargetZoom(gbaZoom);
-            System.Console.WriteLine($"🔍 GBA Preset: {gbaZoom:F1}x (240x160)");
-        }
+            // Preset zoom levels
+            if (IsKeyPressed(currentKeyboardState, Keys.D1))
+            {
+                var gbaZoom = camera.CalculateGbaZoom();
+                camera.SetZoomSmooth(gbaZoom);
+                System.Console.WriteLine($"🔍 GBA Preset: {gbaZoom:F1}x (240x160)");
+            }
 
-        if (IsKeyPressed(currentKeyboardState, Keys.D2))
-        {
-            var ndsZoom = _viewportScaleManager.CalculateNdsZoom();
-            _viewportScaleManager.SetTargetZoom(ndsZoom);
-            System.Console.WriteLine($"🔍 NDS Preset: {ndsZoom:F1}x (256x192)");
-        }
+            if (IsKeyPressed(currentKeyboardState, Keys.D2))
+            {
+                var ndsZoom = camera.CalculateNdsZoom();
+                camera.SetZoomSmooth(ndsZoom);
+                System.Console.WriteLine($"🔍 NDS Preset: {ndsZoom:F1}x (256x192)");
+            }
 
-        if (IsKeyPressed(currentKeyboardState, Keys.D3))
-        {
-            _viewportScaleManager.SetTargetZoom(3.0f);
-            System.Console.WriteLine($"🔍 Default Preset: 3.0x");
-        }
+            if (IsKeyPressed(currentKeyboardState, Keys.D3))
+            {
+                camera.SetZoomSmooth(3.0f);
+                System.Console.WriteLine($"🔍 Default Preset: 3.0x");
+            }
+        });
 
         _previousKeyboardState = currentKeyboardState;
     }
@@ -311,20 +299,6 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game
     private bool IsKeyPressed(KeyboardState currentState, Keys key)
     {
         return currentState.IsKeyDown(key) && _previousKeyboardState.IsKeyUp(key);
-    }
-
-    /// <summary>
-    /// Updates the camera zoom from the ViewportScaleManager.
-    /// Finds the player entity with a camera and syncs the zoom value.
-    /// </summary>
-    private void UpdateCameraZoom()
-    {
-        var query = new QueryDescription().WithAll<Player, Camera>();
-
-        _world.Query(in query, (ref Camera camera) =>
-        {
-            camera.Zoom = _viewportScaleManager.CurrentZoom;
-        });
     }
 
     /// <summary>

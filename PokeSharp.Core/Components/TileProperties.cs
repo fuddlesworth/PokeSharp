@@ -149,3 +149,4 @@ public struct TileProperties
     public readonly IEnumerable<int> TileGids => TilePropertyMap.Keys;
 }
 
+
