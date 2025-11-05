@@ -262,7 +262,7 @@ public static class TemplateRegistry
         };
         // No GridMovement component - can't move
         // Override sprite to use different texture
-        stationaryNpc.WithComponent(new Sprite("npc-stationary-spritesheet") { Tint = Color.White, Scale = 1f });
+        stationaryNpc.WithComponent(new Sprite("npc-spritesheet") { Tint = Color.White, Scale = 1f });
         cache.Register(stationaryNpc);
         logger?.LogDebug("Registered template: {TemplateId} (inherits from {BaseId})", 
             stationaryNpc.TemplateId, stationaryNpc.BaseTemplateId);
@@ -282,7 +282,7 @@ public static class TemplateRegistry
             },
         };
         // Override sprite for trainers
-        trainerNpc.WithComponent(new Sprite("trainer-spritesheet") { Tint = Color.White, Scale = 1f });
+        trainerNpc.WithComponent(new Sprite("npc-spritesheet") { Tint = Color.White, Scale = 1f });
         // TODO: Add Trainer component when implemented
         // trainerNpc.WithComponent(new Trainer(...));
         cache.Register(trainerNpc);
@@ -304,7 +304,7 @@ public static class TemplateRegistry
             },
         };
         // Override sprite for gym leaders
-        gymLeaderNpc.WithComponent(new Sprite("gym-leader-spritesheet") { Tint = Color.White, Scale = 1f });
+        gymLeaderNpc.WithComponent(new Sprite("npc-spritesheet") { Tint = Color.White, Scale = 1f });
         // TODO: Add Badge component when implemented
         // gymLeaderNpc.WithComponent(new Badge(...));
         cache.Register(gymLeaderNpc);
@@ -326,7 +326,7 @@ public static class TemplateRegistry
             },
         };
         // Override sprite for shop keepers
-        shopKeeperNpc.WithComponent(new Sprite("shop-keeper-spritesheet") { Tint = Color.White, Scale = 1f });
+        shopKeeperNpc.WithComponent(new Sprite("npc-spritesheet") { Tint = Color.White, Scale = 1f });
         // TODO: Add Shop component when implemented
         // shopKeeperNpc.WithComponent(new Shop(...));
         cache.Register(shopKeeperNpc);

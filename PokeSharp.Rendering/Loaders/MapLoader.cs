@@ -93,10 +93,14 @@ public class MapLoader
         // Create animated tile entities
         var animatedTilesCreated = CreateAnimatedTileEntities(world, tmxDoc, tileset);
 
+        // Spawn entities from map objects (NPCs, items, etc.)
+        var objectsCreated = SpawnMapObjects(world, tmxDoc, mapId, tmxDoc.TileHeight);
+
         Console.WriteLine($"✅ Loaded map: {mapName} ({tmxDoc.Width}x{tmxDoc.Height} tiles)");
         Console.WriteLine($"   MapId: {mapId}");
         Console.WriteLine($"   Created {tilesCreated} tile entities");
         Console.WriteLine($"   Created {animatedTilesCreated} animated tile entities");
+        Console.WriteLine($"   Created {objectsCreated} entities from map objects");
         Console.WriteLine($"   MapInfo entity: {mapInfoEntity}");
         Console.WriteLine($"   TilesetInfo entity: {tilesetEntity}");
         Console.WriteLine(
@@ -451,6 +455,98 @@ public class MapLoader
                 world.Add(entity, new TileScript(scriptPath));
             }
         }
+    }
+
+    /// <summary>
+    ///     Spawns entities from map objects (NPCs, items, triggers, etc.).
+    ///     Objects must have a "type" property indicating entity template (e.g., "npc/generic").
+    /// </summary>
+    /// <param name="world">The ECS world.</param>
+    /// <param name="tmxDoc">The Tiled map document.</param>
+    /// <param name="mapId">The map identifier.</param>
+    /// <param name="tileHeight">Tile height for coordinate conversion.</param>
+    /// <returns>Number of entities created from objects.</returns>
+    private int SpawnMapObjects(World world, TmxDocument tmxDoc, int mapId, int tileHeight)
+    {
+        if (_entityFactory == null)
+        {
+            // No entity factory - can't spawn from templates
+            return 0;
+        }
+
+        int created = 0;
+
+        foreach (var objectGroup in tmxDoc.ObjectGroups)
+        {
+            foreach (var obj in objectGroup.Objects)
+            {
+                // Get template ID from object type or properties
+                var templateId = obj.Type;
+                if (string.IsNullOrEmpty(templateId) && obj.Properties.TryGetValue("template", out var templateProp))
+                {
+                    templateId = templateProp.ToString();
+                }
+
+                if (string.IsNullOrEmpty(templateId))
+                {
+                    Console.WriteLine($"⚠️ Object '{obj.Name}' has no type/template, skipping");
+                    continue;
+                }
+
+                // Check if template exists
+                if (!_entityFactory.HasTemplate(templateId))
+                {
+                    Console.WriteLine($"⚠️ Template '{templateId}' not found for object '{obj.Name}', skipping");
+                    continue;
+                }
+
+                // Convert pixel coordinates to tile coordinates
+                // Tiled Y coordinate is from top of object, we want bottom-center for entities
+                var tileX = (int)Math.Floor(obj.X / tileHeight);
+                var tileY = (int)Math.Floor((obj.Y + obj.Height) / tileHeight) - 1; // -1 to account for entity being 1 tile tall
+
+                try
+                {
+                    // Spawn entity from template
+                    var entity = _entityFactory
+                        .SpawnFromTemplateAsync(
+                            templateId,
+                            world,
+                            builder =>
+                            {
+                                // Override position with map coordinates
+                                builder.OverrideComponent(new Position(tileX, tileY, mapId));
+
+                                // Apply any custom properties from the object
+                                if (obj.Properties.TryGetValue("direction", out var dirProp))
+                                {
+                                    var dirStr = dirProp.ToString()?.ToLower();
+                                    var direction = dirStr switch
+                                    {
+                                        "up" => Direction.Up,
+                                        "down" => Direction.Down,
+                                        "left" => Direction.Left,
+                                        "right" => Direction.Right,
+                                        _ => Direction.Down
+                                    };
+                                    builder.OverrideComponent(direction);
+                                }
+                            }
+                        )
+                        .GetAwaiter()
+                        .GetResult();
+
+                    Console.WriteLine($"   Spawned '{obj.Name}' ({templateId}) at ({tileX}, {tileY})");
+                    created++;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"⚠️ Failed to spawn '{obj.Name}' from template '{templateId}': {ex.Message}");
+                }
+            }
+        }
+
+        return created;
     }
 
     private Microsoft.Xna.Framework.Rectangle CalculateSourceRect(int tileGid, TmxTileset tileset)

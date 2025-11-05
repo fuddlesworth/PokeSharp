@@ -143,8 +143,8 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game
         // Create test player entity
         CreateTestPlayer();
 
-        // Create test NPCs to demonstrate template system
-        CreateTestNpcs();
+        // NPCs are now spawned from the map's object layers (see MapLoader.SpawnMapObjects)
+        // CreateTestNpcs(); // Disabled - NPCs come from map now
     }
 
     /// <summary>
