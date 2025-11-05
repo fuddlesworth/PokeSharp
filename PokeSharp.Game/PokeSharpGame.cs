@@ -107,15 +107,17 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game
 
         // InputSystem with Pokemon-style input buffering (5 inputs, 200ms timeout)
         var inputSystem = new InputSystem();
-        inputSystem.SetSpatialHashSystem(_spatialHashSystem);
         _systemManager.RegisterSystem(inputSystem);
+
+        // Register MovementSystem (Priority: 100, handles movement and collision checking)
+        var movementSystem = new MovementSystem();
+        movementSystem.SetSpatialHashSystem(_spatialHashSystem);
+        _systemManager.RegisterSystem(movementSystem);
 
         // Register CollisionSystem (Priority: 200, provides tile collision checking)
         var collisionSystem = new CollisionSystem();
         collisionSystem.SetSpatialHashSystem(_spatialHashSystem);
         _systemManager.RegisterSystem(collisionSystem);
-
-        _systemManager.RegisterSystem(new MovementSystem());
 
         // Register AnimationSystem (Priority: 800, after movement, before rendering)
         _systemManager.RegisterSystem(new AnimationSystem(_animationLibrary));

@@ -12,7 +12,8 @@ namespace PokeSharp.Core.Systems;
 /// </summary>
 public class SpatialHashSystem : BaseSystem
 {
-    private readonly SpatialHash _spatialHash;
+    private readonly SpatialHash _staticHash;   // For tiles (indexed once)
+    private readonly SpatialHash _dynamicHash;  // For entities with Position (cleared each frame)
     private bool _staticTilesIndexed = false;
 
     /// <summary>
@@ -20,7 +21,8 @@ public class SpatialHashSystem : BaseSystem
     /// </summary>
     public SpatialHashSystem()
     {
-        _spatialHash = new SpatialHash();
+        _staticHash = new SpatialHash();
+        _dynamicHash = new SpatialHash();
     }
 
     /// <inheritdoc />
@@ -31,36 +33,32 @@ public class SpatialHashSystem : BaseSystem
     {
         EnsureInitialized();
 
-        // Clear only dynamic entities (tiles are static and indexed once)
+        // Index static tiles once
         if (!_staticTilesIndexed)
         {
-            // First run - clear everything and index static tiles
-            _spatialHash.Clear();
+            _staticHash.Clear();
 
-            // Index all tile entities (static tiles with TilePosition)
-            // These don't move, so only index once
             var tileQuery = new QueryDescription().WithAll<TilePosition>();
             world.Query(
                 in tileQuery,
                 (Entity entity, ref TilePosition pos) =>
                 {
-                    _spatialHash.Add(entity, pos.MapId, pos.X, pos.Y);
+                    _staticHash.Add(entity, pos.MapId, pos.X, pos.Y);
                 }
             );
 
             _staticTilesIndexed = true;
         }
 
-        // Re-index all dynamic entities each frame (they can move)
-        // Note: We don't remove old positions, but Clear() would be needed for proper tracking
-        // For now, accept some duplication since dynamic entities are few (<100) vs tiles (1000s)
+        // Clear and re-index all dynamic entities each frame
+        _dynamicHash.Clear();
+
         var dynamicQuery = new QueryDescription().WithAll<Position>();
         world.Query(
             in dynamicQuery,
             (Entity entity, ref Position pos) =>
             {
-                // Position.X and Position.Y are already tile coordinates, no conversion needed!
-                _spatialHash.Add(entity, pos.MapId, pos.X, pos.Y);
+                _dynamicHash.Add(entity, pos.MapId, pos.X, pos.Y);
             }
         );
     }
@@ -83,7 +81,8 @@ public class SpatialHashSystem : BaseSystem
     /// <returns>Collection of entities at this position.</returns>
     public IEnumerable<Entity> GetEntitiesAt(int mapId, int x, int y)
     {
-        return _spatialHash.GetAt(mapId, x, y);
+        // Return entities from both static and dynamic hashes
+        return _staticHash.GetAt(mapId, x, y).Concat(_dynamicHash.GetAt(mapId, x, y));
     }
 
     /// <summary>
@@ -97,7 +96,8 @@ public class SpatialHashSystem : BaseSystem
         Microsoft.Xna.Framework.Rectangle bounds
     )
     {
-        return _spatialHash.GetInBounds(mapId, bounds);
+        // Return entities from both static and dynamic hashes
+        return _staticHash.GetInBounds(mapId, bounds).Concat(_dynamicHash.GetInBounds(mapId, bounds));
     }
 
     /// <summary>
@@ -106,6 +106,10 @@ public class SpatialHashSystem : BaseSystem
     /// <returns>A tuple with (entity count, occupied position count).</returns>
     public (int entityCount, int occupiedPositions) GetDiagnostics()
     {
-        return (_spatialHash.GetEntityCount(), _spatialHash.GetOccupiedPositionCount());
+        var staticCount = _staticHash.GetEntityCount();
+        var dynamicCount = _dynamicHash.GetEntityCount();
+        var staticPositions = _staticHash.GetOccupiedPositionCount();
+        var dynamicPositions = _dynamicHash.GetOccupiedPositionCount();
+        return (staticCount + dynamicCount, staticPositions + dynamicPositions);
     }
 }

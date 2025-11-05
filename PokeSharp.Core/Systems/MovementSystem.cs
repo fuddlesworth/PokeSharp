@@ -8,10 +8,20 @@ namespace PokeSharp.Core.Systems;
 /// <summary>
 ///     System that handles grid-based movement with smooth interpolation.
 ///     Implements Pokemon-style tile-by-tile movement and updates animations based on movement state.
+///     Also handles collision checking and movement validation.
 /// </summary>
 public class MovementSystem : BaseSystem
 {
     private const int TileSize = 16;
+    private SpatialHashSystem? _spatialHashSystem;
+
+    /// <summary>
+    ///     Sets the spatial hash system for collision detection.
+    /// </summary>
+    public void SetSpatialHashSystem(SpatialHashSystem spatialHashSystem)
+    {
+        _spatialHashSystem = spatialHashSystem;
+    }
 
     /// <inheritdoc />
     public override int Priority => SystemPriority.Movement;
@@ -20,6 +30,9 @@ public class MovementSystem : BaseSystem
     public override void Update(World world, float deltaTime)
     {
         EnsureInitialized();
+
+        // Process movement requests first (before updating existing movements)
+        ProcessMovementRequests(world);
 
         // Query all entities with Position and GridMovement components
         var query = new QueryDescription().WithAll<Position, GridMovement>();
@@ -96,5 +109,173 @@ public class MovementSystem : BaseSystem
                 }
             }
         );
+    }
+
+    /// <summary>
+    ///     Processes pending movement requests and validates them with collision checking.
+    ///     This allows any entity (player, NPC, AI) to request movement.
+    /// </summary>
+    private void ProcessMovementRequests(World world)
+    {
+        var requestQuery = new QueryDescription().WithAll<
+            Position,
+            GridMovement,
+            MovementRequest
+        >();
+
+        world.Query(
+            in requestQuery,
+            (Entity entity, ref Position position, ref GridMovement movement, ref MovementRequest request) =>
+            {
+                // Skip if already processed or entity is currently moving
+                if (request.Processed || movement.IsMoving)
+                {
+                    request.Processed = true;
+                    return;
+                }
+
+                // Process the movement request
+                TryStartMovement(world, entity, ref position, ref movement, request.Direction);
+
+                // Mark as processed
+                request.Processed = true;
+            }
+        );
+
+        // Remove processed requests
+        var removeQuery = new QueryDescription().WithAll<MovementRequest>();
+        var toRemove = new List<Entity>();
+
+        world.Query(
+            in removeQuery,
+            (Entity entity, ref MovementRequest request) =>
+            {
+                if (request.Processed)
+                    toRemove.Add(entity);
+            }
+        );
+
+        foreach (var entity in toRemove)
+        {
+            world.Remove<MovementRequest>(entity);
+        }
+    }
+
+    /// <summary>
+    ///     Attempts to start movement in the specified direction with collision checking.
+    ///     Handles normal movement, ledge jumping, and directional blocking.
+    /// </summary>
+    private void TryStartMovement(
+        World world,
+        Entity entity,
+        ref Position position,
+        ref GridMovement movement,
+        Direction direction
+    )
+    {
+        if (_spatialHashSystem == null)
+            return;
+
+        // Calculate target grid position
+        var targetX = position.X;
+        var targetY = position.Y;
+
+        switch (direction)
+        {
+            case Direction.Up:
+                targetY--;
+                break;
+            case Direction.Down:
+                targetY++;
+                break;
+            case Direction.Left:
+                targetX--;
+                break;
+            case Direction.Right:
+                targetX++;
+                break;
+            default:
+                return; // Invalid direction
+        }
+
+        // Check if target tile is a Pokemon ledge
+        if (CollisionSystem.IsLedge(_spatialHashSystem, position.MapId, targetX, targetY))
+        {
+            // Get the allowed jump direction for this ledge
+            var allowedJumpDir = CollisionSystem.GetLedgeJumpDirection(
+                _spatialHashSystem,
+                position.MapId,
+                targetX,
+                targetY
+            );
+
+            // Only allow jumping in the specified direction
+            if (direction == allowedJumpDir)
+            {
+                // Calculate landing position (2 tiles in jump direction)
+                var jumpLandX = targetX;
+                var jumpLandY = targetY;
+
+                switch (allowedJumpDir)
+                {
+                    case Direction.Down:
+                        jumpLandY++;
+                        break;
+                    case Direction.Up:
+                        jumpLandY--;
+                        break;
+                    case Direction.Left:
+                        jumpLandX--;
+                        break;
+                    case Direction.Right:
+                        jumpLandX++;
+                        break;
+                }
+
+                // Check if landing position is valid
+                if (
+                    !CollisionSystem.IsPositionWalkable(
+                        _spatialHashSystem,
+                        position.MapId,
+                        jumpLandX,
+                        jumpLandY,
+                        Direction.None
+                    )
+                )
+                    return; // Can't jump if landing is blocked
+
+                // Perform the jump (2 tiles in jump direction)
+                var jumpStart = new Vector2(position.PixelX, position.PixelY);
+                var jumpEnd = new Vector2(jumpLandX * TileSize, jumpLandY * TileSize);
+                movement.StartMovement(jumpStart, jumpEnd);
+
+                // Update facing direction
+                movement.FacingDirection = direction;
+                return;
+            }
+
+            // Block all other directions
+            return;
+        }
+
+        // Check collision with directional blocking (for Pokemon ledges)
+        if (
+            !CollisionSystem.IsPositionWalkable(
+                _spatialHashSystem,
+                position.MapId,
+                targetX,
+                targetY,
+                direction
+            )
+        )
+            return; // Position is blocked
+
+        // Start the grid movement
+        var startPixels = new Vector2(position.PixelX, position.PixelY);
+        var targetPixels = new Vector2(targetX * TileSize, targetY * TileSize);
+        movement.StartMovement(startPixels, targetPixels);
+
+        // Update facing direction
+        movement.FacingDirection = direction;
     }
 }
