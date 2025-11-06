@@ -118,9 +118,8 @@ public class MovementSystem : BaseSystem
                 position.PixelX = movement.TargetPosition.X;
                 position.PixelY = movement.TargetPosition.Y;
 
-                // Update grid coordinates
-                position.X = (int)(movement.TargetPosition.X / TileSize);
-                position.Y = (int)(movement.TargetPosition.Y / TileSize);
+                // Grid coordinates were already updated when movement started
+                // No need to update them here
 
                 movement.CompleteMovement();
 
@@ -181,9 +180,8 @@ public class MovementSystem : BaseSystem
                 position.PixelX = movement.TargetPosition.X;
                 position.PixelY = movement.TargetPosition.Y;
 
-                // Update grid coordinates
-                position.X = (int)(movement.TargetPosition.X / TileSize);
-                position.Y = (int)(movement.TargetPosition.Y / TileSize);
+                // Grid coordinates were already updated when movement started
+                // No need to update them here
 
                 movement.CompleteMovement();
             }
@@ -368,6 +366,10 @@ public class MovementSystem : BaseSystem
                 var jumpEnd = new Vector2(jumpLandX * TileSize, jumpLandY * TileSize);
                 movement.StartMovement(jumpStart, jumpEnd);
 
+                // Update grid position immediately to the landing position
+                position.X = jumpLandX;
+                position.Y = jumpLandY;
+
                 // Update facing direction
                 movement.FacingDirection = direction;
                 _logger?.LogLedgeJump(targetX, targetY, jumpLandX, jumpLandY, direction.ToString());
@@ -397,6 +399,11 @@ public class MovementSystem : BaseSystem
         var startPixels = new Vector2(position.PixelX, position.PixelY);
         var targetPixels = new Vector2(targetX * TileSize, targetY * TileSize);
         movement.StartMovement(startPixels, targetPixels);
+
+        // Update grid position immediately to prevent entities from passing through each other
+        // The pixel position will still interpolate smoothly for rendering
+        position.X = targetX;
+        position.Y = targetY;
 
         // Update facing direction
         movement.FacingDirection = direction;

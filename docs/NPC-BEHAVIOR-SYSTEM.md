@@ -176,3 +176,4 @@ Scripts can call all WorldAPI methods for full game control.
 - [TYPE-SYSTEM.md](TYPE-SYSTEM.md) - TypeRegistry usage guide
 
 
+

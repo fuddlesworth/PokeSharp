@@ -158,11 +158,15 @@ public class ScriptService
 
     /// <summary>
     ///     Initialize a script instance with world, entity context, and logger.
+    ///     Validates all required parameters and ensures type safety.
     /// </summary>
     /// <param name="scriptInstance">The script instance to initialize.</param>
     /// <param name="world">The ECS world.</param>
     /// <param name="entity">The entity (optional).</param>
     /// <param name="logger">Logger instance for the script (optional).</param>
+    /// <exception cref="ArgumentNullException">Thrown when scriptInstance or world is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when scriptInstance is not a TypeScriptBase.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when Initialize method cannot be found.</exception>
     public void InitializeScript(
         object scriptInstance,
         World world,
@@ -170,14 +174,62 @@ public class ScriptService
         ILogger? logger = null
     )
     {
-        if (scriptInstance is TypeScriptBase scriptBase)
+        // Validate required parameters
+        if (scriptInstance == null)
         {
-            // Use reflection to call internal Initialize method
-            var initMethod = typeof(TypeScriptBase).GetMethod(
-                "Initialize",
-                BindingFlags.NonPublic | BindingFlags.Instance
+            throw new ArgumentNullException(nameof(scriptInstance), "Script instance cannot be null");
+        }
+
+        if (world == null)
+        {
+            throw new ArgumentNullException(nameof(world), "World cannot be null");
+        }
+
+        // Validate script instance type
+        if (scriptInstance is not TypeScriptBase scriptBase)
+        {
+            throw new ArgumentException(
+                $"Script instance must be of type TypeScriptBase, but was {scriptInstance.GetType().FullName}",
+                nameof(scriptInstance)
             );
-            initMethod?.Invoke(scriptBase, new object?[] { world, entity, logger });
+        }
+
+        try
+        {
+            // Call the protected OnInitialize method using reflection
+            var initMethod = scriptBase.GetType().GetMethod(
+                "OnInitialize",
+                BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy
+            );
+
+            if (initMethod == null)
+            {
+                throw new InvalidOperationException(
+                    $"OnInitialize method not found on {scriptBase.GetType().FullName}"
+                );
+            }
+
+            // Create ScriptContext for initialization (use NullLogger if no logger provided)
+            var effectiveLogger = logger ?? Microsoft.Extensions.Logging.Abstractions.NullLogger.Instance;
+            var context = new ScriptContext(world, entity, effectiveLogger);
+            initMethod.Invoke(scriptBase, new object[] { context });
+
+            _logger.LogDebug(
+                "Successfully initialized script instance of type {Type}",
+                scriptBase.GetType().FullName
+            );
+        }
+        catch (TargetInvocationException ex)
+        {
+            _logger.LogError(
+                ex.InnerException ?? ex,
+                "Error invoking OnInitialize method on script instance of type {Type}",
+                scriptBase.GetType().FullName
+            );
+            throw new InvalidOperationException(
+                $"Failed to initialize script instance: {ex.InnerException?.Message ?? ex.Message}",
+                ex.InnerException ?? ex
+            );
         }
     }
 

@@ -23,5 +23,15 @@
     <None Update="Assets\Sprites\npc-spritesheet.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Remove="docs\WEATHER_ARCHITECTURE_SUMMARY.md" />
+    <None Remove="docs\WEATHER_ARCHITECTURE_DIAGRAM.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Systems\WeatherSystem.cs" />
+    <Compile Remove="Systems\BattleTransitionManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\Scripts\Weather\Examples\" />
+    <Folder Include="Assets\Types\Weather\" />
   </ItemGroup>
 </Project>

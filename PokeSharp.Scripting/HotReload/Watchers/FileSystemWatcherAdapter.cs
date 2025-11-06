@@ -79,6 +79,9 @@ public class FileSystemWatcherAdapter : IScriptWatcher
         }
     }
 
+    /// <summary>
+    /// Stops the file watcher and disposes all CancellationTokenSource instances.
+    /// </summary>
     public Task StopAsync()
     {
         Status = WatcherStatus.Stopping;
@@ -94,26 +97,52 @@ public class FileSystemWatcherAdapter : IScriptWatcher
             _watcher = null;
         }
 
-        // Cancel all pending debounce timers
+        // Cancel and dispose all pending debounce timers to prevent resource leaks
         foreach (var cts in _debounceTimers.Values)
-            cts.Cancel();
+        {
+            try
+            {
+                cts.Cancel();
+                cts.Dispose();
+            }
+            catch (ObjectDisposedException)
+            {
+                // Already disposed, ignore
+            }
+        }
         _debounceTimers.Clear();
 
         Status = WatcherStatus.Stopped;
-        _logger.LogInformation("FileSystemWatcher stopped");
+        _logger.LogInformation("FileSystemWatcher stopped and all resources disposed");
         return Task.CompletedTask;
     }
 
+    /// <summary>
+    /// Disposes the watcher and ensures all resources are cleaned up.
+    /// </summary>
     public void Dispose()
     {
         StopAsync().GetAwaiter().GetResult();
     }
 
+    /// <summary>
+    /// Handles file change events with debouncing and proper CancellationTokenSource disposal.
+    /// </summary>
     private void OnFileChanged(object sender, FileSystemEventArgs e)
     {
         // Debounce: if file is saved multiple times rapidly, only process once
         if (_debounceTimers.TryGetValue(e.FullPath, out var existingCts))
-            existingCts.Cancel();
+        {
+            try
+            {
+                existingCts.Cancel();
+                existingCts.Dispose();
+            }
+            catch (ObjectDisposedException)
+            {
+                // Already disposed, ignore
+            }
+        }
 
         var cts = new CancellationTokenSource();
         _debounceTimers[e.FullPath] = cts;
@@ -122,10 +151,22 @@ public class FileSystemWatcherAdapter : IScriptWatcher
             .ContinueWith(
                 async _ =>
                 {
-                    if (!cts.Token.IsCancellationRequested)
+                    try
                     {
-                        await CheckStabilityAndNotify(e.FullPath, e.ChangeType.ToString());
-                        _debounceTimers.TryRemove(e.FullPath, out var _);
+                        if (!cts.Token.IsCancellationRequested)
+                        {
+                            await CheckStabilityAndNotify(e.FullPath, e.ChangeType.ToString());
+
+                            // Remove and dispose the CancellationTokenSource
+                            if (_debounceTimers.TryRemove(e.FullPath, out var removedCts))
+                            {
+                                removedCts.Dispose();
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Error in debounce continuation for {FilePath}", e.FullPath);
                     }
                 },
                 TaskScheduler.Default

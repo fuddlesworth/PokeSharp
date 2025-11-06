@@ -6,9 +6,17 @@ namespace PokeSharp.Scripting.HotReload.Cache;
 ///     Thread-safe versioned cache for hot-reloadable scripts with rollback support.
 ///     Maintains version history, lazy instantiation, and automatic rollback on compilation failure.
 ///     Target: Enable instant rollback with no game disruption.
+///     OPTIMIZATION: Bounded version history (MaxHistoryDepth=3) prevents memory leaks with LRU pruning.
 /// </summary>
 public class VersionedScriptCache
 {
+    /// <summary>
+    ///     Maximum depth of version history chain to maintain for rollback.
+    ///     Older versions are pruned using LRU strategy to prevent unbounded memory growth.
+    ///     Default: 3 (current + 2 previous versions)
+    /// </summary>
+    public const int MaxHistoryDepth = 3;
+
     private readonly ConcurrentDictionary<string, ScriptCacheEntry> _cache = new();
     private readonly object _versionLock = new();
     private int _currentVersion;
@@ -62,6 +70,10 @@ public class VersionedScriptCache
                     {
                         PreviousVersion = oldEntry, // Link to previous for rollback
                     };
+
+                    // OPTIMIZATION: Prune version history to MaxHistoryDepth using LRU strategy
+                    PruneVersionHistory(newEntry, MaxHistoryDepth);
+
                     return newEntry;
                 }
             );
@@ -288,6 +300,55 @@ public class VersionedScriptCache
         }
 
         return depth;
+    }
+
+    /// <summary>
+    ///     Prune version history chain to maintain maximum depth using LRU strategy.
+    ///     This prevents unbounded memory growth from long version chains.
+    ///     PERFORMANCE: O(maxDepth) traversal, typically 3-5 iterations.
+    /// </summary>
+    /// <param name="entry">Entry to prune starting from</param>
+    /// <param name="maxDepth">Maximum depth to maintain (excluding current version)</param>
+    private static void PruneVersionHistory(ScriptCacheEntry entry, int maxDepth)
+    {
+        if (maxDepth <= 0) return;
+
+        var current = entry;
+        var depth = 0;
+
+        // Traverse to the depth limit
+        while (current.PreviousVersion != null && depth < maxDepth - 1)
+        {
+            current = current.PreviousVersion;
+            depth++;
+        }
+
+        // Sever the chain at max depth to allow GC of older versions
+        if (current.PreviousVersion != null)
+        {
+            current.PreviousVersion = null;
+        }
+    }
+
+    /// <summary>
+    ///     Get statistics about version history memory usage.
+    ///     Useful for monitoring and performance analysis.
+    /// </summary>
+    /// <returns>Total version entries across all script types</returns>
+    public int GetTotalVersionEntries()
+    {
+        var total = 0;
+        foreach (var kvp in _cache)
+        {
+            total++; // Current version
+            var current = kvp.Value.PreviousVersion;
+            while (current != null)
+            {
+                total++;
+                current = current.PreviousVersion;
+            }
+        }
+        return total;
     }
 }
 

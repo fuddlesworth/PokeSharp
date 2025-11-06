@@ -1,6 +1,7 @@
 using Arch.Core;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Core.Components;
+using PokeSharp.Core.Types;
 
 namespace PokeSharp.Scripting;
 

@@ -16,6 +16,9 @@ public static class SystemPriority
     public const int AI = 50;
     public const int NpcBehavior = 75;
 
+    // Weather and environment
+    public const int Weather = 90;
+
     // Movement and physics
     public const int Movement = 100;
     public const int Collision = 200;
