@@ -98,6 +98,18 @@ public class MapApiService(
         return result;
     }
 
+    public Direction GetDirectionTo(int fromX, int fromY, int toX, int toY)
+    {
+        var dx = toX - fromX;
+        var dy = toY - fromY;
+
+        // Prioritize horizontal movement over vertical
+        if (Math.Abs(dx) > Math.Abs(dy))
+            return dx > 0 ? Direction.Right : Direction.Left;
+
+        return dy > 0 ? Direction.Down : Direction.Up;
+    }
+
     /// <summary>
     ///     Sets the spatial hash system. This is called after initialization when GraphicsDevice is available.
     /// </summary>

@@ -83,4 +83,17 @@ public class GameStateApiService(ILogger<GameStateApiService> logger) : IGameSta
     {
         return _variables.Keys;
     }
+
+    public float Random()
+    {
+        return (float)System.Random.Shared.NextDouble();
+    }
+
+    public int RandomRange(int min, int max)
+    {
+        if (min >= max)
+            throw new ArgumentException("min must be less than max", nameof(min));
+
+        return System.Random.Shared.Next(min, max);
+    }
 }

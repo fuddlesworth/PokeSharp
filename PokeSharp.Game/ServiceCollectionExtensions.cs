@@ -61,10 +61,6 @@ public static class ServiceCollectionExtensions
             return new EventBus(logger);
         });
 
-        // API Test Event Subscriber (for Phase 1 validation)
-        services.AddSingleton<ApiTestEventSubscriber>();
-        services.AddSingleton<ApiTestInitializer>();
-
         // Abstract Factory Pattern: Graphics services that depend on GraphicsDevice
         // The factory allows deferred creation of AssetManager and MapLoader until
         // GraphicsDevice is available at runtime (in PokeSharpGame.Initialize)
@@ -99,6 +95,12 @@ public static class ServiceCollectionExtensions
 
         // Game Services Provider (Phase 4B facade)
         services.AddSingleton<IGameServicesProvider, GameServicesProvider>();
+
+        // Logging Provider (Phase 5 facade)
+        services.AddSingleton<ILoggingProvider, LoggingProvider>();
+
+        // Initialization Provider (Phase 7 facade)
+        services.AddSingleton<IInitializationProvider, InitializationProvider>();
 
         // Game Initializers and Helpers
         services.AddSingleton<PerformanceMonitor>();

@@ -1,4 +1,5 @@
 using Arch.Core;
+using PokeSharp.Core.Components.Movement;
 
 namespace PokeSharp.Core.ScriptingApi;
 
@@ -46,4 +47,15 @@ public interface IMapApi
     /// <param name="mapId">The map identifier.</param>
     /// <returns>Tuple of (width, height) in tiles, or null if map not found.</returns>
     (int width, int height)? GetMapDimensions(int mapId);
+
+    /// <summary>
+    ///     Calculates the primary direction from one point to another.
+    ///     Useful for pathfinding and NPC behaviors.
+    /// </summary>
+    /// <param name="fromX">Source X coordinate.</param>
+    /// <param name="fromY">Source Y coordinate.</param>
+    /// <param name="toX">Target X coordinate.</param>
+    /// <param name="toY">Target Y coordinate.</param>
+    /// <returns>The primary direction to move (prioritizes horizontal over vertical).</returns>
+    Direction GetDirectionTo(int fromX, int fromY, int toX, int toY);
 }

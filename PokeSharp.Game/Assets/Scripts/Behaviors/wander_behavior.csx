@@ -15,7 +15,7 @@ public class WanderBehavior : TypeScriptBase
             ctx.Entity.Value,
             new WanderState
             {
-                MoveTimer = TypeScriptBase.Random() * 3.0f,
+                MoveTimer = ctx.GameState.Random() * 3.0f,
                 MinWaitTime = 1.0f,
                 MaxWaitTime = 4.0f,
                 Speed = 2.0f,
@@ -48,13 +48,13 @@ public class WanderBehavior : TypeScriptBase
                 Direction.East,
                 Direction.West,
             };
-            var randomDir = directions[TypeScriptBase.RandomRange(0, directions.Length)];
+            var randomDir = directions[ctx.GameState.RandomRange(0, directions.Length)];
 
             ctx.World.Add(ctx.Entity.Value, new MovementRequest(randomDir));
 
             // Next movement in 1-4 seconds
             state.MoveTimer =
-                TypeScriptBase.Random() * (state.MaxWaitTime - state.MinWaitTime)
+                ctx.GameState.Random() * (state.MaxWaitTime - state.MinWaitTime)
                 + state.MinWaitTime;
             state.MovementCount++;
 

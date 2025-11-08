@@ -35,9 +35,11 @@ public class GuardBehavior : TypeScriptBase
         // Return to guard position if moved
         if (position.X != state.GuardPosition.X || position.Y != state.GuardPosition.Y)
         {
-            var dir = TypeScriptBase.GetDirectionTo(
-                new Point(position.X, position.Y),
-                state.GuardPosition
+            var dir = ctx.Map.GetDirectionTo(
+                position.X,
+                position.Y,
+                state.GuardPosition.X,
+                state.GuardPosition.Y
             );
             ctx.World.Add(ctx.Entity.Value, new MovementRequest(dir));
             ctx.Logger.LogDebug(

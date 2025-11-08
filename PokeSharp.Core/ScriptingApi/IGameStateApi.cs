@@ -67,4 +67,20 @@ public interface IGameStateApi
     /// </summary>
     /// <returns>Collection of variable keys.</returns>
     IEnumerable<string> GetVariableKeys();
+
+    /// <summary>
+    ///     Returns a random float between 0.0 (inclusive) and 1.0 (exclusive).
+    ///     Useful for probability checks and random behavior variations.
+    /// </summary>
+    /// <returns>Random float in range [0.0, 1.0).</returns>
+    float Random();
+
+    /// <summary>
+    ///     Returns a random integer between min (inclusive) and max (exclusive).
+    ///     Useful for random selections and dice rolls.
+    /// </summary>
+    /// <param name="min">Minimum value (inclusive).</param>
+    /// <param name="max">Maximum value (exclusive).</param>
+    /// <returns>Random integer in range [min, max).</returns>
+    int RandomRange(int min, int max);
 }

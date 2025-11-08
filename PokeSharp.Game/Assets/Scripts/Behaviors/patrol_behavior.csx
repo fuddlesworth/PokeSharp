@@ -77,7 +77,7 @@ public class PatrolBehavior : TypeScriptBase
         }
 
         // Move toward waypoint
-        var direction = TypeScriptBase.GetDirectionTo(new Point(position.X, position.Y), target);
+        var direction = ctx.Map.GetDirectionTo(position.X, position.Y, target.X, target.Y);
 
         ctx.World.Add(ctx.Entity.Value, new MovementRequest(direction));
     }

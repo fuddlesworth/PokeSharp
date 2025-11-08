@@ -93,7 +93,8 @@ public class NPCBehaviorSystem : BaseSystem
                             behavior.BehaviorTypeId,
                             npc.NpcId
                         );
-                        behavior.IsActive = false;
+                        // Deactivate behavior (with cleanup if needed)
+                        DeactivateBehavior(null, ref behavior, null, "script not found");
                         return;
                     }
 
@@ -105,7 +106,8 @@ public class NPCBehaviorSystem : BaseSystem
                             behavior.BehaviorTypeId,
                             scriptObj.GetType().Name
                         );
-                        behavior.IsActive = false;
+                        // Deactivate behavior (with cleanup if needed)
+                        DeactivateBehavior(null, ref behavior, null, "wrong script type");
                         return;
                     }
 
@@ -149,8 +151,21 @@ public class NPCBehaviorSystem : BaseSystem
                     );
                     errorCount++;
 
-                    // Disable the behavior to prevent repeated errors
-                    behavior.IsActive = false;
+                    // Deactivate behavior with cleanup
+                    var scriptObj = _behaviorRegistry.GetScript(behavior.BehaviorTypeId);
+                    if (scriptObj is TypeScriptBase script)
+                    {
+                        var scriptLogger = _scriptLoggerCache.GetOrAdd(
+                            $"{behavior.BehaviorTypeId}.{npc.NpcId}",
+                            key => _loggerFactory.CreateLogger($"Script.{key}")
+                        );
+                        var context = new ScriptContext(world, entity, scriptLogger, _apis);
+                        DeactivateBehavior(script, ref behavior, context, $"error: {ex.Message}");
+                    }
+                    else
+                    {
+                        behavior.IsActive = false;
+                    }
                 }
             }
         );
@@ -162,5 +177,46 @@ public class NPCBehaviorSystem : BaseSystem
                 behaviorCount,
                 errorCount
             );
+    }
+
+    /// <summary>
+    ///     Safely deactivates a behavior by calling OnDeactivated and cleaning up state.
+    /// </summary>
+    /// <param name="script">The behavior script instance (null if not available).</param>
+    /// <param name="behavior">Reference to the behavior component.</param>
+    /// <param name="context">Script context for cleanup (null if not available).</param>
+    /// <param name="reason">Reason for deactivation (for logging).</param>
+    private void DeactivateBehavior(
+        TypeScriptBase? script,
+        ref Behavior behavior,
+        ScriptContext? context,
+        string reason
+    )
+    {
+        if (behavior.IsInitialized && script != null && context != null)
+        {
+            try
+            {
+                script.OnDeactivated(context);
+                _logger.LogInformation(
+                    "Deactivated behavior {TypeId}: {Reason}",
+                    behavior.BehaviorTypeId,
+                    reason
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(
+                    ex,
+                    "Error during OnDeactivated for {TypeId}: {Message}",
+                    behavior.BehaviorTypeId,
+                    ex.Message
+                );
+            }
+
+            behavior.IsInitialized = false;
+        }
+
+        behavior.IsActive = false;
     }
 }
