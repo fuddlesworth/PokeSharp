@@ -1,17 +1,15 @@
 using Arch.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
-using PokeSharp.Core.Factories;
 using PokeSharp.Core.Scripting.Services;
 using PokeSharp.Core.ScriptingApi;
 using PokeSharp.Core.Systems;
-using PokeSharp.Core.Types;
+using PokeSharp.Game.Services;
 using PokeSharp.Game.Diagnostics;
 using PokeSharp.Game.Initialization;
 using PokeSharp.Game.Input;
 using PokeSharp.Rendering.Assets;
 using PokeSharp.Rendering.Loaders;
-using PokeSharp.Scripting.Services;
 
 namespace PokeSharp.Game;
 
@@ -21,8 +19,7 @@ namespace PokeSharp.Game;
 /// </summary>
 public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
 {
-    private readonly TypeRegistry<BehaviorDefinition> _behaviorRegistry;
-    private readonly IEntityFactoryService _entityFactory;
+    private readonly IGameServicesProvider _gameServices;
     private readonly IScriptingApiProvider _apiProvider;
     private readonly GraphicsDeviceManager _graphics;
     private readonly InputManager _inputManager;
@@ -32,7 +29,6 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
     // Services that depend on GraphicsDevice (created in Initialize)
     private readonly PerformanceMonitor _performanceMonitor;
     private readonly PlayerFactory _playerFactory;
-    private readonly ScriptService _scriptService;
     private readonly SystemManager _systemManager;
     private readonly World _world;
     private readonly ApiTestInitializer _apiTestInitializer;
@@ -50,9 +46,7 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
         ILoggerFactory loggerFactory,
         World world,
         SystemManager systemManager,
-        IEntityFactoryService entityFactory,
-        ScriptService scriptService,
-        TypeRegistry<BehaviorDefinition> behaviorRegistry,
+        IGameServicesProvider gameServices,
         PerformanceMonitor performanceMonitor,
         InputManager inputManager,
         PlayerFactory playerFactory,
@@ -65,9 +59,7 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
         _loggerFactory = loggerFactory;
         _world = world;
         _systemManager = systemManager;
-        _entityFactory = entityFactory;
-        _scriptService = scriptService;
-        _behaviorRegistry = behaviorRegistry;
+        _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
         _performanceMonitor = performanceMonitor;
         _inputManager = inputManager;
         _playerFactory = playerFactory;
@@ -94,10 +86,10 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
     /// </summary>
     public async ValueTask DisposeAsync()
     {
-        if (_scriptService is IAsyncDisposable scriptServiceDisposable)
+        if (_gameServices.ScriptService is IAsyncDisposable scriptServiceDisposable)
             await scriptServiceDisposable.DisposeAsync();
 
-        if (_behaviorRegistry is IAsyncDisposable registryDisposable)
+        if (_gameServices.BehaviorRegistry is IAsyncDisposable registryDisposable)
             await registryDisposable.DisposeAsync();
 
         _apiTestSubscriber?.Dispose();
@@ -118,7 +110,7 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
         var assetManager = new AssetManager(GraphicsDevice, "Assets", assetManagerLogger);
 
         var mapLoaderLogger = _loggerFactory.CreateLogger<MapLoader>();
-        var mapLoader = new MapLoader(assetManager, _entityFactory, mapLoaderLogger);
+        var mapLoader = new MapLoader(assetManager, _gameServices.EntityFactory, mapLoaderLogger);
 
         // Create initializers
         var gameInitializerLogger = _loggerFactory.CreateLogger<GameInitializer>();
@@ -128,7 +120,7 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
             _world,
             _systemManager,
             assetManager,
-            _entityFactory,
+            _gameServices.EntityFactory,
             mapLoader
         );
 
@@ -153,8 +145,7 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
             _loggerFactory,
             _world,
             _systemManager,
-            _scriptService,
-            _behaviorRegistry,
+            _gameServices,
             _apiProvider
         );
 

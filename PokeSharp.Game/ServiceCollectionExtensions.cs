@@ -11,6 +11,7 @@ using PokeSharp.Core.Types;
 using PokeSharp.Game.Diagnostics;
 using PokeSharp.Game.Initialization;
 using PokeSharp.Game.Input;
+using PokeSharp.Game.Services;
 using PokeSharp.Game.Templates;
 using PokeSharp.Rendering.Factories;
 using PokeSharp.Scripting.Services;
@@ -95,6 +96,9 @@ public static class ServiceCollectionExtensions
             var apis = sp.GetRequiredService<IScriptingApiProvider>();
             return new ScriptService("Assets/Scripts", logger, apis);
         });
+
+        // Game Services Provider (Phase 4B facade)
+        services.AddSingleton<IGameServicesProvider, GameServicesProvider>();
 
         // Game Initializers and Helpers
         services.AddSingleton<PerformanceMonitor>();
