@@ -1,6 +1,7 @@
 using Arch.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
+using PokeSharp.Core.Components.Common;
 using PokeSharp.Core.Components.Maps;
 using PokeSharp.Core.Components.Movement;
 using PokeSharp.Core.Components.NPCs;
@@ -553,7 +554,7 @@ public class MapLoader(
                         // Handle NPC-specific properties
                         if (templateId.StartsWith("npc/"))
                         {
-                            // NPCComponent properties
+                            // NPC properties
                             var hasNpcId = obj.Properties.TryGetValue("npcId", out var npcIdProp);
                             var hasDisplayName = obj.Properties.TryGetValue(
                                 "displayName",
@@ -562,12 +563,21 @@ public class MapLoader(
 
                             if (hasNpcId || hasDisplayName)
                             {
-                                var npcId = npcIdProp?.ToString() ?? obj.Name;
-                                var displayName = displayNameProp?.ToString() ?? obj.Name;
-                                builder.OverrideComponent(new NPCComponent(npcId, displayName));
+                                var npcId = npcIdProp?.ToString();
+                                if (string.IsNullOrWhiteSpace(npcId))
+                                    npcId = obj.Name ?? string.Empty;
+
+                                var displayName = displayNameProp?.ToString();
+                                if (string.IsNullOrWhiteSpace(displayName))
+                                    displayName = obj.Name ?? string.Empty;
+
+                                builder.OverrideComponent(new Npc(npcId));
+
+                                if (!string.IsNullOrWhiteSpace(displayName))
+                                    builder.OverrideComponent(new Name(displayName));
                             }
 
-                            // PathComponent properties (waypoints for patrol NPCs)
+                            // Movement route properties (waypoints for patrol NPCs)
                             if (obj.Properties.TryGetValue("waypoints", out var waypointsProp))
                             {
                                 var waypointsStr = waypointsProp.ToString();
@@ -600,7 +610,7 @@ public class MapLoader(
                                             waypointWaitTime = waitTime;
 
                                         builder.OverrideComponent(
-                                            new PathComponent(
+                                            new MovementRoute(
                                                 points.ToArray(),
                                                 true,
                                                 waypointWaitTime

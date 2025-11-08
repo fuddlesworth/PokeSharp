@@ -5,7 +5,7 @@ namespace PokeSharp.Core.Components.NPCs;
 ///     Defines the range and conditions for interaction.
 ///     Pure data component - no methods.
 /// </summary>
-public struct InteractionComponent
+public struct Interaction
 {
     /// <summary>
     ///     Range in tiles from which the player can interact with this entity.
@@ -39,7 +39,7 @@ public struct InteractionComponent
     /// <summary>
     ///     Initializes a new interaction component with default values.
     /// </summary>
-    public InteractionComponent()
+    public Interaction()
     {
         InteractionRange = 1; // Adjacent tiles by default
         RequiresFacing = true;
@@ -51,7 +51,7 @@ public struct InteractionComponent
     /// <summary>
     ///     Initializes a new interaction component with specified range and dialogue.
     /// </summary>
-    public InteractionComponent(int range, string? dialogueScript = null)
+    public Interaction(int range, string? dialogueScript = null)
     {
         InteractionRange = range;
         RequiresFacing = true;

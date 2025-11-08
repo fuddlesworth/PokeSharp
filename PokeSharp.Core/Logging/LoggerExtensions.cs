@@ -20,7 +20,7 @@ public static class LoggerExtensions
         this ILogger logger,
         Exception ex,
         string message,
-        params object[] args
+        params object?[] args
     )
     {
         var contextData = new Dictionary<string, object>

@@ -112,7 +112,7 @@ public class NpcApiService(World world, ILogger<NpcApiService> logger) : INPCApi
             return;
         }
 
-        var pathComponent = new PathComponent
+        var pathComponent = new MovementRoute
         {
             Waypoints = waypoints,
             CurrentWaypointIndex = 0,
@@ -121,7 +121,7 @@ public class NpcApiService(World world, ILogger<NpcApiService> logger) : INPCApi
             CurrentWaitTime = 0f,
         };
 
-        if (_world.Has<PathComponent>(npc))
+        if (_world.Has<MovementRoute>(npc))
             _world.Set(npc, pathComponent);
         else
             _world.Add(npc, pathComponent);
@@ -139,9 +139,9 @@ public class NpcApiService(World world, ILogger<NpcApiService> logger) : INPCApi
         if (!_world.IsAlive(npc))
             return null;
 
-        if (_world.Has<PathComponent>(npc))
+        if (_world.Has<MovementRoute>(npc))
         {
-            ref var path = ref _world.Get<PathComponent>(npc);
+            ref var path = ref _world.Get<MovementRoute>(npc);
             return path.Waypoints;
         }
 
@@ -153,19 +153,19 @@ public class NpcApiService(World world, ILogger<NpcApiService> logger) : INPCApi
         if (!_world.IsAlive(npc))
             return;
 
-        if (_world.Has<PathComponent>(npc))
+        if (_world.Has<MovementRoute>(npc))
         {
-            _world.Remove<PathComponent>(npc);
+            _world.Remove<MovementRoute>(npc);
             _logger.LogInformation("Path cleared for entity {Entity}", npc.Id);
         }
     }
 
     public void PauseNPCPath(Entity npc)
     {
-        if (!_world.IsAlive(npc) || !_world.Has<PathComponent>(npc))
+        if (!_world.IsAlive(npc) || !_world.Has<MovementRoute>(npc))
             return;
 
-        ref var path = ref _world.Get<PathComponent>(npc);
+        ref var path = ref _world.Get<MovementRoute>(npc);
 
         // Set wait time to a very high value to effectively pause
         path.WaypointWaitTime = float.MaxValue;
@@ -175,10 +175,10 @@ public class NpcApiService(World world, ILogger<NpcApiService> logger) : INPCApi
 
     public void ResumeNPCPath(Entity npc, float waitTime = 0f)
     {
-        if (!_world.IsAlive(npc) || !_world.Has<PathComponent>(npc))
+        if (!_world.IsAlive(npc) || !_world.Has<MovementRoute>(npc))
             return;
 
-        ref var path = ref _world.Get<PathComponent>(npc);
+        ref var path = ref _world.Get<MovementRoute>(npc);
 
         // Reset wait time to resume movement
         path.WaypointWaitTime = waitTime;

@@ -5,7 +5,7 @@ namespace PokeSharp.Core.Components.NPCs;
 ///     Links an entity to a moddable behavior from the TypeRegistry.
 ///     Pure data component - no methods.
 /// </summary>
-public struct BehaviorComponent
+public struct Behavior
 {
     /// <summary>
     ///     Type identifier for the behavior (e.g., "patrol", "stationary", "trainer").
@@ -27,7 +27,7 @@ public struct BehaviorComponent
     /// <summary>
     ///     Initializes a new behavior component with a type ID.
     /// </summary>
-    public BehaviorComponent(string behaviorTypeId)
+    public Behavior(string behaviorTypeId)
     {
         BehaviorTypeId = behaviorTypeId;
         IsActive = true;

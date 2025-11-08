@@ -7,7 +7,7 @@ namespace PokeSharp.Core.Components.NPCs;
 ///     Defines a path of tile positions for an NPC to follow.
 ///     Pure data component - no methods.
 /// </summary>
-public struct PathComponent
+public struct MovementRoute
 {
     /// <summary>
     ///     Array of waypoint positions that the NPC will walk through.
@@ -40,7 +40,7 @@ public struct PathComponent
     /// <summary>
     ///     Initializes a new path component with waypoints.
     /// </summary>
-    public PathComponent(Point[] waypoints, bool loop = true, float waypointWaitTime = 1.0f)
+    public MovementRoute(Point[] waypoints, bool loop = true, float waypointWaitTime = 1.0f)
     {
         Waypoints = waypoints ?? throw new ArgumentNullException(nameof(waypoints));
         CurrentWaypointIndex = 0;

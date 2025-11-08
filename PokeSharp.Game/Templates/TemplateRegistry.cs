@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
+using PokeSharp.Core.Components.Common;
 using PokeSharp.Core.Components.Maps;
 using PokeSharp.Core.Components.Movement;
 using PokeSharp.Core.Components.NPCs;
@@ -198,7 +199,9 @@ public static class TemplateRegistry
         };
 
         // Add components in the order they should be created
-        template.WithComponent(new Player("PLAYER", 3000)); // Default name and starting money
+        template.WithComponent(new Player());
+        template.WithComponent(new Name("PLAYER"));
+        template.WithComponent(new Wallet(3000)); // Default starting money
         template.WithComponent(new Position(0, 0)); // Default position, overridden at spawn
         template.WithComponent(new Sprite("player-spritesheet") { Tint = Color.White, Scale = 1f });
         template.WithComponent(new GridMovement(4.0f)); // 4 tiles per second
@@ -408,16 +411,17 @@ public static class TemplateRegistry
                 SourcePath = "TemplateRegistry.RegisterNpcTemplates",
             },
         };
-        // Add NPCComponent (will be overridden at spawn with specific NPC data)
-        patrolNpc.WithComponent(new NPCComponent("patrol_npc", "GUARD"));
-        // Add PathComponent (will be overridden at spawn with actual waypoints)
+        // Add NPC data (will be overridden at spawn with specific NPC data)
+        patrolNpc.WithComponent(new Npc("patrol_npc"));
+        patrolNpc.WithComponent(new Name("GUARD"));
+        // Add movement route (will be overridden at spawn with actual waypoints)
         patrolNpc.WithComponent(
-            new PathComponent(
+            new MovementRoute(
                 new[] { new Point(10, 10), new Point(15, 10), new Point(15, 15), new Point(10, 15) }
             )
         );
-        // Add BehaviorComponent with patrol behavior
-        patrolNpc.WithComponent(new BehaviorComponent("patrol"));
+        // Add behavior with patrol behavior
+        patrolNpc.WithComponent(new Behavior("patrol"));
         cache.Register(patrolNpc);
         logger?.LogDebug(
             "Registered template: {TemplateId} (inherits from {BaseId})",

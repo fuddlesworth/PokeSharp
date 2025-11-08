@@ -1,6 +1,7 @@
 using Arch.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
+using PokeSharp.Core.Components.Common;
 using PokeSharp.Core.Components.Movement;
 using PokeSharp.Core.Components.Player;
 using PokeSharp.Core.ScriptingApi;
@@ -16,6 +17,7 @@ public class PlayerApiService(World world, ILogger<PlayerApiService> logger) : I
         logger ?? throw new ArgumentNullException(nameof(logger));
 
     private readonly World _world = world ?? throw new ArgumentNullException(nameof(world));
+    private const string DefaultPlayerName = "PLAYER";
 
     /// <summary>
     ///     Gets the player's chosen name.
@@ -24,14 +26,24 @@ public class PlayerApiService(World world, ILogger<PlayerApiService> logger) : I
     public string GetPlayerName()
     {
         var playerEntity = GetPlayerEntity();
-        if (playerEntity.HasValue && _world.Has<Player>(playerEntity.Value))
+        if (playerEntity.HasValue)
         {
-            ref var player = ref _world.Get<Player>(playerEntity.Value);
-            return string.IsNullOrWhiteSpace(player.PlayerName) ? "PLAYER" : player.PlayerName;
+            if (_world.Has<Name>(playerEntity.Value))
+            {
+                ref var name = ref _world.Get<Name>(playerEntity.Value);
+                return string.IsNullOrWhiteSpace(name.DisplayName)
+                    ? DefaultPlayerName
+                    : name.DisplayName;
+            }
+
+            _logger.LogWarning("Player entity missing Name component when getting player name");
+        }
+        else
+        {
+            _logger.LogWarning("Player entity not found when getting player name");
         }
 
-        _logger.LogWarning("Player entity not found when getting player name");
-        return "PLAYER";
+        return DefaultPlayerName;
     }
 
     /// <summary>
@@ -41,13 +53,21 @@ public class PlayerApiService(World world, ILogger<PlayerApiService> logger) : I
     public int GetMoney()
     {
         var playerEntity = GetPlayerEntity();
-        if (playerEntity.HasValue && _world.Has<Player>(playerEntity.Value))
+        if (playerEntity.HasValue)
         {
-            ref var player = ref _world.Get<Player>(playerEntity.Value);
-            return player.Money;
+            if (_world.Has<Wallet>(playerEntity.Value))
+            {
+                ref var wallet = ref _world.Get<Wallet>(playerEntity.Value);
+                return wallet.Balance;
+            }
+
+            _logger.LogWarning("Player entity missing Wallet component when getting money");
+        }
+        else
+        {
+            _logger.LogWarning("Player entity not found when getting money");
         }
 
-        _logger.LogWarning("Player entity not found when getting money");
         return 0;
     }
 
@@ -57,15 +77,26 @@ public class PlayerApiService(World world, ILogger<PlayerApiService> logger) : I
             throw new ArgumentException("Amount must be positive", nameof(amount));
 
         var playerEntity = GetPlayerEntity();
-        if (playerEntity.HasValue && _world.Has<Player>(playerEntity.Value))
+        if (playerEntity.HasValue)
         {
-            ref var player = ref _world.Get<Player>(playerEntity.Value);
-            player.Money += amount;
-            _logger.LogInformation(
-                "Gave {Amount} money to player. New balance: {Balance}",
-                amount,
-                player.Money
-            );
+            if (_world.Has<Wallet>(playerEntity.Value))
+            {
+                ref var wallet = ref _world.Get<Wallet>(playerEntity.Value);
+                wallet.Balance += amount;
+                _logger.LogInformation(
+                    "Gave {Amount} money to player. New balance: {Balance}",
+                    amount,
+                    wallet.Balance
+                );
+            }
+            else
+            {
+                _logger.LogWarning("Player entity missing Wallet component when giving money");
+            }
+        }
+        else
+        {
+            _logger.LogWarning("Player entity not found when giving money");
         }
     }
 
@@ -75,19 +106,30 @@ public class PlayerApiService(World world, ILogger<PlayerApiService> logger) : I
             throw new ArgumentException("Amount must be positive", nameof(amount));
 
         var playerEntity = GetPlayerEntity();
-        if (playerEntity.HasValue && _world.Has<Player>(playerEntity.Value))
+        if (playerEntity.HasValue)
         {
-            ref var player = ref _world.Get<Player>(playerEntity.Value);
-            if (player.Money >= amount)
+            if (_world.Has<Wallet>(playerEntity.Value))
             {
-                player.Money -= amount;
-                _logger.LogInformation(
-                    "Took {Amount} money from player. New balance: {Balance}",
-                    amount,
-                    player.Money
-                );
-                return true;
+                ref var wallet = ref _world.Get<Wallet>(playerEntity.Value);
+                if (wallet.Balance >= amount)
+                {
+                    wallet.Balance -= amount;
+                    _logger.LogInformation(
+                        "Took {Amount} money from player. New balance: {Balance}",
+                        amount,
+                        wallet.Balance
+                    );
+                    return true;
+                }
             }
+            else
+            {
+                _logger.LogWarning("Player entity missing Wallet component when taking money");
+            }
+        }
+        else
+        {
+            _logger.LogWarning("Player entity not found when taking money");
         }
 
         return false;

@@ -13,7 +13,7 @@ namespace PokeSharp.Game.Systems;
 
 /// <summary>
 ///     System responsible for executing NPC behavior scripts using the ScriptContext pattern.
-///     Queries entities with BehaviorComponent and executes their OnTick methods.
+///     Queries entities with behavior data and executes their OnTick methods.
 /// </summary>
 /// <remarks>
 ///     CLEAN ARCHITECTURE:
@@ -68,15 +68,15 @@ public class NPCBehaviorSystem : BaseSystem
             return;
         }
 
-        // Query all NPCs with behavior components
-        var query = new QueryDescription().WithAll<NPCComponent, BehaviorComponent, Position>();
+        // Query all NPCs with behavior data
+        var query = new QueryDescription().WithAll<Npc, Behavior, Position>();
 
         var behaviorCount = 0;
         var errorCount = 0;
 
         world.Query(
             in query,
-            (Entity entity, ref NPCComponent npc, ref BehaviorComponent behavior) =>
+            (Entity entity, ref Npc npc, ref Behavior behavior) =>
             {
                 try
                 {

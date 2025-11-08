@@ -8,12 +8,12 @@ using PokeSharp.Core.Pathfinding;
 namespace PokeSharp.Core.Systems;
 
 /// <summary>
-///     System that processes PathComponents and generates movement requests for NPCs.
+///     System that processes NPC path data and generates movement requests for NPCs.
 ///     Integrates A* pathfinding with the existing MovementSystem.
 /// </summary>
 /// <remarks>
 ///     This system runs after SpatialHashSystem but before MovementSystem.
-///     It generates MovementRequest components based on the current PathComponent state.
+///     It generates MovementRequest components based on the current path state.
 /// </remarks>
 public class PathfindingSystem : BaseSystem
 {
@@ -24,7 +24,7 @@ public class PathfindingSystem : BaseSystem
     private readonly QueryDescription _pathQuery = new QueryDescription().WithAll<
         Position,
         GridMovement,
-        PathComponent
+        MovementRoute
     >();
 
     private SpatialHashSystem? _spatialHashSystem;
@@ -65,15 +65,15 @@ public class PathfindingSystem : BaseSystem
                 Entity entity,
                 ref Position position,
                 ref GridMovement movement,
-                ref PathComponent pathComponent
+                ref MovementRoute movementRoute
             ) =>
             {
-                ProcessPathComponent(
+                ProcessMovementRoute(
                     world,
                     entity,
                     ref position,
                     ref movement,
-                    ref pathComponent,
+                    ref movementRoute,
                     deltaTime
                 );
             }
@@ -81,19 +81,19 @@ public class PathfindingSystem : BaseSystem
     }
 
     /// <summary>
-    ///     Processes a single entity's path component.
+    ///     Processes a single entity's path data.
     /// </summary>
-    private void ProcessPathComponent(
+    private void ProcessMovementRoute(
         World world,
         Entity entity,
         ref Position position,
         ref GridMovement movement,
-        ref PathComponent pathComponent,
+        ref MovementRoute movementRoute,
         float deltaTime
     )
     {
         // Skip if no waypoints
-        if (pathComponent.Waypoints == null || pathComponent.Waypoints.Length == 0)
+        if (movementRoute.Waypoints == null || movementRoute.Waypoints.Length == 0)
             return;
 
         // Skip if entity is currently moving
@@ -101,33 +101,33 @@ public class PathfindingSystem : BaseSystem
             return;
 
         // Check if at end of path
-        if (pathComponent.IsAtEnd)
+        if (movementRoute.IsAtEnd)
         {
             _logger?.LogTrace("Entity {Entity} reached end of path", entity.Id);
             return;
         }
 
         // Handle waypoint wait time
-        if (pathComponent.CurrentWaitTime < pathComponent.WaypointWaitTime)
+        if (movementRoute.CurrentWaitTime < movementRoute.WaypointWaitTime)
         {
-            pathComponent.CurrentWaitTime += deltaTime;
+            movementRoute.CurrentWaitTime += deltaTime;
             return;
         }
 
         // Get current and target positions
         var currentPos = new Point(position.X, position.Y);
-        var targetWaypoint = pathComponent.CurrentWaypoint;
+        var targetWaypoint = movementRoute.CurrentWaypoint;
 
         // If already at current waypoint, advance to next
         if (currentPos == targetWaypoint)
         {
-            AdvanceToNextWaypoint(ref pathComponent);
+            AdvanceToNextWaypoint(ref movementRoute);
 
             // Check if we just reached the end
-            if (pathComponent.IsAtEnd)
+            if (movementRoute.IsAtEnd)
                 return;
 
-            targetWaypoint = pathComponent.CurrentWaypoint;
+            targetWaypoint = movementRoute.CurrentWaypoint;
         }
 
         // Try to move toward the waypoint
@@ -212,15 +212,15 @@ public class PathfindingSystem : BaseSystem
         // Smooth the path to reduce waypoints
         path = _pathfindingService.SmoothPath(path, mapId, _spatialHashSystem);
 
-        // Update the path component with the new calculated path
+        // Update the NPC path with the new calculated path
         var newWaypoints = path.ToArray();
 
-        if (world.Has<PathComponent>(entity))
+        if (world.Has<MovementRoute>(entity))
         {
-            ref var pathComponent = ref world.Get<PathComponent>(entity);
-            pathComponent.Waypoints = newWaypoints;
-            pathComponent.CurrentWaypointIndex = 0;
-            pathComponent.CurrentWaitTime = 0f;
+            ref var movementRoute = ref world.Get<MovementRoute>(entity);
+            movementRoute.Waypoints = newWaypoints;
+            movementRoute.CurrentWaypointIndex = 0;
+            movementRoute.CurrentWaitTime = 0f;
 
             _logger?.LogInformation(
                 "Alternative path found for entity {Entity}: {Count} waypoints",
@@ -233,28 +233,28 @@ public class PathfindingSystem : BaseSystem
     /// <summary>
     ///     Advances to the next waypoint in the path.
     /// </summary>
-    private void AdvanceToNextWaypoint(ref PathComponent pathComponent)
+    private void AdvanceToNextWaypoint(ref MovementRoute movementRoute)
     {
-        pathComponent.CurrentWaypointIndex++;
+        movementRoute.CurrentWaypointIndex++;
 
         // Check if we reached the end
-        if (pathComponent.CurrentWaypointIndex >= pathComponent.Waypoints.Length)
+        if (movementRoute.CurrentWaypointIndex >= movementRoute.Waypoints.Length)
         {
-            if (pathComponent.Loop)
+            if (movementRoute.Loop)
             {
                 // Loop back to start
-                pathComponent.CurrentWaypointIndex = 0;
+                movementRoute.CurrentWaypointIndex = 0;
                 _logger?.LogTrace("Path looped back to start");
             }
             else
             {
                 // Stay at last waypoint
-                pathComponent.CurrentWaypointIndex = pathComponent.Waypoints.Length - 1;
+                movementRoute.CurrentWaypointIndex = movementRoute.Waypoints.Length - 1;
                 _logger?.LogTrace("Path completed");
             }
         }
 
         // Reset wait time for the new waypoint
-        pathComponent.CurrentWaitTime = 0f;
+        movementRoute.CurrentWaitTime = 0f;
     }
 }

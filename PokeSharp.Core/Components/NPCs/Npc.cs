@@ -4,17 +4,12 @@ namespace PokeSharp.Core.Components.NPCs;
 ///     Component identifying an entity as an NPC with game-specific properties.
 ///     Pure data component - no methods.
 /// </summary>
-public struct NPCComponent
+public struct Npc
 {
     /// <summary>
     ///     Unique identifier for this NPC (e.g., "rival_oak_lab", "nurse_joy_pewter").
     /// </summary>
     public string NpcId { get; set; }
-
-    /// <summary>
-    ///     Display name shown in dialogue and interactions (e.g., "BLUE", "NURSE JOY").
-    /// </summary>
-    public string DisplayName { get; set; }
 
     /// <summary>
     ///     Whether this NPC is a trainer who can battle the player.
@@ -35,11 +30,12 @@ public struct NPCComponent
 
     /// <summary>
     ///     Initializes a new NPC component with required fields.
+    ///     Use <see cref="Components.Common.Name" /> for display names.
     /// </summary>
-    public NPCComponent(string npcId, string displayName)
+    /// <param name="npcId">Unique identifier for the NPC.</param>
+    public Npc(string npcId)
     {
         NpcId = npcId;
-        DisplayName = displayName;
         IsTrainer = false;
         IsDefeated = false;
         ViewRange = 0;

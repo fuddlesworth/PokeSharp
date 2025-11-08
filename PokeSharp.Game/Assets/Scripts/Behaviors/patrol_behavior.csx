@@ -1,6 +1,7 @@
 using Arch.Core;
 using Microsoft.Xna.Framework;
 using PokeSharp.Core.Components;
+using PokeSharp.Core.Components.NPCs;
 using PokeSharp.Scripting;
 
 /// <summary>
@@ -16,7 +17,7 @@ public class PatrolBehavior : TypeScriptBase
         // Initialize per-entity state component
         if (!ctx.HasState<PatrolState>())
         {
-            ref var path = ref ctx.World.Get<PathComponent>(ctx.Entity.Value);
+            ref var path = ref ctx.World.Get<MovementRoute>(ctx.Entity.Value);
 
             ctx.World.Add(
                 ctx.Entity.Value,
@@ -38,7 +39,7 @@ public class PatrolBehavior : TypeScriptBase
     {
         // Get per-entity state (each NPC has its own)
         ref var state = ref ctx.GetState<PatrolState>();
-        ref var path = ref ctx.World.Get<PathComponent>(ctx.Entity.Value);
+        ref var path = ref ctx.World.Get<MovementRoute>(ctx.Entity.Value);
         ref var position = ref ctx.Position;
 
         // Check path validity
