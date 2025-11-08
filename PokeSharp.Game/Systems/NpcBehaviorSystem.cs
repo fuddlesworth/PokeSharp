@@ -3,6 +3,7 @@ using Arch.Core;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Core.Components.Movement;
 using PokeSharp.Core.Components.NPCs;
+using PokeSharp.Core.Logging;
 using PokeSharp.Core.Scripting.Services;
 using PokeSharp.Core.ScriptingApi;
 using PokeSharp.Core.Systems;
@@ -28,6 +29,8 @@ public class NPCBehaviorSystem : BaseSystem
     private readonly IScriptingApiProvider _apis;
     private readonly ConcurrentDictionary<string, ILogger> _scriptLoggerCache = new();
     private TypeRegistry<BehaviorDefinition>? _behaviorRegistry;
+    private int _tickCounter;
+    private int _lastBehaviorSummaryCount;
 
     public NPCBehaviorSystem(
         ILogger<NPCBehaviorSystem> logger,
@@ -51,20 +54,20 @@ public class NPCBehaviorSystem : BaseSystem
     public void SetBehaviorRegistry(TypeRegistry<BehaviorDefinition> registry)
     {
         _behaviorRegistry = registry;
-        _logger.LogInformation("Behavior registry set with {Count} behaviors", registry.Count);
+        _logger.LogWorkflowStatus("Behavior registry linked", ("behaviors", registry.Count));
     }
 
     public override void Initialize(World world)
     {
         base.Initialize(world);
-        _logger.LogInformation("NPCBehaviorSystem initialized");
+        _logger.LogSystemInitialized("NPCBehaviorSystem", ("behaviors", _behaviorRegistry?.Count ?? 0));
     }
 
     public override void Update(World world, float deltaTime)
     {
         if (_behaviorRegistry == null)
         {
-            _logger.LogWarning("Behavior registry not set on NPCBehaviorSystem");
+            _logger.LogSystemUnavailable("Behavior registry", "not set on NPCBehaviorSystem");
             return;
         }
 
@@ -88,11 +91,11 @@ public class NPCBehaviorSystem : BaseSystem
                     var scriptObj = _behaviorRegistry.GetScript(behavior.BehaviorTypeId);
                     if (scriptObj == null)
                     {
-                        _logger.LogWarning(
-                            "Behavior script not found: {TypeId} (NPC: {NpcId})",
-                            behavior.BehaviorTypeId,
-                            npc.NpcId
-                        );
+                    _logger.LogEntityOperationInvalid(
+                        $"NPC {npc.NpcId}",
+                        "Behavior activation",
+                        $"script not found ({behavior.BehaviorTypeId})"
+                    );
                         // Deactivate behavior (with cleanup if needed)
                         DeactivateBehavior(null, ref behavior, null, "script not found");
                         return;
@@ -101,11 +104,11 @@ public class NPCBehaviorSystem : BaseSystem
                     // Cast to TypeScriptBase
                     if (scriptObj is not TypeScriptBase script)
                     {
-                        _logger.LogError(
-                            "Script is not TypeScriptBase: {TypeId} (Type: {ActualType})",
-                            behavior.BehaviorTypeId,
-                            scriptObj.GetType().Name
-                        );
+                    _logger.LogEntityOperationInvalid(
+                        $"NPC {npc.NpcId}",
+                        "Behavior activation",
+                        $"script type mismatch ({scriptObj.GetType().Name})"
+                    );
                         // Deactivate behavior (with cleanup if needed)
                         DeactivateBehavior(null, ref behavior, null, "wrong script type");
                         return;
@@ -126,10 +129,10 @@ public class NPCBehaviorSystem : BaseSystem
                     // Initialize on first tick
                     if (!behavior.IsInitialized)
                     {
-                        _logger.LogInformation(
-                            "Activating behavior script for NPC {NpcId}, type {TypeId}",
-                            npc.NpcId,
-                            behavior.BehaviorTypeId
+                        _logger.LogWorkflowStatus(
+                            "Activating behavior",
+                            ("npc", npc.NpcId),
+                            ("behavior", behavior.BehaviorTypeId)
                         );
 
                         script.OnActivated(context);
@@ -143,11 +146,10 @@ public class NPCBehaviorSystem : BaseSystem
                 catch (Exception ex)
                 {
                     // Isolate errors - one NPC's script error shouldn't crash all behaviors
-                    _logger.LogError(
+                    _logger.LogExceptionWithContext(
                         ex,
-                        "Script error for NPC {NpcId}: {Message}",
-                        npc.NpcId,
-                        ex.Message
+                        "Behavior script error for NPC {NpcId}",
+                        npc.NpcId
                     );
                     errorCount++;
 
@@ -171,12 +173,22 @@ public class NPCBehaviorSystem : BaseSystem
         );
 
         // Log performance metrics periodically
-        if (behaviorCount > 0)
-            _logger.LogTrace(
-                "Executed {Count} NPC behaviors ({Errors} errors)",
-                behaviorCount,
-                errorCount
+        _tickCounter++;
+
+        var shouldLogSummary =
+            errorCount > 0
+            || (_tickCounter % 60 == 0 && behaviorCount > 0)
+            || (behaviorCount > 0 && behaviorCount != _lastBehaviorSummaryCount);
+
+        if (shouldLogSummary)
+            _logger.LogWorkflowStatus(
+                "Behavior tick summary",
+                ("executed", behaviorCount),
+                ("errors", errorCount)
             );
+
+        if (behaviorCount > 0)
+            _lastBehaviorSummaryCount = behaviorCount;
     }
 
     /// <summary>

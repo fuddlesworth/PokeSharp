@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using PokeSharp.Core.Logging;
 using PokeSharp.Core.Scripting.Services;
 using PokeSharp.Core.ScriptingApi;
 using PokeSharp.Scripting.Runtime;
@@ -139,10 +140,10 @@ public class ScriptService : IAsyncDisposable
             _scriptCache[scriptPath] = (script, instance.GetType());
             _scriptInstances[scriptPath] = instance;
 
-            _logger.LogInformation(
-                "Successfully loaded script: {Path} ({Type})",
-                scriptPath,
-                instance.GetType().Name
+            _logger.LogWorkflowStatus(
+                "Script loaded",
+                ("path", scriptPath),
+                ("type", instance.GetType().Name)
             );
             return instance;
         }

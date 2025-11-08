@@ -30,7 +30,7 @@ public class NPCBehaviorInitializer(
         {
             // Load all behavior definitions from JSON
             var loadedCount = gameServices.BehaviorRegistry.LoadAllAsync().Result;
-            logger.LogInformation("Loaded {Count} behavior definitions", loadedCount);
+            logger.LogWorkflowStatus("Behavior definitions loaded", ("count", loadedCount));
 
             // Load and compile behavior scripts for each type
             foreach (var typeId in gameServices.BehaviorRegistry.GetAllTypeIds())
@@ -41,10 +41,10 @@ public class NPCBehaviorInitializer(
                     && !string.IsNullOrEmpty(scripted.BehaviorScript)
                 )
                 {
-                    logger.LogInformation(
-                        "Loading behavior script for {TypeId}: {Script}",
-                        typeId,
-                        scripted.BehaviorScript
+                    logger.LogWorkflowStatus(
+                        "Compiling behavior script",
+                        ("behavior", typeId),
+                        ("script", scripted.BehaviorScript)
                     );
 
                     var scriptInstance = gameServices.ScriptService
@@ -59,9 +59,10 @@ public class NPCBehaviorInitializer(
                         // Register script instance in the registry
                         gameServices.BehaviorRegistry.RegisterScript(typeId, scriptInstance);
 
-                        logger.LogInformation(
-                            "✓ Loaded and initialized behavior: {TypeId}",
-                            typeId
+                        logger.LogWorkflowStatus(
+                            "Behavior ready",
+                            ("behavior", typeId),
+                            ("script", scripted.BehaviorScript)
                         );
                     }
                     else

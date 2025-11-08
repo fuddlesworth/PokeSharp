@@ -340,15 +340,15 @@ public class ZOrderRenderSystem(
         foreach (var textureId in texturesNeeded)
             if (!_assetManager.HasTexture(textureId))
             {
-                _logger?.LogDebug("Preloading texture: {TextureId}", textureId);
+                _logger?.LogWorkflowStatus("Preloading texture", ("texture", textureId));
                 _assetManager.GetTexture(textureId); // Force load now
             }
 
         sw.Stop();
-        _logger?.LogInformation(
-            "Preloaded {Count} textures in {TimeMs:F2}ms",
-            texturesNeeded.Count,
-            sw.Elapsed.TotalMilliseconds
+        _logger?.LogWorkflowStatus(
+            "Texture preload complete",
+            ("count", texturesNeeded.Count),
+            ("timeMs", sw.Elapsed.TotalMilliseconds.ToString("F2"))
         );
     }
 

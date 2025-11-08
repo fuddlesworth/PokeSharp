@@ -94,10 +94,10 @@ public class TypeRegistry<T>(string dataPath, ILogger logger) : IAsyncDisposable
                 _logger.LogError(ex, "Error loading type from {JsonPath}", jsonPath);
             }
 
-        _logger.LogInformation(
-            "Loaded {Count} type definitions from {Path}",
-            successCount,
-            _dataPath
+        _logger.LogWorkflowStatus(
+            "Type definitions loaded",
+            ("count", successCount),
+            ("path", _dataPath)
         );
         return successCount;
     }

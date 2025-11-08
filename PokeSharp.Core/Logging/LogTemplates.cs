@@ -168,6 +168,20 @@ public static class LogTemplates
     }
 
     /// <summary>
+    ///     Logs a workflow/process status message with optional details.
+    /// </summary>
+    public static void LogWorkflowStatus(
+        this ILogger logger,
+        string message,
+        params (string key, object value)[] details
+    )
+    {
+        var detailsFormatted = FormatDetails(details);
+        var body = $"[cyan]{EscapeMarkup(message)}[/]{detailsFormatted}";
+        logger.LogInformation(LogFormatting.FormatTemplate(WithAccent(LogAccent.Workflow, body)));
+    }
+
+    /// <summary>
     ///     Logs map loaded with statistics.
     /// </summary>
     public static void LogMapLoaded(

@@ -30,14 +30,19 @@ public class MapInitializer(
     {
         try
         {
+            logger.LogWorkflowStatus("Loading map", ("path", mapPath));
+
             // Load map as tile entities (ECS-based approach)
             var mapInfoEntity = mapLoader.LoadMapEntities(world, mapPath);
+            logger.LogWorkflowStatus("Map entities created", ("entity", mapInfoEntity.Id));
 
             // Invalidate spatial hash to reindex static tiles
             spatialHashSystem.InvalidateStaticTiles();
+            logger.LogWorkflowStatus("Spatial hash invalidated", ("cells", "static"));
 
             // Preload all textures used by the map to avoid loading spikes during gameplay
             renderSystem.PreloadMapAssets(world);
+            logger.LogWorkflowStatus("Render assets preloaded");
 
             // Set camera bounds from MapInfo
             var mapInfoQuery = new QueryDescription().WithAll<MapInfo>();
@@ -45,14 +50,15 @@ public class MapInitializer(
                 in mapInfoQuery,
                 (ref MapInfo mapInfo) =>
                 {
-                    logger.LogInformation(
-                        "Camera bounds set to {Width}x{Height} pixels",
-                        mapInfo.PixelWidth,
-                        mapInfo.PixelHeight
+                    logger.LogWorkflowStatus(
+                        "Camera bounds updated",
+                        ("widthPx", mapInfo.PixelWidth),
+                        ("heightPx", mapInfo.PixelHeight)
                     );
                 }
             );
 
+            logger.LogWorkflowStatus("Map load complete", ("path", mapPath));
             return mapInfoEntity;
         }
         catch (Exception ex)
