@@ -2,6 +2,7 @@ using Arch.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using PokeSharp.Core.Events;
+using PokeSharp.Core.Logging;
 using PokeSharp.Core.ScriptingApi;
 using PokeSharp.Core.Types.Events;
 
@@ -32,7 +33,7 @@ public class EffectApiService(World world, IEventBus eventBus, ILogger<EffectApi
     {
         if (string.IsNullOrWhiteSpace(effectId))
         {
-            _logger.LogWarning("Attempted to spawn effect with null or empty effectId");
+            _logger.LogOperationSkipped("Effects.Spawn", "effectId was null or whitespace");
             return;
         }
 

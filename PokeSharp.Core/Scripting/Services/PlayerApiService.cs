@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using PokeSharp.Core.Components.Common;
 using PokeSharp.Core.Components.Movement;
 using PokeSharp.Core.Components.Player;
+using PokeSharp.Core.Logging;
 using PokeSharp.Core.ScriptingApi;
 
 namespace PokeSharp.Core.Scripting.Services;
@@ -36,11 +37,11 @@ public class PlayerApiService(World world, ILogger<PlayerApiService> logger) : I
                     : name.DisplayName;
             }
 
-            _logger.LogWarning("Player entity missing Name component when getting player name");
+            _logger.LogEntityMissingComponent("Player", "Name", "retrieve player name");
         }
         else
         {
-            _logger.LogWarning("Player entity not found when getting player name");
+            _logger.LogEntityNotFound("Player", "retrieve player name");
         }
 
         return DefaultPlayerName;
@@ -61,11 +62,11 @@ public class PlayerApiService(World world, ILogger<PlayerApiService> logger) : I
                 return wallet.Balance;
             }
 
-            _logger.LogWarning("Player entity missing Wallet component when getting money");
+            _logger.LogEntityMissingComponent("Player", "Wallet", "retrieve balance");
         }
         else
         {
-            _logger.LogWarning("Player entity not found when getting money");
+            _logger.LogEntityNotFound("Player", "retrieve balance");
         }
 
         return 0;
@@ -91,12 +92,12 @@ public class PlayerApiService(World world, ILogger<PlayerApiService> logger) : I
             }
             else
             {
-                _logger.LogWarning("Player entity missing Wallet component when giving money");
+                _logger.LogEntityMissingComponent("Player", "Wallet", "receive funds");
             }
         }
         else
         {
-            _logger.LogWarning("Player entity not found when giving money");
+            _logger.LogEntityNotFound("Player", "receive funds");
         }
     }
 
@@ -124,12 +125,12 @@ public class PlayerApiService(World world, ILogger<PlayerApiService> logger) : I
             }
             else
             {
-                _logger.LogWarning("Player entity missing Wallet component when taking money");
+                _logger.LogEntityMissingComponent("Player", "Wallet", "deduct funds");
             }
         }
         else
         {
-            _logger.LogWarning("Player entity not found when taking money");
+            _logger.LogEntityNotFound("Player", "deduct funds");
         }
 
         return false;
@@ -190,7 +191,7 @@ public class PlayerApiService(World world, ILogger<PlayerApiService> logger) : I
         }
         else
         {
-            _logger.LogWarning("Cannot lock player movement: GridMovement component not found");
+            _logger.LogEntityMissingComponent("Player", "GridMovement", "lock movement");
         }
     }
 
@@ -207,7 +208,7 @@ public class PlayerApiService(World world, ILogger<PlayerApiService> logger) : I
             return movement.MovementLocked;
         }
 
-        _logger.LogWarning("Cannot check movement lock: GridMovement component not found");
+        _logger.LogEntityMissingComponent("Player", "GridMovement", "check movement lock");
         return false;
     }
 

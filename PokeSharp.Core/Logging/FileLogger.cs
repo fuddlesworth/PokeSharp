@@ -95,7 +95,8 @@ public sealed class FileLogger<T> : ILogger<T>, IDisposable
         if (!IsEnabled(logLevel) || _disposed)
             return;
 
-        var message = formatter(state, exception);
+        var rawMessage = formatter(state, exception);
+        var message = LogFormatting.StripMarkup(rawMessage);
         var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
         var logLevelStr = GetLogLevelString(logLevel);
 

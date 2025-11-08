@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using PokeSharp.Core.Logging;
 
 namespace PokeSharp.Core.Templates;
 
@@ -32,7 +33,7 @@ public class TemplateCompiler<TEntity> : ITemplateCompiler<TEntity>
         // Check if we have a registered compiler for this type
         if (!_compilers.TryGetValue(entityType, out var compiler))
         {
-            _logger.LogError("No compiler registered for type {EntityType}", entityType.Name);
+            _logger.LogTemplateCompilerMissing(entityType.Name);
             throw new InvalidOperationException(
                 $"No compiler registered for entity type '{entityType.Name}'. "
                     + $"Use RegisterCompiler<{entityType.Name}>() to register a compilation function."

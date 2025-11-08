@@ -1,7 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Core.Logging;
 using PokeSharp.Game;
+
+// Ensure glyph-heavy logging renders correctly
+Console.OutputEncoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
 
 // Setup DI container
 var services = new ServiceCollection();

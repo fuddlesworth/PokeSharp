@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using PokeSharp.Core.Components.Movement;
 using PokeSharp.Core.Components.NPCs;
+using PokeSharp.Core.Logging;
 using PokeSharp.Core.ScriptingApi;
 
 namespace PokeSharp.Core.Scripting.Services;
@@ -21,7 +22,7 @@ public class NpcApiService(World world, ILogger<NpcApiService> logger) : INPCApi
     {
         if (!_world.IsAlive(npc))
         {
-            _logger.LogWarning("Attempted to move dead/invalid NPC entity");
+            _logger.LogEntityOperationInvalid("NPC", "move", "entity is dead or invalid");
             return;
         }
 
@@ -42,7 +43,7 @@ public class NpcApiService(World world, ILogger<NpcApiService> logger) : INPCApi
     {
         if (!_world.IsAlive(npc))
         {
-            _logger.LogWarning("Attempted to face dead/invalid NPC entity");
+            _logger.LogEntityOperationInvalid("NPC", "face direction", "entity is dead or invalid");
             return;
         }
 
@@ -57,13 +58,13 @@ public class NpcApiService(World world, ILogger<NpcApiService> logger) : INPCApi
     {
         if (!_world.IsAlive(npc) || !_world.IsAlive(target))
         {
-            _logger.LogWarning("Attempted to face with dead/invalid entities");
+            _logger.LogEntityOperationInvalid("NPC targeting", "face entity", "source or target invalid");
             return;
         }
 
         if (!_world.Has<Position>(npc) || !_world.Has<Position>(target))
         {
-            _logger.LogWarning("Entities missing Position component for facing");
+            _logger.LogEntityMissingComponent("NPC facing pair", "Position", "align facing direction");
             return;
         }
 
@@ -102,13 +103,13 @@ public class NpcApiService(World world, ILogger<NpcApiService> logger) : INPCApi
     {
         if (!_world.IsAlive(npc))
         {
-            _logger.LogWarning("Attempted to set path on dead/invalid NPC entity");
+            _logger.LogEntityOperationInvalid("NPC", "set path", "entity is dead or invalid");
             return;
         }
 
         if (waypoints == null || waypoints.Length == 0)
         {
-            _logger.LogWarning("Attempted to set empty path");
+            _logger.LogOperationSkipped("NPC.SetPath", "waypoint list is empty");
             return;
         }
 

@@ -142,7 +142,7 @@ public class SystemManager(ILogger<SystemManager>? logger = null)
 
         if (!_initialized)
         {
-            _logger?.LogWarning("Attempting to update systems before initialization");
+            _logger?.LogOperationSkipped("SystemManager.Update", "SystemManager not initialized");
             throw new InvalidOperationException(
                 "SystemManager has not been initialized. Call Initialize() first."
             );
@@ -209,12 +209,7 @@ public class SystemManager(ILogger<SystemManager>? logger = null)
                     {
                         _lastSlowWarningFrame[system] = _frameCounter;
                         var percentOfFrame = elapsed / TargetFrameTime * 100;
-                        _logger?.LogWarning(
-                            "Slow system: {System} took {Time:F2}ms ({Percent:F1}% of frame)",
-                            system.GetType().Name,
-                            elapsed,
-                            percentOfFrame
-                        );
+                        _logger?.LogSlowSystem(system.GetType().Name, elapsed, percentOfFrame);
                     }
                 }
         }

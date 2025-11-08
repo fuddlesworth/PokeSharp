@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.Reflection;
 using Arch.Core;
 using Microsoft.Extensions.Logging;
+using PokeSharp.Core.Logging;
 using PokeSharp.Core.Templates;
 
 namespace PokeSharp.Core.Factories;
@@ -39,7 +40,7 @@ public sealed class EntityFactoryService(
         var template = _templateCache.Get(templateId);
         if (template == null)
         {
-            _logger.LogError("Template not found: {TemplateId}", templateId);
+            _logger.LogTemplateMissing(templateId);
             throw new ArgumentException(
                 $"Template '{templateId}' not found in cache",
                 nameof(templateId)

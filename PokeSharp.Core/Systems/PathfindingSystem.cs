@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using PokeSharp.Core.Components.Movement;
 using PokeSharp.Core.Components.NPCs;
+using PokeSharp.Core.Logging;
 using PokeSharp.Core.Pathfinding;
 
 namespace PokeSharp.Core.Systems;
@@ -55,7 +56,7 @@ public class PathfindingSystem : BaseSystem
 
         if (_spatialHashSystem == null)
         {
-            _logger?.LogError("SpatialHashSystem not set on PathfindingSystem");
+            _logger?.LogSystemDependencyMissing("PathfindingSystem", "SpatialHashSystem", true);
             return;
         }
 

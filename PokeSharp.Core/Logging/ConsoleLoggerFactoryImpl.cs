@@ -1,4 +1,3 @@
-using System.Text;
 using Microsoft.Extensions.Logging;
 using Spectre.Console;
 
@@ -72,55 +71,36 @@ internal sealed class ConsoleLoggerFactoryImpl(LogLevel minLevel = LogLevel.Info
                 return;
 
             var message = formatter(state, exception);
-            var timestamp = DateTime.Now.ToString("HH:mm:ss.fff");
-            var logLevelMarkup = GetLogLevelMarkup(logLevel);
-            var categoryMarkup = GetCategoryMarkup(_categoryName);
-
-            var logLine = new StringBuilder();
-            logLine.Append($"[grey][[{timestamp}]][/] ");
-            logLine.Append($"{logLevelMarkup} ");
-
             var scope = SimpleLogScope.CurrentScope;
-            if (!string.IsNullOrEmpty(scope))
-                logLine.Append($"[dim][[{scope}]][/] ");
+            var formattedLine = LogFormatting.FormatLogLine(
+                logLevel,
+                _categoryName,
+                message,
+                scope,
+                DateTime.Now,
+                LogFormatting.ContainsMarkup(message)
+            );
 
-            logLine.Append($"{categoryMarkup}: ");
-            // Escape markup brackets
-            var escapedMessage = message.Replace("[", "[[").Replace("]", "]]");
-            logLine.Append(escapedMessage);
+            if (LogFormatting.SupportsMarkup)
+                AnsiConsole.MarkupLine(formattedLine);
+            else
+                AnsiConsole.WriteLine(formattedLine);
 
-            AnsiConsole.MarkupLine(logLine.ToString());
+            if (exception == null)
+                return;
 
-            if (exception != null)
-                AnsiConsole.WriteException(exception);
-        }
+            var exceptionLines = LogFormatting.FormatExceptionLines(
+                exception,
+                logLevel >= LogLevel.Debug
+            );
 
-        private static string GetLogLevelMarkup(LogLevel logLevel)
-        {
-            return logLevel switch
+            foreach (var line in exceptionLines)
             {
-                LogLevel.Trace => "[grey]TRACE[/]",
-                LogLevel.Debug => "[cyan]DEBUG[/]",
-                LogLevel.Information => "[green]INFO [/]",
-                LogLevel.Warning => "[yellow]WARN [/]",
-                LogLevel.Error => "[red]ERROR[/]",
-                LogLevel.Critical => "[bold red]CRIT [/]",
-                _ => "[grey]NONE [/]",
-            };
-        }
-
-        private static string GetCategoryMarkup(string categoryName)
-        {
-            var color = GetCategoryColor(categoryName);
-            return $"[{color}]{categoryName}[/]";
-        }
-
-        private static string GetCategoryColor(string categoryName)
-        {
-            // Simple hash-based color selection
-            var hash = categoryName.GetHashCode();
-            var colors = new[] { "cyan", "magenta", "blue", "yellow", "green", "white" };
-            return colors[Math.Abs(hash) % colors.Length];
+                if (LogFormatting.SupportsMarkup)
+                    AnsiConsole.MarkupLine(line);
+                else
+                    AnsiConsole.WriteLine(line);
+            }
         }
 
         private sealed class SimpleLogScope : IDisposable

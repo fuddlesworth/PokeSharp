@@ -266,7 +266,7 @@ public class MovementSystem(ILogger<MovementSystem>? logger = null) : BaseSystem
     {
         if (_spatialHashSystem == null)
         {
-            _logger?.LogError("SpatialHashSystem not set - movement blocked for entity");
+            _logger?.LogSystemDependencyMissing("MovementSystem", "SpatialHashSystem", true);
             throw new InvalidOperationException(
                 "SpatialHashSystem must be set before processing movement. Call SetSpatialHashSystem() first."
             );

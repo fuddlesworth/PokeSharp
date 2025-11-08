@@ -59,11 +59,7 @@ public class AssetManager(
     /// <param name="manifestPath">Path to the manifest JSON file.</param>
     public void LoadManifest(string manifestPath = "Assets/manifest.json")
     {
-        // Use scoped logging to group all manifest loading operations
-        using (_logger?.BeginScope("AssetManifest"))
-        {
-            LoadManifestInternal(manifestPath);
-        }
+        LoadManifestInternal(manifestPath);
     }
 
     private void LoadManifestInternal(string manifestPath)
@@ -80,10 +76,10 @@ public class AssetManager(
             JsonSerializer.Deserialize<AssetManifest>(json, options)
             ?? throw new InvalidOperationException("Failed to deserialize asset manifest");
 
-        _logger?.LogInformation("Deserialized manifest");
-        _logger?.LogInformation("Tilesets: {TilesetCount}", _manifest.Tilesets?.Count ?? 0);
-        _logger?.LogInformation("Sprites: {SpriteCount}", _manifest.Sprites?.Count ?? 0);
-        _logger?.LogInformation("Maps: {MapCount}", _manifest.Maps?.Count ?? 0);
+        _logger?.LogAssetStatus("Manifest deserialized");
+        _logger?.LogAssetStatus("Tilesets discovered", ("count", _manifest.Tilesets?.Count ?? 0));
+        _logger?.LogAssetStatus("Sprites discovered", ("count", _manifest.Sprites?.Count ?? 0));
+        _logger?.LogAssetStatus("Maps discovered", ("count", _manifest.Maps?.Count ?? 0));
 
         // Load all tilesets
         if (_manifest.Tilesets != null)
@@ -109,13 +105,16 @@ public class AssetManager(
                 }
 
             if (successful > 0)
-                _logger?.LogInformation(
-                    "[green]Loaded [cyan]{Count}[/] tilesets"
-                        + (failed > 0 ? " [dim]({Failed} failed)[/]" : "")
-                        + "[/]",
-                    successful,
-                    failed
-                );
+            {
+                if (failed > 0)
+                    _logger?.LogAssetStatus(
+                        "Tilesets loaded",
+                        ("count", successful),
+                        ("failed", failed)
+                    );
+                else
+                    _logger?.LogAssetStatus("Tilesets loaded", ("count", successful));
+            }
         }
 
         // Load all sprites
@@ -142,13 +141,16 @@ public class AssetManager(
                 }
 
             if (successful > 0)
-                _logger?.LogInformation(
-                    "[green]Loaded [cyan]{Count}[/] sprites"
-                        + (failed > 0 ? " [dim]({Failed} failed)[/]" : "")
-                        + "[/]",
-                    successful,
-                    failed
-                );
+            {
+                if (failed > 0)
+                    _logger?.LogAssetStatus(
+                        "Sprites loaded",
+                        ("count", successful),
+                        ("failed", failed)
+                    );
+                else
+                    _logger?.LogAssetStatus("Sprites loaded", ("count", successful));
+            }
         }
     }
 

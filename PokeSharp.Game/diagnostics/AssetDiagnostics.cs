@@ -14,9 +14,8 @@ public static class AssetDiagnostics
         if (logger == null)
             return;
 
-        logger.LogDiagnosticHeader("ASSET MANAGER DIAGNOSTIC REPORT");
-
-        logger.LogDiagnosticInfo("Total Loaded Textures", assetManager.LoadedTextureCount);
+        logger.LogAssetStatus("Asset diagnostics report");
+        logger.LogAssetStatus("Textures loaded", ("count", assetManager.LoadedTextureCount));
 
         // Check for player texture
         var hasPlayer = assetManager.HasTexture("player");
@@ -37,7 +36,5 @@ public static class AssetDiagnostics
             }
         else
             logger.LogResourceNotFound("Texture", "player");
-
-        logger.LogDiagnosticSeparator();
     }
 }

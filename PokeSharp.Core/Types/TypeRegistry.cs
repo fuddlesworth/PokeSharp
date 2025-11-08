@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using PokeSharp.Core.Logging;
 
 namespace PokeSharp.Core.Types;
 
@@ -75,7 +76,7 @@ public class TypeRegistry<T>(string dataPath, ILogger logger) : IAsyncDisposable
     {
         if (!Directory.Exists(_dataPath))
         {
-            _logger.LogWarning("Data path does not exist: {DataPath}", _dataPath);
+            _logger.LogResourceNotFound("Data path", _dataPath);
             return 0;
         }
 

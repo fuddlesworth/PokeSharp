@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using PokeSharp.Core.Components.Maps;
 using PokeSharp.Core.Components.Movement;
 using PokeSharp.Core.Components.Player;
+using PokeSharp.Core.Logging;
 using PokeSharp.Core.ScriptingApi;
 using PokeSharp.Core.Systems;
 
@@ -27,7 +28,7 @@ public class MapApiService(
     {
         if (_spatialHashSystem == null)
         {
-            _logger.LogWarning("SpatialHashSystem not initialized yet");
+            _logger.LogSystemUnavailable("SpatialHashSystem", "not initialized yet");
             return true; // Default to walkable if system not ready
         }
 
@@ -47,7 +48,7 @@ public class MapApiService(
     {
         if (_spatialHashSystem == null)
         {
-            _logger.LogWarning("SpatialHashSystem not initialized yet");
+            _logger.LogSystemUnavailable("SpatialHashSystem", "not initialized yet");
             return [];
         }
 

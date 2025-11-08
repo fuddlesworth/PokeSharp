@@ -1,6 +1,7 @@
 using Arch.Core;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Core.Events;
+using PokeSharp.Core.Logging;
 using PokeSharp.Core.ScriptingApi;
 using PokeSharp.Core.Types.Events;
 
@@ -29,7 +30,7 @@ public class DialogueApiService(World world, IEventBus eventBus, ILogger<Dialogu
     {
         if (string.IsNullOrWhiteSpace(message))
         {
-            _logger.LogWarning("Attempted to show null or empty dialogue message");
+            _logger.LogOperationSkipped("Dialogue.ShowMessage", "message was null or whitespace");
             return;
         }
 
