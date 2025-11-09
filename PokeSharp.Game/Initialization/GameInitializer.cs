@@ -36,6 +36,7 @@ public class GameInitializer(
     private readonly SystemManager _systemManager = systemManager;
     private readonly World _world = world;
     private EntityPoolManager _poolManager = null!;
+    private ComponentPoolManager _componentPoolManager = null!;
 
     /// <summary>
     ///     Gets the animation library.
@@ -56,6 +57,11 @@ public class GameInitializer(
     ///     Gets the entity pool manager.
     /// </summary>
     public EntityPoolManager PoolManager => _poolManager;
+
+    /// <summary>
+    ///     Gets the component pool manager for temporary component operations.
+    /// </summary>
+    public ComponentPoolManager ComponentPoolManager => _componentPoolManager;
 
     /// <summary>
     ///     Initializes all game systems and infrastructure.
@@ -98,6 +104,15 @@ public class GameInitializer(
             20,
             1,
             2000
+        );
+
+        // Initialize component pooling system (Phase 4B)
+        // Pools frequently-used components for temporary operations (copying, calculations)
+        var componentPoolLogger = _loggerFactory.CreateLogger<ComponentPoolManager>();
+        _componentPoolManager = new ComponentPoolManager(componentPoolLogger, enableStatistics: true);
+
+        _logger.LogInformation(
+            "Component pool manager initialized for temporary component operations (Position, Velocity, Sprite, Animation, GridMovement)"
         );
 
         // Create and register systems in priority order

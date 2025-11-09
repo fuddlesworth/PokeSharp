@@ -1,0 +1,34 @@
+/Users/ntomsic/Documents/PokeSharp/tests/PerformanceBenchmarks/ComponentPoolingTests.cs(301,20): warning CS0649: Field 'ComponentPoolManagerTests.TestComponent.Value' is never assigned to, and will always have its default value 0 [/Users/ntomsic/Documents/PokeSharp/tests/PerformanceBenchmarks/PerformanceBenchmarks.csproj]
+/Users/ntomsic/Documents/PokeSharp/tests/PerformanceBenchmarks/ComponentPoolingTests.cs(174,9): warning xUnit2002: Do not use Assert.NotNull() on value type 'Position'. Remove this assert. (https://xunit.net/xunit.analyzers/rules/xUnit2002) [/Users/ntomsic/Documents/PokeSharp/tests/PerformanceBenchmarks/PerformanceBenchmarks.csproj]
+/Users/ntomsic/Documents/PokeSharp/tests/PerformanceBenchmarks/ComponentPoolingTests.cs(179,9): warning xUnit2002: Do not use Assert.NotNull() on value type 'GridMovement'. Remove this assert. (https://xunit.net/xunit.analyzers/rules/xUnit2002) [/Users/ntomsic/Documents/PokeSharp/tests/PerformanceBenchmarks/PerformanceBenchmarks.csproj]
+/Users/ntomsic/Documents/PokeSharp/tests/PerformanceBenchmarks/ComponentPoolingTests.cs(184,9): warning xUnit2002: Do not use Assert.NotNull() on value type 'Velocity'. Remove this assert. (https://xunit.net/xunit.analyzers/rules/xUnit2002) [/Users/ntomsic/Documents/PokeSharp/tests/PerformanceBenchmarks/PerformanceBenchmarks.csproj]
+/Users/ntomsic/Documents/PokeSharp/tests/PerformanceBenchmarks/ComponentPoolingTests.cs(189,9): warning xUnit2002: Do not use Assert.NotNull() on value type 'Sprite'. Remove this assert. (https://xunit.net/xunit.analyzers/rules/xUnit2002) [/Users/ntomsic/Documents/PokeSharp/tests/PerformanceBenchmarks/PerformanceBenchmarks.csproj]
+/Users/ntomsic/Documents/PokeSharp/tests/PerformanceBenchmarks/ComponentPoolingTests.cs(194,9): warning xUnit2002: Do not use Assert.NotNull() on value type 'Animation'. Remove this assert. (https://xunit.net/xunit.analyzers/rules/xUnit2002) [/Users/ntomsic/Documents/PokeSharp/tests/PerformanceBenchmarks/PerformanceBenchmarks.csproj]
+/Users/ntomsic/Documents/PokeSharp/tests/PerformanceBenchmarks/ComponentPoolingTests.cs(42,9): warning xUnit2002: Do not use Assert.NotNull() on value type 'Position'. Remove this assert. (https://xunit.net/xunit.analyzers/rules/xUnit2002) [/Users/ntomsic/Documents/PokeSharp/tests/PerformanceBenchmarks/PerformanceBenchmarks.csproj]
+/Users/ntomsic/Documents/PokeSharp/tests/PerformanceBenchmarks/ComponentPoolingTests.cs(136,14): warning xUnit1031: Test methods should not use blocking task operations, as they can cause deadlocks. Use an async test method and await instead. (https://xunit.net/xunit.analyzers/rules/xUnit1031) [/Users/ntomsic/Documents/PokeSharp/tests/PerformanceBenchmarks/PerformanceBenchmarks.csproj]
+=== PokeSharp Performance Benchmarks ===
+
+1. Entity Pooling Performance:
+   Without pooling: 12ms (1.30μs per entity)
+   With pooling:    7ms (0.75μs per entity)
+   Improvement:     1.71x faster
+
+2. Query Performance (50K entities):
+   Sequential:      2ms
+   Entities/sec:    25000000
+
+3. System Execution Performance:
+   Single system:   0ms
+   Sequential (2):  2ms
+   Target (60 FPS): 16.67ms
+   Frame budget:    WITHIN budget
+
+4. Garbage Collection Statistics:
+   Gen0 Collections: 0
+   Gen1 Collections: 0
+   Gen2 Collections: 0
+   Memory Before:    7.07MB
+   Memory After:     13.58MB
+   Memory Delta:     6.51MB
+
+=== All Tests Complete ===

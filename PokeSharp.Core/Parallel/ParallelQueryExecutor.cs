@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -38,6 +39,7 @@ public class ParallelQueryExecutor
 
     /// <summary>
     ///     Execute query in parallel chunks with a single component.
+    ///     Uses ArrayPool for zero-allocation entity collection.
     /// </summary>
     public void ExecuteParallel<T>(
         in QueryDescription query,
@@ -47,25 +49,46 @@ public class ParallelQueryExecutor
         ArgumentNullException.ThrowIfNull(action);
 
         var stopwatch = Stopwatch.StartNew();
-        var entities = new List<Entity>();
 
-        // Collect entities first (Arch queries can't be modified during iteration)
-        _world.Query(in query, (Entity entity) => entities.Add(entity));
-
-        // Process in parallel
-        var options = new ParallelOptions { MaxDegreeOfParallelism = _maxDegreeOfParallelism };
-        System.Threading.Tasks.Parallel.ForEach(entities, options, entity =>
+        // Phase 4: Use ArrayPool to eliminate List<Entity> allocations
+        // Get entity count first
+        var entityCount = _world.CountEntities(in query);
+        if (entityCount == 0)
         {
-            ref var component = ref entity.Get<T>();
-            action(entity, ref component);
-        });
+            stopwatch.Stop();
+            RecordExecution(0, stopwatch.Elapsed.TotalMilliseconds);
+            return;
+        }
 
-        stopwatch.Stop();
-        RecordExecution(entities.Count, stopwatch.Elapsed.TotalMilliseconds);
+        // Rent array from pool (zero allocation)
+        var entityArray = ArrayPool<Entity>.Shared.Rent(entityCount);
+        try
+        {
+            var index = 0;
+            _world.Query(in query, (Entity entity) => entityArray[index++] = entity);
+
+            // Process in parallel (array is safe because we only access [0..entityCount))
+            var options = new ParallelOptions { MaxDegreeOfParallelism = _maxDegreeOfParallelism };
+            var count = entityCount; // Capture for lambda
+            System.Threading.Tasks.Parallel.For(0, count, options, i =>
+            {
+                ref var component = ref entityArray[i].Get<T>();
+                action(entityArray[i], ref component);
+            });
+
+            stopwatch.Stop();
+            RecordExecution(entityCount, stopwatch.Elapsed.TotalMilliseconds);
+        }
+        finally
+        {
+            // Always return array to pool
+            ArrayPool<Entity>.Shared.Return(entityArray);
+        }
     }
 
     /// <summary>
     ///     Execute query in parallel with two components.
+    ///     Uses ArrayPool for zero-allocation entity collection.
     /// </summary>
     public void ExecuteParallel<T1, T2>(
         in QueryDescription query,
@@ -75,24 +98,42 @@ public class ParallelQueryExecutor
         ArgumentNullException.ThrowIfNull(action);
 
         var stopwatch = Stopwatch.StartNew();
-        var entities = new List<Entity>();
 
-        _world.Query(in query, (Entity entity) => entities.Add(entity));
-
-        var options = new ParallelOptions { MaxDegreeOfParallelism = _maxDegreeOfParallelism };
-        System.Threading.Tasks.Parallel.ForEach(entities, options, entity =>
+        var entityCount = _world.CountEntities(in query);
+        if (entityCount == 0)
         {
-            ref var c1 = ref entity.Get<T1>();
-            ref var c2 = ref entity.Get<T2>();
-            action(entity, ref c1, ref c2);
-        });
+            stopwatch.Stop();
+            RecordExecution(0, stopwatch.Elapsed.TotalMilliseconds);
+            return;
+        }
 
-        stopwatch.Stop();
-        RecordExecution(entities.Count, stopwatch.Elapsed.TotalMilliseconds);
+        var entityArray = ArrayPool<Entity>.Shared.Rent(entityCount);
+        try
+        {
+            var index = 0;
+            _world.Query(in query, (Entity entity) => entityArray[index++] = entity);
+
+            var options = new ParallelOptions { MaxDegreeOfParallelism = _maxDegreeOfParallelism };
+            var count = entityCount;
+            System.Threading.Tasks.Parallel.For(0, count, options, i =>
+            {
+                ref var c1 = ref entityArray[i].Get<T1>();
+                ref var c2 = ref entityArray[i].Get<T2>();
+                action(entityArray[i], ref c1, ref c2);
+            });
+
+            stopwatch.Stop();
+            RecordExecution(entityCount, stopwatch.Elapsed.TotalMilliseconds);
+        }
+        finally
+        {
+            ArrayPool<Entity>.Shared.Return(entityArray);
+        }
     }
 
     /// <summary>
     ///     Execute query in parallel with three components.
+    ///     Uses ArrayPool for zero-allocation entity collection.
     /// </summary>
     public void ExecuteParallel<T1, T2, T3>(
         in QueryDescription query,
@@ -102,25 +143,43 @@ public class ParallelQueryExecutor
         ArgumentNullException.ThrowIfNull(action);
 
         var stopwatch = Stopwatch.StartNew();
-        var entities = new List<Entity>();
 
-        _world.Query(in query, (Entity entity) => entities.Add(entity));
-
-        var options = new ParallelOptions { MaxDegreeOfParallelism = _maxDegreeOfParallelism };
-        System.Threading.Tasks.Parallel.ForEach(entities, options, entity =>
+        var entityCount = _world.CountEntities(in query);
+        if (entityCount == 0)
         {
-            ref var c1 = ref entity.Get<T1>();
-            ref var c2 = ref entity.Get<T2>();
-            ref var c3 = ref entity.Get<T3>();
-            action(entity, ref c1, ref c2, ref c3);
-        });
+            stopwatch.Stop();
+            RecordExecution(0, stopwatch.Elapsed.TotalMilliseconds);
+            return;
+        }
 
-        stopwatch.Stop();
-        RecordExecution(entities.Count, stopwatch.Elapsed.TotalMilliseconds);
+        var entityArray = ArrayPool<Entity>.Shared.Rent(entityCount);
+        try
+        {
+            var index = 0;
+            _world.Query(in query, (Entity entity) => entityArray[index++] = entity);
+
+            var options = new ParallelOptions { MaxDegreeOfParallelism = _maxDegreeOfParallelism };
+            var count = entityCount;
+            System.Threading.Tasks.Parallel.For(0, count, options, i =>
+            {
+                ref var c1 = ref entityArray[i].Get<T1>();
+                ref var c2 = ref entityArray[i].Get<T2>();
+                ref var c3 = ref entityArray[i].Get<T3>();
+                action(entityArray[i], ref c1, ref c2, ref c3);
+            });
+
+            stopwatch.Stop();
+            RecordExecution(entityCount, stopwatch.Elapsed.TotalMilliseconds);
+        }
+        finally
+        {
+            ArrayPool<Entity>.Shared.Return(entityArray);
+        }
     }
 
     /// <summary>
     ///     Execute query in parallel with four components.
+    ///     Uses ArrayPool for zero-allocation entity collection.
     /// </summary>
     public void ExecuteParallel<T1, T2, T3, T4>(
         in QueryDescription query,
@@ -130,26 +189,44 @@ public class ParallelQueryExecutor
         ArgumentNullException.ThrowIfNull(action);
 
         var stopwatch = Stopwatch.StartNew();
-        var entities = new List<Entity>();
 
-        _world.Query(in query, (Entity entity) => entities.Add(entity));
-
-        var options = new ParallelOptions { MaxDegreeOfParallelism = _maxDegreeOfParallelism };
-        System.Threading.Tasks.Parallel.ForEach(entities, options, entity =>
+        var entityCount = _world.CountEntities(in query);
+        if (entityCount == 0)
         {
-            ref var c1 = ref entity.Get<T1>();
-            ref var c2 = ref entity.Get<T2>();
-            ref var c3 = ref entity.Get<T3>();
-            ref var c4 = ref entity.Get<T4>();
-            action(entity, ref c1, ref c2, ref c3, ref c4);
-        });
+            stopwatch.Stop();
+            RecordExecution(0, stopwatch.Elapsed.TotalMilliseconds);
+            return;
+        }
 
-        stopwatch.Stop();
-        RecordExecution(entities.Count, stopwatch.Elapsed.TotalMilliseconds);
+        var entityArray = ArrayPool<Entity>.Shared.Rent(entityCount);
+        try
+        {
+            var index = 0;
+            _world.Query(in query, (Entity entity) => entityArray[index++] = entity);
+
+            var options = new ParallelOptions { MaxDegreeOfParallelism = _maxDegreeOfParallelism };
+            var count = entityCount;
+            System.Threading.Tasks.Parallel.For(0, count, options, i =>
+            {
+                ref var c1 = ref entityArray[i].Get<T1>();
+                ref var c2 = ref entityArray[i].Get<T2>();
+                ref var c3 = ref entityArray[i].Get<T3>();
+                ref var c4 = ref entityArray[i].Get<T4>();
+                action(entityArray[i], ref c1, ref c2, ref c3, ref c4);
+            });
+
+            stopwatch.Stop();
+            RecordExecution(entityCount, stopwatch.Elapsed.TotalMilliseconds);
+        }
+        finally
+        {
+            ArrayPool<Entity>.Shared.Return(entityArray);
+        }
     }
 
     /// <summary>
     ///     Execute with result aggregation (map-reduce pattern).
+    ///     Uses ArrayPool for zero-allocation entity collection.
     /// </summary>
     public TResult ExecuteParallelWithReduce<T, TResult>(
         in QueryDescription query,
@@ -162,23 +239,40 @@ public class ParallelQueryExecutor
 
         var stopwatch = Stopwatch.StartNew();
         var results = new ConcurrentBag<TResult>();
-        var entities = new List<Entity>();
 
-        _world.Query(in query, (Entity entity) => entities.Add(entity));
-
-        var options = new ParallelOptions { MaxDegreeOfParallelism = _maxDegreeOfParallelism };
-        System.Threading.Tasks.Parallel.ForEach(entities, options, entity =>
+        var entityCount = _world.CountEntities(in query);
+        if (entityCount == 0)
         {
-            ref var component = ref entity.Get<T>();
-            var result = map(entity, ref component);
-            results.Add(result);
-        });
+            stopwatch.Stop();
+            RecordExecution(0, stopwatch.Elapsed.TotalMilliseconds);
+            return default!;
+        }
 
-        stopwatch.Stop();
-        RecordExecution(entities.Count, stopwatch.Elapsed.TotalMilliseconds);
+        var entityArray = ArrayPool<Entity>.Shared.Rent(entityCount);
+        try
+        {
+            var index = 0;
+            _world.Query(in query, (Entity entity) => entityArray[index++] = entity);
 
-        // Reduce results
-        return results.Aggregate(reduce);
+            var options = new ParallelOptions { MaxDegreeOfParallelism = _maxDegreeOfParallelism };
+            var count = entityCount;
+            System.Threading.Tasks.Parallel.For(0, count, options, i =>
+            {
+                ref var component = ref entityArray[i].Get<T>();
+                var result = map(entityArray[i], ref component);
+                results.Add(result);
+            });
+
+            stopwatch.Stop();
+            RecordExecution(entityCount, stopwatch.Elapsed.TotalMilliseconds);
+
+            // Reduce results
+            return results.Aggregate(reduce);
+        }
+        finally
+        {
+            ArrayPool<Entity>.Shared.Return(entityArray);
+        }
     }
 
     /// <summary>

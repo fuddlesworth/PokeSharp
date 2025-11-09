@@ -5,6 +5,7 @@ using PokeSharp.Core.Events;
 using PokeSharp.Core.Factories;
 using PokeSharp.Core.Mapping;
 using PokeSharp.Core.Parallel;
+using PokeSharp.Core.Pooling;
 using PokeSharp.Core.Scripting.Services;
 using PokeSharp.Core.ScriptingApi;
 using PokeSharp.Core.Systems;
@@ -43,6 +44,13 @@ public static class ServiceCollectionExtensions
             var world = sp.GetRequiredService<World>();
             var logger = sp.GetService<ILogger<ParallelSystemManager>>();
             return new ParallelSystemManager(world, enableParallel: true, logger);
+        });
+
+        // Component Pool Manager (Phase 4B) - For temporary component operations
+        services.AddSingleton(sp =>
+        {
+            var logger = sp.GetService<ILogger<ComponentPoolManager>>();
+            return new ComponentPoolManager(logger, enableStatistics: true);
         });
 
         // Entity Factory & Templates
