@@ -5,6 +5,7 @@ using PokeSharp.Core.Components.Maps;
 using PokeSharp.Core.Components.Movement;
 using PokeSharp.Core.Factories;
 using PokeSharp.Core.Logging;
+using PokeSharp.Core.Systems;
 using PokeSharp.Rendering.Components;
 
 namespace PokeSharp.Game.Initialization;
@@ -34,7 +35,7 @@ public class PlayerFactory(
     {
         // Capture tile size from MapInfo (default to 16 if not found)
         var tileSize = 16;
-        var mapInfoQuery = new QueryDescription().WithAll<MapInfo>();
+        var mapInfoQuery = QueryCache.Get<MapInfo>();
         _world.Query(
             in mapInfoQuery,
             (ref MapInfo mapInfo) =>

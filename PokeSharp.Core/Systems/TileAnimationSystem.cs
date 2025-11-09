@@ -4,7 +4,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using PokeSharp.Core.Components.Tiles;
 using PokeSharp.Core.Logging;
+using PokeSharp.Core.Parallel;
 using PokeSharp.Core.Queries;
+using static PokeSharp.Core.Parallel.ParallelQueryExecutor;
 
 namespace PokeSharp.Core.Systems;
 
@@ -12,8 +14,9 @@ namespace PokeSharp.Core.Systems;
 ///     System that updates animated tile frames based on time.
 ///     Handles Pokemon-style tile animations (water ripples, grass swaying, flowers).
 ///     Priority: 850 (after Animation:800, before Render:1000).
+///     Uses parallel execution for optimal performance with many animated tiles.
 /// </summary>
-public class TileAnimationSystem(ILogger<TileAnimationSystem>? logger = null) : BaseSystem
+public class TileAnimationSystem(ILogger<TileAnimationSystem>? logger = null) : ParallelSystemBase
 {
     private readonly ILogger<TileAnimationSystem>? _logger = logger;
     private int _animatedTileCount = -1; // Track for logging on first update
@@ -29,23 +32,27 @@ public class TileAnimationSystem(ILogger<TileAnimationSystem>? logger = null) : 
         if (!Enabled)
             return;
 
-        // Use centralized query for animated tiles
-        var tileCount = 0;
-
-        world.Query(
+        // Execute tile animation updates in parallel
+        // Each tile is independent, making this ideal for parallel processing
+        ParallelQuery<AnimatedTile, TileSprite>(
             in Queries.Queries.AnimatedTiles,
             (Entity entity, ref AnimatedTile animTile, ref TileSprite sprite) =>
             {
                 UpdateTileAnimation(ref animTile, ref sprite, deltaTime);
-                tileCount++;
             }
         );
 
-        // Log animated tile count on first update
-        if (_animatedTileCount < 0 && tileCount > 0)
+        // Log animated tile count on first update (sequential count for logging)
+        if (_animatedTileCount < 0)
         {
-            _animatedTileCount = tileCount;
-            _logger?.LogAnimatedTilesProcessed(_animatedTileCount);
+            var tileCount = 0;
+            world.Query(in Queries.Queries.AnimatedTiles, (Entity entity) => tileCount++);
+
+            if (tileCount > 0)
+            {
+                _animatedTileCount = tileCount;
+                _logger?.LogAnimatedTilesProcessed(_animatedTileCount);
+            }
         }
     }
 
@@ -142,4 +149,21 @@ public class TileAnimationSystem(ILogger<TileAnimationSystem>? logger = null) : 
 
         return new Rectangle(sourceX, sourceY, tileWidth, tileHeight);
     }
+
+    /// <summary>
+    ///     Declares components this system reads for parallel execution analysis.
+    /// </summary>
+    public override List<Type> GetReadComponents() => new()
+    {
+        typeof(AnimatedTile)
+    };
+
+    /// <summary>
+    ///     Declares components this system writes for parallel execution analysis.
+    /// </summary>
+    public override List<Type> GetWriteComponents() => new()
+    {
+        typeof(AnimatedTile),
+        typeof(TileSprite)
+    };
 }

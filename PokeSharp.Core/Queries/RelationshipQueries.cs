@@ -1,5 +1,6 @@
 using Arch.Core;
 using PokeSharp.Core.Components.Relationships;
+using PokeSharp.Core.Systems;
 
 namespace PokeSharp.Core.Queries;
 
@@ -18,14 +19,12 @@ public static class RelationshipQueries
     /// <summary>
     /// Query for all entities with a Parent component (child entities).
     /// </summary>
-    public static QueryDescription AllChildren => new QueryDescription()
-        .WithAll<Parent>();
+    public static QueryDescription AllChildren => QueryCache.Get<Parent>();
 
     /// <summary>
     /// Query for all entities with a Children component (parent entities).
     /// </summary>
-    public static QueryDescription AllParents => new QueryDescription()
-        .WithAll<Children>();
+    public static QueryDescription AllParents => QueryCache.Get<Children>();
 
     /// <summary>
     /// Query for entities that are both parents and children in hierarchy.
@@ -34,8 +33,7 @@ public static class RelationshipQueries
     /// Useful for finding intermediate nodes in a hierarchical structure,
     /// such as a trainer who is part of a team.
     /// </remarks>
-    public static QueryDescription HierarchyNodes => new QueryDescription()
-        .WithAll<Parent, Children>();
+    public static QueryDescription HierarchyNodes => QueryCache.Get<Parent, Children>();
 
     /// <summary>
     /// Query for root entities (parents with no parent themselves).
@@ -44,9 +42,7 @@ public static class RelationshipQueries
     /// Identifies top-level entities in a hierarchy, such as the main player
     /// or team leaders.
     /// </remarks>
-    public static QueryDescription RootParents => new QueryDescription()
-        .WithAll<Children>()
-        .WithNone<Parent>();
+    public static QueryDescription RootParents => QueryCache.GetWithNone<Children, Parent>();
 
     /// <summary>
     /// Query for leaf entities (children with no children of their own).
@@ -55,9 +51,7 @@ public static class RelationshipQueries
     /// Identifies bottom-level entities in a hierarchy, such as individual
     /// Pokémon or items that don't contain other entities.
     /// </remarks>
-    public static QueryDescription LeafChildren => new QueryDescription()
-        .WithAll<Parent>()
-        .WithNone<Children>();
+    public static QueryDescription LeafChildren => QueryCache.GetWithNone<Parent, Children>();
 
     #endregion
 
@@ -66,14 +60,12 @@ public static class RelationshipQueries
     /// <summary>
     /// Query for all entities with an Owner component (entities that own something).
     /// </summary>
-    public static QueryDescription AllOwners => new QueryDescription()
-        .WithAll<Owner>();
+    public static QueryDescription AllOwners => QueryCache.Get<Owner>();
 
     /// <summary>
     /// Query for all entities with an Owned component (owned entities).
     /// </summary>
-    public static QueryDescription AllOwned => new QueryDescription()
-        .WithAll<Owned>();
+    public static QueryDescription AllOwned => QueryCache.Get<Owned>();
 
     /// <summary>
     /// Query for entities that both own and are owned.
@@ -82,8 +74,7 @@ public static class RelationshipQueries
     /// Useful for finding intermediate ownership chains, such as a Pokémon
     /// that is owned by a trainer but also owns items.
     /// </remarks>
-    public static QueryDescription OwnershipChain => new QueryDescription()
-        .WithAll<Owner, Owned>();
+    public static QueryDescription OwnershipChain => QueryCache.Get<Owner, Owned>();
 
     /// <summary>
     /// Query for entities that own something but are not owned themselves.
@@ -92,9 +83,7 @@ public static class RelationshipQueries
     /// Identifies top-level owners in ownership chains, such as the player
     /// or autonomous entities.
     /// </remarks>
-    public static QueryDescription IndependentOwners => new QueryDescription()
-        .WithAll<Owner>()
-        .WithNone<Owned>();
+    public static QueryDescription IndependentOwners => QueryCache.GetWithNone<Owner, Owned>();
 
     /// <summary>
     /// Query for owned entities that don't own anything else.
@@ -103,9 +92,7 @@ public static class RelationshipQueries
     /// Identifies leaf nodes in ownership chains, such as basic items or
     /// resources that cannot own other entities.
     /// </remarks>
-    public static QueryDescription PureOwned => new QueryDescription()
-        .WithAll<Owned>()
-        .WithNone<Owner>();
+    public static QueryDescription PureOwned => QueryCache.GetWithNone<Owned, Owner>();
 
     #endregion
 

@@ -12,16 +12,25 @@ namespace PokeSharp.Rendering.Systems;
 ///     animation definitions and frame timing.
 ///     Executes at priority 800 (after movement, before rendering).
 /// </summary>
-public class AnimationSystem(
-    AnimationLibrary animationLibrary,
-    ILogger<AnimationSystem>? logger = null
-) : BaseSystem
+public class AnimationSystem : ParallelSystemBase
 {
-    private readonly AnimationLibrary _animationLibrary =
-        animationLibrary ?? throw new ArgumentNullException(nameof(animationLibrary));
-
-    private readonly ILogger<AnimationSystem>? _logger = logger;
+    private readonly AnimationLibrary _animationLibrary;
+    private readonly ILogger<AnimationSystem>? _logger;
     private ulong _frameCounter;
+
+    /// <summary>
+    ///     Creates a new AnimationSystem with the specified animation library and optional logger.
+    /// </summary>
+    /// <param name="animationLibrary">The animation library containing animation definitions.</param>
+    /// <param name="logger">Optional logger for system diagnostics.</param>
+    public AnimationSystem(
+        AnimationLibrary animationLibrary,
+        ILogger<AnimationSystem>? logger = null
+    )
+    {
+        _animationLibrary = animationLibrary ?? throw new ArgumentNullException(nameof(animationLibrary));
+        _logger = logger;
+    }
 
     /// <inheritdoc />
     public override int Priority => SystemPriority.Animation;
@@ -34,11 +43,11 @@ public class AnimationSystem(
             EnsureInitialized();
             _frameCounter++;
 
-            // Query all entities with Animation + Sprite components
-            var query = new QueryDescription().WithAll<AnimationComponent, Sprite>();
+            // Query all entities with Animation + Sprite components in parallel
+            var query = QueryCache.Get<AnimationComponent, Sprite>();
 
-            world.Query(
-                in query,
+            ParallelQuery<AnimationComponent, Sprite>(
+                query,
                 (Entity entity, ref AnimationComponent animation, ref Sprite sprite) =>
                 {
                     UpdateAnimation(entity, ref animation, ref sprite, deltaTime);
@@ -199,4 +208,17 @@ public class AnimationSystem(
         // Mark this frame as triggered
         animation.TriggeredEventFrames.Add(frameIndex);
     }
+
+    /// <inheritdoc />
+    public override List<Type> GetReadComponents() => new()
+    {
+        typeof(AnimationComponent)
+    };
+
+    /// <inheritdoc />
+    public override List<Type> GetWriteComponents() => new()
+    {
+        typeof(AnimationComponent),
+        typeof(Sprite)
+    };
 }

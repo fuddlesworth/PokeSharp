@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using PokeSharp.Core.Events;
 using PokeSharp.Core.Factories;
 using PokeSharp.Core.Mapping;
+using PokeSharp.Core.Parallel;
 using PokeSharp.Core.Scripting.Services;
 using PokeSharp.Core.ScriptingApi;
 using PokeSharp.Core.Systems;
@@ -36,8 +37,13 @@ public static class ServiceCollectionExtensions
             return world;
         });
 
-        // System Manager
-        services.AddSingleton<SystemManager>();
+        // System Manager - Using ParallelSystemManager for inter-system parallelism
+        services.AddSingleton<SystemManager>(sp =>
+        {
+            var world = sp.GetRequiredService<World>();
+            var logger = sp.GetService<ILogger<ParallelSystemManager>>();
+            return new ParallelSystemManager(world, enableParallel: true, logger);
+        });
 
         // Entity Factory & Templates
         services.AddSingleton(sp =>

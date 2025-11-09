@@ -5,6 +5,7 @@ using PokeSharp.Core.Components.NPCs;
 using PokeSharp.Core.Components.Player;
 using PokeSharp.Core.Components.Rendering;
 using PokeSharp.Core.Components.Tiles;
+using PokeSharp.Core.Systems;
 
 namespace PokeSharp.Core.Queries;
 
@@ -45,44 +46,37 @@ public static class Queries
     ///     Entities with position and grid movement capability.
     ///     Used by MovementSystem for basic movement processing.
     /// </summary>
-    public static readonly QueryDescription Movement = new QueryDescription()
-        .WithAll<Position, GridMovement>();
+    public static readonly QueryDescription Movement = QueryCache.Get<Position, GridMovement>();
 
     /// <summary>
     ///     Entities with position, grid movement, and animation.
     ///     Used by MovementSystem for movement with animation updates.
     /// </summary>
-    public static readonly QueryDescription MovementWithAnimation = new QueryDescription()
-        .WithAll<Position, GridMovement, Animation>();
+    public static readonly QueryDescription MovementWithAnimation = QueryCache.Get<Position, GridMovement, Animation>();
 
     /// <summary>
     ///     Entities with position, grid movement, but NO animation.
     ///     Optimized query for movement without animation overhead.
     /// </summary>
-    public static readonly QueryDescription MovementWithoutAnimation = new QueryDescription()
-        .WithAll<Position, GridMovement>()
-        .WithNone<Animation>();
+    public static readonly QueryDescription MovementWithoutAnimation = QueryCache.GetWithNone<Position, GridMovement, Animation>();
 
     /// <summary>
     ///     Player movement entities (position, movement, and player tag).
     ///     Used for player-specific movement logic.
     /// </summary>
-    public static readonly QueryDescription PlayerMovement = new QueryDescription()
-        .WithAll<Position, GridMovement, Player>();
+    public static readonly QueryDescription PlayerMovement = QueryCache.Get<Position, GridMovement, Player>();
 
     /// <summary>
     ///     Entities with pending movement requests.
     ///     Used by MovementSystem to process movement requests.
     /// </summary>
-    public static readonly QueryDescription MovementRequests = new QueryDescription()
-        .WithAll<Position, GridMovement, MovementRequest>();
+    public static readonly QueryDescription MovementRequests = QueryCache.Get<Position, GridMovement, MovementRequest>();
 
     /// <summary>
     ///     Entities with only MovementRequest (for cleanup).
     ///     Used to remove processed movement requests.
     /// </summary>
-    public static readonly QueryDescription MovementRequestsOnly = new QueryDescription()
-        .WithAll<MovementRequest>();
+    public static readonly QueryDescription MovementRequestsOnly = QueryCache.Get<MovementRequest>();
 
     // ============================================================================
     // COLLISION QUERIES
@@ -92,23 +86,19 @@ public static class Queries
     ///     Entities with position and collision capability.
     ///     Used for collision detection and spatial queries.
     /// </summary>
-    public static readonly QueryDescription Collidable = new QueryDescription()
-        .WithAll<Position, Collision>();
+    public static readonly QueryDescription Collidable = QueryCache.Get<Position, Collision>();
 
     /// <summary>
     ///     Solid collision entities (with collision but not player).
     ///     Used for checking walkability and obstacle detection.
     /// </summary>
-    public static readonly QueryDescription SolidCollision = new QueryDescription()
-        .WithAll<Position, Collision>()
-        .WithNone<Player>();
+    public static readonly QueryDescription SolidCollision = QueryCache.GetWithNone<Position, Collision, Player>();
 
     /// <summary>
     ///     Ledge tiles with position and ledge component.
     ///     Used for Pokemon-style ledge jumping logic.
     /// </summary>
-    public static readonly QueryDescription Ledges = new QueryDescription()
-        .WithAll<TilePosition, TileLedge>();
+    public static readonly QueryDescription Ledges = QueryCache.Get<TilePosition, TileLedge>();
 
     // ============================================================================
     // RENDERING QUERIES
@@ -118,23 +108,19 @@ public static class Queries
     ///     Entities with position and sprite (basic renderable).
     ///     Used by rendering system for sprite rendering.
     /// </summary>
-    public static readonly QueryDescription Renderable = new QueryDescription()
-        .WithAll<Position, Sprite>();
+    public static readonly QueryDescription Renderable = QueryCache.Get<Position, Sprite>();
 
     /// <summary>
     ///     Entities with position, sprite, and animation.
     ///     Used for animated sprite rendering.
     /// </summary>
-    public static readonly QueryDescription AnimatedSprites = new QueryDescription()
-        .WithAll<Position, Sprite, Animation>();
+    public static readonly QueryDescription AnimatedSprites = QueryCache.Get<Position, Sprite, Animation>();
 
     /// <summary>
     ///     Static sprites without animation.
     ///     Optimized for non-animated rendering.
     /// </summary>
-    public static readonly QueryDescription StaticSprites = new QueryDescription()
-        .WithAll<Position, Sprite>()
-        .WithNone<Animation>();
+    public static readonly QueryDescription StaticSprites = QueryCache.GetWithNone<Position, Sprite, Animation>();
 
     // ============================================================================
     // NPC QUERIES
@@ -144,29 +130,25 @@ public static class Queries
     ///     All NPC entities with position and NPC tag.
     ///     Used for NPC systems and AI processing.
     /// </summary>
-    public static readonly QueryDescription Npcs = new QueryDescription()
-        .WithAll<Position, Npc>();
+    public static readonly QueryDescription Npcs = QueryCache.Get<Position, Npc>();
 
     /// <summary>
     ///     NPCs with behavior AI components.
     ///     Used by behavior systems for NPC AI logic.
     /// </summary>
-    public static readonly QueryDescription NpcsWithBehavior = new QueryDescription()
-        .WithAll<Position, Npc, Behavior>();
+    public static readonly QueryDescription NpcsWithBehavior = QueryCache.Get<Position, Npc, Behavior>();
 
     /// <summary>
     ///     NPCs with interaction capability.
     ///     Used for interaction systems and dialogue triggers.
     /// </summary>
-    public static readonly QueryDescription InteractableNpcs = new QueryDescription()
-        .WithAll<Position, Npc, Interaction>();
+    public static readonly QueryDescription InteractableNpcs = QueryCache.Get<Position, Npc, Interaction>();
 
     /// <summary>
     ///     NPCs with movement routes (patrol paths).
     ///     Used by PathfindingSystem for NPC movement.
     /// </summary>
-    public static readonly QueryDescription NpcsWithRoutes = new QueryDescription()
-        .WithAll<Position, GridMovement, MovementRoute>();
+    public static readonly QueryDescription NpcsWithRoutes = QueryCache.Get<Position, GridMovement, MovementRoute>();
 
     // ============================================================================
     // TILE QUERIES
@@ -176,30 +158,25 @@ public static class Queries
     ///     Static tile entities with tile position and sprite.
     ///     Used for static tile rendering (no animation).
     /// </summary>
-    public static readonly QueryDescription StaticTiles = new QueryDescription()
-        .WithAll<TilePosition, TileSprite>()
-        .WithNone<AnimatedTile>();
+    public static readonly QueryDescription StaticTiles = QueryCache.GetWithNone<TilePosition, TileSprite, AnimatedTile>();
 
     /// <summary>
     ///     Animated tile entities with animation data.
     ///     Used by TileAnimationSystem for frame updates.
     /// </summary>
-    public static readonly QueryDescription AnimatedTiles = new QueryDescription()
-        .WithAll<TilePosition, TileSprite, AnimatedTile>();
+    public static readonly QueryDescription AnimatedTiles = QueryCache.Get<TilePosition, TileSprite, AnimatedTile>();
 
     /// <summary>
     ///     All tile entities (any tile with tile position).
     ///     Used by spatial hash for tile indexing.
     /// </summary>
-    public static readonly QueryDescription AllTiles = new QueryDescription()
-        .WithAll<TilePosition>();
+    public static readonly QueryDescription AllTiles = QueryCache.Get<TilePosition>();
 
     /// <summary>
     ///     Tiles with scripts (interactive tiles).
     ///     Used for tile interaction and scripting systems.
     /// </summary>
-    public static readonly QueryDescription ScriptedTiles = new QueryDescription()
-        .WithAll<TilePosition, TileScript>();
+    public static readonly QueryDescription ScriptedTiles = QueryCache.Get<TilePosition, TileScript>();
 
     // ============================================================================
     // SPATIAL QUERIES
@@ -209,15 +186,13 @@ public static class Queries
     ///     All entities with dynamic Position component.
     ///     Used by SpatialHashSystem for dynamic entity indexing.
     /// </summary>
-    public static readonly QueryDescription AllPositioned = new QueryDescription()
-        .WithAll<Position>();
+    public static readonly QueryDescription AllPositioned = QueryCache.Get<Position>();
 
     /// <summary>
     ///     All entities with static TilePosition component.
     ///     Used by SpatialHashSystem for static tile indexing.
     /// </summary>
-    public static readonly QueryDescription AllTilePositioned = new QueryDescription()
-        .WithAll<TilePosition>();
+    public static readonly QueryDescription AllTilePositioned = QueryCache.Get<TilePosition>();
 
     // ============================================================================
     // MAP QUERIES
@@ -227,15 +202,13 @@ public static class Queries
     ///     Map metadata entities with MapInfo component.
     ///     Used for querying map dimensions, tile size, etc.
     /// </summary>
-    public static readonly QueryDescription MapInfo = new QueryDescription()
-        .WithAll<MapInfo>();
+    public static readonly QueryDescription MapInfo = QueryCache.Get<MapInfo>();
 
     /// <summary>
     ///     Encounter zone entities for wild Pokemon battles.
     ///     Used by encounter systems to trigger battles.
     /// </summary>
-    public static readonly QueryDescription EncounterZones = new QueryDescription()
-        .WithAll<EncounterZone, TilePosition>();
+    public static readonly QueryDescription EncounterZones = QueryCache.Get<EncounterZone, TilePosition>();
 
     // ============================================================================
     // PLAYER QUERIES
@@ -245,15 +218,13 @@ public static class Queries
     ///     Player entity with full component set.
     ///     Used for player-specific systems and input handling.
     /// </summary>
-    public static readonly QueryDescription Player = new QueryDescription()
-        .WithAll<Position, GridMovement, Player>();
+    public static readonly QueryDescription Player = QueryCache.Get<Position, GridMovement, Player>();
 
     /// <summary>
     ///     Player with animation for player rendering.
     ///     Used by rendering systems for player sprite updates.
     /// </summary>
-    public static readonly QueryDescription PlayerWithAnimation = new QueryDescription()
-        .WithAll<Position, GridMovement, Player, Animation>();
+    public static readonly QueryDescription PlayerWithAnimation = QueryCache.Get<Position, GridMovement, Player, Animation>();
 
     // ============================================================================
     // PATHFINDING QUERIES
@@ -263,6 +234,5 @@ public static class Queries
     ///     Entities with position, movement, and movement routes.
     ///     Used by PathfindingSystem for path following.
     /// </summary>
-    public static readonly QueryDescription PathFollowers = new QueryDescription()
-        .WithAll<Position, GridMovement, MovementRoute>();
+    public static readonly QueryDescription PathFollowers = QueryCache.Get<Position, GridMovement, MovementRoute>();
 }

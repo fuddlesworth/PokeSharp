@@ -59,4 +59,27 @@ public interface IEntityFactoryService
     /// <param name="tag">Entity tag to filter by</param>
     /// <returns>Template IDs matching the tag</returns>
     IEnumerable<string> GetTemplateIdsByTag(string tag);
+
+    /// <summary>
+    ///     Spawn multiple entities from the same template efficiently.
+    ///     Optimized for batch spawning by resolving template hierarchy and validation once.
+    /// </summary>
+    /// <param name="templateId">Template ID to spawn from</param>
+    /// <param name="world">World to spawn entities in</param>
+    /// <param name="count">Number of entities to spawn</param>
+    /// <param name="configureEach">Optional per-entity configuration with index</param>
+    /// <returns>Array of spawned entities</returns>
+    Entity[] SpawnBatchFromTemplate(
+        string templateId,
+        World world,
+        int count,
+        Action<EntityBuilder, int>? configureEach = null
+    );
+
+    /// <summary>
+    ///     Release multiple entities (currently destroys them, placeholder for future pooling).
+    /// </summary>
+    /// <param name="entities">Entities to release</param>
+    /// <param name="world">World to destroy entities in</param>
+    void ReleaseBatch(Entity[] entities, World world);
 }

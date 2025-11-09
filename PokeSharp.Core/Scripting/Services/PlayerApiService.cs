@@ -6,6 +6,7 @@ using PokeSharp.Core.Components.Movement;
 using PokeSharp.Core.Components.Player;
 using PokeSharp.Core.Logging;
 using PokeSharp.Core.ScriptingApi;
+using PokeSharp.Core.Systems;
 
 namespace PokeSharp.Core.Scripting.Services;
 
@@ -214,7 +215,7 @@ public class PlayerApiService(World world, ILogger<PlayerApiService> logger) : I
 
     private Entity? GetPlayerEntity()
     {
-        var query = new QueryDescription().WithAll<Player>();
+        var query = QueryCache.Get<Player>();
         Entity? playerEntity = null;
 
         _world.Query(

@@ -45,7 +45,7 @@ public class MapInitializer(
             logger.LogWorkflowStatus("Render assets preloaded");
 
             // Set camera bounds from MapInfo
-            var mapInfoQuery = new QueryDescription().WithAll<MapInfo>();
+            var mapInfoQuery = QueryCache.Get<MapInfo>();
             world.Query(
                 in mapInfoQuery,
                 (ref MapInfo mapInfo) =>

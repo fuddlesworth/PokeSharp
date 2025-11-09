@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework.Input;
 using PokeSharp.Core.Components.Player;
 using PokeSharp.Core.Logging;
+using PokeSharp.Core.Systems;
 using PokeSharp.Rendering.Components;
 using PokeSharp.Rendering.Systems;
 
@@ -41,7 +42,7 @@ public class InputManager(ILogger<InputManager> logger)
     {
         var currentKeyboardState = Keyboard.GetState();
 
-        var query = new QueryDescription().WithAll<Player, Camera>();
+        var query = QueryCache.Get<Player, Camera>();
         world.Query(
             in query,
             (ref Camera camera) =>

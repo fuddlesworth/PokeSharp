@@ -61,11 +61,11 @@ public class RelationshipSystem : BaseSystem
     {
         base.Initialize(world);
 
-        // Create optimized queries for relationship components
-        _parentQuery = new QueryDescription().WithAll<Parent>();
-        _childrenQuery = new QueryDescription().WithAll<Children>();
-        _ownerQuery = new QueryDescription().WithAll<Owner>();
-        _ownedQuery = new QueryDescription().WithAll<Owned>();
+        // Use cached queries for relationship components
+        _parentQuery = QueryCache.Get<Parent>();
+        _childrenQuery = QueryCache.Get<Children>();
+        _ownerQuery = QueryCache.Get<Owner>();
+        _ownedQuery = QueryCache.Get<Owned>();
 
         _logger.LogInformation("RelationshipSystem initialized (Priority: {Priority})", Priority);
     }

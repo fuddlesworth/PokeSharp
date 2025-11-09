@@ -13,17 +13,27 @@ namespace PokeSharp.Core.Systems;
 ///     System that handles grid-based movement with smooth interpolation.
 ///     Implements Pokemon-style tile-by-tile movement and updates animations based on movement state.
 ///     Also handles collision checking and movement validation.
+///     Uses parallel execution for improved multi-core performance.
 /// </summary>
-public class MovementSystem(ILogger<MovementSystem>? logger = null) : BaseSystem
+public class MovementSystem : ParallelSystemBase
 {
     // Cache for entities to remove (reused across frames to avoid allocation)
     private readonly List<Entity> _entitiesToRemove = new(32);
-    private readonly ILogger<MovementSystem>? _logger = logger;
+    private readonly ILogger<MovementSystem>? _logger;
 
     // Cache for tile sizes per map (reduces redundant queries)
     private readonly Dictionary<int, int> _tileSizeCache = new();
 
     private SpatialHashSystem? _spatialHashSystem;
+
+    /// <summary>
+    ///     Creates a new MovementSystem with optional logger.
+    /// </summary>
+    /// <param name="logger">Optional logger for system diagnostics.</param>
+    public MovementSystem(ILogger<MovementSystem>? logger = null)
+    {
+        _logger = logger;
+    }
 
     /// <inheritdoc />
     public override int Priority => SystemPriority.Movement;
@@ -45,23 +55,18 @@ public class MovementSystem(ILogger<MovementSystem>? logger = null) : BaseSystem
         // Process movement requests first (before updating existing movements)
         ProcessMovementRequests(world);
 
-        // Process entities WITH animation (separate query to avoid Has<> checks)
-        world.Query(
-            in Queries.Queries.MovementWithAnimation,
-            (
-                Entity entity,
-                ref Position position,
-                ref GridMovement movement,
-                ref Animation animation
-            ) =>
+        // Process entities WITH animation (parallel execution for multi-core speedup)
+        ParallelQuery<Position, GridMovement, Animation>(
+            Queries.Queries.MovementWithAnimation,
+            (Entity entity, ref Position position, ref GridMovement movement, ref Animation animation) =>
             {
                 ProcessMovementWithAnimation(ref position, ref movement, ref animation, deltaTime);
             }
         );
 
-        // Process entities WITHOUT animation (separate query for performance)
-        world.Query(
-            in Queries.Queries.MovementWithoutAnimation,
+        // Process entities WITHOUT animation (parallel execution for multi-core speedup)
+        ParallelQuery<Position, GridMovement>(
+            Queries.Queries.MovementWithoutAnimation,
             (Entity entity, ref Position position, ref GridMovement movement) =>
             {
                 ProcessMovementNoAnimation(ref position, ref movement, deltaTime);
@@ -444,4 +449,39 @@ public class MovementSystem(ILogger<MovementSystem>? logger = null) : BaseSystem
         // This maintains backward compatibility with tests and situations without map metadata
         return withinBounds ?? true;
     }
+
+    /// <summary>
+    ///     Specifies which components this system reads (for parallel execution analysis).
+    /// </summary>
+    public override List<Type> GetReadComponents()
+    {
+        return new List<Type>
+        {
+            typeof(Position),
+            typeof(GridMovement),
+            typeof(Animation),
+            typeof(MovementRequest),
+            typeof(MapInfo)
+        };
+    }
+
+    /// <summary>
+    ///     Specifies which components this system writes (for parallel execution analysis).
+    /// </summary>
+    public override List<Type> GetWriteComponents()
+    {
+        return new List<Type>
+        {
+            typeof(Position),
+            typeof(GridMovement),
+            typeof(Animation),
+            typeof(MovementRequest)
+        };
+    }
+
+    /// <summary>
+    ///     This system allows parallel execution with other systems that don't conflict.
+    ///     However, it has dependencies on SpatialHashSystem for collision detection.
+    /// </summary>
+    public override bool AllowsParallelExecution => true;
 }

@@ -26,7 +26,7 @@ public class InputSystem(
     private readonly ILogger<InputSystem>? _logger = logger;
 
     // Cache query description to avoid allocation every frame
-    private readonly QueryDescription _playerQuery = new QueryDescription().WithAll<
+    private readonly QueryDescription _playerQuery = QueryCache.Get<
         Player,
         Position,
         GridMovement,

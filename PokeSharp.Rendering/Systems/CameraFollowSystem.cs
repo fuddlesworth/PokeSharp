@@ -26,7 +26,7 @@ public class CameraFollowSystem(ILogger<CameraFollowSystem>? logger = null) : Ba
         base.Initialize(world);
 
         // Query for player with camera
-        _playerQuery = new QueryDescription().WithAll<Player, Position, Camera>();
+        _playerQuery = QueryCache.Get<Player, Position, Camera>();
     }
 
     /// <inheritdoc />

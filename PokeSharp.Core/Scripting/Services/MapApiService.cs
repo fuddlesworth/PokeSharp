@@ -84,7 +84,7 @@ public class MapApiService(
     public (int width, int height)? GetMapDimensions(int mapId)
     {
         // Query for MapInfo component
-        var query = new QueryDescription().WithAll<MapInfo>();
+        var query = QueryCache.Get<MapInfo>();
         (int width, int height)? result = null;
 
         _world.Query(
@@ -122,7 +122,7 @@ public class MapApiService(
 
     private Entity? GetPlayerEntity()
     {
-        var query = new QueryDescription().WithAll<Player>();
+        var query = QueryCache.Get<Player>();
         Entity? playerEntity = null;
 
         _world.Query(

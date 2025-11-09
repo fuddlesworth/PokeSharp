@@ -80,6 +80,49 @@ public static class QueryCache
     }
 
     /// <summary>
+    ///     Gets or creates a query description with four component types.
+    /// </summary>
+    public static QueryDescription Get<T1, T2, T3, T4>()
+        where T1 : struct
+        where T2 : struct
+        where T3 : struct
+        where T4 : struct
+    {
+        var key = $"{typeof(T1).FullName},{typeof(T2).FullName},{typeof(T3).FullName},{typeof(T4).FullName}";
+        return _cache.GetOrAdd(key, _ => new QueryDescription().WithAll<T1, T2, T3, T4>());
+    }
+
+    /// <summary>
+    ///     Gets or creates a query description with five component types.
+    /// </summary>
+    public static QueryDescription Get<T1, T2, T3, T4, T5>()
+        where T1 : struct
+        where T2 : struct
+        where T3 : struct
+        where T4 : struct
+        where T5 : struct
+    {
+        var key = $"{typeof(T1).FullName},{typeof(T2).FullName},{typeof(T3).FullName},{typeof(T4).FullName},{typeof(T5).FullName}";
+        return _cache.GetOrAdd(key, _ => new QueryDescription().WithAll<T1, T2, T3, T4, T5>());
+    }
+
+    /// <summary>
+    ///     Gets or creates a query description with three required components and one excluded component.
+    /// </summary>
+    public static QueryDescription GetWithNone<T1, T2, T3, TNone>()
+        where T1 : struct
+        where T2 : struct
+        where T3 : struct
+        where TNone : struct
+    {
+        var key = $"{typeof(T1).FullName},{typeof(T2).FullName},{typeof(T3).FullName}!{typeof(TNone).FullName}";
+        return _cache.GetOrAdd(
+            key,
+            _ => new QueryDescription().WithAll<T1, T2, T3>().WithNone<TNone>()
+        );
+    }
+
+    /// <summary>
     ///     Clears the query cache (primarily for testing).
     /// </summary>
     public static void Clear()

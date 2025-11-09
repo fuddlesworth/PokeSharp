@@ -77,7 +77,7 @@ internal static class LogFormatting
         { LogLevel.Debug, new LogLevelStyle("DEBUG", "steelblue1", false, "lightsteelblue1", false, "DEBUG") },
         { LogLevel.Information, new LogLevelStyle("INFO", "skyblue3", false, "silver", true, "INFO ") },
         { LogLevel.Warning, new LogLevelStyle("WARN", "gold1", true, "gold1", false, "WARN ") },
-        { LogLevel.Error, new LogLevelStyle("ERROR", "tomato", true, "tomato", false, "ERROR") },
+        { LogLevel.Error, new LogLevelStyle("ERROR", "red3", true, "red3", false, "ERROR") },
         { LogLevel.Critical, new LogLevelStyle("CRIT", "magenta1", true, "magenta1", false, "CRIT ") },
     };
 

@@ -72,7 +72,7 @@ public class NPCBehaviorSystem : BaseSystem
         }
 
         // Query all NPCs with behavior data
-        var query = new QueryDescription().WithAll<Npc, Behavior, Position>();
+        var query = QueryCache.Get<Npc, Behavior, Position>();
 
         var behaviorCount = 0;
         var errorCount = 0;

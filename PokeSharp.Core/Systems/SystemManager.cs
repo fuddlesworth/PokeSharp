@@ -63,7 +63,7 @@ public class SystemManager(ILogger<SystemManager>? logger = null)
     /// </summary>
     /// <param name="system">The system to register.</param>
     /// <exception cref="ArgumentNullException">Thrown if system is null.</exception>
-    public void RegisterSystem(ISystem system)
+    public virtual void RegisterSystem(ISystem system)
     {
         ArgumentNullException.ThrowIfNull(system);
 

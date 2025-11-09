@@ -1,0 +1,26 @@
+diff --git a/PokeSharp.Game/Initialization/GameInitializer.cs b/PokeSharp.Game/Initialization/GameInitializer.cs
+index a05bfa6..b1c4f2e 100644
+--- a/PokeSharp.Game/Initialization/GameInitializer.cs
++++ b/PokeSharp.Game/Initialization/GameInitializer.cs
+@@ -145,6 +145,19 @@ public class GameInitializer
+
+         // Initialize all systems
+         _systemManager.Initialize(_world);
++
++        // Enable parallel execution by building the execution plan
++        // This analyzes system dependencies and creates parallel execution stages
++        if (_systemManager is ParallelSystemManager parallelManager)
++        {
++            parallelManager.RebuildExecutionPlan();
++
++            _logger?.LogInformation("Parallel execution enabled");
++            _logger?.LogInformation("Execution plan:\n{Plan}", parallelManager.GetExecutionPlan());
++            _logger?.LogDebug("Dependency graph:\n{Graph}", parallelManager.GetDependencyGraph());
++        }
++        else
++        {
++            _logger?.LogWarning("ParallelSystemManager not configured - systems will run sequentially");
++        }
+
+         // Connect pool manager to entity factory for automatic pooling
+         _entityFactory.ConnectPoolManager(_poolManager);

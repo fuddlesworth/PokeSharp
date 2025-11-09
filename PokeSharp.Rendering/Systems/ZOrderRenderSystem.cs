@@ -38,7 +38,7 @@ public class ZOrderRenderSystem(
         assetManager ?? throw new ArgumentNullException(nameof(assetManager));
 
     // Cache query descriptions to avoid allocation every frame
-    private readonly QueryDescription _cameraQuery = new QueryDescription().WithAll<
+    private readonly QueryDescription _cameraQuery = QueryCache.Get<
         Player,
         Camera
     >();
@@ -46,12 +46,12 @@ public class ZOrderRenderSystem(
     private readonly GraphicsDevice _graphicsDevice =
         graphicsDevice ?? throw new ArgumentNullException(nameof(graphicsDevice));
 
-    private readonly QueryDescription _groundTileQuery = new QueryDescription().WithAll<
+    private readonly QueryDescription _groundTileQuery = QueryCache.Get<
         TilePosition,
         TileSprite
     >();
 
-    private readonly QueryDescription _groundTileWithOffsetQuery = new QueryDescription().WithAll<
+    private readonly QueryDescription _groundTileWithOffsetQuery = QueryCache.Get<
         TilePosition,
         TileSprite,
         LayerOffset
@@ -59,29 +59,27 @@ public class ZOrderRenderSystem(
 
     private readonly ILogger<ZOrderRenderSystem>? _logger = logger;
 
-    private readonly QueryDescription _movingSpriteQuery = new QueryDescription().WithAll<
+    private readonly QueryDescription _movingSpriteQuery = QueryCache.Get<
         Position,
         Sprite,
         GridMovement
     >();
 
-    private readonly QueryDescription _objectTileQuery = new QueryDescription().WithAll<
+    private readonly QueryDescription _objectTileQuery = QueryCache.Get<
         TilePosition,
         TileSprite
     >();
 
-    private readonly QueryDescription _overheadTileQuery = new QueryDescription().WithAll<
+    private readonly QueryDescription _overheadTileQuery = QueryCache.Get<
         TilePosition,
         TileSprite
     >();
 
-    private readonly QueryDescription _imageLayerQuery = new QueryDescription().WithAll<ImageLayer>();
+    private readonly QueryDescription _imageLayerQuery = QueryCache.Get<ImageLayer>();
 
     private readonly SpriteBatch _spriteBatch = new(graphicsDevice);
 
-    private readonly QueryDescription _staticSpriteQuery = new QueryDescription()
-        .WithAll<Position, Sprite>()
-        .WithNone<GridMovement>();
+    private readonly QueryDescription _staticSpriteQuery = QueryCache.GetWithNone<Position, Sprite, GridMovement>();
 
     private Rectangle? _cachedCameraBounds;
 

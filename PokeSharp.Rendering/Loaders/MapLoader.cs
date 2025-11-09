@@ -2,6 +2,7 @@ using System;
 using Arch.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
+using PokeSharp.Core.BulkOperations;
 using PokeSharp.Core.Components.Common;
 using PokeSharp.Core.Components.Maps;
 using PokeSharp.Core.Components.Movement;
@@ -11,6 +12,7 @@ using PokeSharp.Core.Components.Tiles;
 using PokeSharp.Core.Factories;
 using PokeSharp.Core.Logging;
 using PokeSharp.Core.Mapping;
+using PokeSharp.Core.Systems;
 using PokeSharp.Rendering.Assets;
 using PokeSharp.Rendering.Loaders.Tmx;
 
@@ -171,7 +173,7 @@ public class MapLoader(
     }
 
     /// <summary>
-    ///     Creates tile entities for a single layer.
+    ///     Creates tile entities for a single layer using bulk operations for performance.
     /// </summary>
     private int CreateTileEntities(
         World world,
@@ -183,7 +185,8 @@ public class MapLoader(
         LayerOffset? layerOffset
     )
     {
-        var tilesCreated = 0;
+        // Collect tile data for bulk creation
+        var tileDataList = new List<TileData>();
 
         for (var y = 0; y < tmxDoc.Height; y++)
         for (var x = 0; x < tmxDoc.Width; x++)
@@ -198,23 +201,81 @@ public class MapLoader(
             if (tileGid == 0)
                 continue; // Skip empty tiles
 
-            CreateTileEntity(
-                world,
-                x,
-                y,
-                mapId,
-                tileGid,
-                tileset,
-                tileLayer,
-                layerOffset,
-                flipH,
-                flipV,
-                flipD
+            tileDataList.Add(
+                new TileData
+                {
+                    X = x,
+                    Y = y,
+                    TileGid = tileGid,
+                    FlipH = flipH,
+                    FlipV = flipV,
+                    FlipD = flipD,
+                }
             );
-            tilesCreated++;
         }
 
-        return tilesCreated;
+        if (tileDataList.Count == 0)
+            return 0;
+
+        // Use bulk operations for creating tiles
+        var bulkOps = new BulkEntityOperations(world);
+
+        // Create all tile entities with TilePosition and TileSprite components
+        var tileEntities = bulkOps.CreateEntities(
+            tileDataList.Count,
+            i =>
+            {
+                var data = tileDataList[i];
+                return new TilePosition(data.X, data.Y, mapId);
+            },
+            i =>
+            {
+                var data = tileDataList[i];
+                return CreateTileSprite(
+                    data.TileGid,
+                    tileset,
+                    tileLayer,
+                    data.FlipH,
+                    data.FlipV,
+                    data.FlipD
+                );
+            }
+        );
+
+        // Process additional tile properties and components
+        for (var i = 0; i < tileEntities.Length; i++)
+        {
+            var entity = tileEntities[i];
+            var data = tileDataList[i];
+
+            // Get tile properties from tileset
+            var localTileId = data.TileGid - tileset.FirstGid;
+            Dictionary<string, object>? props = null;
+            if (localTileId >= 0)
+                tileset.TileProperties.TryGetValue(localTileId, out props);
+
+            // Add LayerOffset if needed
+            if (layerOffset.HasValue)
+                world.Add(entity, layerOffset.Value);
+
+            // Process additional tile properties (collision, ledges, encounters, etc.)
+            ProcessTileProperties(world, entity, props);
+        }
+
+        return tileDataList.Count;
+    }
+
+    /// <summary>
+    ///     Temporary structure to hold tile data before bulk creation.
+    /// </summary>
+    private struct TileData
+    {
+        public int X;
+        public int Y;
+        public int TileGid;
+        public bool FlipH;
+        public bool FlipV;
+        public bool FlipD;
     }
 
     /// <summary>
@@ -351,7 +412,7 @@ public class MapLoader(
             );
 
             // Find all tile entities with this tile ID and add AnimatedTile component
-            var tileQuery = new QueryDescription().WithAll<TileSprite>();
+            var tileQuery = QueryCache.Get<TileSprite>();
             world.Query(
                 in tileQuery,
                 (Entity entity, ref TileSprite sprite) =>

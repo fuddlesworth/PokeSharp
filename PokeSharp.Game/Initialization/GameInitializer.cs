@@ -3,6 +3,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework.Graphics;
 using PokeSharp.Core.Factories;
 using PokeSharp.Core.Logging;
+using PokeSharp.Core.Parallel;
+using PokeSharp.Core.Pooling;
 using PokeSharp.Core.Systems;
 using PokeSharp.Game.Diagnostics;
 using PokeSharp.Input.Systems;
@@ -33,6 +35,7 @@ public class GameInitializer(
     private readonly MapLoader _mapLoader = mapLoader;
     private readonly SystemManager _systemManager = systemManager;
     private readonly World _world = world;
+    private EntityPoolManager _poolManager = null!;
 
     /// <summary>
     ///     Gets the animation library.
@@ -48,6 +51,11 @@ public class GameInitializer(
     ///     Gets the render system.
     /// </summary>
     public ZOrderRenderSystem RenderSystem { get; private set; } = null!;
+
+    /// <summary>
+    ///     Gets the entity pool manager.
+    /// </summary>
+    public EntityPoolManager PoolManager => _poolManager;
 
     /// <summary>
     ///     Initializes all game systems and infrastructure.
@@ -77,11 +85,30 @@ public class GameInitializer(
         AnimationLibrary = new AnimationLibrary();
         _logger.LogComponentInitialized("AnimationLibrary", AnimationLibrary.Count);
 
+        // Initialize entity pooling system
+        _poolManager = new EntityPoolManager(_world);
+
+        // Register and warmup pools for common entity types
+        _poolManager.RegisterPool("player", initialSize: 1, maxSize: 10, warmup: true);
+        _poolManager.RegisterPool("npc", initialSize: 20, maxSize: 100, warmup: true);
+        _poolManager.RegisterPool("tile", initialSize: 2000, maxSize: 5000, warmup: true);
+
+        _logger.LogInformation(
+            "Entity pool manager initialized with {NPCPoolSize} NPC, {PlayerPoolSize} player, and {TilePoolSize} tile pool capacity",
+            20,
+            1,
+            2000
+        );
+
         // Create and register systems in priority order
         // SpatialHashSystem (Priority: 25) - must run early to build spatial index
         var spatialHashLogger = _loggerFactory.CreateLogger<SpatialHashSystem>();
         SpatialHashSystem = new SpatialHashSystem(spatialHashLogger);
         _systemManager.RegisterSystem(SpatialHashSystem);
+
+        // Register pool management systems
+        var poolCleanupLogger = _loggerFactory.CreateLogger<PoolCleanupSystem>();
+        _systemManager.RegisterSystem(new PoolCleanupSystem(_poolManager, poolCleanupLogger));
 
         // InputSystem with Pokemon-style input buffering (5 inputs, 200ms timeout)
         var inputLogger = _loggerFactory.CreateLogger<InputSystem>();
@@ -119,6 +146,33 @@ public class GameInitializer(
 
         // Initialize all systems
         _systemManager.Initialize(_world);
+
+        // Build parallel execution plan for inter-system parallelism
+        if (_systemManager is ParallelSystemManager parallelManager)
+        {
+            parallelManager.RebuildExecutionPlan();
+            _logger.LogInformation("Parallel execution plan built");
+
+            // Log execution stages for debugging
+            var plan = parallelManager.GetExecutionPlan();
+            if (!string.IsNullOrEmpty(plan))
+            {
+                _logger.LogInformation("Execution stages:\n{Plan}", plan);
+            }
+        }
+
+        // Connect pool manager to entity factory for automatic pooling
+        if (_entityFactory is EntityFactoryService concreteFactory)
+        {
+            concreteFactory.SetPoolManager(_poolManager);
+            _logger.LogInformation("Entity factory configured to use pooling");
+        }
+        else
+        {
+            _logger.LogWarning(
+                "Entity factory is not EntityFactoryService, pooling integration skipped"
+            );
+        }
 
         _logger.LogInformation("Game initialization complete");
     }
