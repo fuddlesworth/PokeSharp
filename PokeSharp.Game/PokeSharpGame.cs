@@ -1,6 +1,7 @@
 using Arch.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
+using PokeSharp.Core.Mapping;
 using PokeSharp.Core.Scripting.Services;
 using PokeSharp.Core.ScriptingApi;
 using PokeSharp.Core.Systems;
@@ -91,8 +92,12 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
         var assetManagerLogger = _logging.CreateLogger<AssetManager>();
         var assetManager = new AssetManager(GraphicsDevice, "Assets", assetManagerLogger);
 
+        // Create PropertyMapperRegistry for tile property mapping (collision, ledges, etc.)
+        var mapperRegistryLogger = _logging.CreateLogger<PropertyMapperRegistry>();
+        var propertyMapperRegistry = PropertyMapperServiceExtensions.CreatePropertyMapperRegistry(mapperRegistryLogger);
+
         var mapLoaderLogger = _logging.CreateLogger<MapLoader>();
-        var mapLoader = new MapLoader(assetManager, propertyMapperRegistry: null, entityFactory: _gameServices.EntityFactory, logger: mapLoaderLogger);
+        var mapLoader = new MapLoader(assetManager, propertyMapperRegistry, entityFactory: _gameServices.EntityFactory, logger: mapLoaderLogger);
 
         // Create initializers
         var gameInitializerLogger = _logging.CreateLogger<GameInitializer>();
@@ -170,11 +175,9 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
         // Pass render system so InputManager can control profiling when P is pressed
         _initialization.InputManager.ProcessInput(_world, deltaTime, _gameInitializer.RenderSystem);
 
-        // Clear the screen BEFORE systems render
-        GraphicsDevice.Clear(Color.CornflowerBlue);
-
-        // Update all systems (including rendering systems)
-        _systemManager.Update(_world, deltaTime);
+        // ✅ FIXED: Removed GraphicsDevice.Clear() from here
+        // ✅ FIXED: Call UpdateSystems() instead of Update()
+        _systemManager.UpdateSystems(_world, deltaTime);
 
         base.Update(gameTime);
     }
@@ -185,8 +188,12 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
     /// <param name="gameTime">Provides timing information.</param>
     protected override void Draw(GameTime gameTime)
     {
-        // Rendering is handled by ZOrderRenderSystem during Update
-        // Clear happens in Update() before systems render to ensure correct order
+        // ✅ FIXED: Clear happens in Draw() now (correct MonoGame pattern)
+        GraphicsDevice.Clear(Color.CornflowerBlue);
+
+        // ✅ FIXED: Call RenderSystems() to execute rendering
+        _systemManager.RenderSystems(_world);
+
         base.Draw(gameTime);
     }
 

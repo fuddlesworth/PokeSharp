@@ -53,6 +53,13 @@ public static class ServiceCollectionExtensions
             return new ComponentPoolManager(logger, enableStatistics: true);
         });
 
+        // Entity Pool Manager (Phase 4A) - For entity recycling and pooling
+        services.AddSingleton(sp =>
+        {
+            var world = sp.GetRequiredService<World>();
+            return new EntityPoolManager(world);
+        });
+
         // Entity Factory & Templates
         services.AddSingleton(sp =>
         {

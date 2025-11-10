@@ -24,6 +24,8 @@ public class SystemManager(ILogger<SystemManager>? logger = null)
     private readonly Dictionary<ISystem, SystemMetrics> _metrics = new();
     private readonly ServiceContainer _serviceContainer = new();
     private readonly List<ISystem> _systems = new();
+    private readonly List<IUpdateSystem> _updateSystems = new();
+    private readonly List<IRenderSystem> _renderSystems = new();
     private ulong _frameCounter;
     private bool _initialized;
     private SystemFactory? _systemFactory;
@@ -38,6 +40,34 @@ public class SystemManager(ILogger<SystemManager>? logger = null)
             lock (_lock)
             {
                 return _systems.AsReadOnly();
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Gets all registered update systems.
+    /// </summary>
+    protected IReadOnlyList<IUpdateSystem> RegisteredUpdateSystems
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _updateSystems.AsReadOnly();
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Gets all registered render systems.
+    /// </summary>
+    protected IReadOnlyList<IRenderSystem> RegisteredRenderSystems
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _renderSystems.AsReadOnly();
             }
         }
     }
@@ -126,6 +156,150 @@ public class SystemManager(ILogger<SystemManager>? logger = null)
         // For now, just delegate to the parameterless version
         // In the future, this could support priority overrides
         RegisterSystem<TSystem>();
+    }
+
+    /// <summary>
+    ///     Registers an update system with automatic dependency injection.
+    ///     Update systems execute during the Update phase of the game loop.
+    /// </summary>
+    /// <typeparam name="T">The update system type to register.</typeparam>
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown if the system cannot be created or dependencies cannot be resolved.
+    /// </exception>
+    public virtual void RegisterUpdateSystem<T>() where T : class, IUpdateSystem
+    {
+        ArgumentNullException.ThrowIfNull(typeof(T));
+
+        lock (_lock)
+        {
+            // Initialize factory on first use
+            if (_systemFactory == null)
+                _systemFactory = new SystemFactory(_serviceContainer);
+
+            // Create system with dependency injection
+            var system = _systemFactory.CreateSystem<T>();
+
+            _updateSystems.Add(system);
+            _updateSystems.Sort((a, b) => a.UpdatePriority.CompareTo(b.UpdatePriority));
+
+            // Also add to legacy list for backwards compatibility
+            if (system is ISystem legacySystem)
+            {
+                _systems.Add(legacySystem);
+                _systems.Sort((a, b) => a.Priority.CompareTo(b.Priority));
+
+                // Initialize metrics for this system
+                _metrics[legacySystem] = new SystemMetrics();
+            }
+
+            _logger?.LogWorkflowStatus(
+                $"Registered update: {typeof(T).Name}",
+                ("priority", system.UpdatePriority)
+            );
+        }
+    }
+
+    /// <summary>
+    ///     Registers a pre-created update system instance.
+    ///     Update systems execute during the Update phase of the game loop.
+    /// </summary>
+    /// <param name="system">The update system instance to register.</param>
+    public virtual void RegisterUpdateSystem(IUpdateSystem system)
+    {
+        ArgumentNullException.ThrowIfNull(system);
+
+        lock (_lock)
+        {
+            _updateSystems.Add(system);
+            _updateSystems.Sort((a, b) => a.UpdatePriority.CompareTo(b.UpdatePriority));
+
+            // Also add to legacy list for backwards compatibility
+            if (system is ISystem legacySystem)
+            {
+                _systems.Add(legacySystem);
+                _systems.Sort((a, b) => a.Priority.CompareTo(b.Priority));
+
+                // Initialize metrics for this system
+                _metrics[legacySystem] = new SystemMetrics();
+            }
+
+            _logger?.LogWorkflowStatus(
+                $"Registered update: {system.GetType().Name}",
+                ("priority", system.UpdatePriority)
+            );
+        }
+    }
+
+    /// <summary>
+    ///     Registers a render system with automatic dependency injection.
+    ///     Render systems execute during the Draw phase of the game loop.
+    /// </summary>
+    /// <typeparam name="T">The render system type to register.</typeparam>
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown if the system cannot be created or dependencies cannot be resolved.
+    /// </exception>
+    public virtual void RegisterRenderSystem<T>() where T : class, IRenderSystem
+    {
+        ArgumentNullException.ThrowIfNull(typeof(T));
+
+        lock (_lock)
+        {
+            // Initialize factory on first use
+            if (_systemFactory == null)
+                _systemFactory = new SystemFactory(_serviceContainer);
+
+            // Create system with dependency injection
+            var system = _systemFactory.CreateSystem<T>();
+
+            _renderSystems.Add(system);
+            _renderSystems.Sort((a, b) => a.RenderOrder.CompareTo(b.RenderOrder));
+
+            // Also add to legacy list for backwards compatibility if it's an ISystem
+            if (system is ISystem legacySystem)
+            {
+                _systems.Add(legacySystem);
+                _systems.Sort((a, b) => a.Priority.CompareTo(b.Priority));
+
+                // Initialize metrics for this system
+                _metrics[legacySystem] = new SystemMetrics();
+            }
+
+            _logger?.LogWorkflowStatus(
+                $"Registered render: {typeof(T).Name}",
+                ("order", system.RenderOrder)
+            );
+        }
+    }
+
+    /// <summary>
+    ///     Registers a pre-created render system instance.
+    ///     Render systems execute during the Draw phase of the game loop.
+    /// </summary>
+    /// <param name="system">The render system instance to register.</param>
+    public virtual void RegisterRenderSystem(IRenderSystem system)
+    {
+        ArgumentNullException.ThrowIfNull(system);
+
+        lock (_lock)
+        {
+            _renderSystems.Add(system);
+            _renderSystems.Sort((a, b) => a.RenderOrder.CompareTo(b.RenderOrder));
+
+            // Also add to legacy list for backwards compatibility if it's an ISystem
+            if (system is ISystem legacySystem)
+            {
+                _systems.Add(legacySystem);
+                _systems.Sort((a, b) => a.Priority.CompareTo(b.Priority));
+
+                // Initialize metrics for this system
+                _metrics[legacySystem] = new SystemMetrics();
+            }
+
+            _logger?.LogWorkflowStatus(
+                $"Registered render: {system.GetType().Name}",
+                ("order", system.RenderOrder)
+            );
+        }
     }
 
     /// <summary>
@@ -278,6 +452,110 @@ public class SystemManager(ILogger<SystemManager>? logger = null)
                     metrics.MaxUpdateMs,
                     metrics.UpdateCount
                 );
+    }
+
+    /// <summary>
+    ///     Helper method to track system performance metrics.
+    /// </summary>
+    protected void TrackSystemPerformance(string systemName, double elapsedMs)
+    {
+        // Find the system in metrics by name
+        lock (_lock)
+        {
+            foreach (var (system, metrics) in _metrics)
+            {
+                if (system.GetType().Name == systemName)
+                {
+                    metrics.UpdateCount++;
+                    metrics.TotalTimeMs += elapsedMs;
+                    metrics.LastUpdateMs = elapsedMs;
+
+                    if (elapsedMs > metrics.MaxUpdateMs)
+                        metrics.MaxUpdateMs = elapsedMs;
+
+                    return;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Updates all registered update systems in priority order.
+    ///     This should be called from the Update() method of the game loop.
+    /// </summary>
+    /// <param name="world">The ECS world containing all entities.</param>
+    /// <param name="deltaTime">Time elapsed since last update in seconds.</param>
+    public void UpdateSystems(World world, float deltaTime)
+    {
+        ArgumentNullException.ThrowIfNull(world);
+
+        IUpdateSystem[] systemsToUpdate;
+
+        lock (_lock)
+        {
+            systemsToUpdate = _updateSystems
+                .Where(s => s.Enabled)
+                .ToArray();
+        }
+
+        _frameCounter++;
+
+        foreach (var system in systemsToUpdate)
+        {
+            try
+            {
+                var sw = Stopwatch.StartNew();
+                system.Update(world, deltaTime);
+                sw.Stop();
+
+                TrackSystemPerformance(system.GetType().Name, sw.Elapsed.TotalMilliseconds);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Update system {SystemName} failed during execution",
+                    system.GetType().Name);
+            }
+        }
+
+        // Log performance stats periodically (every 5 seconds at 60fps)
+        if (_frameCounter % 300 == 0)
+            LogPerformanceStats();
+    }
+
+    /// <summary>
+    ///     Renders all registered render systems in render order.
+    ///     This should be called from the Draw() method of the game loop.
+    /// </summary>
+    /// <param name="world">The ECS world containing all entities to render.</param>
+    public void RenderSystems(World world)
+    {
+        ArgumentNullException.ThrowIfNull(world);
+
+        IRenderSystem[] systemsToRender;
+
+        lock (_lock)
+        {
+            systemsToRender = _renderSystems
+                .Where(s => s.Enabled)
+                .ToArray();
+        }
+
+        foreach (var system in systemsToRender)
+        {
+            try
+            {
+                var sw = Stopwatch.StartNew();
+                system.Render(world);
+                sw.Stop();
+
+                TrackSystemPerformance(system.GetType().Name, sw.Elapsed.TotalMilliseconds);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Render system {SystemName} failed during execution",
+                    system.GetType().Name);
+            }
+        }
     }
 
     /// <summary>

@@ -14,15 +14,35 @@ namespace PokeSharp.Core.Systems;
 ///     Runs very early (Priority: 25) to ensure spatial data is available for other systems.
 ///     Uses dirty tracking to avoid rebuilding index for static tiles every frame.
 /// </summary>
-public class SpatialHashSystem(ILogger<SpatialHashSystem>? logger = null) : BaseSystem
+public class SpatialHashSystem(ILogger<SpatialHashSystem>? logger = null) : ParallelSystemBase, IUpdateSystem
 {
     private readonly SpatialHash _dynamicHash = new(); // For entities with Position (cleared each frame)
     private readonly ILogger<SpatialHashSystem>? _logger = logger;
     private readonly SpatialHash _staticHash = new(); // For tiles (indexed once)
     private bool _staticTilesIndexed;
 
+    /// <summary>
+    /// Gets the update priority. Lower values execute first.
+    /// Spatial hash executes at priority 25, after input (0) and before NPC behavior (75).
+    /// </summary>
+    public int UpdatePriority => SystemPriority.SpatialHash;
+
     /// <inheritdoc />
     public override int Priority => SystemPriority.SpatialHash;
+
+    /// <summary>
+    /// Components this system reads to build the spatial hash.
+    /// </summary>
+    public override List<Type> GetReadComponents() => new()
+    {
+        typeof(Position),
+        typeof(TilePosition)
+    };
+
+    /// <summary>
+    /// This system doesn't write to any components (builds internal data structures only).
+    /// </summary>
+    public override List<Type> GetWriteComponents() => new();
 
     /// <inheritdoc />
     public override void Update(World world, float deltaTime)

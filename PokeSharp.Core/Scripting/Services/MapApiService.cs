@@ -112,7 +112,7 @@ public class MapApiService(
     }
 
     /// <summary>
-    ///     Sets the spatial hash system. This is called after initialization when GraphicsDevice is available.
+    ///     Sets the spatial hash system. This is called after initialization when SpatialHashSystem is available.
     /// </summary>
     public void SetSpatialHashSystem(SpatialHashSystem spatialHashSystem)
     {

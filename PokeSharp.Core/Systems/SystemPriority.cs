@@ -31,5 +31,6 @@ public static class SystemPriority
 
     // Rendering
     public const int MapRender = 900;
+    public const int PoolCleanup = 980;
     public const int Render = 1000;
 }

@@ -8,9 +8,9 @@ using PokeSharp.Core.Scripting.Services;
 using PokeSharp.Core.ScriptingApi;
 using PokeSharp.Core.Systems;
 using PokeSharp.Core.Types;
-using PokeSharp.Scripting.Runtime;
+using PokeSharp.Core.Scripting.Runtime;
 
-namespace PokeSharp.Game.Systems;
+namespace PokeSharp.Core.Systems;
 
 /// <summary>
 ///     System responsible for executing NPC behavior scripts using the ScriptContext pattern.
@@ -22,7 +22,7 @@ namespace PokeSharp.Game.Systems;
 ///     Scripts are cached as singletons in TypeRegistry and executed with per-tick
 ///     ScriptContext instances to prevent state corruption.
 /// </remarks>
-public class NPCBehaviorSystem : BaseSystem
+public class NPCBehaviorSystem : ParallelSystemBase, IUpdateSystem
 {
     private readonly ILogger<NPCBehaviorSystem> _logger;
     private readonly ILoggerFactory _loggerFactory;
@@ -44,9 +44,33 @@ public class NPCBehaviorSystem : BaseSystem
     }
 
     /// <summary>
+    /// Gets the update priority. Lower values execute first.
+    /// NPC behavior executes at priority 75, after spatial hash (25) and before movement (100).
+    /// </summary>
+    public int UpdatePriority => SystemPriority.NpcBehavior;
+
+    /// <summary>
     ///     System priority for NPC behaviors - runs after spatial hash, before movement.
     /// </summary>
     public override int Priority => SystemPriority.NpcBehavior;
+
+    /// <summary>
+    /// Components this system reads to execute NPC behaviors.
+    /// </summary>
+    public override List<Type> GetReadComponents() => new()
+    {
+        typeof(Components.NPCs.Npc),
+        typeof(Components.Movement.Position)
+    };
+
+    /// <summary>
+    /// Components this system writes (behaviors modify state and may queue movement).
+    /// </summary>
+    public override List<Type> GetWriteComponents() => new()
+    {
+        typeof(Components.NPCs.Behavior),
+        typeof(Components.Movement.MovementRequest)
+    };
 
     /// <summary>
     ///     Set the behavior registry for loading behavior scripts.

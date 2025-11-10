@@ -5,7 +5,6 @@ using PokeSharp.Core.ScriptingApi;
 using PokeSharp.Core.Systems;
 using PokeSharp.Core.Types;
 using PokeSharp.Game.Services;
-using PokeSharp.Game.Systems;
 
 namespace PokeSharp.Game.Initialization;
 
@@ -84,7 +83,7 @@ public class NPCBehaviorInitializer(
                 apiProvider
             );
             npcBehaviorSystem.SetBehaviorRegistry(gameServices.BehaviorRegistry);
-            systemManager.RegisterSystem(npcBehaviorSystem);
+            systemManager.RegisterUpdateSystem(npcBehaviorSystem);
 
             logger.LogSystemInitialized("NPCBehaviorSystem", ("behaviors", loadedCount));
         }

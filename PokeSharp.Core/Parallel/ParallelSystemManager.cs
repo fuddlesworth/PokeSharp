@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Arch.Core;
 using Microsoft.Extensions.Logging;
+using PokeSharp.Core.Logging;
 using PokeSharp.Core.Systems;
 
 namespace PokeSharp.Core.Parallel;
@@ -52,11 +53,18 @@ public class ParallelSystemManager : SystemManager
     public bool IsParallelEnabled => _parallelEnabled;
 
     /// <summary>
+    ///     Gets the execution stages for logging and debugging.
+    ///     Returns null if execution plan has not been built yet.
+    /// </summary>
+    public IReadOnlyList<IReadOnlyList<ISystem>>? ExecutionStages =>
+        _executionStages?.Select(stage => (IReadOnlyList<ISystem>)stage.AsReadOnly()).ToList();
+
+    /// <summary>
     ///     Register a system with metadata for parallel execution analysis.
     /// </summary>
     public void RegisterSystemWithMetadata<TSystem>(
         SystemMetadata metadata,
-        int priority = 100
+        int priority = SystemPriority.Movement
     ) where TSystem : ISystem
     {
         ArgumentNullException.ThrowIfNull(metadata);
@@ -89,7 +97,89 @@ public class ParallelSystemManager : SystemManager
     {
         ArgumentNullException.ThrowIfNull(system);
 
-        // Create metadata for all systems
+        // Extract and register metadata before calling base
+        RegisterSystemMetadata(system, system.Priority);
+
+        base.RegisterSystem(system);
+        _executionPlanBuilt = false;
+    }
+
+    /// <summary>
+    ///     Register an update system with type parameter (with DI).
+    /// </summary>
+    public override void RegisterUpdateSystem<T>()
+    {
+        // First call base to create and register the system
+        base.RegisterUpdateSystem<T>();
+
+        // Then extract metadata from the registered system
+        var system = RegisteredUpdateSystems.OfType<T>().FirstOrDefault();
+        if (system != null)
+        {
+            int priority = system is ISystem s ? s.Priority : (system as IUpdateSystem)?.UpdatePriority ?? SystemPriority.Movement;
+            RegisterSystemMetadata(system, priority);
+        }
+
+        _executionPlanBuilt = false;
+    }
+
+    /// <summary>
+    ///     Register an update system instance.
+    /// </summary>
+    public override void RegisterUpdateSystem(IUpdateSystem system)
+    {
+        ArgumentNullException.ThrowIfNull(system);
+
+        // Extract and register metadata before calling base
+        int priority = system is ISystem s ? s.Priority : system.UpdatePriority;
+        RegisterSystemMetadata(system, priority);
+
+        base.RegisterUpdateSystem(system);
+        _executionPlanBuilt = false;
+    }
+
+    /// <summary>
+    ///     Register a render system with type parameter (with DI).
+    /// </summary>
+    public override void RegisterRenderSystem<T>()
+    {
+        // First call base to create and register the system
+        base.RegisterRenderSystem<T>();
+
+        // Then extract metadata from the registered system
+        var system = RegisteredRenderSystems.OfType<T>().FirstOrDefault();
+        if (system != null)
+        {
+            int priority = system is ISystem s ? s.Priority : (system as IRenderSystem)?.RenderOrder ?? SystemPriority.Render;
+            RegisterSystemMetadata(system, priority);
+        }
+
+        _executionPlanBuilt = false;
+    }
+
+    /// <summary>
+    ///     Register a render system instance.
+    /// </summary>
+    public override void RegisterRenderSystem(IRenderSystem system)
+    {
+        ArgumentNullException.ThrowIfNull(system);
+
+        // Extract and register metadata before calling base
+        int priority = system is ISystem s ? s.Priority : system.RenderOrder;
+        RegisterSystemMetadata(system, priority);
+
+        base.RegisterRenderSystem(system);
+        _executionPlanBuilt = false;
+    }
+
+    /// <summary>
+    ///     Helper method to extract and register system metadata.
+    /// </summary>
+    private void RegisterSystemMetadata(object system, int priority)
+    {
+        ArgumentNullException.ThrowIfNull(system);
+
+        // Create metadata
         SystemMetadata metadata;
 
         if (system is IParallelSystemMetadata parallelSystem)
@@ -100,7 +190,7 @@ public class ParallelSystemManager : SystemManager
                 SystemType = system.GetType(),
                 ReadsComponents = parallelSystem.GetReadComponents(),
                 WritesComponents = parallelSystem.GetWriteComponents(),
-                Priority = system.Priority,
+                Priority = priority,
                 AllowsParallelExecution = parallelSystem.AllowsParallelExecution
             };
         }
@@ -113,13 +203,14 @@ public class ParallelSystemManager : SystemManager
                 SystemType = system.GetType(),
                 ReadsComponents = new List<Type>(),
                 WritesComponents = new List<Type>(),
-                Priority = system.Priority,
+                Priority = priority,
                 AllowsParallelExecution = true // Conservative: allow parallel unless proven otherwise
             };
 
-            _logger?.LogInformation(
-                "System {SystemName} does not implement IParallelSystemMetadata, assuming parallel-safe with no component dependencies",
-                system.GetType().Name
+            _logger?.LogWorkflowStatus(
+                $"Registered {system.GetType().Name} (legacy mode)",
+                ("parallel", "assumed safe"),
+                ("dependencies", "none")
             );
         }
 
@@ -130,21 +221,17 @@ public class ParallelSystemManager : SystemManager
             var genericMethod = method!.MakeGenericMethod(system.GetType());
             genericMethod.Invoke(_dependencyGraph, new object[] { metadata });
 
-            _logger?.LogInformation(
-                "Registered {SystemName} with dependency graph | Reads: {ReadCount}, Writes: {WriteCount}, Parallel: {AllowsParallel}",
-                system.GetType().Name,
-                metadata.ReadsComponents.Count,
-                metadata.WritesComponents.Count,
-                metadata.AllowsParallelExecution
+            _logger?.LogWorkflowStatus(
+                $"Registered {system.GetType().Name}",
+                ("reads", metadata.ReadsComponents.Count),
+                ("writes", metadata.WritesComponents.Count),
+                ("parallel", metadata.AllowsParallelExecution)
             );
         }
         catch (Exception ex)
         {
             _logger?.LogWarning(ex, "Failed to register system metadata for {SystemName}", system.GetType().Name);
         }
-
-        base.RegisterSystem(system);
-        _executionPlanBuilt = false;
     }
 
     /// <summary>
@@ -153,9 +240,41 @@ public class ParallelSystemManager : SystemManager
     /// </summary>
     public void RebuildExecutionPlan()
     {
-        var systemTypes = Systems.Select(s => s.GetType()).ToList();
+        // Collect all registered systems (Update, Render, and legacy Systems)
+        var allSystemObjects = new List<object>();
 
-        _logger?.LogInformation("Building execution plan for {SystemCount} systems", systemTypes.Count);
+        // Add all update systems
+        foreach (var updateSystem in RegisteredUpdateSystems)
+        {
+            allSystemObjects.Add(updateSystem);
+        }
+
+        // Add all render systems
+        foreach (var renderSystem in RegisteredRenderSystems)
+        {
+            allSystemObjects.Add(renderSystem);
+        }
+
+        // Add legacy systems that aren't already included
+        foreach (var system in Systems)
+        {
+            // Only add if not already in the list (avoid duplicates)
+            if (!allSystemObjects.Any(s => s.GetType() == system.GetType()))
+            {
+                allSystemObjects.Add(system);
+            }
+        }
+
+        var systemTypes = allSystemObjects.Select(s => s.GetType()).Distinct().ToList();
+
+        _logger?.LogWorkflowStatus(
+            "Building execution plan",
+            ("total", systemTypes.Count),
+            ("update", RegisteredUpdateSystems.Count),
+            ("render", RegisteredRenderSystems.Count),
+            ("legacy", Systems.Count)
+        );
+
         foreach (var type in systemTypes)
         {
             _logger?.LogDebug("  System registered: {SystemName}", type.Name);
@@ -163,7 +282,11 @@ public class ParallelSystemManager : SystemManager
 
         var stages = _dependencyGraph.ComputeExecutionStages(systemTypes);
 
-        _logger?.LogInformation("ComputeExecutionStages returned {StageCount} stages", stages.Count);
+        _logger?.LogWorkflowStatus(
+            "Computed execution stages",
+            ("stages", stages.Count)
+        );
+
         for (int i = 0; i < stages.Count; i++)
         {
             _logger?.LogDebug("  Stage {Index}: {SystemCount} systems", i + 1, stages[i].Count);
@@ -173,9 +296,10 @@ public class ParallelSystemManager : SystemManager
         _executionStages = stages.Select(stage =>
         {
             return stage
-                .Select(type => Systems.FirstOrDefault(s => s.GetType() == type))
+                .Select(type => allSystemObjects.FirstOrDefault(s => s.GetType() == type))
                 .Where(s => s != null)
-                .ToList()!;
+                .Cast<ISystem>() // Cast to ISystem for execution
+                .ToList();
         }).ToList();
 
         _executionPlanBuilt = true;
@@ -187,10 +311,10 @@ public class ParallelSystemManager : SystemManager
             return;
         }
 
-        _logger?.LogInformation(
-            "Parallel execution plan built: {StageCount} stages, {MaxParallelism} max parallel systems",
-            _executionStages.Count,
-            _executionStages.Max(s => s.Count)
+        _logger?.LogWorkflowStatus(
+            "Execution plan ready",
+            ("stages", _executionStages.Count),
+            ("max parallel", _executionStages.Max(s => s.Count))
         );
 
         LogExecutionPlan();
@@ -202,6 +326,13 @@ public class ParallelSystemManager : SystemManager
     public new void Update(World world, float deltaTime)
     {
         ArgumentNullException.ThrowIfNull(world);
+
+        // Lazy rebuild: If execution plan was invalidated by late system registration, rebuild now
+        if (_parallelEnabled && !_executionPlanBuilt)
+        {
+            _logger?.LogWorkflowStatus("Rebuilding execution plan", ("reason", "late system registration"));
+            RebuildExecutionPlan();
+        }
 
         if (!_parallelEnabled || !_executionPlanBuilt || _executionStages == null || _executionStages.Count == 0)
         {
@@ -267,7 +398,9 @@ public class ParallelSystemManager : SystemManager
             );
         }
 
-        _logger?.LogInformation("Parallel execution {Status}", enabled ? "enabled" : "disabled");
+        _logger?.LogWorkflowStatus(
+            $"Parallel execution {(enabled ? "enabled" : "disabled")}"
+        );
     }
 
     /// <summary>

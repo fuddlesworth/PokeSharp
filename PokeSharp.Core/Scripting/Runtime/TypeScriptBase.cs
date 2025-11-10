@@ -1,9 +1,9 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using PokeSharp.Core.Components.Movement;
-using PokeSharp.Scripting.Services;
+using PokeSharp.Core.Scripting.Services;
 
-namespace PokeSharp.Scripting.Runtime;
+namespace PokeSharp.Core.Scripting.Runtime;
 
 /// <summary>
 ///     Base class for type behavior scripts using the ScriptContext pattern.

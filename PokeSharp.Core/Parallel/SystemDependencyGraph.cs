@@ -276,7 +276,7 @@ public class SystemMetadata
     /// <summary>
     ///     Execution priority (lower values execute first).
     /// </summary>
-    public int Priority { get; set; } = 100;
+    public int Priority { get; set; } = SystemPriority.Movement;
 
     /// <summary>
     ///     Whether this system allows parallel execution.

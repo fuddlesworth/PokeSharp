@@ -25,7 +25,7 @@ public class ZOrderRenderSystem(
     GraphicsDevice graphicsDevice,
     AssetManager assetManager,
     ILogger<ZOrderRenderSystem>? logger = null
-) : BaseSystem
+) : ParallelSystemBase, IRenderSystem
 {
     // Use centralized rendering constants
     private const int TileSize = RenderingConstants.TileSize;
@@ -105,8 +105,44 @@ public class ZOrderRenderSystem(
     /// <inheritdoc />
     public override int Priority => SystemPriority.Render;
 
+    /// <summary>
+    /// Components this system reads for rendering.
+    /// </summary>
+    public override List<Type> GetReadComponents() => new()
+    {
+        typeof(Player),
+        typeof(Camera),
+        typeof(TilePosition),
+        typeof(TileSprite),
+        typeof(Core.Components.Tiles.LayerOffset),
+        typeof(Position),
+        typeof(Sprite),
+        typeof(Core.Components.Rendering.Animation)
+    };
+
+    /// <summary>
+    /// This system doesn't write to any components (read-only rendering).
+    /// </summary>
+    public override List<Type> GetWriteComponents() => new();
+
+    /// <summary>
+    /// Gets the render order. Lower values render first.
+    /// Order 1 renders entities after background (0) but before UI (2).
+    /// </summary>
+    public int RenderOrder => 1;
+
     /// <inheritdoc />
+    /// <remarks>
+    /// This is a render-only system. The Update method is not used.
+    /// All rendering logic is in the Render method.
+    /// </remarks>
     public override void Update(World world, float deltaTime)
+    {
+        // No-op: This is a render-only system. See Render() method.
+    }
+
+    /// <inheritdoc />
+    public void Render(World world)
     {
         try
         {
@@ -116,7 +152,7 @@ public class ZOrderRenderSystem(
             // Only run detailed profiling when explicitly enabled (adds overhead)
             if (_enableDetailedProfiling)
             {
-                UpdateWithProfiling(world);
+                RenderWithProfiling(world);
                 return;
             }
 
@@ -186,7 +222,7 @@ public class ZOrderRenderSystem(
         {
             _logger?.LogError(
                 ex,
-                "Error in ZOrderRenderSystem.Update (Frame {FrameCounter})",
+                "Error in ZOrderRenderSystem.Render (Frame {FrameCounter})",
                 _frameCounter
             );
             throw;
@@ -194,9 +230,9 @@ public class ZOrderRenderSystem(
     }
 
     /// <summary>
-    ///     Update with detailed profiling enabled (slower, for diagnostics only).
+    ///     Render with detailed profiling enabled (slower, for diagnostics only).
     /// </summary>
-    private void UpdateWithProfiling(World world)
+    private void RenderWithProfiling(World world)
     {
         var swSetup = Stopwatch.StartNew();
         UpdateCameraCache(world);

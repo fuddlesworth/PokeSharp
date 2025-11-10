@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using PokeSharp.Core.Logging;
 using PokeSharp.Core.Scripting.Services;
 using PokeSharp.Core.ScriptingApi;
-using PokeSharp.Scripting.Runtime;
+using PokeSharp.Core.Scripting.Runtime;
 
 namespace PokeSharp.Scripting.Services;
 

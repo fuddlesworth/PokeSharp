@@ -20,7 +20,7 @@ public class InputSystem(
     int maxBufferSize = 5,
     float bufferTimeout = 0.2f,
     ILogger<InputSystem>? logger = null
-) : BaseSystem
+) : ParallelSystemBase, IUpdateSystem
 {
     private readonly InputBuffer _inputBuffer = new(maxBufferSize, bufferTimeout);
     private readonly ILogger<InputSystem>? _logger = logger;
@@ -44,8 +44,34 @@ public class InputSystem(
     private KeyboardState _prevKeyboardState;
     private float _totalTime;
 
+    /// <summary>
+    /// Gets the update priority. Lower values execute first.
+    /// Input executes at priority 0, before all other update systems.
+    /// </summary>
+    public int UpdatePriority => SystemPriority.Input;
+
     /// <inheritdoc />
     public override int Priority => SystemPriority.Input;
+
+    /// <summary>
+    /// Components this system reads to process player input.
+    /// </summary>
+    public override List<Type> GetReadComponents() => new()
+    {
+        typeof(Player),
+        typeof(Position),
+        typeof(GridMovement),
+        typeof(InputState),
+        typeof(Direction)
+    };
+
+    /// <summary>
+    /// Components this system writes to queue movement requests.
+    /// </summary>
+    public override List<Type> GetWriteComponents() => new()
+    {
+        typeof(MovementRequest)
+    };
 
     /// <inheritdoc />
     public override void Update(World world, float deltaTime)

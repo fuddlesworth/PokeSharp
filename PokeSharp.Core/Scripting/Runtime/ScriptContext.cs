@@ -3,9 +3,8 @@ using Microsoft.Extensions.Logging;
 using PokeSharp.Core.Components.Movement;
 using PokeSharp.Core.Scripting.Services;
 using PokeSharp.Core.ScriptingApi;
-using PokeSharp.Scripting.Services;
 
-namespace PokeSharp.Scripting.Runtime;
+namespace PokeSharp.Core.Scripting.Runtime;
 
 /// <summary>
 ///     Provides unified context for both entity-level and global scripts.

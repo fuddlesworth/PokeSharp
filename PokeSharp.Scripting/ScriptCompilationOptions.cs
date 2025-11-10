@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using PokeSharp.Core.Components.Movement;
-using PokeSharp.Scripting.Runtime;
+using PokeSharp.Core.Scripting.Runtime;
 
 namespace PokeSharp.Scripting;
 
@@ -42,7 +42,7 @@ public static class ScriptCompilationOptions
                 "Arch.Core",
                 "Microsoft.Xna.Framework",
                 "Microsoft.Extensions.Logging",
-                "PokeSharp.Scripting.Runtime",
+                "PokeSharp.Core.Scripting.Runtime",
                 "PokeSharp.Core.ScriptingApi",
                 "PokeSharp.Core.Components.Maps",
                 "PokeSharp.Core.Components.Movement",

@@ -15,7 +15,7 @@ namespace PokeSharp.Core.Systems;
 ///     Also handles collision checking and movement validation.
 ///     Uses parallel execution for improved multi-core performance.
 /// </summary>
-public class MovementSystem : ParallelSystemBase
+public class MovementSystem : ParallelSystemBase, IUpdateSystem
 {
     // Cache for entities to remove (reused across frames to avoid allocation)
     private readonly List<Entity> _entitiesToRemove = new(32);
@@ -24,28 +24,27 @@ public class MovementSystem : ParallelSystemBase
     // Cache for tile sizes per map (reduces redundant queries)
     private readonly Dictionary<int, int> _tileSizeCache = new();
 
-    private SpatialHashSystem? _spatialHashSystem;
+    private readonly SpatialHashSystem _spatialHashSystem;
 
     /// <summary>
-    ///     Creates a new MovementSystem with optional logger.
+    ///     Creates a new MovementSystem with required spatial hash system and optional logger.
     /// </summary>
+    /// <param name="spatialHashSystem">Spatial hash system for collision detection (required).</param>
     /// <param name="logger">Optional logger for system diagnostics.</param>
-    public MovementSystem(ILogger<MovementSystem>? logger = null)
+    public MovementSystem(SpatialHashSystem spatialHashSystem, ILogger<MovementSystem>? logger = null)
     {
+        _spatialHashSystem = spatialHashSystem ?? throw new ArgumentNullException(nameof(spatialHashSystem));
         _logger = logger;
     }
 
+    /// <summary>
+    /// Gets the update priority. Lower values execute first.
+    /// Movement executes at priority 100, after input (0) and spatial hash (25).
+    /// </summary>
+    public int UpdatePriority => SystemPriority.Movement;
+
     /// <inheritdoc />
     public override int Priority => SystemPriority.Movement;
-
-    /// <summary>
-    ///     Sets the spatial hash system for collision detection.
-    /// </summary>
-    public void SetSpatialHashSystem(SpatialHashSystem spatialHashSystem)
-    {
-        _spatialHashSystem = spatialHashSystem;
-        _logger?.LogDebug("SpatialHashSystem connected to MovementSystem");
-    }
 
     /// <inheritdoc />
     public override void Update(World world, float deltaTime)
@@ -248,14 +247,6 @@ public class MovementSystem : ParallelSystemBase
         Direction direction
     )
     {
-        if (_spatialHashSystem == null)
-        {
-            _logger?.LogSystemDependencyMissing("MovementSystem", "SpatialHashSystem", true);
-            throw new InvalidOperationException(
-                "SpatialHashSystem must be set before processing movement. Call SetSpatialHashSystem() first."
-            );
-        }
-
         // Get tile size for this map (cached for performance)
         var tileSize = GetTileSize(world, position.MapId);
 

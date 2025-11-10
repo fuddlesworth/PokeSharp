@@ -16,10 +16,16 @@ namespace PokeSharp.Core.Systems;
 ///     Priority: 850 (after Animation:800, before Render:1000).
 ///     Uses parallel execution for optimal performance with many animated tiles.
 /// </summary>
-public class TileAnimationSystem(ILogger<TileAnimationSystem>? logger = null) : ParallelSystemBase
+public class TileAnimationSystem(ILogger<TileAnimationSystem>? logger = null) : ParallelSystemBase, IUpdateSystem
 {
     private readonly ILogger<TileAnimationSystem>? _logger = logger;
     private int _animatedTileCount = -1; // Track for logging on first update
+
+    /// <summary>
+    /// Gets the update priority. Lower values execute first.
+    /// Tile animation executes at priority 850, after animation (800) and camera follow (825).
+    /// </summary>
+    public int UpdatePriority => SystemPriority.TileAnimation;
 
     /// <inheritdoc />
     public override int Priority => SystemPriority.TileAnimation;

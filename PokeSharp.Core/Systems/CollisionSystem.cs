@@ -10,13 +10,39 @@ namespace PokeSharp.Core.Systems;
 ///     System that provides tile-based collision detection for grid movement.
 ///     Uses spatial hash to query entities with Collision components.
 /// </summary>
-public class CollisionSystem(ILogger<CollisionSystem>? logger = null) : BaseSystem
+public class CollisionSystem(
+    SpatialHashSystem spatialHashSystem,
+    ILogger<CollisionSystem>? logger = null
+) : ParallelSystemBase, IUpdateSystem
 {
     private readonly ILogger<CollisionSystem>? _logger = logger;
-    private SpatialHashSystem? _spatialHashSystem;
+    private readonly SpatialHashSystem _spatialHashSystem =
+        spatialHashSystem ?? throw new ArgumentNullException(nameof(spatialHashSystem));
+
+    /// <summary>
+    /// Gets the update priority. Lower values execute first.
+    /// Collision executes at priority 200, after movement (100).
+    /// </summary>
+    public int UpdatePriority => SystemPriority.Collision;
 
     /// <inheritdoc />
     public override int Priority => SystemPriority.Collision;
+
+    /// <summary>
+    /// Components this system reads for collision detection.
+    /// </summary>
+    public override List<Type> GetReadComponents() => new()
+    {
+        typeof(Collision),
+        typeof(TileLedge),
+        typeof(Position),
+        typeof(TilePosition)
+    };
+
+    /// <summary>
+    /// This system doesn't write to any components (provides query methods only).
+    /// </summary>
+    public override List<Type> GetWriteComponents() => new();
 
     /// <inheritdoc />
     public override void Update(World world, float deltaTime)
@@ -24,17 +50,6 @@ public class CollisionSystem(ILogger<CollisionSystem>? logger = null) : BaseSyst
         // Collision system doesn't require per-frame updates
         // It provides on-demand collision checking via IsPositionWalkable
         EnsureInitialized();
-    }
-
-    /// <summary>
-    ///     Sets the spatial hash system for entity lookups.
-    ///     Should be called during system initialization.
-    /// </summary>
-    /// <param name="spatialHashSystem">The spatial hash system instance.</param>
-    public void SetSpatialHashSystem(SpatialHashSystem spatialHashSystem)
-    {
-        _spatialHashSystem = spatialHashSystem;
-        _logger?.LogDebug("SpatialHashSystem connected to CollisionSystem");
     }
 
     /// <summary>
@@ -122,11 +137,6 @@ public class CollisionSystem(ILogger<CollisionSystem>? logger = null) : BaseSyst
         Direction fromDirection = Direction.None
     )
     {
-        if (_spatialHashSystem == null)
-            throw new InvalidOperationException(
-                "SpatialHashSystem not initialized. Call SetSpatialHashSystem() first."
-            );
-
         return IsPositionWalkable(_spatialHashSystem, mapId, tileX, tileY, fromDirection);
     }
 

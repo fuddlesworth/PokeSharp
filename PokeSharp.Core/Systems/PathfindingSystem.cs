@@ -17,41 +17,32 @@ namespace PokeSharp.Core.Systems;
 ///     This system runs after SpatialHashSystem but before MovementSystem.
 ///     It generates MovementRequest components based on the current path state.
 /// </remarks>
-public class PathfindingSystem : BaseSystem
+public class PathfindingSystem : BaseSystem, IUpdateSystem
 {
     private readonly ILogger<PathfindingSystem>? _logger;
     private readonly PathfindingService _pathfindingService;
-    private SpatialHashSystem? _spatialHashSystem;
+    private readonly SpatialHashSystem _spatialHashSystem;
 
-    public PathfindingSystem(ILogger<PathfindingSystem>? logger = null)
+    public PathfindingSystem(SpatialHashSystem spatialHashSystem, ILogger<PathfindingSystem>? logger = null)
     {
+        _spatialHashSystem = spatialHashSystem ?? throw new ArgumentNullException(nameof(spatialHashSystem));
         _logger = logger;
         _pathfindingService = new PathfindingService();
     }
 
+    /// <summary>
+    /// Gets the update priority. Lower values execute first.
+    /// Pathfinding executes at priority 300, after movement (100) and collision (200).
+    /// </summary>
+    public int UpdatePriority => SystemPriority.Pathfinding;
+
     /// <inheritdoc />
     public override int Priority => SystemPriority.Pathfinding;
-
-    /// <summary>
-    ///     Sets the spatial hash system for pathfinding collision detection.
-    /// </summary>
-    public void SetSpatialHashSystem(SpatialHashSystem spatialHashSystem)
-    {
-        _spatialHashSystem =
-            spatialHashSystem ?? throw new ArgumentNullException(nameof(spatialHashSystem));
-        _logger?.LogDebug("SpatialHashSystem connected to PathfindingSystem");
-    }
 
     /// <inheritdoc />
     public override void Update(World world, float deltaTime)
     {
         EnsureInitialized();
-
-        if (_spatialHashSystem == null)
-        {
-            _logger?.LogSystemDependencyMissing("PathfindingSystem", "SpatialHashSystem", true);
-            return;
-        }
 
         // Use centralized query for path followers
         world.Query(

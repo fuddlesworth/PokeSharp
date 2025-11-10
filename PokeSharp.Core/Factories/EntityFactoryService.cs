@@ -16,7 +16,8 @@ namespace PokeSharp.Core.Factories;
 /// </summary>
 public sealed class EntityFactoryService(
     TemplateCache templateCache,
-    ILogger<EntityFactoryService> logger
+    ILogger<EntityFactoryService> logger,
+    EntityPoolManager poolManager
 ) : IEntityFactoryService
 {
     // Static cache for reflection MethodInfo to avoid expensive lookups
@@ -28,19 +29,8 @@ public sealed class EntityFactoryService(
     private readonly TemplateCache _templateCache =
         templateCache ?? throw new ArgumentNullException(nameof(templateCache));
 
-    private EntityPoolManager? _poolManager;
-
-    /// <summary>
-    ///     Sets the entity pool manager for optimized entity creation and recycling.
-    ///     Should be called after GameInitializer creates the pool manager.
-    /// </summary>
-    /// <param name="poolManager">Pool manager instance</param>
-    /// <exception cref="ArgumentNullException">Thrown if poolManager is null</exception>
-    public void SetPoolManager(EntityPoolManager poolManager)
-    {
-        _poolManager = poolManager ?? throw new ArgumentNullException(nameof(poolManager));
-        _logger.LogInformation("Entity pool manager configured for EntityFactoryService");
-    }
+    private readonly EntityPoolManager _poolManager =
+        poolManager ?? throw new ArgumentNullException(nameof(poolManager));
 
     /// <inheritdoc />
     public Entity SpawnFromTemplate(
@@ -85,23 +75,16 @@ public sealed class EntityFactoryService(
 
         // Create empty entity first (use pool if available)
         Entity entity;
-        if (_poolManager != null)
+        try
         {
-            try
-            {
-                var poolName = GetPoolNameFromTemplateId(templateId);
-                entity = _poolManager.Acquire(poolName);
-                _logger.LogDebug("Acquired entity from pool '{PoolName}' for template '{TemplateId}'", poolName, templateId);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                // Pool doesn't exist, fall back to direct creation
-                _logger.LogWarning("Pool not found for template '{TemplateId}': {Error}. Falling back to direct creation.", templateId, ex.Message);
-                entity = world.Create();
-            }
+            var poolName = GetPoolNameFromTemplateId(templateId);
+            entity = _poolManager.Acquire(poolName);
+            _logger.LogDebug("Acquired entity from pool '{PoolName}' for template '{TemplateId}'", poolName, templateId);
         }
-        else
+        catch (KeyNotFoundException ex)
         {
+            // Pool doesn't exist, fall back to direct creation
+            _logger.LogWarning("Pool not found for template '{TemplateId}': {Error}. Falling back to direct creation.", templateId, ex.Message);
             entity = world.Create();
         }
 
@@ -486,21 +469,14 @@ public sealed class EntityFactoryService(
 
             // Create entity (use pool if available)
             Entity entity;
-            if (_poolManager != null)
+            try
             {
-                try
-                {
-                    var poolName = GetPoolNameFromTemplateId(templateId);
-                    entity = _poolManager.Acquire(poolName);
-                }
-                catch (KeyNotFoundException)
-                {
-                    // Pool doesn't exist, fall back to direct creation
-                    entity = world.Create();
-                }
+                var poolName = GetPoolNameFromTemplateId(templateId);
+                entity = _poolManager.Acquire(poolName);
             }
-            else
+            catch (KeyNotFoundException)
             {
+                // Pool doesn't exist, fall back to direct creation
                 entity = world.Create();
             }
 
@@ -545,14 +521,7 @@ public sealed class EntityFactoryService(
 
         foreach (var entity in entities)
         {
-            if (_poolManager != null)
-            {
-                _poolManager.Release(entity);
-            }
-            else
-            {
-                world.Destroy(entity);
-            }
+            _poolManager.Release(entity);
         }
     }
 }

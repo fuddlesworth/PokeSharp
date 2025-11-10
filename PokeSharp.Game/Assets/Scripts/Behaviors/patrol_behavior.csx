@@ -2,7 +2,7 @@ using Arch.Core;
 using Microsoft.Xna.Framework;
 using PokeSharp.Core.Components;
 using PokeSharp.Core.Components.NPCs;
-using PokeSharp.Scripting;
+using PokeSharp.Core.Scripting.Runtime;
 
 /// <summary>
 /// Patrol behavior using ScriptContext pattern.

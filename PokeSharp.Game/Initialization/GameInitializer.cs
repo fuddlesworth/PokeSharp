@@ -116,48 +116,54 @@ public class GameInitializer(
         );
 
         // Create and register systems in priority order
+
+        // === Update Systems (Logic Only) ===
+
         // SpatialHashSystem (Priority: 25) - must run early to build spatial index
         var spatialHashLogger = _loggerFactory.CreateLogger<SpatialHashSystem>();
         SpatialHashSystem = new SpatialHashSystem(spatialHashLogger);
-        _systemManager.RegisterSystem(SpatialHashSystem);
+        _systemManager.RegisterUpdateSystem(SpatialHashSystem);
 
         // Register pool management systems
         var poolCleanupLogger = _loggerFactory.CreateLogger<PoolCleanupSystem>();
-        _systemManager.RegisterSystem(new PoolCleanupSystem(_poolManager, poolCleanupLogger));
+        _systemManager.RegisterUpdateSystem(new PoolCleanupSystem(_poolManager, poolCleanupLogger));
 
         // InputSystem with Pokemon-style input buffering (5 inputs, 200ms timeout)
         var inputLogger = _loggerFactory.CreateLogger<InputSystem>();
         var inputSystem = new InputSystem(5, 0.2f, inputLogger);
-        _systemManager.RegisterSystem(inputSystem);
+        _systemManager.RegisterUpdateSystem(inputSystem);
 
         // Register MovementSystem (Priority: 100, handles movement and collision checking)
         var movementLogger = _loggerFactory.CreateLogger<MovementSystem>();
-        var movementSystem = new MovementSystem(movementLogger);
-        movementSystem.SetSpatialHashSystem(SpatialHashSystem);
-        _systemManager.RegisterSystem(movementSystem);
+        var movementSystem = new MovementSystem(SpatialHashSystem, movementLogger);
+        _systemManager.RegisterUpdateSystem(movementSystem);
 
         // Register CollisionSystem (Priority: 200, provides tile collision checking)
         var collisionLogger = _loggerFactory.CreateLogger<CollisionSystem>();
-        var collisionSystem = new CollisionSystem(collisionLogger);
-        collisionSystem.SetSpatialHashSystem(SpatialHashSystem);
-        _systemManager.RegisterSystem(collisionSystem);
+        var collisionSystem = new CollisionSystem(SpatialHashSystem, collisionLogger);
+        _systemManager.RegisterUpdateSystem(collisionSystem);
 
         // Register AnimationSystem (Priority: 800, after movement, before rendering)
         var animationLogger = _loggerFactory.CreateLogger<AnimationSystem>();
-        _systemManager.RegisterSystem(new AnimationSystem(AnimationLibrary, animationLogger));
+        _systemManager.RegisterUpdateSystem(new AnimationSystem(AnimationLibrary, animationLogger));
 
         // Register CameraFollowSystem (Priority: 825, after Animation, before TileAnimation)
         var cameraFollowLogger = _loggerFactory.CreateLogger<CameraFollowSystem>();
-        _systemManager.RegisterSystem(new CameraFollowSystem(cameraFollowLogger));
+        _systemManager.RegisterUpdateSystem(new CameraFollowSystem(cameraFollowLogger));
 
         // Register TileAnimationSystem (Priority: 850, animates water/grass tiles between Animation and Render)
         var tileAnimLogger = _loggerFactory.CreateLogger<TileAnimationSystem>();
-        _systemManager.RegisterSystem(new TileAnimationSystem(tileAnimLogger));
+        _systemManager.RegisterUpdateSystem(new TileAnimationSystem(tileAnimLogger));
+
+        // NOTE: NPCBehaviorSystem is registered separately in NPCBehaviorInitializer
+        // It requires ScriptService and behavior registry to be set up first
+
+        // === Render Systems (Rendering Only) ===
 
         // Register ZOrderRenderSystem (Priority: 1000) - unified rendering with Z-order sorting
         var renderLogger = _loggerFactory.CreateLogger<ZOrderRenderSystem>();
         RenderSystem = new ZOrderRenderSystem(graphicsDevice, _assetManager, renderLogger);
-        _systemManager.RegisterSystem(RenderSystem);
+        _systemManager.RegisterRenderSystem(RenderSystem);
 
         // Initialize all systems
         _systemManager.Initialize(_world);
@@ -166,29 +172,37 @@ public class GameInitializer(
         if (_systemManager is ParallelSystemManager parallelManager)
         {
             parallelManager.RebuildExecutionPlan();
-            _logger.LogInformation("Parallel execution plan built");
+            _logger.LogWorkflowStatus("Parallel execution plan ready");
 
             // Log execution stages for debugging
-            var plan = parallelManager.GetExecutionPlan();
-            if (!string.IsNullOrEmpty(plan))
-            {
-                _logger.LogInformation("Execution stages:\n{Plan}", plan);
-            }
+            LogExecutionStages(parallelManager);
         }
 
-        // Connect pool manager to entity factory for automatic pooling
-        if (_entityFactory is EntityFactoryService concreteFactory)
+        _logger.LogWorkflowStatus("Game initialization complete");
+    }
+
+    private void LogExecutionStages(ParallelSystemManager parallelManager)
+    {
+        var executionStages = parallelManager.ExecutionStages;
+        if (executionStages == null || executionStages.Count == 0)
+            return;
+
+        // Log each stage with structured formatting
+        for (int i = 0; i < executionStages.Count; i++)
         {
-            concreteFactory.SetPoolManager(_poolManager);
-            _logger.LogInformation("Entity factory configured to use pooling");
-        }
-        else
-        {
-            _logger.LogWarning(
-                "Entity factory is not EntityFactoryService, pooling integration skipped"
+            var stage = executionStages[i];
+            var stageNumber = i + 1;
+
+            // Format the systems list with priorities
+            var systemsList = stage
+                .Select(s => $"{s.GetType().Name} (P:{s.Priority})")
+                .ToList();
+
+            _logger.LogWorkflowStatus(
+                $"Stage {stageNumber}",
+                ("parallel", stage.Count),
+                ("systems", string.Join(", ", systemsList))
             );
         }
-
-        _logger.LogInformation("Game initialization complete");
     }
 }

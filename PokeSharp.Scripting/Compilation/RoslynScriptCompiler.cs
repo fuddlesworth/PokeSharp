@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using PokeSharp.Core.Components.Movement;
 using PokeSharp.Scripting.HotReload.Compilation;
-using PokeSharp.Scripting.Runtime;
+using PokeSharp.Core.Scripting.Runtime;
 using DiagnosticSeverity = PokeSharp.Scripting.HotReload.Compilation.DiagnosticSeverity;
 
 namespace PokeSharp.Scripting.Compilation;
