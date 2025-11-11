@@ -55,4 +55,14 @@ public struct Parent
     /// implementing time-based relationship logic.
     /// </remarks>
     public DateTime EstablishedAt;
+
+    /// <summary>
+    /// Whether this relationship is currently valid.
+    /// Set to false instead of removing the component to avoid expensive ECS structural changes.
+    /// </summary>
+    /// <remarks>
+    /// When false, the relationship should be considered broken and ignored by systems.
+    /// RelationshipSystem sets this to false when the parent entity is destroyed.
+    /// </remarks>
+    public bool IsValid;
 }

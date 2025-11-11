@@ -1,3 +1,4 @@
+using System.Linq;
 using Arch.Core;
 using Microsoft.Xna.Framework;
 using PokeSharp.Game.Components.Movement;
@@ -18,6 +19,15 @@ public class PatrolBehavior : TypeScriptBase
         if (!ctx.HasState<PatrolState>())
         {
             ref var path = ref ctx.World.Get<MovementRoute>(ctx.Entity.Value);
+
+            // Log all waypoints for debugging
+            var waypointStr = string.Join(", ", path.Waypoints.Select(p => $"({p.X},{p.Y})"));
+            ctx.Logger.LogInformation(
+                "Patrol initialized | waypoints: {Count}, loop: {Loop}, path: {Path}",
+                path.Waypoints.Length,
+                path.Loop,
+                waypointStr
+            );
 
             ctx.World.Add(
                 ctx.Entity.Value,
@@ -61,18 +71,39 @@ public class PatrolBehavior : TypeScriptBase
 
         var target = path.Waypoints[state.CurrentWaypoint];
 
-        // Reached waypoint?
-        if (position.X == target.X && position.Y == target.Y)
+        // Reached waypoint? Check BOTH grid position AND movement completion
+        var isMoving = ctx.World.Get<GridMovement>(ctx.Entity.Value).IsMoving;
+        if (position.X == target.X && position.Y == target.Y && !isMoving)
         {
-            ctx.Logger.LogTrace("Reached waypoint {Waypoint}", state.CurrentWaypoint);
+            ctx.Logger.LogInformation(
+                "Reached waypoint {Index}/{Total}: ({X},{Y}) | wait={Wait}s",
+                state.CurrentWaypoint,
+                path.Waypoints.Length - 1,
+                target.X,
+                target.Y,
+                state.WaitDuration
+            );
 
             state.CurrentWaypoint++;
             if (state.CurrentWaypoint >= path.Waypoints.Length)
             {
+                ctx.Logger.LogInformation(
+                    "End of path reached, Loop={Loop}, resetting to {Index}",
+                    path.Loop,
+                    path.Loop ? 0 : path.Waypoints.Length - 1
+                );
                 state.CurrentWaypoint = path.Loop ? 0 : path.Waypoints.Length - 1;
             }
 
             state.WaitTimer = state.WaitDuration;
+
+            // Deactivate any existing MovementRequest when reaching waypoint
+            if (ctx.World.Has<MovementRequest>(ctx.Entity.Value))
+            {
+                ref var request = ref ctx.World.Get<MovementRequest>(ctx.Entity.Value);
+                request.Active = false;
+            }
+
             return;
         }
 

@@ -92,4 +92,14 @@ public struct Owner
     /// or special handling for different ownership types.
     /// </remarks>
     public OwnershipType Type;
+
+    /// <summary>
+    /// Whether this ownership relationship is currently valid.
+    /// Set to false instead of removing the component to avoid expensive ECS structural changes.
+    /// </summary>
+    /// <remarks>
+    /// When false, the ownership should be considered broken and ignored by systems.
+    /// RelationshipSystem sets this to false when the owned entity is destroyed.
+    /// </remarks>
+    public bool IsValid;
 }

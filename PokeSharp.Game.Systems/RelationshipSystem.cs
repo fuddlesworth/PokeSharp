@@ -30,7 +30,7 @@ namespace PokeSharp.Game.Systems;
 /// their work before relationship validation occurs.
 /// </para>
 /// </remarks>
-public class RelationshipSystem : SystemBase
+public class RelationshipSystem : SystemBase, IUpdateSystem
 {
     private readonly ILogger<RelationshipSystem> _logger;
     private QueryDescription _parentQuery;
@@ -113,6 +113,10 @@ public class RelationshipSystem : SystemBase
 
         world.Query(in _parentQuery, (Entity entity, ref Parent parent) =>
         {
+            // Skip already invalid relationships
+            if (!parent.IsValid)
+                return;
+
             if (!world.IsAlive(parent.Value))
             {
                 entitiesToFix.Add(entity);
@@ -124,7 +128,9 @@ public class RelationshipSystem : SystemBase
         {
             if (world.IsAlive(entity))
             {
-                entity.Remove<Parent>();
+                // Mark as invalid instead of removing to avoid expensive ECS structural changes
+                ref var parent = ref entity.Get<Parent>();
+                parent.IsValid = false;
                 _brokenParentsFixed++;
 
                 if (AutoDestroyOrphans)
@@ -134,7 +140,7 @@ public class RelationshipSystem : SystemBase
                 }
                 else
                 {
-                    _logger.LogDebug("Removed invalid parent reference from entity {Entity}", entity);
+                    _logger.LogDebug("Marked invalid parent reference for entity {Entity}", entity);
                 }
             }
         }
@@ -175,6 +181,10 @@ public class RelationshipSystem : SystemBase
 
         world.Query(in _ownerQuery, (Entity entity, ref Owner owner) =>
         {
+            // Skip already invalid relationships
+            if (!owner.IsValid)
+                return;
+
             if (!world.IsAlive(owner.Value))
             {
                 entitiesToFix.Add(entity);
@@ -185,9 +195,11 @@ public class RelationshipSystem : SystemBase
         {
             if (world.IsAlive(entity))
             {
-                entity.Remove<Owner>();
+                // Mark as invalid instead of removing to avoid expensive ECS structural changes
+                ref var owner = ref entity.Get<Owner>();
+                owner.IsValid = false;
                 _brokenOwnersFixed++;
-                _logger.LogDebug("Removed invalid owner reference from entity {Entity}", entity);
+                _logger.LogDebug("Marked invalid owner reference for entity {Entity}", entity);
             }
         }
     }
@@ -201,6 +213,10 @@ public class RelationshipSystem : SystemBase
 
         world.Query(in _ownedQuery, (Entity entity, ref Owned owned) =>
         {
+            // Skip already invalid relationships
+            if (!owned.IsValid)
+                return;
+
             if (!world.IsAlive(owned.OwnerEntity))
             {
                 entitiesToFix.Add(entity);
@@ -212,7 +228,9 @@ public class RelationshipSystem : SystemBase
         {
             if (world.IsAlive(entity))
             {
-                entity.Remove<Owned>();
+                // Mark as invalid instead of removing to avoid expensive ECS structural changes
+                ref var owned = ref entity.Get<Owned>();
+                owned.IsValid = false;
                 _brokenOwnedFixed++;
 
                 if (AutoDestroyOrphans)
@@ -222,7 +240,7 @@ public class RelationshipSystem : SystemBase
                 }
                 else
                 {
-                    _logger.LogDebug("Removed invalid owned reference from entity {Entity}", entity);
+                    _logger.LogDebug("Marked invalid owned reference for entity {Entity}", entity);
                 }
             }
         }

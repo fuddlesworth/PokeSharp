@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using PokeSharp.Game.Components.Maps;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Components.Rendering;
+using PokeSharp.Game.Systems.Services;
 using PokeSharp.Engine.Common.Logging;
 using EcsQueries = PokeSharp.Engine.Systems.Queries.Queries;
 using PokeSharp.Engine.Systems.Management;
@@ -16,28 +17,27 @@ namespace PokeSharp.Game.Systems;
 ///     System that handles grid-based movement with smooth interpolation.
 ///     Implements Pokemon-style tile-by-tile movement and updates animations based on movement state.
 ///     Also handles collision checking and movement validation.
-///     Uses parallel execution for improved multi-core performance.
+///     Optimized for Pokemon-style games with <50 moving entities.
 /// </summary>
-public class MovementSystem : ParallelSystemBase, IUpdateSystem
+public class MovementSystem : SystemBase, IUpdateSystem
 {
     // Cache for entities to remove (reused across frames to avoid allocation)
     private readonly List<Entity> _entitiesToRemove = new(32);
     private readonly ILogger<MovementSystem>? _logger;
 
     // Cache for tile sizes per map (reduces redundant queries)
-    // Thread-safe for parallel query execution
-    private readonly ConcurrentDictionary<int, int> _tileSizeCache = new();
+    private readonly Dictionary<int, int> _tileSizeCache = new();
 
-    private readonly ISpatialQuery _spatialQuery;
+    private readonly ICollisionService _collisionService;
 
     /// <summary>
-    ///     Creates a new MovementSystem with required spatial query interface and optional logger.
+    ///     Creates a new MovementSystem with required collision service and optional logger.
     /// </summary>
-    /// <param name="spatialQuery">Spatial query service for collision detection (required).</param>
+    /// <param name="collisionService">Collision service for movement validation (required).</param>
     /// <param name="logger">Optional logger for system diagnostics.</param>
-    public MovementSystem(ISpatialQuery spatialQuery, ILogger<MovementSystem>? logger = null)
+    public MovementSystem(ICollisionService collisionService, ILogger<MovementSystem>? logger = null)
     {
-        _spatialQuery = spatialQuery ?? throw new ArgumentNullException(nameof(spatialQuery));
+        _collisionService = collisionService ?? throw new ArgumentNullException(nameof(collisionService));
         _logger = logger;
     }
 
@@ -55,18 +55,18 @@ public class MovementSystem : ParallelSystemBase, IUpdateSystem
         // Process movement requests first (before updating existing movements)
         ProcessMovementRequests(world);
 
-        // Process entities WITH animation (parallel execution for multi-core speedup)
-        ParallelQuery<Position, GridMovement, Animation>(
-            EcsQueries.MovementWithAnimation,
+        // Process entities WITH animation (sequential - optimal for <50 entities)
+        world.Query(
+            in EcsQueries.MovementWithAnimation,
             (Entity entity, ref Position position, ref GridMovement movement, ref Animation animation) =>
             {
                 ProcessMovementWithAnimation(ref position, ref movement, ref animation, deltaTime);
             }
         );
 
-        // Process entities WITHOUT animation (parallel execution for multi-core speedup)
-        ParallelQuery<Position, GridMovement>(
-            EcsQueries.MovementWithoutAnimation,
+        // Process entities WITHOUT animation (sequential - optimal for <50 entities)
+        world.Query(
+            in EcsQueries.MovementWithoutAnimation,
             (Entity entity, ref Position position, ref GridMovement movement) =>
             {
                 ProcessMovementNoAnimation(ref position, ref movement, deltaTime);
@@ -263,12 +263,18 @@ public class MovementSystem : ParallelSystemBase, IUpdateSystem
             return; // Outside map bounds - block movement
         }
 
+        // Get entity's elevation for collision checking (used throughout this method)
+        var entityElevation = Elevation.Default;
+        if (world.Has<Elevation>(entity))
+        {
+            entityElevation = world.Get<Elevation>(entity).Value;
+        }
+
         // Check if target tile is a Pokemon ledge
-        if (CollisionSystem.IsLedge(_spatialQuery, position.MapId, targetX, targetY))
+        if (_collisionService.IsLedge(position.MapId, targetX, targetY))
         {
             // Get the allowed jump direction for this ledge
-            var allowedJumpDir = CollisionSystem.GetLedgeJumpDirection(
-                _spatialQuery,
+            var allowedJumpDir = _collisionService.GetLedgeJumpDirection(
                 position.MapId,
                 targetX,
                 targetY
@@ -306,12 +312,12 @@ public class MovementSystem : ParallelSystemBase, IUpdateSystem
 
                 // Check if landing position is valid (not blocked)
                 if (
-                    !CollisionSystem.IsPositionWalkable(
-                        _spatialQuery,
+                    !_collisionService.IsPositionWalkable(
                         position.MapId,
                         jumpLandX,
                         jumpLandY,
-                        Direction.None
+                        Direction.None,
+                        entityElevation
                     )
                 )
                 {
@@ -339,12 +345,12 @@ public class MovementSystem : ParallelSystemBase, IUpdateSystem
 
         // Check collision with directional blocking (for Pokemon ledges)
         if (
-            !CollisionSystem.IsPositionWalkable(
-                _spatialQuery,
+            !_collisionService.IsPositionWalkable(
                 position.MapId,
                 targetX,
                 targetY,
-                direction
+                direction,
+                entityElevation
             )
         )
         {
@@ -368,28 +374,30 @@ public class MovementSystem : ParallelSystemBase, IUpdateSystem
 
     /// <summary>
     ///     Gets the tile size for a specific map from MapInfo component.
-    ///     Uses thread-safe caching to minimize redundant queries.
+    ///     Uses caching to minimize redundant queries.
     /// </summary>
     /// <param name="world">The ECS world.</param>
     /// <param name="mapId">The map identifier.</param>
     /// <returns>Tile size in pixels (default: 16).</returns>
     private int GetTileSize(World world, int mapId)
     {
-        // Thread-safe cache lookup with lazy initialization
-        return _tileSizeCache.GetOrAdd(mapId, id =>
-        {
-            // Query MapInfo for tile size using centralized query
-            var tileSize = 16; // default
-            world.Query(
-                in EcsQueries.MapInfo,
-                (ref MapInfo mapInfo) =>
-                {
-                    if (mapInfo.MapId == id)
-                        tileSize = mapInfo.TileSize;
-                }
-            );
-            return tileSize;
-        });
+        // Cache lookup with lazy initialization
+        if (_tileSizeCache.TryGetValue(mapId, out var cachedSize))
+            return cachedSize;
+
+        // Query MapInfo for tile size using centralized query
+        var tileSize = 16; // default
+        world.Query(
+            in EcsQueries.MapInfo,
+            (ref MapInfo mapInfo) =>
+            {
+                if (mapInfo.MapId == mapId)
+                    tileSize = mapInfo.TileSize;
+            }
+        );
+
+        _tileSizeCache[mapId] = tileSize;
+        return tileSize;
     }
 
     /// <summary>
@@ -422,38 +430,4 @@ public class MovementSystem : ParallelSystemBase, IUpdateSystem
         return withinBounds ?? true;
     }
 
-    /// <summary>
-    ///     Specifies which components this system reads (for parallel execution analysis).
-    /// </summary>
-    public override List<Type> GetReadComponents()
-    {
-        return new List<Type>
-        {
-            typeof(Position),
-            typeof(GridMovement),
-            typeof(Animation),
-            typeof(MovementRequest),
-            typeof(MapInfo)
-        };
-    }
-
-    /// <summary>
-    ///     Specifies which components this system writes (for parallel execution analysis).
-    /// </summary>
-    public override List<Type> GetWriteComponents()
-    {
-        return new List<Type>
-        {
-            typeof(Position),
-            typeof(GridMovement),
-            typeof(Animation),
-            typeof(MovementRequest)
-        };
-    }
-
-    /// <summary>
-    ///     This system allows parallel execution with other systems that don't conflict.
-    ///     However, it has dependencies on SpatialHashSystem for collision detection.
-    /// </summary>
-    public override bool AllowsParallelExecution => true;
 }

@@ -25,7 +25,7 @@ namespace PokeSharp.Game.Scripting.Systems;
 ///     Scripts are cached as singletons in TypeRegistry and executed with per-tick
 ///     ScriptContext instances to prevent state corruption.
 /// </remarks>
-public class NPCBehaviorSystem : ParallelSystemBase, IUpdateSystem
+public class NPCBehaviorSystem : SystemBase, IUpdateSystem
 {
     private readonly PerformanceConfiguration _config;
     private readonly ILogger<NPCBehaviorSystem> _logger;
@@ -60,23 +60,6 @@ public class NPCBehaviorSystem : ParallelSystemBase, IUpdateSystem
     /// </summary>
     public override int Priority => SystemPriority.NpcBehavior;
 
-    /// <summary>
-    /// Components this system reads to execute NPC behaviors.
-    /// </summary>
-    public override List<Type> GetReadComponents() => new()
-    {
-        typeof(Components.NPCs.Npc),
-        typeof(Components.Movement.Position)
-    };
-
-    /// <summary>
-    /// Components this system writes (behaviors modify state and may queue movement).
-    /// </summary>
-    public override List<Type> GetWriteComponents() => new()
-    {
-        typeof(Components.NPCs.Behavior),
-        typeof(Components.Movement.MovementRequest)
-    };
 
     /// <summary>
     ///     Set the behavior registry for loading behavior scripts.

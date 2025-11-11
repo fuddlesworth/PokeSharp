@@ -19,11 +19,6 @@ public struct TileSprite
     public int TileGid { get; set; }
 
     /// <summary>
-    ///     Gets or sets the rendering layer for this tile.
-    /// </summary>
-    public TileLayer Layer { get; set; }
-
-    /// <summary>
     ///     Gets or sets the source rectangle in the tileset texture.
     /// </summary>
     public Rectangle SourceRect { get; set; }
@@ -46,10 +41,13 @@ public struct TileSprite
     /// <summary>
     ///     Initializes a new instance of the TileSprite struct.
     /// </summary>
+    /// <remarks>
+    /// Elevation is now a separate component, not part of TileSprite.
+    /// Add an Elevation component to the entity for render order and collision.
+    /// </remarks>
     public TileSprite(
         string tilesetId,
         int tileGid,
-        TileLayer layer,
         Rectangle sourceRect,
         bool flipHorizontally = false,
         bool flipVertically = false,
@@ -58,7 +56,6 @@ public struct TileSprite
     {
         TilesetId = tilesetId;
         TileGid = tileGid;
-        Layer = layer;
         SourceRect = sourceRect;
         FlipHorizontally = flipHorizontally;
         FlipVertically = flipVertically;

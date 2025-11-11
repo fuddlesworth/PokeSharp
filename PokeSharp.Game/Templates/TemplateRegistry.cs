@@ -71,7 +71,8 @@ public static class TemplateRegistry
             },
         };
         baseTile.WithComponent(new TilePosition(0, 0)); // Will be overridden
-        baseTile.WithComponent(new TileSprite("default", 0, TileLayer.Ground, Rectangle.Empty)); // Will be overridden
+        baseTile.WithComponent(new TileSprite("default", 0, Rectangle.Empty)); // Will be overridden
+        baseTile.WithComponent(new Elevation(Elevation.Default)); // Will be overridden
         cache.Register(baseTile);
         logger?.LogDebug("Registered base tile template: {TemplateId}", baseTile.TemplateId);
 
@@ -90,8 +91,9 @@ public static class TemplateRegistry
             },
         };
         // No additional components - just a walkable tile
-        // We need at least one component for validation, so override sprite layer
-        groundTile.WithComponent(new TileSprite("default", 0, TileLayer.Ground, Rectangle.Empty));
+        // We need at least one component for validation, so override sprite
+        groundTile.WithComponent(new TileSprite("default", 0, Rectangle.Empty));
+        groundTile.WithComponent(new Elevation(Elevation.Ground)); // Ground level
         cache.Register(groundTile);
         logger?.LogDebug(
             "Registered template: {TemplateId} (inherits from {BaseId})",
@@ -114,7 +116,8 @@ public static class TemplateRegistry
             },
         };
         wallTile.WithComponent(new Collision(true)); // Solid
-        wallTile.WithComponent(new TileSprite("default", 0, TileLayer.Object, Rectangle.Empty)); // Object layer
+        wallTile.WithComponent(new TileSprite("default", 0, Rectangle.Empty));
+        wallTile.WithComponent(new Elevation(Elevation.Default)); // Standard elevation
         cache.Register(wallTile);
         logger?.LogDebug(
             "Registered template: {TemplateId} (inherits from {BaseId})",
@@ -204,6 +207,7 @@ public static class TemplateRegistry
         template.WithComponent(new Wallet(3000)); // Default starting money
         template.WithComponent(new Position(0, 0)); // Default position, overridden at spawn
         template.WithComponent(new Sprite("player-spritesheet") { Tint = Color.White, Scale = 1f });
+        template.WithComponent(new Elevation(Elevation.Default)); // Standard elevation (3) - matches Pokemon Emerald
         template.WithComponent(new GridMovement(4.0f)); // 4 tiles per second
         template.WithComponent(Direction.Down); // Face down by default
         template.WithComponent(new Animation("idle_down")); // Start idle
@@ -241,6 +245,7 @@ public static class TemplateRegistry
         };
         baseNpc.WithComponent(new Position(0, 0)); // Default position
         baseNpc.WithComponent(new Sprite("npc-spritesheet") { Tint = Color.White, Scale = 1f });
+        baseNpc.WithComponent(new Elevation(Elevation.Default)); // Standard elevation (3) - matches Pokemon Emerald
         baseNpc.WithComponent(Direction.Down); // Face down by default
         baseNpc.WithComponent(new Animation("idle_down"));
         baseNpc.WithComponent(new Collision(true)); // NPCs block movement

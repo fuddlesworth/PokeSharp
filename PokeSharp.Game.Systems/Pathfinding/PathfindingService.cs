@@ -1,5 +1,7 @@
+using Arch.Core.Extensions;
 using Microsoft.Xna.Framework;
 using PokeSharp.Game.Components.Movement;
+using PokeSharp.Game.Components.Tiles;
 using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Engine.Core.Systems;
 
@@ -255,15 +257,23 @@ public class PathfindingService
     /// </summary>
     private bool IsWalkable(Point position, int mapId, ISpatialQuery spatialQuery)
     {
-        // Use the same collision detection as MovementSystem
-        // Check all four directions to be thorough
-        return CollisionSystem.IsPositionWalkable(
-            spatialQuery,
-            mapId,
-            position.X,
-            position.Y,
-            Direction.None
-        );
+        // Use the same collision detection as CollisionService
+        // Check if position is walkable by querying spatial hash for collision components
+        var entities = spatialQuery.GetEntitiesAt(mapId, position.X, position.Y);
+
+        foreach (var entity in entities)
+        {
+            if (entity.Has<Collision>())
+            {
+                ref var collision = ref entity.Get<Collision>();
+                if (collision.IsSolid)
+                {
+                    return false; // Blocked by solid collision
+                }
+            }
+        }
+
+        return true; // Walkable
     }
 
     /// <summary>

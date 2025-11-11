@@ -84,9 +84,15 @@ public sealed class EntityFactoryService(
         }
         catch (KeyNotFoundException ex)
         {
-            // Pool doesn't exist, fall back to direct creation
-            _logger.LogWarning("Pool not found for template '{TemplateId}': {Error}. Falling back to direct creation.", templateId, ex.Message);
+            // Pool doesn't exist - this indicates a configuration error
+            _logger.LogError("Pool not found for template '{TemplateId}': {Error}. This may cause memory leaks. Register pool or update template configuration.", templateId, ex.Message);
             entity = world.Create();
+        }
+        catch (InvalidOperationException ex) when (ex.Message.Contains("exhausted"))
+        {
+            // Pool exhausted - this indicates insufficient pool size
+            _logger.LogError("Pool exhausted for template '{TemplateId}': {Error}. Increase maxSize or release entities more aggressively.", templateId, ex.Message);
+            throw; // Don't fall back - fail fast to reveal the problem
         }
 
         // Add each component using reflection (Arch requires compile-time types)
@@ -475,10 +481,17 @@ public sealed class EntityFactoryService(
                 var poolName = GetPoolNameFromTemplateId(templateId);
                 entity = _poolManager.Acquire(poolName);
             }
-            catch (KeyNotFoundException)
+            catch (KeyNotFoundException ex)
             {
-                // Pool doesn't exist, fall back to direct creation
+                // Pool doesn't exist - this indicates a configuration error
+                _logger.LogError("Pool not found for template '{TemplateId}' in batch spawn: {Error}. This may cause memory leaks.", templateId, ex.Message);
                 entity = world.Create();
+            }
+            catch (InvalidOperationException ex) when (ex.Message.Contains("exhausted"))
+            {
+                // Pool exhausted during batch spawn - fail fast
+                _logger.LogError("Pool exhausted during batch spawn for template '{TemplateId}': {Error}", templateId, ex.Message);
+                throw;
             }
 
             // Add each component using cached reflection

@@ -6,6 +6,7 @@ using PokeSharp.Game.Scripting.Services;
 using PokeSharp.Game.Scripting.Api;
 using PokeSharp.Game.Systems.Services;
 using PokeSharp.Engine.Systems.Management;
+using PokeSharp.Engine.Systems.Pooling;
 using PokeSharp.Game.Services;
 using PokeSharp.Game.Diagnostics;
 using PokeSharp.Game.Initialization;
@@ -26,6 +27,7 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
     private readonly ILoggingProvider _logging;
     private readonly IInitializationProvider _initialization;
     private readonly IGameTimeService _gameTime;
+    private readonly EntityPoolManager _poolManager;
     private readonly GraphicsDeviceManager _graphics;
 
     // Services that depend on GraphicsDevice (created in Initialize)
@@ -46,7 +48,8 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
         IGameServicesProvider gameServices,
         IInitializationProvider initialization,
         IScriptingApiProvider apiProvider,
-        IGameTimeService gameTime
+        IGameTimeService gameTime,
+        EntityPoolManager poolManager
     )
     {
         _logging = logging ?? throw new ArgumentNullException(nameof(logging));
@@ -56,6 +59,7 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
         _initialization = initialization ?? throw new ArgumentNullException(nameof(initialization));
         _apiProvider = apiProvider ?? throw new ArgumentNullException(nameof(apiProvider));
         _gameTime = gameTime ?? throw new ArgumentNullException(nameof(gameTime));
+        _poolManager = poolManager ?? throw new ArgumentNullException(nameof(poolManager));
 
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
@@ -101,7 +105,7 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
         var propertyMapperRegistry = PropertyMapperServiceExtensions.CreatePropertyMapperRegistry(mapperRegistryLogger);
 
         var mapLoaderLogger = _logging.CreateLogger<MapLoader>();
-        var mapLoader = new MapLoader(assetManager, propertyMapperRegistry, entityFactory: _gameServices.EntityFactory, logger: mapLoaderLogger);
+        var mapLoader = new MapLoader(assetManager, _systemManager, propertyMapperRegistry, entityFactory: _gameServices.EntityFactory, logger: mapLoaderLogger);
 
         // Create initializers
         var gameInitializerLogger = _logging.CreateLogger<GameInitializer>();
@@ -112,7 +116,8 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
             _systemManager,
             assetManager,
             _gameServices.EntityFactory,
-            mapLoader
+            mapLoader,
+            _poolManager
         );
 
         // Initialize core game systems

@@ -4,11 +4,11 @@ using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Core.Events;
 using PokeSharp.Engine.Systems.Factories;
 using PokeSharp.Game.Data.PropertyMapping;
-using PokeSharp.Engine.Systems.Parallel;
 using PokeSharp.Engine.Systems.Pooling;
 using PokeSharp.Game.Scripting.Services;
 using PokeSharp.Game.Scripting.Api;
 using PokeSharp.Game.Systems.Services;
+using PokeSharp.Game.Systems;
 using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Engine.Core.Templates;
 using PokeSharp.Engine.Core.Types;
@@ -38,20 +38,17 @@ public static class ServiceCollectionExtensions
             return world;
         });
 
-        // System Manager - Using ParallelSystemManager for inter-system parallelism
+        // System Manager - Sequential execution (optimal for <500 entities per system)
+        // Parallel overhead (1-2ms) exceeds work time (0.09ms) for Pokemon-style games
         services.AddSingleton<SystemManager>(sp =>
         {
-            var world = sp.GetRequiredService<World>();
-            var logger = sp.GetService<ILogger<ParallelSystemManager>>();
-            return new ParallelSystemManager(world, enableParallel: true, logger);
+            var logger = sp.GetService<ILogger<SystemManager>>();
+            return new SystemManager(logger);
         });
 
-        // Component Pool Manager (Phase 4B) - For temporary component operations
-        services.AddSingleton(sp =>
-        {
-            var logger = sp.GetService<ILogger<ComponentPoolManager>>();
-            return new ComponentPoolManager(logger, enableStatistics: true);
-        });
+        // Note: ComponentPoolManager registration removed - it was never used.
+        // ECS systems work directly with component references via queries.
+        // If temporary component copies are needed in the future, add it back.
 
         // Entity Pool Manager (Phase 4A) - For entity recycling and pooling
         services.AddSingleton(sp =>
@@ -93,6 +90,16 @@ public static class ServiceCollectionExtensions
 
         // Game Time Service
         services.AddSingleton<IGameTimeService, GameTimeService>();
+
+        // Collision Service - provides on-demand collision checking (not a system)
+        services.AddSingleton<ICollisionService>(sp =>
+        {
+            var systemManager = sp.GetRequiredService<SystemManager>();
+            // SpatialHashSystem is registered as a system and implements ISpatialQuery
+            var spatialQuery = systemManager.GetSystem<SpatialHashSystem>();
+            var logger = sp.GetService<ILogger<CollisionService>>();
+            return new CollisionService(spatialQuery, logger);
+        });
 
         // Scripting API Services
         services.AddSingleton<PlayerApiService>();

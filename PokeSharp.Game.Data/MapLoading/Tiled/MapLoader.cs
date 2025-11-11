@@ -9,6 +9,7 @@ using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Components.NPCs;
 using PokeSharp.Game.Components.Rendering;
 using PokeSharp.Game.Components.Tiles;
+using PokeSharp.Game.Systems;
 using PokeSharp.Engine.Systems.Factories;
 using PokeSharp.Engine.Common.Logging;
 using PokeSharp.Game.Data.PropertyMapping;
@@ -25,6 +26,7 @@ namespace PokeSharp.Game.Data.MapLoading.Tiled;
 /// </summary>
 public class MapLoader(
     IAssetProvider assetManager,
+    SystemManager systemManager,
     PropertyMapperRegistry? propertyMapperRegistry = null,
     IEntityFactoryService? entityFactory = null,
     ILogger<MapLoader>? logger = null
@@ -38,6 +40,9 @@ public class MapLoader(
 
     private readonly IAssetProvider _assetManager =
         assetManager ?? throw new ArgumentNullException(nameof(assetManager));
+
+    private readonly SystemManager _systemManager =
+        systemManager ?? throw new ArgumentNullException(nameof(systemManager));
 
     private readonly PropertyMapperRegistry? _propertyMapperRegistry = propertyMapperRegistry;
     private readonly IEntityFactoryService? _entityFactory = entityFactory;
@@ -111,6 +116,14 @@ public class MapLoader(
             tilesetId
         );
 
+        // Invalidate spatial hash to rebuild with new tiles
+        var spatialHashSystem = _systemManager.GetSystem<SpatialHashSystem>();
+        if (spatialHashSystem != null)
+        {
+            spatialHashSystem.InvalidateStaticTiles();
+            _logger?.LogDebug("Spatial hash invalidated for map '{MapName}'", mapName);
+        }
+
         return mapInfoEntity;
     }
 
@@ -150,8 +163,8 @@ public class MapLoader(
             if (layer?.Data == null)
                 continue;
 
-            // Determine TileLayer from layer name or index
-            var tileLayer = DetermineTileLayer(layer.Name, layerIndex);
+            // Determine elevation from layer name, custom properties, or index
+            var elevation = DetermineElevation(layer, layerIndex);
 
             // Get layer offset for parallax scrolling (default to 0,0 if not set)
             var layerOffset = (layer.OffsetX != 0 || layer.OffsetY != 0)
@@ -164,7 +177,7 @@ public class MapLoader(
                 mapId,
                 tileset,
                 layer,
-                tileLayer,
+                elevation,
                 layerOffset
             );
         }
@@ -181,7 +194,7 @@ public class MapLoader(
         int mapId,
         TmxTileset tileset,
         TmxLayer layer,
-        TileLayer tileLayer,
+        byte elevation,
         LayerOffset? layerOffset
     )
     {
@@ -234,7 +247,6 @@ public class MapLoader(
                 return CreateTileSprite(
                     data.TileGid,
                     tileset,
-                    tileLayer,
                     data.FlipH,
                     data.FlipV,
                     data.FlipD
@@ -253,6 +265,15 @@ public class MapLoader(
             Dictionary<string, object>? props = null;
             if (localTileId >= 0)
                 tileset.TileProperties.TryGetValue(localTileId, out props);
+
+            // Add Elevation component (Pokemon Emerald-style elevation system)
+            // Check if tile has custom elevation property, otherwise use layer elevation
+            var tileElevation = elevation;
+            if (props != null && props.TryGetValue("elevation", out var elevProp))
+            {
+                tileElevation = Convert.ToByte(elevProp);
+            }
+            world.Add(entity, new Elevation(tileElevation));
 
             // Add LayerOffset if needed
             if (layerOffset.HasValue)
@@ -398,11 +419,26 @@ public class MapLoader(
                 .FrameTileIds.Select(id => tileset.FirstGid + id)
                 .ToArray();
 
-            // Create AnimatedTile component
+            // PERFORMANCE OPTIMIZATION: Precalculate ALL source rectangles at load time
+            // This eliminates expensive runtime calculations, dictionary lookups, and lock contention
+            var frameSourceRects = globalFrameIds
+                .Select(frameGid => CalculateTileSourceRect(
+                    frameGid,
+                    firstGid,
+                    tileWidth,
+                    tileHeight,
+                    tilesPerRow,
+                    tileSpacing,
+                    tileMargin
+                ))
+                .ToArray();
+
+            // Create AnimatedTile component with precalculated source rects
             var animatedTile = new AnimatedTile(
                 globalTileId,
                 globalFrameIds,
                 animation.FrameDurations,
+                frameSourceRects, // CRITICAL: Precalculated for zero runtime overhead
                 firstGid,
                 tilesPerRow,
                 tileWidth,
@@ -535,43 +571,44 @@ public class MapLoader(
     }
 
     /// <summary>
-    ///     Determines the TileLayer enum value from a layer name.
-    ///     Supports backward compatibility with standard "Ground", "Objects", "Overhead" names,
-    ///     while also working with any layer names by falling back to layer index.
+    /// Determines elevation from layer name, custom properties, or index.
+    /// Follows Pokemon Emerald's elevation model:
+    /// - Ground layer (0) = elevation 0 (water, pits)
+    /// - Standard layer (1) = elevation 3 (most tiles)
+    /// - Overhead layer (2+) = elevation 9 (tall structures)
     /// </summary>
-    /// <param name="layerName">The name of the layer from Tiled.</param>
-    /// <param name="layerIndex">The index of the layer (0-based).</param>
-    /// <returns>The appropriate TileLayer enum value.</returns>
-    private TileLayer DetermineTileLayer(string layerName, int layerIndex)
+    /// <remarks>
+    /// Layers can override this by setting a custom "elevation" property in Tiled.
+    /// </remarks>
+    private byte DetermineElevation(TmxLayer layer, int layerIndex)
     {
         // Try to determine from layer name (case-insensitive)
-        if (!string.IsNullOrEmpty(layerName))
+        if (!string.IsNullOrEmpty(layer.Name))
         {
-            return layerName.ToLowerInvariant() switch
-            {
-                "ground" => TileLayer.Ground,
-                "objects" => TileLayer.Object,
-                "overhead" => TileLayer.Overhead,
-                // For any other names, use index-based fallback
-                _ => DetermineFromIndex(layerIndex)
-            };
+            var normalized = layer.Name.ToLowerInvariant();
+            if (normalized.Contains("ground") || normalized.Contains("water"))
+                return Elevation.Ground; // 0
+            if (normalized.Contains("overhead") || normalized.Contains("roof"))
+                return Elevation.Overhead; // 9
+            if (normalized.Contains("bridge"))
+                return Elevation.Bridge; // 6
         }
 
-        // Fallback to index
-        return DetermineFromIndex(layerIndex);
+        // Fallback to index-based elevation
+        return DetermineElevationFromIndex(layerIndex);
     }
 
     /// <summary>
-    ///     Determines TileLayer from index with wraparound for 4+ layers.
-    ///     Treats index 0 as Ground, 1 as Objects, 2+ as Overhead.
+    /// Determines elevation from layer index.
+    /// Index 0 = Ground (0), Index 1 = Standard (3), Index 2+ = Overhead (9).
     /// </summary>
-    private static TileLayer DetermineFromIndex(int layerIndex)
+    private static byte DetermineElevationFromIndex(int layerIndex)
     {
         return layerIndex switch
         {
-            0 => TileLayer.Ground,
-            1 => TileLayer.Object,
-            _ => TileLayer.Overhead // 2+ all map to Overhead
+            0 => Elevation.Ground, // 0
+            1 => Elevation.Default, // 3
+            _ => Elevation.Overhead // 9 (2+)
         };
     }
 
@@ -651,7 +688,7 @@ public class MapLoader(
         int mapId,
         int tileGid,
         TmxTileset tileset,
-        TileLayer layer,
+        byte elevation,
         LayerOffset? layerOffset,
         bool flipH = false,
         bool flipV = false,
@@ -666,7 +703,7 @@ public class MapLoader(
 
         // Create base components
         var position = new TilePosition(x, y, mapId);
-        var sprite = CreateTileSprite(tileGid, tileset, layer, flipH, flipV, flipD);
+        var sprite = CreateTileSprite(tileGid, tileset, flipH, flipV, flipD);
 
         // Determine which template to use (if entity factory is available)
         string? templateId = null;
@@ -692,7 +729,6 @@ public class MapLoader(
     private TileSprite CreateTileSprite(
         int tileGid,
         TmxTileset tileset,
-        TileLayer layer,
         bool flipH,
         bool flipV,
         bool flipD
@@ -701,7 +737,6 @@ public class MapLoader(
         return new TileSprite(
             tileset.Name ?? "default",
             tileGid,
-            layer,
             CalculateSourceRect(tileGid, tileset),
             flipH,
             flipV,
@@ -941,6 +976,13 @@ public class MapLoader(
                         // Override position with map coordinates
                         builder.OverrideComponent(new Position(tileX, tileY, mapId, tileHeight));
 
+                        // Apply custom elevation if specified (Pokemon Emerald style)
+                        if (obj.Properties.TryGetValue("elevation", out var elevProp))
+                        {
+                            var elevValue = Convert.ToByte(elevProp);
+                            builder.OverrideComponent(new Elevation(elevValue));
+                        }
+
                         // Apply any custom properties from the object
                         if (obj.Properties.TryGetValue("direction", out var dirProp))
                         {
@@ -1049,6 +1091,38 @@ public class MapLoader(
         }
 
         return created;
+    }
+
+    /// <summary>
+    ///     Calculates tile source rectangle from raw parameters (used for animation frame precalculation).
+    ///     This is a performance-critical method called once per tile at load time.
+    /// </summary>
+    private static Rectangle CalculateTileSourceRect(
+        int tileGid,
+        int firstGid,
+        int tileWidth,
+        int tileHeight,
+        int tilesPerRow,
+        int spacing,
+        int margin
+    )
+    {
+        var localId = tileGid - firstGid;
+        if (localId < 0)
+            throw new InvalidOperationException(
+                $"Tile GID {tileGid} is not part of tileset starting at {firstGid}."
+            );
+
+        spacing = Math.Max(0, spacing);
+        margin = Math.Max(0, margin);
+
+        var tileX = localId % tilesPerRow;
+        var tileY = localId / tilesPerRow;
+
+        var sourceX = margin + tileX * (tileWidth + spacing);
+        var sourceY = margin + tileY * (tileHeight + spacing);
+
+        return new Rectangle(sourceX, sourceY, tileWidth, tileHeight);
     }
 
     private Rectangle CalculateSourceRect(int tileGid, TmxTileset tileset)

@@ -14,7 +14,7 @@ namespace PokeSharp.Game.Systems;
 ///     Priority: 980 (very late update, before relationship system at 990).
 ///     Runs at the end of each frame to monitor pool status.
 /// </remarks>
-public class PoolCleanupSystem : ParallelSystemBase, IUpdateSystem
+public class PoolCleanupSystem : SystemBase, IUpdateSystem
 {
     private readonly EntityPoolManager _poolManager;
     private readonly ILogger<PoolCleanupSystem>? _logger;
@@ -38,15 +38,6 @@ public class PoolCleanupSystem : ParallelSystemBase, IUpdateSystem
     /// </summary>
     public override int Priority => SystemPriority.PoolCleanup;
 
-    /// <summary>
-    /// This system doesn't read any components (monitors pool statistics only).
-    /// </summary>
-    public override List<Type> GetReadComponents() => new();
-
-    /// <summary>
-    /// This system doesn't write to any components (logging/monitoring only).
-    /// </summary>
-    public override List<Type> GetWriteComponents() => new();
 
     /// <summary>
     ///     Creates a new pool cleanup system.

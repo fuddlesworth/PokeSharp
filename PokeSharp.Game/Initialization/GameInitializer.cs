@@ -1,9 +1,9 @@
 using Arch.Core;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework.Graphics;
 using PokeSharp.Engine.Systems.Factories;
 using PokeSharp.Engine.Common.Logging;
-using PokeSharp.Engine.Systems.Parallel;
 using PokeSharp.Engine.Systems.Pooling;
 using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Game.Diagnostics;
@@ -13,6 +13,7 @@ using PokeSharp.Engine.Rendering.Assets;
 using PokeSharp.Game.Data.MapLoading.Tiled;
 using PokeSharp.Engine.Rendering.Systems;
 using PokeSharp.Game.Systems;
+using PokeSharp.Game.Systems.Services;
 
 namespace PokeSharp.Game.Initialization;
 
@@ -26,7 +27,8 @@ public class GameInitializer(
     SystemManager systemManager,
     AssetManager assetManager,
     IEntityFactoryService entityFactory,
-    MapLoader mapLoader
+    MapLoader mapLoader,
+    EntityPoolManager poolManager
 )
 {
     private readonly AssetManager _assetManager = assetManager;
@@ -36,8 +38,7 @@ public class GameInitializer(
     private readonly MapLoader _mapLoader = mapLoader;
     private readonly SystemManager _systemManager = systemManager;
     private readonly World _world = world;
-    private EntityPoolManager _poolManager = null!;
-    private ComponentPoolManager _componentPoolManager = null!;
+    private readonly EntityPoolManager _poolManager = poolManager;
 
     /// <summary>
     ///     Gets the animation library.
@@ -52,17 +53,12 @@ public class GameInitializer(
     /// <summary>
     ///     Gets the render system.
     /// </summary>
-    public ZOrderRenderSystem RenderSystem { get; private set; } = null!;
+    public ElevationRenderSystem RenderSystem { get; private set; } = null!;
 
     /// <summary>
     ///     Gets the entity pool manager.
     /// </summary>
     public EntityPoolManager PoolManager => _poolManager;
-
-    /// <summary>
-    ///     Gets the component pool manager for temporary component operations.
-    /// </summary>
-    public ComponentPoolManager ComponentPoolManager => _componentPoolManager;
 
     /// <summary>
     ///     Initializes all game systems and infrastructure.
@@ -92,8 +88,8 @@ public class GameInitializer(
         AnimationLibrary = new AnimationLibrary();
         _logger.LogComponentInitialized("AnimationLibrary", AnimationLibrary.Count);
 
-        // Initialize entity pooling system
-        _poolManager = new EntityPoolManager(_world);
+        // CRITICAL FIX: EntityPoolManager is now injected via constructor (same instance as EntityFactoryService)
+        // This ensures pools registered here are available to EntityFactoryService
 
         // Register and warmup pools for common entity types
         _poolManager.RegisterPool("player", initialSize: 1, maxSize: 10, warmup: true);
@@ -107,14 +103,9 @@ public class GameInitializer(
             2000
         );
 
-        // Initialize component pooling system (Phase 4B)
-        // Pools frequently-used components for temporary operations (copying, calculations)
-        var componentPoolLogger = _loggerFactory.CreateLogger<ComponentPoolManager>();
-        _componentPoolManager = new ComponentPoolManager(componentPoolLogger, enableStatistics: true);
-
-        _logger.LogInformation(
-            "Component pool manager initialized for temporary component operations (Position, Velocity, Sprite, Animation, GridMovement)"
-        );
+        // Note: ComponentPoolManager was removed as it was never used.
+        // ECS systems work directly with component references, not temporary copies.
+        // If needed in the future, add it back with actual usage in systems.
 
         // Create and register systems in priority order
 
@@ -134,15 +125,23 @@ public class GameInitializer(
         var inputSystem = new InputSystem(5, 0.2f, inputLogger);
         _systemManager.RegisterUpdateSystem(inputSystem);
 
+        // Register CollisionService (not a system, but a service used by MovementSystem)
+        var collisionServiceLogger = _loggerFactory.CreateLogger<CollisionService>();
+        var collisionService = new CollisionService(SpatialHashSystem, collisionServiceLogger);
+
         // Register MovementSystem (Priority: 100, handles movement and collision checking)
+        // Note: MovementSystem now uses ICollisionService, not ISpatialQuery directly
         var movementLogger = _loggerFactory.CreateLogger<MovementSystem>();
-        var movementSystem = new MovementSystem(SpatialHashSystem, movementLogger);
+        var movementSystem = new MovementSystem(collisionService, movementLogger);
         _systemManager.RegisterUpdateSystem(movementSystem);
 
-        // Register CollisionSystem (Priority: 200, provides tile collision checking)
-        var collisionLogger = _loggerFactory.CreateLogger<CollisionSystem>();
-        var collisionSystem = new CollisionSystem(SpatialHashSystem, collisionLogger);
-        _systemManager.RegisterUpdateSystem(collisionSystem);
+        // CollisionSystem removed - converted to CollisionService (registered in DI container)
+        // Collision checking is now a service, not a system (no per-frame Update() needed)
+
+        // Register PathfindingSystem (Priority: 300, processes MovementRoute waypoints with A* pathfinding)
+        var pathfindingLogger = _loggerFactory.CreateLogger<PathfindingSystem>();
+        var pathfindingSystem = new PathfindingSystem(SpatialHashSystem, pathfindingLogger);
+        _systemManager.RegisterUpdateSystem(pathfindingSystem);
 
         // Register AnimationSystem (Priority: 800, after movement, before rendering)
         var animationLogger = _loggerFactory.CreateLogger<AnimationSystem>();
@@ -159,51 +158,21 @@ public class GameInitializer(
         // NOTE: NPCBehaviorSystem is registered separately in NPCBehaviorInitializer
         // It requires ScriptService and behavior registry to be set up first
 
+        // Register RelationshipSystem (Priority: 950, validates entity relationships and cleans up broken references)
+        var relationshipLogger = _loggerFactory.CreateLogger<RelationshipSystem>();
+        var relationshipSystem = new RelationshipSystem(relationshipLogger);
+        _systemManager.RegisterUpdateSystem(relationshipSystem);
+
         // === Render Systems (Rendering Only) ===
 
-        // Register ZOrderRenderSystem (Priority: 1000) - unified rendering with Z-order sorting
-        var renderLogger = _loggerFactory.CreateLogger<ZOrderRenderSystem>();
-        RenderSystem = new ZOrderRenderSystem(graphicsDevice, _assetManager, renderLogger);
+        // Register ElevationRenderSystem (Priority: 1000) - unified rendering with Z-order sorting
+        var renderLogger = _loggerFactory.CreateLogger<ElevationRenderSystem>();
+        RenderSystem = new ElevationRenderSystem(graphicsDevice, _assetManager, renderLogger);
         _systemManager.RegisterRenderSystem(RenderSystem);
 
         // Initialize all systems
         _systemManager.Initialize(_world);
 
-        // Build parallel execution plan for inter-system parallelism
-        if (_systemManager is ParallelSystemManager parallelManager)
-        {
-            parallelManager.RebuildExecutionPlan();
-            _logger.LogWorkflowStatus("Parallel execution plan ready");
-
-            // Log execution stages for debugging
-            LogExecutionStages(parallelManager);
-        }
-
         _logger.LogWorkflowStatus("Game initialization complete");
-    }
-
-    private void LogExecutionStages(ParallelSystemManager parallelManager)
-    {
-        var executionStages = parallelManager.ExecutionStages;
-        if (executionStages == null || executionStages.Count == 0)
-            return;
-
-        // Log each stage with structured formatting
-        for (int i = 0; i < executionStages.Count; i++)
-        {
-            var stage = executionStages[i];
-            var stageNumber = i + 1;
-
-            // Format the systems list with priorities
-            var systemsList = stage
-                .Select(s => $"{s.GetType().Name} (P:{s.Priority})")
-                .ToList();
-
-            _logger.LogWorkflowStatus(
-                $"Stage {stageNumber}",
-                ("parallel", stage.Count),
-                ("systems", string.Join(", ", systemsList))
-            );
-        }
     }
 }

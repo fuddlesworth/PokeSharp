@@ -20,7 +20,7 @@ public class MapInitializer(
     World world,
     MapLoader mapLoader,
     SpatialHashSystem spatialHashSystem,
-    ZOrderRenderSystem renderSystem
+    ElevationRenderSystem renderSystem
 )
 {
     /// <summary>

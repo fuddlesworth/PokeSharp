@@ -30,7 +30,7 @@ public class InputManager(ILogger<InputManager> logger)
     /// <param name="world">The ECS world.</param>
     /// <param name="deltaTime">Time elapsed since last update.</param>
     /// <param name="renderSystem">The render system for profiling control.</param>
-    public void ProcessInput(World world, float deltaTime, ZOrderRenderSystem? renderSystem = null)
+    public void ProcessInput(World world, float deltaTime, ElevationRenderSystem? renderSystem = null)
     {
         HandleZoomControls(world);
         HandleDebugControls(renderSystem);
@@ -99,7 +99,7 @@ public class InputManager(ILogger<InputManager> logger)
     ///     Handles debug controls for profiling and diagnostics.
     ///     P key: Toggle detailed rendering profiling
     /// </summary>
-    private void HandleDebugControls(ZOrderRenderSystem? renderSystem)
+    private void HandleDebugControls(ElevationRenderSystem? renderSystem)
     {
         var currentKeyboardState = Keyboard.GetState();
 

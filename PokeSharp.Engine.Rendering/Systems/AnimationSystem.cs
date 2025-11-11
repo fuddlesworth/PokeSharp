@@ -13,7 +13,7 @@ namespace PokeSharp.Engine.Rendering.Systems;
 ///     animation definitions and frame timing.
 ///     Executes at priority 800 (after movement, before rendering).
 /// </summary>
-public class AnimationSystem : ParallelSystemBase, IUpdateSystem
+public class AnimationSystem : SystemBase, IUpdateSystem
 {
     private readonly AnimationLibrary _animationLibrary;
     private readonly ILogger<AnimationSystem>? _logger;
@@ -47,11 +47,11 @@ public class AnimationSystem : ParallelSystemBase, IUpdateSystem
             EnsureInitialized();
             _frameCounter++;
 
-            // Query all entities with Animation + Sprite components in parallel
+            // Query all entities with Animation + Sprite components
             var query = QueryCache.Get<AnimationComponent, Sprite>();
 
-            ParallelQuery<AnimationComponent, Sprite>(
-                query,
+            world.Query(
+                in query,
                 (Entity entity, ref AnimationComponent animation, ref Sprite sprite) =>
                 {
                     UpdateAnimation(entity, ref animation, ref sprite, deltaTime);
@@ -213,16 +213,4 @@ public class AnimationSystem : ParallelSystemBase, IUpdateSystem
         animation.TriggeredEventFrames.Add(frameIndex);
     }
 
-    /// <inheritdoc />
-    public override List<Type> GetReadComponents() => new()
-    {
-        typeof(AnimationComponent)
-    };
-
-    /// <inheritdoc />
-    public override List<Type> GetWriteComponents() => new()
-    {
-        typeof(AnimationComponent),
-        typeof(Sprite)
-    };
 }

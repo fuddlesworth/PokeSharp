@@ -80,6 +80,17 @@ public struct Camera
     public Rectangle MapBounds { get; set; }
 
     /// <summary>
+    ///     Indicates whether the camera transform needs to be recalculated.
+    ///     Set to true when Position, Zoom, or Rotation changes.
+    ///     Reset to false after transform is calculated.
+    /// </summary>
+    /// <remarks>
+    ///     Used by render systems to avoid expensive matrix calculations every frame.
+    ///     Only recalculate when camera actually moves or changes.
+    /// </remarks>
+    public bool IsDirty { get; set; }
+
+    /// <summary>
     ///     Initializes a new instance of the Camera struct with default values.
     /// </summary>
     public Camera()
@@ -94,6 +105,7 @@ public struct Camera
         LeadDistance = 1.5f;
         FollowTarget = null;
         MapBounds = Rectangle.Empty;
+        IsDirty = true; // Initial render requires transform calculation
     }
 
     /// <summary>
@@ -114,6 +126,7 @@ public struct Camera
         LeadDistance = leadDistance;
         FollowTarget = null;
         MapBounds = Rectangle.Empty;
+        IsDirty = true; // Initial render requires transform calculation
     }
 
     /// <summary>
@@ -245,10 +258,13 @@ public struct Camera
     /// <param name="deltaTime">Time elapsed since last frame (for frame-independent smoothing).</param>
     public void Update(float deltaTime)
     {
+        var dirty = false;
+
         // 1. Smooth zoom transition
         if (Math.Abs(Zoom - TargetZoom) > 0.001f)
         {
             Zoom = MathHelper.Lerp(Zoom, TargetZoom, ZoomTransitionSpeed);
+            dirty = true;
 
             // Snap to target when very close
             if (Math.Abs(Zoom - TargetZoom) < 0.001f)
@@ -258,6 +274,7 @@ public struct Camera
         // 2. Follow target if set
         if (FollowTarget.HasValue)
         {
+            var oldPosition = Position;
             var targetPosition = FollowTarget.Value;
 
             // Apply smoothing if enabled
@@ -269,7 +286,15 @@ public struct Camera
             // Clamp to map bounds
             if (MapBounds != Rectangle.Empty)
                 Position = ClampPositionToMapBounds(Position);
+
+            // Mark dirty if position changed
+            if (Position != oldPosition)
+                dirty = true;
         }
+
+        // Mark transform as dirty if camera changed
+        if (dirty)
+            IsDirty = true;
     }
 
     /// <summary>

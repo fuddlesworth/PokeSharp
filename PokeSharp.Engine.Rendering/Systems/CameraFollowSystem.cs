@@ -13,7 +13,7 @@ namespace PokeSharp.Engine.Rendering.Systems;
 ///     System for camera following with smooth transitions and map bounds clamping.
 ///     Sets the camera's follow target and calls camera.Update() to handle all logic.
 /// </summary>
-public class CameraFollowSystem(ILogger<CameraFollowSystem>? logger = null) : ParallelSystemBase, IUpdateSystem
+public class CameraFollowSystem(ILogger<CameraFollowSystem>? logger = null) : SystemBase, IUpdateSystem
 {
     private readonly ILogger<CameraFollowSystem>? _logger = logger;
     private QueryDescription _playerQuery;
@@ -27,22 +27,6 @@ public class CameraFollowSystem(ILogger<CameraFollowSystem>? logger = null) : Pa
     /// <inheritdoc />
     public override int Priority => SystemPriority.CameraFollow;
 
-    /// <summary>
-    /// Components this system reads to calculate camera position.
-    /// </summary>
-    public override List<Type> GetReadComponents() => new()
-    {
-        typeof(Player),
-        typeof(Position)
-    };
-
-    /// <summary>
-    /// Components this system writes to update camera.
-    /// </summary>
-    public override List<Type> GetWriteComponents() => new()
-    {
-        typeof(Camera)
-    };
 
     /// <inheritdoc />
     public override void Initialize(World world)

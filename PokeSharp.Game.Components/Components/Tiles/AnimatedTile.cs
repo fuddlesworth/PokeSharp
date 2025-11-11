@@ -1,10 +1,12 @@
 using System;
+using Microsoft.Xna.Framework;
 
 namespace PokeSharp.Game.Components.Tiles;
 
 /// <summary>
 ///     Component for storing animated tile data.
 ///     Supports Pokemon-style tile animations (water ripples, grass swaying, flowers).
+///     OPTIMIZED: Source rectangles are precalculated at load time for zero runtime overhead.
 /// </summary>
 public struct AnimatedTile
 {
@@ -17,6 +19,12 @@ public struct AnimatedTile
     ///     Gets or sets the duration of each frame in seconds.
     /// </summary>
     public float[] FrameDurations { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the precalculated source rectangles for each animation frame.
+    ///     Eliminates expensive runtime calculations and dictionary lookups.
+    /// </summary>
+    public Rectangle[] FrameSourceRects { get; set; }
 
     /// <summary>
     ///     Gets or sets the current frame index being displayed.
@@ -71,6 +79,7 @@ public struct AnimatedTile
     /// <param name="baseTileId">The base tile ID.</param>
     /// <param name="frameTileIds">Array of animation frame tile IDs.</param>
     /// <param name="frameDurations">Array of frame durations in seconds.</param>
+    /// <param name="frameSourceRects">Precalculated source rectangles for each frame (CRITICAL for performance).</param>
     /// <param name="tilesetFirstGid">First global ID for the owning tileset.</param>
     /// <param name="tilesPerRow">Number of tiles per row in the tileset.</param>
     /// <param name="tileWidth">Tile width in pixels.</param>
@@ -81,6 +90,7 @@ public struct AnimatedTile
         int baseTileId,
         int[] frameTileIds,
         float[] frameDurations,
+        Rectangle[] frameSourceRects,
         int tilesetFirstGid,
         int tilesPerRow,
         int tileWidth,
@@ -92,10 +102,15 @@ public struct AnimatedTile
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(tileWidth);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(tileHeight);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(tilesPerRow);
+        ArgumentNullException.ThrowIfNull(frameSourceRects);
+
+        if (frameSourceRects.Length != frameTileIds.Length)
+            throw new ArgumentException("FrameSourceRects length must match FrameTileIds length", nameof(frameSourceRects));
 
         BaseTileId = baseTileId;
         FrameTileIds = frameTileIds;
         FrameDurations = frameDurations;
+        FrameSourceRects = frameSourceRects;
         TilesetFirstGid = tilesetFirstGid;
         TilesPerRow = tilesPerRow;
         TileWidth = tileWidth;

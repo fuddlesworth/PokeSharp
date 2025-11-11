@@ -71,6 +71,26 @@ public class SystemManager
     }
 
     /// <summary>
+    ///     Gets a specific system by type from registered systems.
+    ///     Searches both update and render systems.
+    /// </summary>
+    /// <typeparam name="T">The type of system to retrieve.</typeparam>
+    /// <returns>The system instance, or null if not found.</returns>
+    public T? GetSystem<T>() where T : class
+    {
+        lock (_lock)
+        {
+            // Search update systems
+            var updateSystem = _updateSystems.OfType<T>().FirstOrDefault();
+            if (updateSystem != null)
+                return updateSystem;
+
+            // Search render systems
+            return _renderSystems.OfType<T>().FirstOrDefault();
+        }
+    }
+
+    /// <summary>
     ///     Gets the total count of registered systems (update + render).
     /// </summary>
     public int SystemCount
