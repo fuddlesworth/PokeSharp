@@ -8,7 +8,7 @@ public struct Animation
 {
     /// <summary>
     ///     Gets or sets the name of the currently playing animation.
-    ///     This references an animation in the AnimationLibrary.
+    ///     This references an animation in the sprite's manifest (e.g., "face_south", "go_north").
     /// </summary>
     public string CurrentAnimation { get; set; }
 

@@ -8,7 +8,6 @@ using PokeSharp.Engine.Systems.Pooling;
 using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Game.Diagnostics;
 using PokeSharp.Engine.Input.Systems;
-using PokeSharp.Engine.Rendering.Animation;
 using PokeSharp.Engine.Rendering.Assets;
 using PokeSharp.Game.Data.MapLoading.Tiled;
 using PokeSharp.Engine.Rendering.Systems;
@@ -42,11 +41,6 @@ public class GameInitializer(
     private readonly World _world = world;
     private readonly EntityPoolManager _poolManager = poolManager;
     private readonly SpriteLoader _spriteLoader = spriteLoader;
-
-    /// <summary>
-    ///     Gets the animation library.
-    /// </summary>
-    public AnimationLibrary AnimationLibrary { get; private set; } = null!;
 
     /// <summary>
     ///     Gets the spatial hash system.
@@ -89,10 +83,6 @@ public class GameInitializer(
             );
             _logger.LogDebug(ex, "Manifest load exception details");
         }
-
-        // Create animation library with default player animations
-        AnimationLibrary = new AnimationLibrary();
-        _logger.LogComponentInitialized("AnimationLibrary", AnimationLibrary.Count);
 
         // CRITICAL FIX: EntityPoolManager is now injected via constructor (same instance as EntityFactoryService)
         // This ensures pools registered here are available to EntityFactoryService
@@ -149,11 +139,7 @@ public class GameInitializer(
         var pathfindingSystem = new PathfindingSystem(SpatialHashSystem, pathfindingLogger);
         _systemManager.RegisterUpdateSystem(pathfindingSystem);
 
-        // Register AnimationSystem (Priority: 800, after movement, before rendering)
-        var animationLogger = _loggerFactory.CreateLogger<AnimationSystem>();
-        _systemManager.RegisterUpdateSystem(new AnimationSystem(AnimationLibrary, animationLogger));
-
-        // Register CameraFollowSystem (Priority: 825, after Animation, before TileAnimation)
+        // Register CameraFollowSystem (Priority: 825, after PathfindingSystem, before TileAnimation)
         var cameraFollowLogger = _loggerFactory.CreateLogger<CameraFollowSystem>();
         _systemManager.RegisterUpdateSystem(new CameraFollowSystem(cameraFollowLogger));
 
