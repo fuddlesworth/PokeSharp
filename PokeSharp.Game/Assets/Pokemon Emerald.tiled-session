@@ -1,8 +1,19 @@
 {
-    "activeFile": "",
+    "activeFile": "Data/Maps/LittlerootTown.json",
     "expandedProjectPaths": [
+        "Data/Maps",
+        ".",
+        "Data"
     ],
     "fileStates": {
+        "Data/Maps/LittlerootTown.json": {
+            "scale": 4,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 122,
+                "y": 159.375
+            }
+        },
         "Tilesets/general/general.json": {
             "scaleInDock": 1
         },
@@ -11,8 +22,10 @@
         }
     },
     "openFiles": [
+        "Data/Maps/LittlerootTown.json"
     ],
     "project": "Pokemon Emerald.tiled-project",
     "recentFiles": [
+        "Data/Maps/LittlerootTown.json"
     ]
 }

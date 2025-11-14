@@ -108,7 +108,7 @@ public static class ServiceCollectionExtensions
 
             // Load base game JSON templates as JSON (before deserialization)
             var jsonLoader = sp.GetRequiredService<PokeSharp.Engine.Core.Templates.Loading.JsonTemplateLoader>();
-            var templateJsonCache = jsonLoader.LoadTemplateJsonAsync("Assets/Data/Templates", recursive: true).GetAwaiter().GetResult();
+            var templateJsonCache = jsonLoader.LoadTemplateJsonAsync("Assets/Templates", recursive: true).GetAwaiter().GetResult();
 
             logger?.LogInformation("WF  Template JSON loaded | count: {Count}, source: base", templateJsonCache.Count);
 
