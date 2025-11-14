@@ -283,19 +283,19 @@ public static class TiledMapLoader
     /// <summary>
     ///     Decodes layer data from various formats (plain array, base64, compressed).
     /// </summary>
-    private static int[] DecodeLayerData(TiledJsonLayer layer)
+    private static uint[] DecodeLayerData(TiledJsonLayer layer)
     {
         if (layer.Data == null)
-            return Array.Empty<int>();
+            return Array.Empty<uint>();
 
         var dataElement = layer.Data.Value;
 
         // Check if data is an array (uncompressed)
         if (dataElement.ValueKind == JsonValueKind.Array)
         {
-            var dataList = new List<int>();
+            var dataList = new List<uint>();
             foreach (var element in dataElement.EnumerateArray())
-                dataList.Add(element.GetInt32());
+                dataList.Add(element.GetUInt32());
             return dataList.ToArray();
         }
 
@@ -304,7 +304,7 @@ public static class TiledMapLoader
         {
             var base64Data = dataElement.GetString();
             if (string.IsNullOrEmpty(base64Data))
-                return Array.Empty<int>();
+                return Array.Empty<uint>();
 
             var bytes = Convert.FromBase64String(base64Data);
 
@@ -312,12 +312,12 @@ public static class TiledMapLoader
             if (!string.IsNullOrEmpty(layer.Compression))
                 bytes = DecompressBytes(bytes, layer.Compression);
 
-            return ConvertBytesToInts(bytes);
+            return ConvertBytesToUInts(bytes);
         }
 
         // Unknown data type - return empty array (production code should not use Console.WriteLine)
         // TODO: Add proper logging via ILogger when available
-        return Array.Empty<int>();
+        return Array.Empty<uint>();
     }
 
     /// <summary>
@@ -363,23 +363,23 @@ public static class TiledMapLoader
     /// <summary>
     ///     Converts byte array to int array (little-endian format).
     /// </summary>
-    private static int[] ConvertBytesToInts(byte[] bytes)
+    private static uint[] ConvertBytesToUInts(byte[] bytes)
     {
         if (bytes.Length % 4 != 0)
             throw new InvalidDataException(
                 $"Byte array length must be multiple of 4, got {bytes.Length}"
             );
 
-        var ints = new int[bytes.Length / 4];
+        var ints = new uint[bytes.Length / 4];
         for (var i = 0; i < ints.Length; i++)
-            ints[i] = BitConverter.ToInt32(bytes, i * 4);
+            ints[i] = BitConverter.ToUInt32(bytes, i * 4);
 
         return ints;
     }
 
-    private static int[,] ConvertFlatArrayTo2D(int[] flatData, int width, int height)
+    private static uint[,] ConvertFlatArrayTo2D(uint[] flatData, int width, int height)
     {
-        var data = new int[height, width];
+        var data = new uint[height, width];
 
         for (var i = 0; i < flatData.Length && i < width * height; i++)
         {

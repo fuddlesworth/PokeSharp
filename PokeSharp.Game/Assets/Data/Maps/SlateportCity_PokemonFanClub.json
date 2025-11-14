@@ -1,0 +1,7614 @@
+{
+  "version": "1.10",
+  "tiledversion": "1.10.0",
+  "type": "map",
+  "orientation": "orthogonal",
+  "renderorder": "right-down",
+  "width": 28,
+  "height": 22,
+  "tilewidth": 8,
+  "tileheight": 8,
+  "infinite": false,
+  "nextlayerid": 3,
+  "nextobjectid": 1,
+  "layers": [
+    {
+      "id": 1,
+      "name": "Ground Layer",
+      "type": "tilelayer",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 28,
+      "height": 22,
+      "data": [
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        516,
+        516,
+        516,
+        516,
+        518,
+        519,
+        516,
+        516,
+        516,
+        516,
+        516,
+        516,
+        516,
+        516,
+        516,
+        516,
+        516,
+        516,
+        516,
+        516,
+        516,
+        516,
+        518,
+        519,
+        516,
+        516,
+        516,
+        516,
+        532,
+        532,
+        532,
+        532,
+        534,
+        535,
+        532,
+        532,
+        532,
+        532,
+        532,
+        532,
+        532,
+        532,
+        532,
+        532,
+        532,
+        532,
+        532,
+        532,
+        532,
+        532,
+        534,
+        535,
+        532,
+        532,
+        532,
+        532,
+        548,
+        548,
+        548,
+        548,
+        550,
+        551,
+        548,
+        548,
+        548,
+        548,
+        548,
+        548,
+        548,
+        548,
+        548,
+        548,
+        548,
+        548,
+        548,
+        548,
+        548,
+        548,
+        550,
+        551,
+        548,
+        548,
+        548,
+        548,
+        564,
+        564,
+        564,
+        564,
+        566,
+        567,
+        564,
+        564,
+        564,
+        564,
+        564,
+        564,
+        564,
+        564,
+        564,
+        564,
+        564,
+        564,
+        564,
+        564,
+        564,
+        564,
+        566,
+        567,
+        564,
+        564,
+        564,
+        564,
+        527,
+        528,
+        543,
+        544,
+        527,
+        528,
+        543,
+        544,
+        527,
+        528,
+        543,
+        544,
+        527,
+        528,
+        543,
+        544,
+        527,
+        528,
+        543,
+        544,
+        527,
+        528,
+        543,
+        544,
+        527,
+        528,
+        543,
+        544,
+        543,
+        544,
+        527,
+        528,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        543,
+        544,
+        527,
+        528,
+        527,
+        528,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        543,
+        544,
+        525,
+        526,
+        520,
+        521,
+        521,
+        521,
+        521,
+        521,
+        521,
+        521,
+        521,
+        521,
+        521,
+        521,
+        521,
+        521,
+        521,
+        521,
+        521,
+        521,
+        521,
+        522,
+        541,
+        542,
+        525,
+        526,
+        527,
+        528,
+        541,
+        542,
+        536,
+        537,
+        537,
+        537,
+        537,
+        537,
+        537,
+        537,
+        537,
+        537,
+        537,
+        537,
+        537,
+        537,
+        537,
+        537,
+        537,
+        537,
+        537,
+        538,
+        525,
+        526,
+        541,
+        542,
+        543,
+        544,
+        525,
+        526,
+        536,
+        537,
+        537,
+        537,
+        537,
+        537,
+        523,
+        523,
+        523,
+        523,
+        523,
+        523,
+        523,
+        523,
+        555,
+        537,
+        537,
+        537,
+        537,
+        538,
+        541,
+        542,
+        525,
+        526,
+        527,
+        528,
+        541,
+        542,
+        536,
+        537,
+        537,
+        537,
+        537,
+        537,
+        523,
+        523,
+        523,
+        523,
+        523,
+        523,
+        523,
+        523,
+        555,
+        537,
+        537,
+        537,
+        537,
+        538,
+        525,
+        526,
+        541,
+        542,
+        543,
+        544,
+        525,
+        526,
+        536,
+        537,
+        2147484185,
+        2147484185,
+        537,
+        537,
+        539,
+        523,
+        523,
+        523,
+        523,
+        523,
+        523,
+        523,
+        555,
+        537,
+        537,
+        537,
+        537,
+        538,
+        541,
+        542,
+        525,
+        526,
+        527,
+        528,
+        541,
+        542,
+        536,
+        537,
+        2147484171,
+        2147484171,
+        555,
+        537,
+        523,
+        523,
+        523,
+        523,
+        523,
+        523,
+        523,
+        523,
+        555,
+        537,
+        523,
+        523,
+        555,
+        538,
+        525,
+        526,
+        541,
+        542,
+        543,
+        544,
+        525,
+        526,
+        536,
+        537,
+        2147484171,
+        2147484171,
+        555,
+        537,
+        523,
+        523,
+        523,
+        523,
+        523,
+        523,
+        523,
+        523,
+        555,
+        537,
+        523,
+        523,
+        555,
+        538,
+        541,
+        542,
+        525,
+        526,
+        527,
+        528,
+        541,
+        542,
+        536,
+        537,
+        2147484171,
+        2147484171,
+        555,
+        537,
+        523,
+        523,
+        523,
+        523,
+        523,
+        523,
+        523,
+        523,
+        555,
+        537,
+        523,
+        523,
+        555,
+        538,
+        525,
+        526,
+        541,
+        542,
+        543,
+        544,
+        525,
+        526,
+        536,
+        537,
+        539,
+        523,
+        555,
+        537,
+        539,
+        523,
+        523,
+        523,
+        523,
+        523,
+        523,
+        523,
+        555,
+        537,
+        539,
+        523,
+        555,
+        538,
+        541,
+        542,
+        525,
+        526,
+        527,
+        528,
+        541,
+        542,
+        552,
+        553,
+        553,
+        553,
+        553,
+        553,
+        553,
+        553,
+        553,
+        553,
+        553,
+        553,
+        553,
+        553,
+        553,
+        553,
+        553,
+        553,
+        553,
+        554,
+        525,
+        526,
+        541,
+        542,
+        543,
+        544,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        527,
+        528,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        543,
+        544,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        10,
+        11,
+        2147483659,
+        2147483658,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        527,
+        528,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        1073741834,
+        1073741835,
+        3221225483,
+        3221225482,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542,
+        525,
+        526,
+        541,
+        542
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Overlay Layer",
+      "type": "tilelayer",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 28,
+      "height": 22,
+      "data": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        812,
+        813,
+        1,
+        1,
+        1,
+        1,
+        568,
+        569,
+        570,
+        571,
+        1,
+        1,
+        1,
+        1,
+        812,
+        813,
+        1,
+        1,
+        777,
+        778,
+        777,
+        778,
+        771,
+        772,
+        773,
+        774,
+        1,
+        1,
+        828,
+        829,
+        1,
+        1,
+        1,
+        1,
+        584,
+        585,
+        586,
+        587,
+        1,
+        1,
+        1,
+        1,
+        828,
+        829,
+        1,
+        1,
+        793,
+        794,
+        793,
+        794,
+        787,
+        788,
+        789,
+        790,
+        566,
+        567,
+        814,
+        815,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        814,
+        815,
+        566,
+        567,
+        779,
+        780,
+        779,
+        780,
+        775,
+        776,
+        2147484424,
+        2147484423,
+        582,
+        583,
+        830,
+        831,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        830,
+        831,
+        582,
+        583,
+        795,
+        796,
+        795,
+        796,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        781,
+        782,
+        782,
+        782,
+        782,
+        782,
+        782,
+        2147484429,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        797,
+        798,
+        798,
+        798,
+        798,
+        798,
+        798,
+        2147484445,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        784,
+        816,
+        816,
+        816,
+        816,
+        816,
+        816,
+        2147484432,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2147484457,
+        2147484456,
+        1,
+        1,
+        801,
+        802,
+        802,
+        802,
+        802,
+        802,
+        802,
+        2147484449,
+        1,
+        1,
+        808,
+        809,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2147484473,
+        2147484472,
+        1,
+        1,
+        817,
+        818,
+        821,
+        805,
+        821,
+        805,
+        807,
+        2147484465,
+        1,
+        1,
+        824,
+        825,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2147484459,
+        2147484458,
+        1,
+        1,
+        803,
+        804,
+        822,
+        786,
+        822,
+        822,
+        823,
+        2147484451,
+        1,
+        1,
+        810,
+        811,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2147484475,
+        2147484474,
+        1,
+        1,
+        819,
+        820,
+        820,
+        820,
+        820,
+        820,
+        820,
+        2147484467,
+        1,
+        1,
+        826,
+        827,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        785,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2147484433,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        812,
+        813,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        812,
+        813,
+        828,
+        829,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        828,
+        829,
+        814,
+        815,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        814,
+        815,
+        830,
+        831,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1073741825,
+        1073741825,
+        1073741825,
+        1073741825,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        830,
+        831
+      ]
+    },
+    {
+      "id": 3,
+      "name": "MetatileData",
+      "type": "objectgroup",
+      "visible": false,
+      "draworder": "topdown",
+      "objects": [
+        {
+          "id": 1,
+          "name": "529",
+          "type": "metatile",
+          "x": 0,
+          "y": 0,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 529
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "529",
+          "type": "metatile",
+          "x": 16,
+          "y": 0,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 529
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "name": "532",
+          "type": "metatile",
+          "x": 32,
+          "y": 0,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 532
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "name": "529",
+          "type": "metatile",
+          "x": 48,
+          "y": 0,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 529
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "name": "530",
+          "type": "metatile",
+          "x": 64,
+          "y": 0,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 530
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "name": "529",
+          "type": "metatile",
+          "x": 80,
+          "y": 0,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 529
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "name": "530",
+          "type": "metatile",
+          "x": 96,
+          "y": 0,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 530
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "name": "529",
+          "type": "metatile",
+          "x": 112,
+          "y": 0,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 529
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "name": "530",
+          "type": "metatile",
+          "x": 128,
+          "y": 0,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 530
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "name": "529",
+          "type": "metatile",
+          "x": 144,
+          "y": 0,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 529
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "name": "529",
+          "type": "metatile",
+          "x": 160,
+          "y": 0,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 529
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "name": "532",
+          "type": "metatile",
+          "x": 176,
+          "y": 0,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 532
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "name": "529",
+          "type": "metatile",
+          "x": 192,
+          "y": 0,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 529
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 14,
+          "name": "529",
+          "type": "metatile",
+          "x": 208,
+          "y": 0,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 529
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 15,
+          "name": "576",
+          "type": "metatile",
+          "x": 0,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 576
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 16,
+          "name": "577",
+          "type": "metatile",
+          "x": 16,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 577
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 17,
+          "name": "540",
+          "type": "metatile",
+          "x": 32,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 540
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 18,
+          "name": "580",
+          "type": "metatile",
+          "x": 48,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 580
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 19,
+          "name": "541",
+          "type": "metatile",
+          "x": 64,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 541
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 20,
+          "name": "541",
+          "type": "metatile",
+          "x": 80,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 541
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 21,
+          "name": "537",
+          "type": "metatile",
+          "x": 96,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 537
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 22,
+          "name": "538",
+          "type": "metatile",
+          "x": 112,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 538
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 23,
+          "name": "541",
+          "type": "metatile",
+          "x": 128,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 541
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 24,
+          "name": "541",
+          "type": "metatile",
+          "x": 144,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 541
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 25,
+          "name": "581",
+          "type": "metatile",
+          "x": 160,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 581
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 26,
+          "name": "540",
+          "type": "metatile",
+          "x": 176,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 540
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 27,
+          "name": "578",
+          "type": "metatile",
+          "x": 192,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 578
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 28,
+          "name": "579",
+          "type": "metatile",
+          "x": 208,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 579
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 29,
+          "name": "584",
+          "type": "metatile",
+          "x": 0,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 584
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_UNKNOWN_E1"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 30,
+          "name": "585",
+          "type": "metatile",
+          "x": 16,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 585
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_UNKNOWN_E1"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 31,
+          "name": "548",
+          "type": "metatile",
+          "x": 32,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 548
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 32,
+          "name": "588",
+          "type": "metatile",
+          "x": 48,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 588
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 33,
+          "name": "546",
+          "type": "metatile",
+          "x": 64,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 546
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 34,
+          "name": "545",
+          "type": "metatile",
+          "x": 80,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 545
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 35,
+          "name": "546",
+          "type": "metatile",
+          "x": 96,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 546
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 36,
+          "name": "545",
+          "type": "metatile",
+          "x": 112,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 545
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 37,
+          "name": "546",
+          "type": "metatile",
+          "x": 128,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 546
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 38,
+          "name": "545",
+          "type": "metatile",
+          "x": 144,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 545
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 39,
+          "name": "589",
+          "type": "metatile",
+          "x": 160,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 589
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 40,
+          "name": "549",
+          "type": "metatile",
+          "x": 176,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 549
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 41,
+          "name": "586",
+          "type": "metatile",
+          "x": 192,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 586
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_UNKNOWN_E0"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 42,
+          "name": "587",
+          "type": "metatile",
+          "x": 208,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 587
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_UNKNOWN_E0"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 43,
+          "name": "516",
+          "type": "metatile",
+          "x": 0,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 516
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 44,
+          "name": "518",
+          "type": "metatile",
+          "x": 16,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 518
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 45,
+          "name": "514",
+          "type": "metatile",
+          "x": 32,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 514
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 46,
+          "name": "513",
+          "type": "metatile",
+          "x": 48,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 47,
+          "name": "514",
+          "type": "metatile",
+          "x": 64,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 514
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 48,
+          "name": "513",
+          "type": "metatile",
+          "x": 80,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 49,
+          "name": "514",
+          "type": "metatile",
+          "x": 96,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 514
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 50,
+          "name": "513",
+          "type": "metatile",
+          "x": 112,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 51,
+          "name": "514",
+          "type": "metatile",
+          "x": 128,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 514
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 52,
+          "name": "513",
+          "type": "metatile",
+          "x": 144,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 53,
+          "name": "514",
+          "type": "metatile",
+          "x": 160,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 514
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 54,
+          "name": "513",
+          "type": "metatile",
+          "x": 176,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 55,
+          "name": "517",
+          "type": "metatile",
+          "x": 192,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 517
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 56,
+          "name": "518",
+          "type": "metatile",
+          "x": 208,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 518
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 57,
+          "name": "516",
+          "type": "metatile",
+          "x": 0,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 516
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 58,
+          "name": "513",
+          "type": "metatile",
+          "x": 16,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 59,
+          "name": "552",
+          "type": "metatile",
+          "x": 32,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 552
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 60,
+          "name": "553",
+          "type": "metatile",
+          "x": 48,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 553
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 61,
+          "name": "553",
+          "type": "metatile",
+          "x": 64,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 553
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 62,
+          "name": "592",
+          "type": "metatile",
+          "x": 80,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 592
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 63,
+          "name": "593",
+          "type": "metatile",
+          "x": 96,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 593
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 64,
+          "name": "593",
+          "type": "metatile",
+          "x": 112,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 593
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 65,
+          "name": "594",
+          "type": "metatile",
+          "x": 128,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 594
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 66,
+          "name": "595",
+          "type": "metatile",
+          "x": 144,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 595
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 67,
+          "name": "553",
+          "type": "metatile",
+          "x": 160,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 553
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 68,
+          "name": "554",
+          "type": "metatile",
+          "x": 176,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 554
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 69,
+          "name": "514",
+          "type": "metatile",
+          "x": 192,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 514
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 70,
+          "name": "513",
+          "type": "metatile",
+          "x": 208,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 71,
+          "name": "516",
+          "type": "metatile",
+          "x": 0,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 516
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 72,
+          "name": "513",
+          "type": "metatile",
+          "x": 16,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 73,
+          "name": "560",
+          "type": "metatile",
+          "x": 32,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 560
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 74,
+          "name": "561",
+          "type": "metatile",
+          "x": 48,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 561
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 75,
+          "name": "561",
+          "type": "metatile",
+          "x": 64,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 561
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 76,
+          "name": "600",
+          "type": "metatile",
+          "x": 80,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 600
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 4
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 77,
+          "name": "601",
+          "type": "metatile",
+          "x": 96,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 601
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 4
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 78,
+          "name": "601",
+          "type": "metatile",
+          "x": 112,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 601
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 4
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 79,
+          "name": "602",
+          "type": "metatile",
+          "x": 128,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 602
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 4
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 80,
+          "name": "603",
+          "type": "metatile",
+          "x": 144,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 603
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 81,
+          "name": "561",
+          "type": "metatile",
+          "x": 160,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 561
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 82,
+          "name": "562",
+          "type": "metatile",
+          "x": 176,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 562
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 83,
+          "name": "514",
+          "type": "metatile",
+          "x": 192,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 514
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 84,
+          "name": "513",
+          "type": "metatile",
+          "x": 208,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 85,
+          "name": "516",
+          "type": "metatile",
+          "x": 0,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 516
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 86,
+          "name": "513",
+          "type": "metatile",
+          "x": 16,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 87,
+          "name": "560",
+          "type": "metatile",
+          "x": 32,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 560
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 88,
+          "name": "558",
+          "type": "metatile",
+          "x": 48,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 558
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 4
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 89,
+          "name": "567",
+          "type": "metatile",
+          "x": 64,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 567
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 90,
+          "name": "608",
+          "type": "metatile",
+          "x": 80,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 608
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 91,
+          "name": "609",
+          "type": "metatile",
+          "x": 96,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 609
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 92,
+          "name": "609",
+          "type": "metatile",
+          "x": 112,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 609
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 93,
+          "name": "610",
+          "type": "metatile",
+          "x": 128,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 610
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 94,
+          "name": "564",
+          "type": "metatile",
+          "x": 144,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 564
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 95,
+          "name": "557",
+          "type": "metatile",
+          "x": 160,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 557
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 4
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 96,
+          "name": "575",
+          "type": "metatile",
+          "x": 176,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 575
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 97,
+          "name": "514",
+          "type": "metatile",
+          "x": 192,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 514
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 98,
+          "name": "513",
+          "type": "metatile",
+          "x": 208,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 99,
+          "name": "516",
+          "type": "metatile",
+          "x": 0,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 516
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 100,
+          "name": "513",
+          "type": "metatile",
+          "x": 16,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 101,
+          "name": "560",
+          "type": "metatile",
+          "x": 32,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 560
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 102,
+          "name": "566",
+          "type": "metatile",
+          "x": 48,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 566
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 4
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 103,
+          "name": "564",
+          "type": "metatile",
+          "x": 64,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 564
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 104,
+          "name": "604",
+          "type": "metatile",
+          "x": 80,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 604
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 105,
+          "name": "605",
+          "type": "metatile",
+          "x": 96,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 605
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 106,
+          "name": "606",
+          "type": "metatile",
+          "x": 112,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 606
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 107,
+          "name": "607",
+          "type": "metatile",
+          "x": 128,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 607
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 108,
+          "name": "564",
+          "type": "metatile",
+          "x": 144,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 564
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 109,
+          "name": "565",
+          "type": "metatile",
+          "x": 160,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 565
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 4
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 110,
+          "name": "571",
+          "type": "metatile",
+          "x": 176,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 571
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 111,
+          "name": "514",
+          "type": "metatile",
+          "x": 192,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 514
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 112,
+          "name": "513",
+          "type": "metatile",
+          "x": 208,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 113,
+          "name": "516",
+          "type": "metatile",
+          "x": 0,
+          "y": 128,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 516
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 114,
+          "name": "513",
+          "type": "metatile",
+          "x": 16,
+          "y": 128,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 115,
+          "name": "568",
+          "type": "metatile",
+          "x": 32,
+          "y": 128,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 568
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 116,
+          "name": "574",
+          "type": "metatile",
+          "x": 48,
+          "y": 128,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 574
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 117,
+          "name": "572",
+          "type": "metatile",
+          "x": 64,
+          "y": 128,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 572
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 118,
+          "name": "612",
+          "type": "metatile",
+          "x": 80,
+          "y": 128,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 612
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 119,
+          "name": "613",
+          "type": "metatile",
+          "x": 96,
+          "y": 128,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 613
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 120,
+          "name": "614",
+          "type": "metatile",
+          "x": 112,
+          "y": 128,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 614
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 121,
+          "name": "615",
+          "type": "metatile",
+          "x": 128,
+          "y": 128,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 615
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 122,
+          "name": "572",
+          "type": "metatile",
+          "x": 144,
+          "y": 128,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 572
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 123,
+          "name": "573",
+          "type": "metatile",
+          "x": 160,
+          "y": 128,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 573
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 124,
+          "name": "570",
+          "type": "metatile",
+          "x": 176,
+          "y": 128,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 570
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 125,
+          "name": "514",
+          "type": "metatile",
+          "x": 192,
+          "y": 128,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 514
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 126,
+          "name": "513",
+          "type": "metatile",
+          "x": 208,
+          "y": 128,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 127,
+          "name": "582",
+          "type": "metatile",
+          "x": 0,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 582
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 128,
+          "name": "513",
+          "type": "metatile",
+          "x": 16,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 129,
+          "name": "514",
+          "type": "metatile",
+          "x": 32,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 514
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 130,
+          "name": "513",
+          "type": "metatile",
+          "x": 48,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 131,
+          "name": "514",
+          "type": "metatile",
+          "x": 64,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 514
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 132,
+          "name": "513",
+          "type": "metatile",
+          "x": 80,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 133,
+          "name": "514",
+          "type": "metatile",
+          "x": 96,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 514
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 134,
+          "name": "513",
+          "type": "metatile",
+          "x": 112,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 135,
+          "name": "514",
+          "type": "metatile",
+          "x": 128,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 514
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 136,
+          "name": "513",
+          "type": "metatile",
+          "x": 144,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 137,
+          "name": "514",
+          "type": "metatile",
+          "x": 160,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 514
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 138,
+          "name": "513",
+          "type": "metatile",
+          "x": 176,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 139,
+          "name": "514",
+          "type": "metatile",
+          "x": 192,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 514
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 140,
+          "name": "583",
+          "type": "metatile",
+          "x": 208,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 583
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 141,
+          "name": "590",
+          "type": "metatile",
+          "x": 0,
+          "y": 160,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 590
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 142,
+          "name": "513",
+          "type": "metatile",
+          "x": 16,
+          "y": 160,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 143,
+          "name": "514",
+          "type": "metatile",
+          "x": 32,
+          "y": 160,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 514
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 144,
+          "name": "513",
+          "type": "metatile",
+          "x": 48,
+          "y": 160,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 145,
+          "name": "514",
+          "type": "metatile",
+          "x": 64,
+          "y": 160,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 514
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 146,
+          "name": "513",
+          "type": "metatile",
+          "x": 80,
+          "y": 160,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 147,
+          "name": "6",
+          "type": "metatile",
+          "x": 96,
+          "y": 160,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 6
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_UNKNOWN_65"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 148,
+          "name": "7",
+          "type": "metatile",
+          "x": 112,
+          "y": 160,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 7
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_UNKNOWN_65"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 149,
+          "name": "514",
+          "type": "metatile",
+          "x": 128,
+          "y": 160,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 514
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 150,
+          "name": "513",
+          "type": "metatile",
+          "x": 144,
+          "y": 160,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 151,
+          "name": "514",
+          "type": "metatile",
+          "x": 160,
+          "y": 160,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 514
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 152,
+          "name": "513",
+          "type": "metatile",
+          "x": 176,
+          "y": 160,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 513
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 153,
+          "name": "514",
+          "type": "metatile",
+          "x": 192,
+          "y": 160,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 514
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 154,
+          "name": "591",
+          "type": "metatile",
+          "x": 208,
+          "y": 160,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "metatile_id",
+              "type": "int",
+              "value": 591
+            },
+            {
+              "name": "collision_bits",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "is_solid",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "behavior",
+              "type": "string",
+              "value": "MB_NORMAL"
+            },
+            {
+              "name": "layer_type",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "tilesets": [
+    {
+      "firstgid": 1,
+      "source": "../../Tilesets/building/building.json"
+    },
+    {
+      "firstgid": 513,
+      "source": "../../Tilesets/pokemon_fan_club/pokemon_fan_club.json"
+    }
+  ],
+  "properties": [
+    {
+      "name": "border_pattern_metatiles",
+      "type": "string",
+      "value": "1,1,1,1"
+    }
+  ]
+}

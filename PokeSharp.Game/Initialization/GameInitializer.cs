@@ -58,6 +58,11 @@ public class GameInitializer(
     public EntityPoolManager PoolManager => _poolManager;
 
     /// <summary>
+    ///     Gets the map lifecycle manager.
+    /// </summary>
+    public MapLifecycleManager MapLifecycleManager { get; private set; } = null!;
+
+    /// <summary>
     ///     Initializes all game systems and infrastructure.
     /// </summary>
     /// <param name="graphicsDevice">The graphics device for rendering.</param>
@@ -66,23 +71,11 @@ public class GameInitializer(
         // NOTE: GameDataLoader is called earlier in PokeSharpGame.Initialize
         // before GameInitializer.Initialize is invoked.
 
-        // Load asset manifest
-        try
-        {
-            _assetManager.LoadManifest();
-            _logger.LogResourceLoaded("Manifest", "Assets/manifest.json");
+        // REMOVED: manifest.json loading (obsolete - replaced by EF Core definitions)
+        // Assets are now loaded on-demand via MapLoader and definition-based loading
 
-            // Run diagnostics
-            AssetDiagnostics.PrintAssetManagerStatus(_assetManager, _logger);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogOperationFailedWithRecovery(
-                "Load manifest",
-                "Continuing with empty asset manager"
-            );
-            _logger.LogDebug(ex, "Manifest load exception details");
-        }
+        // Run diagnostics
+        AssetDiagnostics.PrintAssetManagerStatus(_assetManager, _logger);
 
         // CRITICAL FIX: EntityPoolManager is now injected via constructor (same instance as EntityFactoryService)
         // This ensures pools registered here are available to EntityFactoryService
@@ -165,6 +158,11 @@ public class GameInitializer(
         var renderLogger = _loggerFactory.CreateLogger<ElevationRenderSystem>();
         RenderSystem = new ElevationRenderSystem(graphicsDevice, _assetManager, renderLogger);
         _systemManager.RegisterRenderSystem(RenderSystem);
+
+        // Initialize MapLifecycleManager (after AssetManager is available)
+        var mapLifecycleLogger = _loggerFactory.CreateLogger<MapLifecycleManager>();
+        MapLifecycleManager = new MapLifecycleManager(_world, _assetManager, mapLifecycleLogger);
+        _logger.LogInformation("MapLifecycleManager initialized");
 
         // Initialize all systems
         _systemManager.Initialize(_world);

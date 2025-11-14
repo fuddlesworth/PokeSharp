@@ -78,7 +78,8 @@ public class MapApiService(
             position.MapId = mapId;
             position.X = x;
             position.Y = y;
-            position.SyncPixelsToGrid();
+            var tileSize = GetTileSize(mapId);
+            position.SyncPixelsToGrid(tileSize);
             _logger.LogInformation("Transitioned to map {MapId} at ({X}, {Y})", mapId, x, y);
         }
     }
@@ -135,5 +136,21 @@ public class MapApiService(
         );
 
         return playerEntity;
+    }
+
+    private int GetTileSize(int mapId)
+    {
+        var tileSize = 16;
+
+        _world.Query(
+            in EcsQueries.MapInfo,
+            (ref MapInfo mapInfo) =>
+            {
+                if (mapInfo.MapId == mapId)
+                    tileSize = mapInfo.TileSize;
+            }
+        );
+
+        return tileSize;
     }
 }

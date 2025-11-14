@@ -20,7 +20,8 @@ public class MapInitializer(
     World world,
     MapLoader mapLoader,
     SpatialHashSystem spatialHashSystem,
-    ElevationRenderSystem renderSystem
+    ElevationRenderSystem renderSystem,
+    MapLifecycleManager mapLifecycleManager
 )
 {
     /// <summary>
@@ -39,6 +40,17 @@ public class MapInitializer(
             var mapInfoEntity = mapLoader.LoadMap(world, mapId);
             logger.LogWorkflowStatus("Map entities created", ("entity", mapInfoEntity.Id));
 
+            // Get MapInfo to extract map ID and name for lifecycle tracking
+            var mapInfo = mapInfoEntity.Get<MapInfo>();
+            var textureIds = mapLoader.GetLoadedTextureIds(mapInfo.MapId);
+
+            // Register map with lifecycle manager BEFORE transitioning
+            mapLifecycleManager.RegisterMap(mapInfo.MapId, mapInfo.MapName, textureIds);
+
+            // Transition to new map (cleans up old maps)
+            mapLifecycleManager.TransitionToMap(mapInfo.MapId);
+            logger.LogWorkflowStatus("Map lifecycle transition complete", ("mapId", mapInfo.MapId));
+
             // Invalidate spatial hash to reindex static tiles
             spatialHashSystem.InvalidateStaticTiles();
             logger.LogWorkflowStatus("Spatial hash invalidated", ("cells", "static"));
@@ -47,11 +59,12 @@ public class MapInitializer(
             renderSystem.PreloadMapAssets(world);
             logger.LogWorkflowStatus("Render assets preloaded");
 
-            // Set camera bounds from MapInfo
+            // Set camera bounds and tile size from MapInfo
             world.Query(
                 in EcsQueries.MapInfo,
                 (ref MapInfo mapInfo) =>
                 {
+                    renderSystem.SetTileSize(mapInfo.TileSize);
                     logger.LogWorkflowStatus(
                         "Camera bounds updated",
                         ("widthPx", mapInfo.PixelWidth),
@@ -90,6 +103,17 @@ public class MapInitializer(
             var mapInfoEntity = mapLoader.LoadMapEntities(world, mapPath);
             logger.LogWorkflowStatus("Map entities created", ("entity", mapInfoEntity.Id));
 
+            // Get MapInfo to extract map ID and name for lifecycle tracking
+            var mapInfo = mapInfoEntity.Get<MapInfo>();
+            var textureIds = mapLoader.GetLoadedTextureIds(mapInfo.MapId);
+
+            // Register map with lifecycle manager BEFORE transitioning
+            mapLifecycleManager.RegisterMap(mapInfo.MapId, mapInfo.MapName, textureIds);
+
+            // Transition to new map (cleans up old maps)
+            mapLifecycleManager.TransitionToMap(mapInfo.MapId);
+            logger.LogWorkflowStatus("Map lifecycle transition complete", ("mapId", mapInfo.MapId));
+
             // Invalidate spatial hash to reindex static tiles
             spatialHashSystem.InvalidateStaticTiles();
             logger.LogWorkflowStatus("Spatial hash invalidated", ("cells", "static"));
@@ -98,11 +122,12 @@ public class MapInitializer(
             renderSystem.PreloadMapAssets(world);
             logger.LogWorkflowStatus("Render assets preloaded");
 
-            // Set camera bounds from MapInfo
+            // Set camera bounds and tile size from MapInfo
             world.Query(
                 in EcsQueries.MapInfo,
                 (ref MapInfo mapInfo) =>
                 {
+                    renderSystem.SetTileSize(mapInfo.TileSize);
                     logger.LogWorkflowStatus(
                         "Camera bounds updated",
                         ("widthPx", mapInfo.PixelWidth),

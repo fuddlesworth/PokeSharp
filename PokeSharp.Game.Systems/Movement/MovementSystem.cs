@@ -60,7 +60,7 @@ public class MovementSystem : SystemBase, IUpdateSystem
             in EcsQueries.MovementWithAnimation,
             (Entity entity, ref Position position, ref GridMovement movement, ref Animation animation) =>
             {
-                ProcessMovementWithAnimation(ref position, ref movement, ref animation, deltaTime);
+                ProcessMovementWithAnimation(world, ref position, ref movement, ref animation, deltaTime);
             }
         );
 
@@ -69,7 +69,7 @@ public class MovementSystem : SystemBase, IUpdateSystem
             in EcsQueries.MovementWithoutAnimation,
             (Entity entity, ref Position position, ref GridMovement movement) =>
             {
-                ProcessMovementNoAnimation(ref position, ref movement, deltaTime);
+                ProcessMovementNoAnimation(world, ref position, ref movement, deltaTime);
             }
         );
     }
@@ -78,6 +78,7 @@ public class MovementSystem : SystemBase, IUpdateSystem
     ///     Processes movement for entities with animation components.
     /// </summary>
     private void ProcessMovementWithAnimation(
+        World world,
         ref Position position,
         ref GridMovement movement,
         ref Animation animation,
@@ -127,9 +128,9 @@ public class MovementSystem : SystemBase, IUpdateSystem
         }
         else
         {
-            // Ensure pixel position matches grid position when not moving
-            // Note: SyncPixelsToGrid will use default 16 if tileSize not available
-            position.SyncPixelsToGrid();
+            // Ensure pixel position matches grid position when not moving.
+            var tileSize = GetTileSize(world, position.MapId);
+            position.SyncPixelsToGrid(tileSize);
 
             // Ensure idle animation is playing
             var expectedAnimation = movement.FacingDirection.ToIdleAnimation();
@@ -142,6 +143,7 @@ public class MovementSystem : SystemBase, IUpdateSystem
     ///     Processes movement for entities without animation components.
     /// </summary>
     private void ProcessMovementNoAnimation(
+        World world,
         ref Position position,
         ref GridMovement movement,
         float deltaTime
@@ -183,8 +185,8 @@ public class MovementSystem : SystemBase, IUpdateSystem
         else
         {
             // Ensure pixel position matches grid position when not moving
-            // Note: SyncPixelsToGrid will use default 16 if tileSize not available
-            position.SyncPixelsToGrid();
+            var tileSize = GetTileSize(world, position.MapId);
+            position.SyncPixelsToGrid(tileSize);
         }
     }
 

@@ -1,0 +1,16 @@
+{
+  "columns": 16,
+  "image": "petalburg_tiles.png",
+  "imageheight": 80,
+  "imagewidth": 128,
+  "margin": 0,
+  "name": "petalburg",
+  "spacing": 0,
+  "tilecount": 160,
+  "tiledversion": "1.10.2",
+  "tileheight": 8,
+  "tilewidth": 8,
+  "type": "tileset",
+  "version": "1.10",
+  "tiles": []
+}

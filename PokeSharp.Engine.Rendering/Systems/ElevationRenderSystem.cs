@@ -42,7 +42,12 @@ public class ElevationRenderSystem(
 ) : SystemBase, IRenderSystem
 {
     // Use centralized rendering constants
-    private const int TileSize = RenderingConstants.TileSize;
+    private int _tileSize = RenderingConstants.TileSize;
+
+    /// <summary>
+    ///     Gets the tile size currently used for rendering.
+    /// </summary>
+    public int TileSize => _tileSize;
     private const float MapHeight = RenderingConstants.MaxRenderDistance;
 
     private readonly AssetManager _assetManager =
@@ -52,6 +57,21 @@ public class ElevationRenderSystem(
     /// Gets the AssetManager used by this render system.
     /// </summary>
     public AssetManager AssetManager => _assetManager;
+
+    /// <summary>
+    ///     Updates the tile size used by the renderer (falls back to default if invalid).
+    /// </summary>
+    public void SetTileSize(int tileSize)
+    {
+        var clamped = tileSize > 0 ? tileSize : RenderingConstants.TileSize;
+        if (_tileSize == clamped)
+            return;
+
+        _tileSize = clamped;
+        _cachedCameraBounds = null;
+        _cachedCameraTransform = Matrix.Identity;
+        _logger?.LogInformation("Render tile size set to {TileSize}px", _tileSize);
+    }
 
     /// <summary>
     /// Sets the sprite texture loader for lazy loading.
@@ -380,15 +400,15 @@ public class ElevationRenderSystem(
                 // Calculate camera bounds for culling
                 const int margin = 2;
                 var left =
-                    (int)(camera.Position.X / TileSize)
-                    - camera.Viewport.Width / 2 / TileSize / (int)camera.Zoom
+                    (int)(camera.Position.X / _tileSize)
+                    - camera.Viewport.Width / 2 / _tileSize / (int)camera.Zoom
                     - margin;
                 var top =
-                    (int)(camera.Position.Y / TileSize)
-                    - camera.Viewport.Height / 2 / TileSize / (int)camera.Zoom
+                    (int)(camera.Position.Y / _tileSize)
+                    - camera.Viewport.Height / 2 / _tileSize / (int)camera.Zoom
                     - margin;
-                var width = camera.Viewport.Width / TileSize / (int)camera.Zoom + margin * 2;
-                var height = camera.Viewport.Height / TileSize / (int)camera.Zoom + margin * 2;
+                var width = camera.Viewport.Width / _tileSize / (int)camera.Zoom + margin * 2;
+                var height = camera.Viewport.Height / _tileSize / (int)camera.Zoom + margin * 2;
 
                 _cachedCameraBounds = new Rectangle(left, top, width, height);
 
@@ -457,14 +477,14 @@ public class ElevationRenderSystem(
                         // Apply layer offset for parallax effect
                         // +1 to Y for bottom-left origin alignment
                         position = new Vector2(
-                            pos.X * TileSize + offset.X,
-                            (pos.Y + 1) * TileSize + offset.Y
+                            pos.X * _tileSize + offset.X,
+                            (pos.Y + 1) * _tileSize + offset.Y
                         );
                     }
                     else
                     {
                         // Standard positioning (+1 to Y for bottom-left origin alignment)
-                        position = new Vector2(pos.X * TileSize, (pos.Y + 1) * TileSize);
+                        position = new Vector2(pos.X * _tileSize, (pos.Y + 1) * _tileSize);
                     }
 
                     // Calculate elevation-based layer depth
@@ -580,8 +600,8 @@ public class ElevationRenderSystem(
                 sourceRect = new Rectangle(0, 0, texture.Width, texture.Height);
 
             // Calculate render position (visual interpolated position)
-            // Add TileSize to Y to align sprite feet with tile bottom
-            var renderPosition = new Vector2(position.PixelX, position.PixelY + TileSize);
+            // Add tile size to Y to align sprite feet with tile bottom
+            var renderPosition = new Vector2(position.PixelX, position.PixelY + _tileSize);
 
             // BEST PRACTICE FOR MOVING ENTITIES: Use TARGET position for depth sorting
             // When moving/jumping, sort based on where the entity is going, not where they started.
@@ -592,13 +612,13 @@ public class ElevationRenderSystem(
             if (movement.IsMoving)
             {
                 // Use target grid position for sorting
-                var targetGridY = (int)(movement.TargetPosition.Y / TileSize);
-                groundY = (targetGridY + 1) * TileSize; // +1 for bottom of tile
+                var targetGridY = (int)(movement.TargetPosition.Y / _tileSize);
+                groundY = (targetGridY + 1) * _tileSize; // +1 for bottom of tile
             }
             else
             {
                 // Use current grid position
-                groundY = (position.Y + 1) * TileSize;
+                groundY = (position.Y + 1) * _tileSize;
             }
 
             var layerDepth = CalculateElevationDepth(elevation.Value, groundY);
@@ -665,8 +685,8 @@ public class ElevationRenderSystem(
                 sourceRect = new Rectangle(0, 0, texture.Width, texture.Height);
 
             // Calculate render position
-            // Add TileSize to Y to align sprite feet with tile bottom
-            var renderPosition = new Vector2(position.PixelX, position.PixelY + TileSize);
+            // Add tile size to Y to align sprite feet with tile bottom
+            var renderPosition = new Vector2(position.PixelX, position.PixelY + _tileSize);
 
             // BEST PRACTICE: Calculate layer depth based on entity's GRID position, not visual pixel position.
             // This ensures:
@@ -677,7 +697,7 @@ public class ElevationRenderSystem(
             // The grid position represents where the entity logically is for gameplay purposes.
             // The pixel position is just the visual interpolation for smooth movement.
             // For a 16x16 tile grid, the entity's ground Y is at the bottom of their grid tile.
-            float groundY = (position.Y + 1) * TileSize; // +1 because we want bottom of tile
+            float groundY = (position.Y + 1) * _tileSize; // +1 because we want bottom of tile
             var layerDepth = CalculateElevationDepth(elevation.Value, groundY);
 
             // Determine sprite effects (flip horizontal for left-facing)

@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Linq;
 using System.Xml.Linq;
 using PokeSharp.Game.Data.MapLoading.Tiled.Tmx;
 
@@ -142,10 +143,10 @@ public static class TmxParser
         return layers;
     }
 
-    private static int[] ParseCsvData(string csv, int width, int height)
+    private static uint[] ParseCsvData(string csv, int width, int height)
     {
         var values = csv.Split(',', StringSplitOptions.RemoveEmptyEntries)
-            .Select(s => int.Parse(s.Trim(), CultureInfo.InvariantCulture))
+            .Select(s => uint.Parse(s.Trim(), CultureInfo.InvariantCulture))
             .ToArray();
 
         if (values.Length != width * height)
@@ -156,14 +157,17 @@ public static class TmxParser
         return values; // Return flat array (row-major order)
     }
 
-    private static int[] ParseXmlData(XElement dataElement, int width, int height)
+    private static uint[] ParseXmlData(XElement dataElement, int width, int height)
     {
-        var data = new int[width * height];
+        var data = new uint[width * height];
         var tiles = dataElement.Elements("tile").ToArray();
 
         for (var i = 0; i < tiles.Length && i < data.Length; i++)
         {
-            data[i] = ParseInt(tiles[i], "gid");
+            var gidAttr = tiles[i].Attribute("gid")?.Value ?? "0";
+            if (!uint.TryParse(gidAttr, NumberStyles.Integer, CultureInfo.InvariantCulture, out var gid))
+                gid = 0;
+            data[i] = gid;
         }
 
         return data; // Return flat array (row-major order)

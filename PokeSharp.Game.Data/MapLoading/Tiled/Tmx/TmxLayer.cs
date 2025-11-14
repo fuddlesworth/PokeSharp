@@ -48,6 +48,7 @@ public class TmxLayer
     /// <summary>
     ///     Gets or sets the tile data as a flat array (row-major order).
     ///     Use: tileGid = Data[y * Width + x]
+    ///     Stored as unsigned because Tiled encodes flip flags in the high bits.
     /// </summary>
-    public int[]? Data { get; set; }
+    public uint[]? Data { get; set; }
 }

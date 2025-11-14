@@ -175,7 +175,8 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
             _world,
             mapLoader,
             _gameInitializer.SpatialHashSystem,
-            _gameInitializer.RenderSystem
+            _gameInitializer.RenderSystem,
+            _gameInitializer.MapLifecycleManager
         );
 
         var npcBehaviorInitializerLogger = _logging.CreateLogger<NPCBehaviorInitializer>();
@@ -195,7 +196,7 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
         LoadSpriteTextures();
 
         // Load test map and create map entity (NEW: Definition-based loading)
-        _mapInitializer.LoadMap("test-map");
+        _mapInitializer.LoadMap("LittlerootTown");
 
         // Create test player entity
         _initialization.PlayerFactory.CreatePlayer(

@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Text.Json;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework.Graphics;
 using PokeSharp.Engine.Common.Logging;
@@ -22,9 +23,15 @@ public class AssetManager(
         graphicsDevice ?? throw new ArgumentNullException(nameof(graphicsDevice));
 
     private readonly ILogger<AssetManager>? _logger = logger;
-    private readonly Dictionary<string, Texture2D> _textures = new();
+
+    // LRU cache with 50MB budget for texture memory management
+    private readonly LruCache<string, Texture2D> _textures = new(
+        maxSizeBytes: 50_000_000, // 50MB budget
+        sizeCalculator: texture => texture.Width * texture.Height * 4L, // RGBA = 4 bytes/pixel
+        logger: logger
+    );
+
     private bool _disposed;
-    private AssetManifest? _manifest;
 
     /// <summary>
     ///     Gets the root directory path where assets are stored.
@@ -37,6 +44,11 @@ public class AssetManager(
     public int LoadedTextureCount => _textures.Count;
 
     /// <summary>
+    ///     Gets the current texture cache memory usage in bytes.
+    /// </summary>
+    public long TextureCacheSizeBytes => _textures.CurrentSize;
+
+    /// <summary>
     ///     Disposes all loaded textures.
     /// </summary>
     public void Dispose()
@@ -44,115 +56,14 @@ public class AssetManager(
         if (_disposed)
             return;
 
-        foreach (var texture in _textures.Values)
-            texture.Dispose();
-
-        _textures.Clear();
+        _textures.Clear(); // LruCache.Clear() disposes all textures
         _disposed = true;
 
         GC.SuppressFinalize(this);
     }
 
-    /// <summary>
-    ///     Loads all assets defined in a manifest file.
-    /// </summary>
-    /// <param name="manifestPath">Path to the manifest JSON file.</param>
-    public void LoadManifest(string manifestPath = "Assets/manifest.json")
-    {
-        LoadManifestInternal(manifestPath);
-    }
-
-    private void LoadManifestInternal(string manifestPath)
-    {
-        if (!File.Exists(manifestPath))
-            throw new FileNotFoundException($"Asset manifest not found: {manifestPath}");
-
-        var json = File.ReadAllText(manifestPath);
-        _logger?.LogDebug("Manifest JSON content:\n{Json}", json);
-
-        // Use case-insensitive deserialization to match lowercase JSON keys with PascalCase C# properties
-        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        _manifest =
-            JsonSerializer.Deserialize<AssetManifest>(json, options)
-            ?? throw new InvalidOperationException("Failed to deserialize asset manifest");
-
-        _logger?.LogAssetStatus("Manifest deserialized");
-        _logger?.LogAssetStatus("Tilesets discovered", ("count", _manifest.Tilesets?.Count ?? 0));
-        _logger?.LogAssetStatus("Sprites discovered", ("count", _manifest.Sprites?.Count ?? 0));
-        _logger?.LogAssetStatus("Maps discovered", ("count", _manifest.Maps?.Count ?? 0));
-
-        // Load all tilesets
-        if (_manifest.Tilesets != null)
-        {
-            _logger?.LogAssetLoadingStarted("tileset(s)", _manifest.Tilesets.Count);
-            var successful = 0;
-            var failed = 0;
-
-            foreach (var tileset in _manifest.Tilesets)
-                try
-                {
-                    LoadTexture(tileset.Id, tileset.Path);
-                    successful++;
-                }
-                catch (Exception ex)
-                {
-                    failed++;
-                    _logger?.LogExceptionWithContext(
-                        ex,
-                        "Failed to load tileset '{TilesetId}'",
-                        tileset.Id
-                    );
-                }
-
-            if (successful > 0)
-            {
-                if (failed > 0)
-                    _logger?.LogAssetStatus(
-                        "Tilesets loaded",
-                        ("count", successful),
-                        ("failed", failed)
-                    );
-                else
-                    _logger?.LogAssetStatus("Tilesets loaded", ("count", successful));
-            }
-        }
-
-        // Load all sprites
-        if (_manifest.Sprites != null)
-        {
-            _logger?.LogAssetLoadingStarted("sprite(s)", _manifest.Sprites.Count);
-            var successful = 0;
-            var failed = 0;
-
-            foreach (var sprite in _manifest.Sprites)
-                try
-                {
-                    LoadTexture(sprite.Id, sprite.Path);
-                    successful++;
-                }
-                catch (Exception ex)
-                {
-                    failed++;
-                    _logger?.LogExceptionWithContext(
-                        ex,
-                        "Failed to load sprite '{SpriteId}'",
-                        sprite.Id
-                    );
-                }
-
-            if (successful > 0)
-            {
-                if (failed > 0)
-                    _logger?.LogAssetStatus(
-                        "Sprites loaded",
-                        ("count", successful),
-                        ("failed", failed)
-                    );
-                else
-                    _logger?.LogAssetStatus("Sprites loaded", ("count", successful));
-            }
-        }
-    }
+    // REMOVED: LoadManifest() and LoadManifestInternal() - obsolete
+    // manifest.json has been replaced by EF Core MapDefinition and on-demand texture loading
 
     /// <summary>
     ///     Loads a texture from a PNG file and caches it.
@@ -164,10 +75,27 @@ public class AssetManager(
         ArgumentException.ThrowIfNullOrEmpty(id);
         ArgumentException.ThrowIfNullOrEmpty(relativePath);
 
-        var fullPath = Path.Combine(_assetRoot, relativePath);
+        var normalizedRelative = relativePath.Replace('/', Path.DirectorySeparatorChar);
+        var fullPath = Path.Combine(_assetRoot, normalizedRelative);
 
         if (!File.Exists(fullPath))
-            throw new FileNotFoundException($"Texture file not found: {fullPath}");
+        {
+            var fallbackPath = ResolveFallbackTexturePath(id, normalizedRelative);
+            if (fallbackPath is not null && File.Exists(fallbackPath))
+            {
+                _logger?.LogWarning(
+                    "Texture '{TextureId}' not found at '{OriginalPath}'. Using fallback '{FallbackPath}'.",
+                    id,
+                    fullPath,
+                    fallbackPath
+                );
+                fullPath = fallbackPath;
+            }
+            else
+            {
+                throw new FileNotFoundException($"Texture file not found: {fullPath}");
+            }
+        }
 
         var sw = Stopwatch.StartNew();
 
@@ -177,7 +105,7 @@ public class AssetManager(
         sw.Stop();
         var elapsedMs = sw.Elapsed.TotalMilliseconds;
 
-        _textures[id] = texture;
+        _textures.AddOrUpdate(id, texture); // LRU cache auto-evicts if needed
 
         // Log texture loading with timing
         _logger?.LogTextureLoaded(id, elapsedMs, texture.Width, texture.Height);
@@ -185,6 +113,70 @@ public class AssetManager(
         // Warn about slow texture loads (>100ms)
         if (elapsedMs > 100.0)
             _logger?.LogSlowTextureLoad(id, elapsedMs);
+    }
+
+    private string? ResolveFallbackTexturePath(string id, string normalizedRelativePath)
+    {
+        var normalized = normalizedRelativePath.Replace('\\', '/');
+
+        if (normalized.StartsWith("Tilesets/", StringComparison.OrdinalIgnoreCase))
+        {
+            var fileName = Path.GetFileName(normalizedRelativePath);
+            var tilesetsRoot = Path.Combine(_assetRoot, "Tilesets");
+            var tilesetDir = Path.Combine(tilesetsRoot, id);
+
+            if (!string.IsNullOrEmpty(fileName))
+            {
+                var nestedPath = Path.Combine(tilesetDir, fileName);
+                if (File.Exists(nestedPath))
+                    return nestedPath;
+            }
+
+            // Try reading the tileset JSON for the actual image name
+            var tilesetJson = Path.Combine(tilesetDir, $"{id}.json");
+            if (File.Exists(tilesetJson))
+            {
+                var imageName = TryGetTilesetImageName(tilesetJson);
+                if (!string.IsNullOrEmpty(imageName))
+                {
+                    var jsonImagePath = Path.Combine(tilesetDir, imageName);
+                    if (File.Exists(jsonImagePath))
+                        return jsonImagePath;
+                }
+            }
+
+            // Fallback: pick the first PNG found in the tileset directory
+            if (Directory.Exists(tilesetDir))
+            {
+                var pngMatch = Directory
+                    .EnumerateFiles(tilesetDir, "*.png", SearchOption.TopDirectoryOnly)
+                    .FirstOrDefault();
+                if (pngMatch is not null)
+                    return pngMatch;
+            }
+        }
+
+        return null;
+    }
+
+    private string? TryGetTilesetImageName(string tilesetJsonPath)
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(File.ReadAllText(tilesetJsonPath));
+            if (doc.RootElement.TryGetProperty("image", out var imageProperty))
+                return imageProperty.GetString();
+        }
+        catch (Exception ex)
+        {
+            _logger?.LogWarning(
+                ex,
+                "Failed to read tileset JSON '{TilesetJson}' while resolving fallback texture path.",
+                tilesetJsonPath
+            );
+        }
+
+        return null;
     }
 
     /// <summary>
@@ -195,54 +187,26 @@ public class AssetManager(
     /// <exception cref="KeyNotFoundException">Thrown if texture not found.</exception>
     public Texture2D GetTexture(string id)
     {
-        if (_textures.TryGetValue(id, out var texture))
+        if (_textures.TryGetValue(id, out var texture) && texture != null)
             return texture;
 
         throw new KeyNotFoundException(
-            $"Texture '{id}' not loaded. Available textures: {string.Join(", ", _textures.Keys)}"
+            $"Texture '{id}' not loaded or was evicted from cache."
         );
     }
 
     /// <summary>
-    ///     Checks if a texture is loaded.
+    ///     Checks if a texture is loaded in cache.
     /// </summary>
     /// <param name="id">The texture identifier.</param>
     /// <returns>True if texture is loaded.</returns>
     public bool HasTexture(string id)
     {
-        return _textures.ContainsKey(id);
+        return _textures.TryGetValue(id, out _);
     }
 
-    /// <summary>
-    ///     Hot-reloads a texture from disk (useful for development).
-    /// </summary>
-    /// <param name="id">The texture identifier to reload.</param>
-    public void HotReloadTexture(string id)
-    {
-        if (!_textures.ContainsKey(id))
-            throw new KeyNotFoundException(
-                $"Cannot hot-reload texture '{id}' - not originally loaded"
-            );
-
-        if (_manifest == null)
-            throw new InvalidOperationException("Cannot hot-reload without manifest");
-
-        // Find the texture path in manifest
-        var tilesetEntry = _manifest.Tilesets?.FirstOrDefault(t => t.Id == id);
-        var spriteEntry = _manifest.Sprites?.FirstOrDefault(s => s.Id == id);
-
-        var path =
-            tilesetEntry?.Path
-            ?? spriteEntry?.Path
-            ?? throw new KeyNotFoundException($"Texture '{id}' not found in manifest");
-
-        // Dispose old texture
-        _textures[id].Dispose();
-        _textures.Remove(id);
-
-        // Reload
-        LoadTexture(id, path);
-    }
+    // REMOVED: HotReloadTexture() - obsolete (depended on manifest.json)
+    // For hot-reloading during development, use UnregisterTexture() + LoadTexture() manually
 
     /// <summary>
     ///     Registers a pre-loaded texture with the asset manager.
@@ -255,14 +219,8 @@ public class AssetManager(
         ArgumentException.ThrowIfNullOrEmpty(id);
         ArgumentNullException.ThrowIfNull(texture);
 
-        // If texture already exists, dispose the old one
-        if (_textures.TryGetValue(id, out var oldTexture))
-        {
-            _logger?.LogDebug("Replacing existing texture: {TextureId}", id);
-            oldTexture.Dispose();
-        }
-
-        _textures[id] = texture;
+        // LruCache will handle old texture disposal automatically
+        _textures.AddOrUpdate(id, texture);
         _logger?.LogDebug(
             "Registered texture: {TextureId} ({Width}x{Height})",
             id,
@@ -277,14 +235,12 @@ public class AssetManager(
     /// <returns>True if texture was found and removed.</returns>
     public bool UnregisterTexture(string id)
     {
-        if (_textures.TryGetValue(id, out var texture))
+        var removed = _textures.Remove(id); // LruCache handles disposal
+        if (removed)
         {
-            texture.Dispose();
-            _textures.Remove(id);
             _logger?.LogDebug("Unregistered texture: {TextureId}", id);
-            return true;
         }
-
-        return false;
+        return removed;
     }
 }
+

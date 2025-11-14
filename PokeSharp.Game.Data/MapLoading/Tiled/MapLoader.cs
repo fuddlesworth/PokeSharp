@@ -57,6 +57,7 @@ public class MapLoader(
     private readonly MapDefinitionService? _mapDefinitionService = mapDefinitionService;
     private readonly ILogger<MapLoader>? _logger = logger;
     private readonly Dictionary<string, int> _mapNameToId = new();
+    private readonly Dictionary<int, HashSet<string>> _mapTextureIds = new(); // Track texture IDs per map
     private int _nextMapId;
 
     /// <summary>
@@ -143,25 +144,25 @@ public class MapLoader(
         var mapId = GetMapIdFromString(mapDef.MapId);
         var mapName = mapDef.DisplayName;
 
-        // Load and setup tileset (optional for image-layer-only maps)
-        TmxTileset? tileset = null;
-        string tilesetId = "none";
+        var loadedTilesets = tmxDoc.Tilesets.Count > 0
+            ? LoadTilesetsFromDefinition(tmxDoc, mapDef.MapId)
+            : new List<LoadedTileset>();
 
-        if (tmxDoc.Tilesets.Count > 0)
-        {
-            var loadedTileset = LoadTilesetFromDoc(tmxDoc, mapDef.MapId);
-            tileset = loadedTileset.tileset;
-            tilesetId = loadedTileset.tilesetId;
-        }
+        // Track texture IDs for lifecycle management
+        TrackMapTextures(mapId, loadedTilesets);
 
-        // Process all layers and create tile entities (only if tileset exists)
-        var tilesCreated = tileset != null ? ProcessLayers(world, tmxDoc, mapId, tileset) : 0;
+        // Process all layers and create tile entities (only if tilesets exist)
+        var tilesCreated = loadedTilesets.Count > 0
+            ? ProcessLayers(world, tmxDoc, mapId, loadedTilesets)
+            : 0;
 
         // Create metadata entities (use MapDefinition metadata)
-        var mapInfoEntity = CreateMapMetadataFromDefinition(world, tmxDoc, mapDef, mapId, tilesetId);
+        var mapInfoEntity = CreateMapMetadataFromDefinition(world, tmxDoc, mapDef, mapId, loadedTilesets);
 
-        // Setup animations (only if tileset exists)
-        var animatedTilesCreated = tileset != null ? CreateAnimatedTileEntities(world, tmxDoc, tileset) : 0;
+        // Setup animations (only if tilesets exist)
+        var animatedTilesCreated = loadedTilesets.Count > 0
+            ? CreateAnimatedTileEntities(world, tmxDoc, loadedTilesets)
+            : 0;
 
         // Create image layers
         var totalLayerCount = tmxDoc.Layers.Count + tmxDoc.ImageLayers.Count;
@@ -179,7 +180,7 @@ public class MapLoader(
             imageLayersCreated,
             animatedTilesCreated,
             mapId,
-            tilesetId
+            DescribeTilesetsForLog(loadedTilesets)
         );
 
         // Invalidate spatial hash to rebuild with new tiles
@@ -203,25 +204,25 @@ public class MapLoader(
         var mapId = GetMapId(mapPath);
         var mapName = Path.GetFileNameWithoutExtension(mapPath);
 
-        // Load and setup tileset (optional for image-layer-only maps)
-        TmxTileset? tileset = null;
-        string tilesetId = "none";
+        var loadedTilesets = tmxDoc.Tilesets.Count > 0
+            ? LoadTilesets(tmxDoc, mapPath)
+            : new List<LoadedTileset>();
 
-        if (tmxDoc.Tilesets.Count > 0)
-        {
-            var loadedTileset = LoadTileset(tmxDoc, mapPath);
-            tileset = loadedTileset.tileset;
-            tilesetId = loadedTileset.tilesetId;
-        }
+        // Track texture IDs for lifecycle management
+        TrackMapTextures(mapId, loadedTilesets);
 
-        // Process all layers and create tile entities (only if tileset exists)
-        var tilesCreated = tileset != null ? ProcessLayers(world, tmxDoc, mapId, tileset) : 0;
+        // Process all layers and create tile entities (only if tilesets exist)
+        var tilesCreated = loadedTilesets.Count > 0
+            ? ProcessLayers(world, tmxDoc, mapId, loadedTilesets)
+            : 0;
 
         // Create metadata entities
-        var mapInfoEntity = CreateMapMetadata(world, tmxDoc, mapPath, mapId, mapName, tilesetId);
+        var mapInfoEntity = CreateMapMetadata(world, tmxDoc, mapPath, mapId, mapName, loadedTilesets);
 
-        // Setup animations (only if tileset exists)
-        var animatedTilesCreated = tileset != null ? CreateAnimatedTileEntities(world, tmxDoc, tileset) : 0;
+        // Setup animations (only if tilesets exist)
+        var animatedTilesCreated = loadedTilesets.Count > 0
+            ? CreateAnimatedTileEntities(world, tmxDoc, loadedTilesets)
+            : 0;
 
         // Create image layers
         var totalLayerCount = tmxDoc.Layers.Count + tmxDoc.ImageLayers.Count;
@@ -239,7 +240,7 @@ public class MapLoader(
             imageLayersCreated,
             animatedTilesCreated,
             mapId,
-            tilesetId
+            DescribeTilesetsForLog(loadedTilesets)
         );
 
         // Invalidate spatial hash to rebuild with new tiles
@@ -253,47 +254,43 @@ public class MapLoader(
         return mapInfoEntity;
     }
 
-    /// <summary>
-    ///     Loads and validates the tileset, ensuring texture is available.
-    /// </summary>
-    /// <returns>Tuple of (tileset, tilesetId)</returns>
-    private (TmxTileset tileset, string tilesetId) LoadTileset(TmxDocument tmxDoc, string mapPath)
+    private List<LoadedTileset> LoadTilesets(TmxDocument tmxDoc, string mapPath) =>
+        LoadTilesetsInternal(tmxDoc, mapPath);
+
+    private List<LoadedTileset> LoadTilesetsFromDefinition(TmxDocument tmxDoc, string mapId)
     {
-        var tileset =
-            tmxDoc.Tilesets.FirstOrDefault()
-            ?? throw new InvalidOperationException($"Map '{mapPath}' has no tilesets");
+        string mapDirectoryBase;
+        if (_assetManager is AssetManager assetManager)
+            mapDirectoryBase = Path.Combine(assetManager.AssetRoot, "Data", "Maps");
+        else
+            mapDirectoryBase = Path.Combine("Assets", "Data", "Maps");
 
-        var tilesetId = ExtractTilesetId(tileset, mapPath);
-
-        // Ensure tileset texture is loaded (only if tileset has an image)
-        if (tileset.Image != null && !string.IsNullOrEmpty(tileset.Image.Source))
-        {
-            if (!_assetManager.HasTexture(tilesetId))
-                LoadTilesetTexture(tileset, mapPath, tilesetId);
-        }
-
-        return (tileset, tilesetId);
+        var syntheticMapPath = Path.Combine(mapDirectoryBase, $"{mapId}.json");
+        return LoadTilesetsInternal(tmxDoc, syntheticMapPath);
     }
 
-    /// <summary>
-    ///     Loads and validates the tileset for definition-based loading.
-    /// </summary>
-    private (TmxTileset tileset, string tilesetId) LoadTilesetFromDoc(TmxDocument tmxDoc, string mapId)
+    private List<LoadedTileset> LoadTilesetsInternal(TmxDocument tmxDoc, string mapPath)
     {
-        var tileset =
-            tmxDoc.Tilesets.FirstOrDefault()
-            ?? throw new InvalidOperationException($"Map '{mapId}' has no tilesets");
+        if (tmxDoc.Tilesets.Count == 0)
+            return new List<LoadedTileset>();
 
-        var tilesetId = ExtractTilesetId(tileset, $"Data/Maps/{mapId}");
-
-        // Ensure tileset texture is loaded (only if tileset has an image)
-        if (tileset.Image != null && !string.IsNullOrEmpty(tileset.Image.Source))
+        var loadedTilesets = new List<LoadedTileset>(tmxDoc.Tilesets.Count);
+        foreach (var tileset in tmxDoc.Tilesets)
         {
-            if (!_assetManager.HasTexture(tilesetId))
-                LoadTilesetTexture(tileset, $"Data/Maps/{mapId}", tilesetId);
+            var tilesetId = ExtractTilesetId(tileset, mapPath);
+            tileset.Name = tilesetId;
+
+            if (tileset.Image != null && !string.IsNullOrEmpty(tileset.Image.Source))
+            {
+                if (!_assetManager.HasTexture(tilesetId))
+                    LoadTilesetTexture(tileset, mapPath, tilesetId);
+            }
+
+            loadedTilesets.Add(new LoadedTileset(tileset, tilesetId));
         }
 
-        return (tileset, tilesetId);
+        loadedTilesets.Sort((a, b) => a.Tileset.FirstGid.CompareTo(b.Tileset.FirstGid));
+        return loadedTilesets;
     }
 
     /// <summary>
@@ -340,9 +337,13 @@ public class MapLoader(
                             root.TryGetProperty("imagewidth", out var iw) &&
                             root.TryGetProperty("imageheight", out var ih))
                         {
+                            var imageValue = img.GetString() ?? "";
+                            var tilesetDir = Path.GetDirectoryName(tilesetPath) ?? string.Empty;
+                            var imageAbsolute = Path.GetFullPath(Path.Combine(tilesetDir, imageValue));
+
                             tileset.Image = new TmxImage
                             {
-                                Source = img.GetString() ?? "",
+                                Source = imageAbsolute,
                                 Width = iw.GetInt32(),
                                 Height = ih.GetInt32()
                             };
@@ -581,7 +582,12 @@ public class MapLoader(
     ///     Processes all tile layers and creates tile entities.
     /// </summary>
     /// <returns>Total number of tiles created</returns>
-    private int ProcessLayers(World world, TmxDocument tmxDoc, int mapId, TmxTileset tileset)
+    private int ProcessLayers(
+        World world,
+        TmxDocument tmxDoc,
+        int mapId,
+        IReadOnlyList<LoadedTileset> tilesets
+    )
     {
         var tilesCreated = 0;
 
@@ -603,7 +609,7 @@ public class MapLoader(
                 world,
                 tmxDoc,
                 mapId,
-                tileset,
+                tilesets,
                 layer,
                 elevation,
                 layerOffset
@@ -620,7 +626,7 @@ public class MapLoader(
         World world,
         TmxDocument tmxDoc,
         int mapId,
-        TmxTileset tileset,
+        IReadOnlyList<LoadedTileset> tilesets,
         TmxLayer layer,
         byte elevation,
         LayerOffset? layerOffset
@@ -634,7 +640,7 @@ public class MapLoader(
         {
             // Extract flip flags from GID (flat array: row-major order)
             var index = y * layer.Width + x;
-            var rawGid = (uint)layer.Data![index];
+            var rawGid = layer.Data![index];
             var tileGid = (int)(rawGid & TILE_ID_MASK);
             var flipH = (rawGid & FLIPPED_HORIZONTALLY_FLAG) != 0;
             var flipV = (rawGid & FLIPPED_VERTICALLY_FLAG) != 0;
@@ -642,6 +648,18 @@ public class MapLoader(
 
             if (tileGid == 0)
                 continue; // Skip empty tiles
+
+            var tilesetIndex = FindTilesetIndexForGid(tileGid, tilesets);
+            if (tilesetIndex < 0)
+            {
+                _logger?.LogWarning(
+                    "[Loading:{MapId}] No tileset found for gid {TileGid} (layer '{LayerName}')",
+                    mapId,
+                    tileGid,
+                    layer.Name ?? "unnamed"
+                );
+                continue;
+            }
 
             tileDataList.Add(
                 new TileData
@@ -652,6 +670,7 @@ public class MapLoader(
                     FlipH = flipH,
                     FlipV = flipV,
                     FlipD = flipD,
+                    TilesetIndex = tilesetIndex
                 }
             );
         }
@@ -673,6 +692,7 @@ public class MapLoader(
             i =>
             {
                 var data = tileDataList[i];
+                var tileset = tilesets[data.TilesetIndex];
                 return CreateTileSprite(
                     data.TileGid,
                     tileset,
@@ -688,6 +708,7 @@ public class MapLoader(
         {
             var entity = tileEntities[i];
             var data = tileDataList[i];
+            var tileset = tilesets[data.TilesetIndex].Tileset;
 
             // Get tile properties from tileset
             var localTileId = data.TileGid - tileset.FirstGid;
@@ -726,6 +747,30 @@ public class MapLoader(
         public bool FlipH;
         public bool FlipV;
         public bool FlipD;
+        public int TilesetIndex;
+    }
+
+    private sealed class LoadedTileset
+    {
+        public LoadedTileset(TmxTileset tileset, string tilesetId)
+        {
+            Tileset = tileset;
+            TilesetId = tilesetId;
+        }
+
+        public TmxTileset Tileset { get; }
+        public string TilesetId { get; }
+    }
+
+    private static int FindTilesetIndexForGid(int tileGid, IReadOnlyList<LoadedTileset> tilesets)
+    {
+        for (var i = tilesets.Count - 1; i >= 0; i--)
+        {
+            if (tileGid >= tilesets[i].Tileset.FirstGid)
+                return i;
+        }
+
+        return -1;
     }
 
     /// <summary>
@@ -737,39 +782,39 @@ public class MapLoader(
         string mapPath,
         int mapId,
         string mapName,
-        string tilesetId
+        IReadOnlyList<LoadedTileset> tilesets
     )
     {
         // Create MapInfo entity for map metadata
         var mapInfo = new MapInfo(mapId, mapName, tmxDoc.Width, tmxDoc.Height, tmxDoc.TileWidth);
         var mapInfoEntity = world.Create(mapInfo);
 
-        if (!tmxDoc.Tilesets.Any())
-            throw new InvalidOperationException($"Map '{mapPath}' does not declare a tileset.");
+        foreach (var loadedTileset in tilesets)
+        {
+            var tileset = loadedTileset.Tileset;
+            if (tileset.FirstGid <= 0)
+                throw new InvalidOperationException(
+                    $"Tileset '{tileset.Name ?? loadedTileset.TilesetId}' in '{mapPath}' has invalid firstgid {tileset.FirstGid}."
+                );
+            if (tileset.TileWidth <= 0 || tileset.TileHeight <= 0)
+                throw new InvalidOperationException(
+                    $"Tileset '{tileset.Name ?? loadedTileset.TilesetId}' in '{mapPath}' has invalid tile size {tileset.TileWidth}x{tileset.TileHeight}."
+                );
+            if (tileset.Image == null || tileset.Image.Width <= 0 || tileset.Image.Height <= 0)
+                throw new InvalidOperationException(
+                    $"Tileset '{tileset.Name ?? loadedTileset.TilesetId}' in '{mapPath}' is missing valid image dimensions."
+                );
 
-        var tileset = tmxDoc.Tilesets.First();
-        if (tileset.FirstGid <= 0)
-            throw new InvalidOperationException(
-                $"Tileset '{tileset.Name ?? tilesetId}' in '{mapPath}' has invalid firstgid {tileset.FirstGid}."
+            var tilesetInfo = new TilesetInfo(
+                loadedTileset.TilesetId,
+                tileset.FirstGid,
+                tileset.TileWidth,
+                tileset.TileHeight,
+                tileset.Image.Width,
+                tileset.Image.Height
             );
-        if (tileset.TileWidth <= 0 || tileset.TileHeight <= 0)
-            throw new InvalidOperationException(
-                $"Tileset '{tileset.Name ?? tilesetId}' in '{mapPath}' has invalid tile size {tileset.TileWidth}x{tileset.TileHeight}."
-            );
-        if (tileset.Image == null || tileset.Image.Width <= 0 || tileset.Image.Height <= 0)
-            throw new InvalidOperationException(
-                $"Tileset '{tileset.Name ?? tilesetId}' in '{mapPath}' is missing valid image dimensions."
-            );
-
-        var tilesetInfo = new TilesetInfo(
-            tilesetId,
-            tileset.FirstGid,
-            tileset.TileWidth,
-            tileset.TileHeight,
-            tileset.Image.Width,
-            tileset.Image.Height
-        );
-        world.Create(tilesetInfo);
+            world.Create(tilesetInfo);
+        }
 
         return mapInfoEntity;
     }
@@ -783,7 +828,7 @@ public class MapLoader(
         TmxDocument tmxDoc,
         MapDefinition mapDef,
         int mapId,
-        string tilesetId
+        IReadOnlyList<LoadedTileset> tilesets
     )
     {
         // Create MapInfo entity for map metadata (use MapDefinition display name)
@@ -791,26 +836,26 @@ public class MapLoader(
         var mapInfoEntity = world.Create(mapInfo);
 
         // Create TilesetInfo if map has tilesets
-        if (tmxDoc.Tilesets.Any())
+        foreach (var loadedTileset in tilesets)
         {
-            var tileset = tmxDoc.Tilesets.First();
+            var tileset = loadedTileset.Tileset;
 
             // Validation
             if (tileset.FirstGid <= 0)
                 throw new InvalidOperationException(
-                    $"Tileset '{tileset.Name ?? tilesetId}' in map '{mapDef.MapId}' has invalid firstgid {tileset.FirstGid}."
+                    $"Tileset '{tileset.Name ?? loadedTileset.TilesetId}' in map '{mapDef.MapId}' has invalid firstgid {tileset.FirstGid}."
                 );
             if (tileset.TileWidth <= 0 || tileset.TileHeight <= 0)
                 throw new InvalidOperationException(
-                    $"Tileset '{tileset.Name ?? tilesetId}' in map '{mapDef.MapId}' has invalid tile size {tileset.TileWidth}x{tileset.TileHeight}."
+                    $"Tileset '{tileset.Name ?? loadedTileset.TilesetId}' in map '{mapDef.MapId}' has invalid tile size {tileset.TileWidth}x{tileset.TileHeight}."
                 );
             if (tileset.Image == null || tileset.Image.Width <= 0 || tileset.Image.Height <= 0)
                 throw new InvalidOperationException(
-                    $"Tileset '{tileset.Name ?? tilesetId}' in map '{mapDef.MapId}' is missing valid image dimensions."
+                    $"Tileset '{tileset.Name ?? loadedTileset.TilesetId}' in map '{mapDef.MapId}' is missing valid image dimensions."
                 );
 
             var tilesetInfo = new TilesetInfo(
-                tilesetId,
+                loadedTileset.TilesetId,
                 tileset.FirstGid,
                 tileset.TileWidth,
                 tileset.TileHeight,
@@ -855,7 +900,36 @@ public class MapLoader(
         );
     }
 
-    private int CreateAnimatedTileEntities(World world, TmxDocument tmxDoc, TmxTileset tileset)
+    private static string DescribeTilesetsForLog(IReadOnlyList<LoadedTileset> tilesets)
+    {
+        if (tilesets.Count == 0)
+            return "none";
+
+        if (tilesets.Count == 1)
+            return tilesets[0].TilesetId;
+
+        return string.Join(",", tilesets.Select(t => t.TilesetId));
+    }
+
+    private int CreateAnimatedTileEntities(
+        World world,
+        TmxDocument tmxDoc,
+        IReadOnlyList<LoadedTileset> tilesets
+    )
+    {
+        if (tilesets.Count == 0)
+            return 0;
+
+        var created = 0;
+        foreach (var loadedTileset in tilesets)
+        {
+            created += CreateAnimatedTileEntitiesForTileset(world, loadedTileset.Tileset);
+        }
+
+        return created;
+    }
+
+    private int CreateAnimatedTileEntitiesForTileset(World world, TmxTileset tileset)
     {
         if (tileset.Animations.Count == 0)
             return 0;
@@ -1006,20 +1080,22 @@ public class MapLoader(
         if (tileset.Image == null || string.IsNullOrEmpty(tileset.Image.Source))
             throw new InvalidOperationException("Tileset has no image source");
 
-        // Resolve relative path from map directory
         var mapDirectory = Path.GetDirectoryName(mapPath) ?? string.Empty;
-        var tilesetPath = Path.Combine(mapDirectory, tileset.Image.Source);
+
+        string tilesetImageAbsolutePath = Path.IsPathRooted(tileset.Image.Source)
+            ? tileset.Image.Source
+            : Path.GetFullPath(Path.Combine(mapDirectory, tileset.Image.Source));
 
         // If using AssetManager, make path relative to Assets root
         // Otherwise (e.g., in tests with stub), use the path directly
         string pathForLoader;
         if (_assetManager is AssetManager assetManager)
         {
-            pathForLoader = Path.GetRelativePath(assetManager.AssetRoot, tilesetPath);
+            pathForLoader = Path.GetRelativePath(assetManager.AssetRoot, tilesetImageAbsolutePath);
         }
         else
         {
-            pathForLoader = tileset.Image.Source;
+            pathForLoader = tilesetImageAbsolutePath;
         }
 
         _assetManager.LoadTexture(tilesetId, pathForLoader);
@@ -1060,6 +1136,35 @@ public class MapLoader(
     public int GetMapIdByName(string mapName)
     {
         return _mapNameToId.TryGetValue(mapName, out var id) ? id : -1;
+    }
+
+    /// <summary>
+    ///     Gets all texture IDs loaded for a specific map.
+    ///     Used by MapLifecycleManager to track texture memory.
+    /// </summary>
+    /// <param name="mapId">The map ID.</param>
+    /// <returns>HashSet of texture IDs used by the map.</returns>
+    public HashSet<string> GetLoadedTextureIds(int mapId)
+    {
+        return _mapTextureIds.TryGetValue(mapId, out var textureIds)
+            ? new HashSet<string>(textureIds) // Return copy to prevent external modification
+            : new HashSet<string>();
+    }
+
+    /// <summary>
+    ///     Tracks texture IDs used by a map for lifecycle management.
+    /// </summary>
+    private void TrackMapTextures(int mapId, IReadOnlyList<LoadedTileset> tilesets)
+    {
+        var textureIds = new HashSet<string>();
+
+        foreach (var loadedTileset in tilesets)
+        {
+            textureIds.Add(loadedTileset.TilesetId);
+        }
+
+        _mapTextureIds[mapId] = textureIds;
+        _logger?.LogDebug("Tracked {Count} texture IDs for map {MapId}", textureIds.Count, mapId);
     }
 
     /// <summary>
@@ -1179,7 +1284,7 @@ public class MapLoader(
         int y,
         int mapId,
         int tileGid,
-        TmxTileset tileset,
+        LoadedTileset loadedTileset,
         byte elevation,
         LayerOffset? layerOffset,
         bool flipH = false,
@@ -1188,6 +1293,7 @@ public class MapLoader(
     )
     {
         // Get tile properties from tileset (convert global ID to local ID)
+        var tileset = loadedTileset.Tileset;
         var localTileId = tileGid - tileset.FirstGid;
         Dictionary<string, object>? props = null;
         if (localTileId >= 0)
@@ -1195,7 +1301,7 @@ public class MapLoader(
 
         // Create base components
         var position = new TilePosition(x, y, mapId);
-        var sprite = CreateTileSprite(tileGid, tileset, flipH, flipV, flipD);
+        var sprite = CreateTileSprite(tileGid, loadedTileset, flipH, flipV, flipD);
 
         // Determine which template to use (if entity factory is available)
         string? templateId = null;
@@ -1220,14 +1326,15 @@ public class MapLoader(
     /// </summary>
     private TileSprite CreateTileSprite(
         int tileGid,
-        TmxTileset tileset,
+        LoadedTileset loadedTileset,
         bool flipH,
         bool flipV,
         bool flipD
     )
     {
+        var tileset = loadedTileset.Tileset;
         return new TileSprite(
-            tileset.Name ?? "default",
+            loadedTileset.TilesetId,
             tileGid,
             CalculateSourceRect(tileGid, tileset),
             flipH,
