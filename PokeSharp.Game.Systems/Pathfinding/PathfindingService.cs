@@ -1,9 +1,9 @@
 using Arch.Core.Extensions;
 using Microsoft.Xna.Framework;
+using PokeSharp.Engine.Core.Systems;
+using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Components.Tiles;
-using PokeSharp.Engine.Systems.Management;
-using PokeSharp.Engine.Core.Systems;
 
 namespace PokeSharp.Game.Systems.Pathfinding;
 
@@ -128,11 +128,7 @@ public class PathfindingService
     /// <param name="mapId">Map identifier</param>
     /// <param name="spatialQuery">Spatial query interface for collision detection</param>
     /// <returns>Smoothed path with fewer waypoints</returns>
-    public Queue<Point> SmoothPath(
-        Queue<Point> path,
-        int mapId,
-        ISpatialQuery spatialQuery
-    )
+    public Queue<Point> SmoothPath(Queue<Point> path, int mapId, ISpatialQuery spatialQuery)
     {
         if (path.Count <= 2)
             return path; // Can't smooth a path with 2 or fewer points
@@ -164,12 +160,7 @@ public class PathfindingService
     /// <summary>
     ///     Checks if there's a clear line of sight between two points.
     /// </summary>
-    private bool HasLineOfSight(
-        Point from,
-        Point to,
-        int mapId,
-        ISpatialQuery spatialQuery
-    )
+    private bool HasLineOfSight(Point from, Point to, int mapId, ISpatialQuery spatialQuery)
     {
         // Use Bresenham's line algorithm to check all tiles in the line
         var points = GetLinePoints(from, to);

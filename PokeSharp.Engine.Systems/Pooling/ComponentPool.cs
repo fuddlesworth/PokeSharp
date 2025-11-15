@@ -13,7 +13,8 @@ namespace PokeSharp.Engine.Systems.Pooling;
 ///     particularly useful for components with reference types or complex initialization.
 ///     Use for: Animation state copying, temporary position calculations, sprite caching.
 /// </remarks>
-public class ComponentPool<T> where T : struct
+public class ComponentPool<T>
+    where T : struct
 {
     private readonly ConcurrentBag<T> _pool = new();
     private readonly int _maxSize;
@@ -91,8 +92,7 @@ public class ComponentPool<T> where T : struct
     /// <summary>
     ///     Component reuse rate (0.0 to 1.0). Higher is better.
     /// </summary>
-    public float ReuseRate =>
-        _totalRented > 0 ? 1.0f - ((float)_totalCreated / _totalRented) : 0f;
+    public float ReuseRate => _totalRented > 0 ? 1.0f - ((float)_totalCreated / _totalRented) : 0f;
 
     /// <summary>
     ///     Clear all pooled components.

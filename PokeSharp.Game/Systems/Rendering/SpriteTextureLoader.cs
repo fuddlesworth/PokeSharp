@@ -22,7 +22,8 @@ public class SpriteTextureLoader
         AssetManager assetManager,
         GraphicsDevice graphicsDevice,
         string spritesBasePath = "Assets/Sprites/NPCs",
-        ILogger<SpriteTextureLoader>? logger = null)
+        ILogger<SpriteTextureLoader>? logger = null
+    )
     {
         _spriteLoader = spriteLoader ?? throw new ArgumentNullException(nameof(spriteLoader));
         _assetManager = assetManager ?? throw new ArgumentNullException(nameof(assetManager));
@@ -57,14 +58,16 @@ public class SpriteTextureLoader
                     loadedCount + 1,
                     manifests.Count,
                     manifest.Category,
-                    manifest.Name);
+                    manifest.Name
+                );
 
                 if (string.IsNullOrEmpty(spritesheetPath) || !File.Exists(spritesheetPath))
                 {
                     _logger?.LogWarning(
                         "Sprite sheet not found for {Category}/{Name}",
                         manifest.Category,
-                        manifest.Name);
+                        manifest.Name
+                    );
                     failedCount++;
                     continue;
                 }
@@ -77,8 +80,14 @@ public class SpriteTextureLoader
                 _logger?.LogDebug("Decoding texture from stream...");
                 var texture = Texture2D.FromStream(_graphicsDevice, fileStream);
 
-                _logger?.LogInformation("Loaded texture: {Category}/{Name} Format={Format}, Size={Width}x{Height}",
-                    manifest.Category, manifest.Name, texture.Format, texture.Width, texture.Height);
+                _logger?.LogInformation(
+                    "Loaded texture: {Category}/{Name} Format={Format}, Size={Width}x{Height}",
+                    manifest.Category,
+                    manifest.Name,
+                    texture.Format,
+                    texture.Width,
+                    texture.Height
+                );
 
                 // Note: Transparency should be baked into the PNG by the extractor
                 // Runtime mask color application doesn't persist correctly
@@ -87,7 +96,11 @@ public class SpriteTextureLoader
                 // Register with AssetManager (using a direct registration method)
                 RegisterTexture(textureKey, texture);
 
-                _logger?.LogDebug("Successfully loaded: {Category}/{Name}", manifest.Category, manifest.Name);
+                _logger?.LogDebug(
+                    "Successfully loaded: {Category}/{Name}",
+                    manifest.Category,
+                    manifest.Name
+                );
                 loadedCount++;
             }
             catch (Exception ex)
@@ -96,7 +109,8 @@ public class SpriteTextureLoader
                     ex,
                     "Failed to load sprite sheet for {Category}/{Name}",
                     manifest.Category,
-                    manifest.Name);
+                    manifest.Name
+                );
                 failedCount++;
             }
         }
@@ -104,7 +118,8 @@ public class SpriteTextureLoader
         _logger?.LogInformation(
             "Sprite sheet loading complete: {Loaded} loaded, {Failed} failed",
             loadedCount,
-            failedCount);
+            failedCount
+        );
 
         return loadedCount;
     }
@@ -128,7 +143,8 @@ public class SpriteTextureLoader
             _logger?.LogWarning(
                 "Sprite sheet not found for {Category}/{SpriteName}",
                 category,
-                spriteName);
+                spriteName
+            );
             return;
         }
 
@@ -136,7 +152,11 @@ public class SpriteTextureLoader
         using var fileStream = File.OpenRead(spritesheetPath);
         var texture = Texture2D.FromStream(_graphicsDevice, fileStream);
 
-        _logger?.LogInformation("Lazy-loaded texture: {TextureKey}, Format={Format}", textureKey, texture.Format);
+        _logger?.LogInformation(
+            "Lazy-loaded texture: {TextureKey}, Format={Format}",
+            textureKey,
+            texture.Format
+        );
 
         // Note: Transparency should be baked into the PNG by the extractor
         // Runtime mask color application doesn't persist correctly
@@ -144,9 +164,7 @@ public class SpriteTextureLoader
         // Register with AssetManager
         RegisterTexture(textureKey, texture);
 
-        _logger?.LogDebug(
-            "Loaded sprite sheet on-demand: {TextureKey}",
-            textureKey);
+        _logger?.LogDebug("Loaded sprite sheet on-demand: {TextureKey}", textureKey);
     }
 
     /// <summary>
@@ -164,6 +182,4 @@ public class SpriteTextureLoader
     {
         _assetManager.RegisterTexture(textureKey, texture);
     }
-
 }
-

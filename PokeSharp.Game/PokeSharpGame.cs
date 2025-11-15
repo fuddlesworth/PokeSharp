@@ -1,21 +1,21 @@
 using Arch.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
-using PokeSharp.Game.Data.PropertyMapping;
-using PokeSharp.Game.Scripting.Services;
-using PokeSharp.Game.Scripting.Api;
-using PokeSharp.Game.Systems.Services;
+using PokeSharp.Engine.Rendering.Assets;
 using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Engine.Systems.Pooling;
-using PokeSharp.Game.Services;
+using PokeSharp.Game.Data.Loading;
+using PokeSharp.Game.Data.MapLoading.Tiled;
+using PokeSharp.Game.Data.PropertyMapping;
+using PokeSharp.Game.Data.Services;
 using PokeSharp.Game.Diagnostics;
 using PokeSharp.Game.Initialization;
 using PokeSharp.Game.Input;
-using PokeSharp.Engine.Rendering.Assets;
-using PokeSharp.Game.Data.MapLoading.Tiled;
-using PokeSharp.Game.Data.Loading;
-using PokeSharp.Game.Data.Services;
+using PokeSharp.Game.Scripting.Api;
+using PokeSharp.Game.Scripting.Services;
+using PokeSharp.Game.Services;
 using PokeSharp.Game.Systems;
+using PokeSharp.Game.Systems.Services;
 
 namespace PokeSharp.Game;
 
@@ -34,7 +34,7 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
     private readonly GameDataLoader _dataLoader;
     private readonly NpcDefinitionService _npcDefinitionService;
     private readonly MapDefinitionService _mapDefinitionService;
-        private readonly SpriteLoader _spriteLoader;
+    private readonly SpriteLoader _spriteLoader;
     private readonly GraphicsDeviceManager _graphics;
 
     // Services that depend on GraphicsDevice (created in Initialize)
@@ -60,7 +60,7 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
         GameDataLoader dataLoader,
         NpcDefinitionService npcDefinitionService,
         MapDefinitionService mapDefinitionService,
-            SpriteLoader spriteLoader
+        SpriteLoader spriteLoader
     )
     {
         _logging = logging ?? throw new ArgumentNullException(nameof(logging));
@@ -72,8 +72,10 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
         _gameTime = gameTime ?? throw new ArgumentNullException(nameof(gameTime));
         _poolManager = poolManager ?? throw new ArgumentNullException(nameof(poolManager));
         _dataLoader = dataLoader ?? throw new ArgumentNullException(nameof(dataLoader));
-        _npcDefinitionService = npcDefinitionService ?? throw new ArgumentNullException(nameof(npcDefinitionService));
-        _mapDefinitionService = mapDefinitionService ?? throw new ArgumentNullException(nameof(mapDefinitionService));
+        _npcDefinitionService =
+            npcDefinitionService ?? throw new ArgumentNullException(nameof(npcDefinitionService));
+        _mapDefinitionService =
+            mapDefinitionService ?? throw new ArgumentNullException(nameof(mapDefinitionService));
         _spriteLoader = spriteLoader ?? throw new ArgumentNullException(nameof(spriteLoader));
 
         _graphics = new GraphicsDeviceManager(this);
@@ -115,16 +117,18 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
         try
         {
             _dataLoader.LoadAllAsync("Assets/Data").GetAwaiter().GetResult();
-            _logging.CreateLogger<PokeSharpGame>().LogInformation(
-                "Game data definitions loaded successfully"
-            );
+            _logging
+                .CreateLogger<PokeSharpGame>()
+                .LogInformation("Game data definitions loaded successfully");
         }
         catch (Exception ex)
         {
-            _logging.CreateLogger<PokeSharpGame>().LogError(
-                ex,
-                "Failed to load game data definitions - continuing with default templates"
-            );
+            _logging
+                .CreateLogger<PokeSharpGame>()
+                .LogError(
+                    ex,
+                    "Failed to load game data definitions - continuing with default templates"
+                );
         }
 
         // JSON templates are loaded during DI setup (see ServiceCollectionExtensions.cs)
@@ -136,7 +140,9 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
 
         // Create PropertyMapperRegistry for tile property mapping (collision, ledges, etc.)
         var mapperRegistryLogger = _logging.CreateLogger<PropertyMapperRegistry>();
-        var propertyMapperRegistry = PropertyMapperServiceExtensions.CreatePropertyMapperRegistry(mapperRegistryLogger);
+        var propertyMapperRegistry = PropertyMapperServiceExtensions.CreatePropertyMapperRegistry(
+            mapperRegistryLogger
+        );
 
         var mapLoaderLogger = _logging.CreateLogger<MapLoader>();
         var mapLoader = new MapLoader(
@@ -224,7 +230,7 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
         // Create sprite texture loader for lazy loading
         // Sprites will be loaded on-demand when first rendered
         var spriteTextureLogger = _logging.CreateLogger<SpriteTextureLoader>();
-            var spriteTextureLoader = new SpriteTextureLoader(
+        var spriteTextureLoader = new SpriteTextureLoader(
             _spriteLoader,
             _gameInitializer.RenderSystem.AssetManager,
             GraphicsDevice,
@@ -234,9 +240,9 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
         // Register the loader with the render system for lazy loading
         _gameInitializer.RenderSystem.SetSpriteTextureLoader(spriteTextureLoader);
 
-        _logging.CreateLogger<PokeSharpGame>().LogInformation(
-            "Sprite lazy loading initialized - sprites will load on-demand"
-        );
+        _logging
+            .CreateLogger<PokeSharpGame>()
+            .LogInformation("Sprite lazy loading initialized - sprites will load on-demand");
     }
 
     /// <summary>

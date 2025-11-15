@@ -27,7 +27,8 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
 
     public SpriteAnimationSystem(
         SpriteLoader spriteLoader,
-        ILogger<SpriteAnimationSystem>? logger = null)
+        ILogger<SpriteAnimationSystem>? logger = null
+    )
     {
         _spriteLoader = spriteLoader ?? throw new ArgumentNullException(nameof(spriteLoader));
         _logger = logger;
@@ -63,10 +64,7 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
     /// <summary>
     ///     Updates a single sprite's animation frame based on time and animation data.
     /// </summary>
-    private void UpdateSpriteAnimation(
-        ref Sprite sprite,
-        ref Animation animation,
-        float deltaTime)
+    private void UpdateSpriteAnimation(ref Sprite sprite, ref Animation animation, float deltaTime)
     {
         if (!animation.IsPlaying)
             return;
@@ -85,7 +83,8 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
                 {
                     _logger?.LogWarning(
                         "Sprite manifest not found for {SpriteName}",
-                        sprite.SpriteName);
+                        sprite.SpriteName
+                    );
                     return;
                 }
 
@@ -97,15 +96,15 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
                     ex,
                     "Failed to load sprite manifest for {Category}/{SpriteName}",
                     sprite.Category,
-                    sprite.SpriteName);
+                    sprite.SpriteName
+                );
                 return;
             }
         }
 
         // Find the current animation in the manifest
         var currentAnimName = animation.CurrentAnimation;
-        var animData = manifest.Animations
-            .FirstOrDefault(a => a.Name == currentAnimName);
+        var animData = manifest.Animations.FirstOrDefault(a => a.Name == currentAnimName);
 
         if (animData == null)
         {
@@ -113,7 +112,8 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
                 "Animation '{AnimationName}' not found in sprite {Category}/{SpriteName}",
                 animation.CurrentAnimation,
                 sprite.Category,
-                sprite.SpriteName);
+                sprite.SpriteName
+            );
             return;
         }
 
@@ -171,4 +171,3 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
         }
     }
 }
-

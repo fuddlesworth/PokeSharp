@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
-using PokeSharp.Game.Systems.Services;
 using PokeSharp.Game.Scripting.Api;
+using PokeSharp.Game.Systems.Services;
 
 namespace PokeSharp.Game.Scripting.Services;
 

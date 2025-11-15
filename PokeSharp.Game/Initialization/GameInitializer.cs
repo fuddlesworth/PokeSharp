@@ -2,18 +2,18 @@ using Arch.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework.Graphics;
-using PokeSharp.Engine.Systems.Factories;
 using PokeSharp.Engine.Common.Logging;
-using PokeSharp.Engine.Systems.Pooling;
-using PokeSharp.Engine.Systems.Management;
-using PokeSharp.Game.Diagnostics;
 using PokeSharp.Engine.Input.Systems;
 using PokeSharp.Engine.Rendering.Assets;
-using PokeSharp.Game.Data.MapLoading.Tiled;
 using PokeSharp.Engine.Rendering.Systems;
+using PokeSharp.Engine.Systems.Factories;
+using PokeSharp.Engine.Systems.Management;
+using PokeSharp.Engine.Systems.Pooling;
+using PokeSharp.Game.Data.MapLoading.Tiled;
+using PokeSharp.Game.Diagnostics;
+using PokeSharp.Game.Services;
 using PokeSharp.Game.Systems;
 using PokeSharp.Game.Systems.Services;
-using PokeSharp.Game.Services;
 
 namespace PokeSharp.Game.Initialization;
 
@@ -29,7 +29,7 @@ public class GameInitializer(
     IEntityFactoryService entityFactory,
     MapLoader mapLoader,
     EntityPoolManager poolManager,
-            SpriteLoader spriteLoader
+    SpriteLoader spriteLoader
 )
 {
     private readonly AssetManager _assetManager = assetManager;
@@ -142,7 +142,9 @@ public class GameInitializer(
 
         // Register SpriteAnimationSystem (Priority: 875, updates NPC/player sprite frames from manifests)
         var spriteAnimLogger = _loggerFactory.CreateLogger<SpriteAnimationSystem>();
-            _systemManager.RegisterUpdateSystem(new SpriteAnimationSystem(_spriteLoader, spriteAnimLogger));
+        _systemManager.RegisterUpdateSystem(
+            new SpriteAnimationSystem(_spriteLoader, spriteAnimLogger)
+        );
 
         // NOTE: NPCBehaviorSystem is registered separately in NPCBehaviorInitializer
         // It requires ScriptService and behavior registry to be set up first

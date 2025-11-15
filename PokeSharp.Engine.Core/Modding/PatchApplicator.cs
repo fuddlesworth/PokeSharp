@@ -43,7 +43,11 @@ public sealed class PatchApplicator
                 current = ApplyOperation(current, operation);
                 if (current == null)
                 {
-                    _logger.LogWarning("Operation {Op} {Path} resulted in null document", operation.Op, operation.Path);
+                    _logger.LogWarning(
+                        "Operation {Op} {Path} resulted in null document",
+                        operation.Op,
+                        operation.Path
+                    );
                     return null;
                 }
             }
@@ -118,7 +122,9 @@ public sealed class PatchApplicator
         }
         else
         {
-            throw new InvalidOperationException($"Cannot add to {parent?.GetType().Name ?? "null"}");
+            throw new InvalidOperationException(
+                $"Cannot add to {parent?.GetType().Name ?? "null"}"
+            );
         }
 
         return document;
@@ -138,7 +144,9 @@ public sealed class PatchApplicator
         }
         else
         {
-            throw new InvalidOperationException($"Cannot remove from {parent?.GetType().Name ?? "null"}");
+            throw new InvalidOperationException(
+                $"Cannot remove from {parent?.GetType().Name ?? "null"}"
+            );
         }
 
         return document;
@@ -164,7 +172,9 @@ public sealed class PatchApplicator
         }
         else
         {
-            throw new InvalidOperationException($"Cannot replace in {parent?.GetType().Name ?? "null"}");
+            throw new InvalidOperationException(
+                $"Cannot replace in {parent?.GetType().Name ?? "null"}"
+            );
         }
 
         return document;
@@ -215,7 +225,8 @@ public sealed class PatchApplicator
         if (actualJson != expectedJson)
         {
             throw new InvalidOperationException(
-                $"Test failed at {path}: expected {expectedJson} but got {actualJson}");
+                $"Test failed at {path}: expected {expectedJson} but got {actualJson}"
+            );
         }
     }
 
@@ -298,9 +309,6 @@ public sealed class PatchApplicator
         var segments = path.TrimStart('/').Split('/');
 
         // Unescape special characters (~0 = ~, ~1 = /)
-        return segments
-            .Select(s => s.Replace("~1", "/").Replace("~0", "~"))
-            .ToList();
+        return segments.Select(s => s.Replace("~1", "/").Replace("~0", "~")).ToList();
     }
 }
-

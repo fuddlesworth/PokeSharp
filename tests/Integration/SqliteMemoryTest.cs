@@ -1,7 +1,7 @@
+using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using PokeSharp.Game.Data;
 using PokeSharp.Game.Data.Entities;
-using System.Diagnostics;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -21,7 +21,10 @@ public class SqliteMemoryTest : IDisposable
     public SqliteMemoryTest(ITestOutputHelper output)
     {
         _output = output;
-        _testDbPath = Path.Combine(Path.GetTempPath(), $"pokesharp_integration_{Guid.NewGuid()}.db");
+        _testDbPath = Path.Combine(
+            Path.GetTempPath(),
+            $"pokesharp_integration_{Guid.NewGuid()}.db"
+        );
     }
 
     public void Dispose()
@@ -58,7 +61,9 @@ public class SqliteMemoryTest : IDisposable
 
         var afterDbCreation = GC.GetTotalMemory(forceFullCollection: true);
         _output.WriteLine($"[PHASE 1] Memory after DB creation: {FormatBytes(afterDbCreation)}");
-        _output.WriteLine($"[PHASE 1] Memory increase: {FormatBytes(afterDbCreation - baselineMemory)}");
+        _output.WriteLine(
+            $"[PHASE 1] Memory increase: {FormatBytes(afterDbCreation - baselineMemory)}"
+        );
         _output.WriteLine("");
 
         // Step 3: Simulate subsequent game startup (loading from existing DB)
@@ -66,8 +71,12 @@ public class SqliteMemoryTest : IDisposable
         await SimulateSubsequentGameStartup();
 
         var afterSubsequentStartup = GC.GetTotalMemory(forceFullCollection: true);
-        _output.WriteLine($"[PHASE 2] Memory after subsequent startup: {FormatBytes(afterSubsequentStartup)}");
-        _output.WriteLine($"[PHASE 2] Memory increase from baseline: {FormatBytes(afterSubsequentStartup - baselineMemory)}");
+        _output.WriteLine(
+            $"[PHASE 2] Memory after subsequent startup: {FormatBytes(afterSubsequentStartup)}"
+        );
+        _output.WriteLine(
+            $"[PHASE 2] Memory increase from baseline: {FormatBytes(afterSubsequentStartup - baselineMemory)}"
+        );
         _output.WriteLine("");
 
         // Step 4: Simulate active gameplay queries
@@ -75,8 +84,12 @@ public class SqliteMemoryTest : IDisposable
         await SimulateActiveGameplay();
 
         var afterGameplay = GC.GetTotalMemory(forceFullCollection: true);
-        _output.WriteLine($"[PHASE 3] Memory after gameplay simulation: {FormatBytes(afterGameplay)}");
-        _output.WriteLine($"[PHASE 3] Memory increase from baseline: {FormatBytes(afterGameplay - baselineMemory)}");
+        _output.WriteLine(
+            $"[PHASE 3] Memory after gameplay simulation: {FormatBytes(afterGameplay)}"
+        );
+        _output.WriteLine(
+            $"[PHASE 3] Memory increase from baseline: {FormatBytes(afterGameplay - baselineMemory)}"
+        );
         _output.WriteLine("");
 
         stopwatch.Stop();
@@ -89,7 +102,9 @@ public class SqliteMemoryTest : IDisposable
         _output.WriteLine($"Final memory usage: {FormatBytes(finalMemoryUsage)}");
         _output.WriteLine($"Memory limit: {FormatBytes(MaxMemoryBytesExpected)}");
         _output.WriteLine($"Maps loaded: {_loadedMaps.Count}");
-        _output.WriteLine($"Status: {(finalMemoryUsage < MaxMemoryBytesExpected ? "✓ PASS" : "✗ FAIL")}");
+        _output.WriteLine(
+            $"Status: {(finalMemoryUsage < MaxMemoryBytesExpected ? "✓ PASS" : "✗ FAIL")}"
+        );
         _output.WriteLine("");
 
         // Log all loaded maps
@@ -100,8 +115,10 @@ public class SqliteMemoryTest : IDisposable
         }
 
         // Assert
-        Assert.True(finalMemoryUsage < MaxMemoryBytesExpected,
-            $"Memory usage ({FormatBytes(finalMemoryUsage)}) exceeded limit ({FormatBytes(MaxMemoryBytesExpected)})");
+        Assert.True(
+            finalMemoryUsage < MaxMemoryBytesExpected,
+            $"Memory usage ({FormatBytes(finalMemoryUsage)}) exceeded limit ({FormatBytes(MaxMemoryBytesExpected)})"
+        );
     }
 
     /// <summary>
@@ -166,11 +183,7 @@ public class SqliteMemoryTest : IDisposable
             await using var context = new GameDataContext(options);
 
             // Load map data (as would happen when player moves to new area)
-            var maps = await context.Maps
-                .OrderBy(m => m.MapId)
-                .Skip(i * 5)
-                .Take(5)
-                .ToListAsync();
+            var maps = await context.Maps.OrderBy(m => m.MapId).Skip(i * 5).Take(5).ToListAsync();
 
             foreach (var map in maps)
             {
@@ -183,7 +196,9 @@ public class SqliteMemoryTest : IDisposable
             // Load NPCs for current map (simulated)
             var npcs = await context.Npcs.Take(10).ToListAsync();
 
-            _output.WriteLine($"  ✓ Map transition {i + 1}: Loaded {maps.Count} maps, {npcs.Count} NPCs");
+            _output.WriteLine(
+                $"  ✓ Map transition {i + 1}: Loaded {maps.Count} maps, {npcs.Count} NPCs"
+            );
         }
 
         // Simulate trainer battles (loading trainer data)
@@ -196,8 +211,8 @@ public class SqliteMemoryTest : IDisposable
         // Simulate region-based queries (e.g., Pokedex, map list)
         await using (var context = new GameDataContext(options))
         {
-            var hoennMaps = await context.Maps
-                .Where(m => m.Region == "hoenn")
+            var hoennMaps = await context
+                .Maps.Where(m => m.Region == "hoenn")
                 .Select(m => new { m.MapId, m.DisplayName })
                 .ToListAsync();
 
@@ -214,18 +229,20 @@ public class SqliteMemoryTest : IDisposable
         var maps = new List<MapDefinition>();
         for (int i = 0; i < 500; i++)
         {
-            maps.Add(new MapDefinition
-            {
-                MapId = $"map_{i:D3}",
-                DisplayName = GetMapDisplayName(i),
-                Region = i < 400 ? "hoenn" : "kanto",
-                MapType = GetMapType(i),
-                TiledDataJson = GenerateRealisticTiledJson(i),
-                MusicId = $"bgm_{i % 20}",
-                Weather = GetWeather(i),
-                ShowMapName = true,
-                CanFly = i % 10 == 0
-            });
+            maps.Add(
+                new MapDefinition
+                {
+                    MapId = $"map_{i:D3}",
+                    DisplayName = GetMapDisplayName(i),
+                    Region = i < 400 ? "hoenn" : "kanto",
+                    MapType = GetMapType(i),
+                    TiledDataJson = GenerateRealisticTiledJson(i),
+                    MusicId = $"bgm_{i % 20}",
+                    Weather = GetWeather(i),
+                    ShowMapName = true,
+                    CanFly = i % 10 == 0,
+                }
+            );
         }
         context.Maps.AddRange(maps);
 
@@ -233,12 +250,14 @@ public class SqliteMemoryTest : IDisposable
         var npcs = new List<NpcDefinition>();
         for (int i = 0; i < 1000; i++)
         {
-            npcs.Add(new NpcDefinition
-            {
-                NpcId = $"npc_{i:D4}",
-                DisplayName = $"NPC {i}",
-                NpcType = GetNpcType(i)
-            });
+            npcs.Add(
+                new NpcDefinition
+                {
+                    NpcId = $"npc_{i:D4}",
+                    DisplayName = $"NPC {i}",
+                    NpcType = GetNpcType(i),
+                }
+            );
         }
         context.Npcs.AddRange(npcs);
 
@@ -246,12 +265,14 @@ public class SqliteMemoryTest : IDisposable
         var trainers = new List<TrainerDefinition>();
         for (int i = 0; i < 200; i++)
         {
-            trainers.Add(new TrainerDefinition
-            {
-                TrainerId = $"trainer_{i:D3}",
-                DisplayName = $"Trainer {i}",
-                TrainerClass = GetTrainerClass(i)
-            });
+            trainers.Add(
+                new TrainerDefinition
+                {
+                    TrainerId = $"trainer_{i:D3}",
+                    DisplayName = $"Trainer {i}",
+                    TrainerClass = GetTrainerClass(i),
+                }
+            );
         }
         context.Trainers.AddRange(trainers);
 
@@ -284,8 +305,19 @@ public class SqliteMemoryTest : IDisposable
 
     private string GetMapDisplayName(int index)
     {
-        var names = new[] { "Littleroot Town", "Route 101", "Oldale Town", "Route 102", "Petalburg City",
-            "Petalburg Woods", "Route 104", "Rustboro City", "Dewford Town", "Slateport City" };
+        var names = new[]
+        {
+            "Littleroot Town",
+            "Route 101",
+            "Oldale Town",
+            "Route 102",
+            "Petalburg City",
+            "Petalburg Woods",
+            "Route 104",
+            "Rustboro City",
+            "Dewford Town",
+            "Slateport City",
+        };
         return names[index % names.Length] + $" #{index / names.Length}";
     }
 
@@ -309,7 +341,15 @@ public class SqliteMemoryTest : IDisposable
 
     private string GetTrainerClass(int index)
     {
-        var classes = new[] { "youngster", "lass", "bug_catcher", "fisherman", "swimmer", "ace_trainer" };
+        var classes = new[]
+        {
+            "youngster",
+            "lass",
+            "bug_catcher",
+            "fisherman",
+            "swimmer",
+            "ace_trainer",
+        };
         return classes[index % classes.Length];
     }
 
@@ -334,14 +374,26 @@ public class SqliteMemoryTest : IDisposable
             infinite = false,
             layers = new[]
             {
-                new { name = "Ground", type = "tilelayer", data = tileData.Take(tileData.Length / 3).ToArray() },
-                new { name = "Objects", type = "tilelayer", data = tileData.Skip(tileData.Length / 3).Take(tileData.Length / 3).ToArray() },
-                new { name = "Collision", type = "tilelayer", data = tileData.Skip(2 * tileData.Length / 3).ToArray() }
+                new
+                {
+                    name = "Ground",
+                    type = "tilelayer",
+                    data = tileData.Take(tileData.Length / 3).ToArray(),
+                },
+                new
+                {
+                    name = "Objects",
+                    type = "tilelayer",
+                    data = tileData.Skip(tileData.Length / 3).Take(tileData.Length / 3).ToArray(),
+                },
+                new
+                {
+                    name = "Collision",
+                    type = "tilelayer",
+                    data = tileData.Skip(2 * tileData.Length / 3).ToArray(),
+                },
             },
-            tilesets = new[]
-            {
-                new { firstgid = 1, source = "tileset.tsx" }
-            }
+            tilesets = new[] { new { firstgid = 1, source = "tileset.tsx" } },
         };
 
         return System.Text.Json.JsonSerializer.Serialize(data);

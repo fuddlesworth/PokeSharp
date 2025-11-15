@@ -22,12 +22,15 @@ public class MapRegistry
     /// <returns>Unique map ID.</returns>
     public int GetOrCreateMapId(string mapName)
     {
-        return _mapNameToId.GetOrAdd(mapName, name =>
-        {
-            var newId = Interlocked.Increment(ref _nextMapId) - 1;
-            _mapIdToName.TryAdd(newId, name);
-            return newId;
-        });
+        return _mapNameToId.GetOrAdd(
+            mapName,
+            name =>
+            {
+                var newId = Interlocked.Increment(ref _nextMapId) - 1;
+                _mapIdToName.TryAdd(newId, name);
+                return newId;
+            }
+        );
     }
 
     /// <summary>

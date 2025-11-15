@@ -10,9 +10,7 @@ public class CompositeMapValidator : IMapValidator
 {
     private readonly List<IMapValidator> _validators = new();
 
-    public CompositeMapValidator()
-    {
-    }
+    public CompositeMapValidator() { }
 
     public CompositeMapValidator(params IMapValidator[] validators)
     {

@@ -14,8 +14,8 @@ public class CollisionMapper : IEntityPropertyMapper<Collision>
         // Can map if has "solid", "collidable", or "ledge_direction" property
         // (ledges are solid tiles with special behavior)
         return properties.ContainsKey("solid")
-               || properties.ContainsKey("collidable")
-               || properties.ContainsKey("ledge_direction");
+            || properties.ContainsKey("collidable")
+            || properties.ContainsKey("ledge_direction");
     }
 
     public Collision Map(Dictionary<string, object> properties)
@@ -34,7 +34,7 @@ public class CollisionMapper : IEntityPropertyMapper<Collision>
             {
                 bool b => b,
                 string s => bool.TryParse(s, out var result) && result,
-                _ => false
+                _ => false,
             };
             return new Collision(isSolid);
         }
@@ -46,7 +46,7 @@ public class CollisionMapper : IEntityPropertyMapper<Collision>
             {
                 bool b => b,
                 string s => bool.TryParse(s, out var result) && result,
-                _ => false
+                _ => false,
             };
             return new Collision(isCollidable);
         }

@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using PokeSharp.Game.Systems.Services;
 using System.Reflection;
 using Arch.Core;
 using Microsoft.CodeAnalysis;
@@ -8,10 +7,11 @@ using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using PokeSharp.Engine.Common.Logging;
-using PokeSharp.Game.Scripting.Services;
 using PokeSharp.Game.Scripting.Api;
-using PokeSharp.Game.Scripting.Runtime;
 using PokeSharp.Game.Scripting.Compilation;
+using PokeSharp.Game.Scripting.Runtime;
+using PokeSharp.Game.Scripting.Services;
+using PokeSharp.Game.Systems.Services;
 
 namespace PokeSharp.Game.Scripting.Services;
 
@@ -270,12 +270,7 @@ public class ScriptService : IAsyncDisposable
 
             // Create ScriptContext for initialization (use NullLogger if no logger provided)
             var effectiveLogger = logger ?? NullLogger.Instance;
-            var context = new ScriptContext(
-                world,
-                entity,
-                effectiveLogger,
-                _apis
-            );
+            var context = new ScriptContext(world, entity, effectiveLogger, _apis);
             initMethod.Invoke(scriptBase, new object[] { context });
 
             _logger.LogDebug(

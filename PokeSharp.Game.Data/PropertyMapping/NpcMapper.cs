@@ -13,9 +13,9 @@ public class NpcMapper : IEntityPropertyMapper<Npc>
     {
         // Can map if has NPC-related properties
         return properties.ContainsKey("trainer")
-               || properties.ContainsKey("pokemon_id")
-               || properties.ContainsKey("view_range")
-               || properties.ContainsKey("npcId");
+            || properties.ContainsKey("pokemon_id")
+            || properties.ContainsKey("view_range")
+            || properties.ContainsKey("npcId");
     }
 
     public Npc Map(Dictionary<string, object> properties)
@@ -37,7 +37,7 @@ public class NpcMapper : IEntityPropertyMapper<Npc>
             {
                 bool b => b,
                 string s => bool.TryParse(s, out var result) && result,
-                _ => false
+                _ => false,
             };
         }
 
@@ -48,7 +48,7 @@ public class NpcMapper : IEntityPropertyMapper<Npc>
             {
                 int i => i,
                 string s when int.TryParse(s, out var result) => result,
-                _ => 0
+                _ => 0,
             };
         }
 

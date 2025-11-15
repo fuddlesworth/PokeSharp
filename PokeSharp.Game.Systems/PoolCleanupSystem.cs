@@ -1,8 +1,8 @@
 using Arch.Core;
 using Microsoft.Extensions.Logging;
-using PokeSharp.Engine.Systems.Pooling;
-using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Engine.Core.Systems;
+using PokeSharp.Engine.Systems.Management;
+using PokeSharp.Engine.Systems.Pooling;
 
 namespace PokeSharp.Game.Systems;
 
@@ -37,7 +37,6 @@ public class PoolCleanupSystem : SystemBase, IUpdateSystem
     ///     Priority for this system (runs very late to monitor pool health).
     /// </summary>
     public override int Priority => SystemPriority.PoolCleanup;
-
 
     /// <summary>
     ///     Creates a new pool cleanup system.

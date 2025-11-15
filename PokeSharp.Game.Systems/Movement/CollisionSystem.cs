@@ -1,10 +1,10 @@
 using Arch.Core.Extensions;
 using Microsoft.Extensions.Logging;
+using PokeSharp.Engine.Core.Systems;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Components.Rendering;
 using PokeSharp.Game.Components.Tiles;
 using PokeSharp.Game.Systems.Services;
-using PokeSharp.Engine.Core.Systems;
 
 namespace PokeSharp.Game.Systems;
 
@@ -18,10 +18,7 @@ public class CollisionService : ICollisionService
     private readonly ILogger<CollisionService>? _logger;
     private readonly ISpatialQuery _spatialQuery;
 
-    public CollisionService(
-        ISpatialQuery spatialQuery,
-        ILogger<CollisionService>? logger = null
-    )
+    public CollisionService(ISpatialQuery spatialQuery, ILogger<CollisionService>? logger = null)
     {
         _spatialQuery = spatialQuery ?? throw new ArgumentNullException(nameof(spatialQuery));
         _logger = logger;
@@ -91,9 +88,9 @@ public class CollisionService : ICollisionService
                         // Solid collision without ledge - always blocks
                         return false;
                     }
-                    }
                 }
             }
+        }
 
         // No blocking collisions found
         return true;
@@ -124,11 +121,7 @@ public class CollisionService : ICollisionService
     /// <param name="tileX">The X coordinate in tile space.</param>
     /// <param name="tileY">The Y coordinate in tile space.</param>
     /// <returns>The direction you can jump across this ledge, or None if not a ledge.</returns>
-    public Direction GetLedgeJumpDirection(
-        int mapId,
-        int tileX,
-        int tileY
-    )
+    public Direction GetLedgeJumpDirection(int mapId, int tileX, int tileY)
     {
         var entities = _spatialQuery.GetEntitiesAt(mapId, tileX, tileY);
 

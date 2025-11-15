@@ -201,4 +201,3 @@ public record ValidationError(string Message, string? Location = null);
 /// <param name="Message">Warning message</param>
 /// <param name="Location">Optional location where the warning occurred</param>
 public record ValidationWarning(string Message, string? Location = null);
-

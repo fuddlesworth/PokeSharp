@@ -23,7 +23,8 @@ public class MapLifecycleManager
     public MapLifecycleManager(
         World world,
         IAssetProvider assetProvider,
-        ILogger<MapLifecycleManager>? logger = null)
+        ILogger<MapLifecycleManager>? logger = null
+    )
     {
         _world = world ?? throw new ArgumentNullException(nameof(world));
         _assetProvider = assetProvider ?? throw new ArgumentNullException(nameof(assetProvider));
@@ -41,8 +42,12 @@ public class MapLifecycleManager
     public void RegisterMap(int mapId, string mapName, HashSet<string> textureIds)
     {
         _loadedMaps[mapId] = new MapMetadata(mapName, textureIds);
-        _logger?.LogInformation("Registered map: {MapName} (ID: {MapId}) with {TextureCount} textures",
-            mapName, mapId, textureIds.Count);
+        _logger?.LogInformation(
+            "Registered map: {MapName} (ID: {MapId}) with {TextureCount} textures",
+            mapName,
+            mapId,
+            textureIds.Count
+        );
     }
 
     /// <summary>
@@ -60,11 +65,15 @@ public class MapLifecycleManager
         _previousMapId = _currentMapId;
         _currentMapId = newMapId;
 
-        _logger?.LogInformation("Transitioning from map {OldMapId} to {NewMapId}", oldMapId, newMapId);
+        _logger?.LogInformation(
+            "Transitioning from map {OldMapId} to {NewMapId}",
+            oldMapId,
+            newMapId
+        );
 
         // Clean up old maps (keep current + previous for smooth transitions)
-        var mapsToUnload = _loadedMaps.Keys
-            .Where(id => id != _currentMapId && id != _previousMapId)
+        var mapsToUnload = _loadedMaps
+            .Keys.Where(id => id != _currentMapId && id != _previousMapId)
             .ToList();
 
         foreach (var mapId in mapsToUnload)
@@ -96,7 +105,10 @@ public class MapLifecycleManager
 
         _logger?.LogInformation(
             "Map {MapName} unloaded: {TilesDestroyed} entities destroyed, {TexturesUnloaded} textures freed",
-            metadata.Name, tilesDestroyed, texturesUnloaded);
+            metadata.Name,
+            tilesDestroyed,
+            texturesUnloaded
+        );
     }
 
     /// <summary>
@@ -108,13 +120,16 @@ public class MapLifecycleManager
         var entitiesToDestroy = new List<Entity>();
         var query = new QueryDescription().WithAll<TilePosition>();
 
-        _world.Query(in query, (Entity entity, ref TilePosition pos) =>
-        {
-            if (pos.MapId == mapId)
+        _world.Query(
+            in query,
+            (Entity entity, ref TilePosition pos) =>
             {
-                entitiesToDestroy.Add(entity);
+                if (pos.MapId == mapId)
+                {
+                    entitiesToDestroy.Add(entity);
+                }
             }
-        });
+        );
 
         // Now destroy entities outside the query
         foreach (var entity in entitiesToDestroy)
@@ -137,8 +152,7 @@ public class MapLifecycleManager
         foreach (var textureId in textureIds)
         {
             // Check if texture is used by other loaded maps
-            var isShared = _loadedMaps.Values
-                .Any(m => m.TextureIds.Contains(textureId));
+            var isShared = _loadedMaps.Values.Any(m => m.TextureIds.Contains(textureId));
 
             if (!isShared)
             {
@@ -159,9 +173,7 @@ public class MapLifecycleManager
     {
         _logger?.LogWarning("Force cleanup triggered - unloading all inactive maps");
 
-        var mapsToUnload = _loadedMaps.Keys
-            .Where(id => id != _currentMapId)
-            .ToList();
+        var mapsToUnload = _loadedMaps.Keys.Where(id => id != _currentMapId).ToList();
 
         foreach (var mapId in mapsToUnload)
         {

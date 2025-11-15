@@ -61,7 +61,13 @@ public sealed class BulkQueryOperations
     {
         var entities = new List<Entity>();
 
-        _world.Query(in query, (Entity entity) => { entities.Add(entity); });
+        _world.Query(
+            in query,
+            (Entity entity) =>
+            {
+                entities.Add(entity);
+            }
+        );
 
         return entities;
     }
@@ -91,10 +97,13 @@ public sealed class BulkQueryOperations
     {
         var results = new List<(Entity, T)>();
 
-        _world.Query(in query, (Entity entity, ref T component) =>
-        {
-            results.Add((entity, component));
-        });
+        _world.Query(
+            in query,
+            (Entity entity, ref T component) =>
+            {
+                results.Add((entity, component));
+            }
+        );
 
         return results;
     }
@@ -127,10 +136,13 @@ public sealed class BulkQueryOperations
     {
         var results = new List<(Entity, T1, T2)>();
 
-        _world.Query(in query, (Entity entity, ref T1 c1, ref T2 c2) =>
-        {
-            results.Add((entity, c1, c2));
-        });
+        _world.Query(
+            in query,
+            (Entity entity, ref T1 c1, ref T2 c2) =>
+            {
+                results.Add((entity, c1, c2));
+            }
+        );
 
         return results;
     }
@@ -155,7 +167,13 @@ public sealed class BulkQueryOperations
     {
         ArgumentNullException.ThrowIfNull(action, nameof(action));
 
-        _world.Query(in query, (Entity entity) => { action(entity); });
+        _world.Query(
+            in query,
+            (Entity entity) =>
+            {
+                action(entity);
+            }
+        );
     }
 
     /// <summary>
@@ -180,10 +198,13 @@ public sealed class BulkQueryOperations
     {
         ArgumentNullException.ThrowIfNull(action, nameof(action));
 
-        _world.Query(in query, (Entity entity, ref T component) =>
-        {
-            action(entity, component);
-        });
+        _world.Query(
+            in query,
+            (Entity entity, ref T component) =>
+            {
+                action(entity, component);
+            }
+        );
     }
 
     /// <summary>
@@ -238,14 +259,17 @@ public sealed class BulkQueryOperations
     {
         int count = 0;
 
-        _world.Query(in query, (Entity entity) =>
-        {
-            if (!entity.Has<T>())
+        _world.Query(
+            in query,
+            (Entity entity) =>
             {
-                entity.Add(component);
-                count++;
+                if (!entity.Has<T>())
+                {
+                    entity.Add(component);
+                    count++;
+                }
             }
-        });
+        );
 
         return count;
     }
@@ -268,14 +292,17 @@ public sealed class BulkQueryOperations
     {
         int count = 0;
 
-        _world.Query(in query, (Entity entity) =>
-        {
-            if (entity.Has<T>())
+        _world.Query(
+            in query,
+            (Entity entity) =>
             {
-                entity.Remove<T>();
-                count++;
+                if (entity.Has<T>())
+                {
+                    entity.Remove<T>();
+                    count++;
+                }
             }
-        });
+        );
 
         return count;
     }
@@ -295,7 +322,13 @@ public sealed class BulkQueryOperations
     public int CountMatching(in QueryDescription query)
     {
         int count = 0;
-        _world.Query(in query, (Entity entity) => { count++; });
+        _world.Query(
+            in query,
+            (Entity entity) =>
+            {
+                count++;
+            }
+        );
         return count;
     }
 
@@ -318,11 +351,14 @@ public sealed class BulkQueryOperations
     {
         bool hasAny = false;
 
-        _world.Query(in query, (Entity entity) =>
-        {
-            hasAny = true;
-            // Early exit after first match would be ideal, but Query doesn't support it
-        });
+        _world.Query(
+            in query,
+            (Entity entity) =>
+            {
+                hasAny = true;
+                // Early exit after first match would be ideal, but Query doesn't support it
+            }
+        );
 
         return hasAny;
     }

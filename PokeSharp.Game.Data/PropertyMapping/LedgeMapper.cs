@@ -39,7 +39,8 @@ public class LedgeMapper : IEntityPropertyMapper<TileLedge>
             "west" or "left" => Direction.West,
             "east" or "right" => Direction.East,
             _ => throw new InvalidOperationException(
-                $"Invalid ledge_direction value: '{ledgeDir}'. Valid values: south/down, north/up, west/left, east/right")
+                $"Invalid ledge_direction value: '{ledgeDir}'. Valid values: south/down, north/up, west/left, east/right"
+            ),
         };
 
         return new TileLedge(jumpDirection);

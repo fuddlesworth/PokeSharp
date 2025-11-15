@@ -1,6 +1,6 @@
 using System.Numerics;
-using PokeSharp.Engine.Core.Systems;
 using Arch.Core;
+using PokeSharp.Engine.Core.Systems;
 using PokeSharp.Engine.Systems.Factories;
 
 namespace PokeSharp.Engine.Systems.BulkOperations;
@@ -85,10 +85,14 @@ public sealed class TemplateBatchSpawner
         {
             if (configure != null)
             {
-                entities[i] = _factory.SpawnFromTemplate(templateId, _world, builder =>
-                {
-                    configure(builder, i);
-                });
+                entities[i] = _factory.SpawnFromTemplate(
+                    templateId,
+                    _world,
+                    builder =>
+                    {
+                        configure(builder, i);
+                    }
+                );
             }
             else
             {
@@ -149,12 +153,16 @@ public sealed class TemplateBatchSpawner
                     startPosition.Y + row * spacing
                 );
 
-                entities[index] = _factory.SpawnFromTemplate(templateId, _world, builder =>
-                {
-                    // Assuming Position component exists - adjust based on your component structure
-                    builder.WithProperty("GridPosition", new { Row = row, Col = col });
-                    builder.WithProperty("SpawnPosition", position);
-                });
+                entities[index] = _factory.SpawnFromTemplate(
+                    templateId,
+                    _world,
+                    builder =>
+                    {
+                        // Assuming Position component exists - adjust based on your component structure
+                        builder.WithProperty("GridPosition", new { Row = row, Col = col });
+                        builder.WithProperty("SpawnPosition", position);
+                    }
+                );
             }
         }
 
@@ -206,12 +214,16 @@ public sealed class TemplateBatchSpawner
                 center.Y + MathF.Sin(angle) * radius
             );
 
-            entities[i] = _factory.SpawnFromTemplate(templateId, _world, builder =>
-            {
-                builder.WithProperty("CircleAngle", angle);
-                builder.WithProperty("CircleIndex", i);
-                builder.WithProperty("SpawnPosition", position);
-            });
+            entities[i] = _factory.SpawnFromTemplate(
+                templateId,
+                _world,
+                builder =>
+                {
+                    builder.WithProperty("CircleAngle", angle);
+                    builder.WithProperty("CircleIndex", i);
+                    builder.WithProperty("SpawnPosition", position);
+                }
+            );
         }
 
         return entities;
@@ -254,12 +266,16 @@ public sealed class TemplateBatchSpawner
             var spawnDelay = i * config.SpawnInterval;
             var position = config.PositionFactory?.Invoke(i) ?? config.SpawnPosition;
 
-            entities[i] = _factory.SpawnFromTemplate(templateId, _world, builder =>
-            {
-                builder.WithProperty("WaveIndex", i);
-                builder.WithProperty("SpawnDelay", spawnDelay);
-                builder.WithProperty("SpawnPosition", position);
-            });
+            entities[i] = _factory.SpawnFromTemplate(
+                templateId,
+                _world,
+                builder =>
+                {
+                    builder.WithProperty("WaveIndex", i);
+                    builder.WithProperty("SpawnDelay", spawnDelay);
+                    builder.WithProperty("SpawnPosition", position);
+                }
+            );
         }
 
         return entities;
@@ -298,11 +314,15 @@ public sealed class TemplateBatchSpawner
         {
             var position = startPos + direction * (stepSize * i);
 
-            entities[i] = _factory.SpawnFromTemplate(templateId, _world, builder =>
-            {
-                builder.WithProperty("LineIndex", i);
-                builder.WithProperty("SpawnPosition", position);
-            });
+            entities[i] = _factory.SpawnFromTemplate(
+                templateId,
+                _world,
+                builder =>
+                {
+                    builder.WithProperty("LineIndex", i);
+                    builder.WithProperty("SpawnPosition", position);
+                }
+            );
         }
 
         return entities;
@@ -327,12 +347,7 @@ public sealed class TemplateBatchSpawner
     /// );
     /// </code>
     /// </example>
-    public Entity[] SpawnRandom(
-        string templateId,
-        int count,
-        Vector2 minBounds,
-        Vector2 maxBounds
-    )
+    public Entity[] SpawnRandom(string templateId, int count, Vector2 minBounds, Vector2 maxBounds)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(templateId, nameof(templateId));
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(count, nameof(count));
@@ -346,10 +361,14 @@ public sealed class TemplateBatchSpawner
                 Random.Shared.NextSingle() * (maxBounds.Y - minBounds.Y) + minBounds.Y
             );
 
-            entities[i] = _factory.SpawnFromTemplate(templateId, _world, builder =>
-            {
-                builder.WithProperty("SpawnPosition", position);
-            });
+            entities[i] = _factory.SpawnFromTemplate(
+                templateId,
+                _world,
+                builder =>
+                {
+                    builder.WithProperty("SpawnPosition", position);
+                }
+            );
         }
 
         return entities;

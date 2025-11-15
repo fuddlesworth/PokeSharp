@@ -5,8 +5,8 @@ using Arch.Core.Extensions;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Common.Logging;
 using PokeSharp.Engine.Common.Validation;
-using PokeSharp.Engine.Systems.Pooling;
 using PokeSharp.Engine.Core.Templates;
+using PokeSharp.Engine.Systems.Pooling;
 
 namespace PokeSharp.Engine.Systems.Factories;
 
@@ -162,7 +162,11 @@ public sealed class EntityFactoryServicePooling : IEntityFactoryService
         {
             // Acquire from pool (2-3x faster)
             entity = _poolManager.Acquire(poolName);
-            _logger.LogDebug("Acquired entity {EntityId} from pool '{PoolName}'", entity.Id, poolName);
+            _logger.LogDebug(
+                "Acquired entity {EntityId} from pool '{PoolName}'",
+                entity.Id,
+                poolName
+            );
         }
         else
         {

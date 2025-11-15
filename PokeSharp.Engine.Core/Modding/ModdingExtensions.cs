@@ -10,7 +10,8 @@ public static class ModdingExtensions
 {
     public static IServiceCollection AddModdingServices(
         this IServiceCollection services,
-        string modsDirectory)
+        string modsDirectory
+    )
     {
         services.AddSingleton<PatchApplicator>();
         services.AddSingleton<PatchFileLoader>();
@@ -23,4 +24,3 @@ public static class ModdingExtensions
         return services;
     }
 }
-

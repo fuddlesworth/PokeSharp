@@ -32,5 +32,3 @@ public struct Wallet
     /// </summary>
     public const string DefaultCurrencyId = "pokedollar";
 }
-
-

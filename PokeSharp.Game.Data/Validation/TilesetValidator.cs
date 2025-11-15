@@ -38,20 +38,24 @@ public class TilesetValidator : IMapValidator
             if (tileset.Image.Width <= 0 || tileset.Image.Height <= 0)
             {
                 result.AddError(
-                    $"Tileset '{tileset.Name}' has invalid image dimensions: {tileset.Image.Width}x{tileset.Image.Height}");
+                    $"Tileset '{tileset.Name}' has invalid image dimensions: {tileset.Image.Width}x{tileset.Image.Height}"
+                );
             }
 
             // Validate tile dimensions
             if (tileset.TileWidth <= 0 || tileset.TileHeight <= 0)
             {
                 result.AddError(
-                    $"Tileset '{tileset.Name}' has invalid tile dimensions: {tileset.TileWidth}x{tileset.TileHeight}");
+                    $"Tileset '{tileset.Name}' has invalid tile dimensions: {tileset.TileWidth}x{tileset.TileHeight}"
+                );
             }
 
             // Validate FirstGid
             if (tileset.FirstGid <= 0)
             {
-                result.AddError($"Tileset '{tileset.Name}' has invalid FirstGid: {tileset.FirstGid}");
+                result.AddError(
+                    $"Tileset '{tileset.Name}' has invalid FirstGid: {tileset.FirstGid}"
+                );
             }
 
             // Validate image path exists (relative to map directory)
@@ -60,8 +64,7 @@ public class TilesetValidator : IMapValidator
 
             if (!File.Exists(tilesetPath))
             {
-                result.AddWarning(
-                    $"Tileset '{tileset.Name}' image not found at: {tilesetPath}");
+                result.AddWarning($"Tileset '{tileset.Name}' image not found at: {tilesetPath}");
             }
         }
 

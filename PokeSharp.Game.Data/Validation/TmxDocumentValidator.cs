@@ -18,7 +18,8 @@ public class TmxDocumentValidator : IMapValidator
 
     public TmxDocumentValidator(
         ILogger<TmxDocumentValidator> logger,
-        bool validateFileReferences = true)
+        bool validateFileReferences = true
+    )
     {
         _logger = logger;
         _validateFileReferences = validateFileReferences;
@@ -76,16 +77,28 @@ public class TmxDocumentValidator : IMapValidator
         const int MaxTileSize = 512; // Reasonable limit for tile size
 
         if (map.Width > MaxDimension)
-            result.AddWarning($"Map width {map.Width} exceeds recommended maximum {MaxDimension}", "Width");
+            result.AddWarning(
+                $"Map width {map.Width} exceeds recommended maximum {MaxDimension}",
+                "Width"
+            );
 
         if (map.Height > MaxDimension)
-            result.AddWarning($"Map height {map.Height} exceeds recommended maximum {MaxDimension}", "Height");
+            result.AddWarning(
+                $"Map height {map.Height} exceeds recommended maximum {MaxDimension}",
+                "Height"
+            );
 
         if (map.TileWidth > MaxTileSize)
-            result.AddWarning($"Tile width {map.TileWidth} exceeds recommended maximum {MaxTileSize}", "TileWidth");
+            result.AddWarning(
+                $"Tile width {map.TileWidth} exceeds recommended maximum {MaxTileSize}",
+                "TileWidth"
+            );
 
         if (map.TileHeight > MaxTileSize)
-            result.AddWarning($"Tile height {map.TileHeight} exceeds recommended maximum {MaxTileSize}", "TileHeight");
+            result.AddWarning(
+                $"Tile height {map.TileHeight} exceeds recommended maximum {MaxTileSize}",
+                "TileHeight"
+            );
     }
 
     /// <summary>
@@ -111,7 +124,8 @@ public class TmxDocumentValidator : IMapValidator
                     {
                         result.AddError(
                             $"External tileset file not found: {tileset.Source}",
-                            $"{location}.Source");
+                            $"{location}.Source"
+                        );
                     }
                 }
 
@@ -123,7 +137,8 @@ public class TmxDocumentValidator : IMapValidator
                     {
                         result.AddWarning(
                             $"Tileset image not found: {tileset.Image.Source}",
-                            $"{location}.Image.Source");
+                            $"{location}.Image.Source"
+                        );
                     }
                 }
             }
@@ -142,7 +157,8 @@ public class TmxDocumentValidator : IMapValidator
                     {
                         result.AddWarning(
                             $"Image layer image not found: {imageLayer.Image.Source}",
-                            $"ImageLayer[{i}] ({imageLayer.Name}).Image.Source");
+                            $"ImageLayer[{i}] ({imageLayer.Name}).Image.Source"
+                        );
                     }
                 }
             }

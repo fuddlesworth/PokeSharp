@@ -78,4 +78,3 @@ public sealed class TemplateJsonCache
 
     public int Count => _templateJsonByPath.Count;
 }
-

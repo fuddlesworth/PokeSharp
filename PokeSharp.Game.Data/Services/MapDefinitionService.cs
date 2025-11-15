@@ -17,9 +17,7 @@ public class MapDefinitionService
     // Cache for O(1) lookups (hot paths like map loading)
     private readonly ConcurrentDictionary<string, MapDefinition> _mapCache = new();
 
-    public MapDefinitionService(
-        GameDataContext context,
-        ILogger<MapDefinitionService> logger)
+    public MapDefinitionService(GameDataContext context, ILogger<MapDefinitionService> logger)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -57,8 +55,8 @@ public class MapDefinitionService
     /// </summary>
     public async Task<List<MapDefinition>> GetMapsByRegionAsync(string region)
     {
-        return await _context.Maps
-            .Where(m => m.Region == region)
+        return await _context
+            .Maps.Where(m => m.Region == region)
             .OrderBy(m => m.DisplayName)
             .ToListAsync();
     }
@@ -68,9 +66,7 @@ public class MapDefinitionService
     /// </summary>
     public async Task<List<MapDefinition>> GetMapsByTypeAsync(string mapType)
     {
-        return await _context.Maps
-            .Where(m => m.MapType == mapType)
-            .ToListAsync();
+        return await _context.Maps.Where(m => m.MapType == mapType).ToListAsync();
     }
 
     /// <summary>
@@ -78,10 +74,7 @@ public class MapDefinitionService
     /// </summary>
     public async Task<List<MapDefinition>> GetFlyableMapsAsync()
     {
-        return await _context.Maps
-            .Where(m => m.CanFly)
-            .OrderBy(m => m.DisplayName)
-            .ToListAsync();
+        return await _context.Maps.Where(m => m.CanFly).OrderBy(m => m.DisplayName).ToListAsync();
     }
 
     /// <summary>
@@ -99,7 +92,7 @@ public class MapDefinitionService
             MapDirection.South => map.SouthMapId,
             MapDirection.East => map.EastMapId,
             MapDirection.West => map.WestMapId,
-            _ => null
+            _ => null,
         };
 
         return connectedMapId != null ? GetMap(connectedMapId) : null;
@@ -110,9 +103,7 @@ public class MapDefinitionService
     /// </summary>
     public async Task<List<MapDefinition>> GetMapsByModAsync(string modId)
     {
-        return await _context.Maps
-            .Where(m => m.SourceMod == modId)
-            .ToListAsync();
+        return await _context.Maps.Where(m => m.SourceMod == modId).ToListAsync();
     }
 
     /// <summary>
@@ -128,10 +119,7 @@ public class MapDefinitionService
     /// </summary>
     public async Task<List<string>> GetAllMapIdsAsync()
     {
-        return await _context.Maps
-            .Select(m => m.MapId)
-            .OrderBy(id => id)
-            .ToListAsync();
+        return await _context.Maps.Select(m => m.MapId).OrderBy(id => id).ToListAsync();
     }
 
     #endregion
@@ -147,15 +135,15 @@ public class MapDefinitionService
         {
             TotalMaps = await _context.Maps.CountAsync(),
             MapsCached = _mapCache.Count,
-            MapsByRegion = await _context.Maps
-                .GroupBy(m => m.Region)
+            MapsByRegion = await _context
+                .Maps.GroupBy(m => m.Region)
                 .Select(g => new { Region = g.Key, Count = g.Count() })
                 .ToDictionaryAsync(x => x.Region, x => x.Count),
-            MapsByType = await _context.Maps
-                .Where(m => m.MapType != null)
+            MapsByType = await _context
+                .Maps.Where(m => m.MapType != null)
                 .GroupBy(m => m.MapType!)
                 .Select(g => new { Type = g.Key, Count = g.Count() })
-                .ToDictionaryAsync(x => x.Type, x => x.Count)
+                .ToDictionaryAsync(x => x.Type, x => x.Count),
         };
 
         return stats;
@@ -172,7 +160,7 @@ public enum MapDirection
     North,
     South,
     East,
-    West
+    West,
 }
 
 /// <summary>
@@ -185,4 +173,3 @@ public record MapStatistics
     public Dictionary<string, int> MapsByRegion { get; init; } = new();
     public Dictionary<string, int> MapsByType { get; init; } = new();
 }
-

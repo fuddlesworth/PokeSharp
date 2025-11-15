@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
-using PokeSharp.Game.Systems.Services;
 using Microsoft.Extensions.Logging;
+using PokeSharp.Game.Systems.Services;
 
 namespace PokeSharp.Game.Scripting.HotReload.Watchers;
 

@@ -1,10 +1,9 @@
-using PokeSharp.Engine.Core.Systems;
-
 using System.Diagnostics;
 using Arch.Core;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Common.Configuration;
 using PokeSharp.Engine.Common.Logging;
+using PokeSharp.Engine.Core.Systems;
 
 namespace PokeSharp.Engine.Systems.Management;
 
@@ -36,7 +35,10 @@ public class SystemManager
     /// </summary>
     /// <param name="logger">Optional logger for system diagnostics.</param>
     /// <param name="config">Optional performance configuration. Uses default if not specified.</param>
-    public SystemManager(ILogger<SystemManager>? logger = null, PerformanceConfiguration? config = null)
+    public SystemManager(
+        ILogger<SystemManager>? logger = null,
+        PerformanceConfiguration? config = null
+    )
     {
         _logger = logger;
         _performanceTracker = new SystemPerformanceTracker(logger, config);
@@ -76,7 +78,8 @@ public class SystemManager
     /// </summary>
     /// <typeparam name="T">The type of system to retrieve.</typeparam>
     /// <returns>The system instance, or null if not found.</returns>
-    public T? GetSystem<T>() where T : class
+    public T? GetSystem<T>()
+        where T : class
     {
         lock (_lock)
         {
@@ -124,7 +127,6 @@ public class SystemManager
             );
         }
     }
-
 
     /// <summary>
     ///     Registers a pre-created render system instance.
@@ -227,9 +229,7 @@ public class SystemManager
 
         lock (_lock)
         {
-            systemsToUpdate = _updateSystems
-                .Where(s => s.Enabled)
-                .ToArray();
+            systemsToUpdate = _updateSystems.Where(s => s.Enabled).ToArray();
         }
 
         _performanceTracker.IncrementFrame();
@@ -246,8 +246,11 @@ public class SystemManager
             }
             catch (Exception ex)
             {
-                _logger?.LogError(ex, "Update system {SystemName} failed during execution",
-                    system.GetType().Name);
+                _logger?.LogError(
+                    ex,
+                    "Update system {SystemName} failed during execution",
+                    system.GetType().Name
+                );
             }
         }
 
@@ -269,9 +272,7 @@ public class SystemManager
 
         lock (_lock)
         {
-            systemsToRender = _renderSystems
-                .Where(s => s.Enabled)
-                .ToArray();
+            systemsToRender = _renderSystems.Where(s => s.Enabled).ToArray();
         }
 
         foreach (var system in systemsToRender)
@@ -286,8 +287,11 @@ public class SystemManager
             }
             catch (Exception ex)
             {
-                _logger?.LogError(ex, "Render system {SystemName} failed during execution",
-                    system.GetType().Name);
+                _logger?.LogError(
+                    ex,
+                    "Render system {SystemName} failed during execution",
+                    system.GetType().Name
+                );
             }
         }
     }
@@ -318,7 +322,6 @@ public class SystemManager
     {
         _performanceTracker.ResetMetrics();
     }
-
 }
 
 /// <summary>

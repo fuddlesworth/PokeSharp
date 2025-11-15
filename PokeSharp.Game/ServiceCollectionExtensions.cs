@@ -3,23 +3,23 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Core.Events;
-using PokeSharp.Engine.Systems.Factories;
-using PokeSharp.Game.Data.PropertyMapping;
-using PokeSharp.Engine.Systems.Pooling;
-using PokeSharp.Game.Scripting.Services;
-using PokeSharp.Game.Scripting.Api;
-using PokeSharp.Game.Systems.Services;
-using PokeSharp.Game.Systems;
-using PokeSharp.Engine.Systems.Management;
+using PokeSharp.Engine.Core.Modding;
 using PokeSharp.Engine.Core.Templates;
 using PokeSharp.Engine.Core.Types;
-using PokeSharp.Engine.Core.Modding;
+using PokeSharp.Engine.Systems.Factories;
+using PokeSharp.Engine.Systems.Management;
+using PokeSharp.Engine.Systems.Pooling;
+using PokeSharp.Game.Data.Factories;
+using PokeSharp.Game.Data.PropertyMapping;
 using PokeSharp.Game.Diagnostics;
 using PokeSharp.Game.Initialization;
 using PokeSharp.Game.Input;
+using PokeSharp.Game.Scripting.Api;
+using PokeSharp.Game.Scripting.Services;
 using PokeSharp.Game.Services;
+using PokeSharp.Game.Systems;
+using PokeSharp.Game.Systems.Services;
 using PokeSharp.Game.Templates;
-using PokeSharp.Game.Data.Factories;
 
 namespace PokeSharp.Game;
 
@@ -40,12 +40,12 @@ public static class ServiceCollectionExtensions
             {
                 options.UseInMemoryDatabase("GameData");
 
-                #if DEBUG
+#if DEBUG
                 options.EnableSensitiveDataLogging();
                 options.EnableDetailedErrors();
-                #endif
+#endif
             },
-            ServiceLifetime.Singleton  // In-Memory DB can be singleton
+            ServiceLifetime.Singleton // In-Memory DB can be singleton
         );
 
         // Data loading and services
@@ -90,8 +90,11 @@ public static class ServiceCollectionExtensions
         // Component Deserializer Registry - for JSON template loading
         services.AddSingleton(sp =>
         {
-            var logger = sp.GetRequiredService<ILogger<PokeSharp.Engine.Core.Templates.Loading.ComponentDeserializerRegistry>>();
-            var registry = new PokeSharp.Engine.Core.Templates.Loading.ComponentDeserializerRegistry(logger);
+            var logger = sp.GetRequiredService<
+                ILogger<PokeSharp.Engine.Core.Templates.Loading.ComponentDeserializerRegistry>
+            >();
+            var registry =
+                new PokeSharp.Engine.Core.Templates.Loading.ComponentDeserializerRegistry(logger);
             ComponentDeserializerSetup.RegisterAllDeserializers(registry, sp.GetService<ILogger>());
             return registry;
         });
@@ -107,10 +110,17 @@ public static class ServiceCollectionExtensions
             var logger = sp.GetService<ILogger<TemplateCache>>();
 
             // Load base game JSON templates as JSON (before deserialization)
-            var jsonLoader = sp.GetRequiredService<PokeSharp.Engine.Core.Templates.Loading.JsonTemplateLoader>();
-            var templateJsonCache = jsonLoader.LoadTemplateJsonAsync("Assets/Templates", recursive: true).GetAwaiter().GetResult();
+            var jsonLoader =
+                sp.GetRequiredService<PokeSharp.Engine.Core.Templates.Loading.JsonTemplateLoader>();
+            var templateJsonCache = jsonLoader
+                .LoadTemplateJsonAsync("Assets/Templates", recursive: true)
+                .GetAwaiter()
+                .GetResult();
 
-            logger?.LogInformation("WF  Template JSON loaded | count: {Count}, source: base", templateJsonCache.Count);
+            logger?.LogInformation(
+                "WF  Template JSON loaded | count: {Count}, source: base",
+                templateJsonCache.Count
+            );
 
             // Load and apply mods
             var modLoader = sp.GetRequiredService<ModLoader>();
@@ -119,11 +129,18 @@ public static class ServiceCollectionExtensions
             var mods = modLoader.DiscoverMods();
             var sortedMods = modLoader.SortByLoadOrder(mods);
 
-            logger?.LogInformation("WF  Mod system initializing | discovered: {Count}", sortedMods.Count);
+            logger?.LogInformation(
+                "WF  Mod system initializing | discovered: {Count}",
+                sortedMods.Count
+            );
 
             foreach (var mod in sortedMods)
             {
-                logger?.LogInformation("WF  Loading mod | id: {ModId}, version: {Version}", mod.Manifest.ModId, mod.Manifest.Version);
+                logger?.LogInformation(
+                    "WF  Loading mod | id: {ModId}, version: {Version}",
+                    mod.Manifest.ModId,
+                    mod.Manifest.Version
+                );
 
                 // Load mod templates as JSON (new content)
                 if (mod.Manifest.ContentFolders.TryGetValue("Templates", out var templatesPath))
@@ -131,7 +148,10 @@ public static class ServiceCollectionExtensions
                     var modTemplatesDir = mod.ResolvePath(templatesPath);
                     if (Directory.Exists(modTemplatesDir))
                     {
-                        var modJsonCache = jsonLoader.LoadTemplateJsonAsync(modTemplatesDir, recursive: true).GetAwaiter().GetResult();
+                        var modJsonCache = jsonLoader
+                            .LoadTemplateJsonAsync(modTemplatesDir, recursive: true)
+                            .GetAwaiter()
+                            .GetResult();
 
                         // Add mod templates to the main cache
                         foreach (var (path, json) in modJsonCache.GetAll())
@@ -139,7 +159,10 @@ public static class ServiceCollectionExtensions
                             templateJsonCache.Add(path, json);
 
                             // Extract templateId for logging
-                            if (json is System.Text.Json.Nodes.JsonObject obj && obj.TryGetPropertyValue("templateId", out var idNode))
+                            if (
+                                json is System.Text.Json.Nodes.JsonObject obj
+                                && obj.TryGetPropertyValue("templateId", out var idNode)
+                            )
                             {
                                 var templateId = idNode?.ToString().Trim('"');
                                 logger?.LogInformation("    + {TemplateId}", templateId);
@@ -158,7 +181,10 @@ public static class ServiceCollectionExtensions
                         var targetJson = templateJsonCache.GetByTemplateId(patch.Target);
                         if (targetJson == null)
                         {
-                            logger?.LogWarning("    ! Patch target not found | target: {Target}", patch.Target);
+                            logger?.LogWarning(
+                                "    ! Patch target not found | target: {Target}",
+                                patch.Target
+                            );
                             continue;
                         }
 
@@ -166,13 +192,20 @@ public static class ServiceCollectionExtensions
                         var patchedJson = patchApplicator.ApplyPatch(targetJson, patch);
                         if (patchedJson == null)
                         {
-                            logger?.LogWarning("    ! Patch failed | target: {Target}", patch.Target);
+                            logger?.LogWarning(
+                                "    ! Patch failed | target: {Target}",
+                                patch.Target
+                            );
                             continue;
                         }
 
                         // Update the JSON cache with patched version
                         templateJsonCache.Update(patch.Target, patchedJson);
-                        logger?.LogInformation("    * {Target} | {Desc}", patch.Target, patch.Description);
+                        logger?.LogInformation(
+                            "    * {Target} | {Desc}",
+                            patch.Target,
+                            patch.Description
+                        );
                     }
                     catch (Exception ex)
                     {

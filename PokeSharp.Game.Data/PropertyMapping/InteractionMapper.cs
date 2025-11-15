@@ -13,9 +13,9 @@ public class InteractionMapper : IEntityPropertyMapper<Interaction>
     {
         // Can map if has interaction-related properties
         return properties.ContainsKey("interaction_type")
-               || properties.ContainsKey("interaction_range")
-               || properties.ContainsKey("dialogue")
-               || properties.ContainsKey("on_interact");
+            || properties.ContainsKey("interaction_range")
+            || properties.ContainsKey("dialogue")
+            || properties.ContainsKey("on_interact");
     }
 
     public Interaction Map(Dictionary<string, object> properties)
@@ -32,7 +32,7 @@ public class InteractionMapper : IEntityPropertyMapper<Interaction>
             {
                 int i => i,
                 string s when int.TryParse(s, out var result) => result,
-                _ => 1
+                _ => 1,
             };
         }
 
@@ -55,7 +55,7 @@ public class InteractionMapper : IEntityPropertyMapper<Interaction>
             {
                 bool b => b,
                 string s => !bool.TryParse(s, out var result) || result, // Default true
-                _ => true
+                _ => true,
             };
         }
 

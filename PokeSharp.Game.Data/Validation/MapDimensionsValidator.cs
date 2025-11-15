@@ -19,25 +19,31 @@ public class MapDimensionsValidator : IMapValidator
         // Validate map dimensions
         if (map.Width < MinMapSize || map.Width > MaxMapSize)
         {
-            result.AddError($"Map width {map.Width} is outside valid range ({MinMapSize}-{MaxMapSize})");
+            result.AddError(
+                $"Map width {map.Width} is outside valid range ({MinMapSize}-{MaxMapSize})"
+            );
         }
 
         if (map.Height < MinMapSize || map.Height > MaxMapSize)
         {
-            result.AddError($"Map height {map.Height} is outside valid range ({MinMapSize}-{MaxMapSize})");
+            result.AddError(
+                $"Map height {map.Height} is outside valid range ({MinMapSize}-{MaxMapSize})"
+            );
         }
 
         // Validate tile dimensions
         if (map.TileWidth < MinTileSize || map.TileWidth > MaxTileSize)
         {
             result.AddError(
-                $"Tile width {map.TileWidth} is outside valid range ({MinTileSize}-{MaxTileSize})");
+                $"Tile width {map.TileWidth} is outside valid range ({MinTileSize}-{MaxTileSize})"
+            );
         }
 
         if (map.TileHeight < MinTileSize || map.TileHeight > MaxTileSize)
         {
             result.AddError(
-                $"Tile height {map.TileHeight} is outside valid range ({MinTileSize}-{MaxTileSize})");
+                $"Tile height {map.TileHeight} is outside valid range ({MinTileSize}-{MaxTileSize})"
+            );
         }
 
         // Warn about very large maps (performance concern)
@@ -45,7 +51,8 @@ public class MapDimensionsValidator : IMapValidator
         if (totalTiles > 100000)
         {
             result.AddWarning(
-                $"Map has {totalTiles} tiles which may impact performance. Consider splitting into smaller maps.");
+                $"Map has {totalTiles} tiles which may impact performance. Consider splitting into smaller maps."
+            );
         }
 
         // Validate version string

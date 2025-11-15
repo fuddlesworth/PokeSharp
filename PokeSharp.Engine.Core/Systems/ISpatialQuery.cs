@@ -92,4 +92,3 @@ public interface ISpatialQuery
     /// </example>
     IEnumerable<Entity> GetEntitiesInBounds(int mapId, Rectangle bounds);
 }
-

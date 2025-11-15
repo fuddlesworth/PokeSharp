@@ -41,34 +41,65 @@ public class PoolConfiguration
     ///     Default pool configuration for general-purpose entities.
     /// </summary>
     public static PoolConfiguration Default =>
-        new() { Name = "default", InitialSize = 100, MaxSize = 1000 };
+        new()
+        {
+            Name = "default",
+            InitialSize = 100,
+            MaxSize = 1000,
+        };
 
     /// <summary>
     ///     Pool configuration optimized for enemy entities (medium size, moderate max).
     /// </summary>
     public static PoolConfiguration Enemies =>
-        new() { Name = "enemies", InitialSize = 50, MaxSize = 500 };
+        new()
+        {
+            Name = "enemies",
+            InitialSize = 50,
+            MaxSize = 500,
+        };
 
     /// <summary>
     ///     Pool configuration optimized for projectiles (large size, high throughput).
     /// </summary>
     public static PoolConfiguration Projectiles =>
-        new() { Name = "projectiles", InitialSize = 200, MaxSize = 2000 };
+        new()
+        {
+            Name = "projectiles",
+            InitialSize = 200,
+            MaxSize = 2000,
+        };
 
     /// <summary>
     ///     Pool configuration optimized for visual effects (medium-large, temporary entities).
     /// </summary>
     public static PoolConfiguration Effects =>
-        new() { Name = "effects", InitialSize = 100, MaxSize = 1000 };
+        new()
+        {
+            Name = "effects",
+            InitialSize = 100,
+            MaxSize = 1000,
+        };
 
     /// <summary>
     ///     Pool configuration optimized for UI elements (small, stable count).
     /// </summary>
-    public static PoolConfiguration UI => new() { Name = "ui", InitialSize = 50, MaxSize = 200 };
+    public static PoolConfiguration UI =>
+        new()
+        {
+            Name = "ui",
+            InitialSize = 50,
+            MaxSize = 200,
+        };
 
     /// <summary>
     ///     Pool configuration optimized for particles (very large, high churn).
     /// </summary>
     public static PoolConfiguration Particles =>
-        new() { Name = "particles", InitialSize = 500, MaxSize = 5000 };
+        new()
+        {
+            Name = "particles",
+            InitialSize = 500,
+            MaxSize = 5000,
+        };
 }

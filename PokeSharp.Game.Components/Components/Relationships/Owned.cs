@@ -1,5 +1,5 @@
-using Arch.Core;
 using System;
+using Arch.Core;
 
 namespace PokeSharp.Game.Components.Relationships;
 

@@ -1,14 +1,14 @@
-using Arch.Core;
-using Arch.Core.Extensions;
-using Microsoft.Extensions.Logging;
-using PokeSharp.Game.Components.Relationships;
-using EcsQueries = PokeSharp.Engine.Systems.Queries.Queries;
-using RelationshipQueries = PokeSharp.Engine.Systems.Queries.RelationshipQueries;
-using PokeSharp.Engine.Systems.Management;
-using PokeSharp.Engine.Core.Systems;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Arch.Core;
+using Arch.Core.Extensions;
+using Microsoft.Extensions.Logging;
+using PokeSharp.Engine.Core.Systems;
+using PokeSharp.Engine.Systems.Management;
+using PokeSharp.Game.Components.Relationships;
+using EcsQueries = PokeSharp.Engine.Systems.Queries.Queries;
+using RelationshipQueries = PokeSharp.Engine.Systems.Queries.RelationshipQueries;
 
 namespace PokeSharp.Game.Systems;
 
@@ -66,10 +66,10 @@ public class RelationshipSystem : SystemBase, IUpdateSystem
         base.Initialize(world);
 
         // Use centralized relationship queries for better semantics
-        _parentQuery = RelationshipQueries.AllChildren;    // Entities with Parent component
-        _childrenQuery = RelationshipQueries.AllParents;   // Entities with Children component
-        _ownerQuery = RelationshipQueries.AllOwners;       // Entities with Owner component
-        _ownedQuery = RelationshipQueries.AllOwned;        // Entities with Owned component
+        _parentQuery = RelationshipQueries.AllChildren; // Entities with Parent component
+        _childrenQuery = RelationshipQueries.AllParents; // Entities with Children component
+        _ownerQuery = RelationshipQueries.AllOwners; // Entities with Owner component
+        _ownedQuery = RelationshipQueries.AllOwned; // Entities with Owned component
 
         _logger.LogInformation("RelationshipSystem initialized (Priority: {Priority})", Priority);
     }
@@ -90,12 +90,20 @@ public class RelationshipSystem : SystemBase, IUpdateSystem
         ValidateOwnedRelationships(world);
 
         // Log summary if any issues were found
-        if (_brokenParentsFixed > 0 || _brokenChildrenFixed > 0 ||
-            _brokenOwnersFixed > 0 || _brokenOwnedFixed > 0)
+        if (
+            _brokenParentsFixed > 0
+            || _brokenChildrenFixed > 0
+            || _brokenOwnersFixed > 0
+            || _brokenOwnedFixed > 0
+        )
         {
             _logger.LogWarning(
                 "Relationship cleanup: {Parents} parent(s), {Children} child refs, {Owners} owner(s), {Owned} owned refs fixed",
-                _brokenParentsFixed, _brokenChildrenFixed, _brokenOwnersFixed, _brokenOwnedFixed);
+                _brokenParentsFixed,
+                _brokenChildrenFixed,
+                _brokenOwnersFixed,
+                _brokenOwnedFixed
+            );
         }
 
         if (_orphansDetected > 0)
@@ -111,18 +119,21 @@ public class RelationshipSystem : SystemBase, IUpdateSystem
     {
         var entitiesToFix = new List<Entity>();
 
-        world.Query(in _parentQuery, (Entity entity, ref Parent parent) =>
-        {
-            // Skip already invalid relationships
-            if (!parent.IsValid)
-                return;
-
-            if (!world.IsAlive(parent.Value))
+        world.Query(
+            in _parentQuery,
+            (Entity entity, ref Parent parent) =>
             {
-                entitiesToFix.Add(entity);
-                _orphansDetected++;
+                // Skip already invalid relationships
+                if (!parent.IsValid)
+                    return;
+
+                if (!world.IsAlive(parent.Value))
+                {
+                    entitiesToFix.Add(entity);
+                    _orphansDetected++;
+                }
             }
-        });
+        );
 
         foreach (var entity in entitiesToFix)
         {
@@ -151,25 +162,30 @@ public class RelationshipSystem : SystemBase, IUpdateSystem
     /// </summary>
     private void ValidateChildrenRelationships(World world)
     {
-        world.Query(in _childrenQuery, (Entity entity, ref Children children) =>
-        {
-            if (children.Values == null)
+        world.Query(
+            in _childrenQuery,
+            (Entity entity, ref Children children) =>
             {
-                return;
-            }
+                if (children.Values == null)
+                {
+                    return;
+                }
 
-            var initialCount = children.Values.Count;
-            children.Values.RemoveAll(child => !world.IsAlive(child));
-            var removedCount = initialCount - children.Values.Count;
+                var initialCount = children.Values.Count;
+                children.Values.RemoveAll(child => !world.IsAlive(child));
+                var removedCount = initialCount - children.Values.Count;
 
-            if (removedCount > 0)
-            {
-                _brokenChildrenFixed += removedCount;
-                _logger.LogDebug(
-                    "Removed {Count} invalid child references from entity {Entity}",
-                    removedCount, entity);
+                if (removedCount > 0)
+                {
+                    _brokenChildrenFixed += removedCount;
+                    _logger.LogDebug(
+                        "Removed {Count} invalid child references from entity {Entity}",
+                        removedCount,
+                        entity
+                    );
+                }
             }
-        });
+        );
     }
 
     /// <summary>
@@ -179,17 +195,20 @@ public class RelationshipSystem : SystemBase, IUpdateSystem
     {
         var entitiesToFix = new List<Entity>();
 
-        world.Query(in _ownerQuery, (Entity entity, ref Owner owner) =>
-        {
-            // Skip already invalid relationships
-            if (!owner.IsValid)
-                return;
-
-            if (!world.IsAlive(owner.Value))
+        world.Query(
+            in _ownerQuery,
+            (Entity entity, ref Owner owner) =>
             {
-                entitiesToFix.Add(entity);
+                // Skip already invalid relationships
+                if (!owner.IsValid)
+                    return;
+
+                if (!world.IsAlive(owner.Value))
+                {
+                    entitiesToFix.Add(entity);
+                }
             }
-        });
+        );
 
         foreach (var entity in entitiesToFix)
         {
@@ -211,18 +230,21 @@ public class RelationshipSystem : SystemBase, IUpdateSystem
     {
         var entitiesToFix = new List<Entity>();
 
-        world.Query(in _ownedQuery, (Entity entity, ref Owned owned) =>
-        {
-            // Skip already invalid relationships
-            if (!owned.IsValid)
-                return;
-
-            if (!world.IsAlive(owned.OwnerEntity))
+        world.Query(
+            in _ownedQuery,
+            (Entity entity, ref Owned owned) =>
             {
-                entitiesToFix.Add(entity);
-                _orphansDetected++;
+                // Skip already invalid relationships
+                if (!owned.IsValid)
+                    return;
+
+                if (!world.IsAlive(owned.OwnerEntity))
+                {
+                    entitiesToFix.Add(entity);
+                    _orphansDetected++;
+                }
             }
-        });
+        );
 
         foreach (var entity in entitiesToFix)
         {
@@ -257,7 +279,7 @@ public class RelationshipSystem : SystemBase, IUpdateSystem
             BrokenChildrenReferencesFixed = _brokenChildrenFixed,
             BrokenOwnersFixed = _brokenOwnersFixed,
             BrokenOwnedFixed = _brokenOwnedFixed,
-            OrphansDetected = _orphansDetected
+            OrphansDetected = _orphansDetected,
         };
     }
 }

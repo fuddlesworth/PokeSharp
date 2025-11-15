@@ -1,9 +1,9 @@
 using Arch.Core;
-using PokeSharp.Game.Systems.Services;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Game.Components.Movement;
-using PokeSharp.Game.Scripting.Services;
 using PokeSharp.Game.Scripting.Api;
+using PokeSharp.Game.Scripting.Services;
+using PokeSharp.Game.Systems.Services;
 
 namespace PokeSharp.Game.Scripting.Runtime;
 
@@ -74,12 +74,7 @@ public sealed class ScriptContext
     ///         Typically, you won't construct this directly - ScriptService handles instantiation.
     ///     </para>
     /// </remarks>
-    public ScriptContext(
-        World world,
-        Entity? entity,
-        ILogger logger,
-        IScriptingApiProvider apis
-    )
+    public ScriptContext(World world, Entity? entity, ILogger logger, IScriptingApiProvider apis)
     {
         World = world ?? throw new ArgumentNullException(nameof(world));
         Logger = logger ?? throw new ArgumentNullException(nameof(logger));

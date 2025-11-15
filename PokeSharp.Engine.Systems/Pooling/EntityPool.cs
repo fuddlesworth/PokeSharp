@@ -100,9 +100,7 @@ public class EntityPool
     ///     Reuse rate (0.0 to 1.0). Higher is better (more reuse, fewer allocations).
     /// </summary>
     public float ReuseRate =>
-        _totalAcquisitions > 0
-            ? 1.0f - ((float)_totalCreated / _totalAcquisitions)
-            : 0f;
+        _totalAcquisitions > 0 ? 1.0f - ((float)_totalCreated / _totalAcquisitions) : 0f;
 
     /// <summary>
     ///     Average time to acquire entity from pool in milliseconds (for monitoring).

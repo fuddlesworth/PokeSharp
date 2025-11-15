@@ -23,7 +23,13 @@ public interface ICollisionService
     /// <param name="fromDirection">Optional direction moving FROM (for ledge checking).</param>
     /// <param name="entityElevation">The elevation of the entity checking collision (default: standard elevation).</param>
     /// <returns>True if the position is walkable from this direction, false if blocked.</returns>
-    bool IsPositionWalkable(int mapId, int tileX, int tileY, Direction fromDirection = Direction.None, byte entityElevation = Elevation.Default);
+    bool IsPositionWalkable(
+        int mapId,
+        int tileX,
+        int tileY,
+        Direction fromDirection = Direction.None,
+        byte entityElevation = Elevation.Default
+    );
 
     /// <summary>
     /// Checks if a tile is a Pokemon-style ledge (has TileLedge component).
@@ -43,4 +49,3 @@ public interface ICollisionService
     /// <returns>The direction you can jump across this ledge, or None if not a ledge.</returns>
     Direction GetLedgeJumpDirection(int mapId, int tileX, int tileY);
 }
-

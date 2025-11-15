@@ -172,9 +172,7 @@ public class SystemPerformanceTracker
 
         // ConcurrentDictionary supports lock-free enumeration
         // Snapshot is taken at the start of enumeration (consistent view)
-        var sortedMetrics = _metrics
-            .OrderByDescending(kvp => kvp.Value.AverageUpdateMs)
-            .ToList();
+        var sortedMetrics = _metrics.OrderByDescending(kvp => kvp.Value.AverageUpdateMs).ToList();
 
         // Log all systems using the custom template
         foreach (var kvp in sortedMetrics)
@@ -201,4 +199,3 @@ public class SystemPerformanceTracker
         _lastSlowWarningFrame.Clear();
     }
 }
-

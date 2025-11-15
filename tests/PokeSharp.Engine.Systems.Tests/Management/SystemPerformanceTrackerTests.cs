@@ -126,7 +126,7 @@ public class SystemPerformanceTrackerTests
         {
             TargetFrameTimeMs = 16.67f,
             SlowSystemThresholdPercent = 0.1, // 10% = 1.667ms
-            SlowSystemWarningCooldownFrames = 10
+            SlowSystemWarningCooldownFrames = 10,
         };
         var tracker = new SystemPerformanceTracker(mockLogger.Object, config);
 
@@ -135,13 +135,16 @@ public class SystemPerformanceTrackerTests
 
         // Assert - Verify warning was logged
         mockLogger.Verify(
-            x => x.Log(
-                LogLevel.Warning,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("SlowSystem")),
-                It.IsAny<Exception>(),
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-            Times.Once);
+            x =>
+                x.Log(
+                    LogLevel.Warning,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("SlowSystem")),
+                    It.IsAny<Exception>(),
+                    It.IsAny<Func<It.IsAnyType, Exception?, string>>()
+                ),
+            Times.Once
+        );
     }
 
     [Fact]
@@ -153,7 +156,7 @@ public class SystemPerformanceTrackerTests
         {
             TargetFrameTimeMs = 16.67f,
             SlowSystemThresholdPercent = 0.1,
-            SlowSystemWarningCooldownFrames = 5 // Warn every 5 frames
+            SlowSystemWarningCooldownFrames = 5, // Warn every 5 frames
         };
         var tracker = new SystemPerformanceTracker(mockLogger.Object, config);
 
@@ -166,13 +169,16 @@ public class SystemPerformanceTrackerTests
 
         // Assert - Should only warn twice (frame 1 and frame 6+)
         mockLogger.Verify(
-            x => x.Log(
-                LogLevel.Warning,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("SlowSystem")),
-                It.IsAny<Exception>(),
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-            Times.Exactly(2));
+            x =>
+                x.Log(
+                    LogLevel.Warning,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("SlowSystem")),
+                    It.IsAny<Exception>(),
+                    It.IsAny<Func<It.IsAnyType, Exception?, string>>()
+                ),
+            Times.Exactly(2)
+        );
     }
 
     [Fact]
@@ -182,8 +188,7 @@ public class SystemPerformanceTrackerTests
         var tracker = new SystemPerformanceTracker();
 
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() =>
-            tracker.TrackSystemPerformance(null!, 5.0));
+        Assert.Throws<ArgumentNullException>(() => tracker.TrackSystemPerformance(null!, 5.0));
     }
 
     [Fact]
@@ -206,4 +211,3 @@ public class SystemPerformanceTrackerTests
         Assert.NotNull(metrics);
     }
 }
-

@@ -1,11 +1,11 @@
 using Arch.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
+using PokeSharp.Engine.Core.Systems;
+using PokeSharp.Engine.Rendering.Components;
+using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Components.Player;
-using PokeSharp.Engine.Systems.Management;
-using PokeSharp.Engine.Rendering.Components;
-using PokeSharp.Engine.Core.Systems;
 
 namespace PokeSharp.Engine.Rendering.Systems;
 
@@ -13,7 +13,9 @@ namespace PokeSharp.Engine.Rendering.Systems;
 ///     System for camera following with smooth transitions and map bounds clamping.
 ///     Sets the camera's follow target and calls camera.Update() to handle all logic.
 /// </summary>
-public class CameraFollowSystem(ILogger<CameraFollowSystem>? logger = null) : SystemBase, IUpdateSystem
+public class CameraFollowSystem(ILogger<CameraFollowSystem>? logger = null)
+    : SystemBase,
+        IUpdateSystem
 {
     private readonly ILogger<CameraFollowSystem>? _logger = logger;
     private QueryDescription _playerQuery;
@@ -26,7 +28,6 @@ public class CameraFollowSystem(ILogger<CameraFollowSystem>? logger = null) : Sy
 
     /// <inheritdoc />
     public override int Priority => SystemPriority.CameraFollow;
-
 
     /// <inheritdoc />
     public override void Initialize(World world)

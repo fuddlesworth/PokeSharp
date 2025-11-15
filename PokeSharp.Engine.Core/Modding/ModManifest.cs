@@ -70,15 +70,13 @@ public sealed class ModManifest
             throw new InvalidOperationException("Name is required");
 
         // Validate semantic versioning format (basic check)
-        if (!System.Text.RegularExpressions.Regex.IsMatch(
-            Version,
-            @"^\d+\.\d+\.\d+"))
+        if (!System.Text.RegularExpressions.Regex.IsMatch(Version, @"^\d+\.\d+\.\d+"))
         {
             throw new InvalidOperationException(
-                $"Version must follow semantic versioning (e.g. 1.0.0): {Version}");
+                $"Version must follow semantic versioning (e.g. 1.0.0): {Version}"
+            );
         }
     }
 
     public override string ToString() => $"{ModId} v{Version} ({Name})";
 }
-

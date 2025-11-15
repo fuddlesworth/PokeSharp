@@ -25,20 +25,19 @@ public static class LogTemplates
         System,
     }
 
-    private static readonly Dictionary<LogAccent, (string Glyph, string Color)> AccentStyles =
-        new()
-        {
-            { LogAccent.Initialization, ("▶", "skyblue1") },
-            { LogAccent.Asset, ("A", "aqua") },
-            { LogAccent.Map, ("M", "springgreen1") },
-            { LogAccent.Performance, ("P", "plum1") },
-            { LogAccent.Memory, ("MEM", "lightsteelblue1") },
-            { LogAccent.Render, ("R", "mediumorchid1") },
-            { LogAccent.Entity, ("E", "gold1") },
-            { LogAccent.Input, ("I", "deepskyblue3") },
-            { LogAccent.Workflow, ("WF", "steelblue1") },
-            { LogAccent.System, ("SYS", "orange3") },
-        };
+    private static readonly Dictionary<LogAccent, (string Glyph, string Color)> AccentStyles = new()
+    {
+        { LogAccent.Initialization, ("▶", "skyblue1") },
+        { LogAccent.Asset, ("A", "aqua") },
+        { LogAccent.Map, ("M", "springgreen1") },
+        { LogAccent.Performance, ("P", "plum1") },
+        { LogAccent.Memory, ("MEM", "lightsteelblue1") },
+        { LogAccent.Render, ("R", "mediumorchid1") },
+        { LogAccent.Entity, ("E", "gold1") },
+        { LogAccent.Input, ("I", "deepskyblue3") },
+        { LogAccent.Workflow, ("WF", "steelblue1") },
+        { LogAccent.System, ("SYS", "orange3") },
+    };
 
     // ═══════════════════════════════════════════════════════════════
     // Initialization Templates
@@ -54,9 +53,10 @@ public static class LogTemplates
     )
     {
         var detailsFormatted = FormatDetails(details);
-        var body =
-            $"[cyan]{EscapeMarkup(systemName)}[/] [dim]initialized[/]{detailsFormatted}";
-        logger.LogInformation(LogFormatting.FormatTemplate(WithAccent(LogAccent.Initialization, body)));
+        var body = $"[cyan]{EscapeMarkup(systemName)}[/] [dim]initialized[/]{detailsFormatted}";
+        logger.LogInformation(
+            LogFormatting.FormatTemplate(WithAccent(LogAccent.Initialization, body))
+        );
     }
 
     /// <summary>
@@ -66,7 +66,9 @@ public static class LogTemplates
     {
         var body =
             $"[cyan]{EscapeMarkup(componentName)}[/] [dim]ready[/] [grey]|[/] [yellow]{count}[/] [dim]items[/]";
-        logger.LogInformation(LogFormatting.FormatTemplate(WithAccent(LogAccent.Initialization, body)));
+        logger.LogInformation(
+            LogFormatting.FormatTemplate(WithAccent(LogAccent.Initialization, body))
+        );
     }
 
     /// <summary>
@@ -117,8 +119,7 @@ public static class LogTemplates
     )
     {
         var componentList = FormatComponents(components);
-        var body =
-            $"[yellow]{EscapeMarkup(entityType)}[/] [dim]#{entityId}[/]{componentList}";
+        var body = $"[yellow]{EscapeMarkup(entityType)}[/] [dim]#{entityId}[/]{componentList}";
         logger.LogInformation(LogFormatting.FormatTemplate(WithAccent(LogAccent.Entity, body)));
     }
 
@@ -131,8 +132,7 @@ public static class LogTemplates
     /// </summary>
     public static void LogAssetLoadingStarted(this ILogger logger, string assetType, int count)
     {
-        var body =
-            $"[dim]loading[/] [yellow]{count}[/] [grey]{EscapeMarkup(assetType)}[/]";
+        var body = $"[dim]loading[/] [yellow]{count}[/] [grey]{EscapeMarkup(assetType)}[/]";
         logger.LogInformation(LogFormatting.FormatTemplate(WithAccent(LogAccent.Asset, body)));
     }
 
@@ -219,7 +219,9 @@ public static class LogTemplates
             : "red";
         var body =
             $"[cyan]{avgMs:F1}ms[/] [dim]avg[/] [{fpsColor}]{fps:F1} FPS[/] [dim]|[/] [aqua]{minMs:F1}ms[/] [dim]min[/] [orange1]{maxMs:F1}ms[/] [dim]peak[/]";
-        logger.LogInformation(LogFormatting.FormatTemplate(WithAccent(LogAccent.Performance, body)));
+        logger.LogInformation(
+            LogFormatting.FormatTemplate(WithAccent(LogAccent.Performance, body))
+        );
     }
 
     /// <summary>
@@ -247,7 +249,9 @@ public static class LogTemplates
         var callsText = calls.ToString("N0", CultureInfo.InvariantCulture);
         var body =
             $"[cyan]{systemDisplay}[/] [{avgColor}]{avgText}ms[/] [dim]avg[/] [{peakColor}]{maxText}ms[/] [dim]peak[/] [grey]|[/] [grey]{callsText} calls[/]";
-        logger.LogInformation(LogFormatting.FormatTemplate(WithAccent(LogAccent.Performance, body)));
+        logger.LogInformation(
+            LogFormatting.FormatTemplate(WithAccent(LogAccent.Performance, body))
+        );
     }
 
     /// <summary>
@@ -547,8 +551,7 @@ public static class LogTemplates
     /// </summary>
     public static void LogZoomChanged(this ILogger logger, string preset, float zoom)
     {
-        var body =
-            $"[cyan]{EscapeMarkup(preset)}[/] [dim]zoom[/] [yellow]{zoom:F1}x[/]";
+        var body = $"[cyan]{EscapeMarkup(preset)}[/] [dim]zoom[/] [yellow]{zoom:F1}x[/]";
         logger.LogDebug(LogFormatting.FormatTemplate(WithAccent(LogAccent.Input, body)));
     }
 
@@ -579,13 +582,18 @@ public static class LogTemplates
     public static void LogDiagnosticHeader(this ILogger logger, string title)
     {
         logger.LogInformation(
-            LogFormatting.FormatTemplate("[blue bold]╔══════════════════════════════════════════╗[/]")
+            LogFormatting.FormatTemplate(
+                "[blue bold]╔══════════════════════════════════════════╗[/]"
+            )
         );
-        var headerLine =
-            LogFormatting.FormatTemplate($"[blue bold]║[/]  [cyan bold]{title, -38}[/]  [blue bold]║[/]");
+        var headerLine = LogFormatting.FormatTemplate(
+            $"[blue bold]║[/]  [cyan bold]{title, -38}[/]  [blue bold]║[/]"
+        );
         logger.LogInformation(headerLine);
         logger.LogInformation(
-            LogFormatting.FormatTemplate("[blue bold]╚══════════════════════════════════════════╝[/]")
+            LogFormatting.FormatTemplate(
+                "[blue bold]╚══════════════════════════════════════════╝[/]"
+            )
         );
     }
 
@@ -615,9 +623,7 @@ public static class LogTemplates
 
     private static string WithAccent(LogAccent accent, string message)
     {
-        var style = AccentStyles.TryGetValue(accent, out var value)
-            ? value
-            : ("•", "grey");
+        var style = AccentStyles.TryGetValue(accent, out var value) ? value : ("•", "grey");
         var glyph = style.Item1;
         return $"[{style.Item2}]{glyph.PadRight(3)}[/] {message}";
     }

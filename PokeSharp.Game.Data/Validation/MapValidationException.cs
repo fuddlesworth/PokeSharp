@@ -22,7 +22,11 @@ public class MapValidationException : Exception
         ValidationResult = validationResult;
     }
 
-    public MapValidationException(ValidationResult validationResult, string message, Exception innerException)
+    public MapValidationException(
+        ValidationResult validationResult,
+        string message,
+        Exception innerException
+    )
         : base(message, innerException)
     {
         ValidationResult = validationResult;

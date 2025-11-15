@@ -20,7 +20,7 @@ namespace PokeSharp.Tests.MemoryValidation
             Console.WriteLine("╔════════════════════════════════════════╗");
             Console.WriteLine("║         MEMORY STATISTICS              ║");
             Console.WriteLine("╠════════════════════════════════════════╣");
-            Console.WriteLine($"║ Total Memory:     {memMB,10:F1} MB      ║");
+            Console.WriteLine($"║ Total Memory:     {memMB, 10:F1} MB      ║");
 
             // If AssetManager is provided, show cache stats
             if (assetManager != null)
@@ -36,13 +36,13 @@ namespace PokeSharp.Tests.MemoryValidation
                     var textures = (int)textureProp.GetValue(assetManager);
                     var cacheMB = cacheBytes / 1_000_000.0;
 
-                    Console.WriteLine($"║ Texture Cache:    {cacheMB,10:F1} MB      ║");
-                    Console.WriteLine($"║ Loaded Textures:  {textures,10}         ║");
+                    Console.WriteLine($"║ Texture Cache:    {cacheMB, 10:F1} MB      ║");
+                    Console.WriteLine($"║ Loaded Textures:  {textures, 10}         ║");
                 }
             }
 
             Console.WriteLine("╠════════════════════════════════════════╣");
-            Console.WriteLine($"║ Status: {GetMemoryStatus(memMB),28} ║");
+            Console.WriteLine($"║ Status: {GetMemoryStatus(memMB), 28} ║");
             Console.WriteLine("╚════════════════════════════════════════╝");
         }
 

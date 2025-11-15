@@ -1,11 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -29,11 +29,23 @@ class Program
         var animationData = animationParser.ParseAnimationData();
         var filenameMapping = animationParser.GetFilenameMapping();
 
-        var picTablesPath = Path.Combine(pokeemeraldPath, "src/data/object_events/object_event_pic_tables.h");
-        var graphicsPath = Path.Combine(pokeemeraldPath, "src/data/object_events/object_event_graphics.h");
+        var picTablesPath = Path.Combine(
+            pokeemeraldPath,
+            "src/data/object_events/object_event_pic_tables.h"
+        );
+        var graphicsPath = Path.Combine(
+            pokeemeraldPath,
+            "src/data/object_events/object_event_graphics.h"
+        );
         var picTableSources = animationParser.ParsePicTableSources(picTablesPath, graphicsPath);
 
-        var extractor = new SpriteExtractor(pokeemeraldPath, spritesBasePath, animationData, filenameMapping, picTableSources);
+        var extractor = new SpriteExtractor(
+            pokeemeraldPath,
+            spritesBasePath,
+            animationData,
+            filenameMapping,
+            picTableSources
+        );
         await extractor.ExtractAllSprites();
 
         Console.WriteLine("\nExtraction complete!");
@@ -59,17 +71,37 @@ public class PokeemeraldAnimationParser
     {
         Console.WriteLine("Parsing animation data from pokeemerald source...");
 
-        var metadata = new Dictionary<string, SpriteAnimationMetadata>(StringComparer.OrdinalIgnoreCase);
+        var metadata = new Dictionary<string, SpriteAnimationMetadata>(
+            StringComparer.OrdinalIgnoreCase
+        );
 
         // Parse object_event_graphics_info.h for animation table assignments
-        var graphicsInfoPath = Path.Combine(_pokeemeraldPath, "src/data/object_events/object_event_graphics_info.h");
-        var graphicsPath = Path.Combine(_pokeemeraldPath, "src/data/object_events/object_event_graphics.h");
-        var picTablesPath = Path.Combine(_pokeemeraldPath, "src/data/object_events/object_event_pic_tables.h");
-        var animsPath = Path.Combine(_pokeemeraldPath, "src/data/object_events/object_event_anims.h");
+        var graphicsInfoPath = Path.Combine(
+            _pokeemeraldPath,
+            "src/data/object_events/object_event_graphics_info.h"
+        );
+        var graphicsPath = Path.Combine(
+            _pokeemeraldPath,
+            "src/data/object_events/object_event_graphics.h"
+        );
+        var picTablesPath = Path.Combine(
+            _pokeemeraldPath,
+            "src/data/object_events/object_event_pic_tables.h"
+        );
+        var animsPath = Path.Combine(
+            _pokeemeraldPath,
+            "src/data/object_events/object_event_anims.h"
+        );
 
-        if (!File.Exists(graphicsInfoPath) || !File.Exists(picTablesPath) || !File.Exists(animsPath))
+        if (
+            !File.Exists(graphicsInfoPath)
+            || !File.Exists(picTablesPath)
+            || !File.Exists(animsPath)
+        )
         {
-            Console.WriteLine("Warning: Could not find pokeemerald source files. Using default animations.");
+            Console.WriteLine(
+                "Warning: Could not find pokeemerald source files. Using default animations."
+            );
             return metadata;
         }
 
@@ -101,7 +133,7 @@ public class PokeemeraldAnimationParser
                         : null,
                     AnimationDefinitions = animationTables.ContainsKey(animTable)
                         ? animationTables[animTable]
-                        : new List<AnimationDefinition>()
+                        : new List<AnimationDefinition>(),
                 };
             }
         }
@@ -118,19 +150,22 @@ public class PokeemeraldAnimationParser
     private Dictionary<string, string> ParseFilenameMapping(string filePath)
     {
         var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        if (!File.Exists(filePath)) return result;
+        if (!File.Exists(filePath))
+            return result;
 
         var content = File.ReadAllText(filePath);
 
         // Match: const u32 gObjectEventPic_<SpriteName>[] = INCBIN_U32("graphics/object_events/pics/people/<path>/<filename>.4bpp");
         // Extract: <path>/<filename> -> <SpriteName>
-        var regex = new Regex(@"gObjectEventPic_(\w+)\[\]\s*=\s*INCBIN_U32\(""graphics/object_events/pics/people/([^""]+)\.4bpp""\)");
+        var regex = new Regex(
+            @"gObjectEventPic_(\w+)\[\]\s*=\s*INCBIN_U32\(""graphics/object_events/pics/people/([^""]+)\.4bpp""\)"
+        );
         var matches = regex.Matches(content);
 
         foreach (Match match in matches)
         {
             var spriteName = match.Groups[1].Value; // e.g. "BrendanNormal", "MayRunning"
-            var spriteFilePath = match.Groups[2].Value;     // e.g. "brendan/walking", "may/running"
+            var spriteFilePath = match.Groups[2].Value; // e.g. "brendan/walking", "may/running"
 
             // Extract just the filename without path
             var filename = Path.GetFileName(spriteFilePath); // e.g. "walking", "running"
@@ -150,24 +185,33 @@ public class PokeemeraldAnimationParser
     /// Parse which PNG files belong to which sPicTable
     /// Returns: sPicTable name -> list of (gObjectEventPic name, frame range)
     /// </summary>
-    public Dictionary<string, List<SpriteSourceInfo>> ParsePicTableSources(string picTablesPath, string graphicsPath)
+    public Dictionary<string, List<SpriteSourceInfo>> ParsePicTableSources(
+        string picTablesPath,
+        string graphicsPath
+    )
     {
         var result = new Dictionary<string, List<SpriteSourceInfo>>();
-        if (!File.Exists(picTablesPath) || !File.Exists(graphicsPath)) return result;
+        if (!File.Exists(picTablesPath) || !File.Exists(graphicsPath))
+            return result;
 
         var picTablesContent = File.ReadAllText(picTablesPath);
         var graphicsContent = File.ReadAllText(graphicsPath);
 
         // First, build a map of gObjectEventPic names to file paths
         var picToFile = new Dictionary<string, string>();
-        var fileRegex = new Regex(@"gObjectEventPic_(\w+)\[\]\s*=\s*INCBIN_U32\(""graphics/object_events/pics/people/([^""]+)\.4bpp""\)");
+        var fileRegex = new Regex(
+            @"gObjectEventPic_(\w+)\[\]\s*=\s*INCBIN_U32\(""graphics/object_events/pics/people/([^""]+)\.4bpp""\)"
+        );
         foreach (Match match in fileRegex.Matches(graphicsContent))
         {
             picToFile[match.Groups[1].Value] = match.Groups[2].Value;
         }
 
         // Parse each sPicTable and find which gObjectEventPic_* it references
-        var tableRegex = new Regex(@"sPicTable_(\w+)\[\]\s*=\s*\{([^}]+)\}", RegexOptions.Singleline);
+        var tableRegex = new Regex(
+            @"sPicTable_(\w+)\[\]\s*=\s*\{([^}]+)\}",
+            RegexOptions.Singleline
+        );
         foreach (Match tableMatch in tableRegex.Matches(picTablesContent))
         {
             var tableName = tableMatch.Groups[1].Value;
@@ -177,7 +221,9 @@ public class PokeemeraldAnimationParser
             var seenPics = new Dictionary<string, SpriteSourceInfo>();
 
             // Find all gObjectEventPic references in this table
-            var frameRegex = new Regex(@"(?:overworld_frame|obj_frame_tiles)\(gObjectEventPic_(\w+)");
+            var frameRegex = new Regex(
+                @"(?:overworld_frame|obj_frame_tiles)\(gObjectEventPic_(\w+)"
+            );
             foreach (Match frameMatch in frameRegex.Matches(tableContent))
             {
                 var picName = frameMatch.Groups[1].Value;
@@ -189,7 +235,7 @@ public class PokeemeraldAnimationParser
                         PicName = picName,
                         FilePath = picToFile.ContainsKey(picName) ? picToFile[picName] : "",
                         StartFrame = seenPics.Values.Sum(s => s.FrameCount),
-                        FrameCount = 0
+                        FrameCount = 0,
                     };
                     seenPics[picName] = sourceInfo;
                     sources.Add(sourceInfo);
@@ -212,7 +258,10 @@ public class PokeemeraldAnimationParser
         var content = File.ReadAllText(filePath);
 
         // Match: const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_<Name> = { ... .anims = sAnimTable_<AnimTable>, ... }
-        var regex = new Regex(@"gObjectEventGraphicsInfo_(\w+)\s*=\s*\{[^}]*\.anims\s*=\s*sAnimTable_(\w+)", RegexOptions.Singleline);
+        var regex = new Regex(
+            @"gObjectEventGraphicsInfo_(\w+)\s*=\s*\{[^}]*\.anims\s*=\s*sAnimTable_(\w+)",
+            RegexOptions.Singleline
+        );
         var matches = regex.Matches(content);
 
         foreach (Match match in matches)
@@ -220,7 +269,6 @@ public class PokeemeraldAnimationParser
             var spriteName = match.Groups[1].Value;
             var animTable = match.Groups[2].Value;
             result[spriteName] = animTable;
-
         }
 
         return result;
@@ -304,17 +352,21 @@ public class PokeemeraldAnimationParser
             var frames = new List<AnimFrame>();
 
             // Parse ANIMCMD_FRAME(frameIndex, duration, .hFlip = true/false)
-            var frameRegex = new Regex(@"ANIMCMD_FRAME\((\d+),\s*(\d+)(?:,\s*\.hFlip\s*=\s*(TRUE|FALSE))?\)");
+            var frameRegex = new Regex(
+                @"ANIMCMD_FRAME\((\d+),\s*(\d+)(?:,\s*\.hFlip\s*=\s*(TRUE|FALSE))?\)"
+            );
             var frameMatches = frameRegex.Matches(animContent);
 
             foreach (Match frameMatch in frameMatches)
             {
-                frames.Add(new AnimFrame
-                {
-                    FrameIndex = int.Parse(frameMatch.Groups[1].Value),
-                    Duration = int.Parse(frameMatch.Groups[2].Value),
-                    FlipHorizontal = frameMatch.Groups[3].Value == "TRUE"
-                });
+                frames.Add(
+                    new AnimFrame
+                    {
+                        FrameIndex = int.Parse(frameMatch.Groups[1].Value),
+                        Duration = int.Parse(frameMatch.Groups[2].Value),
+                        FlipHorizontal = frameMatch.Groups[3].Value == "TRUE",
+                    }
+                );
             }
 
             if (frames.Count > 0)
@@ -324,7 +376,10 @@ public class PokeemeraldAnimationParser
         }
 
         // Parse animation tables that reference sequences
-        var tableRegex = new Regex(@"sAnimTable_(\w+)\[\]\s*=\s*\{([^}]+)\}", RegexOptions.Singleline);
+        var tableRegex = new Regex(
+            @"sAnimTable_(\w+)\[\]\s*=\s*\{([^}]+)\}",
+            RegexOptions.Singleline
+        );
         var tableMatches = tableRegex.Matches(content);
 
         foreach (Match match in tableMatches)
@@ -345,11 +400,13 @@ public class PokeemeraldAnimationParser
 
                 if (animSequences.TryGetValue(animSeqName, out var frames))
                 {
-                    animations.Add(new AnimationDefinition
-                    {
-                        Name = ConvertAnimTypeName(animType),
-                        Frames = frames
-                    });
+                    animations.Add(
+                        new AnimationDefinition
+                        {
+                            Name = ConvertAnimTypeName(animType),
+                            Frames = frames,
+                        }
+                    );
                 }
             }
 
@@ -415,10 +472,13 @@ public class SpriteExtractor
     private readonly Dictionary<string, string> _filenameMapping;
     private readonly Dictionary<string, List<SpriteSourceInfo>> _picTableSources;
 
-    public SpriteExtractor(string pokeemeraldPath, string outputPath,
+    public SpriteExtractor(
+        string pokeemeraldPath,
+        string outputPath,
         Dictionary<string, SpriteAnimationMetadata> animationData,
         Dictionary<string, string> filenameMapping,
-        Dictionary<string, List<SpriteSourceInfo>> picTableSources)
+        Dictionary<string, List<SpriteSourceInfo>> picTableSources
+    )
     {
         _pokeemeraldPath = pokeemeraldPath;
         _outputPath = outputPath;
@@ -478,7 +538,9 @@ public class SpriteExtractor
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error processing {Path.GetFileName(pngFile)}: {ex.Message}");
+                    Console.WriteLine(
+                        $"Error processing {Path.GetFileName(pngFile)}: {ex.Message}"
+                    );
                 }
             }
         }
@@ -487,22 +549,31 @@ public class SpriteExtractor
         Console.WriteLine($"Each sprite has its own manifest.json in its directory");
     }
 
-    private async Task<SpriteManifest?> ExtractSpriteFromPicTable(string picTableName, List<SpriteSourceInfo> sources)
+    private async Task<SpriteManifest?> ExtractSpriteFromPicTable(
+        string picTableName,
+        List<SpriteSourceInfo> sources
+    )
     {
-        if (sources.Count == 0) return null;
+        if (sources.Count == 0)
+            return null;
 
         // Determine the category and base name from the first source file
         var firstFilePath = sources[0].FilePath;
         var directory = Path.GetDirectoryName(firstFilePath)?.Replace("\\", "/") ?? "";
-        var isPlayerSprite = directory.StartsWith("may", StringComparison.OrdinalIgnoreCase) ||
-                            directory.StartsWith("brendan", StringComparison.OrdinalIgnoreCase);
+        var isPlayerSprite =
+            directory.StartsWith("may", StringComparison.OrdinalIgnoreCase)
+            || directory.StartsWith("brendan", StringComparison.OrdinalIgnoreCase);
         var category = string.IsNullOrEmpty(directory) ? "generic" : directory.Split('/')[0];
 
         // Use picTableName as the sprite name (e.g. "BrendanNormal" -> "normal")
         var spriteName = ConvertPicTableNameToSpriteName(picTableName, category);
 
-        Console.WriteLine($"Processing: {picTableName} -> {spriteName} ({category}) [Player: {isPlayerSprite}]");
-        Console.WriteLine($"  Combining {sources.Count} source file(s): {string.Join(", ", sources.Select(s => Path.GetFileName(s.FilePath)))}");
+        Console.WriteLine(
+            $"Processing: {picTableName} -> {spriteName} ({category}) [Player: {isPlayerSprite}]"
+        );
+        Console.WriteLine(
+            $"  Combining {sources.Count} source file(s): {string.Join(", ", sources.Select(s => Path.GetFileName(s.FilePath)))}"
+        );
 
         // Load all source PNGs
         var sourceImages = new List<Image<Rgba32>>();
@@ -525,7 +596,10 @@ public class SpriteExtractor
             maxHeight = Math.Max(maxHeight, img.Height);
 
             // Determine frame count for this source
-            var srcFrameInfo = AnalyzeSpriteSheet(img, Path.GetFileNameWithoutExtension(source.FilePath));
+            var srcFrameInfo = AnalyzeSpriteSheet(
+                img,
+                Path.GetFileNameWithoutExtension(source.FilePath)
+            );
             totalPhysicalFrames += srcFrameInfo.FrameCount;
         }
 
@@ -560,7 +634,10 @@ public class SpriteExtractor
         }
 
         // Determine frame layout from first image (assuming all have same dimensions)
-        var frameInfo = AnalyzeSpriteSheet(sourceImages[0], Path.GetFileNameWithoutExtension(sources[0].FilePath));
+        var frameInfo = AnalyzeSpriteSheet(
+            sourceImages[0],
+            Path.GetFileNameWithoutExtension(sources[0].FilePath)
+        );
 
         // Create output directory (Players/category/spriteName or NPCs/category/spriteName structure)
         // For player sprites: Players/brendan/normal, Players/may/surfing
@@ -568,7 +645,12 @@ public class SpriteExtractor
         var baseFolder = isPlayerSprite ? "Players" : "NPCs";
         var spriteOutputDir = isPlayerSprite
             ? Path.Combine(_outputPath, baseFolder, category, spriteName)
-            : Path.Combine(_outputPath, baseFolder, string.IsNullOrEmpty(directory) ? "generic" : directory, spriteName);
+            : Path.Combine(
+                _outputPath,
+                baseFolder,
+                string.IsNullOrEmpty(directory) ? "generic" : directory,
+                spriteName
+            );
         Directory.CreateDirectory(spriteOutputDir);
 
         // Save combined spritesheet with transparency
@@ -577,7 +659,12 @@ public class SpriteExtractor
         {
             ColorType = SixLabors.ImageSharp.Formats.Png.PngColorType.RgbWithAlpha,
             BitDepth = SixLabors.ImageSharp.Formats.Png.PngBitDepth.Bit8,
-            CompressionLevel = SixLabors.ImageSharp.Formats.Png.PngCompressionLevel.DefaultCompression
+            CompressionLevel = SixLabors
+                .ImageSharp
+                .Formats
+                .Png
+                .PngCompressionLevel
+                .DefaultCompression,
         };
         await combined.SaveAsPngAsync(outputPath, pngEncoder);
 
@@ -591,38 +678,46 @@ public class SpriteExtractor
             for (int logicalIndex = 0; logicalIndex < physicalFrameMapping.Count; logicalIndex++)
             {
                 int physicalIndex = physicalFrameMapping[logicalIndex];
-                frames.Add(new FrameInfo
-                {
-                    Index = logicalIndex,
-                    X = physicalIndex * frameInfo.FrameWidth,
-                    Y = 0,
-                    Width = frameInfo.FrameWidth,
-                    Height = frameInfo.FrameHeight
-                });
+                frames.Add(
+                    new FrameInfo
+                    {
+                        Index = logicalIndex,
+                        X = physicalIndex * frameInfo.FrameWidth,
+                        Y = 0,
+                        Width = frameInfo.FrameWidth,
+                        Height = frameInfo.FrameHeight,
+                    }
+                );
             }
         }
         else
         {
             for (int i = 0; i < totalPhysicalFrames; i++)
             {
-                frames.Add(new FrameInfo
-                {
-                    Index = i,
-                    X = i * frameInfo.FrameWidth,
-                    Y = 0,
-                    Width = frameInfo.FrameWidth,
-                    Height = frameInfo.FrameHeight
-                });
+                frames.Add(
+                    new FrameInfo
+                    {
+                        Index = i,
+                        X = i * frameInfo.FrameWidth,
+                        Y = 0,
+                        Width = frameInfo.FrameWidth,
+                        Height = frameInfo.FrameHeight,
+                    }
+                );
             }
         }
 
         var logicalFrameCount = frames.Count;
-        var animations = GenerateAnimations(picTableName, directory, new SpriteSheetInfo
-        {
-            FrameWidth = frameInfo.FrameWidth,
-            FrameHeight = frameInfo.FrameHeight,
-            FrameCount = totalPhysicalFrames
-        });
+        var animations = GenerateAnimations(
+            picTableName,
+            directory,
+            new SpriteSheetInfo
+            {
+                FrameWidth = frameInfo.FrameWidth,
+                FrameHeight = frameInfo.FrameHeight,
+                FrameCount = totalPhysicalFrames,
+            }
+        );
 
         // Create manifest
         var manifest = new SpriteManifest
@@ -636,14 +731,19 @@ public class SpriteExtractor
             FrameHeight = frameInfo.FrameHeight,
             FrameCount = logicalFrameCount,
             Frames = frames,
-            Animations = animations
+            Animations = animations,
         };
 
         var manifestPath = Path.Combine(spriteOutputDir, "manifest.json");
-        var json = JsonSerializer.Serialize(manifest, new JsonSerializerOptions { WriteIndented = true });
+        var json = JsonSerializer.Serialize(
+            manifest,
+            new JsonSerializerOptions { WriteIndented = true }
+        );
         await File.WriteAllTextAsync(manifestPath, json);
 
-        Console.WriteLine($"  ✓ Extracted {spriteName}: {frames.Count} frames, {animations.Count} animations");
+        Console.WriteLine(
+            $"  ✓ Extracted {spriteName}: {frames.Count} frames, {animations.Count} animations"
+        );
 
         // Cleanup
         foreach (var img in sourceImages)
@@ -664,7 +764,9 @@ public class SpriteExtractor
             if (picTableName.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
             {
                 var suffix = picTableName.Substring(prefix.Length);
-                return string.IsNullOrEmpty(suffix) ? PascalToSnakeCase(picTableName) : suffix.ToLower();
+                return string.IsNullOrEmpty(suffix)
+                    ? PascalToSnakeCase(picTableName)
+                    : suffix.ToLower();
             }
         }
 
@@ -674,14 +776,18 @@ public class SpriteExtractor
 
     private string PascalToSnakeCase(string input)
     {
-        if (string.IsNullOrEmpty(input)) return input;
+        if (string.IsNullOrEmpty(input))
+            return input;
 
         // Insert underscore before capitals (except first char) and digits
         var result = new System.Text.StringBuilder();
         for (int i = 0; i < input.Length; i++)
         {
             char c = input[i];
-            if (i > 0 && (char.IsUpper(c) || (char.IsDigit(c) && i > 0 && !char.IsDigit(input[i - 1]))))
+            if (
+                i > 0
+                && (char.IsUpper(c) || (char.IsDigit(c) && i > 0 && !char.IsDigit(input[i - 1])))
+            )
             {
                 result.Append('_');
             }
@@ -699,9 +805,12 @@ public class SpriteExtractor
         // Determine sprite type and category
         // Player sprites (may, brendan) keep their original category name (may/brendan)
         // The directory name (may, brendan, generic, etc.) IS the category
-        var isPlayerSprite = directory.StartsWith("may", StringComparison.OrdinalIgnoreCase) ||
-                            directory.StartsWith("brendan", StringComparison.OrdinalIgnoreCase);
-        var category = string.IsNullOrEmpty(directory) ? "generic" : directory.Split(Path.DirectorySeparatorChar)[0];
+        var isPlayerSprite =
+            directory.StartsWith("may", StringComparison.OrdinalIgnoreCase)
+            || directory.StartsWith("brendan", StringComparison.OrdinalIgnoreCase);
+        var category = string.IsNullOrEmpty(directory)
+            ? "generic"
+            : directory.Split(Path.DirectorySeparatorChar)[0];
 
         Console.WriteLine($"Processing: {spriteName} ({category}) [Player: {isPlayerSprite}]");
 
@@ -713,7 +822,12 @@ public class SpriteExtractor
         // Create output directory for this sprite
         // Structure: Players/category/spriteName or NPCs/category/spriteName
         var baseFolder = isPlayerSprite ? "Players" : "NPCs";
-        var spriteOutputDir = Path.Combine(_outputPath, baseFolder, string.IsNullOrEmpty(directory) ? "generic" : directory, spriteName);
+        var spriteOutputDir = Path.Combine(
+            _outputPath,
+            baseFolder,
+            string.IsNullOrEmpty(directory) ? "generic" : directory,
+            spriteName
+        );
         Directory.CreateDirectory(spriteOutputDir);
 
         // Get physical frame mapping from pokeemerald data
@@ -728,14 +842,16 @@ public class SpriteExtractor
             for (int logicalIndex = 0; logicalIndex < physicalFrameMapping.Count; logicalIndex++)
             {
                 int physicalIndex = physicalFrameMapping[logicalIndex];
-                frames.Add(new FrameInfo
-                {
-                    Index = logicalIndex, // Logical frame index (used by animations)
-                    X = physicalIndex * frameInfo.FrameWidth, // Physical position in PNG
-                    Y = 0,
-                    Width = frameInfo.FrameWidth,
-                    Height = frameInfo.FrameHeight
-                });
+                frames.Add(
+                    new FrameInfo
+                    {
+                        Index = logicalIndex, // Logical frame index (used by animations)
+                        X = physicalIndex * frameInfo.FrameWidth, // Physical position in PNG
+                        Y = 0,
+                        Width = frameInfo.FrameWidth,
+                        Height = frameInfo.FrameHeight,
+                    }
+                );
             }
         }
         else
@@ -743,14 +859,16 @@ public class SpriteExtractor
             // Default: 1:1 mapping
             for (int i = 0; i < frameInfo.FrameCount; i++)
             {
-                frames.Add(new FrameInfo
-                {
-                    Index = i,
-                    X = i * frameInfo.FrameWidth,
-                    Y = 0,
-                    Width = frameInfo.FrameWidth,
-                    Height = frameInfo.FrameHeight
-                });
+                frames.Add(
+                    new FrameInfo
+                    {
+                        Index = i,
+                        X = i * frameInfo.FrameWidth,
+                        Y = 0,
+                        Width = frameInfo.FrameWidth,
+                        Height = frameInfo.FrameHeight,
+                    }
+                );
             }
         }
 
@@ -777,7 +895,12 @@ public class SpriteExtractor
         {
             ColorType = SixLabors.ImageSharp.Formats.Png.PngColorType.RgbWithAlpha,
             BitDepth = SixLabors.ImageSharp.Formats.Png.PngBitDepth.Bit8,
-            CompressionLevel = SixLabors.ImageSharp.Formats.Png.PngCompressionLevel.DefaultCompression
+            CompressionLevel = SixLabors
+                .ImageSharp
+                .Formats
+                .Png
+                .PngCompressionLevel
+                .DefaultCompression,
         };
         await rgbaImage.SaveAsPngAsync(originalOutputPath, pngEncoder);
 
@@ -800,16 +923,19 @@ public class SpriteExtractor
             FrameHeight = frameInfo.FrameHeight,
             FrameCount = logicalFrameCount,
             Frames = frames,
-            Animations = animations
+            Animations = animations,
         };
 
         // Write individual manifest
         var manifestPath = Path.Combine(spriteOutputDir, "manifest.json");
-        var json = JsonSerializer.Serialize(manifest, new JsonSerializerOptions
-        {
-            WriteIndented = true,
-            DefaultIgnoreCondition = JsonIgnoreCondition.Never  // Always write all fields
-        });
+        var json = JsonSerializer.Serialize(
+            manifest,
+            new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.Never, // Always write all fields
+            }
+        );
         await File.WriteAllTextAsync(manifestPath, json);
 
         return manifest;
@@ -829,7 +955,9 @@ public class SpriteExtractor
         var height = image.Height;
 
         // Detect frame size based on sprite sheet dimensions
-        int frameWidth, frameHeight, frameCount;
+        int frameWidth,
+            frameHeight,
+            frameCount;
 
         // Check for common patterns
         if (height == 64 && width % 64 == 0)
@@ -872,10 +1000,9 @@ public class SpriteExtractor
         {
             FrameWidth = frameWidth,
             FrameHeight = frameHeight,
-            FrameCount = frameCount
+            FrameCount = frameCount,
         };
     }
-
 
     private List<int>? GetPhysicalFrameMapping(string spriteName)
     {
@@ -891,9 +1018,11 @@ public class SpriteExtractor
 
         foreach (var name in possibleNames)
         {
-            if (_animationData.TryGetValue(name, out var metadata) &&
-                metadata.PhysicalFrameMapping != null &&
-                metadata.PhysicalFrameMapping.Count > 0)
+            if (
+                _animationData.TryGetValue(name, out var metadata)
+                && metadata.PhysicalFrameMapping != null
+                && metadata.PhysicalFrameMapping.Count > 0
+            )
             {
                 return metadata.PhysicalFrameMapping;
             }
@@ -902,7 +1031,11 @@ public class SpriteExtractor
         return null;
     }
 
-    private List<AnimationInfo> GenerateAnimations(string picTableOrSpriteName, string directory, SpriteSheetInfo info)
+    private List<AnimationInfo> GenerateAnimations(
+        string picTableOrSpriteName,
+        string directory,
+        SpriteSheetInfo info
+    )
     {
         // For sPicTable-based sprites, picTableOrSpriteName is the sPicTable name (e.g. "BrendanNormal", "MayWatering")
         // For standalone sprites, it's the filename
@@ -919,19 +1052,24 @@ public class SpriteExtractor
         static string StripCommonSuffixes(string name)
         {
             // Graphics info names often don't have Normal/Running suffixes
-            if (name.EndsWith("Normal")) return name.Substring(0, name.Length - 6);
-            if (name.EndsWith("Running")) return name.Substring(0, name.Length - 7);
+            if (name.EndsWith("Normal"))
+                return name.Substring(0, name.Length - 6);
+            if (name.EndsWith("Running"))
+                return name.Substring(0, name.Length - 7);
             return name;
         }
 
         SpriteAnimationMetadata? metadata = null;
         foreach (var name in possibleNames)
         {
-            if (string.IsNullOrEmpty(name)) continue; // Skip empty names
+            if (string.IsNullOrEmpty(name))
+                continue; // Skip empty names
 
             if (_animationData.TryGetValue(name, out metadata))
             {
-                Console.WriteLine($"  Found animation data for {picTableOrSpriteName} as {name} ({metadata.AnimationTable})");
+                Console.WriteLine(
+                    $"  Found animation data for {picTableOrSpriteName} as {name} ({metadata.AnimationTable})"
+                );
                 break;
             }
         }
@@ -960,19 +1098,22 @@ public class SpriteExtractor
 
                 // Calculate average frame duration (pokeemerald uses variable units, we use seconds)
                 // GBA runs at ~60 fps, so duration=8 means 8/60 seconds
-                var avgDuration = animDef.Frames.Count > 0
-                    ? (float)(animDef.Frames.Average(f => f.Duration) / 60.0)
-                    : 0.15f;
+                var avgDuration =
+                    animDef.Frames.Count > 0
+                        ? (float)(animDef.Frames.Average(f => f.Duration) / 60.0)
+                        : 0.15f;
 
                 // Use the animation name exactly as defined in pokeemerald
-                animations.Add(new AnimationInfo
-                {
-                    Name = animDef.Name,
-                    Loop = true,
-                    FrameIndices = frameIndices,
-                    FrameDuration = avgDuration,
-                    FlipHorizontal = usesFlip
-                });
+                animations.Add(
+                    new AnimationInfo
+                    {
+                        Name = animDef.Name,
+                        Loop = true,
+                        FrameIndices = frameIndices,
+                        FrameDuration = avgDuration,
+                        FlipHorizontal = usesFlip,
+                    }
+                );
             }
 
             return animations;
@@ -980,21 +1121,25 @@ public class SpriteExtractor
 
         // No animation data found in pokeemerald - return empty list
         // Don't generate fake/hardcoded animations
-        Console.WriteLine($"  WARNING: No animation data found for {picTableOrSpriteName} in pokeemerald source");
+        Console.WriteLine(
+            $"  WARNING: No animation data found for {picTableOrSpriteName} in pokeemerald source"
+        );
         return new List<AnimationInfo>();
     }
 
     private string ToPascalCase(string input)
     {
-        if (string.IsNullOrEmpty(input)) return input;
+        if (string.IsNullOrEmpty(input))
+            return input;
 
         var parts = input.Split('_');
-        var result = string.Join("", parts.Select(p =>
-            p.Length > 0 ? char.ToUpper(p[0]) + p.Substring(1) : p));
+        var result = string.Join(
+            "",
+            parts.Select(p => p.Length > 0 ? char.ToUpper(p[0]) + p.Substring(1) : p)
+        );
 
         return result;
     }
-
 
     /// <summary>
     /// Apply transparency by replacing mask color with transparent pixels

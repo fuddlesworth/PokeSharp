@@ -53,9 +53,9 @@ public class PropertyMapperRegistry
             var interfaces = mapperType.GetInterfaces();
 
             // Find IEntityPropertyMapper<T> interface
-            var entityMapperInterface = interfaces
-                .FirstOrDefault(i => i.IsGenericType
-                                     && i.GetGenericTypeDefinition() == typeof(IEntityPropertyMapper<>));
+            var entityMapperInterface = interfaces.FirstOrDefault(i =>
+                i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEntityPropertyMapper<>)
+            );
 
             if (entityMapperInterface != null)
             {
@@ -70,8 +70,11 @@ public class PropertyMapperRegistry
                     }
                     catch (Exception ex)
                     {
-                        _logger?.LogWarning(ex, "Mapper {MapperType} failed to map properties",
-                            mapperType.Name);
+                        _logger?.LogWarning(
+                            ex,
+                            "Mapper {MapperType} failed to map properties",
+                            mapperType.Name
+                        );
                     }
                 }
             }

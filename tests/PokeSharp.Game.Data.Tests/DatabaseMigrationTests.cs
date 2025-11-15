@@ -1,8 +1,8 @@
+using System.Text.Json;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using PokeSharp.Game.Data;
 using PokeSharp.Game.Data.Entities;
-using FluentAssertions;
-using System.Text.Json;
 using Xunit;
 
 namespace PokeSharp.Game.Data.Tests;
@@ -85,7 +85,8 @@ public class DatabaseMigrationTests : IDisposable
         await connection.OpenAsync();
 
         await using var command = connection.CreateCommand();
-        command.CommandText = @"
+        command.CommandText =
+            @"
             SELECT COUNT(*) FROM sqlite_master
             WHERE type='index'
             AND name LIKE 'IX_%'";
@@ -116,8 +117,9 @@ public class DatabaseMigrationTests : IDisposable
         // Assert - Retrieve
         await using (var context = new GameDataContext(options))
         {
-            var retrievedMap = await context.Maps
-                .FirstOrDefaultAsync(m => m.MapId == testMap.MapId);
+            var retrievedMap = await context.Maps.FirstOrDefaultAsync(m =>
+                m.MapId == testMap.MapId
+            );
 
             retrievedMap.Should().NotBeNull();
             retrievedMap!.MapId.Should().Be(testMap.MapId);
@@ -145,8 +147,9 @@ public class DatabaseMigrationTests : IDisposable
         // Assert - Retrieve
         await using (var context = new GameDataContext(options))
         {
-            var retrievedNpc = await context.Npcs
-                .FirstOrDefaultAsync(n => n.NpcId == testNpc.NpcId);
+            var retrievedNpc = await context.Npcs.FirstOrDefaultAsync(n =>
+                n.NpcId == testNpc.NpcId
+            );
 
             retrievedNpc.Should().NotBeNull();
             retrievedNpc!.NpcId.Should().Be(testNpc.NpcId);
@@ -173,8 +176,9 @@ public class DatabaseMigrationTests : IDisposable
         // Assert - Retrieve
         await using (var context = new GameDataContext(options))
         {
-            var retrievedTrainer = await context.Trainers
-                .FirstOrDefaultAsync(t => t.TrainerId == testTrainer.TrainerId);
+            var retrievedTrainer = await context.Trainers.FirstOrDefaultAsync(t =>
+                t.TrainerId == testTrainer.TrainerId
+            );
 
             retrievedTrainer.Should().NotBeNull();
             retrievedTrainer!.TrainerId.Should().Be(testTrainer.TrainerId);
@@ -195,13 +199,14 @@ public class DatabaseMigrationTests : IDisposable
         {
             await context.Database.EnsureCreatedAsync();
 
-            var maps = Enumerable.Range(0, mapCount)
+            var maps = Enumerable
+                .Range(0, mapCount)
                 .Select(i => new MapDefinition
                 {
                     MapId = $"test_map_{i}",
                     DisplayName = $"Test Map {i}",
                     Region = "hoenn",
-                    TiledDataJson = CreateSampleTiledJson(i)
+                    TiledDataJson = CreateSampleTiledJson(i),
                 })
                 .ToList();
 
@@ -237,7 +242,8 @@ public class DatabaseMigrationTests : IDisposable
         {
             var map = await context.Maps.FirstAsync(m => m.MapId == testMap.MapId);
 
-            var deserializedAction = () => JsonSerializer.Deserialize<Dictionary<string, object>>(map.TiledDataJson);
+            var deserializedAction = () =>
+                JsonSerializer.Deserialize<Dictionary<string, object>>(map.TiledDataJson);
             deserializedAction.Should().NotThrow("TiledDataJson should be valid JSON");
 
             var data = deserializedAction();
@@ -283,13 +289,15 @@ public class DatabaseMigrationTests : IDisposable
         await using (var context = new GameDataContext(options))
         {
             await context.Database.EnsureCreatedAsync();
-            context.Maps.Add(new MapDefinition
-            {
-                MapId = testMapId,
-                DisplayName = "Persistent Test Map",
-                Region = "hoenn",
-                TiledDataJson = "{}"
-            });
+            context.Maps.Add(
+                new MapDefinition
+                {
+                    MapId = testMapId,
+                    DisplayName = "Persistent Test Map",
+                    Region = "hoenn",
+                    TiledDataJson = "{}",
+                }
+            );
             await context.SaveChangesAsync();
         }
 
@@ -317,9 +325,27 @@ public class DatabaseMigrationTests : IDisposable
         {
             await context.Database.EnsureCreatedAsync();
             context.Maps.AddRange(
-                new MapDefinition { MapId = "hoenn_1", DisplayName = "Hoenn Map 1", Region = "hoenn", TiledDataJson = "{}" },
-                new MapDefinition { MapId = "hoenn_2", DisplayName = "Hoenn Map 2", Region = "hoenn", TiledDataJson = "{}" },
-                new MapDefinition { MapId = "kanto_1", DisplayName = "Kanto Map 1", Region = "kanto", TiledDataJson = "{}" }
+                new MapDefinition
+                {
+                    MapId = "hoenn_1",
+                    DisplayName = "Hoenn Map 1",
+                    Region = "hoenn",
+                    TiledDataJson = "{}",
+                },
+                new MapDefinition
+                {
+                    MapId = "hoenn_2",
+                    DisplayName = "Hoenn Map 2",
+                    Region = "hoenn",
+                    TiledDataJson = "{}",
+                },
+                new MapDefinition
+                {
+                    MapId = "kanto_1",
+                    DisplayName = "Kanto Map 1",
+                    Region = "kanto",
+                    TiledDataJson = "{}",
+                }
             );
             await context.SaveChangesAsync();
         }
@@ -327,9 +353,7 @@ public class DatabaseMigrationTests : IDisposable
         // Act
         await using (var context = new GameDataContext(options))
         {
-            var hoennMaps = await context.Maps
-                .Where(m => m.Region == "hoenn")
-                .ToListAsync();
+            var hoennMaps = await context.Maps.Where(m => m.Region == "hoenn").ToListAsync();
 
             // Assert
             hoennMaps.Should().HaveCount(2);
@@ -346,9 +370,30 @@ public class DatabaseMigrationTests : IDisposable
         {
             await context.Database.EnsureCreatedAsync();
             context.Maps.AddRange(
-                new MapDefinition { MapId = "town_1", DisplayName = "Town 1", Region = "hoenn", MapType = "town", TiledDataJson = "{}" },
-                new MapDefinition { MapId = "route_1", DisplayName = "Route 1", Region = "hoenn", MapType = "route", TiledDataJson = "{}" },
-                new MapDefinition { MapId = "cave_1", DisplayName = "Cave 1", Region = "hoenn", MapType = "cave", TiledDataJson = "{}" }
+                new MapDefinition
+                {
+                    MapId = "town_1",
+                    DisplayName = "Town 1",
+                    Region = "hoenn",
+                    MapType = "town",
+                    TiledDataJson = "{}",
+                },
+                new MapDefinition
+                {
+                    MapId = "route_1",
+                    DisplayName = "Route 1",
+                    Region = "hoenn",
+                    MapType = "route",
+                    TiledDataJson = "{}",
+                },
+                new MapDefinition
+                {
+                    MapId = "cave_1",
+                    DisplayName = "Cave 1",
+                    Region = "hoenn",
+                    MapType = "cave",
+                    TiledDataJson = "{}",
+                }
             );
             await context.SaveChangesAsync();
         }
@@ -356,9 +401,7 @@ public class DatabaseMigrationTests : IDisposable
         // Act
         await using (var context = new GameDataContext(options))
         {
-            var towns = await context.Maps
-                .Where(m => m.MapType == "town")
-                .ToListAsync();
+            var towns = await context.Maps.Where(m => m.MapType == "town").ToListAsync();
 
             // Assert
             towns.Should().HaveCount(1);
@@ -375,9 +418,24 @@ public class DatabaseMigrationTests : IDisposable
         {
             await context.Database.EnsureCreatedAsync();
             context.Npcs.AddRange(
-                new NpcDefinition { NpcId = "npc_1", DisplayName = "Nurse", NpcType = "nurse" },
-                new NpcDefinition { NpcId = "npc_2", DisplayName = "Shopkeeper", NpcType = "shopkeeper" },
-                new NpcDefinition { NpcId = "npc_3", DisplayName = "Nurse 2", NpcType = "nurse" }
+                new NpcDefinition
+                {
+                    NpcId = "npc_1",
+                    DisplayName = "Nurse",
+                    NpcType = "nurse",
+                },
+                new NpcDefinition
+                {
+                    NpcId = "npc_2",
+                    DisplayName = "Shopkeeper",
+                    NpcType = "shopkeeper",
+                },
+                new NpcDefinition
+                {
+                    NpcId = "npc_3",
+                    DisplayName = "Nurse 2",
+                    NpcType = "nurse",
+                }
             );
             await context.SaveChangesAsync();
         }
@@ -385,9 +443,7 @@ public class DatabaseMigrationTests : IDisposable
         // Act
         await using (var context = new GameDataContext(options))
         {
-            var nurses = await context.Npcs
-                .Where(n => n.NpcType == "nurse")
-                .ToListAsync();
+            var nurses = await context.Npcs.Where(n => n.NpcType == "nurse").ToListAsync();
 
             // Assert
             nurses.Should().HaveCount(2);
@@ -404,9 +460,24 @@ public class DatabaseMigrationTests : IDisposable
         {
             await context.Database.EnsureCreatedAsync();
             context.Trainers.AddRange(
-                new TrainerDefinition { TrainerId = "trainer_1", DisplayName = "Youngster Joey", TrainerClass = "youngster" },
-                new TrainerDefinition { TrainerId = "trainer_2", DisplayName = "Lass Amy", TrainerClass = "lass" },
-                new TrainerDefinition { TrainerId = "trainer_3", DisplayName = "Youngster Ben", TrainerClass = "youngster" }
+                new TrainerDefinition
+                {
+                    TrainerId = "trainer_1",
+                    DisplayName = "Youngster Joey",
+                    TrainerClass = "youngster",
+                },
+                new TrainerDefinition
+                {
+                    TrainerId = "trainer_2",
+                    DisplayName = "Lass Amy",
+                    TrainerClass = "lass",
+                },
+                new TrainerDefinition
+                {
+                    TrainerId = "trainer_3",
+                    DisplayName = "Youngster Ben",
+                    TrainerClass = "youngster",
+                }
             );
             await context.SaveChangesAsync();
         }
@@ -414,8 +485,8 @@ public class DatabaseMigrationTests : IDisposable
         // Act
         await using (var context = new GameDataContext(options))
         {
-            var youngsters = await context.Trainers
-                .Where(t => t.TrainerClass == "youngster")
+            var youngsters = await context
+                .Trainers.Where(t => t.TrainerClass == "youngster")
                 .ToListAsync();
 
             // Assert
@@ -436,14 +507,16 @@ public class DatabaseMigrationTests : IDisposable
             // Add 100 maps
             for (int i = 0; i < 100; i++)
             {
-                context.Maps.Add(new MapDefinition
-                {
-                    MapId = $"map_{i}",
-                    DisplayName = $"Map {i}",
-                    Region = i % 2 == 0 ? "hoenn" : "kanto",
-                    MapType = i % 3 == 0 ? "town" : "route",
-                    TiledDataJson = "{}"
-                });
+                context.Maps.Add(
+                    new MapDefinition
+                    {
+                        MapId = $"map_{i}",
+                        DisplayName = $"Map {i}",
+                        Region = i % 2 == 0 ? "hoenn" : "kanto",
+                        MapType = i % 3 == 0 ? "town" : "route",
+                        TiledDataJson = "{}",
+                    }
+                );
             }
             await context.SaveChangesAsync();
         }
@@ -452,8 +525,8 @@ public class DatabaseMigrationTests : IDisposable
         var startTime = DateTime.UtcNow;
         await using (var context = new GameDataContext(options))
         {
-            var results = await context.Maps
-                .Where(m => m.Region == "hoenn")
+            var results = await context
+                .Maps.Where(m => m.Region == "hoenn")
                 .Where(m => m.MapType == "town")
                 .OrderBy(m => m.DisplayName)
                 .Take(10)
@@ -463,7 +536,9 @@ public class DatabaseMigrationTests : IDisposable
 
             // Assert
             results.Should().NotBeEmpty();
-            duration.Should().BeLessThan(TimeSpan.FromMilliseconds(100), "query should be fast with indexes");
+            duration
+                .Should()
+                .BeLessThan(TimeSpan.FromMilliseconds(100), "query should be fast with indexes");
         }
     }
 
@@ -486,13 +561,15 @@ public class DatabaseMigrationTests : IDisposable
             // Add realistic amount of data
             for (int i = 0; i < 500; i++)
             {
-                context.Maps.Add(new MapDefinition
-                {
-                    MapId = $"map_{i}",
-                    DisplayName = $"Test Map {i}",
-                    Region = "hoenn",
-                    TiledDataJson = CreateSampleTiledJson(i)
-                });
+                context.Maps.Add(
+                    new MapDefinition
+                    {
+                        MapId = $"map_{i}",
+                        DisplayName = $"Test Map {i}",
+                        Region = "hoenn",
+                        TiledDataJson = CreateSampleTiledJson(i),
+                    }
+                );
             }
             await context.SaveChangesAsync();
         }
@@ -501,8 +578,12 @@ public class DatabaseMigrationTests : IDisposable
         var memoryUsed = finalMemory - initialMemory;
 
         // Assert
-        memoryUsed.Should().BeLessThan(MaxExpectedMemoryBytes,
-            $"memory usage should stay under {MaxExpectedMemoryBytes / (1024 * 1024)}MB");
+        memoryUsed
+            .Should()
+            .BeLessThan(
+                MaxExpectedMemoryBytes,
+                $"memory usage should stay under {MaxExpectedMemoryBytes / (1024 * 1024)}MB"
+            );
     }
 
     [Fact]
@@ -533,7 +614,9 @@ public class DatabaseMigrationTests : IDisposable
         var memoryGrowth = finalMemory - initialMemory;
 
         // Assert - Memory should not grow significantly
-        memoryGrowth.Should().BeLessThan(10 * 1024 * 1024, "repeated queries should not leak memory");
+        memoryGrowth
+            .Should()
+            .BeLessThan(10 * 1024 * 1024, "repeated queries should not leak memory");
     }
 
     [Fact]
@@ -549,13 +632,15 @@ public class DatabaseMigrationTests : IDisposable
         await using (var context = new GameDataContext(options))
         {
             await context.Database.EnsureCreatedAsync();
-            context.Maps.Add(new MapDefinition
-            {
-                MapId = "large_map",
-                DisplayName = "Large Map",
-                Region = "hoenn",
-                TiledDataJson = largeJson
-            });
+            context.Maps.Add(
+                new MapDefinition
+                {
+                    MapId = "large_map",
+                    DisplayName = "Large Map",
+                    Region = "hoenn",
+                    TiledDataJson = largeJson,
+                }
+            );
             await context.SaveChangesAsync();
         }
 
@@ -570,7 +655,9 @@ public class DatabaseMigrationTests : IDisposable
         var memoryUsed = finalMemory - initialMemory;
 
         // Assert
-        memoryUsed.Should().BeLessThan(50 * 1024 * 1024, "large JSON fields should be handled efficiently");
+        memoryUsed
+            .Should()
+            .BeLessThan(50 * 1024 * 1024, "large JSON fields should be handled efficiently");
     }
 
     #endregion
@@ -596,7 +683,7 @@ public class DatabaseMigrationTests : IDisposable
             MusicId = "littleroot",
             Weather = "clear",
             ShowMapName = true,
-            CanFly = false
+            CanFly = false,
         };
     }
 
@@ -606,7 +693,7 @@ public class DatabaseMigrationTests : IDisposable
         {
             NpcId = "test_npc",
             DisplayName = "Test NPC",
-            NpcType = "generic"
+            NpcType = "generic",
         };
     }
 
@@ -616,7 +703,7 @@ public class DatabaseMigrationTests : IDisposable
         {
             TrainerId = "test_trainer",
             DisplayName = "Test Trainer",
-            TrainerClass = "youngster"
+            TrainerClass = "youngster",
         };
     }
 
@@ -630,9 +717,14 @@ public class DatabaseMigrationTests : IDisposable
             tileheight = 16,
             layers = new[]
             {
-                new { name = "Ground", type = "tilelayer", data = new int[300] }
+                new
+                {
+                    name = "Ground",
+                    type = "tilelayer",
+                    data = new int[300],
+                },
             },
-            seed = seed
+            seed = seed,
         };
         return JsonSerializer.Serialize(data);
     }
@@ -649,8 +741,13 @@ public class DatabaseMigrationTests : IDisposable
             tileheight = 16,
             layers = new[]
             {
-                new { name = "Ground", type = "tilelayer", data = largeData }
-            }
+                new
+                {
+                    name = "Ground",
+                    type = "tilelayer",
+                    data = largeData,
+                },
+            },
         };
         return JsonSerializer.Serialize(data);
     }

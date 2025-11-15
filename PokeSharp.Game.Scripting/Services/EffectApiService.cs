@@ -1,14 +1,14 @@
 using Arch.Core;
-using PokeSharp.Game.Systems.Services;
-using PokeSharp.Engine.Core.Systems;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
-using PokeSharp.Engine.Core.Events;
 using PokeSharp.Engine.Common.Logging;
-using PokeSharp.Game.Scripting.Api;
-using PokeSharp.Engine.Systems.Management;
-using PokeSharp.Engine.Systems.Factories;
+using PokeSharp.Engine.Core.Events;
+using PokeSharp.Engine.Core.Systems;
 using PokeSharp.Engine.Core.Types.Events;
+using PokeSharp.Engine.Systems.Factories;
+using PokeSharp.Engine.Systems.Management;
+using PokeSharp.Game.Scripting.Api;
+using PokeSharp.Game.Systems.Services;
 
 namespace PokeSharp.Game.Scripting.Services;
 
@@ -23,7 +23,8 @@ public class EffectApiService(
     IGameTimeService gameTime
 ) : IEffectApi
 {
-    private readonly IEventBus _eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
+    private readonly IEventBus _eventBus =
+        eventBus ?? throw new ArgumentNullException(nameof(eventBus));
 
     private readonly ILogger<EffectApiService> _logger =
         logger ?? throw new ArgumentNullException(nameof(logger));

@@ -1,11 +1,11 @@
-using Arch.Core;
-using Arch.Core.Extensions;
-using PokeSharp.Game.Components.Relationships;
-using PokeSharp.Engine.Systems.Queries;
-using PokeSharp.Engine.Systems.Management;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Arch.Core;
+using Arch.Core.Extensions;
+using PokeSharp.Engine.Systems.Management;
+using PokeSharp.Engine.Systems.Queries;
+using PokeSharp.Game.Components.Relationships;
 
 namespace PokeSharp.Engine.Systems.Extensions;
 
@@ -64,11 +64,7 @@ public static class RelationshipExtensions
         }
 
         // Set new parent
-        child.Add(new Parent
-        {
-            Value = parent,
-            EstablishedAt = DateTime.UtcNow
-        });
+        child.Add(new Parent { Value = parent, EstablishedAt = DateTime.UtcNow });
 
         // Add to parent's children list
         if (!parent.Has<Children>())
@@ -207,8 +203,12 @@ public static class RelationshipExtensions
     /// </code>
     /// </para>
     /// </remarks>
-    public static void SetOwner(this Entity owned, Entity owner, World world,
-        OwnershipType ownershipType = OwnershipType.Permanent)
+    public static void SetOwner(
+        this Entity owned,
+        Entity owner,
+        World world,
+        OwnershipType ownershipType = OwnershipType.Permanent
+    )
     {
         if (!world.IsAlive(owned))
             throw new ArgumentException("Owned entity is not alive", nameof(owned));
@@ -222,20 +222,12 @@ public static class RelationshipExtensions
         }
 
         // Set new owner
-        owned.Add(new Owned
-        {
-            OwnerEntity = owner,
-            AcquiredAt = DateTime.UtcNow
-        });
+        owned.Add(new Owned { OwnerEntity = owner, AcquiredAt = DateTime.UtcNow });
 
         // Set owner relationship
         if (!owner.Has<Owner>() || owner.Get<Owner>().Value != owned)
         {
-            owner.Set(new Owner
-            {
-                Value = owned,
-                Type = ownershipType
-            });
+            owner.Set(new Owner { Value = owned, Type = ownershipType });
         }
     }
 
@@ -313,13 +305,16 @@ public static class RelationshipExtensions
         // Use centralized relationship query
         var query = RelationshipQueries.AllOwned;
 
-        world.Query(in query, (Entity entity, ref Owned owned) =>
-        {
-            if (owned.OwnerEntity == owner && world.IsAlive(entity))
+        world.Query(
+            in query,
+            (Entity entity, ref Owned owned) =>
             {
-                ownedEntities.Add(entity);
+                if (owned.OwnerEntity == owner && world.IsAlive(entity))
+                {
+                    ownedEntities.Add(entity);
+                }
             }
-        });
+        );
 
         return ownedEntities;
     }

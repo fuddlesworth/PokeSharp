@@ -1,11 +1,11 @@
 using Arch.Core;
-using PokeSharp.Game.Systems.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
+using PokeSharp.Engine.Common.Logging;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Components.NPCs;
-using PokeSharp.Engine.Common.Logging;
 using PokeSharp.Game.Scripting.Api;
+using PokeSharp.Game.Systems.Services;
 
 namespace PokeSharp.Game.Scripting.Services;
 
@@ -60,13 +60,21 @@ public class NpcApiService(World world, ILogger<NpcApiService> logger) : INPCApi
     {
         if (!_world.IsAlive(npc) || !_world.IsAlive(target))
         {
-            _logger.LogEntityOperationInvalid("NPC targeting", "face entity", "source or target invalid");
+            _logger.LogEntityOperationInvalid(
+                "NPC targeting",
+                "face entity",
+                "source or target invalid"
+            );
             return;
         }
 
         if (!_world.Has<Position>(npc) || !_world.Has<Position>(target))
         {
-            _logger.LogEntityMissingComponent("NPC facing pair", "Position", "align facing direction");
+            _logger.LogEntityMissingComponent(
+                "NPC facing pair",
+                "Position",
+                "align facing direction"
+            );
             return;
         }
 

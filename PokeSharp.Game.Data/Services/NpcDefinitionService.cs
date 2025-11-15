@@ -18,9 +18,7 @@ public class NpcDefinitionService
     private readonly ConcurrentDictionary<string, NpcDefinition> _npcCache = new();
     private readonly ConcurrentDictionary<string, TrainerDefinition> _trainerCache = new();
 
-    public NpcDefinitionService(
-        GameDataContext context,
-        ILogger<NpcDefinitionService> logger)
+    public NpcDefinitionService(GameDataContext context, ILogger<NpcDefinitionService> logger)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -58,9 +56,7 @@ public class NpcDefinitionService
     /// </summary>
     public async Task<List<NpcDefinition>> GetNpcsByTypeAsync(string npcType)
     {
-        return await _context.Npcs
-            .Where(n => n.NpcType == npcType)
-            .ToListAsync();
+        return await _context.Npcs.Where(n => n.NpcType == npcType).ToListAsync();
     }
 
     /// <summary>
@@ -68,9 +64,7 @@ public class NpcDefinitionService
     /// </summary>
     public async Task<List<NpcDefinition>> GetNpcsByModAsync(string modId)
     {
-        return await _context.Npcs
-            .Where(n => n.SourceMod == modId)
-            .ToListAsync();
+        return await _context.Npcs.Where(n => n.SourceMod == modId).ToListAsync();
     }
 
     /// <summary>
@@ -115,9 +109,7 @@ public class NpcDefinitionService
     /// </summary>
     public async Task<List<TrainerDefinition>> GetTrainersByClassAsync(string trainerClass)
     {
-        return await _context.Trainers
-            .Where(t => t.TrainerClass == trainerClass)
-            .ToListAsync();
+        return await _context.Trainers.Where(t => t.TrainerClass == trainerClass).ToListAsync();
     }
 
     /// <summary>
@@ -125,9 +117,7 @@ public class NpcDefinitionService
     /// </summary>
     public async Task<List<TrainerDefinition>> GetTrainersByModAsync(string modId)
     {
-        return await _context.Trainers
-            .Where(t => t.SourceMod == modId)
-            .ToListAsync();
+        return await _context.Trainers.Where(t => t.SourceMod == modId).ToListAsync();
     }
 
     /// <summary>
@@ -152,7 +142,7 @@ public class NpcDefinitionService
             TotalNpcs = await _context.Npcs.CountAsync(),
             TotalTrainers = await _context.Trainers.CountAsync(),
             NpcsCached = _npcCache.Count,
-            TrainersCached = _trainerCache.Count
+            TrainersCached = _trainerCache.Count,
         };
 
         return stats;
@@ -171,4 +161,3 @@ public record DataStatistics
     public int NpcsCached { get; init; }
     public int TrainersCached { get; init; }
 }
-

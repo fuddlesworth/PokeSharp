@@ -132,4 +132,3 @@ public class MapDefinition
     // [ForeignKey(nameof(WestMapId))]
     // public MapDefinition? WestMap { get; set; }
 }
-

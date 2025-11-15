@@ -25,4 +25,3 @@ public class GameTimeService : IGameTimeService
         _deltaTime = deltaTime;
     }
 }
-

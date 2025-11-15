@@ -105,7 +105,10 @@ public struct AnimatedTile
         ArgumentNullException.ThrowIfNull(frameSourceRects);
 
         if (frameSourceRects.Length != frameTileIds.Length)
-            throw new ArgumentException("FrameSourceRects length must match FrameTileIds length", nameof(frameSourceRects));
+            throw new ArgumentException(
+                "FrameSourceRects length must match FrameTileIds length",
+                nameof(frameSourceRects)
+            );
 
         BaseTileId = baseTileId;
         FrameTileIds = frameTileIds;

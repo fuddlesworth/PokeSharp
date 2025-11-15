@@ -21,4 +21,3 @@
     <ProjectReference Include="..\PokeSharp.Game.Systems\PokeSharp.Game.Systems.csproj" />
   </ItemGroup>
 </Project>
-

@@ -1,13 +1,13 @@
 using Arch.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
+using PokeSharp.Engine.Common.Logging;
+using PokeSharp.Engine.Common.Utilities;
+using PokeSharp.Engine.Core.Systems;
+using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Components.Tiles;
-using PokeSharp.Engine.Common.Logging;
 using EcsQueries = PokeSharp.Engine.Systems.Queries.Queries;
-using PokeSharp.Engine.Common.Utilities;
-using PokeSharp.Engine.Systems.Management;
-using PokeSharp.Engine.Core.Systems;
 
 namespace PokeSharp.Game.Systems;
 
@@ -16,7 +16,10 @@ namespace PokeSharp.Game.Systems;
 ///     Runs very early (Priority: 25) to ensure spatial data is available for other systems.
 ///     Uses dirty tracking to avoid rebuilding index for static tiles every frame.
 /// </summary>
-public class SpatialHashSystem(ILogger<SpatialHashSystem>? logger = null) : SystemBase, IUpdateSystem, ISpatialQuery
+public class SpatialHashSystem(ILogger<SpatialHashSystem>? logger = null)
+    : SystemBase,
+        IUpdateSystem,
+        ISpatialQuery
 {
     private readonly SpatialHash _dynamicHash = new(); // For entities with Position (cleared each frame)
     private readonly ILogger<SpatialHashSystem>? _logger = logger;
@@ -31,7 +34,6 @@ public class SpatialHashSystem(ILogger<SpatialHashSystem>? logger = null) : Syst
 
     /// <inheritdoc />
     public override int Priority => SystemPriority.SpatialHash;
-
 
     /// <inheritdoc />
     public override void Update(World world, float deltaTime)

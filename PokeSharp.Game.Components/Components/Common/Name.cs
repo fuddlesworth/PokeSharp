@@ -22,5 +22,3 @@ public struct Name
         DisplayName = string.IsNullOrWhiteSpace(displayName) ? string.Empty : displayName;
     }
 }
-
-

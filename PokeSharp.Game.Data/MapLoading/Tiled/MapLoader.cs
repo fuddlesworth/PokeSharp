@@ -3,23 +3,23 @@ using System.Text.Json;
 using Arch.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
+using PokeSharp.Engine.Common.Logging;
+using PokeSharp.Engine.Rendering.Assets;
 using PokeSharp.Engine.Systems.BulkOperations;
+using PokeSharp.Engine.Systems.Factories;
+using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Game.Components.Common;
 using PokeSharp.Game.Components.Maps;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Components.NPCs;
 using PokeSharp.Game.Components.Rendering;
 using PokeSharp.Game.Components.Tiles;
-using PokeSharp.Game.Systems;
-using PokeSharp.Engine.Systems.Factories;
-using PokeSharp.Engine.Common.Logging;
-using PokeSharp.Game.Data.PropertyMapping;
-using PokeSharp.Engine.Systems.Management;
-using PokeSharp.Engine.Rendering.Assets;
-using PokeSharp.Game.Data.MapLoading.Tiled.Tmx;
-using PokeSharp.Game.Data.Services;
 using PokeSharp.Game.Data.Entities;
 using PokeSharp.Game.Data.MapLoading.Tiled.TiledJson;
+using PokeSharp.Game.Data.MapLoading.Tiled.Tmx;
+using PokeSharp.Game.Data.PropertyMapping;
+using PokeSharp.Game.Data.Services;
+using PokeSharp.Game.Systems;
 
 namespace PokeSharp.Game.Data.MapLoading.Tiled;
 
@@ -75,8 +75,8 @@ public class MapLoader(
         if (_mapDefinitionService == null)
         {
             throw new InvalidOperationException(
-                "MapDefinitionService is required for definition-based map loading. " +
-                "Use LoadMapEntities(world, mapPath) for file-based loading."
+                "MapDefinitionService is required for definition-based map loading. "
+                    + "Use LoadMapEntities(world, mapPath) for file-based loading."
             );
         }
 
@@ -87,15 +87,18 @@ public class MapLoader(
             throw new FileNotFoundException($"Map definition not found: {mapId}");
         }
 
-        _logger?.LogInformation("Loading map from definition: {MapId} ({DisplayName})",
-            mapDef.MapId, mapDef.DisplayName);
+        _logger?.LogInformation(
+            "Loading map from definition: {MapId} ({DisplayName})",
+            mapDef.MapId,
+            mapDef.DisplayName
+        );
 
         // Parse Tiled JSON from definition
         var jsonOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
             ReadCommentHandling = JsonCommentHandling.Skip,
-            AllowTrailingCommas = true
+            AllowTrailingCommas = true,
         };
 
         var mapDirectoryBase = ResolveMapDirectoryBase();
@@ -142,29 +145,41 @@ public class MapLoader(
         var mapId = GetMapIdFromString(mapDef.MapId);
         var mapName = mapDef.DisplayName;
 
-        var loadedTilesets = tmxDoc.Tilesets.Count > 0
-            ? LoadTilesetsFromDefinition(tmxDoc, mapDef.MapId)
-            : new List<LoadedTileset>();
+        var loadedTilesets =
+            tmxDoc.Tilesets.Count > 0
+                ? LoadTilesetsFromDefinition(tmxDoc, mapDef.MapId)
+                : new List<LoadedTileset>();
 
         // Track texture IDs for lifecycle management
         TrackMapTextures(mapId, loadedTilesets);
 
         // Process all layers and create tile entities (only if tilesets exist)
-        var tilesCreated = loadedTilesets.Count > 0
-            ? ProcessLayers(world, tmxDoc, mapId, loadedTilesets)
-            : 0;
+        var tilesCreated =
+            loadedTilesets.Count > 0 ? ProcessLayers(world, tmxDoc, mapId, loadedTilesets) : 0;
 
         // Create metadata entities (use MapDefinition metadata)
-        var mapInfoEntity = CreateMapMetadataFromDefinition(world, tmxDoc, mapDef, mapId, loadedTilesets);
+        var mapInfoEntity = CreateMapMetadataFromDefinition(
+            world,
+            tmxDoc,
+            mapDef,
+            mapId,
+            loadedTilesets
+        );
 
         // Setup animations (only if tilesets exist)
-        var animatedTilesCreated = loadedTilesets.Count > 0
-            ? CreateAnimatedTileEntities(world, tmxDoc, loadedTilesets)
-            : 0;
+        var animatedTilesCreated =
+            loadedTilesets.Count > 0
+                ? CreateAnimatedTileEntities(world, tmxDoc, loadedTilesets)
+                : 0;
 
         // Create image layers
         var totalLayerCount = tmxDoc.Layers.Count + tmxDoc.ImageLayers.Count;
-        var imageLayersCreated = CreateImageLayerEntities(world, tmxDoc, $"Data/Maps/{mapDef.MapId}", totalLayerCount);
+        var imageLayersCreated = CreateImageLayerEntities(
+            world,
+            tmxDoc,
+            $"Data/Maps/{mapDef.MapId}",
+            totalLayerCount
+        );
 
         // Spawn map objects (NPCs, items, etc.)
         var objectsCreated = SpawnMapObjects(world, tmxDoc, mapId, tmxDoc.TileHeight);
@@ -202,25 +217,31 @@ public class MapLoader(
         var mapId = GetMapId(mapPath);
         var mapName = Path.GetFileNameWithoutExtension(mapPath);
 
-        var loadedTilesets = tmxDoc.Tilesets.Count > 0
-            ? LoadTilesets(tmxDoc, mapPath)
-            : new List<LoadedTileset>();
+        var loadedTilesets =
+            tmxDoc.Tilesets.Count > 0 ? LoadTilesets(tmxDoc, mapPath) : new List<LoadedTileset>();
 
         // Track texture IDs for lifecycle management
         TrackMapTextures(mapId, loadedTilesets);
 
         // Process all layers and create tile entities (only if tilesets exist)
-        var tilesCreated = loadedTilesets.Count > 0
-            ? ProcessLayers(world, tmxDoc, mapId, loadedTilesets)
-            : 0;
+        var tilesCreated =
+            loadedTilesets.Count > 0 ? ProcessLayers(world, tmxDoc, mapId, loadedTilesets) : 0;
 
         // Create metadata entities
-        var mapInfoEntity = CreateMapMetadata(world, tmxDoc, mapPath, mapId, mapName, loadedTilesets);
+        var mapInfoEntity = CreateMapMetadata(
+            world,
+            tmxDoc,
+            mapPath,
+            mapId,
+            mapName,
+            loadedTilesets
+        );
 
         // Setup animations (only if tilesets exist)
-        var animatedTilesCreated = loadedTilesets.Count > 0
-            ? CreateAnimatedTileEntities(world, tmxDoc, loadedTilesets)
-            : 0;
+        var animatedTilesCreated =
+            loadedTilesets.Count > 0
+                ? CreateAnimatedTileEntities(world, tmxDoc, loadedTilesets)
+                : 0;
 
         // Create image layers
         var totalLayerCount = tmxDoc.Layers.Count + tmxDoc.ImageLayers.Count;
@@ -296,7 +317,7 @@ public class MapLoader(
         {
             PropertyNameCaseInsensitive = true,
             ReadCommentHandling = JsonCommentHandling.Skip,
-            AllowTrailingCommas = true
+            AllowTrailingCommas = true,
         };
 
         foreach (var tileset in tmxDoc.Tilesets)
@@ -318,27 +339,43 @@ public class MapLoader(
 
                         // Extract tileset properties from JSON (flat structure)
                         var originalFirstGid = tileset.FirstGid;
-                        tileset.Name = root.TryGetProperty("name", out var name) ? name.GetString() ?? "" : "";
-                        tileset.TileWidth = root.TryGetProperty("tilewidth", out var tw) ? tw.GetInt32() : 0;
-                        tileset.TileHeight = root.TryGetProperty("tileheight", out var th) ? th.GetInt32() : 0;
-                        tileset.TileCount = root.TryGetProperty("tilecount", out var tc) ? tc.GetInt32() : 0;
-                        tileset.Margin = root.TryGetProperty("margin", out var mg) ? mg.GetInt32() : 0;
-                        tileset.Spacing = root.TryGetProperty("spacing", out var sp) ? sp.GetInt32() : 0;
+                        tileset.Name = root.TryGetProperty("name", out var name)
+                            ? name.GetString() ?? ""
+                            : "";
+                        tileset.TileWidth = root.TryGetProperty("tilewidth", out var tw)
+                            ? tw.GetInt32()
+                            : 0;
+                        tileset.TileHeight = root.TryGetProperty("tileheight", out var th)
+                            ? th.GetInt32()
+                            : 0;
+                        tileset.TileCount = root.TryGetProperty("tilecount", out var tc)
+                            ? tc.GetInt32()
+                            : 0;
+                        tileset.Margin = root.TryGetProperty("margin", out var mg)
+                            ? mg.GetInt32()
+                            : 0;
+                        tileset.Spacing = root.TryGetProperty("spacing", out var sp)
+                            ? sp.GetInt32()
+                            : 0;
 
                         // Image data is at top level in tileset JSON
-                        if (root.TryGetProperty("image", out var img) &&
-                            root.TryGetProperty("imagewidth", out var iw) &&
-                            root.TryGetProperty("imageheight", out var ih))
+                        if (
+                            root.TryGetProperty("image", out var img)
+                            && root.TryGetProperty("imagewidth", out var iw)
+                            && root.TryGetProperty("imageheight", out var ih)
+                        )
                         {
                             var imageValue = img.GetString() ?? "";
                             var tilesetDir = Path.GetDirectoryName(tilesetPath) ?? string.Empty;
-                            var imageAbsolute = Path.GetFullPath(Path.Combine(tilesetDir, imageValue));
+                            var imageAbsolute = Path.GetFullPath(
+                                Path.Combine(tilesetDir, imageValue)
+                            );
 
                             tileset.Image = new TmxImage
                             {
                                 Source = imageAbsolute,
                                 Width = iw.GetInt32(),
-                                Height = ih.GetInt32()
+                                Height = ih.GetInt32(),
                             };
                         }
 
@@ -350,12 +387,22 @@ public class MapLoader(
                             ParseTilesetAnimations(tilesArray, tileset);
                         }
 
-                        _logger?.LogDebug("Loaded external tileset: {Name} ({Width}x{Height}) with {AnimCount} animations from {Path}",
-                            tileset.Name, tileset.TileWidth, tileset.TileHeight, tileset.Animations.Count, tileset.Source);
+                        _logger?.LogDebug(
+                            "Loaded external tileset: {Name} ({Width}x{Height}) with {AnimCount} animations from {Path}",
+                            tileset.Name,
+                            tileset.TileWidth,
+                            tileset.TileHeight,
+                            tileset.Animations.Count,
+                            tileset.Source
+                        );
                     }
                     catch (Exception ex)
                     {
-                        _logger?.LogError(ex, "Failed to load external tileset from {Path}", tilesetPath);
+                        _logger?.LogError(
+                            ex,
+                            "Failed to load external tileset from {Path}",
+                            tilesetPath
+                        );
                         throw;
                     }
                 }
@@ -388,8 +435,10 @@ public class MapLoader(
 
                 foreach (var frameElement in animArray.EnumerateArray())
                 {
-                    if (frameElement.TryGetProperty("tileid", out var frameTileId) &&
-                        frameElement.TryGetProperty("duration", out var frameDuration))
+                    if (
+                        frameElement.TryGetProperty("tileid", out var frameTileId)
+                        && frameElement.TryGetProperty("duration", out var frameDuration)
+                    )
                     {
                         frameTileIds.Add(frameTileId.GetInt32());
                         // Convert milliseconds to seconds
@@ -402,11 +451,14 @@ public class MapLoader(
                     tileset.Animations[tileId] = new TmxTileAnimation
                     {
                         FrameTileIds = frameTileIds.ToArray(),
-                        FrameDurations = frameDurations.ToArray()
+                        FrameDurations = frameDurations.ToArray(),
                     };
 
-                    _logger?.LogDebug("Parsed animation for tile {TileId}: {FrameCount} frames",
-                        tileId, frameTileIds.Count);
+                    _logger?.LogDebug(
+                        "Parsed animation for tile {TileId}: {FrameCount} frames",
+                        tileId,
+                        frameTileIds.Count
+                    );
                 }
             }
 
@@ -417,8 +469,10 @@ public class MapLoader(
 
                 foreach (var propElement in propsArray.EnumerateArray())
                 {
-                    if (propElement.TryGetProperty("name", out var propName) &&
-                        propElement.TryGetProperty("value", out var propValue))
+                    if (
+                        propElement.TryGetProperty("name", out var propName)
+                        && propElement.TryGetProperty("value", out var propValue)
+                    )
                     {
                         var key = propName.GetString();
                         if (!string.IsNullOrEmpty(key))
@@ -427,10 +481,12 @@ public class MapLoader(
                             object value = propValue.ValueKind switch
                             {
                                 JsonValueKind.String => propValue.GetString() ?? "",
-                                JsonValueKind.Number => propValue.TryGetInt32(out var i) ? i : propValue.GetDouble(),
+                                JsonValueKind.Number => propValue.TryGetInt32(out var i)
+                                    ? i
+                                    : propValue.GetDouble(),
                                 JsonValueKind.True => true,
                                 JsonValueKind.False => false,
-                                _ => propValue.ToString()
+                                _ => propValue.ToString(),
                             };
                             properties[key] = value;
                         }
@@ -440,8 +496,11 @@ public class MapLoader(
                 if (properties.Count > 0)
                 {
                     tileset.TileProperties[tileId] = properties;
-                    _logger?.LogDebug("Parsed {PropCount} properties for tile {TileId}",
-                        properties.Count, tileId);
+                    _logger?.LogDebug(
+                        "Parsed {PropCount} properties for tile {TileId}",
+                        properties.Count,
+                        tileId
+                    );
                 }
             }
         }
@@ -452,7 +511,11 @@ public class MapLoader(
     ///     Tiled JSON stores all layers (tile, object, image) in one "layers" array,
     ///     distinguished by "type" field. We need to split them into separate collections.
     /// </summary>
-    private void ParseMixedLayers(TmxDocument tmxDoc, string tiledJson, JsonSerializerOptions jsonOptions)
+    private void ParseMixedLayers(
+        TmxDocument tmxDoc,
+        string tiledJson,
+        JsonSerializerOptions jsonOptions
+    )
     {
         using var jsonDoc = JsonDocument.Parse(tiledJson);
         var root = jsonDoc.RootElement;
@@ -478,7 +541,9 @@ public class MapLoader(
                 {
                     case "tilelayer":
                         var tiledLayer = JsonSerializer.Deserialize<TiledJsonLayer>(
-                            layerElement.GetRawText(), jsonOptions);
+                            layerElement.GetRawText(),
+                            jsonOptions
+                        );
                         if (tiledLayer != null)
                         {
                             var converted = TiledMapLoader.ConvertTileLayer(
@@ -498,7 +563,9 @@ public class MapLoader(
 
                     case "imagelayer":
                         var imageLayer = JsonSerializer.Deserialize<TmxImageLayer>(
-                            layerElement.GetRawText(), jsonOptions);
+                            layerElement.GetRawText(),
+                            jsonOptions
+                        );
                         if (imageLayer != null)
                             imageLayers.Add(imageLayer);
                         break;
@@ -515,19 +582,26 @@ public class MapLoader(
         tmxDoc.ObjectGroups = objectGroups;
         tmxDoc.ImageLayers = imageLayers;
 
-        _logger?.LogDebug("Parsed {TileLayers} tile layers, {ObjectGroups} object groups, {ImageLayers} image layers",
-            tilelayers.Count, objectGroups.Count, imageLayers.Count);
+        _logger?.LogDebug(
+            "Parsed {TileLayers} tile layers, {ObjectGroups} object groups, {ImageLayers} image layers",
+            tilelayers.Count,
+            objectGroups.Count,
+            imageLayers.Count
+        );
     }
 
     /// <summary>
     ///     Parses an object group, converting properties arrays to dictionaries.
     /// </summary>
-    private TmxObjectGroup? ParseObjectGroup(JsonElement groupElement, JsonSerializerOptions jsonOptions)
+    private TmxObjectGroup? ParseObjectGroup(
+        JsonElement groupElement,
+        JsonSerializerOptions jsonOptions
+    )
     {
         var objectGroup = new TmxObjectGroup
         {
             Id = groupElement.TryGetProperty("id", out var id) ? id.GetInt32() : 0,
-            Name = groupElement.TryGetProperty("name", out var name) ? name.GetString() ?? "" : ""
+            Name = groupElement.TryGetProperty("name", out var name) ? name.GetString() ?? "" : "",
         };
 
         if (!groupElement.TryGetProperty("objects", out var objectsArray))
@@ -538,12 +612,20 @@ public class MapLoader(
             var obj = new TmxObject
             {
                 Id = objElement.TryGetProperty("id", out var objId) ? objId.GetInt32() : 0,
-                Name = objElement.TryGetProperty("name", out var objName) ? objName.GetString() : null,
-                Type = objElement.TryGetProperty("type", out var objType) ? objType.GetString() : null,
+                Name = objElement.TryGetProperty("name", out var objName)
+                    ? objName.GetString()
+                    : null,
+                Type = objElement.TryGetProperty("type", out var objType)
+                    ? objType.GetString()
+                    : null,
                 X = objElement.TryGetProperty("x", out var objX) ? objX.GetSingle() : 0,
                 Y = objElement.TryGetProperty("y", out var objY) ? objY.GetSingle() : 0,
-                Width = objElement.TryGetProperty("width", out var objWidth) ? objWidth.GetSingle() : 0,
-                Height = objElement.TryGetProperty("height", out var objHeight) ? objHeight.GetSingle() : 0
+                Width = objElement.TryGetProperty("width", out var objWidth)
+                    ? objWidth.GetSingle()
+                    : 0,
+                Height = objElement.TryGetProperty("height", out var objHeight)
+                    ? objHeight.GetSingle()
+                    : 0,
             };
 
             // Convert properties array to dictionary
@@ -551,8 +633,10 @@ public class MapLoader(
             {
                 foreach (var propElement in propsArray.EnumerateArray())
                 {
-                    if (propElement.TryGetProperty("name", out var propName) &&
-                        propElement.TryGetProperty("value", out var propValue))
+                    if (
+                        propElement.TryGetProperty("name", out var propName)
+                        && propElement.TryGetProperty("value", out var propValue)
+                    )
                     {
                         var key = propName.GetString();
                         if (!string.IsNullOrEmpty(key))
@@ -561,10 +645,12 @@ public class MapLoader(
                             object value = propValue.ValueKind switch
                             {
                                 JsonValueKind.String => propValue.GetString() ?? "",
-                                JsonValueKind.Number => propValue.TryGetInt32(out var i) ? i : propValue.GetDouble(),
+                                JsonValueKind.Number => propValue.TryGetInt32(out var i)
+                                    ? i
+                                    : propValue.GetDouble(),
                                 JsonValueKind.True => true,
                                 JsonValueKind.False => false,
-                                _ => propValue.ToString()
+                                _ => propValue.ToString(),
                             };
                             obj.Properties[key] = value;
                         }
@@ -601,9 +687,10 @@ public class MapLoader(
             var elevation = DetermineElevation(layer, layerIndex);
 
             // Get layer offset for parallax scrolling (default to 0,0 if not set)
-            var layerOffset = (layer.OffsetX != 0 || layer.OffsetY != 0)
-                ? new LayerOffset(layer.OffsetX, layer.OffsetY)
-                : (LayerOffset?)null;
+            var layerOffset =
+                (layer.OffsetX != 0 || layer.OffsetY != 0)
+                    ? new LayerOffset(layer.OffsetX, layer.OffsetY)
+                    : (LayerOffset?)null;
 
             tilesCreated += CreateTileEntities(
                 world,
@@ -670,7 +757,7 @@ public class MapLoader(
                     FlipH = flipH,
                     FlipV = flipV,
                     FlipD = flipD,
-                    TilesetIndex = tilesetIndex
+                    TilesetIndex = tilesetIndex,
                 }
             );
         }
@@ -693,13 +780,7 @@ public class MapLoader(
             {
                 var data = tileDataList[i];
                 var tileset = tilesets[data.TilesetIndex];
-                return CreateTileSprite(
-                    data.TileGid,
-                    tileset,
-                    data.FlipH,
-                    data.FlipV,
-                    data.FlipD
-                );
+                return CreateTileSprite(data.TileGid, tileset, data.FlipH, data.FlipV, data.FlipD);
             }
         );
 
@@ -832,7 +913,13 @@ public class MapLoader(
     )
     {
         // Create MapInfo entity for map metadata (use MapDefinition display name)
-        var mapInfo = new MapInfo(mapId, mapDef.DisplayName, tmxDoc.Width, tmxDoc.Height, tmxDoc.TileWidth);
+        var mapInfo = new MapInfo(
+            mapId,
+            mapDef.DisplayName,
+            tmxDoc.Width,
+            tmxDoc.Height,
+            tmxDoc.TileWidth
+        );
         var mapInfoEntity = world.Create(mapInfo);
 
         // Create TilesetInfo if map has tilesets
@@ -974,15 +1061,17 @@ public class MapLoader(
             // PERFORMANCE OPTIMIZATION: Precalculate ALL source rectangles at load time
             // This eliminates expensive runtime calculations, dictionary lookups, and lock contention
             var frameSourceRects = globalFrameIds
-                .Select(frameGid => CalculateTileSourceRect(
-                    frameGid,
-                    firstGid,
-                    tileWidth,
-                    tileHeight,
-                    tilesPerRow,
-                    tileSpacing,
-                    tileMargin
-                ))
+                .Select(frameGid =>
+                    CalculateTileSourceRect(
+                        frameGid,
+                        firstGid,
+                        tileWidth,
+                        tileHeight,
+                        tilesPerRow,
+                        tileSpacing,
+                        tileMargin
+                    )
+                )
                 .ToArray();
 
             // Create AnimatedTile component with precalculated source rects
@@ -1232,7 +1321,7 @@ public class MapLoader(
         {
             0 => Elevation.Ground, // 0
             1 => Elevation.Default, // 3
-            _ => Elevation.Overhead // 9 (2+)
+            _ => Elevation.Overhead, // 9 (2+)
         };
     }
 
@@ -1659,10 +1748,7 @@ public class MapLoader(
     ///     Apply NPC/Trainer definition data from EF Core to entity builder.
     ///     Supports both NPC definitions and Trainer definitions.
     /// </summary>
-    private void ApplyNpcDefinition(
-        EntityBuilder builder,
-        TmxObject obj,
-        string templateId)
+    private void ApplyNpcDefinition(EntityBuilder builder, TmxObject obj, string templateId)
     {
         // Check for NPC definition reference
         if (obj.Properties.TryGetValue("npcId", out var npcIdProp))
@@ -1750,10 +1836,7 @@ public class MapLoader(
                 }
                 else
                 {
-                    _logger?.LogWarning(
-                        "Trainer definition not found: '{TrainerId}'",
-                        trainerId
-                    );
+                    _logger?.LogWarning("Trainer definition not found: '{TrainerId}'", trainerId);
                 }
             }
         }
@@ -1846,10 +1929,7 @@ public class MapLoader(
                         new MovementRoute(points.ToArray(), true, waypointWaitTime)
                     );
 
-                    _logger?.LogDebug(
-                        "Applied waypoint route with {Count} points",
-                        points.Count
-                    );
+                    _logger?.LogDebug("Applied waypoint route with {Count} points", points.Count);
                 }
             }
         }

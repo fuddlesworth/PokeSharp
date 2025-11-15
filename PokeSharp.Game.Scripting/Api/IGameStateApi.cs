@@ -1,4 +1,5 @@
 namespace PokeSharp.Game.Scripting.Api;
+
 using PokeSharp.Game.Systems.Services;
 
 /// <summary>

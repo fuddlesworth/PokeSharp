@@ -47,10 +47,12 @@ public sealed class PatchFileLoader
                 operation.Validate();
             }
 
-            _logger.LogDebug("Loaded patch file: {Path} -> {Target} ({Count} operations)",
+            _logger.LogDebug(
+                "Loaded patch file: {Path} -> {Target} ({Count} operations)",
                 Path.GetFileName(filePath),
                 patch.Target,
-                patch.Operations.Count);
+                patch.Operations.Count
+            );
 
             return patch;
         }
@@ -82,4 +84,3 @@ public sealed class PatchFileLoader
         return patches;
     }
 }
-

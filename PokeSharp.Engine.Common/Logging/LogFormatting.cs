@@ -41,8 +41,10 @@ internal static class LogFormatting
         }
     });
 
-    private static readonly Regex _markupRegex =
-        new(@"\[/?[^\]]+\]", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+    private static readonly Regex _markupRegex = new(
+        @"\[/?[^\]]+\]",
+        RegexOptions.Compiled | RegexOptions.CultureInvariant
+    );
 
     private static readonly Dictionary<string, string> PlainGlyphMap = new()
     {
@@ -54,8 +56,8 @@ internal static class LogFormatting
         { "╚", "====" },
         { "╦", "====" },
         { "╩", "====" },
-        { "╠", "|"},
-        { "╣", "|"},
+        { "╠", "|" },
+        { "╣", "|" },
         { "║", "||" },
         { "✗", "x" },
         { "A  ", "[asset]" },
@@ -68,17 +70,32 @@ internal static class LogFormatting
         { "SYS", "[sys]" },
     };
 
-    private static readonly LogLevelStyle DefaultStyle =
-        new("NONE", "white", false, "white", false, "NONE");
+    private static readonly LogLevelStyle DefaultStyle = new(
+        "NONE",
+        "white",
+        false,
+        "white",
+        false,
+        "NONE"
+    );
 
     private static readonly Dictionary<LogLevel, LogLevelStyle> LogLevelStyles = new()
     {
         { LogLevel.Trace, new LogLevelStyle("TRACE", "grey53", false, "grey35", true, "TRACE") },
-        { LogLevel.Debug, new LogLevelStyle("DEBUG", "steelblue1", false, "lightsteelblue1", false, "DEBUG") },
-        { LogLevel.Information, new LogLevelStyle("INFO", "skyblue3", false, "silver", true, "INFO ") },
+        {
+            LogLevel.Debug,
+            new LogLevelStyle("DEBUG", "steelblue1", false, "lightsteelblue1", false, "DEBUG")
+        },
+        {
+            LogLevel.Information,
+            new LogLevelStyle("INFO", "skyblue3", false, "silver", true, "INFO ")
+        },
         { LogLevel.Warning, new LogLevelStyle("WARN", "gold1", true, "gold1", false, "WARN ") },
         { LogLevel.Error, new LogLevelStyle("ERROR", "red3", true, "red3", false, "ERROR") },
-        { LogLevel.Critical, new LogLevelStyle("CRIT", "magenta1", true, "magenta1", false, "CRIT ") },
+        {
+            LogLevel.Critical,
+            new LogLevelStyle("CRIT", "magenta1", true, "magenta1", false, "CRIT ")
+        },
     };
 
     private static readonly string[] CategoryPalette =
@@ -132,10 +149,7 @@ internal static class LogFormatting
         {
             var builder = new StringBuilder();
             builder.Append($"[{timestamp:HH:mm:ss.fff}] ");
-            builder.AppendFormat(
-                PlainLevelTemplate,
-                PadRight(style.PlainLabel, LevelLabelWidth)
-            );
+            builder.AppendFormat(PlainLevelTemplate, PadRight(style.PlainLabel, LevelLabelWidth));
             builder.Append(' ');
 
             if (!string.IsNullOrWhiteSpace(scope))
@@ -196,7 +210,8 @@ internal static class LogFormatting
         if (string.IsNullOrEmpty(text))
             return text;
 
-        var withoutTags = _markupRegex.Replace(text, string.Empty)
+        var withoutTags = _markupRegex
+            .Replace(text, string.Empty)
             .Replace("[[", "[")
             .Replace("]]", "]");
 
@@ -215,9 +230,7 @@ internal static class LogFormatting
 
     private static string FormatMessage(LogLevelStyle style, string message)
     {
-        var messageStyle = style.MessageDim
-            ? $"{style.MessageColor} dim"
-            : style.MessageColor;
+        var messageStyle = style.MessageDim ? $"{style.MessageColor} dim" : style.MessageColor;
         return $"[{messageStyle}]{EscapeMarkup(message)}[/]";
     }
 
@@ -256,4 +269,3 @@ internal static class LogFormatting
         string PlainLabel
     );
 }
-

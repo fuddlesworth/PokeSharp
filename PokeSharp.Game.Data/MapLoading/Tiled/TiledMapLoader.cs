@@ -2,10 +2,10 @@ using System.IO.Compression;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Common.Configuration;
+using PokeSharp.Game.Data.Configuration;
 using PokeSharp.Game.Data.MapLoading.Tiled.TiledJson;
 using PokeSharp.Game.Data.MapLoading.Tiled.Tmx;
 using PokeSharp.Game.Data.Validation;
-using PokeSharp.Game.Data.Configuration;
 using ZstdSharp;
 
 namespace PokeSharp.Game.Data.MapLoading.Tiled;
@@ -38,9 +38,15 @@ public static class TiledMapLoader
         if (options.ValidateMaps && logger != null)
         {
             _validator = new TmxDocumentValidator(
-                logger as ILogger<TmxDocumentValidator> ??
-                    Microsoft.Extensions.Logging.Abstractions.NullLogger<TmxDocumentValidator>.Instance,
-                options.ValidateFileReferences);
+                logger as ILogger<TmxDocumentValidator>
+                    ?? Microsoft
+                        .Extensions
+                        .Logging
+                        .Abstractions
+                        .NullLogger<TmxDocumentValidator>
+                        .Instance,
+                options.ValidateFileReferences
+            );
         }
     }
 
@@ -74,7 +80,8 @@ public static class TiledMapLoader
         if (string.IsNullOrWhiteSpace(json))
             throw new JsonException("Tiled map JSON cannot be empty.");
 
-        var resolvedPath = mapPath ?? Path.Combine(Directory.GetCurrentDirectory(), "inline_map.json");
+        var resolvedPath =
+            mapPath ?? Path.Combine(Directory.GetCurrentDirectory(), "inline_map.json");
         return DeserializeAndValidate(json, resolvedPath);
     }
 

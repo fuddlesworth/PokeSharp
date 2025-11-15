@@ -100,4 +100,3 @@ public struct Elevation
 
     public override readonly string ToString() => $"Elevation({Value})";
 }
-

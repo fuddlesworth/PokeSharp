@@ -23,7 +23,8 @@ public static class ComponentDeserializerSetup
     /// </summary>
     public static void RegisterAllDeserializers(
         ComponentDeserializerRegistry registry,
-        ILogger? logger = null)
+        ILogger? logger = null
+    )
     {
         ArgumentNullException.ThrowIfNull(registry, nameof(registry));
 
@@ -100,7 +101,7 @@ public static class ComponentDeserializerSetup
                 "south" or "South" or "down" or "Down" => Direction.South,
                 "west" or "West" or "left" or "Left" => Direction.West,
                 "east" or "East" or "right" or "Right" => Direction.East,
-                _ => throw new ArgumentException($"Invalid direction: {directionStr}")
+                _ => throw new ArgumentException($"Invalid direction: {directionStr}"),
             };
             return new TileLedge(direction);
         });
@@ -237,7 +238,7 @@ public static class ComponentDeserializerSetup
                 "south" or "South" or "down" or "Down" => Direction.South,
                 "west" or "West" or "left" or "Left" => Direction.West,
                 "east" or "East" or "right" or "Right" => Direction.East,
-                _ => throw new ArgumentException($"Invalid direction: {directionStr}")
+                _ => throw new ArgumentException($"Invalid direction: {directionStr}"),
             };
         });
 
@@ -254,7 +255,7 @@ public static class ComponentDeserializerSetup
                     "south" or "South" or "down" or "Down" => Direction.South,
                     "west" or "West" or "left" or "Left" => Direction.West,
                     "east" or "East" or "right" or "Right" => Direction.East,
-                    _ => Direction.None
+                    _ => Direction.None,
                 };
             }
 
@@ -267,7 +268,7 @@ public static class ComponentDeserializerSetup
             return new InputState
             {
                 PressedDirection = pressedDirection,
-                ActionPressed = actionPressed
+                ActionPressed = actionPressed,
             };
         });
     }
@@ -284,11 +285,7 @@ public static class ComponentDeserializerSetup
                 isTrainer = isTrainerElement.GetBoolean();
             }
 
-            return new Npc
-            {
-                NpcId = npcId,
-                IsTrainer = isTrainer
-            };
+            return new Npc { NpcId = npcId, IsTrainer = isTrainer };
         });
 
         // Behavior
@@ -301,13 +298,7 @@ public static class ComponentDeserializerSetup
                 isActive = isActiveElement.GetBoolean();
             }
 
-            return new Behavior
-            {
-                BehaviorTypeId = behaviorTypeId,
-                IsActive = isActive
-            };
+            return new Behavior { BehaviorTypeId = behaviorTypeId, IsActive = isActive };
         });
     }
 }
-
-

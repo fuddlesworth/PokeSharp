@@ -12,8 +12,7 @@ public class ScriptMapper : IEntityPropertyMapper<TileScript>
     public bool CanMap(Dictionary<string, object> properties)
     {
         // Can map if has script-related properties
-        return properties.ContainsKey("script")
-               || properties.ContainsKey("on_step");
+        return properties.ContainsKey("script") || properties.ContainsKey("on_step");
     }
 
     public TileScript Map(Dictionary<string, object> properties)

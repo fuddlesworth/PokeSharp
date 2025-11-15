@@ -17,10 +17,12 @@ public class JsonTemplateLoader
 
     public JsonTemplateLoader(
         ILogger<JsonTemplateLoader> logger,
-        ComponentDeserializerRegistry componentRegistry)
+        ComponentDeserializerRegistry componentRegistry
+    )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _componentRegistry = componentRegistry ?? throw new ArgumentNullException(nameof(componentRegistry));
+        _componentRegistry =
+            componentRegistry ?? throw new ArgumentNullException(nameof(componentRegistry));
 
         _jsonOptions = new JsonSerializerOptions
         {
@@ -28,10 +30,7 @@ public class JsonTemplateLoader
             ReadCommentHandling = JsonCommentHandling.Skip,
             AllowTrailingCommas = true,
             WriteIndented = true,
-            Converters =
-            {
-                new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
-            }
+            Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) },
         };
     }
 
@@ -41,7 +40,10 @@ public class JsonTemplateLoader
     /// <param name="filePath">Path to the JSON file</param>
     /// <param name="ct">Cancellation token</param>
     /// <returns>Loaded EntityTemplate</returns>
-    public async Task<EntityTemplate> LoadTemplateAsync(string filePath, CancellationToken ct = default)
+    public async Task<EntityTemplate> LoadTemplateAsync(
+        string filePath,
+        CancellationToken ct = default
+    )
     {
         if (!File.Exists(filePath))
             throw new FileNotFoundException($"Template file not found: {filePath}");
@@ -52,7 +54,9 @@ public class JsonTemplateLoader
             var dto = JsonSerializer.Deserialize<TemplateDto>(json, _jsonOptions);
 
             if (dto == null)
-                throw new InvalidOperationException($"Failed to deserialize template from {filePath}");
+                throw new InvalidOperationException(
+                    $"Failed to deserialize template from {filePath}"
+                );
 
             var template = ConvertDtoToTemplate(dto, filePath);
 
@@ -82,7 +86,8 @@ public class JsonTemplateLoader
     public async Task<List<EntityTemplate>> LoadTemplatesFromDirectoryAsync(
         string directoryPath,
         bool recursive = true,
-        CancellationToken ct = default)
+        CancellationToken ct = default
+    )
     {
         if (!Directory.Exists(directoryPath))
         {
@@ -124,7 +129,8 @@ public class JsonTemplateLoader
     public async Task<TemplateJsonCache> LoadTemplateJsonAsync(
         string directoryPath,
         bool recursive = true,
-        CancellationToken ct = default)
+        CancellationToken ct = default
+    )
     {
         var cache = new TemplateJsonCache();
 
@@ -157,7 +163,11 @@ public class JsonTemplateLoader
             }
         }
 
-        _logger.LogDebug("Loaded {Count} template JSON files from {DirectoryPath}", cache.Count, directoryPath);
+        _logger.LogDebug(
+            "Loaded {Count} template JSON files from {DirectoryPath}",
+            cache.Count,
+            directoryPath
+        );
         return cache;
     }
 
@@ -172,7 +182,9 @@ public class JsonTemplateLoader
         );
 
         if (dto == null)
-            throw new InvalidOperationException($"Failed to deserialize template from {sourcePath}");
+            throw new InvalidOperationException(
+                $"Failed to deserialize template from {sourcePath}"
+            );
 
         return ConvertDtoToTemplate(dto, sourcePath);
     }
@@ -184,7 +196,8 @@ public class JsonTemplateLoader
     {
         var template = new EntityTemplate
         {
-            TemplateId = dto.TemplateId ?? throw new InvalidOperationException("TemplateId is required"),
+            TemplateId =
+                dto.TemplateId ?? throw new InvalidOperationException("TemplateId is required"),
             Name = dto.Name ?? dto.TemplateId,
             Tag = dto.Tag ?? "entity",
             BaseTemplateId = dto.BaseTemplateId,
@@ -193,8 +206,8 @@ public class JsonTemplateLoader
             {
                 Version = dto.Version ?? "1.0.0",
                 CompiledAt = DateTime.UtcNow,
-                SourcePath = sourcePath
-            }
+                SourcePath = sourcePath,
+            },
         };
 
         // Deserialize components
@@ -237,5 +250,3 @@ internal record TemplateDto
     public List<ComponentDto>? Components { get; init; }
     public Dictionary<string, object>? CustomProperties { get; init; }
 }
-
-

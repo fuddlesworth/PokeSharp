@@ -25,9 +25,11 @@ public class ScriptingApiProvider(
     private readonly GameStateApiService _gameStateApi =
         gameStateApi ?? throw new ArgumentNullException(nameof(gameStateApi));
 
-    private readonly MapApiService _mapApi = mapApi ?? throw new ArgumentNullException(nameof(mapApi));
+    private readonly MapApiService _mapApi =
+        mapApi ?? throw new ArgumentNullException(nameof(mapApi));
 
-    private readonly NpcApiService _npcApi = npcApi ?? throw new ArgumentNullException(nameof(npcApi));
+    private readonly NpcApiService _npcApi =
+        npcApi ?? throw new ArgumentNullException(nameof(npcApi));
 
     private readonly PlayerApiService _playerApi =
         playerApi ?? throw new ArgumentNullException(nameof(playerApi));

@@ -100,8 +100,7 @@ public class WanderBehavior : TypeScriptBase
         // Check if movement completed (reached 1 tile away OR movement system stopped us)
         var gridMovement = ctx.World.Get<GridMovement>(ctx.Entity.Value);
         var movedOneTitle =
-            position.X != state.StartPosition.X ||
-            position.Y != state.StartPosition.Y;
+            position.X != state.StartPosition.X || position.Y != state.StartPosition.Y;
 
         if (state.IsMoving && !gridMovement.IsMoving && movedOneTitle)
         {
@@ -118,7 +117,9 @@ public class WanderBehavior : TypeScriptBase
             state.CurrentDirection = Direction.None;
             state.IsMoving = false;
             state.BlockedAttempts = 0; // Reset blocked counter on successful move
-            state.WaitTimer = ctx.GameState.Random() * (state.MaxWaitTime - state.MinWaitTime) + state.MinWaitTime;
+            state.WaitTimer =
+                ctx.GameState.Random() * (state.MaxWaitTime - state.MinWaitTime)
+                + state.MinWaitTime;
 
             // Deactivate movement request
             if (ctx.World.Has<MovementRequest>(ctx.Entity.Value))
@@ -150,7 +151,9 @@ public class WanderBehavior : TypeScriptBase
                 state.CurrentDirection = Direction.None;
                 state.IsMoving = false;
                 state.BlockedAttempts = 0;
-                state.WaitTimer = ctx.GameState.Random() * (state.MaxWaitTime - state.MinWaitTime) + state.MinWaitTime;
+                state.WaitTimer =
+                    ctx.GameState.Random() * (state.MaxWaitTime - state.MinWaitTime)
+                    + state.MinWaitTime;
 
                 // Deactivate movement request
                 if (ctx.World.Has<MovementRequest>(ctx.Entity.Value))

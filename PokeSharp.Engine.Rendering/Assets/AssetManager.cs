@@ -1,6 +1,6 @@
 using System.Diagnostics;
-using System.Text.Json;
 using System.Linq;
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework.Graphics;
 using PokeSharp.Engine.Common.Logging;
@@ -190,9 +190,7 @@ public class AssetManager(
         if (_textures.TryGetValue(id, out var texture) && texture != null)
             return texture;
 
-        throw new KeyNotFoundException(
-            $"Texture '{id}' not loaded or was evicted from cache."
-        );
+        throw new KeyNotFoundException($"Texture '{id}' not loaded or was evicted from cache.");
     }
 
     /// <summary>
@@ -225,7 +223,8 @@ public class AssetManager(
             "Registered texture: {TextureId} ({Width}x{Height})",
             id,
             texture.Width,
-            texture.Height);
+            texture.Height
+        );
     }
 
     /// <summary>
@@ -243,5 +242,3 @@ public class AssetManager(
         return removed;
     }
 }
-
-

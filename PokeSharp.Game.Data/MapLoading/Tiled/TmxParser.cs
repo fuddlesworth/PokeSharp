@@ -165,7 +165,14 @@ public static class TmxParser
         for (var i = 0; i < tiles.Length && i < data.Length; i++)
         {
             var gidAttr = tiles[i].Attribute("gid")?.Value ?? "0";
-            if (!uint.TryParse(gidAttr, NumberStyles.Integer, CultureInfo.InvariantCulture, out var gid))
+            if (
+                !uint.TryParse(
+                    gidAttr,
+                    NumberStyles.Integer,
+                    CultureInfo.InvariantCulture,
+                    out var gid
+                )
+            )
                 gid = 0;
             data[i] = gid;
         }

@@ -1,16 +1,16 @@
 using System.Collections.Concurrent;
 using Arch.Core;
 using Microsoft.Extensions.Logging;
-using PokeSharp.Game.Components.Movement;
-using PokeSharp.Game.Components.NPCs;
 using PokeSharp.Engine.Common.Configuration;
 using PokeSharp.Engine.Common.Logging;
-using PokeSharp.Game.Scripting.Services;
-using PokeSharp.Game.Scripting.Api;
-using PokeSharp.Engine.Systems.Management;
-using PokeSharp.Engine.Core.Types;
-using PokeSharp.Game.Scripting.Runtime;
 using PokeSharp.Engine.Core.Systems;
+using PokeSharp.Engine.Core.Types;
+using PokeSharp.Engine.Systems.Management;
+using PokeSharp.Game.Components.Movement;
+using PokeSharp.Game.Components.NPCs;
+using PokeSharp.Game.Scripting.Api;
+using PokeSharp.Game.Scripting.Runtime;
+using PokeSharp.Game.Scripting.Services;
 using EcsQueries = PokeSharp.Engine.Systems.Queries.Queries;
 
 namespace PokeSharp.Game.Scripting.Systems;
@@ -60,7 +60,6 @@ public class NPCBehaviorSystem : SystemBase, IUpdateSystem
     /// </summary>
     public override int Priority => SystemPriority.NpcBehavior;
 
-
     /// <summary>
     ///     Set the behavior registry for loading behavior scripts.
     /// </summary>
@@ -78,19 +77,22 @@ public class NPCBehaviorSystem : SystemBase, IUpdateSystem
     /// <returns>Cached or newly created logger</returns>
     private ILogger GetOrCreateLogger(string key)
     {
-        return _scriptLoggerCache.GetOrAdd(key, k =>
-        {
-            // Check if we've hit the cache limit
-            if (_scriptLoggerCache.Count >= _config.MaxCachedLoggers)
+        return _scriptLoggerCache.GetOrAdd(
+            key,
+            k =>
             {
-                _logger.LogWarning(
-                    "Script logger cache limit reached ({Limit}). Consider increasing limit or checking for leaks.",
-                    _config.MaxCachedLoggers
-                );
-            }
+                // Check if we've hit the cache limit
+                if (_scriptLoggerCache.Count >= _config.MaxCachedLoggers)
+                {
+                    _logger.LogWarning(
+                        "Script logger cache limit reached ({Limit}). Consider increasing limit or checking for leaks.",
+                        _config.MaxCachedLoggers
+                    );
+                }
 
-            return _loggerFactory.CreateLogger($"Script.{k}");
-        });
+                return _loggerFactory.CreateLogger($"Script.{k}");
+            }
+        );
     }
 
     /// <summary>
@@ -107,7 +109,10 @@ public class NPCBehaviorSystem : SystemBase, IUpdateSystem
     public override void Initialize(World world)
     {
         base.Initialize(world);
-        _logger.LogSystemInitialized("NPCBehaviorSystem", ("behaviors", _behaviorRegistry?.Count ?? 0));
+        _logger.LogSystemInitialized(
+            "NPCBehaviorSystem",
+            ("behaviors", _behaviorRegistry?.Count ?? 0)
+        );
     }
 
     public override void Update(World world, float deltaTime)
@@ -153,11 +158,11 @@ public class NPCBehaviorSystem : SystemBase, IUpdateSystem
                     var scriptObj = _behaviorRegistry.GetScript(behavior.BehaviorTypeId);
                     if (scriptObj == null)
                     {
-                    _logger.LogEntityOperationInvalid(
-                        $"NPC {npc.NpcId}",
-                        "Behavior activation",
-                        $"script not found ({behavior.BehaviorTypeId})"
-                    );
+                        _logger.LogEntityOperationInvalid(
+                            $"NPC {npc.NpcId}",
+                            "Behavior activation",
+                            $"script not found ({behavior.BehaviorTypeId})"
+                        );
                         // Deactivate behavior (with cleanup if needed)
                         DeactivateBehavior(null, ref behavior, null, npc.NpcId, "script not found");
                         return;
@@ -166,25 +171,26 @@ public class NPCBehaviorSystem : SystemBase, IUpdateSystem
                     // Cast to TypeScriptBase
                     if (scriptObj is not TypeScriptBase script)
                     {
-                    _logger.LogEntityOperationInvalid(
-                        $"NPC {npc.NpcId}",
-                        "Behavior activation",
-                        $"script type mismatch ({scriptObj.GetType().Name})"
-                    );
+                        _logger.LogEntityOperationInvalid(
+                            $"NPC {npc.NpcId}",
+                            "Behavior activation",
+                            $"script type mismatch ({scriptObj.GetType().Name})"
+                        );
                         // Deactivate behavior (with cleanup if needed)
-                        DeactivateBehavior(null, ref behavior, null, npc.NpcId, "wrong script type");
+                        DeactivateBehavior(
+                            null,
+                            ref behavior,
+                            null,
+                            npc.NpcId,
+                            "wrong script type"
+                        );
                         return;
                     }
 
                     // Create ScriptContext for this entity (with cached logger and API services)
                     var loggerKey = $"{behavior.BehaviorTypeId}.{npc.NpcId}";
                     var scriptLogger = GetOrCreateLogger(loggerKey);
-                    var context = new ScriptContext(
-                        world,
-                        entity,
-                        scriptLogger,
-                        _apis
-                    );
+                    var context = new ScriptContext(world, entity, scriptLogger, _apis);
 
                     // Initialize on first tick
                     if (!behavior.IsInitialized)
@@ -220,7 +226,13 @@ public class NPCBehaviorSystem : SystemBase, IUpdateSystem
                         var loggerKey = $"{behavior.BehaviorTypeId}.{npc.NpcId}";
                         var scriptLogger = GetOrCreateLogger(loggerKey);
                         var context = new ScriptContext(world, entity, scriptLogger, _apis);
-                        DeactivateBehavior(script, ref behavior, context, npc.NpcId, $"error: {ex.Message}");
+                        DeactivateBehavior(
+                            script,
+                            ref behavior,
+                            context,
+                            npc.NpcId,
+                            $"error: {ex.Message}"
+                        );
                     }
                     else
                     {

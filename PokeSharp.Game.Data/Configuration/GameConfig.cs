@@ -30,7 +30,7 @@ public class GameConfig
         {
             MapLoader = MapLoaderConfig.CreateDefault(),
             Assets = new AssetConfig(),
-            Performance = new PerformanceConfig()
+            Performance = new PerformanceConfig(),
         };
     }
 
@@ -43,7 +43,7 @@ public class GameConfig
         {
             MapLoader = MapLoaderConfig.CreateDevelopment(),
             Assets = AssetConfig.CreateDevelopment(),
-            Performance = PerformanceConfig.CreateDevelopment()
+            Performance = PerformanceConfig.CreateDevelopment(),
         };
     }
 
@@ -56,7 +56,7 @@ public class GameConfig
         {
             MapLoader = MapLoaderConfig.CreateProduction(),
             Assets = AssetConfig.CreateProduction(),
-            Performance = PerformanceConfig.CreateProduction()
+            Performance = PerformanceConfig.CreateProduction(),
         };
     }
 }
@@ -72,7 +72,9 @@ public class AssetConfig
     public int MaxTextureSize { get; set; } = 4096;
 
     public static AssetConfig CreateDevelopment() => new() { PreloadAssets = false };
-    public static AssetConfig CreateProduction() => new() { PreloadAssets = true, CompressTextures = true };
+
+    public static AssetConfig CreateProduction() =>
+        new() { PreloadAssets = true, CompressTextures = true };
 }
 
 /// <summary>
@@ -86,5 +88,6 @@ public class PerformanceConfig
     public int TargetFrameRate { get; set; } = 60;
 
     public static PerformanceConfig CreateDevelopment() => new() { EnableEntityCulling = false };
+
     public static PerformanceConfig CreateProduction() => new() { EnableEntityCulling = true };
 }

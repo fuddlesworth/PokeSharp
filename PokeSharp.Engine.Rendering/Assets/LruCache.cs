@@ -9,7 +9,9 @@ namespace PokeSharp.Engine.Rendering.Assets;
 /// </summary>
 /// <typeparam name="TKey">Cache key type</typeparam>
 /// <typeparam name="TValue">Cache value type (must implement IDisposable for cleanup)</typeparam>
-public class LruCache<TKey, TValue> where TKey : notnull where TValue : IDisposable
+public class LruCache<TKey, TValue>
+    where TKey : notnull
+    where TValue : IDisposable
 {
     private readonly long _maxSizeBytes;
     private readonly ConcurrentDictionary<TKey, CacheEntry> _cache = new();
@@ -19,7 +21,11 @@ public class LruCache<TKey, TValue> where TKey : notnull where TValue : IDisposa
     private readonly ILogger? _logger;
     private long _currentSizeBytes;
 
-    public LruCache(long maxSizeBytes, Func<TValue, long>? sizeCalculator = null, ILogger? logger = null)
+    public LruCache(
+        long maxSizeBytes,
+        Func<TValue, long>? sizeCalculator = null,
+        ILogger? logger = null
+    )
     {
         _maxSizeBytes = maxSizeBytes;
         _sizeCalculator = sizeCalculator ?? (_ => 1024); // Default 1KB estimate
@@ -52,8 +58,11 @@ public class LruCache<TKey, TValue> where TKey : notnull where TValue : IDisposa
                 Interlocked.Add(ref _currentSizeBytes, -oldEntry.Size);
                 oldEntry.Value.Dispose();
 
-                _logger?.LogDebug("Replaced existing cache entry: {Key} (freed {Size:N0} bytes)",
-                    key, oldEntry.Size);
+                _logger?.LogDebug(
+                    "Replaced existing cache entry: {Key} (freed {Size:N0} bytes)",
+                    key,
+                    oldEntry.Size
+                );
             }
 
             // Evict LRU items if adding this would exceed budget
@@ -67,8 +76,13 @@ public class LruCache<TKey, TValue> where TKey : notnull where TValue : IDisposa
             _cache[key] = new CacheEntry(value, size, node);
             Interlocked.Add(ref _currentSizeBytes, size);
 
-            _logger?.LogDebug("Added to cache: {Key} ({Size:N0} bytes, total: {Total:N0}/{Max:N0})",
-                key, size, _currentSizeBytes, _maxSizeBytes);
+            _logger?.LogDebug(
+                "Added to cache: {Key} ({Size:N0} bytes, total: {Total:N0}/{Max:N0})",
+                key,
+                size,
+                _currentSizeBytes,
+                _maxSizeBytes
+            );
         }
     }
 
@@ -111,8 +125,11 @@ public class LruCache<TKey, TValue> where TKey : notnull where TValue : IDisposa
                 Interlocked.Add(ref _currentSizeBytes, -entry.Size);
                 entry.Value.Dispose();
 
-                _logger?.LogDebug("Removed from cache: {Key} (freed {Size:N0} bytes)",
-                    key, entry.Size);
+                _logger?.LogDebug(
+                    "Removed from cache: {Key} (freed {Size:N0} bytes)",
+                    key,
+                    entry.Size
+                );
                 return true;
             }
             return false;
@@ -145,7 +162,8 @@ public class LruCache<TKey, TValue> where TKey : notnull where TValue : IDisposa
     private void EvictLru()
     {
         // Must be called within lock
-        if (_lruList.Last == null) return;
+        if (_lruList.Last == null)
+            return;
 
         var lruKey = _lruList.Last.Value;
         if (_cache.TryRemove(lruKey, out var entry))
@@ -154,8 +172,11 @@ public class LruCache<TKey, TValue> where TKey : notnull where TValue : IDisposa
             Interlocked.Add(ref _currentSizeBytes, -entry.Size);
             entry.Value.Dispose();
 
-            _logger?.LogDebug("Evicted LRU item: {Key} (freed {Size:N0} bytes)",
-                lruKey, entry.Size);
+            _logger?.LogDebug(
+                "Evicted LRU item: {Key} (freed {Size:N0} bytes)",
+                lruKey,
+                entry.Size
+            );
         }
     }
 

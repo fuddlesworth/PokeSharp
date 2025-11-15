@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using PokeSharp.Engine.Rendering.Assets;
 using Xunit;
 using Xunit.Abstractions;
-using PokeSharp.Engine.Rendering.Assets;
 
 namespace PokeSharp.Tests.MemoryValidation
 {
@@ -58,7 +58,9 @@ namespace PokeSharp.Tests.MemoryValidation
                 $"FAIL: Baseline memory {baselineMemoryMB:F1}MB exceeds target {TARGET_BASELINE_MB}MB"
             );
 
-            _output.WriteLine($"✅ PASS: Baseline memory {baselineMemoryMB:F1}MB is below {TARGET_BASELINE_MB}MB");
+            _output.WriteLine(
+                $"✅ PASS: Baseline memory {baselineMemoryMB:F1}MB is below {TARGET_BASELINE_MB}MB"
+            );
         }
 
         [Fact]
@@ -100,7 +102,9 @@ namespace PokeSharp.Tests.MemoryValidation
                 $"FAIL: Map load increased memory by {memoryIncreaseMB:F1}MB, exceeds target {TARGET_MAP_LOAD_INCREASE_MB}MB"
             );
 
-            _output.WriteLine($"✅ PASS: Map load increased memory by {memoryIncreaseMB:F1}MB (<{TARGET_MAP_LOAD_INCREASE_MB}MB)");
+            _output.WriteLine(
+                $"✅ PASS: Map load increased memory by {memoryIncreaseMB:F1}MB (<{TARGET_MAP_LOAD_INCREASE_MB}MB)"
+            );
         }
 
         [Fact]
@@ -149,7 +153,9 @@ namespace PokeSharp.Tests.MemoryValidation
                 $"FAIL: Memory after transition {memoryAfterTransition:F1}MB exceeds expected {expectedMemory:F1}MB. Map A likely not cleaned up."
             );
 
-            _output.WriteLine($"✅ PASS: Map transition cleaned up previous map. Memory: {memoryAfterTransition:F1}MB");
+            _output.WriteLine(
+                $"✅ PASS: Map transition cleaned up previous map. Memory: {memoryAfterTransition:F1}MB"
+            );
         }
 
         [Fact]
@@ -178,7 +184,7 @@ namespace PokeSharp.Tests.MemoryValidation
                 "Data/Maps/DewfordTown.json",
                 "Data/Maps/SlateportCity.json",
                 "Data/Maps/MauvilleCity.json",
-                "Data/Maps/VerdanturfTown.json"
+                "Data/Maps/VerdanturfTown.json",
             };
 
             // ACT
@@ -196,7 +202,9 @@ namespace PokeSharp.Tests.MemoryValidation
                 var textures = assetManager.LoadedTextureCount;
                 var cacheMB = assetManager.TextureCacheSizeBytes / 1_000_000.0;
 
-                _output.WriteLine($"  Memory: {currentMemoryMB:F1}MB | Cache: {cacheMB:F1}MB | Textures: {textures}");
+                _output.WriteLine(
+                    $"  Memory: {currentMemoryMB:F1}MB | Cache: {cacheMB:F1}MB | Textures: {textures}"
+                );
 
                 // ASSERT per iteration
                 Assert.True(
@@ -225,7 +233,9 @@ namespace PokeSharp.Tests.MemoryValidation
                 $"FAIL: Memory growing unstably. Last 5 maps grew {memoryGrowth:F1}MB"
             );
 
-            _output.WriteLine($"✅ PASS: All {STRESS_TEST_MAP_COUNT} maps stayed below {TARGET_STRESS_TEST_MAX_MB}MB");
+            _output.WriteLine(
+                $"✅ PASS: All {STRESS_TEST_MAP_COUNT} maps stayed below {TARGET_STRESS_TEST_MAX_MB}MB"
+            );
         }
 
         [Fact]

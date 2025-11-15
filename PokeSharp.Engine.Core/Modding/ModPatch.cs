@@ -55,7 +55,8 @@ public sealed class PatchOperation
         if (!validOps.Contains(Op.ToLowerInvariant()))
         {
             throw new InvalidOperationException(
-                $"Invalid patch operation: {Op}. Must be one of: {string.Join(", ", validOps)}");
+                $"Invalid patch operation: {Op}. Must be one of: {string.Join(", ", validOps)}"
+            );
         }
 
         if (string.IsNullOrWhiteSpace(Path))
@@ -89,4 +90,3 @@ public sealed class PatchOperation
 
     public override string ToString() => $"{Op} {Path}";
 }
-

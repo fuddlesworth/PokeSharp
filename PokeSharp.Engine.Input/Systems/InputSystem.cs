@@ -3,12 +3,12 @@ using Arch.Core.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using PokeSharp.Game.Components.Movement;
-using PokeSharp.Game.Components.Player;
-using PokeSharp.Engine.Systems.Management;
+using PokeSharp.Engine.Core.Systems;
 using PokeSharp.Engine.Input.Components;
 using PokeSharp.Engine.Input.Services;
-using PokeSharp.Engine.Core.Systems;
+using PokeSharp.Engine.Systems.Management;
+using PokeSharp.Game.Components.Movement;
+using PokeSharp.Game.Components.Player;
 
 namespace PokeSharp.Engine.Input.Systems;
 
@@ -137,7 +137,10 @@ public class InputSystem(
                             request.Direction = bufferedDirection;
                             request.Active = true;
                             _inputEventsProcessed++;
-                            _logger?.LogTrace("Consumed buffered input: {Direction}", bufferedDirection);
+                            _logger?.LogTrace(
+                                "Consumed buffered input: {Direction}",
+                                bufferedDirection
+                            );
                             _lastBufferedDirection = Direction.None;
                         }
                     }
@@ -145,7 +148,10 @@ public class InputSystem(
                     {
                         world.Add(entity, new MovementRequest(bufferedDirection));
                         _inputEventsProcessed++;
-                        _logger?.LogTrace("Consumed buffered input: {Direction}", bufferedDirection);
+                        _logger?.LogTrace(
+                            "Consumed buffered input: {Direction}",
+                            bufferedDirection
+                        );
                         _lastBufferedDirection = Direction.None;
                     }
                 }

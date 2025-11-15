@@ -29,7 +29,8 @@ public static class PropertyMapperServiceExtensions
     /// <param name="logger">Optional logger for the registry.</param>
     /// <returns>Configured PropertyMapperRegistry with all mappers registered.</returns>
     public static PropertyMapperRegistry CreatePropertyMapperRegistry(
-        ILogger<PropertyMapperRegistry>? logger = null)
+        ILogger<PropertyMapperRegistry>? logger = null
+    )
     {
         var registry = new PropertyMapperRegistry(logger);
 

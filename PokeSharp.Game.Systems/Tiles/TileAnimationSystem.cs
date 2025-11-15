@@ -1,10 +1,10 @@
 using Arch.Core;
 using Microsoft.Extensions.Logging;
-using PokeSharp.Game.Components.Tiles;
 using PokeSharp.Engine.Common.Logging;
-using EcsQueries = PokeSharp.Engine.Systems.Queries.Queries;
-using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Engine.Core.Systems;
+using PokeSharp.Engine.Systems.Management;
+using PokeSharp.Game.Components.Tiles;
+using EcsQueries = PokeSharp.Engine.Systems.Queries.Queries;
 
 namespace PokeSharp.Game.Systems;
 
@@ -14,7 +14,9 @@ namespace PokeSharp.Game.Systems;
 ///     Priority: 850 (after Animation:800, before Render:1000).
 ///     OPTIMIZED: Uses precalculated source rectangles for zero runtime overhead.
 /// </summary>
-public class TileAnimationSystem(ILogger<TileAnimationSystem>? logger = null) : SystemBase, IUpdateSystem
+public class TileAnimationSystem(ILogger<TileAnimationSystem>? logger = null)
+    : SystemBase,
+        IUpdateSystem
 {
     private readonly ILogger<TileAnimationSystem>? _logger = logger;
     private int _animatedTileCount = -1; // Track for logging on first update
@@ -55,23 +57,28 @@ public class TileAnimationSystem(ILogger<TileAnimationSystem>? logger = null) : 
             var precalcCount = 0;
             var nullRectCount = 0;
 
-            world.Query(in EcsQueries.AnimatedTiles, (Entity entity, ref AnimatedTile tile) =>
-            {
-                tileCount++;
-                if (tile.FrameSourceRects != null && tile.FrameSourceRects.Length > 0)
-                    precalcCount++;
-                else
-                    nullRectCount++;
-            });
+            world.Query(
+                in EcsQueries.AnimatedTiles,
+                (Entity entity, ref AnimatedTile tile) =>
+                {
+                    tileCount++;
+                    if (tile.FrameSourceRects != null && tile.FrameSourceRects.Length > 0)
+                        precalcCount++;
+                    else
+                        nullRectCount++;
+                }
+            );
 
             if (tileCount > 0)
             {
                 _animatedTileCount = tileCount;
                 _logger?.LogAnimatedTilesProcessed(_animatedTileCount);
                 _logger?.LogWarning(
-                    "PERFORMANCE CHECK: {PrecalcCount}/{TotalCount} tiles have precalculated rects. " +
-                    "{NullCount} tiles missing precalc (OLD MAP DATA - RELOAD REQUIRED!)",
-                    precalcCount, tileCount, nullRectCount
+                    "PERFORMANCE CHECK: {PrecalcCount}/{TotalCount} tiles have precalculated rects. "
+                        + "{NullCount} tiles missing precalc (OLD MAP DATA - RELOAD REQUIRED!)",
+                    precalcCount,
+                    tileCount,
+                    nullRectCount
                 );
             }
         }
@@ -127,5 +134,4 @@ public class TileAnimationSystem(ILogger<TileAnimationSystem>? logger = null) : 
             sprite.SourceRect = animTile.FrameSourceRects[animTile.CurrentFrameIndex];
         }
     }
-
 }

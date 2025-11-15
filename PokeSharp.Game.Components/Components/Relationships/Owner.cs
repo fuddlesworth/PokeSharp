@@ -29,7 +29,7 @@ public enum OwnershipType
     /// Shared ownership among multiple entities.
     /// Example: Team resources, shared inventory.
     /// </summary>
-    Shared
+    Shared,
 }
 
 /// <summary>

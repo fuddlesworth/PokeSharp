@@ -114,4 +114,3 @@ public record TrainerPartyMemberDto
     public string? Ability { get; init; }
     public Dictionary<string, int>? Ivs { get; init; }
 }
-

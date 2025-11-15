@@ -2,14 +2,14 @@ using System.Collections.Concurrent;
 using Arch.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
+using PokeSharp.Engine.Common.Logging;
+using PokeSharp.Engine.Core.Systems;
+using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Game.Components.Maps;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Components.Rendering;
 using PokeSharp.Game.Systems.Services;
-using PokeSharp.Engine.Common.Logging;
 using EcsQueries = PokeSharp.Engine.Systems.Queries.Queries;
-using PokeSharp.Engine.Systems.Management;
-using PokeSharp.Engine.Core.Systems;
 
 namespace PokeSharp.Game.Systems;
 
@@ -35,9 +35,13 @@ public class MovementSystem : SystemBase, IUpdateSystem
     /// </summary>
     /// <param name="collisionService">Collision service for movement validation (required).</param>
     /// <param name="logger">Optional logger for system diagnostics.</param>
-    public MovementSystem(ICollisionService collisionService, ILogger<MovementSystem>? logger = null)
+    public MovementSystem(
+        ICollisionService collisionService,
+        ILogger<MovementSystem>? logger = null
+    )
     {
-        _collisionService = collisionService ?? throw new ArgumentNullException(nameof(collisionService));
+        _collisionService =
+            collisionService ?? throw new ArgumentNullException(nameof(collisionService));
         _logger = logger;
     }
 
@@ -58,9 +62,20 @@ public class MovementSystem : SystemBase, IUpdateSystem
         // Process entities WITH animation (sequential - optimal for <50 entities)
         world.Query(
             in EcsQueries.MovementWithAnimation,
-            (Entity entity, ref Position position, ref GridMovement movement, ref Animation animation) =>
+            (
+                Entity entity,
+                ref Position position,
+                ref GridMovement movement,
+                ref Animation animation
+            ) =>
             {
-                ProcessMovementWithAnimation(world, ref position, ref movement, ref animation, deltaTime);
+                ProcessMovementWithAnimation(
+                    world,
+                    ref position,
+                    ref movement,
+                    ref animation,
+                    deltaTime
+                );
             }
         );
 
@@ -431,5 +446,4 @@ public class MovementSystem : SystemBase, IUpdateSystem
         // This maintains backward compatibility with tests and situations without map metadata
         return withinBounds ?? true;
     }
-
 }

@@ -23,9 +23,7 @@ public class ComponentDeserializerRegistry
     /// <typeparam name="TComponent">Component type (must be a struct)</typeparam>
     /// <param name="typeName">Type name used in JSON (e.g., "TilePosition")</param>
     /// <param name="deserializer">Function to deserialize JsonElement to component instance</param>
-    public void Register<TComponent>(
-        string typeName,
-        Func<JsonElement, TComponent> deserializer)
+    public void Register<TComponent>(string typeName, Func<JsonElement, TComponent> deserializer)
         where TComponent : struct
     {
         ArgumentNullException.ThrowIfNull(typeName, nameof(typeName));
@@ -34,7 +32,7 @@ public class ComponentDeserializerRegistry
         _deserializers[typeName] = new ComponentDeserializerInfo
         {
             ComponentType = typeof(TComponent),
-            Deserializer = jsonElement => deserializer(jsonElement)
+            Deserializer = jsonElement => deserializer(jsonElement),
         };
 
         _logger.LogDebug("Registered deserializer for component type: {TypeName}", typeName);
@@ -66,16 +64,18 @@ public class ComponentDeserializerRegistry
 
         if (!_deserializers.TryGetValue(dto.Type, out var info))
             throw new InvalidOperationException(
-                $"No deserializer registered for component type: {dto.Type}. " +
-                $"Available types: {string.Join(", ", _deserializers.Keys)}"
+                $"No deserializer registered for component type: {dto.Type}. "
+                    + $"Available types: {string.Join(", ", _deserializers.Keys)}"
             );
 
         try
         {
-            var data = dto.Data ?? throw new ArgumentException(
-                $"Component data is required for type: {dto.Type}",
-                nameof(dto)
-            );
+            var data =
+                dto.Data
+                ?? throw new ArgumentException(
+                    $"Component data is required for type: {dto.Type}",
+                    nameof(dto)
+                );
 
             var componentData = info.Deserializer(data);
 
@@ -85,16 +85,12 @@ public class ComponentDeserializerRegistry
                 ComponentType = info.ComponentType,
                 InitialData = componentData,
                 ScriptId = dto.ScriptId,
-                Tags = dto.Tags
+                Tags = dto.Tags,
             };
         }
         catch (Exception ex)
         {
-            _logger.LogError(
-                ex,
-                "Failed to deserialize component {ComponentType}",
-                dto.Type
-            );
+            _logger.LogError(ex, "Failed to deserialize component {ComponentType}", dto.Type);
             throw;
         }
     }
@@ -138,4 +134,3 @@ public record ComponentDto
     public string? ScriptId { get; init; }
     public List<string>? Tags { get; init; }
 }
-

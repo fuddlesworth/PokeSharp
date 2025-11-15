@@ -1,11 +1,11 @@
 using Arch.Core;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Common.Logging;
-using PokeSharp.Game.Scripting.Api;
-using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Engine.Core.Types;
-using PokeSharp.Game.Services;
+using PokeSharp.Engine.Systems.Management;
+using PokeSharp.Game.Scripting.Api;
 using PokeSharp.Game.Scripting.Systems;
+using PokeSharp.Game.Services;
 
 namespace PokeSharp.Game.Initialization;
 
@@ -47,8 +47,8 @@ public class NPCBehaviorInitializer(
                         ("script", scripted.BehaviorScript)
                     );
 
-                    var scriptInstance = gameServices.ScriptService
-                        .LoadScriptAsync(scripted.BehaviorScript)
+                    var scriptInstance = gameServices
+                        .ScriptService.LoadScriptAsync(scripted.BehaviorScript)
                         .Result;
 
                     if (scriptInstance != null)

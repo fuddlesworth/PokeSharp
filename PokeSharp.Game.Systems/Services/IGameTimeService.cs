@@ -28,4 +28,3 @@ public interface IGameTimeService
     /// <param name="deltaTime">Time since last frame in seconds.</param>
     void Update(float totalSeconds, float deltaTime);
 }
-

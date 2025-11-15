@@ -36,7 +36,11 @@ public sealed class ModLoader
         }
 
         var modDirectories = Directory.GetDirectories(_modsDirectory);
-        _logger.LogInformation("Scanning for mods | path: {Path}, directories: {Count}", _modsDirectory, modDirectories.Length);
+        _logger.LogInformation(
+            "Scanning for mods | path: {Path}, directories: {Count}",
+            _modsDirectory,
+            modDirectories.Length
+        );
 
         foreach (var modDir in modDirectories)
         {
@@ -45,7 +49,10 @@ public sealed class ModLoader
                 var manifestPath = Path.Combine(modDir, "mod.json");
                 if (!File.Exists(manifestPath))
                 {
-                    _logger.LogWarning("Skipping directory | reason: no mod.json, path: {Dir}", Path.GetFileName(modDir));
+                    _logger.LogWarning(
+                        "Skipping directory | reason: no mod.json, path: {Dir}",
+                        Path.GetFileName(modDir)
+                    );
                     continue;
                 }
 
@@ -63,15 +70,15 @@ public sealed class ModLoader
 
                 manifest.Validate();
 
-                var loadedMod = new LoadedMod
-                {
-                    Manifest = manifest,
-                    RootPath = modDir
-                };
+                var loadedMod = new LoadedMod { Manifest = manifest, RootPath = modDir };
 
                 _loadedMods.Add(loadedMod);
-                _logger.LogInformation("Discovered mod | id: {ModId}, version: {Version}, name: {Name}",
-                    manifest.ModId, manifest.Version, manifest.Name);
+                _logger.LogInformation(
+                    "Discovered mod | id: {ModId}, version: {Version}, name: {Name}",
+                    manifest.ModId,
+                    manifest.Version,
+                    manifest.Name
+                );
             }
             catch (Exception ex)
             {
@@ -99,7 +106,8 @@ public sealed class ModLoader
             if (processing.Contains(mod.Manifest.ModId))
             {
                 throw new InvalidOperationException(
-                    $"Circular dependency detected involving mod: {mod.Manifest.ModId}");
+                    $"Circular dependency detected involving mod: {mod.Manifest.ModId}"
+                );
             }
 
             processing.Add(mod.Manifest.ModId);
@@ -111,7 +119,8 @@ public sealed class ModLoader
                 if (dep == null)
                 {
                     throw new InvalidOperationException(
-                        $"Mod '{mod.Manifest.ModId}' depends on '{depId}' which is not loaded");
+                        $"Mod '{mod.Manifest.ModId}' depends on '{depId}' which is not loaded"
+                    );
                 }
                 Visit(dep);
             }
@@ -166,4 +175,3 @@ public sealed class LoadedMod
 
     public override string ToString() => Manifest.ToString();
 }
-

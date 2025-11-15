@@ -21,11 +21,7 @@ public class SpriteLoader
     public SpriteLoader(ILogger<SpriteLoader> logger)
     {
         _logger = logger;
-        _spritesBasePaths = new List<string>
-        {
-            "Assets/Sprites/Players",
-            "Assets/Sprites/NPCs"
-        };
+        _spritesBasePaths = new List<string> { "Assets/Sprites/Players", "Assets/Sprites/NPCs" };
     }
 
     /// <summary>
@@ -46,24 +42,31 @@ public class SpriteLoader
         {
             if (!Directory.Exists(spritesBasePath))
             {
-                _logger.LogWarning("Sprites directory not found at {Path}. Run the sprite extractor tool.", spritesBasePath);
+                _logger.LogWarning(
+                    "Sprites directory not found at {Path}. Run the sprite extractor tool.",
+                    spritesBasePath
+                );
                 continue;
             }
 
             _logger.LogInformation("Scanning for sprite manifests in {Path}", spritesBasePath);
 
             // Find all manifest.json files in subdirectories
-            var manifestFiles = Directory.GetFiles(spritesBasePath, "manifest.json", SearchOption.AllDirectories);
+            var manifestFiles = Directory.GetFiles(
+                spritesBasePath,
+                "manifest.json",
+                SearchOption.AllDirectories
+            );
 
             foreach (var manifestFile in manifestFiles)
             {
                 try
                 {
                     var json = await File.ReadAllTextAsync(manifestFile);
-                    var manifest = JsonSerializer.Deserialize<SpriteManifest>(json, new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    });
+                    var manifest = JsonSerializer.Deserialize<SpriteManifest>(
+                        json,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                    );
 
                     if (manifest != null)
                     {
@@ -75,7 +78,11 @@ public class SpriteLoader
                         {
                             var lookupKey = $"{manifest.Category}/{manifest.Name}";
                             _spritePathLookup[lookupKey] = manifestDir;
-                            _logger.LogDebug("Registered sprite: {Key} -> {Path}", lookupKey, manifestDir);
+                            _logger.LogDebug(
+                                "Registered sprite: {Key} -> {Path}",
+                                lookupKey,
+                                manifestDir
+                            );
                         }
                     }
                 }
@@ -86,7 +93,10 @@ public class SpriteLoader
             }
         }
 
-        _logger.LogInformation("Loaded {Count} total sprites from all categories", _allSprites.Count);
+        _logger.LogInformation(
+            "Loaded {Count} total sprites from all categories",
+            _allSprites.Count
+        );
 
         return _allSprites;
     }
@@ -270,4 +280,3 @@ public class SpriteAnimationInfo
     [JsonPropertyName("FlipHorizontal")]
     public bool FlipHorizontal { get; set; }
 }
-

@@ -1,12 +1,12 @@
 using Arch.Core;
-using PokeSharp.Game.Systems.Services;
-using PokeSharp.Engine.Core.Systems;
 using Microsoft.Extensions.Logging;
+using PokeSharp.Engine.Common.Logging;
+using PokeSharp.Engine.Core.Systems;
 using PokeSharp.Game.Components.Maps;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Components.Player;
-using PokeSharp.Engine.Common.Logging;
 using PokeSharp.Game.Scripting.Api;
+using PokeSharp.Game.Systems.Services;
 using EcsQueries = PokeSharp.Engine.Systems.Queries.Queries;
 
 namespace PokeSharp.Game.Scripting.Services;
@@ -118,8 +118,7 @@ public class MapApiService(
     /// </summary>
     public void SetSpatialQuery(ISpatialQuery spatialQuery)
     {
-        _spatialQuery =
-            spatialQuery ?? throw new ArgumentNullException(nameof(spatialQuery));
+        _spatialQuery = spatialQuery ?? throw new ArgumentNullException(nameof(spatialQuery));
     }
 
     private Entity? GetPlayerEntity()

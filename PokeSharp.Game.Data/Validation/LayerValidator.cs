@@ -30,7 +30,8 @@ public class LayerValidator : IMapValidator
             if (actualWidth != expectedWidth || actualHeight != expectedHeight)
             {
                 result.AddError(
-                    $"Layer '{layer.Name}' dimensions ({actualWidth}x{actualHeight}) don't match map dimensions ({expectedWidth}x{expectedHeight})");
+                    $"Layer '{layer.Name}' dimensions ({actualWidth}x{actualHeight}) don't match map dimensions ({expectedWidth}x{expectedHeight})"
+                );
             }
 
             // Validate tile GIDs are within tileset bounds
@@ -53,7 +54,8 @@ public class LayerValidator : IMapValidator
             if (!File.Exists(imagePath))
             {
                 result.AddWarning(
-                    $"Image layer '{imageLayer.Name}' image not found at: {imagePath}");
+                    $"Image layer '{imageLayer.Name}' image not found at: {imagePath}"
+                );
             }
         }
 
@@ -63,13 +65,15 @@ public class LayerValidator : IMapValidator
     private void ValidateTileGids(TmxDocument map, TmxLayer layer, ValidationResult result)
     {
         // Build valid GID ranges from tilesets
-        var validRanges = map.Tilesets
-            .Select(ts => new
+        var validRanges = map
+            .Tilesets.Select(ts => new
             {
                 ts.FirstGid,
                 // Calculate last GID based on tileset image dimensions
-                LastGid = ts.FirstGid + ((ts.Image?.Width ?? 256) / ts.TileWidth)
-                                      * ((ts.Image?.Height ?? 256) / ts.TileHeight) - 1
+                LastGid = ts.FirstGid
+                    + ((ts.Image?.Width ?? 256) / ts.TileWidth)
+                        * ((ts.Image?.Height ?? 256) / ts.TileHeight)
+                    - 1,
             })
             .ToList();
 
@@ -93,7 +97,8 @@ public class LayerValidator : IMapValidator
                 if (!isValid)
                 {
                     result.AddError(
-                        $"Layer '{layer.Name}' has invalid tile GID {tileGid} at ({x}, {y})");
+                        $"Layer '{layer.Name}' has invalid tile GID {tileGid} at ({x}, {y})"
+                    );
                 }
             }
         }

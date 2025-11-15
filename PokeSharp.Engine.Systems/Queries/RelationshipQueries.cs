@@ -1,6 +1,6 @@
 using Arch.Core;
-using PokeSharp.Game.Components.Relationships;
 using PokeSharp.Engine.Systems.Management;
+using PokeSharp.Game.Components.Relationships;
 
 namespace PokeSharp.Engine.Systems.Queries;
 
@@ -105,8 +105,8 @@ public static class RelationshipQueries
     /// Useful for finding all entities involved in any kind of relationship
     /// when you need to process relationships generically.
     /// </remarks>
-    public static QueryDescription AnyRelationship => new QueryDescription()
-        .WithAny<Parent, Children, Owner, Owned>();
+    public static QueryDescription AnyRelationship =>
+        new QueryDescription().WithAny<Parent, Children, Owner, Owned>();
 
     /// <summary>
     /// Query for entities with both parent-child and ownership relationships.
@@ -116,9 +116,8 @@ public static class RelationshipQueries
     /// such as a Pokémon that is both part of a trainer's team (parent-child)
     /// and owns items (ownership).
     /// </remarks>
-    public static QueryDescription FullyRelated => new QueryDescription()
-        .WithAny<Parent, Children>()
-        .WithAny<Owner, Owned>();
+    public static QueryDescription FullyRelated =>
+        new QueryDescription().WithAny<Parent, Children>().WithAny<Owner, Owned>();
 
     /// <summary>
     /// Query for orphaned entities (have relationship components but invalid references).
@@ -128,8 +127,8 @@ public static class RelationshipQueries
     /// to determine if they're truly orphaned. Use in conjunction with
     /// IsAlive checks on the referenced entities.
     /// </remarks>
-    public static QueryDescription PotentialOrphans => new QueryDescription()
-        .WithAny<Parent, Owned>();
+    public static QueryDescription PotentialOrphans =>
+        new QueryDescription().WithAny<Parent, Owned>();
 
     #endregion
 

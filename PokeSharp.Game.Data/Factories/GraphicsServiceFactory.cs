@@ -1,10 +1,10 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework.Graphics;
-using PokeSharp.Engine.Systems.Factories;
-using PokeSharp.Game.Data.PropertyMapping;
 using PokeSharp.Engine.Rendering.Assets;
-using PokeSharp.Game.Data.MapLoading.Tiled;
+using PokeSharp.Engine.Systems.Factories;
 using PokeSharp.Engine.Systems.Management;
+using PokeSharp.Game.Data.MapLoading.Tiled;
+using PokeSharp.Game.Data.PropertyMapping;
 using PokeSharp.Game.Data.Services;
 
 namespace PokeSharp.Game.Data.Factories;
@@ -35,7 +35,8 @@ public class GraphicsServiceFactory : IGraphicsServiceFactory
         SystemManager systemManager,
         PropertyMapperRegistry? propertyMapperRegistry = null,
         NpcDefinitionService? npcDefinitionService = null,
-        MapDefinitionService? mapDefinitionService = null)
+        MapDefinitionService? mapDefinitionService = null
+    )
     {
         _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
         _systemManager = systemManager ?? throw new ArgumentNullException(nameof(systemManager));

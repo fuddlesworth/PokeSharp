@@ -3,15 +3,15 @@ using Arch.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PokeSharp.Engine.Common.Logging;
+using PokeSharp.Engine.Core.Systems;
+using PokeSharp.Engine.Rendering.Assets;
+using PokeSharp.Engine.Rendering.Components;
+using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Components.Player;
 using PokeSharp.Game.Components.Rendering;
 using PokeSharp.Game.Components.Tiles;
-using PokeSharp.Engine.Common.Logging;
-using PokeSharp.Engine.Systems.Management;
-using PokeSharp.Engine.Rendering.Assets;
-using PokeSharp.Engine.Rendering.Components;
-using PokeSharp.Engine.Core.Systems;
 using AnimationComponent = PokeSharp.Game.Components.Rendering.Animation;
 
 namespace PokeSharp.Engine.Rendering.Systems;
@@ -139,7 +139,11 @@ public class ElevationRenderSystem(
     private int _lastSpriteCount;
     private int _lastTileCount;
 
-    private double _setupTime, _batchBeginTime, _tileTime, _spriteTime, _batchEndTime;
+    private double _setupTime,
+        _batchBeginTime,
+        _tileTime,
+        _spriteTime,
+        _batchEndTime;
 
     /// <inheritdoc />
     public override int Priority => SystemPriority.Render;
@@ -179,10 +183,10 @@ public class ElevationRenderSystem(
             UpdateCameraCache(world);
 
             _spriteBatch.Begin(
-                SpriteSortMode.BackToFront,  // Sort sprites by layerDepth for proper overlap
-                BlendState.NonPremultiplied,  // Use NonPremultiplied for PNG transparency
+                SpriteSortMode.BackToFront, // Sort sprites by layerDepth for proper overlap
+                BlendState.NonPremultiplied, // Use NonPremultiplied for PNG transparency
                 SamplerState.PointClamp,
-                DepthStencilState.None,  // Disable depth buffer for 2D sprite transparency
+                DepthStencilState.None, // Disable depth buffer for 2D sprite transparency
                 RasterizerState.CullNone,
                 null,
                 transformMatrix: _cachedCameraTransform
@@ -244,10 +248,10 @@ public class ElevationRenderSystem(
 
         var swBatchBegin = Stopwatch.StartNew();
         _spriteBatch.Begin(
-            SpriteSortMode.BackToFront,  // Sort sprites by layerDepth for proper overlap
-            BlendState.NonPremultiplied,  // Use NonPremultiplied for PNG transparency
+            SpriteSortMode.BackToFront, // Sort sprites by layerDepth for proper overlap
+            BlendState.NonPremultiplied, // Use NonPremultiplied for PNG transparency
             SamplerState.PointClamp,
-            DepthStencilState.None,  // Disable depth buffer for 2D sprite transparency
+            DepthStencilState.None, // Disable depth buffer for 2D sprite transparency
             RasterizerState.CullNone,
             null,
             transformMatrix: _cachedCameraTransform
@@ -276,12 +280,7 @@ public class ElevationRenderSystem(
         if (_frameCounter % 300 == 0)
         {
             var totalEntities = totalTilesRendered + spriteCount + imageLayerCount;
-            _logger?.LogRenderStats(
-                totalEntities,
-                totalTilesRendered,
-                spriteCount,
-                _frameCounter
-            );
+            _logger?.LogRenderStats(totalEntities, totalTilesRendered, spriteCount, _frameCounter);
 
             _logger?.LogInformation(
                 "Render breakdown: Setup={0:F2}ms, Begin={1:F2}ms, Tiles={2:F2}ms, Sprites={3:F2}ms, End={4:F2}ms",
@@ -353,7 +352,10 @@ public class ElevationRenderSystem(
 
         // With lazy loading, sprites will load on-demand during rendering
         // Just log what textures are expected
-        _logger?.LogDebug("Map requires {Count} textures (will load on-demand)", texturesNeeded.Count);
+        _logger?.LogDebug(
+            "Map requires {Count} textures (will load on-demand)",
+            texturesNeeded.Count
+        );
 
         // Optionally preload sprite textures if lazy loader is available
         if (_spriteTextureLoader != null)
@@ -441,7 +443,12 @@ public class ElevationRenderSystem(
             // - Optional component pattern: query includes LayerOffset but we check if it exists
             world.Query(
                 in _tileQuery,
-                (Entity entity, ref TilePosition pos, ref TileSprite sprite, ref Elevation elevation) =>
+                (
+                    Entity entity,
+                    ref TilePosition pos,
+                    ref TileSprite sprite,
+                    ref Elevation elevation
+                ) =>
                 {
                     // Viewport culling: skip tiles outside camera bounds
                     if (cameraBounds.HasValue)
@@ -537,7 +544,12 @@ public class ElevationRenderSystem(
             // Render moving sprites
             world.Query(
                 in _movingSpriteQuery,
-                (ref Position position, ref Sprite sprite, ref GridMovement movement, ref Elevation elevation) =>
+                (
+                    ref Position position,
+                    ref Sprite sprite,
+                    ref GridMovement movement,
+                    ref Elevation elevation
+                ) =>
                 {
                     spriteCount++;
                     RenderMovingSprite(ref position, ref sprite, ref movement, ref elevation);
@@ -624,7 +636,9 @@ public class ElevationRenderSystem(
             var layerDepth = CalculateElevationDepth(elevation.Value, groundY);
 
             // Determine sprite effects (flip horizontal for left-facing)
-            var effects = sprite.FlipHorizontal ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            var effects = sprite.FlipHorizontal
+                ? SpriteEffects.FlipHorizontally
+                : SpriteEffects.None;
 
             // Draw sprite
             _spriteBatch.Draw(
@@ -652,7 +666,11 @@ public class ElevationRenderSystem(
         }
     }
 
-    private void RenderStaticSprite(ref Position position, ref Sprite sprite, ref Elevation elevation)
+    private void RenderStaticSprite(
+        ref Position position,
+        ref Sprite sprite,
+        ref Elevation elevation
+    )
     {
         try
         {
@@ -701,7 +719,9 @@ public class ElevationRenderSystem(
             var layerDepth = CalculateElevationDepth(elevation.Value, groundY);
 
             // Determine sprite effects (flip horizontal for left-facing)
-            var effects = sprite.FlipHorizontal ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            var effects = sprite.FlipHorizontal
+                ? SpriteEffects.FlipHorizontally
+                : SpriteEffects.None;
 
             // Draw sprite
             _spriteBatch.Draw(

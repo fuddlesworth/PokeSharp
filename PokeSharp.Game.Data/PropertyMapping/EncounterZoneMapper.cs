@@ -28,12 +28,14 @@ public class EncounterZoneMapper : IEntityPropertyMapper<EncounterZone>
             int i => i,
             string s when int.TryParse(s, out var result) => result,
             _ => throw new InvalidOperationException(
-                $"Invalid encounter_rate value: '{encounterRateValue}'. Must be an integer.")
+                $"Invalid encounter_rate value: '{encounterRateValue}'. Must be an integer."
+            ),
         };
 
         if (encounterRate < 0 || encounterRate > 255)
             throw new InvalidOperationException(
-                $"encounter_rate must be between 0 and 255. Got: {encounterRate}");
+                $"encounter_rate must be between 0 and 255. Got: {encounterRate}"
+            );
 
         // Get encounter table ID (optional, defaults to empty string)
         var encounterTableId = properties.TryGetValue("encounter_table", out var tableValue)

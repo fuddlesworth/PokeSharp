@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using PokeSharp.Game.Systems.Services;
 using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Game.Scripting.Compilation;
@@ -8,6 +7,7 @@ using PokeSharp.Game.Scripting.HotReload.Cache;
 using PokeSharp.Game.Scripting.HotReload.Compilation;
 using PokeSharp.Game.Scripting.HotReload.Notifications;
 using PokeSharp.Game.Scripting.HotReload.Watchers;
+using PokeSharp.Game.Systems.Services;
 
 namespace PokeSharp.Game.Scripting.HotReload;
 

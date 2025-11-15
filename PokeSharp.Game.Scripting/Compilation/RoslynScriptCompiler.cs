@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using PokeSharp.Game.Systems.Services;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
@@ -11,6 +10,7 @@ using Microsoft.Xna.Framework;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Scripting.HotReload.Compilation;
 using PokeSharp.Game.Scripting.Runtime;
+using PokeSharp.Game.Systems.Services;
 using DiagnosticSeverity = PokeSharp.Game.Scripting.HotReload.Compilation.DiagnosticSeverity;
 
 namespace PokeSharp.Game.Scripting.Compilation;

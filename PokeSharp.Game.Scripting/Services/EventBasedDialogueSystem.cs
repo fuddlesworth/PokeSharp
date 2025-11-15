@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
-using PokeSharp.Game.Systems.Services;
 using PokeSharp.Engine.Core.Events;
 using PokeSharp.Engine.Core.Types.Events;
+using PokeSharp.Game.Systems.Services;
 
 namespace PokeSharp.Game.Scripting.Services;
 

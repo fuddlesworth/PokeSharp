@@ -22,7 +22,8 @@ public sealed class TemplateCache
         if (!template.Validate(out var errors))
         {
             throw new InvalidOperationException(
-                $"Template validation failed for '{template.TemplateId}': {string.Join(", ", errors)}");
+                $"Template validation failed for '{template.TemplateId}': {string.Join(", ", errors)}"
+            );
         }
 
         _templates[template.TemplateId] = template;

@@ -1,7 +1,7 @@
 using Arch.Core;
 using Arch.Core.Extensions;
-using PokeSharp.Game.Components;
 using PokeSharp.Engine.Systems.Pooling;
+using PokeSharp.Game.Components;
 
 namespace PokeSharp.Engine.Systems.Extensions;
 

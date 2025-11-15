@@ -15,9 +15,7 @@ public class GameDataLoader
     private readonly ILogger<GameDataLoader> _logger;
     private readonly JsonSerializerOptions _jsonOptions;
 
-    public GameDataLoader(
-        GameDataContext context,
-        ILogger<GameDataLoader> logger)
+    public GameDataLoader(GameDataContext context, ILogger<GameDataLoader> logger)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -27,7 +25,7 @@ public class GameDataLoader
             PropertyNameCaseInsensitive = true,
             ReadCommentHandling = JsonCommentHandling.Skip,
             AllowTrailingCommas = true,
-            WriteIndented = true
+            WriteIndented = true,
         };
     }
 
@@ -53,8 +51,10 @@ public class GameDataLoader
         loadedCounts["Maps"] = await LoadMapsAsync(mapsPath, ct);
 
         // Log summary
-        _logger.LogInformation("Game data loaded: {Summary}",
-            string.Join(", ", loadedCounts.Select(kvp => $"{kvp.Key}: {kvp.Value}")));
+        _logger.LogInformation(
+            "Game data loaded: {Summary}",
+            string.Join(", ", loadedCounts.Select(kvp => $"{kvp.Key}: {kvp.Value}"))
+        );
     }
 
     /// <summary>
@@ -103,11 +103,12 @@ public class GameDataLoader
                     BehaviorScript = dto.BehaviorScript,
                     DialogueScript = dto.DialogueScript,
                     MovementSpeed = dto.MovementSpeed ?? 2.0f,
-                    CustomPropertiesJson = dto.CustomProperties != null
-                        ? JsonSerializer.Serialize(dto.CustomProperties, _jsonOptions)
-                        : null,
+                    CustomPropertiesJson =
+                        dto.CustomProperties != null
+                            ? JsonSerializer.Serialize(dto.CustomProperties, _jsonOptions)
+                            : null,
                     SourceMod = dto.SourceMod,
-                    Version = dto.Version ?? "1.0.0"
+                    Version = dto.Version ?? "1.0.0",
                 };
 
                 _context.Npcs.Add(npc);
@@ -178,14 +179,16 @@ public class GameDataLoader
                     DefeatDialogue = dto.DefeatDialogue,
                     OnDefeatScript = dto.OnDefeatScript,
                     IsRematchable = dto.IsRematchable ?? false,
-                    PartyJson = dto.Party != null
-                        ? JsonSerializer.Serialize(dto.Party, _jsonOptions)
-                        : "[]",
-                    CustomPropertiesJson = dto.CustomProperties != null
-                        ? JsonSerializer.Serialize(dto.CustomProperties, _jsonOptions)
-                        : null,
+                    PartyJson =
+                        dto.Party != null
+                            ? JsonSerializer.Serialize(dto.Party, _jsonOptions)
+                            : "[]",
+                    CustomPropertiesJson =
+                        dto.CustomProperties != null
+                            ? JsonSerializer.Serialize(dto.CustomProperties, _jsonOptions)
+                            : null,
                     SourceMod = dto.SourceMod,
-                    Version = dto.Version ?? "1.0.0"
+                    Version = dto.Version ?? "1.0.0",
                 };
 
                 _context.Trainers.Add(trainer);
@@ -231,7 +234,10 @@ public class GameDataLoader
                 var tiledJson = await File.ReadAllTextAsync(file, ct);
 
                 // Parse to extract metadata (use a lightweight DTO)
-                var tiledDoc = JsonSerializer.Deserialize<TiledMapMetadataDto>(tiledJson, _jsonOptions);
+                var tiledDoc = JsonSerializer.Deserialize<TiledMapMetadataDto>(
+                    tiledJson,
+                    _jsonOptions
+                );
 
                 if (tiledDoc == null)
                 {
@@ -263,13 +269,17 @@ public class GameDataLoader
                     WestMapId = GetPropertyString(properties, "westMap"),
                     EncounterDataJson = GetPropertyString(properties, "encounters"),
                     SourceMod = GetPropertyString(properties, "sourceMod"),
-                    Version = GetPropertyString(properties, "version") ?? "1.0.0"
+                    Version = GetPropertyString(properties, "version") ?? "1.0.0",
                 };
 
                 _context.Maps.Add(mapDef);
                 count++;
 
-                _logger.LogDebug("Loaded Map: {MapId} ({DisplayName})", mapDef.MapId, mapDef.DisplayName);
+                _logger.LogDebug(
+                    "Loaded Map: {MapId} ({DisplayName})",
+                    mapDef.MapId,
+                    mapDef.DisplayName
+                );
             }
             catch (Exception ex)
             {
@@ -291,7 +301,8 @@ public class GameDataLoader
     /// Tiled format: [{ "name": "key", "type": "string", "value": "val" }, ...]
     /// </summary>
     private static Dictionary<string, object> ConvertTiledPropertiesToDictionary(
-        List<TiledPropertyDto>? properties)
+        List<TiledPropertyDto>? properties
+    )
     {
         var dict = new Dictionary<string, object>();
 
@@ -322,10 +333,14 @@ public class GameDataLoader
     {
         if (props.TryGetValue(key, out var value))
         {
-            if (value is bool b) return b;
-            if (value is JsonElement je && je.ValueKind == JsonValueKind.True) return true;
-            if (value is JsonElement je2 && je2.ValueKind == JsonValueKind.False) return false;
-            if (bool.TryParse(value?.ToString(), out var result)) return result;
+            if (value is bool b)
+                return b;
+            if (value is JsonElement je && je.ValueKind == JsonValueKind.True)
+                return true;
+            if (value is JsonElement je2 && je2.ValueKind == JsonValueKind.False)
+                return false;
+            if (bool.TryParse(value?.ToString(), out var result))
+                return result;
         }
         return null;
     }
@@ -393,4 +408,3 @@ internal record TiledPropertyDto
 }
 
 #endregion
-
