@@ -1,0 +1,8 @@
+{
+  "typeId": "jump_east",
+  "displayName": "Jump East",
+  "description": "Allows jumping east but blocks west movement",
+  "behaviorScript": "TileBehaviors/jump_east.csx",
+  "flags": "BlocksMovement"
+}
+

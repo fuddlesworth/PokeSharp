@@ -1,0 +1,8 @@
+{
+  "typeId": "ice",
+  "displayName": "Ice Tile",
+  "description": "Forces sliding movement",
+  "behaviorScript": "TileBehaviors/ice.csx",
+  "flags": "ForcesMovement, DisablesRunning"
+}
+

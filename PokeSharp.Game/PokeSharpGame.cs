@@ -30,6 +30,7 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
     private readonly IEntityFactoryService _entityFactory;
     private readonly ScriptService _scriptService;
     private readonly TypeRegistry<BehaviorDefinition> _behaviorRegistry;
+    private readonly TypeRegistry<TileBehaviorDefinition> _tileBehaviorRegistry;
     private readonly IScriptingApiProvider _apiProvider;
     private readonly ILoggerFactory _loggerFactory;
     private readonly PerformanceMonitor _performanceMonitor;
@@ -51,6 +52,7 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
     private GameInitializer _gameInitializer = null!;
     private MapInitializer _mapInitializer = null!;
     private NPCBehaviorInitializer _npcBehaviorInitializer = null!;
+    private TileBehaviorInitializer _tileBehaviorInitializer = null!;
     private SpriteTextureLoader? _spriteTextureLoader;
 
     // Async initialization state
@@ -71,6 +73,7 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
         _entityFactory = options.EntityFactory ?? throw new ArgumentNullException(nameof(options), $"{nameof(options.EntityFactory)} cannot be null");
         _scriptService = options.ScriptService ?? throw new ArgumentNullException(nameof(options), $"{nameof(options.ScriptService)} cannot be null");
         _behaviorRegistry = options.BehaviorRegistry ?? throw new ArgumentNullException(nameof(options), $"{nameof(options.BehaviorRegistry)} cannot be null");
+        _tileBehaviorRegistry = options.TileBehaviorRegistry ?? throw new ArgumentNullException(nameof(options), $"{nameof(options.TileBehaviorRegistry)} cannot be null");
         _performanceMonitor = options.PerformanceMonitor ?? throw new ArgumentNullException(nameof(options), $"{nameof(options.PerformanceMonitor)} cannot be null");
         _inputManager = options.InputManager ?? throw new ArgumentNullException(nameof(options), $"{nameof(options.InputManager)} cannot be null");
         _playerFactory = options.PlayerFactory ?? throw new ArgumentNullException(nameof(options), $"{nameof(options.PlayerFactory)} cannot be null");
@@ -105,8 +108,11 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
         if (_scriptService is IAsyncDisposable scriptServiceDisposable)
             await scriptServiceDisposable.DisposeAsync();
 
-        if (_behaviorRegistry is IAsyncDisposable registryDisposable)
-            await registryDisposable.DisposeAsync();
+        if (_behaviorRegistry is IAsyncDisposable behaviorRegistryDisposable)
+            await behaviorRegistryDisposable.DisposeAsync();
+
+        if (_tileBehaviorRegistry is IAsyncDisposable tileBehaviorRegistryDisposable)
+            await tileBehaviorRegistryDisposable.DisposeAsync();
 
         _world?.Dispose();
 
@@ -163,7 +169,7 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
             var assetManagerLogger = _loggerFactory.CreateLogger<AssetManager>();
             var assetManager = new AssetManager(GraphicsDevice, "Assets", assetManagerLogger);
 
-            // Create PropertyMapperRegistry for tile property mapping (collision, ledges, etc.)
+            // Create PropertyMapperRegistry for tile property mapping (collision, behaviors, etc.)
             var mapperRegistryLogger = _loggerFactory.CreateLogger<PropertyMapperRegistry>();
             var propertyMapperRegistry = PropertyMapperServiceExtensions.CreatePropertyMapperRegistry(
                 mapperRegistryLogger
@@ -234,6 +240,20 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
             // Initialize NPC behavior system
             await _npcBehaviorInitializer.InitializeAsync();
 
+            // Initialize tile behavior system
+            var tileBehaviorInitializerLogger = _loggerFactory.CreateLogger<TileBehaviorInitializer>();
+            _tileBehaviorInitializer = new TileBehaviorInitializer(
+                tileBehaviorInitializerLogger,
+                _loggerFactory,
+                _world,
+                _systemManager,
+                _tileBehaviorRegistry,
+                _scriptService,
+                _apiProvider,
+                _gameInitializer.CollisionService
+            );
+            await _tileBehaviorInitializer.InitializeAsync();
+
             // Set sprite texture loader in MapInitializer (must be called after MapInitializer is created)
             // This was moved from LoadSpriteTextures() to here due to initialization order
             if (_spriteTextureLoader != null)
@@ -242,7 +262,7 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
             }
 
             // Load test map and create map entity (NEW: Definition-based loading)
-            await _mapInitializer.LoadMap("LittlerootTown");
+            await _mapInitializer.LoadMap("test-map");
 
             // Create test player entity
             _playerFactory.CreatePlayer(

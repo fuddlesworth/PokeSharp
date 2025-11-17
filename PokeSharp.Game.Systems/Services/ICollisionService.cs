@@ -20,7 +20,7 @@ public interface ICollisionService
     /// <param name="mapId">The map identifier.</param>
     /// <param name="tileX">The X coordinate in tile space.</param>
     /// <param name="tileY">The Y coordinate in tile space.</param>
-    /// <param name="fromDirection">Optional direction moving FROM (for ledge checking).</param>
+    /// <param name="fromDirection">Optional direction moving FROM (for behavior checking).</param>
     /// <param name="entityElevation">The elevation of the entity checking collision (default: standard elevation).</param>
     /// <returns>True if the position is walkable from this direction, false if blocked.</returns>
     bool IsPositionWalkable(
@@ -32,24 +32,6 @@ public interface ICollisionService
     );
 
     /// <summary>
-    /// Checks if a tile is a Pokemon-style ledge (has TileLedge component).
-    /// </summary>
-    /// <param name="mapId">The map identifier.</param>
-    /// <param name="tileX">The X coordinate in tile space.</param>
-    /// <param name="tileY">The Y coordinate in tile space.</param>
-    /// <returns>True if the tile is a ledge, false otherwise.</returns>
-    bool IsLedge(int mapId, int tileX, int tileY);
-
-    /// <summary>
-    /// Gets the allowed jump direction for a ledge tile.
-    /// </summary>
-    /// <param name="mapId">The map identifier.</param>
-    /// <param name="tileX">The X coordinate in tile space.</param>
-    /// <param name="tileY">The Y coordinate in tile space.</param>
-    /// <returns>The direction you can jump across this ledge, or None if not a ledge.</returns>
-    Direction GetLedgeJumpDirection(int mapId, int tileX, int tileY);
-
-    /// <summary>
     /// Optimized method that queries collision data for a tile position ONCE.
     /// Eliminates redundant spatial hash queries by returning all collision info in a single call.
     /// </summary>
@@ -57,21 +39,21 @@ public interface ICollisionService
     /// <param name="tileX">The X coordinate in tile space.</param>
     /// <param name="tileY">The Y coordinate in tile space.</param>
     /// <param name="entityElevation">The elevation of the entity checking collision.</param>
-    /// <param name="fromDirection">Direction moving FROM (for ledge blocking).</param>
+    /// <param name="fromDirection">Direction moving FROM (for behavior blocking).</param>
     /// <returns>
     /// Tuple containing:
-    /// - isLedge: Whether the tile contains a ledge
-    /// - allowedJumpDir: The direction you can jump across the ledge (or None)
+    /// - isJumpTile: Whether the tile contains a jump behavior
+    /// - allowedJumpDir: The direction you can jump (or None)
     /// - isWalkable: Whether the position is walkable from the given direction
     /// </returns>
     /// <remarks>
     /// PERFORMANCE OPTIMIZATION:
     /// This method performs a SINGLE spatial query instead of multiple separate calls.
-    /// Before: IsLedge() + GetLedgeJumpDirection() + IsPositionWalkable() = 3 spatial queries
+    /// Before: Multiple separate queries for jump behavior and collision checking
     /// After: GetTileCollisionInfo() = 1 spatial query
     /// Result: ~75% reduction in collision query overhead (6.25ms -> ~1.5ms)
     /// </remarks>
-    (bool isLedge, Direction allowedJumpDir, bool isWalkable) GetTileCollisionInfo(
+    (bool isJumpTile, Direction allowedJumpDir, bool isWalkable) GetTileCollisionInfo(
         int mapId,
         int tileX,
         int tileY,

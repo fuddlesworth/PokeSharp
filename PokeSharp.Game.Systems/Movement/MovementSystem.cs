@@ -1,13 +1,16 @@
 using System.Collections.Concurrent;
 using Arch.Core;
+using Arch.Core.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using PokeSharp.Engine.Common.Logging;
 using PokeSharp.Engine.Core.Systems;
 using PokeSharp.Engine.Systems.Management;
+using PokeSharp.Game.Components.Interfaces;
 using PokeSharp.Game.Components.Maps;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Components.Rendering;
+using PokeSharp.Game.Components.Tiles;
 using PokeSharp.Game.Systems.Services;
 using EcsQueries = PokeSharp.Engine.Systems.Queries.Queries;
 
@@ -43,20 +46,34 @@ public class MovementSystem : SystemBase, IUpdateSystem
     private readonly Dictionary<int, int> _tileSizeCache = new();
 
     private readonly ICollisionService _collisionService;
+    private readonly ISpatialQuery? _spatialQuery;
+    private ITileBehaviorSystem? _tileBehaviorSystem;
 
     /// <summary>
     ///     Creates a new MovementSystem with required collision service and optional logger.
     /// </summary>
     /// <param name="collisionService">Collision service for movement validation (required).</param>
+    /// <param name="spatialQuery">Optional spatial query for getting tile entities.</param>
     /// <param name="logger">Optional logger for system diagnostics.</param>
     public MovementSystem(
         ICollisionService collisionService,
+        ISpatialQuery? spatialQuery = null,
         ILogger<MovementSystem>? logger = null
     )
     {
         _collisionService =
             collisionService ?? throw new ArgumentNullException(nameof(collisionService));
+        _spatialQuery = spatialQuery;
         _logger = logger;
+    }
+
+    /// <summary>
+    ///     Sets the tile behavior system for behavior-based movement.
+    ///     Called after TileBehaviorSystem is initialized.
+    /// </summary>
+    public void SetTileBehaviorSystem(ITileBehaviorSystem tileBehaviorSystem)
+    {
+        _tileBehaviorSystem = tileBehaviorSystem;
     }
 
     /// <summary>
@@ -266,7 +283,7 @@ public class MovementSystem : SystemBase, IUpdateSystem
 
     /// <summary>
     ///     Attempts to start movement in the specified direction with collision checking.
-    ///     Handles normal movement, ledge jumping, and directional blocking.
+    ///     Handles normal movement, jump behavior, and directional blocking.
     /// </summary>
     private void TryStartMovement(
         World world,
@@ -314,11 +331,52 @@ public class MovementSystem : SystemBase, IUpdateSystem
             ? elevation.Value
             : Elevation.Default;
 
+        // NEW: Check for forced movement from current tile (before calculating target)
+        if (_tileBehaviorSystem != null && _spatialQuery != null)
+        {
+            var currentTileEntities = _spatialQuery.GetEntitiesAt(position.MapId, position.X, position.Y);
+            foreach (var tileEntity in currentTileEntities)
+            {
+                if (tileEntity.Has<TileBehavior>())
+                {
+                    var forcedDir = _tileBehaviorSystem.GetForcedMovement(world, tileEntity, direction);
+                    if (forcedDir != Direction.None)
+                    {
+                        direction = forcedDir; // Override direction with forced movement
+                        // Recalculate target position with new direction
+                        targetX = position.X;
+                        targetY = position.Y;
+                        switch (forcedDir)
+                        {
+                            case Direction.North:
+                                targetY--;
+                                break;
+                            case Direction.South:
+                                targetY++;
+                                break;
+                            case Direction.West:
+                                targetX--;
+                                break;
+                            case Direction.East:
+                                targetX++;
+                                break;
+                        }
+                        // Recheck bounds
+                        if (!IsWithinMapBounds(world, position.MapId, targetX, targetY))
+                        {
+                            return;
+                        }
+                        break; // Only check first tile with behavior
+                    }
+                }
+            }
+        }
+
         // OPTIMIZATION: Query collision info once instead of 2-3 separate calls
         // This eliminates redundant spatial hash queries (6.25ms -> ~1.5ms, 75% reduction)
-        // Before: IsLedge() + GetLedgeJumpDirection() + IsPositionWalkable() = 3 queries
+        // Before: Multiple separate queries for jump behavior and collision checking
         // After: GetTileCollisionInfo() = 1 query
-        var (isLedge, allowedJumpDir, isTargetWalkable) = _collisionService.GetTileCollisionInfo(
+        var (isJumpTile, allowedJumpDir, isTargetWalkable) = _collisionService.GetTileCollisionInfo(
             position.MapId,
             targetX,
             targetY,
@@ -326,8 +384,8 @@ public class MovementSystem : SystemBase, IUpdateSystem
             direction
         );
 
-        // Check if target tile is a Pokemon ledge
-        if (isLedge)
+        // Check if target tile has jump behavior
+        if (isJumpTile)
         {
             // Only allow jumping in the specified direction
             if (direction == allowedJumpDir)
@@ -355,7 +413,7 @@ public class MovementSystem : SystemBase, IUpdateSystem
                 // Check if landing position is within bounds
                 if (!IsWithinMapBounds(world, position.MapId, jumpLandX, jumpLandY))
                 {
-                    _logger?.LogLedgeJumpBlocked(jumpLandX, jumpLandY);
+                    _logger?.LogJumpBlocked(jumpLandX, jumpLandY);
                     return; // Can't jump outside map bounds
                 }
 
@@ -371,7 +429,7 @@ public class MovementSystem : SystemBase, IUpdateSystem
                 // Check if landing position is valid (not blocked)
                 if (!isLandingWalkable)
                 {
-                    _logger?.LogLedgeLandingBlocked(jumpLandX, jumpLandY);
+                    _logger?.LogJumpLandingBlocked(jumpLandX, jumpLandY);
                     return; // Can't jump if landing is blocked
                 }
 
@@ -386,14 +444,14 @@ public class MovementSystem : SystemBase, IUpdateSystem
 
                 // Update facing direction
                 movement.FacingDirection = direction;
-                _logger?.LogLedgeJump(targetX, targetY, jumpLandX, jumpLandY, GetDirectionName(direction));
+                _logger?.LogJump(targetX, targetY, jumpLandX, jumpLandY, GetDirectionName(direction));
             }
 
             // Block all other directions
             return;
         }
 
-        // Check collision with directional blocking (for Pokemon ledges)
+        // Check collision with directional blocking (for jump behaviors)
         // OPTIMIZATION: Use cached walkability from earlier GetTileCollisionInfo() call
         if (!isTargetWalkable)
         {

@@ -36,7 +36,7 @@ public static class PropertyMapperServiceExtensions
 
         // Register tile property mappers
         registry.RegisterMapper(new CollisionMapper());
-        registry.RegisterMapper(new LedgeMapper());
+        registry.RegisterMapper(new TileBehaviorMapper());
         registry.RegisterMapper(new EncounterZoneMapper());
         registry.RegisterMapper(new TerrainTypeMapper());
         registry.RegisterMapper(new ScriptMapper());

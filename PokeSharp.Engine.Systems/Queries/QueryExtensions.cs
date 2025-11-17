@@ -134,16 +134,6 @@ public static class QueryExtensions
         return collision.IsSolid;
     }
 
-    /// <summary>
-    ///     Checks if an entity is a ledge (has TileLedge component).
-    /// </summary>
-    /// <param name="entity">Entity to check.</param>
-    /// <returns>True if entity is a ledge.</returns>
-    public static bool IsLedge(this Entity entity)
-    {
-        return entity.Has<TileLedge>();
-    }
-
     // ============================================================================
     // ENTITY TYPE QUERY HELPERS
     // ============================================================================

@@ -129,6 +129,7 @@ public class TiledJsonParser
             {
                 Id = objElement.TryGetProperty("id", out var objId) ? objId.GetInt32() : 0,
                 Name = objElement.TryGetProperty("name", out var objName) ? objName.GetString() ?? "" : "",
+                Type = objElement.TryGetProperty("type", out var type) ? type.GetString() : null,
                 X = objElement.TryGetProperty("x", out var x) ? x.GetSingle() : 0,
                 Y = objElement.TryGetProperty("y", out var y) ? y.GetSingle() : 0,
                 Width = objElement.TryGetProperty("width", out var width) ? width.GetSingle() : 0,

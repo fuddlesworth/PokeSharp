@@ -1,6 +1,8 @@
+using Arch.Core;
 using Arch.Core.Extensions;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Core.Systems;
+using PokeSharp.Game.Components.Interfaces;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Components.Rendering;
 using PokeSharp.Game.Components.Tiles;
@@ -17,11 +19,31 @@ public class CollisionService : ICollisionService
 {
     private readonly ILogger<CollisionService>? _logger;
     private readonly ISpatialQuery _spatialQuery;
+    private ITileBehaviorSystem? _tileBehaviorSystem;
+    private World? _world;
 
     public CollisionService(ISpatialQuery spatialQuery, ILogger<CollisionService>? logger = null)
     {
         _spatialQuery = spatialQuery ?? throw new ArgumentNullException(nameof(spatialQuery));
         _logger = logger;
+    }
+
+    /// <summary>
+    ///     Sets the world for behavior-based collision checking.
+    ///     Called after World is initialized.
+    /// </summary>
+    public void SetWorld(World world)
+    {
+        _world = world;
+    }
+
+    /// <summary>
+    ///     Sets the tile behavior system for behavior-based collision checking.
+    ///     Called after TileBehaviorSystem is initialized.
+    /// </summary>
+    public void SetTileBehaviorSystem(ITileBehaviorSystem tileBehaviorSystem)
+    {
+        _tileBehaviorSystem = tileBehaviorSystem;
     }
 
     /// <summary>
@@ -65,6 +87,21 @@ public class CollisionService : ICollisionService
                 }
             }
 
+            // NEW: Check tile behaviors first (if TileBehaviorSystem is available)
+            if (_tileBehaviorSystem != null && _world != null && entity.Has<TileBehavior>())
+            {
+                var toDirection = fromDirection != Direction.None ? fromDirection.Opposite() : Direction.None;
+                if (_tileBehaviorSystem.IsMovementBlocked(
+                    _world,
+                    entity,
+                    fromDirection,
+                    toDirection
+                ))
+                {
+                    return false; // Behavior blocks movement
+                }
+            }
+
             // Check if entity has Collision component
             if (entity.Has<Collision>())
             {
@@ -72,67 +109,14 @@ public class CollisionService : ICollisionService
 
                 if (collision.IsSolid)
                 {
-                    // Check ledge logic if entity has TileLedge component
-                    if (entity.Has<TileLedge>() && fromDirection != Direction.None)
-                    {
-                        ref var ledge = ref entity.Get<TileLedge>();
-
-                        // Check if ledge blocks this specific direction
-                        if (ledge.IsBlockedFrom(fromDirection))
-                            return false; // Ledge blocks this direction (can't climb up)
-                        // Ledge allows this direction (can jump down) - continue checking other entities
-                        // Don't return true yet, there might be other blocking entities
-                    }
-                    else
-                    {
-                        // Solid collision without ledge - always blocks
-                        return false;
-                    }
+                    // Solid collision blocks movement
+                    return false;
                 }
             }
         }
 
         // No blocking collisions found
         return true;
-    }
-
-    /// <summary>
-    ///     Checks if a tile is a Pokemon-style ledge (has TileLedge component).
-    /// </summary>
-    /// <param name="mapId">The map identifier.</param>
-    /// <param name="tileX">The X coordinate in tile space.</param>
-    /// <param name="tileY">The Y coordinate in tile space.</param>
-    /// <returns>True if the tile is a ledge, false otherwise.</returns>
-    public bool IsLedge(int mapId, int tileX, int tileY)
-    {
-        var entities = _spatialQuery.GetEntitiesAt(mapId, tileX, tileY);
-
-        foreach (var entity in entities)
-            if (entity.Has<TileLedge>())
-                return true;
-
-        return false;
-    }
-
-    /// <summary>
-    ///     Gets the allowed jump direction for a ledge tile.
-    /// </summary>
-    /// <param name="mapId">The map identifier.</param>
-    /// <param name="tileX">The X coordinate in tile space.</param>
-    /// <param name="tileY">The Y coordinate in tile space.</param>
-    /// <returns>The direction you can jump across this ledge, or None if not a ledge.</returns>
-    public Direction GetLedgeJumpDirection(int mapId, int tileX, int tileY)
-    {
-        var entities = _spatialQuery.GetEntitiesAt(mapId, tileX, tileY);
-
-        foreach (var entity in entities)
-            if (entity.Has<TileLedge>())
-            {
-                ref var ledge = ref entity.Get<TileLedge>();
-                return ledge.JumpDirection;
-            }
-
-        return Direction.None;
     }
 
     /// <summary>
@@ -143,21 +127,21 @@ public class CollisionService : ICollisionService
     /// <param name="tileX">The X coordinate in tile space.</param>
     /// <param name="tileY">The Y coordinate in tile space.</param>
     /// <param name="entityElevation">The elevation of the entity checking collision.</param>
-    /// <param name="fromDirection">Direction moving FROM (for ledge blocking).</param>
+    /// <param name="fromDirection">Direction moving FROM (for behavior blocking).</param>
     /// <returns>
     /// Tuple containing:
-    /// - isLedge: Whether the tile contains a ledge
-    /// - allowedJumpDir: The direction you can jump across the ledge (or None)
+    /// - isJumpTile: Whether the tile contains a jump behavior
+    /// - allowedJumpDir: The direction you can jump (or None)
     /// - isWalkable: Whether the position is walkable from the given direction
     /// </returns>
     /// <remarks>
     /// PERFORMANCE OPTIMIZATION:
     /// This method performs a SINGLE spatial query instead of multiple separate calls.
-    /// Before: IsLedge() + GetLedgeJumpDirection() + IsPositionWalkable() = 3 spatial queries
+    /// Before: Multiple separate queries for jump behavior and collision checking
     /// After: GetTileCollisionInfo() = 1 spatial query
     /// Result: ~75% reduction in collision query overhead (6.25ms -> ~1.5ms)
     /// </remarks>
-    public (bool isLedge, Direction allowedJumpDir, bool isWalkable) GetTileCollisionInfo(
+    public (bool isJumpTile, Direction allowedJumpDir, bool isWalkable) GetTileCollisionInfo(
         int mapId,
         int tileX,
         int tileY,
@@ -168,11 +152,11 @@ public class CollisionService : ICollisionService
         // OPTIMIZATION: Single spatial query instead of 2-3 separate queries
         var entities = _spatialQuery.GetEntitiesAt(mapId, tileX, tileY);
 
-        bool isLedge = false;
+        bool isJumpTile = false;
         Direction allowedJumpDir = Direction.None;
         bool isWalkable = true;
 
-        // Single pass through entities - check for ledge AND collision in one loop
+        // Single pass through entities - check for jump behavior AND collision in one loop
         foreach (var entity in entities)
         {
             // Check elevation first - only collide with entities at same elevation
@@ -186,15 +170,23 @@ public class CollisionService : ICollisionService
                 }
             }
 
-            // Check for ledge component
-            if (entity.Has<TileLedge>())
+            // Check for jump behavior
+            if (_tileBehaviorSystem != null && _world != null && entity.Has<TileBehavior>())
             {
-                ref var ledge = ref entity.Get<TileLedge>();
-                isLedge = true;
-                allowedJumpDir = ledge.JumpDirection;
+                // fromDirection is the direction the player is moving (e.g., South)
+                // But from the tile's perspective, they're coming FROM the opposite direction (North)
+                // So we pass the opposite direction to GetJumpDirection
+                var tileFromDirection = fromDirection != Direction.None ? fromDirection.Opposite() : Direction.None;
+                var jumpDir = _tileBehaviorSystem.GetJumpDirection(_world, entity, tileFromDirection);
+                if (jumpDir != Direction.None)
+                {
+                    isJumpTile = true;
+                    allowedJumpDir = jumpDir;
+                }
 
-                // Check if ledge blocks this direction
-                if (fromDirection != Direction.None && ledge.IsBlockedFrom(fromDirection))
+                // Check if behavior blocks movement
+                var toDirection = fromDirection != Direction.None ? fromDirection.Opposite() : Direction.None;
+                if (_tileBehaviorSystem.IsMovementBlocked(_world, entity, fromDirection, toDirection))
                 {
                     isWalkable = false;
                 }
@@ -207,16 +199,12 @@ public class CollisionService : ICollisionService
 
                 if (collision.IsSolid)
                 {
-                    // If it's a ledge, walkability was already determined above
-                    if (!entity.Has<TileLedge>())
-                    {
-                        // Solid collision without ledge - always blocks
-                        isWalkable = false;
-                    }
+                    // Solid collision blocks movement
+                    isWalkable = false;
                 }
             }
         }
 
-        return (isLedge, allowedJumpDir, isWalkable);
+        return (isJumpTile, allowedJumpDir, isWalkable);
     }
 }

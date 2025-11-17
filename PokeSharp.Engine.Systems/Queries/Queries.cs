@@ -115,12 +115,6 @@ public static class Queries
         Player
     >();
 
-    /// <summary>
-    ///     Ledge tiles with position and ledge component.
-    ///     Used for Pokemon-style ledge jumping logic.
-    /// </summary>
-    public static readonly QueryDescription Ledges = QueryCache.Get<TilePosition, TileLedge>();
-
     // ============================================================================
     // RENDERING QUERIES
     // ============================================================================

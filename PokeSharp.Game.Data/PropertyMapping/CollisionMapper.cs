@@ -11,21 +11,15 @@ public class CollisionMapper : IEntityPropertyMapper<Collision>
 {
     public bool CanMap(Dictionary<string, object> properties)
     {
-        // Can map if has "solid", "collidable", or "ledge_direction" property
-        // (ledges are solid tiles with special behavior)
+        // Can map if has "solid" or "collidable" property
         return properties.ContainsKey("solid")
-            || properties.ContainsKey("collidable")
-            || properties.ContainsKey("ledge_direction");
+            || properties.ContainsKey("collidable");
     }
 
     public Collision Map(Dictionary<string, object> properties)
     {
         if (!CanMap(properties))
             throw new InvalidOperationException("Cannot map properties to Collision component");
-
-        // Check for ledge (ledges are always solid)
-        if (properties.ContainsKey("ledge_direction"))
-            return new Collision(true);
 
         // Check for solid property
         if (properties.TryGetValue("solid", out var solidValue))

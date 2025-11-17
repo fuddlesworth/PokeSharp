@@ -47,6 +47,11 @@ public sealed class PokeSharpGameOptions
     public TypeRegistry<BehaviorDefinition> BehaviorRegistry { get; init; } = null!;
 
     /// <summary>
+    ///     Gets or sets the tile behavior registry.
+    /// </summary>
+    public TypeRegistry<TileBehaviorDefinition> TileBehaviorRegistry { get; init; } = null!;
+
+    /// <summary>
     ///     Gets or sets the scripting API provider.
     /// </summary>
     public IScriptingApiProvider ApiProvider { get; init; } = null!;

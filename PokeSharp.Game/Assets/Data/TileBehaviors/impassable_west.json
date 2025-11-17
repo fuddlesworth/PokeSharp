@@ -1,0 +1,8 @@
+{
+  "typeId": "impassable_west",
+  "displayName": "Impassable West",
+  "description": "Blocks movement from west",
+  "behaviorScript": "TileBehaviors/impassable_west.csx",
+  "flags": "BlocksMovement"
+}
+

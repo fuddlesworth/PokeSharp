@@ -1,14 +1,14 @@
 {
-  "templateId": "tile/ledge/up",
-  "name": "Ledge (up)",
+  "templateId": "tile/jump/north",
+  "name": "Jump (north)",
   "tag": "tile",
   "baseTemplateId": "tile/wall",
   "version": "1.0.0",
   "components": [
     {
-      "type": "TileLedge",
+      "type": "TileBehavior",
       "data": {
-        "direction": "north"
+        "behaviorTypeId": "jump_north"
       }
     }
   ]

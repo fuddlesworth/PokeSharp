@@ -50,6 +50,13 @@ public static class TemplateServicesExtensions
             return new TypeRegistry<BehaviorDefinition>("Assets/Data/Behaviors", logger);
         });
 
+        // Tile Behavior Registry
+        services.AddSingleton(sp =>
+        {
+            var logger = sp.GetRequiredService<ILogger<TypeRegistry<TileBehaviorDefinition>>>();
+            return new TypeRegistry<TileBehaviorDefinition>("Assets/Data/TileBehaviors", logger);
+        });
+
         return services;
     }
 }

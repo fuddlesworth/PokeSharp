@@ -74,6 +74,7 @@ try
             EntityFactory = sp.GetRequiredService<IEntityFactoryService>(),
             ScriptService = sp.GetRequiredService<ScriptService>(),
             BehaviorRegistry = sp.GetRequiredService<TypeRegistry<BehaviorDefinition>>(),
+            TileBehaviorRegistry = sp.GetRequiredService<TypeRegistry<TileBehaviorDefinition>>(),
             ApiProvider = sp.GetRequiredService<IScriptingApiProvider>(),
             PerformanceMonitor = sp.GetRequiredService<PerformanceMonitor>(),
             InputManager = sp.GetRequiredService<InputManager>(),

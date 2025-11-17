@@ -80,17 +80,17 @@
       ]
     },
     {
-      "id": 7,
+      "id": 6,
       "properties": [
         {
-          "name": "ledge",
+          "name": "solid",
           "type": "bool",
           "value": true
         },
         {
-          "name": "ledge_direction",
+          "name": "behavior_type",
           "type": "string",
-          "value": "down"
+          "value": "jump_south"
         }
       ]
     }

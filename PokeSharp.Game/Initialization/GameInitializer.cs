@@ -54,6 +54,11 @@ public class GameInitializer(
     public MapLifecycleManager MapLifecycleManager { get; private set; } = null!;
 
     /// <summary>
+    ///     Gets the collision service.
+    /// </summary>
+    public CollisionService CollisionService { get; private set; } = null!;
+
+    /// <summary>
     ///     Gets the sprite texture loader (set after Initialize is called).
     /// </summary>
     public SpriteTextureLoader SpriteTextureLoader { get; private set; } = null!;
@@ -106,11 +111,12 @@ public class GameInitializer(
 
         // Register CollisionService (not a system, but a service used by MovementSystem)
         var collisionServiceLogger = loggerFactory.CreateLogger<CollisionService>();
-        var collisionService = new CollisionService(SpatialHashSystem, collisionServiceLogger);
+        CollisionService = new CollisionService(SpatialHashSystem, collisionServiceLogger);
+        CollisionService.SetWorld(world);
 
         // Register MovementSystem (Priority: 100, handles movement and collision checking)
         var movementLogger = loggerFactory.CreateLogger<MovementSystem>();
-        var movementSystem = new MovementSystem(collisionService, movementLogger);
+        var movementSystem = new MovementSystem(CollisionService, SpatialHashSystem, movementLogger);
         systemManager.RegisterUpdateSystem(movementSystem);
 
         // Register PathfindingSystem (Priority: 300, processes MovementRoute waypoints with A* pathfinding)

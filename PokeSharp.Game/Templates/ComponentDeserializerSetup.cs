@@ -91,21 +91,6 @@ public static class ComponentDeserializerSetup
             return new Elevation(level);
         });
 
-        // TileLedge
-        registry.Register<TileLedge>(json =>
-        {
-            var directionStr = json.GetProperty("direction").GetString();
-            var direction = directionStr switch
-            {
-                "north" or "North" or "up" or "Up" => Direction.North,
-                "south" or "South" or "down" or "Down" => Direction.South,
-                "west" or "West" or "left" or "Left" => Direction.West,
-                "east" or "East" or "right" or "Right" => Direction.East,
-                _ => throw new ArgumentException($"Invalid direction: {directionStr}"),
-            };
-            return new TileLedge(direction);
-        });
-
         // EncounterZone
         registry.Register<EncounterZone>(json =>
         {

@@ -19,23 +19,23 @@ public static partial class LogMessages
     [LoggerMessage(
         EventId = 1001,
         Level = LogLevel.Debug,
-        Message = "Ledge jump blocked: landing out of bounds ({X}, {Y})"
+        Message = "Jump blocked: landing out of bounds ({X}, {Y})"
     )]
-    public static partial void LogLedgeJumpBlocked(this ILogger logger, int x, int y);
+    public static partial void LogJumpBlocked(this ILogger logger, int x, int y);
 
     [LoggerMessage(
         EventId = 1002,
         Level = LogLevel.Debug,
-        Message = "Ledge jump blocked: landing position blocked ({X}, {Y})"
+        Message = "Jump blocked: landing position blocked ({X}, {Y})"
     )]
-    public static partial void LogLedgeLandingBlocked(this ILogger logger, int x, int y);
+    public static partial void LogJumpLandingBlocked(this ILogger logger, int x, int y);
 
     [LoggerMessage(
         EventId = 1003,
         Level = LogLevel.Debug,
-        Message = "Ledge jump: ({StartX}, {StartY}) -> ({EndX}, {EndY}) direction: {Direction}"
+        Message = "Jump: ({StartX}, {StartY}) -> ({EndX}, {EndY}) direction: {Direction}"
     )]
-    public static partial void LogLedgeJump(
+    public static partial void LogJump(
         this ILogger logger,
         int startX,
         int startY,
