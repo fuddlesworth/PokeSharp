@@ -35,15 +35,24 @@ public class TypeRegistry<T>(string dataPath, ILogger logger) : IAsyncDisposable
 
     /// <summary>
     ///     Asynchronously disposes resources and clears script instances.
+    ///     Errors during disposal are logged but do not prevent other resources from being disposed.
     /// </summary>
     public async ValueTask DisposeAsync()
     {
         // Dispose any script instances that implement IAsyncDisposable
         foreach (var script in _scripts.Values)
+            try
+            {
             if (script is IAsyncDisposable asyncDisposable)
                 await asyncDisposable.DisposeAsync();
             else if (script is IDisposable disposable)
                 disposable.Dispose();
+            }
+            catch (Exception ex)
+            {
+                // Log disposal errors but continue disposing other resources
+                _logger.LogError(ex, "Error disposing script instance of type {Type}", script.GetType().Name);
+            }
 
         Clear();
         GC.SuppressFinalize(this);

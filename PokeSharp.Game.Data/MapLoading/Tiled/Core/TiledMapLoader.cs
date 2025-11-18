@@ -355,8 +355,12 @@ public static class TiledMapLoader
             return ConvertBytesToUInts(bytes);
         }
 
-        // Unknown data type - return empty array (production code should not use Console.WriteLine)
-        // TODO: Add proper logging via ILogger when available
+        // Unknown data type - return empty array
+        _logger?.LogWarning(
+            "Unknown layer data type for layer '{LayerName}'. Expected array or string, got {ValueKind}",
+            layer.Name,
+            dataElement.ValueKind
+        );
         return Array.Empty<uint>();
     }
 

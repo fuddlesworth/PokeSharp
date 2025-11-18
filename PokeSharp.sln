@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeSharp.Engine.Rendering"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeSharp.Engine.Input", "PokeSharp.Engine.Input\PokeSharp.Engine.Input.csproj", "{AEE0368C-C901-4BDE-AA3E-A1C838273642}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeSharp.Engine.Scenes", "PokeSharp.Engine.Scenes\PokeSharp.Engine.Scenes.csproj", "{F3A8B2C1-9D4E-4F5A-8B6C-7E9F0A1B2C3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeSharp.Engine.Scenes.Tests", "tests\PokeSharp.Engine.Scenes.Tests\PokeSharp.Engine.Scenes.Tests.csproj", "{A1B2C3D4-E5F6-4A7B-8C9D-0E1F2A3B4C5D}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeSharp.Game.Components", "PokeSharp.Game.Components\PokeSharp.Game.Components.csproj", "{8102B091-D90E-4135-8FEC-3108946E02D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeSharp.Game.Systems", "PokeSharp.Game.Systems\PokeSharp.Game.Systems.csproj", "{1E638242-0D18-46A3-9F12-1400A5CDFC4F}"
@@ -59,6 +63,14 @@ Global
 		{AEE0368C-C901-4BDE-AA3E-A1C838273642}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEE0368C-C901-4BDE-AA3E-A1C838273642}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEE0368C-C901-4BDE-AA3E-A1C838273642}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3A8B2C1-9D4E-4F5A-8B6C-7E9F0A1B2C3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3A8B2C1-9D4E-4F5A-8B6C-7E9F0A1B2C3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3A8B2C1-9D4E-4F5A-8B6C-7E9F0A1B2C3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3A8B2C1-9D4E-4F5A-8B6C-7E9F0A1B2C3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1B2C3D4-E5F6-4A7B-8C9D-0E1F2A3B4C5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B2C3D4-E5F6-4A7B-8C9D-0E1F2A3B4C5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B2C3D4-E5F6-4A7B-8C9D-0E1F2A3B4C5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B2C3D4-E5F6-4A7B-8C9D-0E1F2A3B4C5D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8102B091-D90E-4135-8FEC-3108946E02D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8102B091-D90E-4135-8FEC-3108946E02D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8102B091-D90E-4135-8FEC-3108946E02D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -78,5 +90,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{34CA3CA9-AF96-450D-B528-850D9C955312} = {A0295B21-2A7E-41B4-B75C-75CDDC38CC65}
+		{A1B2C3D4-E5F6-4A7B-8C9D-0E1F2A3B4C5D} = {A0295B21-2A7E-41B4-B75C-75CDDC38CC65}
 	EndGlobalSection
 EndGlobal

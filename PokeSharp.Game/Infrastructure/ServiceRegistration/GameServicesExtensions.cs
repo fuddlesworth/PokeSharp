@@ -4,6 +4,7 @@ using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Game.Data.Factories;
 using PokeSharp.Game.Infrastructure.Diagnostics;
 using PokeSharp.Game.Initialization;
+using PokeSharp.Game.Initialization.Factories;
 using PokeSharp.Game.Input;
 using PokeSharp.Game.Systems;
 using PokeSharp.Game.Systems.Services;

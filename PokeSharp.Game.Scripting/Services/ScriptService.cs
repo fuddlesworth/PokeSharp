@@ -1,14 +1,11 @@
 using System.Collections.Concurrent;
 using System.Reflection;
 using Arch.Core;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using PokeSharp.Engine.Common.Logging;
 using PokeSharp.Game.Scripting.Api;
-using PokeSharp.Game.Scripting.Compilation;
 using PokeSharp.Game.Scripting.Runtime;
 
 namespace PokeSharp.Game.Scripting.Services;
@@ -16,19 +13,20 @@ namespace PokeSharp.Game.Scripting.Services;
 /// <summary>
 ///     Service for compiling and executing Roslyn C# scripts (.csx files).
 ///     Provides hot-reload support and script caching.
+///     Orchestrates script compilation, caching, instantiation, and initialization.
 /// </summary>
 public class ScriptService : IAsyncDisposable
 {
+    /// <summary>
+    ///     Static cache for OnInitialize MethodInfo to avoid expensive reflection lookups.
+    ///     Thread-safe ConcurrentDictionary keyed by script type.
+    /// </summary>
+    private static readonly ConcurrentDictionary<Type, MethodInfo> _onInitializeMethodCache = new();
+
     private readonly IScriptingApiProvider _apis;
-    private readonly ScriptOptions _defaultOptions = ScriptCompilationOptions.GetDefaultOptions();
+    private readonly ScriptCache _cache;
+    private readonly ScriptCompiler _compiler;
     private readonly ILogger<ScriptService> _logger;
-
-    private readonly ConcurrentDictionary<
-        string,
-        (Script<object> compiled, Type? scriptType)
-    > _scriptCache = new();
-
-    private readonly ConcurrentDictionary<string, object> _scriptInstances = new();
     private readonly string _scriptsBasePath;
 
     /// <summary>
@@ -36,10 +34,12 @@ public class ScriptService : IAsyncDisposable
     /// </summary>
     /// <param name="scriptsBasePath">Base path for script files.</param>
     /// <param name="logger">Logger instance.</param>
+    /// <param name="loggerFactory">Logger factory for creating child loggers.</param>
     /// <param name="apis">Scripting API provider.</param>
     public ScriptService(
         string scriptsBasePath,
         ILogger<ScriptService> logger,
+        ILoggerFactory loggerFactory,
         IScriptingApiProvider apis
     )
     {
@@ -47,6 +47,11 @@ public class ScriptService : IAsyncDisposable
             scriptsBasePath ?? throw new ArgumentNullException(nameof(scriptsBasePath));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _apis = apis ?? throw new ArgumentNullException(nameof(apis));
+
+        // Create dependencies
+        var compilerLogger = loggerFactory.CreateLogger<ScriptCompiler>();
+        _compiler = new ScriptCompiler(compilerLogger);
+        _cache = new ScriptCache();
     }
 
     /// <summary>
@@ -57,7 +62,7 @@ public class ScriptService : IAsyncDisposable
         var exceptions = new List<Exception>();
 
         // Dispose any scripts that implement IAsyncDisposable
-        foreach (var instance in _scriptInstances.Values)
+        foreach (var instance in _cache.GetAllInstances())
             try
             {
                 if (instance is IAsyncDisposable asyncDisposable)
@@ -71,7 +76,7 @@ public class ScriptService : IAsyncDisposable
                 exceptions.Add(ex);
             }
 
-        ClearCache();
+        _cache.Clear();
         GC.SuppressFinalize(this);
 
         if (exceptions.Count > 0)
@@ -89,6 +94,13 @@ public class ScriptService : IAsyncDisposable
         if (string.IsNullOrWhiteSpace(scriptPath))
             throw new ArgumentException("Script path cannot be null or empty", nameof(scriptPath));
 
+        // Check cache first
+        if (_cache.TryGetInstance(scriptPath, out var cachedInstance))
+        {
+            _logger.LogDebug("Returning cached script instance for {Path}", scriptPath);
+            return cachedInstance;
+        }
+
         var fullPath = Path.Combine(_scriptsBasePath, scriptPath);
         if (!File.Exists(fullPath))
         {
@@ -98,47 +110,43 @@ public class ScriptService : IAsyncDisposable
 
         try
         {
+            // Read script code
             var scriptCode = await File.ReadAllTextAsync(fullPath);
 
-            // Script should already end with "new ClassName()" to return an instance
-            // If it doesn't, we'll log an error
-            var script = CSharpScript.Create<object>(scriptCode, _defaultOptions);
+            // Check if we have a cached compiled script
+            Script<object>? script = null;
+            Type? scriptType = null;
 
-            // Compile the script
-            var diagnostics = script.Compile();
-            if (diagnostics.Any(d => d.Severity == DiagnosticSeverity.Error))
+            if (_cache.TryGetCompiled(scriptPath, out var cachedScript, out scriptType))
             {
-                _logger.LogError("Script compilation failed for {Path}:", scriptPath);
-                foreach (
-                    var diagnostic in diagnostics.Where(d => d.Severity == DiagnosticSeverity.Error)
-                )
-                    _logger.LogError("  {Message}", diagnostic.GetMessage());
-                return null;
+                script = cachedScript;
+            }
+            else
+            {
+                // Compile the script
+                script = _compiler.Compile(scriptCode, scriptPath);
+                if (script == null)
+                    return null;
+
+                // Cache the compiled script
+                scriptType = null; // Will be set after execution
+                _cache.CacheCompiled(scriptPath, script, null);
             }
 
             // Execute script to get the instance
-            var result = await script.RunAsync();
-            var instance = result.ReturnValue;
-
+            var instance = await _compiler.ExecuteAsync(script, scriptPath);
             if (instance == null)
-            {
-                _logger.LogError("Script {Path} did not return an instance", scriptPath);
                 return null;
+
+            // Update cache with script type
+            if (scriptType == null)
+            {
+                scriptType = instance.GetType();
+                _cache.CacheCompiled(scriptPath, script, scriptType);
             }
 
-            if (instance is not TypeScriptBase)
-            {
-                _logger.LogError(
-                    "Script {Path} returned {Type}, expected TypeScriptBase",
-                    scriptPath,
-                    instance.GetType().Name
-                );
-                return null;
-            }
-
-            // Cache the compiled script and instance
-            _scriptCache[scriptPath] = (script, instance.GetType());
-            _scriptInstances[scriptPath] = instance;
+            // Cache the instance
+            _cache.CacheInstance(scriptPath, instance);
 
             _logger.LogWorkflowStatus(
                 "Script loaded",
@@ -147,11 +155,20 @@ public class ScriptService : IAsyncDisposable
             );
             return instance;
         }
-        catch (CompilationErrorException ex)
+        catch (FileNotFoundException ex)
+        {
+            _logger.LogWarning(
+                ex,
+                "Script file not found: {Path}",
+                scriptPath
+            );
+            return null;
+        }
+        catch (IOException ex)
         {
             _logger.LogError(
                 ex,
-                "Script compilation error in {Path}: {Message}",
+                "I/O error reading script file {Path}: {Message}",
                 scriptPath,
                 ex.Message
             );
@@ -159,7 +176,7 @@ public class ScriptService : IAsyncDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error loading script {Path}", scriptPath);
+            _logger.LogError(ex, "Unexpected error loading script {Path}", scriptPath);
             return null;
         }
     }
@@ -183,7 +200,7 @@ public class ScriptService : IAsyncDisposable
             var newInstance = await LoadScriptAsync(scriptPath);
 
             // Then dispose and replace old instance atomically
-            if (_scriptInstances.TryGetValue(scriptPath, out var oldInstance))
+            if (_cache.TryRemoveInstance(scriptPath, out var oldInstance))
             {
                 if (oldInstance is IAsyncDisposable asyncDisposable)
                     await asyncDisposable.DisposeAsync();
@@ -210,7 +227,7 @@ public class ScriptService : IAsyncDisposable
         if (string.IsNullOrWhiteSpace(scriptPath))
             return null;
 
-        return _scriptInstances.TryGetValue(scriptPath, out var instance) ? instance : null;
+        return _cache.TryGetInstance(scriptPath, out var instance) ? instance : null;
     }
 
     /// <summary>
@@ -250,21 +267,28 @@ public class ScriptService : IAsyncDisposable
 
         try
         {
-            // Call the protected OnInitialize method using reflection
-            var initMethod = scriptBase
-                .GetType()
-                .GetMethod(
-                    "OnInitialize",
-                    BindingFlags.NonPublic
-                        | BindingFlags.Public
-                        | BindingFlags.Instance
-                        | BindingFlags.FlattenHierarchy
-                );
+            // Get or cache the OnInitialize method using reflection
+            var scriptType = scriptBase.GetType();
+            var initMethod = _onInitializeMethodCache.GetOrAdd(
+                scriptType,
+                type =>
+                {
+                    var method = type.GetMethod(
+                        "OnInitialize",
+                        BindingFlags.NonPublic
+                            | BindingFlags.Public
+                            | BindingFlags.Instance
+                            | BindingFlags.FlattenHierarchy
+                    );
 
-            if (initMethod == null)
-                throw new InvalidOperationException(
-                    $"OnInitialize method not found on {scriptBase.GetType().FullName}"
-                );
+                    if (method == null)
+                        throw new InvalidOperationException(
+                            $"OnInitialize method not found on {type.FullName}"
+                        );
+
+                    return method;
+                }
+            );
 
             // Create ScriptContext for initialization (use NullLogger if no logger provided)
             var effectiveLogger = logger ?? NullLogger.Instance;
@@ -296,7 +320,7 @@ public class ScriptService : IAsyncDisposable
     /// <param name="scriptPath">Relative path to the .csx file.</param>
     public bool IsScriptLoaded(string scriptPath)
     {
-        return _scriptInstances.ContainsKey(scriptPath);
+        return _cache.IsInstanceCached(scriptPath);
     }
 
     /// <summary>
@@ -304,8 +328,7 @@ public class ScriptService : IAsyncDisposable
     /// </summary>
     public void ClearCache()
     {
-        _scriptCache.Clear();
-        _scriptInstances.Clear();
+        _cache.Clear();
         _logger.LogInformation("Cleared script cache");
     }
 }

@@ -4,12 +4,12 @@ using PokeSharp.Game.Data.MapLoading.Tiled.Tmx;
 namespace PokeSharp.Game.Data.Validation;
 
 /// <summary>
-///     Validates TMX document structure and data integrity
+///     Validates TMX document structure and data integrity.
+///     Validates required elements, bounds, and file references.
 /// </summary>
 /// <remarks>
-///     TODO: This validator needs to be rewritten to work with the current TMX structure.
-///     The original implementation was written for a different data model where layer.Data
-///     was a List&lt;TmxTile&gt; instead of int[,]. Temporarily stubbed to allow builds.
+///     This validator works with the current TMX structure where layer.Data is a uint[] array.
+///     For layer data validation (dimensions, tile GIDs), see <see cref="LayerValidator"/>.
 /// </remarks>
 public class TmxDocumentValidator : IMapValidator
 {
@@ -29,7 +29,6 @@ public class TmxDocumentValidator : IMapValidator
     {
         var result = new ValidationResult();
 
-        // TODO: Restore full validation after fixing type mismatches
         ValidateRequiredElements(map, result);
         ValidateBounds(map, result);
 

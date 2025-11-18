@@ -1,20 +1,28 @@
 using Arch.Core;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using PokeSharp.Engine.Core.Types;
 using PokeSharp.Engine.Rendering.Assets;
+using PokeSharp.Engine.Scenes;
+using PokeSharp.Engine.Scenes.Scenes;
 using PokeSharp.Engine.Systems.Factories;
 using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Engine.Systems.Pooling;
 using PokeSharp.Game.Data.Loading;
 using PokeSharp.Game.Data.MapLoading.Tiled.Core;
-using PokeSharp.Game.Data.PropertyMapping;
 using PokeSharp.Game.Data.Services;
 using PokeSharp.Game.Infrastructure.Configuration;
 using PokeSharp.Game.Infrastructure.Diagnostics;
 using PokeSharp.Game.Infrastructure.Services;
+using Microsoft.Extensions.Options;
 using PokeSharp.Game.Initialization;
+using PokeSharp.Game.Initialization.Initializers;
+using PokeSharp.Game.Initialization.Factories;
+using PokeSharp.Game.Initialization.Pipeline;
+using PokeSharp.Game.Initialization.Pipeline.Steps;
 using PokeSharp.Game.Input;
+using PokeSharp.Game.Scenes;
 using PokeSharp.Game.Scripting.Api;
 using PokeSharp.Game.Scripting.Services;
 using PokeSharp.Game.Systems;
@@ -36,6 +44,7 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
     private readonly GraphicsDeviceManager _graphics;
     private readonly InputManager _inputManager;
     private readonly ILoggerFactory _loggerFactory;
+    private readonly GameConfiguration _gameConfig;
     private readonly MapDefinitionService _mapDefinitionService;
     private readonly NpcDefinitionService _npcDefinitionService;
     private readonly PerformanceMonitor _performanceMonitor;
@@ -50,25 +59,51 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
     private readonly TypeRegistry<TileBehaviorDefinition> _tileBehaviorRegistry;
     private readonly World _world;
 
-    private GameInitializer _gameInitializer = null!;
-    private Task? _initializationTask;
+    private IGameInitializer _gameInitializer = null!;
+    private Task<GameplayScene>? _initializationTask;
+    private LoadingProgress? _loadingProgress;
+    private SceneManager? _sceneManager;
+    private readonly IServiceProvider _services; // Required for SceneManager and scenes that need DI
 
     // Async initialization state
-    private bool _isInitialized;
-    private MapInitializer _mapInitializer = null!;
-    private NPCBehaviorInitializer _npcBehaviorInitializer = null!;
+    private IMapInitializer _mapInitializer = null!;
     private SpriteTextureLoader? _spriteTextureLoader;
-    private TileBehaviorInitializer _tileBehaviorInitializer = null!;
 
     /// <summary>
     ///     Initializes a new instance of the PokeSharpGame class.
     /// </summary>
-    public PokeSharpGame(ILoggerFactory loggerFactory, PokeSharpGameOptions options)
+    /// <param name="loggerFactory">Factory for creating loggers.</param>
+    /// <param name="options">Game configuration options containing all required dependencies.</param>
+    /// <param name="services">Service provider required for SceneManager and scenes that use dependency injection.</param>
+    /// <param name="gameConfig">Game configuration loaded from appsettings.json.</param>
+    /// <remarks>
+    ///     <para>
+    ///         <b>Design Decision:</b> This constructor accepts a <see cref="PokeSharpGameOptions" /> object
+    ///         containing 20+ dependencies as an intentional design choice to:
+    ///     </para>
+    ///     <list type="bullet">
+    ///         <item>Keep all dependencies explicit and visible</item>
+    ///         <item>Avoid hidden service locator dependencies</item>
+    ///         <item>Make it clear what the game class requires</item>
+    ///         <item>Simplify dependency management compared to nested configuration objects</item>
+    ///     </list>
+    ///     <para>
+    ///         The <see cref="PokeSharpGameOptions" /> pattern groups related dependencies while maintaining
+    ///         explicit visibility. This is a deliberate trade-off favoring clarity over a smaller constructor signature.
+    ///     </para>
+    /// </remarks>
+    public PokeSharpGame(
+        ILoggerFactory loggerFactory,
+        PokeSharpGameOptions options,
+        IServiceProvider? services = null,
+        IOptions<GameConfiguration>? gameConfig = null
+    )
     {
         ArgumentNullException.ThrowIfNull(loggerFactory);
         ArgumentNullException.ThrowIfNull(options);
 
         _loggerFactory = loggerFactory;
+        _gameConfig = gameConfig?.Value ?? new GameConfiguration();
         _world =
             options.World
             ?? throw new ArgumentNullException(
@@ -172,18 +207,24 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
                 $"{nameof(options.TemplateCacheInitializer)} cannot be null"
             );
 
-        _graphics = new GraphicsDeviceManager(this);
-        Content.RootDirectory = "Content";
+        // Service provider is required for SceneManager and scenes that use dependency injection
+        // Note: This is not a service locator anti-pattern - it's passed to SceneManager which
+        // provides it to scenes for their own DI needs (e.g., LoadingScene, GameplayScene)
+        _services = services ?? throw new ArgumentNullException(
+            nameof(services),
+            "Service provider is required for scene management"
+        );
 
-        // Window configuration - defaults to 800x600
-        // Can be overridden via configuration in the future
-        var windowConfig = GameWindowConfig.CreateDefault();
+        _graphics = new GraphicsDeviceManager(this);
+        Content.RootDirectory = _gameConfig.Initialization.ContentRoot;
+
+        // Window configuration from appsettings.json
+        var windowConfig = _gameConfig.Window;
         _graphics.PreferredBackBufferWidth = windowConfig.Width;
         _graphics.PreferredBackBufferHeight = windowConfig.Height;
         IsMouseVisible = windowConfig.IsMouseVisible;
+        Window.Title = windowConfig.Title;
         _graphics.ApplyChanges();
-
-        Window.Title = "PokeSharp - Week 1 Demo";
     }
 
     /// <summary>
@@ -214,153 +255,84 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
     {
         base.Initialize();
 
+        // Create SceneManager (GraphicsDevice is now available after base.Initialize())
+        var sceneManagerLogger = _loggerFactory.CreateLogger<SceneManager>();
+        _sceneManager = new SceneManager(GraphicsDevice, _services, sceneManagerLogger);
+
+        // Create LoadingProgress
+        _loadingProgress = new LoadingProgress();
+
         // Start async initialization (non-blocking)
-        // Game updates will be paused until this completes
-        _initializationTask = InitializeAsync();
+        _initializationTask = InitializeGameplaySceneAsync(_loadingProgress);
+
+        // Create and show loading scene immediately
+        var loadingSceneLogger = _loggerFactory.CreateLogger<LoadingScene>();
+        // Convert Task<GameplayScene> to Task<IScene> for LoadingScene
+        Task<IScene> initializationTaskAsIScene = _initializationTask.ContinueWith(t => (IScene)t.Result);
+        var loadingScene = new LoadingScene(
+            GraphicsDevice,
+            _services,
+            loadingSceneLogger,
+            _loadingProgress,
+            initializationTaskAsIScene,
+            _sceneManager,
+            this // Pass the game instance for Gum initialization
+        );
+
+        _sceneManager.ChangeScene(loadingScene);
     }
 
     /// <summary>
     ///     Performs async initialization including data loading and system setup.
     ///     This runs asynchronously to avoid blocking the main thread.
+    ///     Returns a fully initialized GameplayScene.
     /// </summary>
-    private async Task InitializeAsync()
+    /// <param name="progress">The progress tracker for reporting initialization progress.</param>
+    /// <returns>A fully initialized GameplayScene.</returns>
+    private async Task<GameplayScene> InitializeGameplaySceneAsync(LoadingProgress progress)
     {
         try
         {
-            // Load game data definitions (NPCs, trainers, etc.) BEFORE initializing any systems
-            try
-            {
-                await _dataLoader.LoadAllAsync("Assets/Data");
-                _loggerFactory
-                    .CreateLogger<PokeSharpGame>()
-                    .LogInformation("Game data definitions loaded successfully");
-            }
-            catch (Exception ex)
-            {
-                _loggerFactory
-                    .CreateLogger<PokeSharpGame>()
-                    .LogError(
-                        ex,
-                        "Failed to load game data definitions - continuing with default templates"
-                    );
-            }
+            var logger = _loggerFactory.CreateLogger<PokeSharpGame>();
 
-            // Initialize template cache asynchronously (loads base templates, mods, and applies patches)
-            await _templateCacheInitializer.InitializeAsync();
-            _loggerFactory
-                .CreateLogger<PokeSharpGame>()
-                .LogInformation("Template cache initialized successfully");
-
-            // Create services that depend on GraphicsDevice
-            var assetManagerLogger = _loggerFactory.CreateLogger<AssetManager>();
-            var assetManager = new AssetManager(GraphicsDevice, "Assets", assetManagerLogger);
-
-            // Create PropertyMapperRegistry for tile property mapping (collision, behaviors, etc.)
-            var mapperRegistryLogger = _loggerFactory.CreateLogger<PropertyMapperRegistry>();
-            var propertyMapperRegistry =
-                PropertyMapperServiceExtensions.CreatePropertyMapperRegistry(mapperRegistryLogger);
-
-            var mapLoaderLogger = _loggerFactory.CreateLogger<MapLoader>();
-            var mapLoader = new MapLoader(
-                assetManager,
-                _systemManager,
-                propertyMapperRegistry,
-                _entityFactory,
-                _npcDefinitionService,
-                _mapDefinitionService,
-                mapLoaderLogger
-            );
-
-            // Create initializers
-            var gameInitializerLogger = _loggerFactory.CreateLogger<GameInitializer>();
-            _gameInitializer = new GameInitializer(
-                gameInitializerLogger,
+            // Create initialization context with all dependencies
+            var context = new InitializationContext(
+                GraphicsDevice,
                 _loggerFactory,
+                _dataLoader,
+                _templateCacheInitializer,
                 _world,
                 _systemManager,
-                assetManager,
                 _entityFactory,
-                mapLoader,
                 _poolManager,
-                _spriteLoader
-            );
-
-            // Pre-load sprite manifests FIRST (required before SpriteAnimationSystem runs)
-            await _spriteLoader.LoadAllSpritesAsync();
-            _loggerFactory.CreateLogger<PokeSharpGame>().LogInformation("Sprite manifests loaded");
-
-            // Initialize core game systems (SpriteAnimationSystem needs sprite cache ready)
-            _gameInitializer.Initialize(GraphicsDevice);
-
-            // Set SpatialQuery on the MapApiService that was created by DI (used by ScriptService)
-            _apiProvider.Map.SetSpatialQuery(_gameInitializer.SpatialHashSystem);
-
-            // Load sprite textures FIRST (creates MapLifecycleManager via SetSpriteTextureLoader)
-            LoadSpriteTextures();
-
-            // NOW create MapInitializer (MapLifecycleManager exists now)
-            var mapInitializerLogger = _loggerFactory.CreateLogger<MapInitializer>();
-            _mapInitializer = new MapInitializer(
-                mapInitializerLogger,
-                _world,
-                mapLoader,
-                _gameInitializer.SpatialHashSystem,
-                _gameInitializer.RenderSystem,
-                _gameInitializer.MapLifecycleManager // This is now initialized!
-            );
-
-            var npcBehaviorInitializerLogger =
-                _loggerFactory.CreateLogger<NPCBehaviorInitializer>();
-            _npcBehaviorInitializer = new NPCBehaviorInitializer(
-                npcBehaviorInitializerLogger,
-                _loggerFactory,
-                _world,
-                _systemManager,
+                _spriteLoader,
                 _behaviorRegistry,
-                _scriptService,
-                _apiProvider
-            );
-
-            // Initialize NPC behavior system
-            await _npcBehaviorInitializer.InitializeAsync();
-
-            // Initialize tile behavior system
-            var tileBehaviorInitializerLogger =
-                _loggerFactory.CreateLogger<TileBehaviorInitializer>();
-            _tileBehaviorInitializer = new TileBehaviorInitializer(
-                tileBehaviorInitializerLogger,
-                _loggerFactory,
-                _world,
-                _systemManager,
                 _tileBehaviorRegistry,
                 _scriptService,
                 _apiProvider,
-                _gameInitializer.CollisionService
-            );
-            await _tileBehaviorInitializer.InitializeAsync();
-
-            // Set sprite texture loader in MapInitializer (must be called after MapInitializer is created)
-            // This was moved from LoadSpriteTextures() to here due to initialization order
-            if (_spriteTextureLoader != null)
-                _mapInitializer.SetSpriteTextureLoader(_spriteTextureLoader);
-
-            // Load test map and create map entity (NEW: Definition-based loading)
-            await _mapInitializer.LoadMap("test-map");
-
-            // Create test player entity
-            _playerFactory.CreatePlayer(
-                10,
-                8,
-                _graphics.PreferredBackBufferWidth,
-                _graphics.PreferredBackBufferHeight
+                _npcDefinitionService,
+                _mapDefinitionService,
+                _playerFactory,
+                _inputManager,
+                _performanceMonitor,
+                _gameTime,
+                _graphics,
+                _services,
+                _gameConfig
             );
 
-            // Mark initialization as complete
-            _isInitialized = true;
+            // Build and execute the initialization pipeline
+            var pipeline = BuildInitializationPipeline(logger);
+            await pipeline.ExecuteAsync(context, progress);
 
-            _loggerFactory
-                .CreateLogger<PokeSharpGame>()
-                .LogInformation("Game initialization completed successfully");
+            // Extract initialized components from context
+            _gameInitializer = context.GameInitializer!;
+            _mapInitializer = context.MapInitializer!;
+            _spriteTextureLoader = context.SpriteTextureLoader;
+
+            logger.LogInformation("Game initialization completed successfully");
+
+            return context.GameplayScene!;
         }
         catch (Exception ex)
         {
@@ -368,113 +340,108 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
                 .CreateLogger<PokeSharpGame>()
                 .LogCritical(ex, "Fatal error during game initialization");
 
+            // Set error in progress so loading scene can display it
+            progress.Error = ex;
+            progress.IsComplete = true;
+
             // Rethrow to prevent game from running in broken state
             throw;
         }
     }
 
     /// <summary>
+    ///     Builds the initialization pipeline with all required steps in the correct order.
+    /// </summary>
+    /// <param name="logger">Logger instance.</param>
+    /// <returns>The configured initialization pipeline.</returns>
+    private InitializationPipeline BuildInitializationPipeline(ILogger logger)
+    {
+        var pipelineLogger = _loggerFactory.CreateLogger<InitializationPipeline>();
+        var pipeline = new InitializationPipeline(pipelineLogger);
+
+        // Phase 1: Load game data and templates
+        pipeline.AddStep(new LoadGameDataStep());
+        pipeline.AddStep(new InitializeTemplateCacheStep());
+
+        // Phase 2: Create services that depend on GraphicsDevice
+        pipeline.AddStep(new CreateGraphicsServicesStep());
+        pipeline.AddStep(new CreateGameInitializerStep());
+
+        // Phase 3: Load sprites and initialize systems
+        pipeline.AddStep(new LoadSpriteManifestsStep());
+        pipeline.AddStep(new InitializeGameSystemsStep());
+        pipeline.AddStep(new SetupApiProvidersStep());
+
+        // Phase 4: Initialize behavior systems
+        pipeline.AddStep(new LoadSpriteTexturesStep());
+        pipeline.AddStep(new CreateMapInitializerStep());
+        pipeline.AddStep(new InitializeBehaviorSystemsStep());
+
+        // Phase 5: Load map and create player
+        pipeline.AddStep(new LoadInitialMapStep());
+        pipeline.AddStep(new CreateInitialPlayerStep());
+
+        // Phase 6: Create and return gameplay scene
+        pipeline.AddStep(new CreateGameplaySceneStep());
+
+        return pipeline;
+    }
+
+    /// <summary>
     ///     Loads game content. Called by MonoGame during initialization.
-    ///     Content loading is handled in LoadSpriteTextures() after initialization.
+    ///     Content loading is handled by the initialization pipeline.
     /// </summary>
     protected override void LoadContent() { }
 
     /// <summary>
-    ///     Initializes lazy sprite loading system.
-    /// </summary>
-    private void LoadSpriteTextures()
-    {
-        // Create sprite texture loader for lazy loading
-        // Sprites will be loaded on-demand when first rendered
-        var spriteTextureLogger = _loggerFactory.CreateLogger<SpriteTextureLoader>();
-        _spriteTextureLoader = new SpriteTextureLoader(
-            _spriteLoader,
-            _gameInitializer.RenderSystem.AssetManager,
-            GraphicsDevice,
-            logger: spriteTextureLogger
-        );
-
-        // Register the loader with the render system for lazy loading
-        _gameInitializer.RenderSystem.SetSpriteTextureLoader(_spriteTextureLoader);
-
-        // PHASE 2: Set sprite loader in GameInitializer for MapLifecycleManager
-        // IMPORTANT: This creates MapLifecycleManager, so must be called BEFORE creating MapInitializer
-        _gameInitializer.SetSpriteTextureLoader(_spriteTextureLoader);
-
-        _loggerFactory
-            .CreateLogger<PokeSharpGame>()
-            .LogInformation("Sprite lazy loading initialized - sprites will load on-demand");
-    }
-
-    /// <summary>
     ///     Updates game logic.
+    ///     Delegates to SceneManager which handles scene updates.
     /// </summary>
     /// <param name="gameTime">Provides timing information.</param>
     protected override void Update(GameTime gameTime)
     {
-        // Wait for async initialization to complete before updating game logic
-        if (!_isInitialized)
+        // Always update SceneManager (even during initialization so LoadingScene can update)
+        _sceneManager?.Update(gameTime);
+
+        // Check for initialization errors
+        // LoadingScene will handle displaying the error, but we should still log it
+        if (_initializationTask?.IsFaulted == true)
         {
-            // Check if initialization task has completed
-            if (_initializationTask?.IsCompleted == true)
-            {
-                // Check for initialization errors
-                if (_initializationTask.IsFaulted)
-                {
-                    _loggerFactory
-                        .CreateLogger<PokeSharpGame>()
-                        .LogCritical(
-                            _initializationTask.Exception,
-                            "Game initialization failed - exiting"
-                        );
-                    Exit();
-                    return;
-                }
-
-                // Task completed successfully - mark as initialized
-                _isInitialized = true;
-            }
-            else
-            {
-                // Still initializing, skip this frame
-                return;
-            }
+            var exception = _initializationTask.Exception?.GetBaseException() 
+                ?? _initializationTask.Exception 
+                ?? new Exception("Unknown initialization error");
+            
+            _loggerFactory
+                .CreateLogger<PokeSharpGame>()
+                .LogCritical(
+                    exception,
+                    "Game initialization failed: {ErrorMessage}",
+                    exception.Message
+                );
+            
+            // Don't exit immediately - let LoadingScene display the error
+            // User can close the window manually
         }
-
-        var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        var totalSeconds = (float)gameTime.TotalGameTime.TotalSeconds;
-        var frameTimeMs = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-
-        // Update game time service
-        _gameTime.Update(totalSeconds, deltaTime);
-
-        // Update performance monitoring
-        _performanceMonitor.Update(frameTimeMs);
-
-        // Handle input (zoom, debug controls)
-        // Pass render system so InputManager can control profiling when P is pressed
-        _inputManager.ProcessInput(_world, deltaTime, _gameInitializer.RenderSystem);
-
-        // ✅ FIXED: Removed GraphicsDevice.Clear() from here
-        // Update all systems
-        _systemManager.Update(_world, deltaTime);
 
         base.Update(gameTime);
     }
 
     /// <summary>
     ///     Renders the game.
+    ///     Delegates all rendering to the current scene via SceneManager.
     /// </summary>
     /// <param name="gameTime">Provides timing information.</param>
     protected override void Draw(GameTime gameTime)
     {
-        // ✅ FIXED: Clear happens in Draw() now (correct MonoGame pattern)
-        GraphicsDevice.Clear(Color.CornflowerBlue);
+        // Always draw SceneManager (even during initialization so LoadingScene can render)
+        // Each scene handles its own screen clearing and rendering
+        _sceneManager?.Draw(gameTime);
 
-        // Only render if initialization is complete
-        if (_isInitialized)
-            // ✅ FIXED: Call Render() to execute rendering
-            _systemManager.Render(_world);
+        // If no scene is active, clear with default color
+        if (_sceneManager?.CurrentScene == null)
+        {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+        }
 
         base.Draw(gameTime);
     }

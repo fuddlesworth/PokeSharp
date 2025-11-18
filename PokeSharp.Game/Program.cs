@@ -3,6 +3,7 @@ using System.Text;
 using Arch.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using PokeSharp.Engine.Common.Logging;
 using PokeSharp.Engine.Core.Types;
 using PokeSharp.Engine.Systems.Factories;
@@ -14,6 +15,8 @@ using PokeSharp.Game.Data.Services;
 using PokeSharp.Game.Infrastructure.Diagnostics;
 using PokeSharp.Game.Infrastructure.Services;
 using PokeSharp.Game.Initialization;
+using PokeSharp.Game.Initialization.Initializers;
+using PokeSharp.Game.Initialization.Factories;
 using PokeSharp.Game.Input;
 using PokeSharp.Game.Scripting.Api;
 using PokeSharp.Game.Scripting.Services;
@@ -70,6 +73,7 @@ try
     services.AddSingleton<PokeSharpGame>(sp =>
     {
         var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
+        var gameConfig = sp.GetRequiredService<IOptions<PokeSharp.Game.Infrastructure.Configuration.GameConfiguration>>();
         var options = new PokeSharpGameOptions
         {
             World = sp.GetRequiredService<World>(),
@@ -90,7 +94,7 @@ try
             SpriteLoader = sp.GetRequiredService<SpriteLoader>(),
             TemplateCacheInitializer = sp.GetRequiredService<TemplateCacheInitializer>(),
         };
-        return new PokeSharpGame(loggerFactory, options);
+        return new PokeSharpGame(loggerFactory, options, sp, gameConfig);
     });
 
     // Build service provider

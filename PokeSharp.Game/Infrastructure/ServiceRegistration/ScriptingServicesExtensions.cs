@@ -51,8 +51,9 @@ public static class ScriptingServicesExtensions
         services.AddSingleton(sp =>
         {
             var logger = sp.GetRequiredService<ILogger<ScriptService>>();
+            var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
             var apis = sp.GetRequiredService<IScriptingApiProvider>();
-            return new ScriptService("Assets/Scripts", logger, apis);
+            return new ScriptService("Assets/Scripts", logger, loggerFactory, apis);
         });
 
         return services;

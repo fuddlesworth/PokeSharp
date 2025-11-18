@@ -1,5 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using PokeSharp.Game.Infrastructure.Configuration;
 using PokeSharp.Game.Infrastructure.ServiceRegistration;
 
 namespace PokeSharp.Game;
@@ -14,7 +16,7 @@ public static class ServiceCollectionExtensions
     ///     Orchestrates registration of all service groups.
     /// </summary>
     /// <param name="services">The service collection</param>
-    /// <param name="configuration">Optional configuration for Serilog (loaded from appsettings.json)</param>
+    /// <param name="configuration">Optional configuration (loaded from appsettings.json)</param>
     /// <param name="environment">Environment name (Development, Production, etc.)</param>
     public static IServiceCollection AddGameServices(
         this IServiceCollection services,
@@ -22,6 +24,22 @@ public static class ServiceCollectionExtensions
         string environment = "Production"
     )
     {
+        // Add configuration to DI if provided
+        if (configuration != null)
+        {
+            services.AddSingleton(configuration);
+            
+            // Configure game options from appsettings.json
+            services.Configure<GameConfiguration>(
+                configuration.GetSection(GameConfiguration.SectionName)
+            );
+        }
+        else
+        {
+            // If no configuration provided, use default values
+            services.Configure<GameConfiguration>(_ => { });
+        }
+
         // Configure logging first (other services may need ILoggerFactory)
         services.AddGameLogging(configuration, environment);
 
