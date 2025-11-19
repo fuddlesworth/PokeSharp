@@ -16,6 +16,7 @@ namespace PokeSharp.Engine.Input.Systems;
 ///     System that processes keyboard and gamepad input and converts it to movement requests.
 ///     Implements Pokemon-style grid-locked input with queue-based buffering for responsive controls.
 ///     Movement validation and collision checking happens in MovementSystem.
+///     Input blocking is handled by the scene manager (scenes with ExclusiveInput=true).
 /// </summary>
 public class InputSystem(
     int maxBufferSize = 5,
@@ -60,6 +61,10 @@ public class InputSystem(
         EnsureInitialized();
 
         _totalTime += deltaTime;
+
+        // Note: Input blocking is handled by the scene manager.
+        // Scenes with ExclusiveInput=true prevent this system from receiving input.
+        // The scene manager only updates scenes that should receive input.
 
         // Poll input states once per frame (not per entity)
         _prevKeyboardState = _keyboardState;

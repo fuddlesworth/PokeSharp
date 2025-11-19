@@ -2,7 +2,9 @@ using Arch.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
+using PokeSharp.Engine.Core.Services;
 using PokeSharp.Engine.Core.Types;
+using PokeSharp.Engine.Input.Systems;
 using PokeSharp.Engine.Rendering.Assets;
 using PokeSharp.Engine.Scenes;
 using PokeSharp.Engine.Scenes.Scenes;
@@ -27,6 +29,8 @@ using PokeSharp.Game.Scripting.Api;
 using PokeSharp.Game.Scripting.Services;
 using PokeSharp.Game.Systems;
 using PokeSharp.Game.Systems.Services;
+using PokeSharp.Engine.Debug.Systems;
+using PokeSharp.Engine.Debug.Logging;
 
 namespace PokeSharp.Game;
 
@@ -321,6 +325,9 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
                 _gameConfig
             );
 
+            // Add SceneManager to context (available after Initialize())
+            context.SceneManager = _sceneManager;
+
             // Build and execute the initialization pipeline
             var pipeline = BuildInitializationPipeline(logger);
             await pipeline.ExecuteAsync(context, progress);
@@ -381,7 +388,11 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
         pipeline.AddStep(new LoadInitialMapStep());
         pipeline.AddStep(new CreateInitialPlayerStep());
 
-        // Phase 6: Create and return gameplay scene
+        // Phase 6: Initialize debug console
+        // Note: Console is optional and will log warnings if dependencies are missing
+        pipeline.AddStep(new InitializeConsoleStep());
+
+        // Phase 7: Create and return gameplay scene
         pipeline.AddStep(new CreateGameplaySceneStep());
 
         return pipeline;
@@ -407,10 +418,10 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
         // LoadingScene will handle displaying the error, but we should still log it
         if (_initializationTask?.IsFaulted == true)
         {
-            var exception = _initializationTask.Exception?.GetBaseException() 
-                ?? _initializationTask.Exception 
+            var exception = _initializationTask.Exception?.GetBaseException()
+                ?? _initializationTask.Exception
                 ?? new Exception("Unknown initialization error");
-            
+
             _loggerFactory
                 .CreateLogger<PokeSharpGame>()
                 .LogCritical(
@@ -418,7 +429,7 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
                     "Game initialization failed: {ErrorMessage}",
                     exception.Message
                 );
-            
+
             // Don't exit immediately - let LoadingScene display the error
             // User can close the window manually
         }

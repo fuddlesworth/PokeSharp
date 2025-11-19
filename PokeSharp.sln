@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeSharp.Game.Data", "Poke
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeSharp.Game.Scripting", "PokeSharp.Game.Scripting\PokeSharp.Game.Scripting.csproj", "{B2CBF9DC-8EB2-4F43-9FAB-C8C6C6033D01}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeSharp.Engine.Debug", "PokeSharp.Engine.Debug\PokeSharp.Engine.Debug.csproj", "{C9D4E8F1-7A2B-4F89-9A3E-4B5C6D7E8F90}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{B2CBF9DC-8EB2-4F43-9FAB-C8C6C6033D01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2CBF9DC-8EB2-4F43-9FAB-C8C6C6033D01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2CBF9DC-8EB2-4F43-9FAB-C8C6C6033D01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9D4E8F1-7A2B-4F89-9A3E-4B5C6D7E8F90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9D4E8F1-7A2B-4F89-9A3E-4B5C6D7E8F90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9D4E8F1-7A2B-4F89-9A3E-4B5C6D7E8F90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9D4E8F1-7A2B-4F89-9A3E-4B5C6D7E8F90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{34CA3CA9-AF96-450D-B528-850D9C955312} = {A0295B21-2A7E-41B4-B75C-75CDDC38CC65}

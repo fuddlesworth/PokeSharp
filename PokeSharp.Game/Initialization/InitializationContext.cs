@@ -62,6 +62,11 @@ public class InitializationContext
     public GameplayScene? GameplayScene { get; set; }
 
     /// <summary>
+    ///     Gets or sets the scene manager (available after Initialize()).
+    /// </summary>
+    public PokeSharp.Engine.Scenes.SceneManager? SceneManager { get; set; }
+
+    /// <summary>
     ///     Gets the graphics device (available from start).
     /// </summary>
     public GraphicsDevice GraphicsDevice { get; }

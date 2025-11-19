@@ -1,0 +1,22 @@
+# Console Aliases - Auto-loaded on startup
+# Format: name=command
+# Use $1, $2, etc. for parameters
+
+# Quick API Shortcuts
+money=Player.GetMoney()
+pos=Player.GetPlayerPosition()
+mapid=Map.GetCurrentMapId()
+
+# Parameterized Teleport
+tp=Map.TransitionToMap(Map.GetCurrentMapId(), $1, $2)
+
+# Give Money Macro
+gm=Player.GiveMoney($1)
+
+# Flag Shortcuts
+setflag=GameState.SetFlag($1, true)
+clearflag=GameState.SetFlag($1, false)
+
+# Multi-Parameter Warp (map ID, x, y)
+warp=Map.TransitionToMap($1, $2, $3)
+

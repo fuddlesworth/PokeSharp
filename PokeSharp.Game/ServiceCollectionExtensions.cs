@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using PokeSharp.Engine.Debug;
 using PokeSharp.Game.Infrastructure.Configuration;
 using PokeSharp.Game.Infrastructure.ServiceRegistration;
 
@@ -28,7 +29,7 @@ public static class ServiceCollectionExtensions
         if (configuration != null)
         {
             services.AddSingleton(configuration);
-            
+
             // Configure game options from appsettings.json
             services.Configure<GameConfiguration>(
                 configuration.GetSection(GameConfiguration.SectionName)
@@ -50,6 +51,9 @@ public static class ServiceCollectionExtensions
         services.AddTemplateServices();
         services.AddScriptingServices();
         services.AddGameRuntimeServices();
+
+        // Debug Console Services
+        services.AddDebugConsole();
 
         return services;
     }

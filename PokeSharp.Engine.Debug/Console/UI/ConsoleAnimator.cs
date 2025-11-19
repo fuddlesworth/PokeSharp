@@ -1,0 +1,76 @@
+using Gum.Wireframe;
+using PokeSharp.Engine.Debug.Console.Configuration;
+
+namespace PokeSharp.Engine.Debug.Console.UI;
+
+/// <summary>
+///     Handles the Quake-style slide-down/slide-up animation for the console.
+/// </summary>
+public class ConsoleAnimator
+{
+    private float _currentY;
+    private float _targetY;
+    private const float AnimationSpeed = ConsoleConstants.Animation.SlideSpeed;
+
+    /// <summary>
+    ///     Gets whether the animation is currently running.
+    /// </summary>
+    public bool IsAnimating => Math.Abs(_currentY - _targetY) > 0.1f;
+
+    /// <summary>
+    ///     Gets the current Y position.
+    /// </summary>
+    public float CurrentY => _currentY;
+
+    /// <summary>
+    ///     Initializes the animator with a starting position.
+    /// </summary>
+    /// <param name="initialY">The initial Y position (typically negative to hide).</param>
+    public void Initialize(float initialY)
+    {
+        _currentY = initialY;
+        _targetY = initialY;
+    }
+
+    /// <summary>
+    ///     Shows the console by sliding down.
+    /// </summary>
+    public void Show()
+    {
+        _targetY = 0;
+    }
+
+    /// <summary>
+    ///     Hides the console by sliding up.
+    /// </summary>
+    /// <param name="hideY">The Y position when hidden (typically negative).</param>
+    public void Hide(float hideY)
+    {
+        _targetY = hideY;
+    }
+
+    /// <summary>
+    ///     Updates the animation and returns the new position.
+    /// </summary>
+    /// <param name="deltaTime">Time elapsed since last frame in seconds.</param>
+    /// <returns>The updated Y position.</returns>
+    public float Update(float deltaTime)
+    {
+        if (!IsAnimating)
+            return _currentY;
+
+        var direction = Math.Sign(_targetY - _currentY);
+        var distance = AnimationSpeed * deltaTime;
+
+        _currentY += direction * distance;
+
+        // Clamp to target
+        if (direction > 0)
+            _currentY = Math.Min(_currentY, _targetY);
+        else
+            _currentY = Math.Max(_currentY, _targetY);
+
+        return _currentY;
+    }
+}
+
