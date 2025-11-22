@@ -8,15 +8,12 @@
   <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.4.1" />
     <PackageReference Include="Gum.MonoGame" Version="2025.11.15.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.10" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.10" />
-    <PackageReference
-      Include="Microsoft.Extensions.Configuration.EnvironmentVariables"
-      Version="9.0.10"
-    />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.22" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.22" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.11" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.11" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.11" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.4" />
   </ItemGroup>
   <ItemGroup>
@@ -58,4 +55,30 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <!-- PKM2 Automatic Conversion Configuration -->
+  <PropertyGroup>
+    <!-- Enable automatic PKM2 conversion during build -->
+    <EnablePkm2Conversion>true</EnablePkm2Conversion>
+
+    <!-- Output directory for generated .pkm2 files -->
+    <Pkm2OutputDirectory>$(OutputPath)Assets/Maps</Pkm2OutputDirectory>
+
+    <!-- Only convert if source is newer than output (incremental build) -->
+    <Pkm2OnlyIfNewer>true</Pkm2OnlyIfNewer>
+
+    <!-- Continue build on conversion errors (set to false to fail on errors) -->
+    <Pkm2ContinueOnError>true</Pkm2ContinueOnError>
+
+    <!-- Enable verbose logging for conversion process -->
+    <Pkm2Verbose>false</Pkm2Verbose>
+  </PropertyGroup>
+
+  <!-- Specify which JSON files to convert -->
+  <ItemGroup>
+    <PkmapInput Include="Assets/Maps/**/*.json" Exclude="**/*.tiled-project;**/*.tiled-session" />
+  </ItemGroup>
+
+  <!-- Import PKM2 conversion targets (Temporarily disabled - see docs/PKM2_IMPLEMENTATION_COMPLETE.md) -->
+  <!-- <Import Project="$(MSBuildThisFileDirectory)../PokeSharp.Game.Data/MapLoading/Pkm2/MSBuild/Pkm2.targets" /> -->
 </Project>
