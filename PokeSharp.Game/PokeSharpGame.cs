@@ -228,6 +228,17 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
         _graphics.PreferredBackBufferHeight = windowConfig.Height;
         IsMouseVisible = windowConfig.IsMouseVisible;
         Window.Title = windowConfig.Title;
+
+        // IMPORTANT: Allow user resizing - this can fix mouse input issues on macOS
+        Window.AllowUserResizing = true;
+
+        // FIX for macOS mouse input lag (GitHub issue MonoGame#8011)
+        // Disabling both fixed timestep and VSync eliminates the significant input lag
+        // that occurs on macOS with default settings. This allows immediate mouse click detection.
+        // See: https://github.com/MonoGame/MonoGame/issues/8011
+        IsFixedTimeStep = false;
+        _graphics.SynchronizeWithVerticalRetrace = false;
+
         _graphics.ApplyChanges();
     }
 

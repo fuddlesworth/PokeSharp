@@ -21,6 +21,7 @@
     <ProjectReference Include="..\PokeSharp.Engine.Systems\PokeSharp.Engine.Systems.csproj" />
     <ProjectReference Include="..\PokeSharp.Engine.Scenes\PokeSharp.Engine.Scenes.csproj" />
     <ProjectReference Include="..\PokeSharp.Game.Scripting\PokeSharp.Game.Scripting.csproj" />
+    <ProjectReference Include="..\PokeSharp.Engine.UI.Debug\PokeSharp.Engine.UI.Debug.csproj" />
   </ItemGroup>
 </Project>
 

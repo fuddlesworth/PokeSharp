@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "PokeSharp.Game": {
+      "commandName": "Project",
+      "workingDirectory": "$(OutDir)"
+    }
+  }
+}
+
+

@@ -1,24 +1,29 @@
 using Microsoft.Xna.Framework;
 using System.Text.RegularExpressions;
+using PokeSharp.Engine.UI.Debug.Core;
 
 namespace PokeSharp.Engine.Debug.Console.Features;
 
 /// <summary>
 /// Provides syntax highlighting for C# code in the console.
+/// Uses UITheme for consistent coloring.
 /// </summary>
 public static partial class ConsoleSyntaxHighlighter
 {
-    // Color scheme
-    private static readonly Color KeywordColor = new(86, 156, 214);      // Blue
-    private static readonly Color StringColor = new(206, 145, 120);       // Orange/Brown
-    private static readonly Color InterpolationColor = new(255, 220, 100); // Bright Yellow
-    private static readonly Color NumberColor = new(181, 206, 168);       // Light Green
-    private static readonly Color CommentColor = new(106, 153, 85);       // Dark Green
-    private static readonly Color TypeColor = new(78, 201, 176);          // Cyan
-    private static readonly Color BuiltInTypeColor = new(86, 156, 214);   // Blue (same as keywords)
-    private static readonly Color MethodColor = new(220, 220, 170);       // Yellow
-    private static readonly Color OperatorColor = new(180, 180, 180);     // Light Gray
-    private static readonly Color DefaultColor = Color.White;
+    // Theme reference
+    private static UITheme Theme => UITheme.Dark;
+
+    // Color scheme (delegated to UITheme)
+    private static Color KeywordColor => Theme.SyntaxKeyword;
+    private static Color StringColor => Theme.SyntaxString;
+    private static Color InterpolationColor => Theme.SyntaxStringInterpolation;
+    private static Color NumberColor => Theme.SyntaxNumber;
+    private static Color CommentColor => Theme.SyntaxComment;
+    private static Color TypeColor => Theme.SyntaxType;
+    private static Color BuiltInTypeColor => Theme.SyntaxKeyword;  // Same as keywords
+    private static Color MethodColor => Theme.SyntaxMethod;
+    private static Color OperatorColor => Theme.SyntaxOperator;
+    private static Color DefaultColor => Theme.SyntaxDefault;
 
     // C# keywords
     private static readonly HashSet<string> Keywords = new()
@@ -78,83 +83,97 @@ public static partial class ConsoleSyntaxHighlighter
         // Find interpolated strings first (they need special handling)
         foreach (Match match in InterpolatedStringRegex().Matches(code))
         {
-            protectedRanges.Add((match.Index, match.Index + match.Length, StringColor, true));
+            protectedRanges.Add((match.Index, match.Index + match.Length - 1, StringColor, true));
         }
 
-        // Find regular strings (both " and @" styles)
+        // Find regular strings (skip if inside interpolated string)
         foreach (Match match in StringRegex().Matches(code))
         {
-            // Make sure it's not already covered by an interpolated string
-            bool overlaps = protectedRanges.Any(r =>
-                match.Index >= r.start && match.Index < r.end);
-            if (!overlaps)
+            if (!IsWithinAnyRange(match.Index, protectedRanges))
             {
-                protectedRanges.Add((match.Index, match.Index + match.Length, StringColor, false));
+                protectedRanges.Add((match.Index, match.Index + match.Length - 1, StringColor, false));
             }
         }
 
-        // Find comments (// and /* */ styles)
+        // Find comments (skip if inside strings)
         foreach (Match match in CommentRegex().Matches(code))
         {
-            protectedRanges.Add((match.Index, match.Index + match.Length, CommentColor, false));
+            if (!IsWithinAnyRange(match.Index, protectedRanges))
+            {
+                protectedRanges.Add((match.Index, match.Index + match.Length - 1, CommentColor, false));
+            }
         }
 
         // Sort ranges by start position
-        protectedRanges = protectedRanges.OrderBy(r => r.start).ToList();
+        protectedRanges.Sort((a, b) => a.start.CompareTo(b.start));
 
+        // Second pass: tokenize the rest
         while (position < code.Length)
         {
             // Check if we're in a protected range (string or comment)
-            var protectedRange = protectedRanges.FirstOrDefault(r => position >= r.start && position < r.end);
-            if (protectedRange != default)
+            var range = protectedRanges.FirstOrDefault(r => r.start <= position && position <= r.end);
+            if (range != default)
             {
-                if (protectedRange.isInterpolated)
+                // Extract the protected text
+                var text = code.Substring(range.start, range.end - range.start + 1);
+
+                // If it's an interpolated string, we need to highlight the interpolations
+                if (range.isInterpolated)
                 {
-                    // Handle interpolated string with special highlighting for {} parts
-                    HighlightInterpolatedString(code, protectedRange.start, protectedRange.end, segments);
-                    position = protectedRange.end;
+                    HighlightInterpolatedString(text, range.color, segments);
                 }
                 else
-            {
-                var text = code.Substring(protectedRange.start, protectedRange.end - protectedRange.start);
-                segments.Add(new ColoredSegment(text, protectedRange.color));
-                position = protectedRange.end;
-                }
-                continue;
-            }
-
-            // Check for numbers
-            var numberMatch = NumberRegex().Match(code, position);
-            if (numberMatch.Success && numberMatch.Index == position)
-            {
-                segments.Add(new ColoredSegment(numberMatch.Value, NumberColor));
-                position += numberMatch.Length;
-                continue;
-            }
-
-            // Check for multi-character operators first
-            bool operatorFound = false;
-            foreach (var op in Operators.OrderByDescending(o => o.Length))
-            {
-                if (position + op.Length <= code.Length &&
-                    code.Substring(position, op.Length) == op)
                 {
-                    segments.Add(new ColoredSegment(op, OperatorColor));
-                    position += op.Length;
-                    operatorFound = true;
-                    break;
+                    segments.Add(new ColoredSegment(text, range.color));
                 }
+
+                position = range.end + 1;
+                continue;
             }
-            if (operatorFound) continue;
 
-            // Check for identifiers (keywords, types, methods)
-            var identifierMatch = IdentifierRegex().Match(code, position);
-            if (identifierMatch.Success && identifierMatch.Index == position)
+            // Not in a protected range - process normally
+            var ch = code[position];
+
+            // Whitespace
+            if (char.IsWhiteSpace(ch))
             {
-                var word = identifierMatch.Value;
-                Color color;
+                var start = position;
+                while (position < code.Length && char.IsWhiteSpace(code[position]))
+                {
+                    position++;
+                }
+                segments.Add(new ColoredSegment(code.Substring(start, position - start), DefaultColor));
+                continue;
+            }
 
-                // Check if it's a keyword first
+            // Numbers
+            if (char.IsDigit(ch) || (ch == '.' && position + 1 < code.Length && char.IsDigit(code[position + 1])))
+            {
+                var start = position;
+                while (position < code.Length &&
+                       (char.IsLetterOrDigit(code[position]) || code[position] == '.' || code[position] == '_'))
+                {
+                    position++;
+                }
+                segments.Add(new ColoredSegment(code.Substring(start, position - start), NumberColor));
+                continue;
+            }
+
+            // Identifiers and keywords
+            if (char.IsLetter(ch) || ch == '_' || ch == '@')
+            {
+                var start = position;
+                position++; // Skip first char
+
+                while (position < code.Length && (char.IsLetterOrDigit(code[position]) || code[position] == '_'))
+                {
+                    position++;
+                }
+
+                var word = code.Substring(start, position - start);
+
+                // Determine color based on token type
+                Color color;
                 if (Keywords.Contains(word))
                 {
                     color = KeywordColor;
@@ -165,18 +184,19 @@ public static partial class ConsoleSyntaxHighlighter
                 }
                 else
                 {
-                    // Check if followed by '(' for method calls (before checking uppercase)
-                    var nextNonWhitespace = position + word.Length;
-                    while (nextNonWhitespace < code.Length && char.IsWhiteSpace(code[nextNonWhitespace]))
+                    // Check if it's a method call (next non-whitespace is '(')
+                    var nextPos = position;
+                    while (nextPos < code.Length && char.IsWhiteSpace(code[nextPos]))
                     {
-                        nextNonWhitespace++;
+                        nextPos++;
                     }
 
-                    if (nextNonWhitespace < code.Length && code[nextNonWhitespace] == '(')
+                    if (nextPos < code.Length && code[nextPos] == '(')
                     {
                         color = MethodColor;
                     }
-                    else if (char.IsUpper(word[0])) // Type names typically start with uppercase
+                    // Check if it's a type (next non-whitespace is alphanumeric - likely a variable declaration)
+                    else if (char.IsUpper(word[0]))
                     {
                         color = TypeColor;
                     }
@@ -187,12 +207,31 @@ public static partial class ConsoleSyntaxHighlighter
                 }
 
                 segments.Add(new ColoredSegment(word, color));
-                position += word.Length;
                 continue;
             }
 
-            // Any other character (punctuation, whitespace, single-char operators)
-            segments.Add(new ColoredSegment(code[position].ToString(), DefaultColor));
+            // Operators (multi-character first)
+            var foundOp = false;
+            for (int len = 3; len >= 1; len--)
+            {
+                if (position + len <= code.Length)
+                {
+                    var op = code.Substring(position, len);
+                    if (Operators.Contains(op))
+                    {
+                        segments.Add(new ColoredSegment(op, OperatorColor));
+                        position += len;
+                        foundOp = true;
+                        break;
+                    }
+                }
+            }
+
+            if (foundOp)
+                continue;
+
+            // Single character (punctuation, brackets, etc)
+            segments.Add(new ColoredSegment(ch.ToString(), DefaultColor));
             position++;
         }
 
@@ -200,84 +239,117 @@ public static partial class ConsoleSyntaxHighlighter
     }
 
     /// <summary>
-    /// Highlights an interpolated string with special colors for the interpolation parts.
+    /// Highlights an interpolated string by coloring the interpolation expressions separately.
     /// </summary>
-    private static void HighlightInterpolatedString(string code, int start, int end, List<ColoredSegment> segments)
+    private static void HighlightInterpolatedString(string text, Color stringColor, List<ColoredSegment> segments)
     {
-        int position = start;
+        var position = 0;
+        var nestLevel = 0;
+        var inInterpolation = false;
+        var interpolationStart = -1;
 
-        // Add the $ prefix
-        if (code[position] == '$')
-        {
-            segments.Add(new ColoredSegment("$", InterpolationColor));
-            position++;
-        }
+        // Start with $"
+        var prefixEnd = text.IndexOf('"') + 1;
+        segments.Add(new ColoredSegment(text.Substring(0, prefixEnd), stringColor));
+        position = prefixEnd;
 
-        // Add the opening quote
-        if (position < end && code[position] == '"')
+        while (position < text.Length - 1) // -1 to skip closing "
         {
-            segments.Add(new ColoredSegment("\"", StringColor));
-            position++;
-        }
+            var ch = text[position];
 
-        while (position < end - 1) // -1 to exclude closing quote
-        {
-            if (code[position] == '{')
+            if (!inInterpolation)
             {
-                // Find matching closing brace
-                int braceDepth = 1;
-                int interpolationStart = position;
-                position++;
-
-                while (position < end - 1 && braceDepth > 0)
+                // Check for interpolation start
+                if (ch == '{' && position + 1 < text.Length && text[position + 1] != '{')
                 {
-                    if (code[position] == '{') braceDepth++;
-                    else if (code[position] == '}') braceDepth--;
+                    // Flush string content up to here
+                    if (position > prefixEnd)
+                    {
+                        segments.Add(new ColoredSegment(text.Substring(prefixEnd, position - prefixEnd), stringColor));
+                    }
+
+                    inInterpolation = true;
+                    interpolationStart = position;
+                    nestLevel = 1;
                     position++;
+                    continue;
                 }
 
-                // Highlight the interpolation part (including braces)
-                string interpolation = code.Substring(interpolationStart, position - interpolationStart);
-                segments.Add(new ColoredSegment(interpolation, InterpolationColor));
+                // Escaped {{ becomes {
+                if (ch == '{' && position + 1 < text.Length && text[position + 1] == '{')
+                {
+                    position += 2;
+                    continue;
+                }
+
+                position++;
             }
             else
             {
-                // Regular string content
-                int textStart = position;
-                while (position < end - 1 && code[position] != '{')
+                // Track nested braces inside interpolation
+                if (ch == '{')
                 {
-                    position++;
+                    nestLevel++;
+                }
+                else if (ch == '}')
+                {
+                    nestLevel--;
+
+                    if (nestLevel == 0)
+                    {
+                        // End of interpolation
+                        var interpText = text.Substring(interpolationStart, position - interpolationStart + 1);
+                        // Remove the { } and highlight the inner code
+                        segments.Add(new ColoredSegment("{", InterpolationColor));
+
+                        if (interpText.Length > 2)
+                        {
+                            var innerCode = interpText.Substring(1, interpText.Length - 2);
+                            var innerSegments = Highlight(innerCode);
+                            segments.AddRange(innerSegments);
+                        }
+
+                        segments.Add(new ColoredSegment("}", InterpolationColor));
+
+                        inInterpolation = false;
+                        prefixEnd = position + 1;
+                        position++;
+                        continue;
+                    }
                 }
 
-                string text = code.Substring(textStart, position - textStart);
-                if (text.Length > 0)
-                {
-                    segments.Add(new ColoredSegment(text, StringColor));
-                }
+                position++;
             }
         }
 
-        // Add the closing quote
-        if (position < end && code[position] == '"')
+        // Flush remaining string content
+        if (!inInterpolation && position > prefixEnd && prefixEnd < text.Length - 1)
         {
-            segments.Add(new ColoredSegment("\"", StringColor));
+            segments.Add(new ColoredSegment(text.Substring(prefixEnd, text.Length - 1 - prefixEnd), stringColor));
+        }
+
+        // Add closing "
+        if (text.Length > 0 && text[text.Length - 1] == '"')
+        {
+            segments.Add(new ColoredSegment("\"", stringColor));
         }
     }
 
-    // Regex patterns
-    [GeneratedRegex(@"\$""(?:[^""\\{]|\\.|\{\{|\}\}|{[^}]*})*""")]
+    /// <summary>
+    /// Checks if a position is within any of the protected ranges.
+    /// </summary>
+    private static bool IsWithinAnyRange(int position, List<(int start, int end, Color color, bool isInterpolated)> ranges)
+    {
+        return ranges.Any(r => r.start <= position && position <= r.end);
+    }
+
+    // Regex patterns (compiled for performance)
+    [GeneratedRegex(@"\$""(?:[^""\\]|\\.|\{\{|\}\}|\{(?:[^}""\\]|\\.)*\})*""")]
     private static partial Regex InterpolatedStringRegex();
 
-    [GeneratedRegex(@"@?""(?:[^""\\]|\\.)*""")]
+    [GeneratedRegex(@"""(?:[^""\\]|\\.)*""")]
     private static partial Regex StringRegex();
 
-    [GeneratedRegex(@"//.*$|/\*.*?\*/", RegexOptions.Multiline | RegexOptions.Singleline)]
+    [GeneratedRegex(@"//.*$", RegexOptions.Multiline)]
     private static partial Regex CommentRegex();
-
-    [GeneratedRegex(@"\b\d+\.?\d*[fFdDmMlLuU]?\b")]
-    private static partial Regex NumberRegex();
-
-    [GeneratedRegex(@"\b[a-zA-Z_][a-zA-Z0-9_]*\b")]
-    private static partial Regex IdentifierRegex();
 }
-

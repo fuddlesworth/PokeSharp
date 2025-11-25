@@ -4,25 +4,29 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Reflection;
 using PokeSharp.Engine.Core.Systems;
+using PokeSharp.Engine.Debug.Commands;
 using PokeSharp.Engine.Debug.Console.Configuration;
 using PokeSharp.Engine.Debug.Console.Features;
 using PokeSharp.Engine.Debug.Console.Scripting;
-using PokeSharp.Engine.Debug.Console.UI;
+using PokeSharp.Engine.Debug.Features;
 using PokeSharp.Engine.Debug.Logging;
-using PokeSharp.Engine.Debug.Scenes;
 using PokeSharp.Engine.Debug.Scripting;
-using PokeSharp.Engine.Debug.Systems.Services;
+using PokeSharp.Engine.Debug.Services;
 using PokeSharp.Engine.Scenes;
 using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Game.Scripting.Api;
-using static PokeSharp.Engine.Debug.Console.Configuration.ConsoleColors;
+using PokeSharp.Engine.UI.Debug.Scenes;
+using PokeSharp.Engine.UI.Debug.Components.Controls;
+using PokeSharp.Engine.UI.Debug.Utilities;
+using PokeSharp.Engine.UI.Debug.Core;
 
 namespace PokeSharp.Engine.Debug.Systems;
 
 /// <summary>
-/// Console system that manages the Quake-style debug console as a scene.
-/// Monitors for toggle key and pushes/pops ConsoleScene onto the scene stack.
+/// Console system that manages the modern debug console as a scene.
+/// Monitors for toggle key and pushes/pops console scene onto the scene stack.
 /// </summary>
 public class ConsoleSystem : IUpdateSystem
 {
@@ -35,27 +39,30 @@ public class ConsoleSystem : IUpdateSystem
     private readonly IServiceProvider _services;
     private readonly ConsoleLoggerProvider? _loggerProvider;
 
-    // Core console components
-    private QuakeConsole _console = null!;
+    // Core console components (shared between console features)
     private ConsoleScriptEvaluator _evaluator = null!;
     private ConsoleGlobals _globals = null!;
+    private ParameterHintProvider _parameterHintProvider = null!;
+    private List<Assembly>? _referencedAssemblies;
+    private ConsoleCommandRegistry _commandRegistry = null!;
+    private ConsoleCompletionProvider _completionProvider = null!;
+    private ConsoleDocumentationProvider _documentationProvider = null!;
 
-    // Services (following Single Responsibility Principle)
-    private IConsoleInputHandler _inputHandler = null!;
-    private IConsoleCommandExecutor _commandExecutor = null!;
-    private IConsoleAutoCompleteCoordinator _autoCompleteCoordinator = null!;
-    private ConsoleCommandHistory _history = null!;
-
-    // State tracking
+    // Console state
     private KeyboardState _previousKeyboardState;
     private bool _isConsoleOpen;
-    private ConsoleScene? _currentConsoleScene;
-    private bool _isProcessingCommand;
-    private bool _isProcessingAutoComplete;
+    private NewConsoleScene? _consoleScene;
+
+    // Console logging state
+    private bool _loggingEnabled = false;
+    private Microsoft.Extensions.Logging.LogLevel _minimumLogLevel = Microsoft.Extensions.Logging.LogLevel.Information;
 
     // IUpdateSystem properties
     public int Priority => ConsoleConstants.System.UpdatePriority;
     public bool Enabled { get; set; } = true;
+
+    // Theme reference
+    private static UITheme Theme => UITheme.Dark;
 
     /// <summary>
     /// Initializes a new instance of the console system.
@@ -86,120 +93,59 @@ public class ConsoleSystem : IUpdateSystem
     {
         try
         {
-            // Create console configuration
-            var config = new ConsoleConfig
-            {
-                Size = ConsoleSize.Medium,
-                FontSize = 16,
-                SyntaxHighlightingEnabled = true,
-                AutoCompleteEnabled = true,
-                PersistHistory = true
-            };
+            // Create command registry
+            _commandRegistry = new ConsoleCommandRegistry(_logger);
 
-            // Create console UI (starts hidden)
-            var viewport = _graphicsDevice.Viewport;
-            _console = new QuakeConsole(_graphicsDevice, viewport.Width, viewport.Height, config);
-
-            // Create script evaluator
+            // Create script evaluator (shared component)
             _evaluator = new ConsoleScriptEvaluator(_logger);
 
             // Create console globals (script API)
             _globals = new ConsoleGlobals(_apiProvider, _world, _systemManager, _graphicsDevice, _logger);
 
-            // Create history and persistence
-            var history = new ConsoleCommandHistory();
-            var persistence = new ConsoleHistoryPersistence(_logger);
-            _history = history;
+            // Create parameter hint provider (shared component)
+            _parameterHintProvider = new ParameterHintProvider(_logger);
+            _parameterHintProvider.SetGlobals(_globals);
 
-            // Create auto-complete
-            var autoComplete = new ConsoleAutoComplete(_logger);
-            autoComplete.SetGlobals(_globals);
-            autoComplete.SetReferences(
-                ConsoleScriptEvaluator.GetDefaultReferences(),
+            // Create completion provider
+            _completionProvider = new ConsoleCompletionProvider(_logger);
+            _completionProvider.SetGlobals(_globals);
+
+            // Create documentation provider
+            _documentationProvider = new ConsoleDocumentationProvider(_logger);
+            _documentationProvider.SetGlobals(_globals);
+            _documentationProvider.SetEvaluator(_evaluator);
+
+            // Store references for documentation
+            _referencedAssemblies = ConsoleScriptEvaluator.GetDefaultReferences().ToList();
+            _documentationProvider.SetReferencedAssemblies(_referencedAssemblies);
+
+            _parameterHintProvider.SetReferences(
+                _referencedAssemblies,
                 ConsoleScriptEvaluator.GetDefaultImports()
             );
-
-            // Create parameter hint provider
-            var parameterHintProvider = new ParameterHintProvider(_logger);
-            parameterHintProvider.SetGlobals(_globals);
-            parameterHintProvider.SetReferences(
-                ConsoleScriptEvaluator.GetDefaultReferences(),
-                ConsoleScriptEvaluator.GetDefaultImports()
-            );
-
-            // Create script manager
-            var scriptManager = new ScriptManager(logger: _logger);
-
-            // Create alias manager
-            var aliasesPath = Path.Combine(scriptManager.ScriptsDirectory, "aliases.txt");
-            var aliasMacroManager = new AliasMacroManager(aliasesPath, _logger);
-
-            // Create bookmarks manager
-            var bookmarksPath = Path.Combine(scriptManager.ScriptsDirectory, ConsoleConstants.Files.BookmarksFileName);
-            var bookmarksManager = new BookmarkedCommandsManager(bookmarksPath, _logger);
-
-            // Create history suggestion provider
-            var historySuggestionProvider = new HistorySuggestionProvider(history);
-
-            // Create output exporter
-            var outputExporter = new OutputExporter(scriptManager.ScriptsDirectory);
-
-            // Initialize services
-            _autoCompleteCoordinator = new ConsoleAutoCompleteCoordinator(_console, autoComplete, historySuggestionProvider, _logger);
-            _inputHandler = new ConsoleInputHandler(_console, history, persistence, _logger, _autoCompleteCoordinator, parameterHintProvider, bookmarksManager);
-            _commandExecutor = new ConsoleCommandExecutor(_console, _evaluator, _globals, aliasMacroManager, scriptManager, outputExporter, history, _logger, bookmarksManager);
-
-            // Load persisted data
-            var loadedHistory = persistence.LoadHistory();
-            history.LoadHistory(loadedHistory);
-            _logger.LogInformation("Loaded {Count} commands from history", loadedHistory.Count);
-
-            aliasMacroManager.LoadAliases();
-            bookmarksManager.LoadBookmarks();
 
             // Set up console logger if provided
             if (_loggerProvider != null)
             {
                 _loggerProvider.SetConsoleWriter((message, color) =>
                 {
-                    // Write logs to console buffer even when closed, so they're visible when reopened
-                    if (_console != null && _console.Config.LoggingEnabled)
+                    // Write logs to console if it's open and logging is enabled
+                    if (_consoleScene != null && _loggingEnabled)
                     {
-                        _console.AppendOutput(message, color);
+                        _consoleScene.AppendOutput(message, color, "Log");
                     }
                 });
-                
-                // Set up log level filter based on console config
+
+                // Set up log level filter based on console logging state
                 _loggerProvider.SetLogLevelFilter(logLevel =>
                 {
-                    if (_console == null) return false;
-                    return logLevel >= _console.Config.MinimumLogLevel;
+                    // Check console logging state
+                    if (_consoleScene != null && _loggingEnabled)
+                        return logLevel >= _minimumLogLevel;
+
+                    return false;
                 });
             }
-
-            // Load startup script if enabled
-            if (config.AutoLoadStartupScript)
-            {
-                _ = LoadStartupScriptAsync(scriptManager, config.StartupScriptName);
-            }
-
-            // Welcome message with better formatting
-            _console.AppendOutput("╔════════════════════════════════════════════════════════════╗", Primary);
-            _console.AppendOutput("║              PokeSharp Debug Console                      ║", Info_Dim);
-            _console.AppendOutput("╚════════════════════════════════════════════════════════════╝", Primary);
-            _console.AppendOutput("", Text_Primary);
-            _console.AppendOutput("  Execute C# code in real-time  •  Full game API access", Text_Secondary);
-            _console.AppendOutput("", Text_Primary);
-            _console.AppendOutput("Quick Start:", Primary);
-            _console.AppendOutput("  • Type 'help' for commands and shortcuts", Text_Secondary);
-            _console.AppendOutput("  • Type 'Help()' for available API methods", Text_Secondary);
-            _console.AppendOutput("  • Press Tab or Ctrl+Space for auto-complete", Text_Secondary);
-            _console.AppendOutput("  • Try: Player.GetMoney()", Success);
-            _console.AppendOutput("", Text_Primary);
-            _console.AppendOutput("Features:", Primary);
-            _console.AppendOutput($"  Console size: {config.Size,-15} Syntax highlighting: {(config.SyntaxHighlightingEnabled ? "ON " : "OFF")}", Success);
-            _console.AppendOutput($"  Auto-complete: {(config.AutoCompleteEnabled ? "ON " : "OFF"),-14} History: {(config.PersistHistory ? "Persistent" : "Session")}", Success);
-            _console.AppendOutput("", Text_Primary);
 
             _logger.LogInformation("Console system initialized successfully");
         }
@@ -211,18 +157,18 @@ public class ConsoleSystem : IUpdateSystem
 
     public void Update(World world, float deltaTime)
     {
-        if (_console == null || !Enabled)
+        if (!Enabled)
             return;
 
         try
         {
-            // Check for console toggle key (`) when console is closed (not ~ with shift)
-            // When console is open, ConsoleScene handles the toggle
+            var currentKeyboard = Keyboard.GetState();
+
+            // Check for console toggle key (`) when console is closed
             if (!_isConsoleOpen)
             {
-                var currentKeyboard = Keyboard.GetState();
                 bool isShiftPressed = currentKeyboard.IsKeyDown(Keys.LeftShift) || currentKeyboard.IsKeyDown(Keys.RightShift);
-                bool togglePressed = currentKeyboard.IsKeyDown(Keys.OemTilde) && 
+                bool togglePressed = currentKeyboard.IsKeyDown(Keys.OemTilde) &&
                                      _previousKeyboardState.IsKeyUp(Keys.OemTilde) &&
                                      !isShiftPressed;
 
@@ -230,11 +176,9 @@ public class ConsoleSystem : IUpdateSystem
                 {
                     ToggleConsole();
                 }
-
-                _previousKeyboardState = currentKeyboard;
             }
-            // Note: When console is open, input handling is done by ConsoleScene
-            // via the HandleConsoleInput callback
+
+            _previousKeyboardState = currentKeyboard;
         }
         catch (Exception ex)
         {
@@ -250,33 +194,69 @@ public class ConsoleSystem : IUpdateSystem
         if (_isConsoleOpen)
         {
             // Close console - pop the scene
-            _logger.LogDebug("Closing console");
-            _sceneManager.PopScene();
-            CloseConsole();
+            if (_consoleScene != null)
+            {
+                _sceneManager.PopScene();
+                _consoleScene.OnCommandSubmitted -= HandleConsoleCommand;
+                _consoleScene.OnRequestCompletions -= HandleConsoleCompletions;
+                _consoleScene.OnRequestParameterHints -= HandleConsoleParameterHints;
+                _consoleScene.OnRequestDocumentation -= HandleConsoleDocumentation;
+                _consoleScene.OnCloseRequested -= OnConsoleClosed;
+                _consoleScene = null;
+
+                // Clear Print() output action
+                _globals.OutputAction = null;
+            }
+
+            _isConsoleOpen = false;
         }
         else
         {
             // Open console - push the scene
-            _logger.LogDebug("Opening console");
-            var consoleLogger = _services.GetRequiredService<ILogger<ConsoleScene>>();
+            try
+            {
+                var consoleLogger = _services.GetRequiredService<ILogger<NewConsoleScene>>();
 
-            // Create console scene with proper dependencies (no callbacks)
-            _currentConsoleScene = new ConsoleScene(
-                _graphicsDevice,
-                _services,
-                consoleLogger,
-                _console,
-                _inputHandler,
-                _autoCompleteCoordinator,
-                _history,
-                _sceneManager);
+                _consoleScene = new NewConsoleScene(
+                    _graphicsDevice,
+                    _services,
+                    consoleLogger
+                );
 
-            // Subscribe to scene events
-            _currentConsoleScene.CommandRequested += OnConsoleCommandRequested;
-            _currentConsoleScene.Closed += OnConsoleClosed;
+                // Wire up event handlers
+                _consoleScene.OnCommandSubmitted += HandleConsoleCommand;
+                _consoleScene.OnRequestCompletions += HandleConsoleCompletions;
+                _consoleScene.OnRequestParameterHints += HandleConsoleParameterHints;
+                _consoleScene.OnRequestDocumentation += HandleConsoleDocumentation;
+                _consoleScene.OnCloseRequested += OnConsoleClosed;
 
-            _sceneManager.PushScene(_currentConsoleScene);
-            _isConsoleOpen = true;
+                // Wire up Print() output to the console
+                _globals.OutputAction = (text) => _consoleScene?.AppendOutput(text, Theme.TextPrimary);
+
+                // Set console height to 50% (medium size)
+                _consoleScene.SetHeightPercent(0.5f);
+
+                // Push scene
+                _sceneManager.PushScene(_consoleScene);
+                _isConsoleOpen = true;
+
+                // Welcome message
+                _consoleScene.AppendOutput("=== PokeSharp Debug Console ===", Theme.Success);
+                _consoleScene.AppendOutput("Type 'help' for available commands", Theme.Info);
+                _consoleScene.AppendOutput("Press ` to close", Theme.TextSecondary);
+                _consoleScene.AppendOutput("", Theme.TextPrimary);
+
+                // Execute startup script if it exists
+                ExecuteStartupScript();
+
+                _logger.LogInformation("Console opened successfully. Press ` to close.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to open console");
+                _isConsoleOpen = false;
+                _consoleScene = null;
+            }
         }
     }
 
@@ -285,158 +265,309 @@ public class ConsoleSystem : IUpdateSystem
     /// </summary>
     private void OnConsoleClosed()
     {
-        _logger.LogDebug("Console closed event received");
-        CloseConsole();
-    }
-
-    /// <summary>
-    /// Cleans up console state and unsubscribes from events.
-    /// </summary>
-    private void CloseConsole()
-    {
-        _isConsoleOpen = false;
-
-        // Unsubscribe from scene events
-        if (_currentConsoleScene != null)
+        if (_isConsoleOpen)
         {
-            _currentConsoleScene.CommandRequested -= OnConsoleCommandRequested;
-            _currentConsoleScene.Closed -= OnConsoleClosed;
-            _currentConsoleScene = null;
+            ToggleConsole();
         }
     }
 
     /// <summary>
-    /// Handles command execution requests from the console scene.
+    /// Handles commands submitted from the console.
     /// </summary>
-    private void OnConsoleCommandRequested(string command)
+    private void HandleConsoleCommand(string command)
     {
-        if (string.IsNullOrWhiteSpace(command))
-            return;
-
-        _logger.LogDebug("Command requested from console scene: {Command}", command);
-        _ = ExecuteCommandAsync(command);
-    }
-
-    /// <summary>
-    /// Executes a console command.
-    /// </summary>
-    private async Task ExecuteCommandAsync(string command)
-    {
-        if (_isProcessingCommand)
-            return;
-
-        _isProcessingCommand = true;
-
         try
         {
-            // Add command to history BEFORE execution so it's available immediately
-            _history.Add(command);
-            _logger.LogDebug("Added command to history: {Command}", command);
-
-            var result = await _commandExecutor.ExecuteAsync(command);
-
-            // Update auto-complete with latest script state
-            if (!result.IsBuiltInCommand)
-            {
-                _autoCompleteCoordinator.UpdateScriptState(_evaluator.CurrentState);
-            }
-
-            _console.ClearInput();
+            _ = ExecuteConsoleCommand(command);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error executing command");
-        }
-        finally
-        {
-            _isProcessingCommand = false;
+            _logger.LogError(ex, "Error executing command from console: {Command}", command);
+            _consoleScene?.AppendOutput($"Error: {ex.Message}", Theme.Error);
         }
     }
 
     /// <summary>
-    /// Triggers auto-completion for the current input.
-    /// Protected against race conditions with concurrent execution flag.
+    /// Handles auto-completion requests from the console.
     /// </summary>
-    private async Task TriggerAutoCompleteAsync()
+    private async void HandleConsoleCompletions(string partialCommand)
     {
-        // Prevent concurrent autocomplete requests (race condition protection)
-        if (_isProcessingAutoComplete)
-        {
-            _logger.LogDebug("Auto-complete already in progress, skipping request");
-            return;
-        }
-
-        _isProcessingAutoComplete = true;
-
-        try
-        {
-            var code = _console.GetInputText();
-            var cursorPos = _console.Input.CursorPosition;
-
-            // Show loading indicator (for async operations that may take time)
-            _console.SetAutoCompleteLoading(true);
-
-            var suggestions = await _autoCompleteCoordinator.GetCompletionsAsync(code, cursorPos);
-
-            if (suggestions.Count > 0)
-            {
-                // Pass the current code to SetAutoCompleteSuggestions for initial filtering
-                // This will also clear the loading state
-                _console.SetAutoCompleteSuggestions(suggestions, code);
-            }
-            else
-            {
-                // Clear loading state if no suggestions found
-                _console.SetAutoCompleteLoading(false);
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error triggering auto-complete");
-            _console.SetAutoCompleteLoading(false);
-        }
-        finally
-        {
-            _isProcessingAutoComplete = false;
-        }
+        var cursorPosition = _consoleScene?.GetCursorPosition() ?? partialCommand.Length;
+        var suggestions = await _completionProvider.GetCompletionsAsync(partialCommand, cursorPosition);
+        _consoleScene?.SetCompletions(suggestions);
     }
 
     /// <summary>
-    /// Loads the startup script if it exists.
+    /// Handles parameter hint requests from the console.
     /// </summary>
-    private async Task LoadStartupScriptAsync(ScriptManager scriptManager, string scriptName)
+    private void HandleConsoleParameterHints(string text, int cursorPosition)
     {
         try
         {
-            if (!scriptManager.ScriptExists(scriptName))
+            // Check if we're inside a method call
+            var methodCallInfo = FindMethodCallAtCursor(text, cursorPosition);
+            if (methodCallInfo == null)
             {
-                _logger.LogDebug("Startup script not found: {ScriptName}", scriptName);
+                _consoleScene?.ClearParameterHints();
                 return;
             }
 
-            var scriptResult = scriptManager.LoadScript(scriptName);
-            if (scriptResult.IsSuccess)
-            {
-                _logger.LogInformation("Loading startup script: {ScriptName}", scriptName);
-                var result = await _evaluator.EvaluateAsync(scriptResult.Value!, _globals);
+            // Update parameter hint provider with current script state
+            _parameterHintProvider.UpdateScriptState(_evaluator.CurrentState);
 
-                if (result.IsSuccess && !string.IsNullOrWhiteSpace(result.Output) && result.Output != "null")
+            // Get parameter hints from provider (pass text up to the opening paren + opening paren)
+            var textForHints = text.Substring(0, methodCallInfo.Value.OpenParenIndex + 1);
+            var hints = _parameterHintProvider.GetParameterHints(textForHints, textForHints.Length)!;
+
+            if (hints != null && hints.Overloads.Count > 0)
+            {
+                // Convert to UI types
+                var uiHints = new ParamHints
                 {
-                    _console.AppendOutput($"Startup: {result.Output}", Success);
-                }
-                else if (result.IsCompilationError)
-                {
-                    _console.AppendOutput($"Startup script has compilation errors", Error);
-                }
+                    MethodName = hints.MethodName,
+                    CurrentOverloadIndex = hints.CurrentOverloadIndex,
+                    Overloads = hints.Overloads.Select(overload => new MethodSig
+                    {
+                        MethodName = overload.MethodName,
+                    ReturnType = overload.ReturnType,
+                    Parameters = overload.Parameters.Select(param => new ParamInfo
+                    {
+                        Name = param.Name ?? string.Empty,
+                        Type = param.Type,
+                        IsOptional = param.IsOptional,
+                        DefaultValue = param.DefaultValue ?? string.Empty
+                    }).ToList()
+                    }).ToList()
+                };
+
+                _consoleScene?.SetParameterHints(uiHints, methodCallInfo.Value.ParameterIndex);
             }
             else
             {
-                _logger.LogDebug("Startup script not available: {Error}", scriptResult.Error);
+                _consoleScene?.ClearParameterHints();
             }
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Failed to load startup script: {ScriptName}", scriptName);
+            _logger.LogError(ex, "Error getting parameter hints for console");
+        }
+    }
+
+    /// <summary>
+    /// Finds the method call that the cursor is currently inside.
+    /// Returns the method name, opening paren position, and current parameter index.
+    /// </summary>
+    private (string MethodName, int OpenParenIndex, int ParameterIndex)? FindMethodCallAtCursor(string text, int cursorPosition)
+    {
+        // Find the last unmatched opening parenthesis before the cursor
+        int nestLevel = 0;
+        int openParenIndex = -1;
+
+        for (int i = cursorPosition - 1; i >= 0; i--)
+        {
+            char c = text[i];
+            if (c == ')')
+                nestLevel++;
+            else if (c == '(')
+            {
+                if (nestLevel == 0)
+                {
+                    openParenIndex = i;
+                    break;
+                }
+                nestLevel--;
+            }
+        }
+
+        if (openParenIndex == -1)
+        {
+            return null;
+        }
+
+        // Extract method name before the opening paren
+        // Handle both direct calls (Method() and member calls (obj.Method())
+        int methodStartIndex = openParenIndex - 1;
+
+        // Skip whitespace before paren
+        while (methodStartIndex >= 0 && char.IsWhiteSpace(text[methodStartIndex]))
+            methodStartIndex--;
+
+        if (methodStartIndex < 0)
+            return null;
+
+        // Find the start of the method name (alphanumeric + underscore)
+        int methodEndIndex = methodStartIndex;
+        while (methodStartIndex >= 0 && (char.IsLetterOrDigit(text[methodStartIndex]) || text[methodStartIndex] == '_'))
+            methodStartIndex--;
+
+        methodStartIndex++; // Move back to first char of method name
+
+        if (methodStartIndex > methodEndIndex)
+        {
+            return null;
+        }
+
+        string methodName = text.Substring(methodStartIndex, methodEndIndex - methodStartIndex + 1);
+
+        // Count commas between opening paren and cursor to determine parameter index
+        int parameterIndex = 0;
+        nestLevel = 0;
+
+        for (int i = openParenIndex + 1; i < cursorPosition && i < text.Length; i++)
+        {
+            char c = text[i];
+            if (c == '(')
+                nestLevel++;
+            else if (c == ')')
+                nestLevel--;
+            else if (c == ',' && nestLevel == 0)
+                parameterIndex++;
+        }
+
+        return (methodName, openParenIndex, parameterIndex);
+    }
+
+
+    /// <summary>
+    /// Handles documentation requests from the console.
+    /// </summary>
+    private void HandleConsoleDocumentation(string completionText)
+    {
+        var doc = _documentationProvider.GetDocumentation(completionText);
+        _consoleScene?.SetDocumentation(doc);
+    }
+
+    /// <summary>
+    /// Executes a command from the console.
+    /// </summary>
+    private async Task ExecuteConsoleCommand(string command)
+    {
+        try
+        {
+            // Get dependencies for command execution
+            var aliasManager = _services.GetRequiredService<AliasMacroManager>();
+            var scriptManager = _services.GetRequiredService<ScriptManager>();
+            var bookmarkManager = _services.GetRequiredService<BookmarkedCommandsManager>();
+            var watchPresetManager = _services.GetRequiredService<WatchPresetManager>();
+
+            // Try to expand alias first
+            if (aliasManager.TryExpandAlias(command, out var expandedCommand))
+            {
+                _logger.LogDebug("Alias expanded: {Original} -> {Expanded}", command, expandedCommand);
+                _consoleScene?.AppendOutput($"[alias] {expandedCommand}", Theme.TextSecondary);
+                command = expandedCommand;
+            }
+
+            // Parse command
+            var parts = command.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length == 0)
+                return;
+
+            var cmd = parts[0];
+            var args = parts.Skip(1).ToArray();
+
+            // Create console context for commands
+            var context = new ConsoleContext(
+                _consoleScene!,
+                () => ToggleConsole(),
+                () => _loggingEnabled,
+                (enabled) => _loggingEnabled = enabled,
+                () => _minimumLogLevel,
+                (level) => _minimumLogLevel = level,
+                _commandRegistry,
+                aliasManager,
+                scriptManager,
+                _evaluator,
+                _globals,
+                bookmarkManager,
+                watchPresetManager
+            );
+
+            // Try to execute as built-in command first
+            var commandExecuted = await _commandRegistry.ExecuteAsync(cmd, args, context);
+
+            if (!commandExecuted)
+            {
+                // Not a built-in command - try to execute as C# script
+                try
+                {
+                    var result = await _evaluator.EvaluateAsync(command, _globals);
+
+                    // Handle compilation errors
+                    if (result.IsCompilationError && result.Errors != null)
+                    {
+                        _consoleScene?.AppendOutput("Compilation Error:", Theme.Error);
+                        foreach (var error in result.Errors)
+                        {
+                            _consoleScene?.AppendOutput($"  {error.Message}", Theme.Error);
+                        }
+                        return;
+                    }
+
+                    // Handle runtime errors
+                    if (result.IsRuntimeError)
+                    {
+                        _consoleScene?.AppendOutput($"Runtime Error: {result.RuntimeException?.Message ?? "Unknown error"}", Theme.Error);
+                        if (result.RuntimeException != null)
+                        {
+                            _consoleScene?.AppendOutput($"  {result.RuntimeException.GetType().Name}", Theme.TextSecondary);
+                        }
+                        return;
+                    }
+
+                    // Handle successful execution
+                    if (result.IsSuccess)
+                    {
+                        // Display output if available
+                        if (!string.IsNullOrEmpty(result.Output) && result.Output != "null")
+                        {
+                            _consoleScene?.AppendOutput(result.Output, Theme.Success);
+                        }
+                        // If no output, that's fine (statement executed successfully but returned nothing)
+                    }
+                    else
+                    {
+                        // Fallback for unexpected state
+                        _consoleScene?.AppendOutput("Command executed but status unclear", Theme.TextSecondary);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // This catch should rarely be hit - log it for debugging
+                    _logger.LogError(ex, "Unexpected exception executing command: {Command}", command);
+                    _consoleScene?.AppendOutput($"Error: {ex.Message}", Theme.Error);
+                    _consoleScene?.AppendOutput($"Type: {ex.GetType().Name}", Theme.TextSecondary);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error executing command in console");
+            _consoleScene?.AppendOutput($"Error: {ex.Message}", Theme.Error);
+        }
+    }
+
+    /// <summary>
+    /// Executes the startup script if it exists.
+    /// </summary>
+    private void ExecuteStartupScript()
+    {
+        try
+        {
+            var scriptContent = StartupScriptLoader.LoadStartupScript();
+            if (string.IsNullOrWhiteSpace(scriptContent))
+            {
+                return;
+            }
+
+            // Execute the startup script
+            _ = ExecuteConsoleCommand(scriptContent);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error executing startup script");
+            _consoleScene?.AppendOutput($"Startup script error: {ex.Message}", Theme.Error);
         }
     }
 }
+
