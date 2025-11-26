@@ -173,11 +173,17 @@ public class UIContext : IDisposable
 
     /// <summary>
     /// Ends the current container.
+    /// Gracefully handles stack imbalance to prevent game crashes.
     /// </summary>
     public void EndContainer()
     {
         if (_containerStack.Count <= 1)
-            throw new InvalidOperationException("Cannot end root container");
+        {
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("[UIContext] EndContainer called on root container - ignoring");
+#endif
+            return;
+        }
 
         _containerStack.Pop();
         _renderer.PopClip();

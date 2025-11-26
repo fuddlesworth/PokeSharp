@@ -41,6 +41,7 @@ public class ConsolePanel : Panel
     // Console state
     private bool _closeRequested = false; // Defer close until after rendering
     private ConsoleSize _currentSize = ConsoleSize.Medium; // Default to 50% height
+    private bool _wasVisible = false; // Track visibility changes for focus management
 
     // Events
     public Action<string>? OnCommandSubmitted { get; set; }
@@ -51,7 +52,37 @@ public class ConsolePanel : Panel
     public Action? OnCloseRequested { get; set; }
     public Action<ConsoleSize>? OnSizeChanged { get; set; }
 
-    public ConsolePanel()
+    /// <summary>
+    /// Creates a ConsolePanel with the specified components.
+    /// Use <see cref="ConsolePanelBuilder"/> to construct instances.
+    /// </summary>
+    internal ConsolePanel(
+        TextBuffer outputBuffer,
+        TextEditor commandEditor,
+        SuggestionsDropdown suggestionsDropdown,
+        HintBar hintBar,
+        SearchBar searchBar,
+        HintBar searchHintBar,
+        ParameterHintTooltip parameterHints,
+        DocumentationPopup documentationPopup,
+        bool loadHistory)
+    {
+        _outputBuffer = outputBuffer;
+        _commandEditor = commandEditor;
+        _suggestionsDropdown = suggestionsDropdown;
+        _hintBar = hintBar;
+        _searchBar = searchBar;
+        _searchHintBar = searchHintBar;
+        _parameterHints = parameterHints;
+        _documentationPopup = documentationPopup;
+
+        Initialize(loadHistory);
+    }
+
+    /// <summary>
+    /// Initializes the console panel with common setup logic.
+    /// </summary>
+    private void Initialize(bool loadHistory)
     {
         Id = "console_panel";
         BackgroundColor = UITheme.Dark.ConsoleBackground;
@@ -61,122 +92,11 @@ public class ConsolePanel : Panel
         // Add padding to the console panel - this creates the ContentRect for children
         Constraint.Padding = Padding;
 
-        // Create output buffer - it will be laid out within the padded ContentRect
-        _outputBuffer = new TextBuffer("console_output")
+        // Load command history from disk if enabled
+        if (loadHistory)
         {
-            BackgroundColor = UITheme.Dark.ConsoleOutputBackground,
-            AutoScroll = true,
-            MaxLines = 5000,
-            Constraint = new LayoutConstraint
-            {
-                Anchor = Anchor.StretchTop,
-                Height = 400 // Will be dynamically calculated in OnRenderContainer
-            }
-        };
-
-        // Create command editor - anchored above the hint bar
-        _commandEditor = new TextEditor("console_input")
-        {
-            Prompt = "> ",
-            BackgroundColor = UITheme.Dark.ConsoleInputBackground,
-            MinVisibleLines = 1,
-            MaxVisibleLines = 10, // Max 10 lines before scrolling
-            Constraint = new LayoutConstraint
-            {
-                Anchor = Anchor.StretchBottom, // Stretch horizontally, positioned from bottom
-                OffsetY = 0, // Will be updated dynamically to sit above hint bar
-                Height = InputMinHeight // Will be updated dynamically
-            }
-        };
-
-        // Create suggestions dropdown - positioned above the input box
-        // The bottom edge is fixed at a consistent position; only the top edge moves
-        _suggestionsDropdown = new SuggestionsDropdown("console_suggestions")
-        {
-            MaxVisibleItems = 8,
-            Constraint = new LayoutConstraint
-            {
-                Anchor = Anchor.BottomLeft, // Anchor to bottom-left
-                OffsetX = Padding, // Align with parameter hints (respects panel padding)
-                OffsetY = -(InputMinHeight + Padding), // Will be updated dynamically
-                WidthPercent = 0.5f, // 50% of content width
-                MinWidth = 400f, // Minimum width for readability
-                MaxWidth = 800f, // Maximum width to prevent excessive size
-                Height = 0 // Dynamically calculated, grows upward
-            }
-        };
-
-        // Create hint bar - shows helpful text at the absolute bottom (below input)
-        _hintBar = new HintBar("console_hints")
-        {
-            TextColor = UITheme.Dark.ConsoleHintText,
-            Constraint = new LayoutConstraint
-            {
-                Anchor = Anchor.StretchBottom, // Stretch horizontally at absolute bottom
-                OffsetY = 0, // At the very bottom
-                Height = 0 // Dynamically calculated (0 when hidden)
-            }
-        };
-
-        // Create search bar - positioned at bottom (replaces input when active)
-        _searchBar = new SearchBar("console_search")
-        {
-            BackgroundColor = UITheme.Dark.ConsoleSearchBackground,
-            BorderColor = Color.Transparent, // No border - use console panel's border
-            BorderThickness = 0,
-            Constraint = new LayoutConstraint
-            {
-                Anchor = Anchor.StretchBottom,
-                OffsetY = 0, // Will be positioned above search hint
-                Height = InputMinHeight
-            }
-        };
-
-        // Create search hint bar - shows keyboard shortcuts for search
-        _searchHintBar = new HintBar("search_hints")
-        {
-            TextColor = UITheme.Dark.ConsoleHintText,
-            Constraint = new LayoutConstraint
-            {
-                Anchor = Anchor.StretchBottom,
-                OffsetY = 0,
-                Height = 0 // Dynamically calculated
-            }
-        };
-
-        // Create parameter hints tooltip - shows method signatures
-        _parameterHints = new ParameterHintTooltip("parameter_hints")
-        {
-            Constraint = new LayoutConstraint
-            {
-                Anchor = Anchor.BottomLeft,
-                OffsetY = 0, // Will be positioned above input editor
-                Height = 0, // Dynamically calculated
-                Width = 0, // Dynamically calculated
-                MaxWidth = 800f, // Prevent tooltip from being too wide
-                MaxHeight = 300f // Prevent tooltip from being too tall
-            }
-        };
-
-        // Create documentation popup - shows detailed docs for selected completion
-        // Positioned as a side panel on the right, doesn't overlap with output
-        _documentationPopup = new DocumentationPopup("documentation_popup")
-        {
-            Constraint = new LayoutConstraint
-            {
-                Anchor = Anchor.TopRight, // Top-right panel (clear separation from action popups)
-                OffsetX = -PanelEdgeGap, // Gap from right edge
-                OffsetY = PanelEdgeGap, // Gap from top edge
-                WidthPercent = 0.35f, // 35% of panel width
-                MinWidth = 400f, // Minimum width for readability
-                MaxWidth = 600f, // Maximum width to prevent excessive size
-                HeightPercent = 0.7f, // 70% of panel height
-                Height = 0 // Dynamically calculated (will override percentage when hidden)
-            }
-        };
-
-        // Load command history from disk
-        _commandEditor.LoadHistoryFromDisk();
+            _commandEditor.LoadHistoryFromDisk();
+        }
 
         // Wire up events
         _commandEditor.OnSubmit += HandleCommandSubmit;
@@ -430,6 +350,8 @@ public class ConsolePanel : Panel
         if (suggestions.Count > 0)
         {
             _suggestionsDropdown.SetItems(suggestions);
+            // Clear any existing filter so all suggestions show
+            _suggestionsDropdown.SetFilter(string.Empty);
             _overlayMode = ConsoleOverlayMode.Suggestions;
         }
         else
@@ -735,15 +657,19 @@ public class ConsolePanel : Panel
             // Update hint bar based on mode and editor state
             if (_overlayMode == ConsoleOverlayMode.CommandHistorySearch)
             {
-                _hintBar.SetText("[Ctrl+R] Toggle search • [Type] filter • [Up/Down] navigate • [Enter] select • [Esc] cancel");
+                _hintBar.SetText(ConsoleShortcuts.GetHistorySearchModeHints());
+            }
+            else if (_overlayMode == ConsoleOverlayMode.Suggestions)
+            {
+                _hintBar.SetText(ConsoleShortcuts.GetSuggestionsModeHints());
             }
             else if (_commandEditor.IsMultiLine)
             {
-                _hintBar.SetText($"({_commandEditor.LineCount} lines) [Ctrl+Enter] submit • [Shift+Enter] new line");
+                _hintBar.SetText(ConsoleShortcuts.GetMultiLineModeHints(_commandEditor.LineCount));
             }
             else
             {
-                _hintBar.SetText("[Ctrl+F] Search • [Ctrl+R] History • [Tab] Complete • [Up/Down] History • [Enter] Submit");
+                _hintBar.SetText(ConsoleShortcuts.GetNormalModeHints());
             }
 
             // Calculate dynamic heights
@@ -902,26 +828,20 @@ public class ConsolePanel : Panel
         // which would require UIRenderer enhancement
         base.OnRenderContainer(context);
 
-        // Auto-focus management when console is visible
-        if (Visible)
+        // Auto-focus management - only set focus on visibility change (not every frame)
+        if (Visible && !_wasVisible)
         {
+            // Console just became visible - set initial focus
             if (_overlayMode == ConsoleOverlayMode.Search)
             {
-                // Focus search bar when in search mode
-                if (context.Frame.FocusedComponentId != _searchBar.Id)
-                {
-                    context.SetFocus(_searchBar.Id);
-                }
+                context.SetFocus(_searchBar.Id);
             }
             else
             {
-                // Focus command editor in normal mode
-                if (context.Frame.FocusedComponentId != _commandEditor.Id)
-                {
-                    context.SetFocus(_commandEditor.Id);
-                }
+                context.SetFocus(_commandEditor.Id);
             }
         }
+        _wasVisible = Visible;
 
         // Don't render suggestions dropdown unless visible
         if (_overlayMode != ConsoleOverlayMode.Suggestions && _overlayMode != ConsoleOverlayMode.CommandHistorySearch)

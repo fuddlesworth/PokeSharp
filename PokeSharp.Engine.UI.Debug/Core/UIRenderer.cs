@@ -78,9 +78,10 @@ public class UIRenderer : IDisposable
             {
                 _spriteBatch.End();
             }
-            catch
+            catch (Exception ex)
             {
-                // Silently handle recovery errors
+                // Recovery from unbalanced Begin/End - log in DEBUG for diagnostics
+                System.Diagnostics.Debug.WriteLine($"[UIRenderer] SpriteBatch recovery: {ex.Message}");
             }
             _isInBatch = false;
         }
@@ -166,11 +167,17 @@ public class UIRenderer : IDisposable
 
     /// <summary>
     /// Pops the top clipping rectangle from the stack.
+    /// Gracefully handles stack imbalance to prevent game crashes.
     /// </summary>
     public void PopClip()
     {
         if (_clipStack.Count == 0)
-            throw new InvalidOperationException("Clip stack is empty");
+        {
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("[UIRenderer] PopClip called with empty stack - ignoring");
+#endif
+            return;
+        }
 
         _clipStack.Pop();
         _currentClipRect = _clipStack.Count > 0 ? _clipStack.Peek() : null;

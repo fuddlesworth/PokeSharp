@@ -33,27 +33,19 @@ public class VariablesPanel : Panel
         public string Description { get; set; } = string.Empty;
     }
 
-    public VariablesPanel()
+    /// <summary>
+    /// Creates a VariablesPanel with the specified components.
+    /// Use <see cref="VariablesPanelBuilder"/> to construct instances.
+    /// </summary>
+    internal VariablesPanel(TextBuffer variablesBuffer)
     {
+        _variablesBuffer = variablesBuffer;
+
         Id = "variables_panel";
         BackgroundColor = UITheme.Dark.ConsoleBackground;
         BorderColor = UITheme.Dark.BorderPrimary;
         BorderThickness = 1;
-
-        // Add padding to the panel
         Constraint.Padding = UITheme.Dark.PaddingMedium;
-
-        // Create text buffer for displaying variables
-        _variablesBuffer = new TextBuffer("variables_buffer")
-        {
-            BackgroundColor = UITheme.Dark.ConsoleOutputBackground,
-            AutoScroll = false,
-            MaxLines = 1000,
-            Constraint = new LayoutConstraint
-            {
-                Anchor = Anchor.Fill
-            }
-        };
 
         AddChild(_variablesBuffer);
     }

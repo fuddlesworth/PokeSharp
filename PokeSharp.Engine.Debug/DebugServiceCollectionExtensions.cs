@@ -10,7 +10,6 @@ using PokeSharp.Engine.Debug.Features;
 using PokeSharp.Engine.Debug.Logging;
 using PokeSharp.Engine.Debug.Scripting;
 using PokeSharp.Engine.Debug.Systems;
-using PokeSharp.Engine.Debug.Systems.Services;
 using PokeSharp.Game.Scripting.Api;
 
 namespace PokeSharp.Engine.Debug;
@@ -118,11 +117,6 @@ public static class DebugServiceCollectionExtensions
             // GraphicsDevice is set later via SetGraphicsDevice
             return new ConsoleGlobals(apiProvider, world, systemManager, null!, logger);
         });
-
-        // Console Services (following SOLID principles)
-        services.AddSingleton<IConsoleInputHandler, ConsoleInputHandler>();
-        services.AddSingleton<IConsoleCommandExecutor, ConsoleCommandExecutor>();
-        services.AddSingleton<IConsoleAutoCompleteCoordinator, ConsoleAutoCompleteCoordinator>();
 
         // Watch Preset Manager
         services.AddSingleton<WatchPresetManager>(sp =>

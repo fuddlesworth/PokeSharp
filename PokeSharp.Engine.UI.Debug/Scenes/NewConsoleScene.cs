@@ -496,15 +496,11 @@ public class NewConsoleScene : SceneBase
                     Padding = 10f // Apply padding to create space around console content
                 }
             };
-            // Create console panel
-            _consolePanel = new ConsolePanel
-            {
-                BackgroundColor = Color.Transparent, // Tab container provides background
-                BorderColor = Color.Transparent, // No border - container has it
-                BorderThickness = 0
-            };
-
-            // Remove padding from console panel since tab container handles it
+            // Create console panel via builder
+            _consolePanel = ConsolePanelBuilder.Create().Build();
+            _consolePanel.BackgroundColor = Color.Transparent; // Tab container provides background
+            _consolePanel.BorderColor = Color.Transparent; // No border - container has it
+            _consolePanel.BorderThickness = 0;
             _consolePanel.Constraint = new LayoutConstraint
             {
                 Anchor = Anchor.Fill,
@@ -523,53 +519,29 @@ public class NewConsoleScene : SceneBase
             Logger.LogInformation("Console events wired up");
 
             Logger.LogInformation("Creating watch panel...");
-            // Create watch panel
-            _watchPanel = new WatchPanel
-            {
-                BackgroundColor = Color.Transparent, // Tab container provides background
-                BorderColor = Color.Transparent, // No border - container has it
-                BorderThickness = 0
-            };
-
-            // Ensure watch panel has correct constraint
-            _watchPanel.Constraint = new LayoutConstraint
-            {
-                Anchor = Anchor.Fill,
-                Padding = 0
-            };
+            _watchPanel = WatchPanelBuilder.Create().Build();
+            _watchPanel.BackgroundColor = Color.Transparent;
+            _watchPanel.BorderColor = Color.Transparent;
+            _watchPanel.BorderThickness = 0;
+            _watchPanel.Constraint = new LayoutConstraint { Anchor = Anchor.Fill, Padding = 0 };
             Logger.LogInformation("Watch panel created");
 
-            // Watches can now be added via the console using the "watch add" command
             Logger.LogInformation("Console initialization complete. Use 'watch add' to monitor expressions.");
 
             Logger.LogInformation("Creating logs panel...");
-            // Create logs panel
-            _logsPanel = new LogsPanel
-            {
-                BackgroundColor = Color.Transparent,
-                BorderColor = Color.Transparent,
-                BorderThickness = 0
-            };
-            _logsPanel.Constraint = new LayoutConstraint
-            {
-                Anchor = Anchor.Fill,
-                Padding = 0
-            };
+            _logsPanel = LogsPanelBuilder.Create().Build();
+            _logsPanel.BackgroundColor = Color.Transparent;
+            _logsPanel.BorderColor = Color.Transparent;
+            _logsPanel.BorderThickness = 0;
+            _logsPanel.Constraint = new LayoutConstraint { Anchor = Anchor.Fill, Padding = 0 };
             Logger.LogInformation("Logs panel created");
 
             Logger.LogInformation("Creating variables panel...");
-            // Create variables panel
-            _variablesPanel = new VariablesPanel
-            {
-                BackgroundColor = Color.Transparent,
-                BorderColor = Color.Transparent,
-                BorderThickness = 0
-            };
-            _variablesPanel.Constraint = new LayoutConstraint
-            {
-                Anchor = Anchor.Fill,
-                Padding = 0
-            };
+            _variablesPanel = VariablesPanelBuilder.Create().Build();
+            _variablesPanel.BackgroundColor = Color.Transparent;
+            _variablesPanel.BorderColor = Color.Transparent;
+            _variablesPanel.BorderThickness = 0;
+            _variablesPanel.Constraint = new LayoutConstraint { Anchor = Anchor.Fill, Padding = 0 };
 
             // Set up global variables display
             _variablesPanel.SetGlobals(new[]

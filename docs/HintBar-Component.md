@@ -173,3 +173,4 @@ Test cases:
 - [x] Suggestions dropdown positions correctly above hints
 
 
+

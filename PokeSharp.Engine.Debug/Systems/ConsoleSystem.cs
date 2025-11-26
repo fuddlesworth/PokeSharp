@@ -57,6 +57,10 @@ public class ConsoleSystem : IUpdateSystem
     private bool _loggingEnabled = false;
     private Microsoft.Extensions.Logging.LogLevel _minimumLogLevel = Microsoft.Extensions.Logging.LogLevel.Information;
 
+    // Auto-completion debouncing
+    private CancellationTokenSource? _completionCts;
+    private const int CompletionDebounceMs = 50;
+
     // IUpdateSystem properties
     public int Priority => ConsoleConstants.System.UpdatePriority;
     public bool Enabled { get; set; } = true;
@@ -204,6 +208,11 @@ public class ConsoleSystem : IUpdateSystem
                 _consoleScene.OnCloseRequested -= OnConsoleClosed;
                 _consoleScene = null;
 
+                // Cancel any pending completion requests
+                _completionCts?.Cancel();
+                _completionCts?.Dispose();
+                _completionCts = null;
+
                 // Clear Print() output action
                 _globals.OutputAction = null;
             }
@@ -289,12 +298,46 @@ public class ConsoleSystem : IUpdateSystem
 
     /// <summary>
     /// Handles auto-completion requests from the console.
+    /// Uses debouncing to prevent excessive requests during fast typing.
     /// </summary>
-    private async void HandleConsoleCompletions(string partialCommand)
+    private void HandleConsoleCompletions(string partialCommand)
     {
-        var cursorPosition = _consoleScene?.GetCursorPosition() ?? partialCommand.Length;
-        var suggestions = await _completionProvider.GetCompletionsAsync(partialCommand, cursorPosition);
-        _consoleScene?.SetCompletions(suggestions);
+        // Cancel any pending completion request
+        _completionCts?.Cancel();
+        _completionCts = new CancellationTokenSource();
+
+        // Fire and forget with proper error handling (not async void)
+        _ = GetCompletionsWithDebounceAsync(partialCommand, _completionCts.Token);
+    }
+
+    /// <summary>
+    /// Gets completions with debouncing to avoid flooding during fast typing.
+    /// </summary>
+    private async Task GetCompletionsWithDebounceAsync(string partialCommand, CancellationToken ct)
+    {
+        try
+        {
+            // Wait for typing to pause (debounce)
+            await Task.Delay(CompletionDebounceMs, ct);
+
+            // Get cursor position and completions
+            var cursorPosition = _consoleScene?.GetCursorPosition() ?? partialCommand.Length;
+            var suggestions = await _completionProvider.GetCompletionsAsync(partialCommand, cursorPosition);
+
+            // Only update UI if this request wasn't cancelled
+            if (!ct.IsCancellationRequested)
+            {
+                _consoleScene?.SetCompletions(suggestions);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Expected when typing quickly - new request cancelled this one
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting completions for: {PartialCommand}", partialCommand);
+        }
     }
 
     /// <summary>

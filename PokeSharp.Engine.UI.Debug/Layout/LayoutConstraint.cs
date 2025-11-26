@@ -11,6 +11,14 @@ public class LayoutConstraint
     private float _offsetY;
     private float? _width;
     private float? _height;
+    private float? _widthPercent;
+    private float? _heightPercent;
+    private float? _minWidth;
+    private float? _minHeight;
+    private float? _maxWidth;
+    private float? _maxHeight;
+    private Thickness _margin;
+    private Thickness _padding;
 
     /// <summary>Dirty flag - true when any constraint property has changed</summary>
     public bool IsDirty { get; private set; } = true;
@@ -55,15 +63,6 @@ public class LayoutConstraint
         set { if (_height != value) { _height = value; MarkDirty(); } }
     }
 
-    private float? _widthPercent;
-    private float? _heightPercent;
-    private float? _minWidth;
-    private float? _minHeight;
-    private float? _maxWidth;
-    private float? _maxHeight;
-    private float _margin;
-    private float _padding;
-
     /// <summary>Width as percentage of parent (0.0-1.0, overrides Width if set)</summary>
     public float? WidthPercent
     {
@@ -106,124 +105,112 @@ public class LayoutConstraint
         set { if (_maxHeight != value) { _maxHeight = value; MarkDirty(); } }
     }
 
-    /// <summary>Margin on all sides (space outside the element)</summary>
-    public float Margin
+    /// <summary>
+    /// Margin (space outside the element).
+    /// Accepts a float (uniform) or Thickness (individual sides).
+    /// </summary>
+    public Thickness Margin
     {
         get => _margin;
         set { if (_margin != value) { _margin = value; MarkDirty(); } }
     }
 
-    /// <summary>Padding on all sides (space inside the element)</summary>
-    public float Padding
+    /// <summary>
+    /// Padding (space inside the element).
+    /// Accepts a float (uniform) or Thickness (individual sides).
+    /// </summary>
+    public Thickness Padding
     {
         get => _padding;
         set { if (_padding != value) { _padding = value; MarkDirty(); } }
     }
 
-    private float? _marginLeft;
-    private float? _marginTop;
-    private float? _marginRight;
-    private float? _marginBottom;
-    private float? _paddingLeft;
-    private float? _paddingTop;
-    private float? _paddingRight;
-    private float? _paddingBottom;
+    // ═══════════════════════════════════════════════════════════════════════
+    // Convenience properties for setting individual sides
+    // These modify the underlying Thickness while maintaining the other sides
+    // ═══════════════════════════════════════════════════════════════════════
 
-    /// <summary>Left margin (overrides Margin if set)</summary>
-    public float? MarginLeft
+    /// <summary>Left margin (convenience setter, modifies Margin.Left)</summary>
+    public float MarginLeft
     {
-        get => _marginLeft;
-        set { if (_marginLeft != value) { _marginLeft = value; MarkDirty(); } }
+        get => _margin.Left;
+        set { Margin = new Thickness(value, _margin.Top, _margin.Right, _margin.Bottom); }
     }
 
-    /// <summary>Top margin (overrides Margin if set)</summary>
-    public float? MarginTop
+    /// <summary>Top margin (convenience setter, modifies Margin.Top)</summary>
+    public float MarginTop
     {
-        get => _marginTop;
-        set { if (_marginTop != value) { _marginTop = value; MarkDirty(); } }
+        get => _margin.Top;
+        set { Margin = new Thickness(_margin.Left, value, _margin.Right, _margin.Bottom); }
     }
 
-    /// <summary>Right margin (overrides Margin if set)</summary>
-    public float? MarginRight
+    /// <summary>Right margin (convenience setter, modifies Margin.Right)</summary>
+    public float MarginRight
     {
-        get => _marginRight;
-        set { if (_marginRight != value) { _marginRight = value; MarkDirty(); } }
+        get => _margin.Right;
+        set { Margin = new Thickness(_margin.Left, _margin.Top, value, _margin.Bottom); }
     }
 
-    /// <summary>Bottom margin (overrides Margin if set)</summary>
-    public float? MarginBottom
+    /// <summary>Bottom margin (convenience setter, modifies Margin.Bottom)</summary>
+    public float MarginBottom
     {
-        get => _marginBottom;
-        set { if (_marginBottom != value) { _marginBottom = value; MarkDirty(); } }
+        get => _margin.Bottom;
+        set { Margin = new Thickness(_margin.Left, _margin.Top, _margin.Right, value); }
     }
 
-    /// <summary>Left padding (overrides Padding if set)</summary>
-    public float? PaddingLeft
+    /// <summary>Left padding (convenience setter, modifies Padding.Left)</summary>
+    public float PaddingLeft
     {
-        get => _paddingLeft;
-        set { if (_paddingLeft != value) { _paddingLeft = value; MarkDirty(); } }
+        get => _padding.Left;
+        set { Padding = new Thickness(value, _padding.Top, _padding.Right, _padding.Bottom); }
     }
 
-    /// <summary>Top padding (overrides Padding if set)</summary>
-    public float? PaddingTop
+    /// <summary>Top padding (convenience setter, modifies Padding.Top)</summary>
+    public float PaddingTop
     {
-        get => _paddingTop;
-        set { if (_paddingTop != value) { _paddingTop = value; MarkDirty(); } }
+        get => _padding.Top;
+        set { Padding = new Thickness(_padding.Left, value, _padding.Right, _padding.Bottom); }
     }
 
-    /// <summary>Right padding (overrides Padding if set)</summary>
-    public float? PaddingRight
+    /// <summary>Right padding (convenience setter, modifies Padding.Right)</summary>
+    public float PaddingRight
     {
-        get => _paddingRight;
-        set { if (_paddingRight != value) { _paddingRight = value; MarkDirty(); } }
+        get => _padding.Right;
+        set { Padding = new Thickness(_padding.Left, _padding.Top, value, _padding.Bottom); }
     }
 
-    /// <summary>Bottom padding (overrides Padding if set)</summary>
-    public float? PaddingBottom
+    /// <summary>Bottom padding (convenience setter, modifies Padding.Bottom)</summary>
+    public float PaddingBottom
     {
-        get => _paddingBottom;
-        set { if (_paddingBottom != value) { _paddingBottom = value; MarkDirty(); } }
+        get => _padding.Bottom;
+        set { Padding = new Thickness(_padding.Left, _padding.Top, _padding.Right, value); }
     }
 
-    /// <summary>
-    /// Gets the effective left margin.
-    /// </summary>
-    public float GetMarginLeft() => MarginLeft ?? Margin;
+    // ═══════════════════════════════════════════════════════════════════════
+    // Convenience accessor methods (for LayoutResolver compatibility)
+    // ═══════════════════════════════════════════════════════════════════════
 
-    /// <summary>
-    /// Gets the effective top margin.
-    /// </summary>
-    public float GetMarginTop() => MarginTop ?? Margin;
+    /// <summary>Gets the left margin</summary>
+    public float GetMarginLeft() => _margin.Left;
 
-    /// <summary>
-    /// Gets the effective right margin.
-    /// </summary>
-    public float GetMarginRight() => MarginRight ?? Margin;
+    /// <summary>Gets the top margin</summary>
+    public float GetMarginTop() => _margin.Top;
 
-    /// <summary>
-    /// Gets the effective bottom margin.
-    /// </summary>
-    public float GetMarginBottom() => MarginBottom ?? Margin;
+    /// <summary>Gets the right margin</summary>
+    public float GetMarginRight() => _margin.Right;
 
-    /// <summary>
-    /// Gets the effective left padding.
-    /// </summary>
-    public float GetPaddingLeft() => PaddingLeft ?? Padding;
+    /// <summary>Gets the bottom margin</summary>
+    public float GetMarginBottom() => _margin.Bottom;
 
-    /// <summary>
-    /// Gets the effective top padding.
-    /// </summary>
-    public float GetPaddingTop() => PaddingTop ?? Padding;
+    /// <summary>Gets the left padding</summary>
+    public float GetPaddingLeft() => _padding.Left;
 
-    /// <summary>
-    /// Gets the effective right padding.
-    /// </summary>
-    public float GetPaddingRight() => PaddingRight ?? Padding;
+    /// <summary>Gets the top padding</summary>
+    public float GetPaddingTop() => _padding.Top;
 
-    /// <summary>
-    /// Gets the effective bottom padding.
-    /// </summary>
-    public float GetPaddingBottom() => PaddingBottom ?? Padding;
+    /// <summary>Gets the right padding</summary>
+    public float GetPaddingRight() => _padding.Right;
+
+    /// <summary>Gets the bottom padding</summary>
+    public float GetPaddingBottom() => _padding.Bottom;
 }
-
-

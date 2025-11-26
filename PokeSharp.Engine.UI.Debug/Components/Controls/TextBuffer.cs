@@ -43,6 +43,7 @@ public class TextBuffer : UIComponent, ITextDisplay
     private bool _isDraggingScrollbar = false;
     private int _scrollbarDragStartY = 0;
     private int _scrollbarDragStartOffset = 0;
+    private Point _lastMousePosition = Point.Zero;
 
     // Visual properties
     public Color BackgroundColor { get; set; } = UITheme.Dark.BackgroundPrimary;
@@ -483,6 +484,12 @@ public class TextBuffer : UIComponent, ITextDisplay
         var startIndex = Math.Max(0, Math.Min(_scrollOffset, lines.Count - visibleCount));
         var endIndex = Math.Min(lines.Count, startIndex + visibleCount);
 
+        // Track mouse position for scrollbar hover detection
+        if (input != null)
+        {
+            _lastMousePosition = input.MousePosition;
+        }
+
         // Handle input for scrolling (mouse wheel and keyboard)
         if (input != null && resolvedRect.Contains(input.MousePosition))
         {
@@ -742,8 +749,7 @@ public class TextBuffer : UIComponent, ITextDisplay
 
     private bool IsScrollbarHovered(LayoutRect thumbRect)
     {
-        // Would need input state to check - simplified for now
-        return false;
+        return thumbRect.Contains(_lastMousePosition);
     }
 
     private int GetLineAtPosition(Point mousePos, LayoutRect rect)

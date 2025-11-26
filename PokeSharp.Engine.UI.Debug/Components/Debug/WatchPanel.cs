@@ -82,27 +82,21 @@ public class WatchPanel : Panel
         public object? ComparisonDiff { get; set; } = null;
     }
 
-    public WatchPanel()
+    /// <summary>
+    /// Creates a WatchPanel with the specified components.
+    /// Use <see cref="WatchPanelBuilder"/> to construct instances.
+    /// </summary>
+    internal WatchPanel(TextBuffer watchBuffer, double updateInterval, bool autoUpdate)
     {
+        _watchBuffer = watchBuffer;
+        UpdateInterval = updateInterval;
+        AutoUpdate = autoUpdate;
+
         Id = "watch_panel";
         BackgroundColor = UITheme.Dark.ConsoleBackground;
         BorderColor = UITheme.Dark.BorderPrimary;
         BorderThickness = 1;
-
-        // Add padding to the panel
         Constraint.Padding = UITheme.Dark.PaddingMedium;
-
-        // Create text buffer for displaying watches
-        _watchBuffer = new TextBuffer("watch_buffer")
-        {
-            BackgroundColor = UITheme.Dark.ConsoleOutputBackground,
-            AutoScroll = false,
-            MaxLines = 1000,
-            Constraint = new LayoutConstraint
-            {
-                Anchor = Anchor.Fill
-            }
-        };
 
         AddChild(_watchBuffer);
     }

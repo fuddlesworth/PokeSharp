@@ -182,6 +182,7 @@ public class UITheme
         // Interactive thresholds
         DragThreshold = 5f,
         DoubleClickMaxDistance = 5f,
+        DoubleClickThreshold = 0.5f, // 500ms max time between clicks
 
         // ═══════════════════════════════════════════════════════════════
         // TAB-SPECIFIC COLORS
@@ -368,6 +369,7 @@ public class UITheme
     // Interactive thresholds
     public float DragThreshold { get; init; }
     public float DoubleClickMaxDistance { get; init; }
+    public float DoubleClickThreshold { get; init; }
 
     // ═══════════════════════════════════════════════════════════════
     // TAB-SPECIFIC COLORS

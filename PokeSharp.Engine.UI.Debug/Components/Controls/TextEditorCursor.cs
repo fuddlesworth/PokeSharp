@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using PokeSharp.Engine.UI.Debug.Core;
 
 namespace PokeSharp.Engine.UI.Debug.Components.Controls;
 
@@ -10,7 +11,6 @@ public class TextEditorCursor
     private int _line;
     private int _column;
     private float _blinkTimer;
-    private const float DefaultBlinkRate = 0.5f;
 
     /// <summary>
     /// Gets or sets the cursor line (0-based).
@@ -33,7 +33,7 @@ public class TextEditorCursor
     /// <summary>
     /// Gets or sets the blink rate in seconds.
     /// </summary>
-    public float BlinkRate { get; set; } = DefaultBlinkRate;
+    public float BlinkRate { get; set; } = UITheme.Dark.CursorBlinkRate;
 
     /// <summary>
     /// Gets whether the cursor should be visible based on blink animation.

@@ -57,23 +57,29 @@ public abstract class UIComponent
 
         Context = context;
 
-        // Resolve layout (with caching)
-        if (_layoutDirty || Constraint.IsDirty)
+        try
         {
-            var parentRect = context.CurrentContainer.ContentRect;
-            _cachedRect = LayoutResolver.Resolve(Constraint, parentRect, GetContentSize());
-            _layoutDirty = false;
-            Constraint.ClearDirty();
+            // Resolve layout (with caching)
+            if (_layoutDirty || Constraint.IsDirty)
+            {
+                var parentRect = context.CurrentContainer.ContentRect;
+                _cachedRect = LayoutResolver.Resolve(Constraint, parentRect, GetContentSize());
+                _layoutDirty = false;
+                Constraint.ClearDirty();
+            }
+            Rect = _cachedRect;
+
+            // Register with frame for input handling
+            context.RegisterComponent(Id, Rect, IsInteractive());
+
+            // Render
+            OnRender(context);
         }
-        Rect = _cachedRect;
-
-        // Register with frame for input handling
-        context.RegisterComponent(Id, Rect, IsInteractive());
-
-        // Render
-        OnRender(context);
-
-        Context = null;
+        finally
+        {
+            // Always clear context to prevent memory leaks and stale state
+            Context = null;
+        }
     }
 
     /// <summary>

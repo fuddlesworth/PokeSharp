@@ -28,8 +28,17 @@ public class StatsPanel : Panel
     public double UpdateTimeMs { get; set; } = 5.2;
     public double RenderTimeMs { get; set; } = 11.8;
 
-    public StatsPanel()
+    /// <summary>
+    /// Creates a StatsPanel with the specified initial values.
+    /// Use <see cref="StatsPanelBuilder"/> to construct instances.
+    /// </summary>
+    internal StatsPanel(float fps, long memoryMB, int entityCount, int drawCalls)
     {
+        Fps = fps;
+        MemoryUsageMB = memoryMB;
+        EntityCount = entityCount;
+        DrawCalls = drawCalls;
+
         BackgroundColor = UITheme.Dark.BackgroundSecondary;
         BorderColor = UITheme.Dark.BorderPrimary;
         BorderThickness = 1;

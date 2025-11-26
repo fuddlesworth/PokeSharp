@@ -19,7 +19,7 @@ public class LogsPanel : Panel
     private readonly List<LogEntry> _allLogs = new();
     private LogLevel _filterLevel = LogLevel.Trace; // Show all by default
     private string? _searchFilter = null;
-    private const int MaxLogs = 5000;
+    private readonly int _maxLogs;
 
     public class LogEntry
     {
@@ -29,27 +29,21 @@ public class LogsPanel : Panel
         public string Category { get; set; } = "General";
     }
 
-    public LogsPanel()
+    /// <summary>
+    /// Creates a LogsPanel with the specified components.
+    /// Use <see cref="LogsPanelBuilder"/> to construct instances.
+    /// </summary>
+    internal LogsPanel(TextBuffer logBuffer, int maxLogs, LogLevel filterLevel)
     {
+        _logBuffer = logBuffer;
+        _maxLogs = maxLogs;
+        _filterLevel = filterLevel;
+
         Id = "logs_panel";
         BackgroundColor = UITheme.Dark.ConsoleBackground;
         BorderColor = UITheme.Dark.BorderPrimary;
         BorderThickness = 1;
-
-        // Add padding to the panel
         Constraint.Padding = UITheme.Dark.PaddingMedium;
-
-        // Create text buffer for displaying logs
-        _logBuffer = new TextBuffer("log_buffer")
-        {
-            BackgroundColor = UITheme.Dark.ConsoleOutputBackground,
-            AutoScroll = true,
-            MaxLines = MaxLogs,
-            Constraint = new LayoutConstraint
-            {
-                Anchor = Anchor.Fill
-            }
-        };
 
         AddChild(_logBuffer);
         UpdateLogDisplay();
@@ -71,7 +65,7 @@ public class LogsPanel : Panel
         _allLogs.Add(entry);
 
         // Trim if we have too many logs
-        if (_allLogs.Count > MaxLogs)
+        if (_allLogs.Count > _maxLogs)
         {
             _allLogs.RemoveAt(0);
         }

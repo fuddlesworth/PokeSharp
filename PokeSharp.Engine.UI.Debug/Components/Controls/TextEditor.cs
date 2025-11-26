@@ -18,7 +18,6 @@ public class TextEditor : UIComponent, ITextInput
     private int _cursorLine = 0;
     private int _cursorColumn = 0;
     private float _cursorBlinkTimer = 0;
-    private const float CursorBlinkRate = 0.5f;
 
     // Undo/Redo
     private readonly TextEditorUndoRedo _undoRedo = new();
@@ -36,7 +35,6 @@ public class TextEditor : UIComponent, ITextInput
     // Mouse state for drag selection
     private bool _isMouseDown = false;
     private float _lastClickTime = 0;
-    private const float DoubleClickThreshold = 0.5f; // 500ms
 
     // Command history
     private readonly List<string> _history = new();
@@ -1027,7 +1025,7 @@ public class TextEditor : UIComponent, ITextInput
             {
                 // Check for double-click
                 var currentTime = (float)context.Input.GameTime.TotalGameTime.TotalSeconds;
-                var isDoubleClick = (currentTime - _lastClickTime) < DoubleClickThreshold;
+                var isDoubleClick = (currentTime - _lastClickTime) < Theme.DoubleClickThreshold;
                 _lastClickTime = currentTime;
 
                 if (isDoubleClick)
@@ -1143,10 +1141,10 @@ public class TextEditor : UIComponent, ITextInput
         if (IsFocused())
         {
             _cursorBlinkTimer += (float)context.Input.GameTime.ElapsedGameTime.TotalSeconds;
-            if (_cursorBlinkTimer > CursorBlinkRate)
+            if (_cursorBlinkTimer > Theme.CursorBlinkRate)
                 _cursorBlinkTimer = 0;
 
-            if (_cursorBlinkTimer < CursorBlinkRate / 2)
+            if (_cursorBlinkTimer < Theme.CursorBlinkRate / 2)
             {
                 var cursorY = textStartY + (_cursorLine - _scrollOffsetY) * lineHeight;
                 if (_cursorLine >= _scrollOffsetY && _cursorLine < _scrollOffsetY + visibleLines)

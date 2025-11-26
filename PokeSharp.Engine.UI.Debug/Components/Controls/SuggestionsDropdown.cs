@@ -23,6 +23,7 @@ public record SuggestionItem(
 /// </summary>
 public class SuggestionsDropdown : UIComponent
 {
+    private readonly object _lock = new();
     private readonly List<SuggestionItem> _items = new();
     private readonly List<SuggestionItem> _filteredItems = new();
     private string _filterText = string.Empty;
@@ -66,9 +67,12 @@ public class SuggestionsDropdown : UIComponent
         get => _selectedIndex;
         set
         {
-            var filteredItems = GetFilteredItems();
-            _selectedIndex = Math.Clamp(value, 0, filteredItems.Count - 1);
-            EnsureSelectedVisible();
+            lock (_lock)
+            {
+                var filteredItems = GetFilteredItemsUnsafe();
+                _selectedIndex = Math.Clamp(value, 0, Math.Max(0, filteredItems.Count - 1));
+                EnsureSelectedVisibleUnsafe();
+            }
         }
     }
 
@@ -76,14 +80,23 @@ public class SuggestionsDropdown : UIComponent
     {
         get
         {
-            var filteredItems = GetFilteredItems();
-            return _selectedIndex >= 0 && _selectedIndex < filteredItems.Count
-                ? filteredItems[_selectedIndex]
-                : null;
+            lock (_lock)
+            {
+                return GetSelectedItemUnsafe();
+            }
         }
     }
 
-    public int ItemCount => GetFilteredItems().Count;
+    public int ItemCount
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return GetFilteredItemsUnsafe().Count;
+            }
+        }
+    }
     public bool HasItems => ItemCount > 0;
 
     // Events
@@ -94,51 +107,87 @@ public class SuggestionsDropdown : UIComponent
 
     /// <summary>
     /// Sets the suggestions to display.
+    /// Thread-safe: can be called from async completion provider.
     /// </summary>
     public void SetItems(List<SuggestionItem> items)
     {
-        _items.Clear();
-        _items.AddRange(items);
-        _isDirty = true;
-        _selectedIndex = 0;
-        _scrollOffset = 0;
+        lock (_lock)
+        {
+            _items.Clear();
+            _items.AddRange(items);
+            _isDirty = true;
+            _selectedIndex = 0;
+            _scrollOffset = 0;
+        }
     }
 
     /// <summary>
     /// Sets the suggestions from simple strings.
+    /// Thread-safe: can be called from async completion provider.
     /// </summary>
     public void SetItems(List<string> items)
     {
-        _items.Clear();
-        _items.AddRange(items.Select(item => new SuggestionItem(item)));
-        _isDirty = true;
-        _selectedIndex = 0;
-        _scrollOffset = 0;
+        lock (_lock)
+        {
+            _items.Clear();
+            _items.AddRange(items.Select(item => new SuggestionItem(item)));
+            _isDirty = true;
+            _selectedIndex = 0;
+            _scrollOffset = 0;
+        }
     }
 
     /// <summary>
-    /// Clears all suggestions.
+    /// Clears all suggestions and resets filter state.
+    /// Thread-safe: can be called from async completion provider.
     /// </summary>
     public void Clear()
     {
-        _items.Clear();
-        _filteredItems.Clear();
-        _selectedIndex = 0;
-        _scrollOffset = 0;
-        _isDirty = true;
+        lock (_lock)
+        {
+            _items.Clear();
+            _filteredItems.Clear();
+            _filterText = string.Empty;
+            _selectedIndex = 0;
+            _scrollOffset = 0;
+            _isDirty = true;
+        }
     }
 
     /// <summary>
     /// Sets the filter text for suggestion filtering.
+    /// Attempts to preserve the current selection if it still matches the new filter.
     /// </summary>
     public void SetFilter(string filter)
     {
-        if (_filterText != filter)
+        lock (_lock)
         {
-            _filterText = filter;
-            _isDirty = true;
-            _selectedIndex = 0;
-            _scrollOffset = 0;
+            if (_filterText != filter)
+            {
+                // Remember the currently selected item before filtering
+                var previousSelection = GetSelectedItemUnsafe();
+
+                _filterText = filter;
+                _isDirty = true;
+
+                // Try to preserve selection if the item still matches
+                if (previousSelection != null)
+                {
+                    var filtered = GetFilteredItemsUnsafe();
+                    var matchIndex = filtered.FindIndex(i => i.Text == previousSelection.Text);
+
+                    if (matchIndex >= 0)
+                    {
+                        _selectedIndex = matchIndex;
+                        EnsureSelectedVisibleUnsafe();
+                        return;
+                    }
+                }
+
+                // Fallback: reset to first item
+                _selectedIndex = 0;
+                _scrollOffset = 0;
+            }
         }
     }
 
@@ -147,12 +196,15 @@ public class SuggestionsDropdown : UIComponent
     /// </summary>
     public void SelectNext()
     {
-        var filteredItems = GetFilteredItems();
-        if (filteredItems.Count == 0)
-            return;
+        lock (_lock)
+        {
+            var filteredItems = GetFilteredItemsUnsafe();
+            if (filteredItems.Count == 0)
+                return;
 
-        _selectedIndex = (_selectedIndex + 1) % filteredItems.Count;
-        EnsureSelectedVisible();
+            _selectedIndex = (_selectedIndex + 1) % filteredItems.Count;
+            EnsureSelectedVisibleUnsafe();
+        }
     }
 
     /// <summary>
@@ -160,15 +212,18 @@ public class SuggestionsDropdown : UIComponent
     /// </summary>
     public void SelectPrevious()
     {
-        var filteredItems = GetFilteredItems();
-        if (filteredItems.Count == 0)
-            return;
+        lock (_lock)
+        {
+            var filteredItems = GetFilteredItemsUnsafe();
+            if (filteredItems.Count == 0)
+                return;
 
-        _selectedIndex--;
-        if (_selectedIndex < 0)
-            _selectedIndex = filteredItems.Count - 1;
+            _selectedIndex--;
+            if (_selectedIndex < 0)
+                _selectedIndex = filteredItems.Count - 1;
 
-        EnsureSelectedVisible();
+            EnsureSelectedVisibleUnsafe();
+        }
     }
 
     /// <summary>
@@ -193,8 +248,20 @@ public class SuggestionsDropdown : UIComponent
 
     /// <summary>
     /// Gets filtered items based on current filter text.
+    /// Thread-safe version that acquires lock.
     /// </summary>
     private List<SuggestionItem> GetFilteredItems()
+    {
+        lock (_lock)
+        {
+            return GetFilteredItemsUnsafe();
+        }
+    }
+
+    /// <summary>
+    /// Gets filtered items. Caller must hold _lock.
+    /// </summary>
+    private List<SuggestionItem> GetFilteredItemsUnsafe()
     {
         if (_isDirty)
         {
@@ -220,6 +287,37 @@ public class SuggestionsDropdown : UIComponent
         }
 
         return _filteredItems;
+    }
+
+    /// <summary>
+    /// Gets currently selected item. Caller must hold _lock.
+    /// </summary>
+    private SuggestionItem? GetSelectedItemUnsafe()
+    {
+        var filtered = GetFilteredItemsUnsafe();
+        return _selectedIndex >= 0 && _selectedIndex < filtered.Count
+            ? filtered[_selectedIndex]
+            : null;
+    }
+
+    /// <summary>
+    /// Ensures selected item is visible. Caller must hold _lock.
+    /// </summary>
+    private void EnsureSelectedVisibleUnsafe()
+    {
+        var filteredItems = GetFilteredItemsUnsafe();
+        if (filteredItems.Count == 0) return;
+
+        _selectedIndex = Math.Clamp(_selectedIndex, 0, filteredItems.Count - 1);
+
+        if (_selectedIndex < _scrollOffset)
+        {
+            _scrollOffset = _selectedIndex;
+        }
+        else if (_selectedIndex >= _scrollOffset + _maxVisibleItems)
+        {
+            _scrollOffset = _selectedIndex - _maxVisibleItems + 1;
+        }
     }
 
     /// <summary>
