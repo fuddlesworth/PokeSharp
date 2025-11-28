@@ -290,8 +290,7 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
             loadingSceneLogger,
             _loadingProgress,
             initializationTaskAsIScene,
-            _sceneManager,
-            this // Pass the game instance for Gum initialization
+            _sceneManager
         );
 
         _sceneManager.ChangeScene(loadingScene);

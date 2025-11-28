@@ -216,7 +216,9 @@ public class BreakpointManager : IBreakpointOperations
         }
 
         // Don't evaluate if already paused from a previous breakpoint
-        if (_isPaused && (_timeControl?.IsPaused ?? false))
+        // Check _isPaused alone - it's set whenever a breakpoint triggers,
+        // regardless of whether _timeControl exists
+        if (_isPaused)
             return;
 
         foreach (var bp in snapshot)
@@ -235,12 +237,11 @@ public class BreakpointManager : IBreakpointOperations
                     bp.OnHit();
                     _logger?.LogInformation("Breakpoint #{Id} hit: {Description}", bp.Id, bp.Description);
 
-                    // Pause the game
-                    if (_timeControl != null)
-                    {
-                        _timeControl.Pause();
-                        _isPaused = true;
-                    }
+                    // Mark as paused to prevent re-triggering on next frame
+                    _isPaused = true;
+
+                    // Pause the game if time control is available
+                    _timeControl?.Pause();
 
                     // Fire event
                     OnBreakpointHit?.Invoke(bp);
