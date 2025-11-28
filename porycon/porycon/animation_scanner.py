@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 from PIL import Image
 import json
+import re
 from .utils import camel_to_snake, TilesetPathResolver
 from .logging_config import get_logger
 
@@ -26,7 +27,7 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 508,
             "num_tiles": 4,
             "anim_folder": "flower",
-            "duration_ms": 200,  # Default duration per frame
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             # From gTilesetAnims_General_Flower[]: Frame0, Frame1, Frame0, Frame2
             "frame_sequence": [0, 1, 0, 2]
         },
@@ -34,7 +35,7 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 432,
             "num_tiles": 30,
             "anim_folder": "water",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             # From gTilesetAnims_General_Water[]: Frame0-7 linear
             "frame_sequence": [0, 1, 2, 3, 4, 5, 6, 7]
         },
@@ -42,7 +43,7 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 464,
             "num_tiles": 10,
             "anim_folder": "sand_water_edge",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             # From gTilesetAnims_General_SandWaterEdge[]: ends with Frame0 for smooth loop
             "frame_sequence": [0, 1, 2, 3, 4, 5, 6, 0]
         },
@@ -50,7 +51,7 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 496,
             "num_tiles": 6,
             "anim_folder": "waterfall",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             # From gTilesetAnims_General_Waterfall[]: Frame0-3 linear
             "frame_sequence": [0, 1, 2, 3]
         },
@@ -58,7 +59,7 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 480,
             "num_tiles": 10,
             "anim_folder": "land_water_edge",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             # From gTilesetAnims_General_LandWaterEdge[]: Frame0-3 linear
             "frame_sequence": [0, 1, 2, 3]
         }
@@ -68,7 +69,7 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 496,
             "num_tiles": 4,
             "anim_folder": "tv_turned_on",
-            "duration_ms": 200
+            "duration_ms": 133  # 8 ticks at 60fps = 8/60 seconds = ~133ms
         }
     },
     "rustboro": {
@@ -76,14 +77,14 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 128,  # NUM_TILES_IN_PRIMARY + 128 = 512 + 128 = 640, but in secondary tileset it's offset
             "num_tiles": 8,
             "anim_folder": "windy_water",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True
         },
         "fountain": {
             "base_tile_id": 448,  # NUM_TILES_IN_PRIMARY + 448
             "num_tiles": 4,
             "anim_folder": "fountain",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True
         }
     },
@@ -92,7 +93,7 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 170,  # NUM_TILES_IN_PRIMARY + 170
             "num_tiles": 6,
             "anim_folder": "flag",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True
         }
     },
@@ -101,7 +102,7 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 224,  # NUM_TILES_IN_PRIMARY + 224
             "num_tiles": 4,
             "anim_folder": "balloons",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True
         }
     },
@@ -110,14 +111,14 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 96,  # NUM_TILES_IN_PRIMARY + 96
             "num_tiles": 4,
             "anim_folder": "flower_1",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True
         },
         "flower_2": {
             "base_tile_id": 128,  # NUM_TILES_IN_PRIMARY + 128
             "num_tiles": 4,
             "anim_folder": "flower_2",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True
         }
     },
@@ -126,7 +127,7 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 288,  # NUM_TILES_IN_PRIMARY + 288
             "num_tiles": 4,
             "anim_folder": "steam",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True,
             # From gTilesetAnims_Lavaridge_Steam[]: Frame0-3 linear
             "frame_sequence": [0, 1, 2, 3]
@@ -135,7 +136,7 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 160,  # NUM_TILES_IN_PRIMARY + 160
             "num_tiles": 4,
             "anim_folder": "lava",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True,
             # From gTilesetAnims_Lavaridge_Cave_Lava[]: Frame0-3 linear
             "frame_sequence": [0, 1, 2, 3]
@@ -146,7 +147,7 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 224,  # NUM_TILES_IN_PRIMARY + 224
             "num_tiles": 4,
             "anim_folder": "flowers",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True
         }
     },
@@ -155,7 +156,7 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 464,  # NUM_TILES_IN_PRIMARY + 464
             "num_tiles": 30,
             "anim_folder": "log_bridges",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True,
             # From gTilesetAnims_Pacifidlog_LogBridges[]: Frame0, Frame1, Frame2, Frame1 (ping-pong)
             "frame_sequence": [0, 1, 2, 1]
@@ -164,7 +165,7 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 496,  # NUM_TILES_IN_PRIMARY + 496
             "num_tiles": 8,
             "anim_folder": "water_currents",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True,
             # From gTilesetAnims_Pacifidlog_WaterCurrents[]: Frame0-7 linear
             "frame_sequence": [0, 1, 2, 3, 4, 5, 6, 7]
@@ -175,7 +176,7 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 240,  # NUM_TILES_IN_PRIMARY + 240
             "num_tiles": 96,
             "anim_folder": "stormy_water",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True
         }
     },
@@ -184,7 +185,7 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 496,  # NUM_TILES_IN_PRIMARY + 496
             "num_tiles": 4,
             "anim_folder": "seaweed",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True,
             # From gTilesetAnims_Underwater_Seaweed[]: Frame0-3 linear
             "frame_sequence": [0, 1, 2, 3]
@@ -195,7 +196,7 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 416,  # NUM_TILES_IN_PRIMARY + 416
             "num_tiles": 4,
             "anim_folder": "lava",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True,
             # From gTilesetAnims_Lavaridge_Cave_Lava[]: Frame0-3 linear
             "frame_sequence": [0, 1, 2, 3]
@@ -206,7 +207,7 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 218,  # NUM_TILES_IN_PRIMARY + 218
             "num_tiles": 6,
             "anim_folder": "flag",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True
         }
     },
@@ -215,7 +216,7 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 218,  # NUM_TILES_IN_PRIMARY + 218
             "num_tiles": 6,
             "anim_folder": "flag",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True
         }
     },
@@ -224,7 +225,7 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 144,  # NUM_TILES_IN_PRIMARY + 144
             "num_tiles": 16,
             "anim_folder": "electric_gates",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True
         }
     },
@@ -233,14 +234,14 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 496,  # NUM_TILES_IN_PRIMARY + 496
             "num_tiles": 12,
             "anim_folder": "side_waterfall",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True
         },
         "front_waterfall": {
             "base_tile_id": 464,  # NUM_TILES_IN_PRIMARY + 464
             "num_tiles": 20,
             "anim_folder": "front_waterfall",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True
         }
     },
@@ -249,14 +250,14 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 480,  # NUM_TILES_IN_PRIMARY + 480
             "num_tiles": 4,
             "anim_folder": "floor_light",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True
         },
         "wall_lights": {
             "base_tile_id": 504,  # NUM_TILES_IN_PRIMARY + 504
             "num_tiles": 1,
             "anim_folder": "wall_lights",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True
         }
     },
@@ -265,7 +266,7 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 496,  # NUM_TILES_IN_PRIMARY + 496
             "num_tiles": 9,
             "anim_folder": "blinking_lights",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True
         }
     },
@@ -274,14 +275,14 @@ ANIMATION_MAPPINGS = {
             "base_tile_id": 151,  # NUM_TILES_IN_PRIMARY + 151
             "num_tiles": 8,
             "anim_folder": "torch",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True
         },
         "statue_shadow": {
             "base_tile_id": 135,  # NUM_TILES_IN_PRIMARY + 135
             "num_tiles": 8,
             "anim_folder": "statue_shadow",
-            "duration_ms": 200,
+            "duration_ms": 133,  # 8 ticks at 60fps = 8/60 seconds = ~133ms
             "is_secondary": True
         }
     }
@@ -293,6 +294,8 @@ class AnimationScanner:
     
     def __init__(self, input_dir: str):
         self.input_dir = Path(input_dir)
+        self._tileset_anim_durations = {}  # Cache for parsed durations from tileset_anims.c
+        self._parse_tileset_anims()
     
     def find_anim_folder(self, tileset_name: str, is_secondary: bool = False) -> Optional[Path]:
         """Find the anim folder for a tileset."""
@@ -324,6 +327,86 @@ class AnimationScanner:
                 return anim_path
         
         return None
+    
+    def _parse_tileset_anims(self):
+        """
+        Parse tileset_anims.c to extract actual animation durations.
+        
+        In pokeemerald, tile animations work like this:
+        1. UpdateTilesetAnimations() is called every frame (60fps)
+        2. The timer increments and wraps at CounterMax (usually 256)
+        3. Each animation is called at specific intervals (e.g., timer % 16 == 0)
+        4. The frame index is calculated as (timer / interval) % num_frames
+        
+        For example, General_Flower:
+        - Called when timer % 16 == 0 (every 16 frames)
+        - Uses timer / 16 as the frame index
+        - Has 4 frames, so each frame lasts 16 frames
+        - 16 frames at 60fps = 16/60 = 267ms per frame
+        """
+        tileset_anims_path = self.input_dir / "src" / "tileset_anims.c"
+        
+        if not tileset_anims_path.exists():
+            logger.debug(f"tileset_anims.c not found at {tileset_anims_path}, using default durations")
+            return
+        
+        try:
+            content = tileset_anims_path.read_text(encoding='utf-8', errors='ignore')
+            
+            # Parse animation arrays to get frame counts
+            # Format: const u16 *const gTilesetAnims_General_Flower[] = { Frame0, Frame1, ... };
+            anim_array_pattern = re.compile(
+                r'const\s+u16\s+\*const\s+gTilesetAnims_(\w+)_(\w+)\[\]\s*=\s*\{([^}]+)\}',
+                re.MULTILINE | re.DOTALL
+            )
+            
+            # Parse TilesetAnim functions to get update intervals
+            # Format: if (timer % 16 == 0) QueueAnimTiles_General_Flower(timer / 16);
+            # We need to match the pattern where timer % interval == some_value
+            anim_call_pattern = re.compile(
+                r'if\s*\(timer\s*%\s*(\d+)\s*==\s*\d+\)\s*QueueAnimTiles_(\w+)_(\w+)\(timer\s*/\s*\1\)'
+            )
+            
+            # Also try to match patterns where the interval might be different
+            # Some animations might use different patterns
+            alt_pattern = re.compile(
+                r'QueueAnimTiles_(\w+)_(\w+)\([^)]*timer[^)]*\)'
+            )
+            
+            # Map animation names to update intervals
+            # Format: "general_flower" -> 16 (means updates every 16 frames)
+            anim_intervals = {}  # "tileset_anim" -> interval
+            
+            for match in anim_call_pattern.finditer(content):
+                interval = int(match.group(1))
+                tileset_name = match.group(2).lower()
+                anim_name = match.group(3).lower()
+                key = f"{tileset_name}_{anim_name}"
+                anim_intervals[key] = interval
+                logger.debug(f"Found animation {key} with interval {interval}")
+            
+            # Parse frame arrays to get frame counts
+            for match in anim_array_pattern.finditer(content):
+                tileset_name = match.group(1).lower()
+                anim_name = match.group(2).lower()
+                anim_content = match.group(3)
+                
+                # Count frame references (Frame0, Frame1, etc.)
+                frame_count = len(re.findall(r'Frame\d+', anim_content))
+                
+                if frame_count > 0:
+                    key = f"{tileset_name}_{anim_name}"
+                    interval = anim_intervals.get(key, 16)  # Default to 16 if not found
+                    
+                    # Duration per frame = interval frames at 60fps
+                    # interval frames / 60 fps = interval/60 seconds = (interval/60)*1000 ms
+                    duration_ms = int((interval / 60.0) * 1000)
+                    
+                    self._tileset_anim_durations[key] = duration_ms
+                    logger.debug(f"Parsed {key}: {duration_ms}ms per frame (interval={interval}, frames={frame_count})")
+        
+        except Exception as e:
+            logger.warning(f"Error parsing tileset_anims.c: {e}")
     
     def scan_animation_frames(self, tileset_name: str, anim_folder_name: str, is_secondary: bool = False) -> List[Path]:
         """Scan for animation frame images in an anim subfolder."""
@@ -567,11 +650,20 @@ class AnimationScanner:
                     continue
             
             if frames:
+                # Try to get duration from parsed tileset_anims.c first
+                tileset_key = camel_to_snake(tileset_name).lower()
+                anim_key = f"{tileset_key}_{anim_name}"
+                duration_ms = self._tileset_anim_durations.get(anim_key)
+                
+                # Fall back to hardcoded value in ANIMATION_MAPPINGS, then default
+                if duration_ms is None:
+                    duration_ms = anim_def.get("duration_ms", 133)  # Default: 8 ticks at 60fps
+                
                 result[anim_name] = {
                     "frames": frames,
                     "base_tile_id": base_tile_id,
                     "num_tiles": num_tiles,
-                    "duration_ms": anim_def.get("duration_ms", 200),
+                    "duration_ms": duration_ms,
                     "is_metatile": is_metatile,
                     # Frame sequence defines playback order (e.g., [0, 1, 0, 2] for ping-pong)
                     # If not defined, will play linearly (0, 1, 2, ...)
@@ -615,8 +707,42 @@ class AnimationScanner:
             num_tiles = anim_def["num_tiles"]
             duration_ms = anim_data[anim_name]["duration_ms"]
             frames = anim_data[anim_name]["frames"]
+            frame_sequence = anim_data[anim_name].get("frame_sequence", None)
+            is_metatile = anim_data[anim_name].get("is_metatile", False)
             
-            if not frames or not frames[0]:
+            if not frames:
+                continue
+            
+            # Determine the actual frame sequence to use
+            # For metatile animations, frames is a list of 16x16 images (one per frame)
+            # For tile strip animations, frames is a flat list of 8x8 tiles: [tile0_frame0, tile1_frame0, ..., tileN_frame0, tile0_frame1, ...]
+            if is_metatile:
+                # Metatile animations: frames is [frame0_img, frame1_img, ...]
+                num_anim_frames = len(frames)
+                if frame_sequence:
+                    playback_order = frame_sequence
+                    # Ensure frame_sequence indices are valid
+                    playback_order = [idx for idx in frame_sequence if idx < num_anim_frames]
+                    if not playback_order:
+                        playback_order = list(range(num_anim_frames))
+                else:
+                    playback_order = list(range(num_anim_frames))
+            else:
+                # Tile strip animations: frames is flat list, need to group by frame
+                if num_tiles > 0 and len(frames) > 0:
+                    num_anim_frames = len(frames) // num_tiles
+                else:
+                    num_anim_frames = 0
+                if frame_sequence:
+                    playback_order = frame_sequence
+                    # Ensure frame_sequence indices are valid
+                    playback_order = [idx for idx in frame_sequence if idx < num_anim_frames]
+                    if not playback_order:
+                        playback_order = list(range(num_anim_frames))
+                else:
+                    playback_order = list(range(num_anim_frames))
+            
+            if num_anim_frames == 0:
                 continue
             
             # For each tile in the animation range, create an animation entry
@@ -642,15 +768,23 @@ class AnimationScanner:
                     # unless the tile is actually used
                     continue
                 
-                # Build animation frames
+                # Build animation frames using the playback order
                 animation_frames = []
-                for frame_idx, frame_tiles in enumerate(frames):
-                    if tile_offset < len(frame_tiles):
+                for seq_idx in playback_order:
+                    if is_metatile:
+                        # Metatile: frames[seq_idx] is the frame image
+                        if seq_idx < len(frames):
+                            frame_tiles_idx = seq_idx
+                        else:
+                            continue
+                    else:
+                        # Tile strip: calculate index in flat list
+                        frame_tiles_idx = seq_idx * num_tiles + tile_offset
+                    
+                    if frame_tiles_idx < len(frames):
                         # Calculate the animation tile index
-                        # Format: anim_name_tile_offset_frame_idx
-                        anim_tile_key = f"{anim_name}_{tile_offset}_{frame_idx}"
                         # Use a simpler index: base_offset + frame_idx * num_tiles + tile_offset
-                        anim_tile_index = base_tile_id * 10000 + frame_idx * 1000 + tile_offset
+                        anim_tile_index = base_tile_id * 10000 + seq_idx * 1000 + tile_offset
                         
                         # Find the new tile ID for this animation frame
                         if anim_tile_index in animation_tile_mapping:

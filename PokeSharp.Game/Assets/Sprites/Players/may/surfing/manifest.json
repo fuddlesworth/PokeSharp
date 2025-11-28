@@ -100,7 +100,9 @@
       "FrameIndices": [
         0
       ],
-      "FrameDuration": 0.26666668,
+      "FrameDurations": [
+        0.26666666666666666
+      ],
       "FlipHorizontal": false
     },
     {
@@ -109,7 +111,9 @@
       "FrameIndices": [
         1
       ],
-      "FrameDuration": 0.26666668,
+      "FrameDurations": [
+        0.26666666666666666
+      ],
       "FlipHorizontal": false
     },
     {
@@ -118,7 +122,9 @@
       "FrameIndices": [
         2
       ],
-      "FrameDuration": 0.26666668,
+      "FrameDurations": [
+        0.26666666666666666
+      ],
       "FlipHorizontal": false
     },
     {
@@ -127,7 +133,9 @@
       "FrameIndices": [
         2
       ],
-      "FrameDuration": 0.26666668,
+      "FrameDurations": [
+        0.26666666666666666
+      ],
       "FlipHorizontal": true
     },
     {
@@ -139,7 +147,12 @@
         4,
         0
       ],
-      "FrameDuration": 0.13333334,
+      "FrameDurations": [
+        0.13333333333333333,
+        0.13333333333333333,
+        0.13333333333333333,
+        0.13333333333333333
+      ],
       "FlipHorizontal": false
     },
     {
@@ -151,7 +164,12 @@
         6,
         1
       ],
-      "FrameDuration": 0.13333334,
+      "FrameDurations": [
+        0.13333333333333333,
+        0.13333333333333333,
+        0.13333333333333333,
+        0.13333333333333333
+      ],
       "FlipHorizontal": false
     },
     {
@@ -163,7 +181,12 @@
         8,
         2
       ],
-      "FrameDuration": 0.13333334,
+      "FrameDurations": [
+        0.13333333333333333,
+        0.13333333333333333,
+        0.13333333333333333,
+        0.13333333333333333
+      ],
       "FlipHorizontal": false
     },
     {
@@ -175,7 +198,12 @@
         8,
         2
       ],
-      "FrameDuration": 0.13333334,
+      "FrameDurations": [
+        0.13333333333333333,
+        0.13333333333333333,
+        0.13333333333333333,
+        0.13333333333333333
+      ],
       "FlipHorizontal": true
     },
     {
@@ -187,7 +215,12 @@
         4,
         0
       ],
-      "FrameDuration": 0.06666667,
+      "FrameDurations": [
+        0.06666666666666667,
+        0.06666666666666667,
+        0.06666666666666667,
+        0.06666666666666667
+      ],
       "FlipHorizontal": false
     },
     {
@@ -199,7 +232,12 @@
         6,
         1
       ],
-      "FrameDuration": 0.06666667,
+      "FrameDurations": [
+        0.06666666666666667,
+        0.06666666666666667,
+        0.06666666666666667,
+        0.06666666666666667
+      ],
       "FlipHorizontal": false
     },
     {
@@ -211,7 +249,12 @@
         8,
         2
       ],
-      "FrameDuration": 0.06666667,
+      "FrameDurations": [
+        0.06666666666666667,
+        0.06666666666666667,
+        0.06666666666666667,
+        0.06666666666666667
+      ],
       "FlipHorizontal": false
     },
     {
@@ -223,7 +266,12 @@
         8,
         2
       ],
-      "FrameDuration": 0.06666667,
+      "FrameDurations": [
+        0.06666666666666667,
+        0.06666666666666667,
+        0.06666666666666667,
+        0.06666666666666667
+      ],
       "FlipHorizontal": true
     },
     {
@@ -235,7 +283,12 @@
         4,
         0
       ],
-      "FrameDuration": 0.033333335,
+      "FrameDurations": [
+        0.03333333333333333,
+        0.03333333333333333,
+        0.03333333333333333,
+        0.03333333333333333
+      ],
       "FlipHorizontal": false
     },
     {
@@ -247,7 +300,12 @@
         6,
         1
       ],
-      "FrameDuration": 0.033333335,
+      "FrameDurations": [
+        0.03333333333333333,
+        0.03333333333333333,
+        0.03333333333333333,
+        0.03333333333333333
+      ],
       "FlipHorizontal": false
     },
     {
@@ -259,7 +317,12 @@
         8,
         2
       ],
-      "FrameDuration": 0.033333335,
+      "FrameDurations": [
+        0.03333333333333333,
+        0.03333333333333333,
+        0.03333333333333333,
+        0.03333333333333333
+      ],
       "FlipHorizontal": false
     },
     {
@@ -271,7 +334,12 @@
         8,
         2
       ],
-      "FrameDuration": 0.033333335,
+      "FrameDurations": [
+        0.03333333333333333,
+        0.03333333333333333,
+        0.03333333333333333,
+        0.03333333333333333
+      ],
       "FlipHorizontal": true
     },
     {
@@ -283,7 +351,12 @@
         4,
         0
       ],
-      "FrameDuration": 0.016666668,
+      "FrameDurations": [
+        0.016666666666666666,
+        0.016666666666666666,
+        0.016666666666666666,
+        0.016666666666666666
+      ],
       "FlipHorizontal": false
     },
     {
@@ -295,7 +368,12 @@
         6,
         1
       ],
-      "FrameDuration": 0.016666668,
+      "FrameDurations": [
+        0.016666666666666666,
+        0.016666666666666666,
+        0.016666666666666666,
+        0.016666666666666666
+      ],
       "FlipHorizontal": false
     },
     {
@@ -307,7 +385,12 @@
         8,
         2
       ],
-      "FrameDuration": 0.016666668,
+      "FrameDurations": [
+        0.016666666666666666,
+        0.016666666666666666,
+        0.016666666666666666,
+        0.016666666666666666
+      ],
       "FlipHorizontal": false
     },
     {
@@ -319,7 +402,12 @@
         8,
         2
       ],
-      "FrameDuration": 0.016666668,
+      "FrameDurations": [
+        0.016666666666666666,
+        0.016666666666666666,
+        0.016666666666666666,
+        0.016666666666666666
+      ],
       "FlipHorizontal": true
     },
     {
@@ -328,7 +416,9 @@
       "FrameIndices": [
         9
       ],
-      "FrameDuration": 0.53333336,
+      "FrameDurations": [
+        0.5333333333333333
+      ],
       "FlipHorizontal": false
     },
     {
@@ -337,7 +427,9 @@
       "FrameIndices": [
         10
       ],
-      "FrameDuration": 0.53333336,
+      "FrameDurations": [
+        0.5333333333333333
+      ],
       "FlipHorizontal": false
     },
     {
@@ -346,7 +438,9 @@
       "FrameIndices": [
         11
       ],
-      "FrameDuration": 0.53333336,
+      "FrameDurations": [
+        0.5333333333333333
+      ],
       "FlipHorizontal": false
     },
     {
@@ -355,7 +449,9 @@
       "FrameIndices": [
         11
       ],
-      "FrameDuration": 0.53333336,
+      "FrameDurations": [
+        0.5333333333333333
+      ],
       "FlipHorizontal": true
     }
   ]

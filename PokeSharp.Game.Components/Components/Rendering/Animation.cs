@@ -28,9 +28,16 @@ public struct Animation
     public bool IsPlaying { get; set; }
 
     /// <summary>
-    ///     Gets or sets whether the animation has completed (for non-looping animations).
+    ///     Gets or sets whether the animation has completed (for non-looping animations or PlayOnce).
     /// </summary>
     public bool IsComplete { get; set; }
+
+    /// <summary>
+    ///     Gets or sets whether the animation should play only once regardless of manifest Loop setting.
+    ///     When true, the animation will set IsComplete=true after one full cycle.
+    ///     Used for turn-in-place animations (Pokemon Emerald WALK_IN_PLACE_FAST behavior).
+    /// </summary>
+    public bool PlayOnce { get; set; }
 
     /// <summary>
     ///     Gets or sets the bit field of frame indices that have already triggered their events.
@@ -60,7 +67,8 @@ public struct Animation
     /// </summary>
     /// <param name="animationName">The new animation name.</param>
     /// <param name="forceRestart">Whether to restart even if already playing this animation.</param>
-    public void ChangeAnimation(string animationName, bool forceRestart = false)
+    /// <param name="playOnce">Whether to play the animation once (ignoring manifest Loop setting).</param>
+    public void ChangeAnimation(string animationName, bool forceRestart = false, bool playOnce = false)
     {
         if (CurrentAnimation != animationName || forceRestart)
         {
@@ -69,7 +77,13 @@ public struct Animation
             FrameTimer = 0f;
             IsPlaying = true;
             IsComplete = false;
+            PlayOnce = playOnce;
             TriggeredEventFrames = 0;
+        }
+        else if (playOnce && !PlayOnce)
+        {
+            // Same animation but switching to PlayOnce mode - don't reset frame
+            PlayOnce = true;
         }
     }
 
@@ -81,6 +95,7 @@ public struct Animation
         CurrentFrame = 0;
         FrameTimer = 0f;
         IsComplete = false;
+        PlayOnce = false;
         TriggeredEventFrames = 0;
     }
 

@@ -8,6 +8,54 @@
         "Data/Worlds"
     ],
     "fileStates": {
+        "Data/Maps/hoenn/battle_frontier_battle_arena_battle_room.json": {
+            "scale": 8,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 76.6875,
+                "y": 95.0625
+            }
+        },
+        "Data/Maps/hoenn/battle_frontier_battle_arena_corridor.json": {
+            "scale": 7.428472222222222,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 143.97307656352248,
+                "y": 111.93418715527717
+            }
+        },
+        "Data/Maps/hoenn/battle_frontier_battle_dome_battle_room.json": {
+            "scale": 5.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 135.27272727272728,
+                "y": 81.9090909090909
+            }
+        },
+        "Data/Maps/hoenn/battle_frontier_battle_pyramid_floor.json": {
+            "scale": 8,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 65.25,
+                "y": 75.4375
+            }
+        },
+        "Data/Maps/hoenn/battle_frontier_battle_pyramid_lobby.json": {
+            "scale": 5.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 137.0909090909091,
+                "y": 146.8181818181818
+            }
+        },
+        "Data/Maps/hoenn/battle_frontier_battle_pyramid_top.json": {
+            "scale": 3.302297794117647,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 271.9318656238693,
+                "y": 183.96281555289596
+            }
+        },
         "Data/Maps/hoenn/dewford_town.json": {
             "scale": 2,
             "selectedLayer": 0,
@@ -121,11 +169,11 @@
             }
         },
         "Data/Maps/hoenn/route110.json": {
-            "scale": 4,
+            "scale": 0.125,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": -1084.875,
-                "y": 2075.375
+                "x": 2972,
+                "y": -1644
             }
         },
         "Data/Maps/hoenn/route111.json": {
@@ -153,19 +201,19 @@
             }
         },
         "Data/Maps/hoenn/route115.json": {
-            "scale": 0.25,
+            "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 4258,
-                "y": 906
+                "x": 724.25,
+                "y": 1598.75
             }
         },
         "Data/Maps/hoenn/route116.json": {
-            "scale": 0.25,
+            "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 3618,
-                "y": 3062
+                "x": 6440.5,
+                "y": 2445.5
             }
         },
         "Data/Maps/hoenn/route117.json": {
@@ -182,6 +230,14 @@
             "viewCenter": {
                 "x": -8248.333333333332,
                 "y": -1105.6666666666665
+            }
+        },
+        "Data/Maps/hoenn/route132.json": {
+            "scale": 0.25,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": -1450,
+                "y": -3438
             }
         },
         "Data/Maps/hoenn/route133.json": {

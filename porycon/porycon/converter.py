@@ -26,48 +26,14 @@ from .metatile_renderer import MetatileRenderer
 from .animation_scanner import AnimationScanner
 from .map_reader import MapReader
 from .metatile_processor import MetatileProcessor
-from .validators import (
-    validate_map_dimensions, validate_map_id, validate_region,
-    validate_tileset_name, validate_non_empty_dict
-)
 
 logger = get_logger('converter')
 
 
 class MapConverter:
-    """
-    Converts pokeemerald maps to Tiled format.
-    
-    This class orchestrates the conversion of Pokemon Emerald map data to Tiled JSON format.
-    It handles metatile processing, tileset generation, and map structure conversion.
-    
-    The conversion process:
-    1. Reads map data from pokeemerald format (map.json, map.bin)
-    2. Processes metatiles into individual tiles
-    3. Renders metatiles as 16x16 images
-    4. Creates per-map tilesets with only used metatiles
-    5. Converts events (warps, triggers, etc.) to Tiled objects
-    6. Generates Tiled-compatible JSON output
-    
-    Attributes:
-        input_dir: Path to pokeemerald root directory
-        output_dir: Path to output directory for converted maps
-        map_reader: MapReader instance for reading map files
-        tileset_builder: TilesetBuilder instance for building tilesets
-        metatile_renderer: MetatileRenderer instance for rendering metatiles
-        metatile_processor: MetatileProcessor instance for processing metatiles
-        animation_scanner: AnimationScanner instance for scanning animations
-        tile_mappings: Dictionary mapping tileset_name -> old_tile_id -> new_tile_id
-    """
+    """Converts pokeemerald maps to Tiled format."""
     
     def __init__(self, input_dir: str, output_dir: str):
-        """
-        Initialize MapConverter.
-        
-        Args:
-            input_dir: Path to pokeemerald root directory
-            output_dir: Path to output directory for converted maps
-        """
         self.input_dir = Path(input_dir)
         self.output_dir = Path(output_dir)
         self.map_reader = MapReader(self.input_dir)
@@ -114,7 +80,6 @@ class MapConverter:
         
         Delegates to MapReader.
         """
-        validate_tileset_name(tileset_name)
         return self.map_reader.read_metatile_attributes(tileset_name)
     
     def load_metatiles(self, tileset_name: str) -> List[int]:
@@ -123,7 +88,6 @@ class MapConverter:
         
         Delegates to MapReader.
         """
-        validate_tileset_name(tileset_name)
         return self.map_reader.read_metatiles(tileset_name)
     
     def load_metatiles_with_attributes(self, tileset_name: str) -> List[Tuple[int, int, int]]:
@@ -132,7 +96,6 @@ class MapConverter:
         
         Delegates to MapReader.
         """
-        validate_tileset_name(tileset_name)
         return self.map_reader.read_metatiles_with_attributes(tileset_name)
     
     def convert_map(
@@ -147,11 +110,6 @@ class MapConverter:
         Returns:
             Tiled map JSON structure
         """
-        # Validate inputs
-        validate_region(region)
-        validate_non_empty_dict(map_data, "map_data")
-        validate_non_empty_dict(layout_data, "layout_data")
-        
         layout_id = map_data.get("layout", "")
         if not layout_id or layout_id not in layout_data:
             logger.warning(f"Layout {layout_id} not found in layout_data")
@@ -171,9 +129,6 @@ class MapConverter:
         # Read map data
         width = layout["width"]
         height = layout["height"]
-        
-        # Validate dimensions
-        validate_map_dimensions(width, height)
         
         try:
             map_entries = self.map_reader.read_map_bin(map_bin_path, width, height)
@@ -777,26 +732,7 @@ class MapConverter:
         return ("primary", self.input_dir / "data" / "tilesets" / "primary" / name_variants[0])
     
     def save_map(self, map_id: str, tiled_map: Dict[str, Any], region: str):
-        """
-        Save converted map to output directory.
-        
-        Saves the converted Tiled map JSON to the appropriate location in the output
-        directory structure: Data/Maps/{region}/{map_name}.json
-        
-        Args:
-            map_id: Unique identifier for the map (e.g., "MAP_LITTLEROOT_TOWN")
-            tiled_map: Complete Tiled map JSON structure
-            region: Region name for organizing output (e.g., "hoenn")
-        
-        Raises:
-            ValueError: If map_id or region is invalid
-            OSError: If the output directory cannot be created
-        """
-        # Validate inputs
-        validate_map_id(map_id)
-        validate_region(region)
-        validate_non_empty_dict(tiled_map, "tiled_map")
-        
+        """Save converted map to output directory."""
         map_name = sanitize_filename(map_id.replace("MAP_", "").lower())
         output_path = self.output_dir / "Data" / "Maps" / region / f"{map_name}.json"
         output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -862,26 +798,7 @@ class MapConverter:
             return None
     
     def _load_tileset_data(self, layout: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-        """
-        Load metatiles and attributes for primary and secondary tilesets.
-        
-        This method loads the metatile data and attributes for both the primary and secondary
-        tilesets specified in the layout. The metatiles are loaded with full attributes
-        (tile_id, flip_flags, palette_index) for proper rendering.
-        
-        Args:
-            layout: Layout dictionary containing primary_tileset and secondary_tileset IDs
-        
-        Returns:
-            Dictionary containing:
-            - primary_tileset: Name of primary tileset
-            - secondary_tileset: Name of secondary tileset
-            - primary_metatiles_with_attrs: List of (tile_id, flip_flags, palette_index) tuples
-            - secondary_metatiles_with_attrs: List of (tile_id, flip_flags, palette_index) tuples
-            - primary_attributes: Dict mapping metatile_id -> layer_type
-            - secondary_attributes: Dict mapping metatile_id -> layer_type
-            Or None if loading fails
-        """
+        """Load metatiles and attributes for primary and secondary tilesets."""
         primary_tileset = self._get_tileset_name(layout["primary_tileset"])
         secondary_tileset = self._get_tileset_name(layout["secondary_tileset"])
         
@@ -1817,43 +1734,12 @@ class MapConverter:
         """
         Convert a map using 16x16 metatiles, creating a unique tileset per map.
         
-        This method processes Pokemon Emerald maps by:
-        1. Reading map.bin file containing metatile IDs
-        2. Rendering each metatile as 16x16 images (bottom and top layers)
-        3. Creating a per-map tileset with only used metatiles
-        4. Assigning Global Tile IDs (GIDs) to metatiles with deduplication
-        5. Building map layers (BG3, BG2, BG1) based on metatile layer types
-        6. Processing border metatiles for map edges
-        7. Adding animations for animated tiles
-        8. Converting events (warps, coord events, background events) to Tiled objects
-        9. Generating the final Tiled map JSON structure
-        
-        The metatile rendering approach:
-        - Each metatile is rendered as two 16x16 images: bottom (tiles 0-3) and top (tiles 4-7)
-        - Images are deduplicated by content to minimize tileset size
-        - GIDs are assigned sequentially, starting from 1
-        
-        Args:
-            map_id: Unique identifier for the map (e.g., "MAP_LITTLEROOT_TOWN")
-            map_data: Parsed map.json data containing map metadata and events
-            layout_data: Dictionary mapping layout_id -> layout info (width, height, tilesets, etc.)
-            region: Region name for organizing output (e.g., "hoenn")
-            warp_lookup: Optional lookup table mapping (map_id, warp_index) -> (x, y, elevation)
-                        for resolving warp destinations
-        
-        Returns:
-            Tiled map JSON structure with layers, tilesets, and objects, or None if conversion fails
-        
-        Raises:
-            ValueError: If map dimensions are invalid or inputs are invalid
-            FileNotFoundError: If required map files are missing
+        This new approach:
+        1. Renders metatiles as 16x16 images
+        2. Creates one tileset per map
+        3. For split rendering, creates two tiles (one with top transparent, one with bottom transparent)
+        4. Stores tilesets in Tilesets/hoenn/map_name/
         """
-        # Validate inputs
-        validate_map_id(map_id)
-        validate_region(region)
-        validate_non_empty_dict(map_data, "map_data")
-        validate_non_empty_dict(layout_data, "layout_data")
-        
         # Validate layout
         layout = self._validate_layout(map_data, layout_data)
         if not layout:
@@ -1864,9 +1750,6 @@ class MapConverter:
         if not result:
             return None
         map_entries, width, height = result
-        
-        # Validate dimensions
-        validate_map_dimensions(width, height)
         
         # Load tileset data
         tileset_data = self._load_tileset_data(layout)
@@ -2137,10 +2020,29 @@ class MapConverter:
                 if not all_bottom_tiles and not all_top_tiles:
                     continue
 
-                # Determine number of frames - use 8 as standard (most animations are 8 frames)
-                # All Pokemon animations sync to 8 frames at 200ms
-                num_anim_frames = 8
-                duration_ms = 200  # Standard duration
+                # Determine number of frames and duration from actual animation data
+                # Get the maximum frame count from all animations (they should all be the same, but be safe)
+                max_frames = 0
+                animation_duration_ms = 133  # Default: 8 ticks at 60fps = ~133ms
+                for pos, (tile_id, flip_flags, anim_name, frames, actual_base, num_tiles, frame_seq, duration_ms) in list(all_bottom_tiles.items()) + list(all_top_tiles.items()):
+                    if frame_seq:
+                        # Use frame_sequence length
+                        num_frames = len(frame_seq)
+                    else:
+                        # Use actual number of frames
+                        if num_tiles > 0 and len(frames) > 0:
+                            num_frames = len(frames) // num_tiles
+                        else:
+                            num_frames = len(frames) if frames else 0
+                    max_frames = max(max_frames, num_frames)
+                    # Use the first non-default duration we find
+                    if duration_ms != 133:  # If not default, use it
+                        animation_duration_ms = duration_ms
+                    elif animation_duration_ms == 133:  # If still default, use the first one we find
+                        animation_duration_ms = duration_ms
+                
+                # If we couldn't determine frame count, default to 8
+                num_anim_frames = max_frames if max_frames > 0 else 8
 
                 # Composite ALL animation types together for each frame
                 composited_frame_map = {}
@@ -2274,7 +2176,7 @@ class MapConverter:
                     if frame_num in composited_frame_map:
                         composited_frame_gids.append({
                             "tileid": composited_frame_map[frame_num],
-                            "duration": duration_ms
+                            "duration": animation_duration_ms
                         })
 
                 # Build animation sequence for TOP layer
@@ -2283,7 +2185,7 @@ class MapConverter:
                     if frame_num in composited_top_frame_map:
                         composited_top_frame_gids.append({
                             "tileid": composited_top_frame_map[frame_num],
-                            "duration": duration_ms
+                            "duration": animation_duration_ms
                         })
 
                 # Apply BOTTOM layer animation to bottom GIDs

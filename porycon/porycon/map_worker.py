@@ -35,7 +35,24 @@ def convert_single_map(args_tuple):
             return ("skipped", map_id, f"map.bin not found", None, None, {}, {})
         
         # Use new metatile-based conversion
-        tiled_map = local_converter.convert_map_with_metatiles(map_id, map_data, layouts_dict, region, warp_lookup)
+        try:
+            tiled_map = local_converter.convert_map_with_metatiles(map_id, map_data, layouts_dict, region, warp_lookup)
+        except Exception as e:
+            import traceback
+            tb_str = traceback.format_exc()
+            # Extract the file and line number from traceback
+            tb_lines = tb_str.split('\n')
+            error_location = None
+            for i, line in enumerate(tb_lines):
+                if 'File "' in line and ('metatile' in line.lower() or 'converter' in line.lower()):
+                    # Get the next line which should have the actual code
+                    if i + 1 < len(tb_lines):
+                        error_location = f"{line.strip()} -> {tb_lines[i+1].strip()}"
+                        break
+            error_details = f"{type(e).__name__}: {str(e)}"
+            if error_location:
+                error_details += f"\n  Location: {error_location}"
+            return ("error", map_id, error_details, None, None, {}, {})
         
         if tiled_map:
             map_name = map_id.replace("MAP_", "").lower()
@@ -58,9 +75,15 @@ def convert_single_map(args_tuple):
                 "map_data": map_data
             }, tiled_map, used_tiles_dict, used_tiles_with_palettes_dict)
         else:
-            return ("failed", map_id, "convert_map returned None", None, None, {}, {})
+            # Try to get more specific error information
+            layout_id = map_info.get("layout_id", "unknown")
+            layout = layouts_dict.get(layout_id, {})
+            map_bin = layout.get("map_bin", "unknown")
+            error_msg = f"convert_map_with_metatiles returned None (layout={layout_id}, map_bin={map_bin})"
+            return ("failed", map_id, error_msg, None, None, {}, {})
     
     except Exception as e:
         import traceback
-        return ("error", map_id, str(e), None, None, {}, {})
+        error_details = f"{type(e).__name__}: {str(e)}"
+        return ("error", map_id, error_details, None, None, {}, {})
 

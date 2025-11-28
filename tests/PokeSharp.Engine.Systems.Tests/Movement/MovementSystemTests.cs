@@ -169,9 +169,10 @@ public class MovementSystemTests : IDisposable
         var memoryAfter = GC.GetTotalMemory(false);
         var allocated = memoryAfter - memoryBefore;
 
-        // Assert - Should not allocate for direction strings
-        // Some allocation is expected for movement updates, but not for ToString()
-        allocated.Should().BeLessThan(10000, "should not allocate strings for direction logging");
+        // Assert - Should not allocate excessive memory for direction strings
+        // Some allocation is expected for movement updates and animation changes, but not for ToString()
+        // Increased tolerance to account for animation string allocations (turn_*, go_*, face_*)
+        allocated.Should().BeLessThan(50000, "should not allocate excessive strings for direction logging");
     }
 
     [Fact]
@@ -195,8 +196,8 @@ public class MovementSystemTests : IDisposable
 
         _system.Initialize(_world);
 
-        // Act
-        _system.Update(_world, 0.25f); // 250ms at 4 tiles/sec
+        // Act - Use smaller delta so movement doesn't complete in one frame
+        _system.Update(_world, 0.1f); // 100ms at 4 tiles/sec = 0.4 progress
 
         // Assert
         var movement = _world.Get<GridMovement>(entity);
@@ -249,14 +250,15 @@ public class MovementSystemTests : IDisposable
     [Fact]
     public void MovementRequest_ShouldBeProcessed_BeforeMovementUpdate()
     {
-        // Arrange
+        // Arrange - Mock GetTileCollisionInfo (used by MovementSystem for optimized collision checking)
         _mockCollisionService
-            .Setup(x => x.IsPositionWalkable(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<Direction>(), It.IsAny<byte>()))
-            .Returns(true);
+            .Setup(x => x.GetTileCollisionInfo(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<byte>(), It.IsAny<Direction>()))
+            .Returns((false, Direction.None, true)); // Not jump tile, no jump dir, walkable
 
+        // Entity must already face South to start moving immediately (Pokemon Emerald turn-in-place behavior)
         var entity = _world.Create(
             new Position { X = 0, Y = 0 },
-            new GridMovement { IsMoving = false, FacingDirection = Direction.None },
+            new GridMovement { IsMoving = false, FacingDirection = Direction.South },
             new MovementRequest { Direction = Direction.South, Active = true }
         );
 
@@ -265,7 +267,7 @@ public class MovementSystemTests : IDisposable
         // Act
         _system.Update(_world, 0.016f);
 
-        // Assert - Movement should have started
+        // Assert - Movement should have started (already facing correct direction)
         var movement = _world.Get<GridMovement>(entity);
         movement.IsMoving.Should().BeTrue();
         movement.FacingDirection.Should().Be(Direction.South);
@@ -274,14 +276,15 @@ public class MovementSystemTests : IDisposable
     [Fact]
     public void CollisionCheck_ShouldPreventMovement_WhenBlocked()
     {
-        // Arrange
+        // Arrange - Mock GetTileCollisionInfo to return blocked
         _mockCollisionService
-            .Setup(x => x.IsPositionWalkable(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<Direction>(), It.IsAny<byte>()))
-            .Returns(false); // Blocked
+            .Setup(x => x.GetTileCollisionInfo(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<byte>(), It.IsAny<Direction>()))
+            .Returns((false, Direction.None, false)); // Not jump tile, no jump dir, NOT walkable
 
+        // Entity must already face South to attempt movement (Pokemon Emerald turn-in-place behavior)
         var entity = _world.Create(
             new Position { X = 0, Y = 0 },
-            new GridMovement { IsMoving = false, FacingDirection = Direction.None },
+            new GridMovement { IsMoving = false, FacingDirection = Direction.South },
             new MovementRequest { Direction = Direction.South, Active = true }
         );
 
@@ -290,7 +293,7 @@ public class MovementSystemTests : IDisposable
         // Act
         _system.Update(_world, 0.016f);
 
-        // Assert - Movement should not have started
+        // Assert - Movement should not have started (blocked by collision)
         var movement = _world.Get<GridMovement>(entity);
         movement.IsMoving.Should().BeFalse();
     }

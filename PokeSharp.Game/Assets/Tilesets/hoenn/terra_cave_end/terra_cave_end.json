@@ -16,19 +16,19 @@
       "animation": [
         {
           "tileid": 43,
-          "duration": 200
+          "duration": 133
         },
         {
           "tileid": 44,
-          "duration": 200
+          "duration": 133
         },
         {
           "tileid": 45,
-          "duration": 200
+          "duration": 133
         },
         {
           "tileid": 46,
-          "duration": 200
+          "duration": 133
         }
       ]
     },
@@ -37,19 +37,19 @@
       "animation": [
         {
           "tileid": 51,
-          "duration": 200
+          "duration": 133
         },
         {
           "tileid": 52,
-          "duration": 200
+          "duration": 133
         },
         {
           "tileid": 53,
-          "duration": 200
+          "duration": 133
         },
         {
           "tileid": 54,
-          "duration": 200
+          "duration": 133
         }
       ]
     },
@@ -58,19 +58,19 @@
       "animation": [
         {
           "tileid": 123,
-          "duration": 200
+          "duration": 133
         },
         {
           "tileid": 124,
-          "duration": 200
+          "duration": 133
         },
         {
           "tileid": 125,
-          "duration": 200
+          "duration": 133
         },
         {
           "tileid": 126,
-          "duration": 200
+          "duration": 133
         }
       ]
     }

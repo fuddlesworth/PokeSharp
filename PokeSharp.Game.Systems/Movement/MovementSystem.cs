@@ -226,10 +226,33 @@ public class MovementSystem : SystemBase, IUpdateSystem
             position.PixelX = position.X * tileSize + mapOffset.X;
             position.PixelY = position.Y * tileSize + mapOffset.Y;
 
-            // Ensure idle animation is playing
-            var expectedAnimation = movement.FacingDirection.ToIdleAnimation();
-            if (animation.CurrentAnimation != expectedAnimation)
-                animation.ChangeAnimation(expectedAnimation);
+            // Handle turn-in-place state (Pokemon Emerald behavior)
+            if (movement.RunningState == RunningState.TurnDirection)
+            {
+                // Play turn animation (walk in place) with PlayOnce=true
+                // Pokemon Emerald uses WALK_IN_PLACE_FAST which plays walk animation for one cycle
+                var turnAnimation = movement.FacingDirection.ToTurnAnimation();
+                if (animation.CurrentAnimation != turnAnimation || !animation.PlayOnce)
+                {
+                    animation.ChangeAnimation(turnAnimation, forceRestart: true, playOnce: true);
+                }
+
+                // Check if turn animation has completed (uses animation framework's timing)
+                if (animation.IsComplete)
+                {
+                    // Turn complete - allow movement on next input
+                    movement.RunningState = RunningState.NotMoving;
+                    // Transition to idle animation
+                    animation.ChangeAnimation(movement.FacingDirection.ToIdleAnimation());
+                }
+            }
+            else
+            {
+                // Ensure idle animation is playing
+                var expectedAnimation = movement.FacingDirection.ToIdleAnimation();
+                if (animation.CurrentAnimation != expectedAnimation)
+                    animation.ChangeAnimation(expectedAnimation);
+            }
         }
     }
 
@@ -288,6 +311,13 @@ public class MovementSystem : SystemBase, IUpdateSystem
             var mapOffset = GetMapWorldOffset(world, position.MapId);
             position.PixelX = position.X * tileSize + mapOffset.X;
             position.PixelY = position.Y * tileSize + mapOffset.Y;
+
+            // For entities without animation, turn-in-place completes immediately
+            // since there's no animation to wait for
+            if (movement.RunningState == RunningState.TurnDirection)
+            {
+                movement.RunningState = RunningState.NotMoving;
+            }
         }
     }
 
@@ -309,8 +339,10 @@ public class MovementSystem : SystemBase, IUpdateSystem
                 ref MovementRequest request
             ) =>
             {
-                // Only process active requests for entities that aren't already moving and aren't locked
-                if (request.Active && !movement.IsMoving && !movement.MovementLocked)
+                // Only process active requests for entities that aren't already moving, aren't locked,
+                // and aren't currently turning in place (Pokemon Emerald: wait for turn to complete)
+                if (request.Active && !movement.IsMoving && !movement.MovementLocked &&
+                    movement.RunningState != RunningState.TurnDirection)
                 {
                     // Process the movement request
                     TryStartMovement(world, entity, ref position, ref movement, request.Direction);

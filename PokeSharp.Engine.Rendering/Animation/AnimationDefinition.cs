@@ -1,5 +1,6 @@
 using Arch.Core;
 using Microsoft.Xna.Framework;
+using System.Linq;
 
 namespace PokeSharp.Engine.Rendering.Animation;
 
@@ -46,8 +47,15 @@ public class AnimationDefinition
 
     /// <summary>
     ///     Gets or sets the duration of each frame in seconds.
+    ///     Used when FrameDurations is null or empty (uniform duration for all frames).
     /// </summary>
     public float FrameDuration { get; set; } = 0.15f; // Default: 6.67 FPS
+
+    /// <summary>
+    ///     Gets or sets per-frame durations in seconds (one per frame in Frames array).
+    ///     If null or empty, FrameDuration is used for all frames.
+    /// </summary>
+    public float[]? FrameDurations { get; set; }
 
     /// <summary>
     ///     Gets or sets whether the animation loops continuously.
@@ -67,8 +75,19 @@ public class AnimationDefinition
 
     /// <summary>
     ///     Gets the total duration of the animation in seconds.
+    ///     Uses per-frame durations if available, otherwise FrameDuration * FrameCount.
     /// </summary>
-    public float TotalDuration => FrameCount * FrameDuration;
+    public float TotalDuration
+    {
+        get
+        {
+            if (FrameDurations != null && FrameDurations.Length > 0)
+            {
+                return FrameDurations.Sum();
+            }
+            return FrameCount * FrameDuration;
+        }
+    }
 
     /// <summary>
     ///     Gets the source rectangle for a specific frame index.

@@ -16,35 +16,35 @@
       "animation": [
         {
           "tileid": 50,
-          "duration": 200
+          "duration": 266
         },
         {
           "tileid": 51,
-          "duration": 200
+          "duration": 266
         },
         {
           "tileid": 52,
-          "duration": 200
+          "duration": 266
         },
         {
           "tileid": 53,
-          "duration": 200
+          "duration": 266
         },
         {
           "tileid": 54,
-          "duration": 200
+          "duration": 266
         },
         {
           "tileid": 55,
-          "duration": 200
+          "duration": 266
         },
         {
           "tileid": 56,
-          "duration": 200
+          "duration": 266
         },
         {
           "tileid": 57,
-          "duration": 200
+          "duration": 266
         }
       ]
     }

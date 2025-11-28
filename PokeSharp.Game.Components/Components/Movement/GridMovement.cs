@@ -3,6 +3,30 @@ using Microsoft.Xna.Framework;
 namespace PokeSharp.Game.Components.Movement;
 
 /// <summary>
+///     Player running states matching pokeemerald's behavior.
+///     See pokeemerald/include/global.fieldmap.h lines 320-322.
+/// </summary>
+public enum RunningState
+{
+    /// <summary>
+    ///     Player is not moving and no input detected.
+    /// </summary>
+    NotMoving = 0,
+
+    /// <summary>
+    ///     Player is turning in place to face a new direction.
+    ///     This happens when input direction differs from facing direction.
+    ///     Movement won't start until the turn completes and input is still held.
+    /// </summary>
+    TurnDirection = 1,
+
+    /// <summary>
+    ///     Player is actively moving between tiles.
+    /// </summary>
+    Moving = 2,
+}
+
+/// <summary>
 ///     Component for grid-based movement with smooth interpolation.
 ///     Used for Pokemon-style tile-by-tile movement.
 /// </summary>
@@ -45,6 +69,12 @@ public struct GridMovement
     public bool MovementLocked { get; set; }
 
     /// <summary>
+    ///     Gets or sets the current running state (pokeemerald-style state machine).
+    ///     Controls whether player is standing, turning in place, or moving.
+    /// </summary>
+    public RunningState RunningState { get; set; }
+
+    /// <summary>
     ///     Initializes a new instance of the GridMovement struct.
     /// </summary>
     /// <param name="speed">Movement speed in tiles per second (default 4.0).</param>
@@ -57,6 +87,7 @@ public struct GridMovement
         MovementSpeed = speed;
         FacingDirection = Direction.South;
         MovementLocked = false;
+        RunningState = RunningState.NotMoving;
     }
 
     /// <summary>
@@ -88,11 +119,27 @@ public struct GridMovement
 
     /// <summary>
     ///     Completes the current movement and resets state.
+    ///     Note: RunningState is NOT reset here - InputSystem manages it based on input.
+    ///     This allows continuous walking without turn-in-place when changing directions.
     /// </summary>
     public void CompleteMovement()
     {
         IsMoving = false;
         MovementProgress = 0f;
+        // Don't reset RunningState - if input is still held, we want to skip turn-in-place
+        // InputSystem will set RunningState = NotMoving when no input is detected
+    }
+
+    /// <summary>
+    ///     Starts a turn-in-place animation (player turns to face direction without moving).
+    ///     Called when input direction differs from current facing direction.
+    ///     The actual turn duration is determined by the animation system (PlayOnce on go_* animation).
+    /// </summary>
+    /// <param name="direction">The direction to turn and face.</param>
+    public void StartTurnInPlace(Direction direction)
+    {
+        RunningState = RunningState.TurnDirection;
+        FacingDirection = direction;
     }
 
     /// <summary>

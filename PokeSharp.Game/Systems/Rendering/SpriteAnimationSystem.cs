@@ -113,8 +113,11 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
         // Update frame timer
         animation.FrameTimer += deltaTime;
 
+        // Get duration for current frame (use per-frame durations if available, otherwise use uniform duration)
+        float currentFrameDuration = GetFrameDuration(animData, animation.CurrentFrame);
+
         // Check if we need to advance to next frame
-        if (animation.FrameTimer >= animData.FrameDuration)
+        if (animation.FrameTimer >= currentFrameDuration)
         {
             // Advance to next frame in the animation sequence
             animation.CurrentFrame++;
@@ -122,14 +125,15 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
             // Handle looping
             if (animation.CurrentFrame >= animData.FrameIndices.Length)
             {
-                if (animData.Loop)
+                // PlayOnce overrides manifest Loop setting - treat as non-looping
+                if (animData.Loop && !animation.PlayOnce)
                 {
                     animation.CurrentFrame = 0;
                     animation.TriggeredEventFrames = 0; // Reset event triggers on loop
                 }
                 else
                 {
-                    // Non-looping animation completed
+                    // Non-looping animation completed (or PlayOnce completed one cycle)
                     animation.CurrentFrame = animData.FrameIndices.Length - 1;
                     animation.IsComplete = true;
                     animation.IsPlaying = false;
@@ -178,5 +182,24 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
 
         animDict.TryGetValue(animName, out var result);
         return result;
+    }
+
+    /// <summary>
+    ///     Gets the duration for a specific frame in an animation.
+    ///     Uses per-frame durations if available, otherwise falls back to uniform FrameDuration.
+    /// </summary>
+    private static float GetFrameDuration(SpriteAnimationInfo animData, int frameIndex)
+    {
+        // Use per-frame durations if available and valid
+        if (animData.FrameDurations != null 
+            && animData.FrameDurations.Length > 0 
+            && frameIndex >= 0 
+            && frameIndex < animData.FrameDurations.Length)
+        {
+            return animData.FrameDurations[frameIndex];
+        }
+
+        // Fall back to uniform duration (backward compatibility)
+        return animData.FrameDuration;
     }
 }

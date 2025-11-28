@@ -95,6 +95,20 @@ public static class DirectionExtensions
     }
 
     /// <summary>
+    ///     Gets the animation name for turning in place in this direction.
+    ///     Pokemon Emerald uses WALK_IN_PLACE_FAST which is 8 frames at 60fps = ~133ms.
+    ///     Uses "go_faster_*" (4 frames × 0.033s = ~133ms) with PlayOnce for matching timing.
+    /// </summary>
+    /// <param name="direction">The direction.</param>
+    /// <returns>The turn animation name (e.g., "go_faster_south").</returns>
+    public static string ToTurnAnimation(this Direction direction)
+    {
+        // Pokemon Emerald's WALK_IN_PLACE_FAST = 8 frames @ 60fps = 133ms
+        // go_faster_* = 4 frames × 0.033s = 133ms (matches perfectly)
+        return $"go_faster_{direction.ToAnimationSuffix()}";
+    }
+
+    /// <summary>
     ///     Gets the opposite direction.
     /// </summary>
     /// <param name="direction">The direction.</param>

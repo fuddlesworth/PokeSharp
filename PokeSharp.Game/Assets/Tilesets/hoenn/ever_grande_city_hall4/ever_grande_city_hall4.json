@@ -1,12 +1,12 @@
 {
   "columns": 16,
   "image": "ever_grande_city_hall4.png",
-  "imageheight": 64,
+  "imageheight": 48,
   "imagewidth": 256,
   "margin": 0,
   "name": "ever_grande_city_hall4",
   "spacing": 0,
-  "tilecount": 64,
+  "tilecount": 48,
   "tileheight": 16,
   "tilewidth": 16,
   "type": "tileset",
@@ -16,11 +16,11 @@
       "animation": [
         {
           "tileid": 30,
-          "duration": 200
+          "duration": 133
         },
         {
           "tileid": 31,
-          "duration": 200
+          "duration": 133
         }
       ]
     },
@@ -29,35 +29,19 @@
       "animation": [
         {
           "tileid": 36,
-          "duration": 200
+          "duration": 133
         },
         {
           "tileid": 37,
-          "duration": 200
+          "duration": 133
         },
         {
           "tileid": 38,
-          "duration": 200
+          "duration": 133
         },
         {
           "tileid": 39,
-          "duration": 200
-        },
-        {
-          "tileid": 40,
-          "duration": 200
-        },
-        {
-          "tileid": 41,
-          "duration": 200
-        },
-        {
-          "tileid": 42,
-          "duration": 200
-        },
-        {
-          "tileid": 43,
-          "duration": 200
+          "duration": 133
         }
       ]
     },
@@ -65,36 +49,20 @@
       "id": 3,
       "animation": [
         {
-          "tileid": 44,
-          "duration": 200
+          "tileid": 40,
+          "duration": 133
         },
         {
-          "tileid": 45,
-          "duration": 200
+          "tileid": 41,
+          "duration": 133
         },
         {
-          "tileid": 46,
-          "duration": 200
+          "tileid": 42,
+          "duration": 133
         },
         {
-          "tileid": 47,
-          "duration": 200
-        },
-        {
-          "tileid": 48,
-          "duration": 200
-        },
-        {
-          "tileid": 49,
-          "duration": 200
-        },
-        {
-          "tileid": 50,
-          "duration": 200
-        },
-        {
-          "tileid": 51,
-          "duration": 200
+          "tileid": 43,
+          "duration": 133
         }
       ]
     }

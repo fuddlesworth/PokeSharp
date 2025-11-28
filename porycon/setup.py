@@ -22,6 +22,7 @@ setup(
     entry_points={
         "console_scripts": [
             "porycon=porycon.__main__:main",
+            "porycon-sprites=porycon.sprite_extract_main:main",
         ],
     },
     classifiers=[
@@ -34,6 +35,7 @@ setup(
         "Programming Language :: Python :: 3.11",
     ],
 )
+
 
 
 

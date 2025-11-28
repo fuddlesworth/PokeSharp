@@ -15,29 +15,12 @@ from .constants import (
     METATILE_SIZE
 )
 from .logging_config import get_logger
-from .validators import (
-    validate_metatile_id, validate_tile_id, validate_tileset_name
-)
 
 logger = get_logger('metatile_processor')
 
 
 class MetatileProcessor:
-    """
-    Handles metatile to tile conversion logic.
-    
-    This class encapsulates the logic for processing metatiles, including:
-    - Determining which tileset a metatile belongs to (primary/secondary)
-    - Determining which tileset a tile belongs to
-    - Validating metatile bounds
-    - Processing individual metatiles (rendering, GID assignment)
-    
-    The processor works with MetatileRenderer to render metatiles and handles
-    the coordination between metatile data and rendered images.
-    
-    Attributes:
-        renderer: MetatileRenderer instance for rendering metatiles
-    """
+    """Handles metatile to tile conversion logic."""
     
     def __init__(self, metatile_renderer: MetatileRenderer):
         """
@@ -67,12 +50,6 @@ class MetatileProcessor:
             - tileset_name: 'primary' or 'secondary' tileset name
             - actual_metatile_id: The metatile ID within that tileset (0-based)
         """
-        # Validate inputs (allow larger range for metatile_id since it can span both tilesets)
-        if metatile_id < 0:
-            raise ValueError(f"Metatile ID must be >= 0, got {metatile_id}")
-        validate_tileset_name(primary_tileset)
-        validate_tileset_name(secondary_tileset)
-        
         if metatile_id < NUM_METATILES_IN_PRIMARY:
             return (primary_tileset, metatile_id)
         else:
@@ -101,12 +78,6 @@ class MetatileProcessor:
             - tileset_name: Which tileset the tile actually belongs to
             - adjusted_tile_id: The tile ID within that tileset
         """
-        # Validate inputs
-        validate_tile_id(tile_id)
-        validate_tileset_name(current_tileset_name)
-        validate_tileset_name(primary_tileset)
-        validate_tileset_name(secondary_tileset)
-        
         if current_tileset_name == primary_tileset:
             # Primary tileset tiles always belong to primary
             return (primary_tileset, tile_id)
@@ -134,9 +105,6 @@ class MetatileProcessor:
         Returns:
             True if valid, False if out of bounds
         """
-        # Validate metatile_id type and basic range
-        if not isinstance(actual_metatile_id, int):
-            return False
         if actual_metatile_id < 0:
             return False
         

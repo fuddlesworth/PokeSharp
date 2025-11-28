@@ -87,8 +87,17 @@ public class InputSystem(
                 // Get current input direction (uses cached input states)
                 var currentDirection = GetInputDirection(_keyboardState, _gamepadState);
 
-                // Update pressed direction if input detected
-                if (currentDirection != Direction.None)
+                // Pokemon Emerald-style running state logic (pokeemerald field_player_avatar.c:584-592)
+                if (currentDirection == Direction.None)
+                {
+                    // No input - set to not moving (only if not mid-movement and not turning in place)
+                    // Don't cancel turn-in-place when key is released - let the animation complete
+                    if (!movement.IsMoving && movement.RunningState != RunningState.TurnDirection)
+                    {
+                        movement.RunningState = RunningState.NotMoving;
+                    }
+                }
+                else
                 {
                     input.PressedDirection = currentDirection;
 
@@ -96,27 +105,52 @@ public class InputSystem(
                     ref var direction = ref entity.Get<Direction>();
                     direction = currentDirection;
 
-                    // Buffer input if:
-                    // 1. Not currently moving (allows holding keys for continuous movement), OR
-                    // 2. Direction changed (allows queuing direction changes during movement)
-                    // But only if we haven't buffered this exact direction very recently (prevents duplicates)
-                    var shouldBuffer =
-                        !movement.IsMoving || currentDirection != _lastBufferedDirection;
+                    // Check if we need to turn in place first (pokeemerald behavior)
+                    // If input direction != facing direction AND not already moving -> TURN_DIRECTION
+                    if (currentDirection != movement.FacingDirection &&
+                        movement.RunningState != RunningState.Moving &&
+                        !movement.IsMoving)
+                    {
+                        // Turn in place - start turn animation
+                        // DON'T buffer input here - only move if key is still held when turn completes
+                        // This allows tapping to just face a direction without moving
+                        movement.StartTurnInPlace(currentDirection);
+                        _logger?.LogTrace(
+                            "Turning in place from {From} to {To}",
+                            movement.FacingDirection,
+                            currentDirection
+                        );
+                    }
+                    else if (movement.RunningState != RunningState.TurnDirection)
+                    {
+                        // Either already facing correct direction or already moving - allow movement
+                        // BUT only if not currently in turn-in-place state (wait for turn to complete)
+                        movement.RunningState = RunningState.Moving;
 
-                    // Also prevent buffering the same direction multiple times per frame
-                    var isDifferentTiming =
-                        _totalTime != _lastBufferTime || currentDirection != _lastBufferedDirection;
+                        // Buffer input if:
+                        // 1. Not currently moving (allows holding keys for continuous movement), OR
+                        // 2. Direction changed (allows queuing direction changes during movement)
+                        // But only if we haven't buffered this exact direction very recently (prevents duplicates)
+                        var shouldBuffer =
+                            !movement.IsMoving || currentDirection != _lastBufferedDirection;
 
-                    if (shouldBuffer && isDifferentTiming)
-                        if (_inputBuffer.AddInput(currentDirection, _totalTime))
-                        {
-                            _lastBufferedDirection = currentDirection;
-                            _lastBufferTime = _totalTime;
-                            _logger?.LogTrace(
-                                "Buffered input direction: {Direction}",
-                                currentDirection
-                            );
-                        }
+                        // Also prevent buffering the same direction multiple times per frame
+                        var isDifferentTiming =
+                            _totalTime != _lastBufferTime || currentDirection != _lastBufferedDirection;
+
+                        if (shouldBuffer && isDifferentTiming)
+                            if (_inputBuffer.AddInput(currentDirection, _totalTime))
+                            {
+                                _lastBufferedDirection = currentDirection;
+                                _lastBufferTime = _totalTime;
+                                _logger?.LogTrace(
+                                    "Buffered input direction: {Direction}",
+                                    currentDirection
+                                );
+                            }
+                    }
+                    // else: RunningState == TurnDirection - wait for turn animation to complete
+                    // MovementSystem will set RunningState = NotMoving when turn completes
                 }
 
                 // Check for action button (uses cached input states)

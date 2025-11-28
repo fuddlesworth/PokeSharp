@@ -366,7 +366,14 @@ public class SpriteAnimationInfo
     public int[] FrameIndices { get; set; } = Array.Empty<int>();
 
     [JsonPropertyName("FrameDuration")]
-    public float FrameDuration { get; set; }
+    public float FrameDuration { get; set; } // Deprecated: kept for backward compatibility, use FrameDurations instead
+
+    /// <summary>
+    ///     Per-frame durations in seconds (one per frame in FrameIndices).
+    ///     If null or empty, falls back to FrameDuration for all frames.
+    /// </summary>
+    [JsonPropertyName("FrameDurations")]
+    public float[]? FrameDurations { get; set; }
 
     [JsonPropertyName("FlipHorizontal")]
     public bool FlipHorizontal { get; set; }

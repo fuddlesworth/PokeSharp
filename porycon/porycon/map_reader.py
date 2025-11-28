@@ -10,26 +10,12 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 from .utils import TilesetPathResolver, load_json
 from .logging_config import get_logger
-from .validators import (
-    validate_path, validate_map_dimensions, validate_tileset_name
-)
 
 logger = get_logger('map_reader')
 
 
 class MapReader:
-    """
-    Handles reading and parsing map files from pokeemerald format.
-    
-    This class provides a clean interface for reading Pokemon Emerald map data files,
-    including map.bin, metatiles.bin, and metatile_attributes.bin. It encapsulates
-    all file I/O operations and parsing logic, making the codebase more testable
-    and maintainable.
-    
-    Attributes:
-        input_dir: Path to pokeemerald root directory
-        path_resolver: TilesetPathResolver instance for finding tileset paths
-    """
+    """Handles reading and parsing map files from pokeemerald format."""
     
     def __init__(self, input_dir: Path):
         """
@@ -80,12 +66,7 @@ class MapReader:
         
         Raises:
             ValueError: If file size doesn't match expected dimensions
-            FileNotFoundError: If map.bin file doesn't exist
         """
-        # Validate inputs
-        validate_path(map_bin_path, must_be_file=True)
-        validate_map_dimensions(width, height)
-        
         if not map_bin_path.exists():
             raise FileNotFoundError(f"map.bin not found: {map_bin_path}")
         
@@ -127,9 +108,6 @@ class MapReader:
         Returns:
             Dictionary mapping metatile_id -> layer_type (0-15)
         """
-        # Validate inputs
-        validate_tileset_name(tileset_name)
-        
         # Get tileset directory
         result = self.path_resolver.find_tileset_path(tileset_name)
         if not result:
@@ -179,9 +157,6 @@ class MapReader:
         Returns:
             List of tile IDs (one per tile in metatiles.bin)
         """
-        # Validate inputs
-        validate_tileset_name(tileset_name)
-        
         # Get tileset directory
         result = self.path_resolver.find_tileset_path(tileset_name)
         if not result:
@@ -225,9 +200,6 @@ class MapReader:
             - flip_flags: bits 10-11 (0-3: 0=none, 1=h, 2=v, 3=hv)
             - palette_index: bits 12-15 (0-15)
         """
-        # Validate inputs
-        validate_tileset_name(tileset_name)
-        
         # Get tileset directory
         result = self.path_resolver.find_tileset_path(tileset_name)
         if not result:
