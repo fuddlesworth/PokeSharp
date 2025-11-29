@@ -407,7 +407,12 @@ public class MapLoader(
         // CRITICAL: Pass mapId to prevent cross-map animation corruption
         var animatedTilesCreated =
             loadedTilesets.Count > 0
-                ? _animatedTileProcessor.CreateAnimatedTileEntities(world, tmxDoc, loadedTilesets, context.MapId)
+                ? _animatedTileProcessor.CreateAnimatedTileEntities(
+                    world,
+                    tmxDoc,
+                    loadedTilesets,
+                    context.MapId
+                )
                 : 0;
 
         // Create image layers
@@ -479,7 +484,12 @@ public class MapLoader(
         // Adds MapBorder component to map entity if border property exists
         if (loadedTilesets.Count > 0)
         {
-            var hasBorder = _borderProcessor.AddBorderToEntity(world, mapInfoEntity, tmxDoc, loadedTilesets);
+            var hasBorder = _borderProcessor.AddBorderToEntity(
+                world,
+                mapInfoEntity,
+                tmxDoc,
+                loadedTilesets
+            );
             if (hasBorder)
                 _logger?.LogInformation("Border data loaded for map '{MapName}'", context.MapName);
         }

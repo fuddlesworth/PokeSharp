@@ -36,11 +36,13 @@ public class ConsoleAutoCompleteCoordinator : IConsoleAutoCompleteCoordinator
         QuakeConsole console,
         ConsoleAutoComplete autoComplete,
         HistorySuggestionProvider historyProvider,
-        ILogger logger)
+        ILogger logger
+    )
     {
         _console = console ?? throw new ArgumentNullException(nameof(console));
         _autoComplete = autoComplete ?? throw new ArgumentNullException(nameof(autoComplete));
-        _historyProvider = historyProvider ?? throw new ArgumentNullException(nameof(historyProvider));
+        _historyProvider =
+            historyProvider ?? throw new ArgumentNullException(nameof(historyProvider));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -53,8 +55,11 @@ public class ConsoleAutoCompleteCoordinator : IConsoleAutoCompleteCoordinator
         _totalTime += deltaTime;
 
         // Check if we should trigger auto-complete after delay
-        if (_console.IsVisible && _lastTypingTime > 0 &&
-            (_totalTime - _lastTypingTime) >= AutoCompleteDelay)
+        if (
+            _console.IsVisible
+            && _lastTypingTime > 0
+            && (_totalTime - _lastTypingTime) >= AutoCompleteDelay
+        )
         {
             _lastTypingTime = 0; // Reset
             // Trigger auto-complete (caller should handle this)
@@ -93,7 +98,11 @@ public class ConsoleAutoCompleteCoordinator : IConsoleAutoCompleteCoordinator
     {
         try
         {
-            _logger.LogInformation("Triggering auto-complete: code='{Code}', pos={Pos}", code, cursorPosition);
+            _logger.LogInformation(
+                "Triggering auto-complete: code='{Code}', pos={Pos}",
+                code,
+                cursorPosition
+            );
 
             // Get API completions from Roslyn
             var apiSuggestions = await _autoComplete.GetCompletionsAsync(code, cursorPosition);
@@ -101,8 +110,11 @@ public class ConsoleAutoCompleteCoordinator : IConsoleAutoCompleteCoordinator
             // Get history suggestions
             var historySuggestions = _historyProvider.GetSuggestions(code, MaxHistorySuggestions);
 
-            _logger.LogInformation("Got {ApiCount} API suggestions and {HistoryCount} history suggestions",
-                apiSuggestions.Count, historySuggestions.Count);
+            _logger.LogInformation(
+                "Got {ApiCount} API suggestions and {HistoryCount} history suggestions",
+                apiSuggestions.Count,
+                historySuggestions.Count
+            );
 
             // If we have history suggestions and they're relevant, add them at the top
             // Create synthetic CompletionItems for history suggestions for now
@@ -128,8 +140,15 @@ public class ConsoleAutoCompleteCoordinator : IConsoleAutoCompleteCoordinator
 
             if (result.Count > 0)
             {
-                _logger.LogInformation("Total suggestions: {Suggestions}",
-                    string.Join(", ", result.Take(ConsoleConstants.Limits.MaxSuggestionsInLog).Select(s => s.DisplayText)));
+                _logger.LogInformation(
+                    "Total suggestions: {Suggestions}",
+                    string.Join(
+                        ", ",
+                        result
+                            .Take(ConsoleConstants.Limits.MaxSuggestionsInLog)
+                            .Select(s => s.DisplayText)
+                    )
+                );
             }
 
             return result;

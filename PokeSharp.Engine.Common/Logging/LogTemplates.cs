@@ -21,7 +21,7 @@ public static partial class LogTemplates
         { LogAccent.Input, ("I", "deepskyblue3") },
         { LogAccent.Workflow, ("WF", "steelblue1") },
         { LogAccent.System, ("SYS", "orange3") },
-        { LogAccent.Script, ("S", "deepskyblue1") },
+        { LogAccent.Script, ("S", "deepskyblue1") }
     };
 
     // ═══════════════════════════════════════════════════════════════
@@ -570,7 +570,7 @@ public static partial class LogTemplates
             )
         );
         var headerLine = LogFormatting.FormatTemplate(
-            $"[blue bold]║[/]  [cyan bold]{title, -38}[/]  [blue bold]║[/]"
+            $"[blue bold]║[/]  [cyan bold]{title,-38}[/]  [blue bold]║[/]"
         );
         logger.LogInformation(headerLine);
         logger.LogInformation(
@@ -1272,6 +1272,6 @@ public static partial class LogTemplates
         Input,
         Workflow,
         System,
-        Script,
+        Script
     }
 }

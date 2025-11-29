@@ -144,7 +144,8 @@ public class SpatialHashException : SystemException
         WithContext("Operation", operation);
     }
 
-    public string Operation => Context.TryGetValue("Operation", out var op) ? op?.ToString() ?? "" : "";
+    public string Operation =>
+        Context.TryGetValue("Operation", out var op) ? op?.ToString() ?? "" : "";
 
     public override bool IsRecoverable => true; // Can fallback to brute force queries
 
@@ -189,19 +190,23 @@ public class NpcBehaviorException : SystemException
     public NpcBehaviorException(int npcEntityId, string scriptName, string message)
         : base("SYSTEM_NPC_BEHAVIOR_ERROR", message)
     {
-        WithContext("NpcEntityId", npcEntityId)
-            .WithContext("ScriptName", scriptName);
+        WithContext("NpcEntityId", npcEntityId).WithContext("ScriptName", scriptName);
     }
 
-    public NpcBehaviorException(int npcEntityId, string scriptName, string message, Exception innerException)
+    public NpcBehaviorException(
+        int npcEntityId,
+        string scriptName,
+        string message,
+        Exception innerException
+    )
         : base("SYSTEM_NPC_BEHAVIOR_ERROR", message, innerException)
     {
-        WithContext("NpcEntityId", npcEntityId)
-            .WithContext("ScriptName", scriptName);
+        WithContext("NpcEntityId", npcEntityId).WithContext("ScriptName", scriptName);
     }
 
     public int NpcEntityId => Context.TryGetValue("NpcEntityId", out var id) && id is int i ? i : 0;
-    public string ScriptName => Context.TryGetValue("ScriptName", out var name) ? name?.ToString() ?? "" : "";
+    public string ScriptName =>
+        Context.TryGetValue("ScriptName", out var name) ? name?.ToString() ?? "" : "";
 
     public override bool IsRecoverable => true; // NPC can use default behavior
 

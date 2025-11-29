@@ -45,7 +45,7 @@ public class PoolConfiguration
         {
             Name = "default",
             InitialSize = 100,
-            MaxSize = 1000,
+            MaxSize = 1000
         };
 
     /// <summary>
@@ -56,7 +56,7 @@ public class PoolConfiguration
         {
             Name = "enemies",
             InitialSize = 50,
-            MaxSize = 500,
+            MaxSize = 500
         };
 
     /// <summary>
@@ -67,7 +67,7 @@ public class PoolConfiguration
         {
             Name = "projectiles",
             InitialSize = 200,
-            MaxSize = 2000,
+            MaxSize = 2000
         };
 
     /// <summary>
@@ -78,7 +78,7 @@ public class PoolConfiguration
         {
             Name = "effects",
             InitialSize = 100,
-            MaxSize = 1000,
+            MaxSize = 1000
         };
 
     /// <summary>
@@ -89,7 +89,7 @@ public class PoolConfiguration
         {
             Name = "ui",
             InitialSize = 50,
-            MaxSize = 200,
+            MaxSize = 200
         };
 
     /// <summary>
@@ -100,6 +100,6 @@ public class PoolConfiguration
         {
             Name = "particles",
             InitialSize = 500,
-            MaxSize = 5000,
+            MaxSize = 5000
         };
 }

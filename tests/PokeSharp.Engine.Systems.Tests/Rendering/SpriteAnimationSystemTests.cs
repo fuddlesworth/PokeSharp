@@ -1,9 +1,6 @@
-using System.Diagnostics;
 using Arch.Core;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
-using PokeSharp.Game.Components.Rendering;
 using PokeSharp.Game.Infrastructure.Services;
 using PokeSharp.Game.Systems;
 using Xunit;
@@ -42,15 +39,43 @@ public class SpriteAnimationSystemTests : IDisposable
                     Loop = true,
                     FrameIndices = new[] { 0, 1, 2, 3 },
                     FrameDuration = 0.125f,
-                    FlipHorizontal = false,
+                    FlipHorizontal = false
                 }
             },
             Frames = new List<SpriteFrameInfo>
             {
-                new() { Index = 0, X = 0, Y = 0, Width = 32, Height = 32 },
-                new() { Index = 1, X = 32, Y = 0, Width = 32, Height = 32 },
-                new() { Index = 2, X = 64, Y = 0, Width = 32, Height = 32 },
-                new() { Index = 3, X = 96, Y = 0, Width = 32, Height = 32 },
+                new()
+                {
+                    Index = 0,
+                    X = 0,
+                    Y = 0,
+                    Width = 32,
+                    Height = 32
+                },
+                new()
+                {
+                    Index = 1,
+                    X = 32,
+                    Y = 0,
+                    Width = 32,
+                    Height = 32
+                },
+                new()
+                {
+                    Index = 2,
+                    X = 64,
+                    Y = 0,
+                    Width = 32,
+                    Height = 32,
+                },
+                new()
+                {
+                    Index = 3,
+                    X = 96,
+                    Y = 0,
+                    Width = 32,
+                    Height = 32,
+                },
             },
         };
 
@@ -86,9 +111,7 @@ public class SpriteAnimationSystemTests : IDisposable
             FrameTimer = 0f,
         };
 
-        _mockSpriteLoader
-            .Setup(x => x.GetSprite("player", "player_sprite"))
-            .Returns(_testManifest);
+        _mockSpriteLoader.Setup(x => x.GetSprite("player", "player_sprite")).Returns(_testManifest);
 
         var entity = _world.Create(sprite, animation);
 
@@ -113,9 +136,7 @@ public class SpriteAnimationSystemTests : IDisposable
             FrameTimer = 0f,
         };
 
-        _mockSpriteLoader
-            .Setup(x => x.GetSprite("player", "player_sprite"))
-            .Returns(_testManifest);
+        _mockSpriteLoader.Setup(x => x.GetSprite("player", "player_sprite")).Returns(_testManifest);
 
         var entity = _world.Create(sprite, animation);
         _system.Initialize(_world);
@@ -129,10 +150,7 @@ public class SpriteAnimationSystemTests : IDisposable
         currentSprite.ManifestKey.Should().Be("player/player_sprite");
 
         // Verify sprite loader is called consistently with same key (only once due to caching)
-        _mockSpriteLoader.Verify(
-            x => x.GetSprite("player", "player_sprite"),
-            Times.Once
-        );
+        _mockSpriteLoader.Verify(x => x.GetSprite("player", "player_sprite"), Times.Once);
     }
 
     [Fact]
@@ -147,18 +165,24 @@ public class SpriteAnimationSystemTests : IDisposable
         var animation2 = new Animation { CurrentAnimation = "walk_down", IsPlaying = true };
         var animation3 = new Animation { CurrentAnimation = "walk_down", IsPlaying = true };
 
-        var testManifest2 = new SpriteManifest { Name = "npc_sprite", Category = "npc", Animations = _testManifest.Animations, Frames = _testManifest.Frames };
-        var testManifest3 = new SpriteManifest { Name = "enemy_sprite", Category = "enemy", Animations = _testManifest.Animations, Frames = _testManifest.Frames };
+        var testManifest2 = new SpriteManifest
+        {
+            Name = "npc_sprite",
+            Category = "npc",
+            Animations = _testManifest.Animations,
+            Frames = _testManifest.Frames,
+        };
+        var testManifest3 = new SpriteManifest
+        {
+            Name = "enemy_sprite",
+            Category = "enemy",
+            Animations = _testManifest.Animations,
+            Frames = _testManifest.Frames,
+        };
 
-        _mockSpriteLoader
-            .Setup(x => x.GetSprite("player", "player_sprite"))
-            .Returns(_testManifest);
-        _mockSpriteLoader
-            .Setup(x => x.GetSprite("npc", "npc_sprite"))
-            .Returns(testManifest2);
-        _mockSpriteLoader
-            .Setup(x => x.GetSprite("enemy", "enemy_sprite"))
-            .Returns(testManifest3);
+        _mockSpriteLoader.Setup(x => x.GetSprite("player", "player_sprite")).Returns(_testManifest);
+        _mockSpriteLoader.Setup(x => x.GetSprite("npc", "npc_sprite")).Returns(testManifest2);
+        _mockSpriteLoader.Setup(x => x.GetSprite("enemy", "enemy_sprite")).Returns(testManifest3);
 
         var entity1 = _world.Create(sprite1, animation1);
         var entity2 = _world.Create(sprite2, animation2);
@@ -222,9 +246,7 @@ public class SpriteAnimationSystemTests : IDisposable
             FrameTimer = 0f,
         };
 
-        _mockSpriteLoader
-            .Setup(x => x.GetSprite("player", "player_sprite"))
-            .Returns(_testManifest);
+        _mockSpriteLoader.Setup(x => x.GetSprite("player", "player_sprite")).Returns(_testManifest);
 
         var entity = _world.Create(sprite, animation);
         _system.Initialize(_world);
@@ -291,9 +313,7 @@ public class SpriteAnimationSystemTests : IDisposable
             FrameTimer = 0.1f,
         };
 
-        _mockSpriteLoader
-            .Setup(x => x.GetSprite("player", "player_sprite"))
-            .Returns(_testManifest);
+        _mockSpriteLoader.Setup(x => x.GetSprite("player", "player_sprite")).Returns(_testManifest);
 
         var entity = _world.Create(sprite, animation);
         _system.Initialize(_world);

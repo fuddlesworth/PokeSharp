@@ -264,8 +264,16 @@ public class GameDataLoader
                 var relativePath = Path.GetRelativePath(assetsRoot, file);
 
                 // Parse map connections from structured Connection properties (includes offsets)
-                var (northMapId, northOffset, southMapId, southOffset,
-                     eastMapId, eastOffset, westMapId, westOffset) = ParseMapConnections(properties);
+                var (
+                    northMapId,
+                    northOffset,
+                    southMapId,
+                    southOffset,
+                    eastMapId,
+                    eastOffset,
+                    westMapId,
+                    westOffset
+                ) = ParseMapConnections(properties);
 
                 var mapDef = new MapDefinition
                 {
@@ -391,12 +399,25 @@ public class GameDataLoader
     ///     Looks for properties named connection_north, connection_south, etc.
     ///     and extracts both the "map" field and "offset" field from the value object.
     /// </summary>
-    private static (MapIdentifier? North, int NorthOffset, MapIdentifier? South, int SouthOffset,
-        MapIdentifier? East, int EastOffset, MapIdentifier? West, int WestOffset)
-        ParseMapConnections(Dictionary<string, object> properties)
+    private static (
+        MapIdentifier? North,
+        int NorthOffset,
+        MapIdentifier? South,
+        int SouthOffset,
+        MapIdentifier? East,
+        int EastOffset,
+        MapIdentifier? West,
+        int WestOffset
+    ) ParseMapConnections(Dictionary<string, object> properties)
     {
-        MapIdentifier? north = null, south = null, east = null, west = null;
-        int northOffset = 0, southOffset = 0, eastOffset = 0, westOffset = 0;
+        MapIdentifier? north = null,
+            south = null,
+            east = null,
+            west = null;
+        int northOffset = 0,
+            southOffset = 0,
+            eastOffset = 0,
+            westOffset = 0;
 
         // Check for connection_north
         if (properties.TryGetValue("connection_north", out var northValue))
@@ -446,51 +467,41 @@ public class GameDataLoader
         try
         {
             // Handle JsonElement case
-            if (connectionValue is JsonElement jsonElement && jsonElement.ValueKind == JsonValueKind.Object)
+            if (
+                connectionValue is JsonElement jsonElement
+                && jsonElement.ValueKind == JsonValueKind.Object
+            )
             {
                 string? mapId = null;
-                int offset = 0;
+                var offset = 0;
 
                 if (jsonElement.TryGetProperty("map", out var mapProp))
-                {
                     mapId = mapProp.GetString();
-                }
 
                 if (jsonElement.TryGetProperty("offset", out var offsetProp))
-                {
                     if (offsetProp.ValueKind == JsonValueKind.Number)
-                    {
                         offset = offsetProp.GetInt32();
-                    }
-                }
 
                 return (mapId, offset);
             }
             // Handle Dictionary case
-            else if (connectionValue is Dictionary<string, object> dict)
+
+            if (connectionValue is Dictionary<string, object> dict)
             {
                 string? mapId = null;
-                int offset = 0;
+                var offset = 0;
 
                 if (dict.TryGetValue("map", out var mapValue))
-                {
                     mapId = mapValue?.ToString();
-                }
 
                 if (dict.TryGetValue("offset", out var offsetValue))
                 {
                     if (offsetValue is int intOffset)
-                    {
                         offset = intOffset;
-                    }
                     else if (offsetValue is JsonElement je && je.ValueKind == JsonValueKind.Number)
-                    {
                         offset = je.GetInt32();
-                    }
                     else if (int.TryParse(offsetValue?.ToString(), out var parsedOffset))
-                    {
                         offset = parsedOffset;
-                    }
                 }
 
                 return (mapId, offset);

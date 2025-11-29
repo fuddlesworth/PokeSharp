@@ -19,7 +19,7 @@ namespace PokeSharp.Engine.Systems.BulkOperations;
 ///     <example>
 ///         <code>
 /// var spawner = new TemplateBatchSpawner(factoryService, world);
-///
+/// 
 /// // Spawn enemy wave
 /// var wave = spawner.SpawnWave("enemy/goblin", 10, new WaveConfiguration
 /// {
@@ -27,7 +27,7 @@ namespace PokeSharp.Engine.Systems.BulkOperations;
 ///     SpawnInterval = 0.5f,
 ///     PositionFactory = i => new Vector2(800 + i * 20, 300)
 /// });
-///
+/// 
 /// // Spawn particle circle
 /// var particles = spawner.SpawnCircle("vfx/sparkle", 20, playerPos, radius: 50f);
 /// </code>
@@ -85,10 +85,7 @@ public sealed class TemplateBatchSpawner
                 entities[i] = _factory.SpawnFromTemplate(
                     templateId,
                     _world,
-                    builder =>
-                    {
-                        configure(builder, i);
-                    }
+                    builder => { configure(builder, i); }
                 );
             else
                 entities[i] = _factory.SpawnFromTemplate(templateId, _world);
@@ -116,7 +113,7 @@ public sealed class TemplateBatchSpawner
     ///     spacing: 64,
     ///     startPosition: new Vector2(100, 100)
     /// );
-    ///
+    /// 
     /// // Access specific position: obstacles[row * cols + col]
     /// </code>
     /// </example>
@@ -178,7 +175,7 @@ public sealed class TemplateBatchSpawner
     ///     center: playerPos,
     ///     radius: 20f
     /// );
-    ///
+    /// 
     /// // Spawn particle explosion
     /// var particles = spawner.SpawnCircle(
     ///     "vfx/explosion_particle",
@@ -240,7 +237,7 @@ public sealed class TemplateBatchSpawner
     ///         200 + i * 30  // Spread vertically
     ///     )
     /// });
-    ///
+    /// 
     /// // Each entity has SpawnDelay property for timed activation
     /// </code>
     /// </example>
@@ -355,10 +352,7 @@ public sealed class TemplateBatchSpawner
             entities[i] = _factory.SpawnFromTemplate(
                 templateId,
                 _world,
-                builder =>
-                {
-                    builder.WithProperty("SpawnPosition", position);
-                }
+                builder => { builder.WithProperty("SpawnPosition", position); }
             );
         }
 

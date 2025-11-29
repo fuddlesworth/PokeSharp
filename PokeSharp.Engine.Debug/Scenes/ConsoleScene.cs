@@ -16,15 +16,15 @@ namespace PokeSharp.Engine.Debug.Scenes;
 /// </summary>
 public class ConsoleScene : SceneBase
 {
-    private readonly QuakeConsole _console;
-    private readonly IConsoleInputHandler _inputHandler;
     private readonly IConsoleAutoCompleteCoordinator _autoCompleteCoordinator;
+    private readonly QuakeConsole _console;
     private readonly ConsoleCommandHistory _history;
+    private readonly IConsoleInputHandler _inputHandler;
     private readonly SceneManager _sceneManager;
+    private bool _isProcessingAutoComplete;
 
     private KeyboardState _previousKeyboardState;
     private MouseState _previousMouseState;
-    private bool _isProcessingAutoComplete;
 
     /// <summary>
     ///     Initializes a new instance of the ConsoleScene class.
@@ -51,7 +51,9 @@ public class ConsoleScene : SceneBase
     {
         _console = console ?? throw new ArgumentNullException(nameof(console));
         _inputHandler = inputHandler ?? throw new ArgumentNullException(nameof(inputHandler));
-        _autoCompleteCoordinator = autoCompleteCoordinator ?? throw new ArgumentNullException(nameof(autoCompleteCoordinator));
+        _autoCompleteCoordinator =
+            autoCompleteCoordinator
+            ?? throw new ArgumentNullException(nameof(autoCompleteCoordinator));
         _history = history ?? throw new ArgumentNullException(nameof(history));
         _sceneManager = sceneManager ?? throw new ArgumentNullException(nameof(sceneManager));
 
@@ -94,7 +96,8 @@ public class ConsoleScene : SceneBase
         var currentMouse = Mouse.GetState();
 
         // Check for console toggle key (`) only (not ~ with shift)
-        bool isShiftPressed = currentKeyboard.IsKeyDown(Keys.LeftShift) || currentKeyboard.IsKeyDown(Keys.RightShift);
+        var isShiftPressed =
+            currentKeyboard.IsKeyDown(Keys.LeftShift) || currentKeyboard.IsKeyDown(Keys.RightShift);
         if (WasKeyPressed(currentKeyboard, Keys.OemTilde) && !isShiftPressed)
         {
             // Close the console scene by popping from stack
@@ -112,7 +115,8 @@ public class ConsoleScene : SceneBase
                 currentKeyboard,
                 _previousKeyboardState,
                 currentMouse,
-                _previousMouseState);
+                _previousMouseState
+            );
 
             // Handle input result
             if (inputResult.ShouldCloseConsole)
@@ -125,25 +129,19 @@ public class ConsoleScene : SceneBase
             }
 
             if (inputResult.ShouldExecuteCommand && !string.IsNullOrWhiteSpace(inputResult.Command))
-            {
                 // Command execution will be handled by ConsoleSystem via event/callback
                 // Scene raises event that system listens to
                 OnCommandRequested(inputResult.Command);
-            }
 
             if (inputResult.ShouldTriggerAutoComplete)
-            {
                 _ = TriggerAutoCompleteAsync();
-            }
 
             // Update auto-complete coordinator timing
             _autoCompleteCoordinator.Update(deltaTime);
 
             // Check for delayed auto-complete
             if (_autoCompleteCoordinator.ShouldTriggerDelayedAutoComplete())
-            {
                 _ = TriggerAutoCompleteAsync();
-            }
         }
         catch (Exception ex)
         {
@@ -209,13 +207,9 @@ public class ConsoleScene : SceneBase
             var suggestions = await _autoCompleteCoordinator.GetCompletionsAsync(code, cursorPos);
 
             if (suggestions.Count > 0)
-            {
                 _console.SetAutoCompleteSuggestions(suggestions, code);
-            }
             else
-            {
                 _console.SetAutoCompleteLoading(false);
-            }
         }
         catch (Exception ex)
         {
@@ -265,4 +259,3 @@ public class ConsoleScene : SceneBase
         return currentState.IsKeyDown(key) && _previousKeyboardState.IsKeyUp(key);
     }
 }
-

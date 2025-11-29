@@ -1,7 +1,7 @@
 namespace PokeSharp.Engine.Debug.Console.Features;
 
 /// <summary>
-/// Represents a single history entry with metadata.
+///     Represents a single history entry with metadata.
 /// </summary>
 public record HistoryEntry
 {
@@ -17,20 +17,23 @@ public record HistoryEntry
 /// </summary>
 public class ConsoleCommandHistory
 {
+    private const int MaxHistorySize = 100; // Maximum command history entries
     private readonly List<HistoryEntry> _history = new();
     private int _currentIndex = -1;
-    private const int MaxHistorySize = 100; // Maximum command history entries
 
     /// <summary>
-    /// Loads history from a list (used for persistence).
+    ///     Gets total number of history entries.
+    /// </summary>
+    public int Count => _history.Count;
+
+    /// <summary>
+    ///     Loads history from a list (used for persistence).
     /// </summary>
     public void LoadHistory(IEnumerable<string> commands)
     {
         _history.Clear();
         foreach (var command in commands.Take(MaxHistorySize))
-        {
             _history.Add(new HistoryEntry { Command = command, Timestamp = DateTime.Now });
-        }
         _currentIndex = _history.Count;
     }
 
@@ -153,9 +156,7 @@ public class ConsoleCommandHistory
     /// </summary>
     public IEnumerable<HistoryEntry> GetRecent(int count = 10)
     {
-        return _history
-            .OrderByDescending(e => e.LastUsed)
-            .Take(count);
+        return _history.OrderByDescending(e => e.LastUsed).Take(count);
     }
 
     /// <summary>
@@ -166,10 +167,4 @@ public class ConsoleCommandHistory
         _history.Clear();
         _currentIndex = -1;
     }
-
-    /// <summary>
-    /// Gets total number of history entries.
-    /// </summary>
-    public int Count => _history.Count;
 }
-

@@ -124,4 +124,3 @@ public class KeyToCharConverterTests
         Assert.Equal('}', shifted);
     }
 }
-

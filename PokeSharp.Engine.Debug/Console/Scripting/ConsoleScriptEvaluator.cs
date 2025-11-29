@@ -1,14 +1,12 @@
+using System.Collections;
 using System.Reflection;
-using System.Text;
 using Arch.Core;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Scripting.Api;
-using PokeSharp.Game.Systems.Services;
 
 namespace PokeSharp.Engine.Debug.Console.Scripting;
 
@@ -20,12 +18,6 @@ public class ConsoleScriptEvaluator
 {
     private readonly ILogger _logger;
     private readonly ScriptOptions _scriptOptions;
-    private ScriptState<object>? _scriptState;
-
-    /// <summary>
-    /// Gets the current script state (for auto-completion tracking).
-    /// </summary>
-    public ScriptState<object>? CurrentState => _scriptState;
 
     /// <summary>
     ///     Initializes a new instance of the console script evaluator.
@@ -35,12 +27,17 @@ public class ConsoleScriptEvaluator
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         // Configure script options with all necessary references and imports
-        _scriptOptions = ScriptOptions.Default
-            .AddReferences(GetDefaultReferences())
+        _scriptOptions = ScriptOptions
+            .Default.AddReferences(GetDefaultReferences())
             .AddImports(GetDefaultImports());
 
         _logger.LogInformation("Console script evaluator initialized");
     }
+
+    /// <summary>
+    ///     Gets the current script state (for auto-completion tracking).
+    /// </summary>
+    public ScriptState<object>? CurrentState { get; private set; }
 
     /// <summary>
     ///     Evaluates a C# code snippet and returns the result.
@@ -57,18 +54,14 @@ public class ConsoleScriptEvaluator
         {
             _logger.LogDebug("Evaluating code: {Code}", code);
 
-            if (_scriptState == null)
-            {
+            if (CurrentState == null)
                 // First execution - create new script state
-                _scriptState = await CSharpScript.RunAsync(code, _scriptOptions, globals);
-            }
+                CurrentState = await CSharpScript.RunAsync(code, _scriptOptions, globals);
             else
-            {
                 // Continue from previous state (preserves variables)
-                _scriptState = await _scriptState.ContinueWithAsync(code);
-            }
+                CurrentState = await CurrentState.ContinueWithAsync(code);
 
-            var result = _scriptState.ReturnValue;
+            var result = CurrentState.ReturnValue;
             return EvaluationResult.Success(FormatResult(result));
         }
         catch (CompilationErrorException ex)
@@ -89,7 +82,7 @@ public class ConsoleScriptEvaluator
     /// </summary>
     public void Reset()
     {
-        _scriptState = null;
+        CurrentState = null;
         _logger.LogDebug("Console script state reset");
     }
 
@@ -119,7 +112,7 @@ public class ConsoleScriptEvaluator
             return $"Entity(Id: {entity.Id})";
 
         // Handle collections
-        if (result is System.Collections.IEnumerable enumerable and not string)
+        if (result is IEnumerable enumerable and not string)
         {
             var items = enumerable.Cast<object>().Take(10).ToList();
             var moreItems = enumerable.Cast<object>().Count() > 10;
@@ -130,7 +123,6 @@ public class ConsoleScriptEvaluator
         return result.ToString() ?? "null";
     }
 
-
     /// <summary>
     ///     Gets the default assembly references for console scripts.
     /// </summary>
@@ -138,17 +130,17 @@ public class ConsoleScriptEvaluator
     {
         return new[]
         {
-            typeof(object).Assembly,                    // System.Private.CoreLib
-            typeof(System.Console).Assembly,            // System.Console
-            typeof(Enumerable).Assembly,                // System.Linq
-            typeof(List<>).Assembly,                    // System.Collections
-            typeof(World).Assembly,                     // Arch.Core
-            typeof(Entity).Assembly,                    // Arch.Core
-            typeof(Point).Assembly,                     // MonoGame.Framework
-            typeof(Vector2).Assembly,                   // MonoGame.Framework
-            typeof(Direction).Assembly,                 // PokeSharp.Game.Components
-            typeof(IScriptingApiProvider).Assembly,     // PokeSharp.Game.Scripting
-            typeof(ILogger).Assembly,                   // Microsoft.Extensions.Logging.Abstractions
+            typeof(object).Assembly, // System.Private.CoreLib
+            typeof(System.Console).Assembly, // System.Console
+            typeof(Enumerable).Assembly, // System.Linq
+            typeof(List<>).Assembly, // System.Collections
+            typeof(World).Assembly, // Arch.Core
+            typeof(Entity).Assembly, // Arch.Core
+            typeof(Point).Assembly, // MonoGame.Framework
+            typeof(Vector2).Assembly, // MonoGame.Framework
+            typeof(Direction).Assembly, // PokeSharp.Game.Components
+            typeof(IScriptingApiProvider).Assembly, // PokeSharp.Game.Scripting
+            typeof(ILogger).Assembly, // Microsoft.Extensions.Logging.Abstractions
         };
     }
 
@@ -172,4 +164,3 @@ public class ConsoleScriptEvaluator
         };
     }
 }
-

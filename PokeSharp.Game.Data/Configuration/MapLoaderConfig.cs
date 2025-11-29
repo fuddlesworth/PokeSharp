@@ -65,7 +65,7 @@ public class MapLoaderConfig
         {
             ValidateMaps = true,
             ThrowOnValidationError = true,
-            CacheTilesetTextures = true,
+            CacheTilesetTextures = true
         };
     }
 
@@ -79,7 +79,7 @@ public class MapLoaderConfig
             ValidateMaps = false, // Skip validation in production for performance
             ThrowOnValidationError = false,
             CacheTilesetTextures = true,
-            MaxRenderDistance = 5000, // Smaller render distance for better performance
+            MaxRenderDistance = 5000 // Smaller render distance for better performance
         };
     }
 }

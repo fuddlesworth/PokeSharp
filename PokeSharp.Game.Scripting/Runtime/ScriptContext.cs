@@ -1,5 +1,6 @@
 using Arch.Core;
 using Microsoft.Extensions.Logging;
+using PokeSharp.Engine.Core.Events.Modding;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Scripting.Api;
 using PokeSharp.Game.Scripting.Services;
@@ -64,6 +65,7 @@ public sealed class ScriptContext
     /// <param name="entity">The target entity for entity-level scripts, or null for global scripts.</param>
     /// <param name="logger">Logger instance for this script's execution.</param>
     /// <param name="apis">The scripting API provider facade (provides access to all domain-specific APIs).</param>
+    /// <param name="eventBus">Optional mod event bus for subscribing to and publishing events.</param>
     /// <remarks>
     ///     <para>
     ///         This constructor uses the facade pattern to reduce parameter count from 9 to 4.
@@ -73,12 +75,19 @@ public sealed class ScriptContext
     ///         Typically, you won't construct this directly - ScriptService handles instantiation.
     ///     </para>
     /// </remarks>
-    public ScriptContext(World world, Entity? entity, ILogger logger, IScriptingApiProvider apis)
+    public ScriptContext(
+        World world,
+        Entity? entity,
+        ILogger logger,
+        IScriptingApiProvider apis,
+        IModEventBus? eventBus = null
+    )
     {
         World = world ?? throw new ArgumentNullException(nameof(world));
         Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _entity = entity;
         _apis = apis ?? throw new ArgumentNullException(nameof(apis));
+        Events = eventBus;
     }
 
     #region Core Properties
@@ -208,6 +217,28 @@ public sealed class ScriptContext
     /// </code>
     /// </example>
     public EffectApiService Effects => _apis.Effects;
+
+    /// <summary>
+    ///     Gets the mod event bus for subscribing to and publishing events.
+    /// </summary>
+    /// <remarks>
+    ///     Mods have full access to all gameplay events. Use Subscribe to react to events,
+    ///     or Publish to emit custom events for other mods to consume.
+    /// </remarks>
+    /// <example>
+    ///     <code>
+    /// // Subscribe to tile entered events
+    /// var sub = ctx.Events?.Subscribe&lt;TileEnteredEvent&gt;(evt =&gt;
+    /// {
+    ///     if (evt.TileBehavior == "tall_grass")
+    ///         ctx.Logger.LogInformation("Stepped in tall grass!");
+    /// });
+    ///
+    /// // Publish custom event
+    /// ctx.Events?.Publish(new MyModEvent { ... });
+    /// </code>
+    /// </example>
+    public IModEventBus? Events { get; }
 
     #endregion
 

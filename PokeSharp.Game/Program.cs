@@ -12,11 +12,11 @@ using PokeSharp.Engine.Systems.Pooling;
 using PokeSharp.Game;
 using PokeSharp.Game.Data.Loading;
 using PokeSharp.Game.Data.Services;
+using PokeSharp.Game.Infrastructure.Configuration;
 using PokeSharp.Game.Infrastructure.Diagnostics;
 using PokeSharp.Game.Infrastructure.Services;
-using PokeSharp.Game.Initialization;
-using PokeSharp.Game.Initialization.Initializers;
 using PokeSharp.Game.Initialization.Factories;
+using PokeSharp.Game.Initialization.Initializers;
 using PokeSharp.Game.Input;
 using PokeSharp.Game.Scripting.Api;
 using PokeSharp.Game.Scripting.Services;
@@ -73,7 +73,9 @@ try
     services.AddSingleton<PokeSharpGame>(sp =>
     {
         var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
-        var gameConfig = sp.GetRequiredService<IOptions<PokeSharp.Game.Infrastructure.Configuration.GameConfiguration>>();
+        var gameConfig = sp.GetRequiredService<
+        GameConfigurationConfiguration>
+        >();
         var options = new PokeSharpGameOptions
         {
             World = sp.GetRequiredService<World>(),
@@ -92,7 +94,7 @@ try
             NpcDefinitionService = sp.GetRequiredService<NpcDefinitionService>(),
             MapDefinitionService = sp.GetRequiredService<MapDefinitionService>(),
             SpriteLoader = sp.GetRequiredService<SpriteLoader>(),
-            TemplateCacheInitializer = sp.GetRequiredService<TemplateCacheInitializer>(),
+            TemplateCacheInitializer = sp.GetRequiredService<TemplteCacheInitializer>(),
         };
         return new PokeSharpGame(loggerFactory, options, sp, gameConfig);
     });

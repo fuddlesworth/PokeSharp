@@ -55,8 +55,12 @@ public class CameraFollowSystem(ILogger<CameraFollowSystem>? logger = null)
                 // Set follow target with offset to center on player sprite
                 // Player position is tile top-left, so add half tile (8 pixels) for centering
                 const float halfTile = 8f;
-                camera.FollowTarget = new Vector2(position.PixelX + halfTile, position.PixelY + halfTile);
-                camera.Update(deltaTime);
+                camera.FollowTarget = new Vector2(
+                    position.PixelX + halfTile,
+                    position.PixelY + halfTile
+                );
+              
+ amera.Update(deltaTime);
             }
         );
     }

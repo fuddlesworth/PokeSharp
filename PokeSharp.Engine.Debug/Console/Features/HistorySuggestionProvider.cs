@@ -1,18 +1,13 @@
 namespace PokeSharp.Engine.Debug.Console.Features;
 
 /// <summary>
-/// Provides command suggestions from history based on current input.
-/// Implements smart ranking based on frequency and recency.
+///     Provides command suggestions from history based on current input.
+///     Implements smart ranking based on frequency and recency.
 /// </summary>
 public class HistorySuggestionProvider
 {
-    private readonly ConsoleCommandHistory _history;
     private const int MaxSuggestions = 5;
-
-    /// <summary>
-    /// Represents a history-based suggestion.
-    /// </summary>
-    public record HistorySuggestion(string Command, int UseCount, int DaysAgo);
+    private readonly ConsoleCommandHistory _history;
 
     public HistorySuggestionProvider(ConsoleCommandHistory history)
     {
@@ -20,12 +15,15 @@ public class HistorySuggestionProvider
     }
 
     /// <summary>
-    /// Gets command suggestions from history that match the current input.
+    ///     Gets command suggestions from history that match the current input.
     /// </summary>
     /// <param name="currentInput">The current input text.</param>
     /// <param name="maxResults">Maximum number of suggestions to return.</param>
     /// <returns>List of matching history suggestions, ranked by relevance.</returns>
-    public List<HistorySuggestion> GetSuggestions(string currentInput, int maxResults = MaxSuggestions)
+    public List<HistorySuggestion> GetSuggestions(
+        string currentInput,
+        int maxResults = MaxSuggestions
+    )
     {
         if (string.IsNullOrWhiteSpace(currentInput))
             return new List<HistorySuggestion>();
@@ -50,7 +48,7 @@ public class HistorySuggestionProvider
             {
                 var useCount = commandFrequency.GetValueOrDefault(command, 1);
                 var recencyBonus = CalculateRecencyBonus(allHistory.ToList(), command);
-                var finalScore = matchScore + recencyBonus + (useCount * 0.1);
+                var finalScore = matchScore + recencyBonus + useCount * 0.1;
 
                 matches.Add((command, finalScore, useCount));
             }
@@ -65,7 +63,7 @@ public class HistorySuggestionProvider
     }
 
     /// <summary>
-    /// Calculates how well a command matches the input.
+    ///     Calculates how well a command matches the input.
     /// </summary>
     private double CalculateMatchScore(string command, string input)
     {
@@ -94,7 +92,7 @@ public class HistorySuggestionProvider
     }
 
     /// <summary>
-    /// Checks if the input appears at a word boundary in the command.
+    ///     Checks if the input appears at a word boundary in the command.
     /// </summary>
     private bool IsAtWordBoundary(string command, string input)
     {
@@ -108,63 +106,57 @@ public class HistorySuggestionProvider
     }
 
     /// <summary>
-    /// Checks if the input characters appear in order in the command (fuzzy matching).
+    ///     Checks if the input characters appear in order in the command (fuzzy matching).
     /// </summary>
     private bool IsFuzzyMatch(string command, string input)
     {
-        int inputIndex = 0;
-        for (int i = 0; i < command.Length && inputIndex < input.Length; i++)
-        {
+        var inputIndex = 0;
+        for (var i = 0; i < command.Length && inputIndex < input.Length; i++)
             if (char.ToLowerInvariant(command[i]) == char.ToLowerInvariant(input[inputIndex]))
-            {
                 inputIndex++;
-            }
-        }
+
         return inputIndex == input.Length;
     }
 
     /// <summary>
-    /// Calculates a recency bonus for commands used recently.
+    ///     Calculates a recency bonus for commands used recently.
     /// </summary>
     private double CalculateRecencyBonus(List<string> allHistory, string command)
     {
         // Find the most recent occurrence
-        for (int i = allHistory.Count - 1; i >= 0; i--)
-        {
+        for (var i = allHistory.Count - 1; i >= 0; i--)
             if (allHistory[i].Equals(command, StringComparison.OrdinalIgnoreCase))
             {
                 // More recent = higher bonus
-                int positionFromEnd = allHistory.Count - i;
+                var positionFromEnd = allHistory.Count - i;
                 if (positionFromEnd <= 5)
                     return 20.0; // Very recent
                 if (positionFromEnd <= 20)
                     return 10.0; // Recent
                 if (positionFromEnd <= 50)
-                    return 5.0;  // Somewhat recent
+                    return 5.0; // Somewhat recent
                 return 0;
             }
-        }
+
         return 0;
     }
 
     /// <summary>
-    /// Counts how many times each command appears in history.
+    ///     Counts how many times each command appears in history.
     /// </summary>
     private Dictionary<string, int> CountCommandFrequency(List<string> history)
     {
         var frequency = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         foreach (var command in history)
-        {
             if (frequency.ContainsKey(command))
                 frequency[command]++;
             else
                 frequency[command] = 1;
-        }
         return frequency;
     }
 
     /// <summary>
-    /// Gets the most frequently used commands.
+    ///     Gets the most frequently used commands.
     /// </summary>
     public List<HistorySuggestion> GetMostFrequentCommands(int maxResults = 10)
     {
@@ -180,5 +172,9 @@ public class HistorySuggestionProvider
             .Select(kvp => new HistorySuggestion(kvp.Key, kvp.Value, 0))
             .ToList();
     }
-}
 
+    /// <summary>
+    ///     Represents a history-based suggestion.
+    /// </summary>
+    public record HistorySuggestion(string Command, int UseCount, int DaysAgo);
+}

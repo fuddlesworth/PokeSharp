@@ -16,10 +16,33 @@ public record InputHandlingResult
     public bool ConsumedInput { get; init; }
 
     public static InputHandlingResult None => new() { ConsumedInput = false };
-    public static InputHandlingResult Execute(string command) => new() { ShouldExecuteCommand = true, Command = command, ConsumedInput = true };
-    public static InputHandlingResult TriggerAutoComplete() => new() { ShouldTriggerAutoComplete = true, ConsumedInput = true };
-    public static InputHandlingResult NavigateHistory(HistoryDirection direction) => new() { ShouldNavigateHistory = true, HistoryDirection = direction, ConsumedInput = true };
-    public static InputHandlingResult CloseConsole() => new() { ShouldCloseConsole = true, ConsumedInput = true };
+
+    public static InputHandlingResult Consumed => new() { ConsumedInput = true };
+
+     public static InputHandlingResult Execute(string command
+   {
+       return new InputHandlingResult { ShouldExecuteCommand = true, Command = command, ConsumedInput = true };
+   }
+
+    d = command,
+            ConsumedInput = true,
+        
+   {
+       return new InputHandlingResult { ShouldTriggerAutoComplete = true, ConsumedInput = true };
+   }      new() { ShouldTriggerAutoComplete = true, ConsumedInput = true };
+
+    publi
+    {
+        return new InputHandlingResult { ShouldNavigateHistory = true, HistoryDirection = direction, ConsumedInput = true };
+    }
+
+                ShouldNavigateHistory = true,
+      
+    {
+        return new InputHandlingResult { ShouldCloseConsole = true, ConsumedInput = true };
+    }
+ new() { ShouldCloseConsole = true, ConsumedInput = true };
+
     public static InputHandlingResult Consumed => new() { ConsumedInput = true };
 }
 
@@ -29,7 +52,7 @@ public record InputHandlingResult
 public enum HistoryDirection
 {
     Up,
-    Down
+    Down,
 }
 
 /// <summary>
@@ -49,9 +72,10 @@ public interface IConsoleInputHandler
     /// <returns>Result indicating what action should be taken.</returns>
     InputHandlingResult HandleInput(
         float deltaTime,
-        KeyboardState keyboardState,
+        
+eyboardState keyboardState,
         KeyboardState previousKeyboardState,
         MouseState mouseState,
-        MouseState previousMouseState);
+        MouseState previousMouseState
+    );
 }
-

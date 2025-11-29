@@ -1,0 +1,82 @@
+Instructions for completing MovementSystem.cs magic number extraction:
+
+The file at: PokeSharp.Game.Systems/Movement/MovementSystem.cs
+
+Needs the following changes (linter was interfering with automated edits):
+
+1. ADD CONSTANTS REGION after line 27 (after "public class MovementSystem : SystemBase, IUpdateSystem"):
+
+    #region Constants
+
+    /// <summary>
+    ///     Default tile size in pixels when MapInfo is unavailable.
+    /// </summary>
+    private const int DefaultTileSize = 16;
+
+    /// <summary>
+    ///     Movement completion threshold (1.0 = 100% complete).
+    /// </summary>
+    private const float MovementCompleteThreshold = 1.0f;
+
+    /// <summary>
+    ///     Direction offset to convert Direction enum (-1 to 3) to array index (0 to 4).
+    /// </summary>
+    private const int DirectionEnumOffset = 1;
+
+    /// <summary>
+    ///     Initial capacity for entity removal buffer to reduce allocations.
+    /// </summary>
+    private const int EntityRemovalBufferCapacity = 32;
+
+    /// <summary>
+    ///     Initial capacity for map info cache.
+    /// </summary>
+    private const int MapInfoCacheCapacity = 10;
+
+    /// <summary>
+    ///     Buffer distance in tiles beyond map boundaries for map connections.
+    ///     Allows movement 1 tile outside bounds for seamless map transitions.
+    /// </summary>
+    private const int MapBoundaryBufferTiles = 1;
+
+    #endregion
+
+2. REPLACE the following lines:
+
+Line ~45:
+  FIND:    private readonly List<Entity> _entitiesToRemove = new(32);
+  REPLACE: private readonly List<Entity> _entitiesToRemove = new(EntityRemovalBufferCapacity);
+
+Line ~53:
+  FIND:    private readonly Dictionary<int, Vector2> _mapWorldOffsetCache = new(10);
+  REPLACE: private readonly Dictionary<int, Vector2> _mapWorldOffsetCache = new(MapInfoCacheCapacity);
+
+Line ~166:
+  FIND:    var index = (int)direction + 1; // Offset for None=-1
+  REPLACE: var index = (int)direction + DirectionEnumOffset;
+
+Line ~206:
+  FIND:    if (movement.MovementProgress >= 1.0f)
+  REPLACE: if (movement.MovementProgress >= MovementCompleteThreshold)
+
+Line ~228:
+  FIND:    movement.MovementProgress = 1.0f;
+  REPLACE: movement.MovementProgress = MovementCompleteThreshold;
+
+Line ~348:
+  FIND:    if (movement.MovementProgress >= 1.0f)
+  REPLACE: if (movement.MovementProgress >= MovementCompleteThreshold)
+
+Line ~351:
+  FIND:    movement.MovementProgress = 1.0f;
+  REPLACE: movement.MovementProgress = MovementCompleteThreshold;
+
+Line ~678:
+  FIND:    var tileSize = 16; // default
+  REPLACE: var tileSize = DefaultTileSize;
+
+Line ~751 and ~753:
+  FIND:    tileX >= -1
+           tileY >= -1
+  REPLACE: tileX >= -MapBoundaryBufferTiles
+           tileY >= -MapBoundaryBufferTiles

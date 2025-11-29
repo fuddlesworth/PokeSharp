@@ -36,7 +36,8 @@ public class ConfigurationException : InitializationException
         WithContext("ConfigSection", configSection);
     }
 
-    public string ConfigSection => Context.TryGetValue("ConfigSection", out var section) ? section?.ToString() ?? "" : "";
+    public string ConfigSection =>
+        Context.TryGetValue("ConfigSection", out var section) ? section?.ToString() ?? "" : "";
 
     public override bool IsRecoverable => false; // Config errors prevent startup
 
@@ -57,13 +58,18 @@ public class DependencyInjectionException : InitializationException
         WithContext("ServiceType", serviceType);
     }
 
-    public DependencyInjectionException(string serviceType, string message, Exception innerException)
+    public DependencyInjectionException(
+        string serviceType,
+        string message,
+        Exception innerException
+    )
         : base("INIT_DI_ERROR", message, innerException)
     {
         WithContext("ServiceType", serviceType);
     }
 
-    public string ServiceType => Context.TryGetValue("ServiceType", out var type) ? type?.ToString() ?? "" : "";
+    public string ServiceType =>
+        Context.TryGetValue("ServiceType", out var type) ? type?.ToString() ?? "" : "";
 
     public override bool IsRecoverable => false; // DI errors prevent startup
 
@@ -84,13 +90,18 @@ public class InitializationPipelineException : InitializationException
         WithContext("StepName", stepName);
     }
 
-    public InitializationPipelineException(string stepName, string message, Exception innerException)
+    public InitializationPipelineException(
+        string stepName,
+        string message,
+        Exception innerException
+    )
         : base("INIT_PIPELINE_ERROR", message, innerException)
     {
         WithContext("StepName", stepName);
     }
 
-    public string StepName => Context.TryGetValue("StepName", out var step) ? step?.ToString() ?? "" : "";
+    public string StepName =>
+        Context.TryGetValue("StepName", out var step) ? step?.ToString() ?? "" : "";
 
     public override bool IsRecoverable => false; // Pipeline failures prevent startup
 

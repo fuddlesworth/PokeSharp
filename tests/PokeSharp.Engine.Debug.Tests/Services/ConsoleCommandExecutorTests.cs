@@ -21,7 +21,9 @@ public class ConsoleCommandExecutorTests
     {
         // Create mocks
         _mockConsole = new Mock<QuakeConsole>(null!, 800, 600, new ConsoleConfig());
-        _mockEvaluator = new Mock<ConsoleScriptEvaluator>(Mock.Of<ILogger<ConsoleScriptEvaluator>>());
+        _mockEvaluator = new Mock<ConsoleScriptEvaluator>(
+            Mock.Of<ILogger<ConsoleScriptEvaluator>>()
+        );
         _mockGlobals = new Mock<ConsoleGlobals>(
             Mock.Of<IScriptingApiProvider>(),
             Mock.Of<Arch.Core.World>(),
@@ -29,7 +31,10 @@ public class ConsoleCommandExecutorTests
             null!,
             Mock.Of<ILogger<ConsoleGlobals>>()
         );
-        _mockAliasManager = new Mock<AliasMacroManager>("test_aliases.txt", Mock.Of<ILogger<AliasMacroManager>>());
+        _mockAliasManager = new Mock<AliasMacroManager>(
+            "test_aliases.txt",
+            Mock.Of<ILogger<AliasMacroManager>>()
+        );
         _mockScriptManager = new Mock<ScriptManager>(null, Mock.Of<ILogger<ScriptManager>>());
         _mockLogger = new Mock<ILogger<ConsoleCommandExecutor>>();
 
@@ -102,7 +107,11 @@ public class ConsoleCommandExecutorTests
     public async Task ExecuteAsync_WithHelpCommand_ShowsHelp()
     {
         // Arrange
-        _mockConsole.Setup(c => c.AppendOutput(It.IsAny<string>(), It.IsAny<Microsoft.Xna.Framework.Color>())).Verifiable();
+        _mockConsole
+            .Setup(c =>
+                c.AppendOutput(It.IsAny<string>(), It.IsAny<Microsoft.Xna.Framework.Color>())
+            )
+            .Verifiable();
 
         // Act
         var result = await _executor.ExecuteAsync("help");
@@ -111,7 +120,10 @@ public class ConsoleCommandExecutorTests
         Assert.True(result.Success);
         Assert.True(result.IsBuiltInCommand);
         // Verify help text was output (at least 10 lines of help text)
-        _mockConsole.Verify(c => c.AppendOutput(It.IsAny<string>(), It.IsAny<Microsoft.Xna.Framework.Color>()), Times.AtLeast(10));
+        _mockConsole.Verify(
+            c => c.AppendOutput(It.IsAny<string>(), It.IsAny<Microsoft.Xna.Framework.Color>()),
+            Times.AtLeast(10)
+        );
     }
 
     [Fact]
@@ -133,7 +145,10 @@ public class ConsoleCommandExecutorTests
         // Assert
         Assert.True(result.Success);
         Assert.False(result.IsBuiltInCommand);
-        _mockEvaluator.Verify(e => e.EvaluateAsync(expandedCommand, _mockGlobals.Object), Times.Once);
+        _mockEvaluator.Verify(
+            e => e.EvaluateAsync(expandedCommand, _mockGlobals.Object),
+            Times.Once
+        );
     }
 
     [Fact]
@@ -162,9 +177,7 @@ public class ConsoleCommandExecutorTests
         // Arrange
         string code = "void operation";
 
-        _mockEvaluator
-            .Setup(e => e.EvaluateAsync(code, _mockGlobals.Object))
-            .ReturnsAsync("null");
+        _mockEvaluator.Setup(e => e.EvaluateAsync(code, _mockGlobals.Object)).ReturnsAsync("null");
 
         // Act
         var result = await _executor.ExecuteAsync(code);
@@ -195,4 +208,3 @@ public class ConsoleCommandExecutorTests
         Assert.Equal(exception, result.Error);
     }
 }
-

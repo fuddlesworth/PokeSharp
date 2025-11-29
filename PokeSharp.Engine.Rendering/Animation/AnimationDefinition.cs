@@ -1,6 +1,5 @@
 using Arch.Core;
 using Microsoft.Xna.Framework;
-using System.Linq;
 
 namespace PokeSharp.Engine.Rendering.Animation;
 
@@ -82,9 +81,7 @@ public class AnimationDefinition
         get
         {
             if (FrameDurations != null && FrameDurations.Length > 0)
-            {
                 return FrameDurations.Sum();
-            }
             return FrameCount * FrameDuration;
         }
     }

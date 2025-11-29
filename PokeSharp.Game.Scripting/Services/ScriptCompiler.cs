@@ -52,7 +52,6 @@ public class ScriptCompiler
             // Check for errors (avoid LINQ allocation by iterating directly)
             var hasErrors = false;
             foreach (var diagnostic in diagnostics)
-            {
                 if (diagnostic.Severity == DiagnosticSeverity.Error)
                 {
                     if (!hasErrors)
@@ -62,7 +61,6 @@ public class ScriptCompiler
                     }
                     _logger.LogError("  {Message}", diagnostic.GetMessage());
                 }
-            }
 
             if (hasErrors)
                 return null;
@@ -131,4 +129,3 @@ public class ScriptCompiler
         }
     }
 }
-

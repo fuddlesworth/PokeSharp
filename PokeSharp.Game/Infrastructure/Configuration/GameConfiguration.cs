@@ -84,4 +84,3 @@ public class GameInitializationConfig
     /// </summary>
     public int PlayerSpawnY { get; set; } = 8;
 }
-

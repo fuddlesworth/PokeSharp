@@ -7,6 +7,7 @@ using PokeSharp.Engine.Core.Systems;
 using PokeSharp.Engine.Input.Components;
 using PokeSharp.Engine.Input.Services;
 using PokeSharp.Engine.Systems.Management;
+using PokeSharp.Game.Components.Helpers;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Components.Player;
 
@@ -93,9 +94,7 @@ public class InputSystem(
                     // No input - set to not moving (only if not mid-movement and not turning in place)
                     // Don't cancel turn-in-place when key is released - let the animation complete
                     if (!movement.IsMoving && movement.RunningState != RunningState.TurnDirection)
-                    {
                         movement.RunningState = RunningState.NotMoving;
-                    }
                 }
                 else
                 {
@@ -107,14 +106,16 @@ public class InputSystem(
 
                     // Check if we need to turn in place first (pokeemerald behavior)
                     // If input direction != facing direction AND not already moving -> TURN_DIRECTION
-                    if (currentDirection != movement.FacingDirection &&
-                        movement.RunningState != RunningState.Moving &&
-                        !movement.IsMoving)
+                    if (
+                        currentDirection != movement.FacingDirection
+                        && movement.RunningState != RunningState.Moving
+                        && !movement.IsMoving
+                    )
                     {
                         // Turn in place - start turn animation
                         // DON'T buffer input here - only move if key is still held when turn completes
                         // This allows tapping to just face a direction without moving
-                        movement.StartTurnInPlace(currentDirection);
+                        GridMovementHelpers.StartTurnInPlace(ref movement, currentDirection);
                         _logger?.LogTrace(
                             "Turning in place from {From} to {To}",
                             movement.FacingDirection,
@@ -136,7 +137,8 @@ public class InputSystem(
 
                         // Also prevent buffering the same direction multiple times per frame
                         var isDifferentTiming =
-                            _totalTime != _lastBufferTime || currentDirection != _lastBufferedDirection;
+                            _totalTime != _lastBufferTime
+                            || currentDirection != _lastBufferedDirection;
 
                         if (shouldBuffer && isDifferentTiming)
                             if (_inputBuffer.AddInput(currentDirection, _totalTime))

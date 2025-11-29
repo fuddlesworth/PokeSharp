@@ -243,8 +243,8 @@ public class TilesetLoader
         {
             _assetManager.LoadTexture(tilesetId, pathForLoader);
             _logger?.LogInformation(
-                "[TilesetDebug] Loaded tileset texture: TilesetId='{TilesetId}', Path='{PathForLoader}', " +
-                "ImageSource='{ImageSource}'",
+                "[TilesetDebug] Loaded tileset texture: TilesetId='{TilesetId}', Path='{PathForLoader}', "
+                    + "ImageSource='{ImageSource}'",
                 tilesetId,
                 pathForLoader,
                 tileset.Image?.Source ?? "null"

@@ -1,9 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using PokeSharp.Engine.Debug.Console.Configuration;
 using PokeSharp.Engine.Debug.Console.Features;
-using System.Collections.Generic;
-using static PokeSharp.Engine.Debug.Console.Configuration.ConsoleColors;
 
 namespace PokeSharp.Engine.Debug.Console.UI.Renderers;
 
@@ -18,7 +15,12 @@ public class ConsoleSearchRenderer
     private readonly Texture2D _pixel;
     private float _screenWidth;
 
-    public ConsoleSearchRenderer(ConsoleFontRenderer fontRenderer, SpriteBatch spriteBatch, Texture2D pixel, float screenWidth)
+    public ConsoleSearchRenderer(
+        ConsoleFontRenderer fontRenderer,
+        SpriteBatch spriteBatch,
+        Texture2D pixel,
+        float screenWidth
+    )
     {
         _fontRenderer = fontRenderer;
         _spriteBatch = spriteBatch;
@@ -37,7 +39,14 @@ public class ConsoleSearchRenderer
     /// <summary>
     /// Draws search highlights for matching text in the output.
     /// </summary>
-    public void DrawSearchHighlights(int outputY, int lineHeight, OutputSearcher searcher, int scrollOffset, IReadOnlyList<ConsoleLine> allLines, UI.ConsoleOutput output)
+    public void DrawSearchHighlights(
+        int outputY,
+        int lineHeight,
+        OutputSearcher seher,
+        int scrollOffset,
+        IReadOnlyList<ConsoleLine> allLines,
+        UI.ConsoleOutput output
+    )
     {
         var currentMatchColor = Search_CurrentMatch; // Bright yellow/orange
         var matchColor = Search_OtherMatches; // Light blue
@@ -55,7 +64,10 @@ public class ConsoleSearchRenderer
 
             // Check if match is in visible area (using effective indices)
             int relativeLineIndex = effectiveLineIndex - scrollOffset;
-            if (relativeLineIndex < 0 || relativeLineIndex >= ConsoleConstants.Limits.DefaultVisibleLines)
+            if (
+                relativeLineIndex < 0
+                || relativeLineIndex >= ConsoleConstants.Limits.DefaultVisibleLines
+            )
                 continue;
 
             var lineText = allLines[match.LineIndex].Text;
@@ -71,9 +83,10 @@ public class ConsoleSearchRenderer
             int highlightX = ConsoleConstants.Rendering.Padding + (int)offsetSize.X;
             int highlightY = outputY + (relativeLineIndex * lineHeight);
 
-            bool isCurrentMatch = currentMatch != null &&
-                                 currentMatch.LineIndex == match.LineIndex &&
-                                 currentMatch.StartColumn == match.StartColumn;
+            bool isCurrentMatch =
+                currentMatch != null
+                && currentMatch.LineIndex == match.LineIndex
+                && currentMatch.StartColumn == match.StartColumn;
 
             var color = isCurrentMatch ? currentMatchColor : matchColor;
             DrawRectangle(highlightX, highlightY, (int)matchSize.X, lineHeight, color);
@@ -83,16 +96,22 @@ public class ConsoleSearchRenderer
     /// <summary>
     /// Draws the forward search bar UI.
     /// </summary>
-    public void DrawSearchBar(int consoleHeight, int lineHeight, string searchInput, OutputSearcher searcher)
+    public void DrawSearchBar(
+        int consoleHeight,
+        int lineHeight,
+        string searchInput,
+        OutputSearcher searcher
+    )
     {
         // Calculate total height needed: help line + search bar
         int totalHeight = lineHeight * 2 + 10; // Two lines plus padding
-        int searchBarY = consoleHeight - totalHeight - ConsoleConstants.Rendering.SearchBarBottomOffset;
+        int searchBarY =
+            consoleHeight - totalHeight - ConsoleConstants.Rendering.SearchBarBottomOffset;
 
         // Draw help text line at the top
         int helpY = searchBarY;
         DrawRectangle(0, helpY, (int)_screenWidth, lineHeight + 4, Background_Secondary);
-        
+
         string helpText = "F3: Next  •  Shift+F3: Prev  •  Esc: Exit";
         var helpSize = _fontRenderer.MeasureString(helpText);
         int helpX = ((int)_screenWidth - (int)helpSize.X) / 2; // Center the help text
@@ -113,7 +132,8 @@ public class ConsoleSearchRenderer
         // Draw match count on the right
         string matchInfo = BuildSearchMatchInfo(searcher, searchInput);
         var matchInfoSize = _fontRenderer.MeasureString(matchInfo);
-        int matchInfoX = (int)_screenWidth - ConsoleConstants.Rendering.Padding - (int)matchInfoSize.X;
+        int matchInfoX =
+            (int)_screenWidth - ConsoleConstants.Rendering.Padding - (int)matchInfoSize.X;
 
         var matchColor = searcher.IsSearching ? Search_Success : Search_Disabled;
         _fontRenderer.DrawString(matchInfo, matchInfoX, textY, matchColor);
@@ -127,7 +147,7 @@ public class ConsoleSearchRenderer
         if (inputSize.X > maxInputWidth)
         {
             string ellipsis = "...";
-            
+
             // Start from the end and find how much we can fit
             for (int i = searchInput.Length - 1; i >= 0; i--)
             {
@@ -146,8 +166,14 @@ public class ConsoleSearchRenderer
     /// <summary>
     /// Draws the reverse-i-search bar UI.
     /// </summary>
-    public void DrawReverseSearchBar(int consoleHeight, int lineHeight, string reverseSearchInput,
-                                    List<string> matches, int matchIndex, string currentMatch)
+    public void DrawReverseSearchBar(
+        int consoleHeight,
+        int lineHeight,
+        string reverseSearchInput,
+        List<string> matches,
+        int matchIndex,
+        string currentMatch
+    )
     {
         // Calculate total height needed: help line + search bar + preview (if there's a match)
         int totalHeight = lineHeight * 2 + 10; // Two lines plus padding
@@ -156,12 +182,13 @@ public class ConsoleSearchRenderer
             totalHeight += lineHeight + 6; // Add preview height
         }
 
-        int searchBarY = consoleHeight - totalHeight - ConsoleConstants.Rendering.SearchBarBottomOffset;
+        int searchBarY =
+            consoleHeight - totalHeight - ConsoleConstants.Rendering.SearchBarBottomOffset;
 
         // Draw help text line at the top
         int helpY = searchBarY;
         DrawRectangle(0, helpY, (int)_screenWidth, lineHeight + 4, Background_Secondary);
-        
+
         string helpText = "Ctrl+R: Next  •  Ctrl+S: Prev  •  Enter: Accept  •  Esc: Cancel";
         var helpSize = _fontRenderer.MeasureString(helpText);
         int helpX = ((int)_screenWidth - (int)helpSize.X) / 2; // Center the help text
@@ -175,14 +202,20 @@ public class ConsoleSearchRenderer
 
         // Draw reverse-i-search prompt and input
         string prompt = "(reverse-i-search)` ";
-        _fontRenderer.DrawString(prompt, ConsoleConstants.Rendering.Padding, textY, ReverseSearch_Prompt);
+        _fontRenderer.DrawString(
+            prompt,
+            ConsoleConstants.Rendering.Padding,
+            textY,
+            ReverseSearch_Prompt
+        );
         var promptSize = _fontRenderer.MeasureString(prompt);
         int inputX = ConsoleConstants.Rendering.Padding + (int)promptSize.X;
 
         // Draw match count on the right
         string matchInfo = BuildReverseSearchMatchInfo(matches, matchIndex, reverseSearchInput);
         var matchInfoSize = _fontRenderer.MeasureString(matchInfo);
-        int matchInfoX = (int)_screenWidth - ConsoleConstants.Rendering.Padding - (int)matchInfoSize.X;
+        int matchInfoX =
+            (int)_screenWidth - ConsoleConstants.Rendering.Padding - (int)matchInfoSize.X;
 
         var matchColor = matches.Count > 0 ? Search_Success : Search_Disabled;
         _fontRenderer.DrawString(matchInfo, matchInfoX, textY, matchColor);
@@ -196,7 +229,7 @@ public class ConsoleSearchRenderer
         if (inputSize.X > maxInputWidth)
         {
             string ellipsis = "...";
-            
+
             // Start from the end and find how much we can fit
             for (int i = reverseSearchInput.Length - 1; i >= 0; i--)
             {
@@ -219,7 +252,12 @@ public class ConsoleSearchRenderer
         }
     }
 
-    private void DrawReverseSearchPreview(int previewY, int lineHeight, string match, string searchInput)
+    private void DrawReverseSearchPreview(
+        int previewY,
+        int lineHeight,
+        string match,
+        string searchInput
+    )
     {
         DrawRectangle(0, previewY, (int)_screenWidth, lineHeight + 6, Background_Secondary);
 
@@ -240,7 +278,12 @@ public class ConsoleSearchRenderer
                 currentX += (int)_fontRenderer.MeasureString(beforeMatch).X;
             }
 
-            _fontRenderer.DrawString(matchText, currentX, previewTextY, ReverseSearch_MatchHighlight);
+            _fontRenderer.DrawString(
+                matchText,
+                currentX,
+                previewTextY,
+                ReverseSearch_MatchHighlight
+            );
             currentX += (int)_fontRenderer.MeasureString(matchText).X;
 
             if (afterMatch.Length > 0)
@@ -250,11 +293,20 @@ public class ConsoleSearchRenderer
         }
         else
         {
-            _fontRenderer.DrawString(match, ConsoleConstants.Rendering.Padding, previewY + 3, Text_Secondary);
+            _fontRenderer.DrawString(
+                match,
+                ConsoleConstants.Rendering.Padding,
+                previewY + 3,
+                Text_Secondary
+            );
         }
     }
 
-    private string BuildReverseSearchMatchInfo(List<string> matches, int matchIndex, string searchInput)
+    private string BuildReverseSearchMatchInfo(
+        List<string> matches,
+        int matchIndex,
+        string searchInput
+    )
     {
         if (matches.Count > 0)
         {

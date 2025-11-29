@@ -110,14 +110,6 @@ public class AssetManager(
     }
 
     /// <summary>
-    ///     Gets all loaded texture IDs (for debugging).
-    /// </summary>
-    public IEnumerable<string> GetLoadedTextureIds()
-    {
-        return _textures.Keys;
-    }
-
-    /// <summary>
     ///     Disposes all loaded textures.
     /// </summary>
     public void Dispose()
@@ -129,6 +121,14 @@ public class AssetManager(
         _disposed = true;
 
         GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    ///     Gets all loaded texture IDs (for debugging).
+    /// </summary>
+    public IEnumerable<string> GetLoadedTextureIds()
+    {
+        return _textures.Keys;
     }
 
     private string? ResolveFallbackTexturePath(string id, string normalizedRelativePath)

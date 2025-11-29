@@ -1,7 +1,6 @@
+using System.Collections.Concurrent;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Concurrent;
 
 namespace PokeSharp.Engine.Debug.Logging;
 
@@ -33,8 +32,10 @@ public class ConsoleLoggerProvider : ILoggerProvider
 
     public ILogger CreateLogger(string categoryName)
     {
-        return _loggers.GetOrAdd(categoryName, name =>
-            new ConsoleLogger(name, WriteToConsole, _isEnabled));
+        return _loggers.GetOrAdd(
+            categoryName,
+            name => new ConsoleLogger(name, WriteToConsole, _isEnabled)
+        );
     }
 
     private void WriteToConsole(string message, Color color)

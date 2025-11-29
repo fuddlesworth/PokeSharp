@@ -1,149 +1,133 @@
 using PokeSharp.Engine.Debug.Console.UI;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace PokeSharp.Engine.Debug.Console.Features;
 
 /// <summary>
-/// Manages console search functionality (forward search and reverse-i-search).
-/// Extracted from QuakeConsole to follow Single Responsibility Principle.
+///     Manages console search functionality (forward search and reverse-i-search).
+///     Extracted from QuakeConsole to follow Single Responsibility Principle.
 /// </summary>
 public class ConsoleSearchManager
 {
-    private readonly OutputSearcher _outputSearcher = new();
-
-    // Forward search state
-    private bool _isSearchMode = false;
-    private string _searchInput = string.Empty;
-
-    // Reverse-i-search state
-    private bool _isReverseSearchMode = false;
-    private string _reverseSearchInput = string.Empty;
-    private List<string> _reverseSearchMatches = new();
-    private int _reverseSearchIndex = 0;
-
     // Section folding state for search
     // Tracks sections that were auto-expanded for search results
     private readonly HashSet<string> _autoExpandedSections = new();
-    private int? _lastSearchMatchLineIndex = null;
+
+    // Reverse-i-search state
+
+    // Forward search state
+    private int? _lastSearchMatchLineIndex;
 
     /// <summary>
-    /// Gets the output searcher instance.
+    ///     Gets the output searcher instance.
     /// </summary>
-    public OutputSearcher OutputSearcher => _outputSearcher;
+    public OutputSearcher OutputSearcher { get; } = new();
 
     /// <summary>
-    /// Gets whether forward search mode is active.
+    ///     Gets whether forward search mode is active.
     /// </summary>
-    public bool IsSearchMode => _isSearchMode;
+    public bool IsSearchMode { get; private set; }
 
     /// <summary>
-    /// Gets the current forward search input.
+    ///     Gets the current forward search input.
     /// </summary>
-    public string SearchInput => _searchInput;
+    public string SearchInput { get; private set; } = string.Empty;
 
     /// <summary>
-    /// Gets whether reverse-i-search mode is active.
+    ///     Gets whether reverse-i-search mode is active.
     /// </summary>
-    public bool IsReverseSearchMode => _isReverseSearchMode;
+    public bool IsReverseSearchMode { get; private set; }
 
     /// <summary>
-    /// Gets the current reverse-i-search input.
+    ///     Gets the current reverse-i-search input.
     /// </summary>
-    public string ReverseSearchInput => _reverseSearchInput;
+    public string ReverseSearchInput { get; private set; } = string.Empty;
 
     /// <summary>
-    /// Gets the reverse search matches list.
+    ///     Gets the reverse search matches list.
     /// </summary>
-    public List<string> ReverseSearchMatches => _reverseSearchMatches;
+    public List<string> ReverseSearchMatches { get; private set; } = new();
 
     /// <summary>
-    /// Gets the current reverse search match index.
+    ///     Gets the current reverse search match index.
     /// </summary>
-    public int ReverseSearchIndex => _reverseSearchIndex;
+    public int ReverseSearchIndex { get; private set; }
 
     /// <summary>
-    /// Gets the current reverse-i-search match.
+    ///     Gets the current reverse-i-search match.
     /// </summary>
     public string? CurrentReverseSearchMatch =>
-        _reverseSearchMatches.Count > 0 && _reverseSearchIndex < _reverseSearchMatches.Count
-            ? _reverseSearchMatches[_reverseSearchIndex]
+        ReverseSearchMatches.Count > 0 && ReverseSearchIndex < ReverseSearchMatches.Count
+            ? ReverseSearchMatches[ReverseSearchIndex]
             : null;
 
     #region Forward Search
 
     /// <summary>
-    /// Starts forward search mode.
+    ///     Starts forward search mode.
     /// </summary>
     public void StartSearch()
     {
-        _isSearchMode = true;
-        _searchInput = string.Empty;
+        IsSearchMode = true;
+        SearchInput = string.Empty;
     }
 
     /// <summary>
-    /// Exits forward search mode.
+    ///     Exits forward search mode.
     /// </summary>
     public void ExitSearch(ConsoleOutput output)
     {
-        _isSearchMode = false;
-        _searchInput = string.Empty;
-        _outputSearcher.ClearSearch();
+        IsSearchMode = false;
+        SearchInput = string.Empty;
+        OutputSearcher.ClearSearch();
 
         // Restore folding state for auto-expanded sections
         RestoreAutoExpandedSections(output);
     }
 
     /// <summary>
-    /// Updates the forward search query.
+    ///     Updates the forward search query.
     /// </summary>
     public void UpdateSearchQuery(string query, ConsoleOutput output)
     {
-        _searchInput = query;
+        SearchInput = query;
         var outputLines = output.GetAllLines().Select(line => line.Text).ToList();
-        _outputSearcher.StartSearch(query, outputLines);
+        OutputSearcher.StartSearch(query, outputLines);
 
         // Scroll to the current match if found
-        if (_outputSearcher.IsSearching)
+        if (OutputSearcher.IsSearching)
         {
-            var match = _outputSearcher.GetCurrentMatch();
+            var match = OutputSearcher.GetCurrentMatch();
             if (match != null)
-            {
                 NavigateToMatch(match.LineIndex, output);
-            }
         }
     }
 
     /// <summary>
-    /// Navigates to the next search match.
+    ///     Navigates to the next search match.
     /// </summary>
     public void NextSearchMatch(ConsoleOutput output)
     {
-        if (!_outputSearcher.IsSearching)
+        if (!OutputSearcher.IsSearching)
             return;
 
-        _outputSearcher.NextMatch();
-        var match = _outputSearcher.GetCurrentMatch();
+        OutputSearcher.NextMatch();
+        var match = OutputSearcher.GetCurrentMatch();
         if (match != null)
-        {
             NavigateToMatch(match.LineIndex, output);
-        }
     }
 
     /// <summary>
-    /// Navigates to the previous search match.
+    ///     Navigates to the previous search match.
     /// </summary>
     public void PreviousSearchMatch(ConsoleOutput output)
     {
-        if (!_outputSearcher.IsSearching)
+        if (!OutputSearcher.IsSearching)
             return;
 
-        _outputSearcher.PreviousMatch();
-        var match = _outputSearcher.GetCurrentMatch();
+        OutputSearcher.PreviousMatch();
+        var match = OutputSearcher.GetCurrentMatch();
         if (match != null)
-        {
             NavigateToMatch(match.LineIndex, output);
-        }
     }
 
     #endregion
@@ -151,76 +135,75 @@ public class ConsoleSearchManager
     #region Reverse-i-search
 
     /// <summary>
-    /// Starts reverse-i-search mode.
+    ///     Starts reverse-i-search mode.
     /// </summary>
     public void StartReverseSearch()
     {
-        _isReverseSearchMode = true;
-        _reverseSearchInput = string.Empty;
-        _reverseSearchMatches.Clear();
-        _reverseSearchIndex = 0;
+        IsReverseSearchMode = true;
+        ReverseSearchInput = string.Empty;
+        ReverseSearchMatches.Clear();
+        ReverseSearchIndex = 0;
     }
 
     /// <summary>
-    /// Exits reverse-i-search mode.
+    ///     Exits reverse-i-search mode.
     /// </summary>
     public void ExitReverseSearch()
     {
-        _isReverseSearchMode = false;
-        _reverseSearchInput = string.Empty;
-        _reverseSearchMatches.Clear();
-        _reverseSearchIndex = 0;
+        IsReverseSearchMode = false;
+        ReverseSearchInput = string.Empty;
+        ReverseSearchMatches.Clear();
+        ReverseSearchIndex = 0;
     }
 
     /// <summary>
-    /// Updates the reverse-i-search query and finds matches.
+    ///     Updates the reverse-i-search query and finds matches.
     /// </summary>
     public void UpdateReverseSearchQuery(string query, IEnumerable<string> historyCommands)
     {
-        _reverseSearchInput = query;
+        ReverseSearchInput = query;
 
         if (string.IsNullOrWhiteSpace(query))
         {
-            _reverseSearchMatches.Clear();
-            _reverseSearchIndex = 0;
+            ReverseSearchMatches.Clear();
+            ReverseSearchIndex = 0;
             return;
         }
 
         // Find all matching commands (most recent first)
-        _reverseSearchMatches = historyCommands
-            .Where(cmd => cmd.Contains(query, System.StringComparison.OrdinalIgnoreCase))
+        ReverseSearchMatches = historyCommands
+            .Where(cmd => cmd.Contains(query, StringComparison.OrdinalIgnoreCase))
             .Reverse()
             .ToList();
 
-        _reverseSearchIndex = 0;
+        ReverseSearchIndex = 0;
     }
 
     /// <summary>
-    /// Moves to the next match in reverse-i-search.
+    ///     Moves to the next match in reverse-i-search.
     /// </summary>
     public void ReverseSearchNextMatch()
     {
-        if (_reverseSearchMatches.Count == 0)
+        if (ReverseSearchMatches.Count == 0)
             return;
 
-        _reverseSearchIndex = (_reverseSearchIndex + 1) % _reverseSearchMatches.Count;
+        ReverseSearchIndex = (ReverseSearchIndex + 1) % ReverseSearchMatches.Count;
     }
 
     /// <summary>
-    /// Moves to the previous match in reverse-i-search.
+    ///     Moves to the previous match in reverse-i-search.
     /// </summary>
     public void ReverseSearchPreviousMatch()
     {
-        if (_reverseSearchMatches.Count == 0)
+        if (ReverseSearchMatches.Count == 0)
             return;
 
-        _reverseSearchIndex = _reverseSearchIndex > 0
-            ? _reverseSearchIndex - 1
-            : _reverseSearchMatches.Count - 1;
+        ReverseSearchIndex =
+            ReverseSearchIndex > 0 ? ReverseSearchIndex - 1 : ReverseSearchMatches.Count - 1;
     }
 
     /// <summary>
-    /// Gets the current reverse-i-search match for accepting.
+    ///     Gets the current reverse-i-search match for accepting.
     /// </summary>
     public string? GetCurrentMatch()
     {
@@ -232,7 +215,7 @@ public class ConsoleSearchManager
     #region Section Folding for Search
 
     /// <summary>
-    /// Navigates to a search match, handling section expansion/collapse automatically.
+    ///     Navigates to a search match, handling section expansion/collapse automatically.
     /// </summary>
     private void NavigateToMatch(int absoluteLineIndex, ConsoleOutput output)
     {
@@ -252,32 +235,26 @@ public class ConsoleSearchManager
         {
             var expandedSection = output.ExpandSectionContainingLine(absoluteLineIndex);
             if (expandedSection != null)
-            {
                 _autoExpandedSections.Add(expandedSection.Id);
-            }
         }
 
         // Update the last match line index (absolute)
         _lastSearchMatchLineIndex = absoluteLineIndex;
 
         // Convert absolute line index to effective line index (accounting for collapsed sections)
-        int effectiveLineIndex = output.ConvertAbsoluteToEffectiveIndex(absoluteLineIndex);
+        var effectiveLineIndex = output.ConvertAbsoluteToEffectiveIndex(absoluteLineIndex);
         if (effectiveLineIndex >= 0)
-        {
             // Scroll to the effective line position
             output.ScrollToLine(effectiveLineIndex);
-        }
     }
 
     /// <summary>
-    /// Restores the folding state for all auto-expanded sections.
+    ///     Restores the folding state for all auto-expanded sections.
     /// </summary>
     private void RestoreAutoExpandedSections(ConsoleOutput output)
     {
         foreach (var sectionId in _autoExpandedSections)
-        {
             output.CollapseSectionById(sectionId);
-        }
         _autoExpandedSections.Clear();
         _lastSearchMatchLineIndex = null;
     }

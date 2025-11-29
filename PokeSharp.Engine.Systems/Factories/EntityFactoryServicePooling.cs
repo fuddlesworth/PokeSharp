@@ -85,7 +85,7 @@ public sealed class EntityFactoryServicePooling : IEntityFactoryService
             Overrides = builder.ComponentOverrides.ToDictionary(
                 kvp => kvp.Key.Name,
                 kvp => kvp.Value
-            ),
+            )
         };
 
         // Add custom properties if any
@@ -223,7 +223,7 @@ public sealed class EntityFactoryServicePooling : IEntityFactoryService
                     Overrides = builder.ComponentOverrides.ToDictionary(
                         kvp => kvp.Key.Name,
                         kvp => kvp.Value
-                    ),
+                    )
                 };
 
                 if (builder.CustomProperties.Any())
@@ -401,7 +401,7 @@ public sealed class EntityFactoryServicePooling : IEntityFactoryService
         if (PoolManager == null)
             throw new InvalidOperationException(
                 "Cannot release entity: EntityPoolManager not configured. "
-                    + "Pass EntityPoolManager to constructor to enable pooling."
+                + "Pass EntityPoolManager to constructor to enable pooling."
             );
 
         PoolManager.Release(entity, poolName);
@@ -423,7 +423,7 @@ public sealed class EntityFactoryServicePooling : IEntityFactoryService
                     {
                         var parameters = m.GetParameters();
                         return parameters.Length == 2
-                            && parameters[0].ParameterType == typeof(Entity);
+                               && parameters[0].ParameterType == typeof(Entity);
                     });
 
                 if (method == null)
@@ -505,7 +505,7 @@ public sealed class EntityFactoryServicePooling : IEntityFactoryService
             Metadata = template.Metadata,
             BaseTemplateId = null,
             CustomProperties = template.CustomProperties,
-            Components = [.. mergedComponents.Values],
+            Components = [.. mergedComponents.Values]
         };
 
         _logger.LogDebug(

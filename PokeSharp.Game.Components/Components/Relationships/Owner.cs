@@ -29,7 +29,7 @@ public enum OwnershipType
     ///     Shared ownership among multiple entities.
     ///     Example: Team resources, shared inventory.
     /// </summary>
-    Shared,
+    Shared
 }
 
 /// <summary>
@@ -51,17 +51,17 @@ public enum OwnershipType
 /// // Create ownership relationship
 /// var trainer = world.Create();
 /// var pokemon = world.Create();
-///
+/// 
 /// trainer.Add(new Owner {
 ///     Value = pokemon,
 ///     Type = OwnershipType.Permanent
 /// });
-///
+/// 
 /// pokemon.Add(new Owned {
 ///     OwnerEntity = trainer,
 ///     AcquiredAt = DateTime.UtcNow
 /// });
-///
+/// 
 /// // Or use extension method
 /// pokemon.SetOwner(trainer, world);
 /// </code>

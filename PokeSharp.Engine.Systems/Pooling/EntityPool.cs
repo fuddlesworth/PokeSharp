@@ -247,7 +247,7 @@ public class EntityPool
                 ReuseRate = ReuseRate,
                 AverageAcquireTimeMs = AverageAcquireTimeMs,
                 MaxSize = _maxSize,
-                UsagePercent = TotalCreated > 0 ? (float)_activeEntities.Count / _maxSize : 0f,
+                UsagePercent = TotalCreated > 0 ? (float)_activeEntities.Count / _maxSize : 0f
             };
         }
     }
@@ -264,7 +264,7 @@ public class EntityPool
             {
                 PoolName = _poolName,
                 AcquiredAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-                ReuseCount = 0,
+                ReuseCount = 0
             }
         );
 

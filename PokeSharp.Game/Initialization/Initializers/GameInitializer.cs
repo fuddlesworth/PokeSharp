@@ -2,10 +2,10 @@ using Arch.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework.Graphics;
 using PokeSharp.Engine.Common.Logging;
+using PokeSharp.Engine.Core.Events.ECS;
 using PokeSharp.Engine.Input.Systems;
 using PokeSharp.Engine.Rendering.Assets;
 using PokeSharp.Engine.Rendering.Systems;
-using PokeSharp.Engine.Systems.Factories;
 using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Engine.Systems.Pooling;
 using PokeSharp.Game.Data.MapLoading.Tiled.Core;
@@ -28,7 +28,8 @@ public class GameInitializer(
     EntityPoolManager poolManager,
     SpriteLoader spriteLoader,
     MapLoader mapLoader,
-    MapDefinitionService mapDefinitionService
+    MapDefinitionService mapDefinitionService,
+    IEcsEventBus? ecsEventBus = null
 ) : IGameInitializer
 {
     /// <summary>
@@ -125,6 +126,7 @@ public class GameInitializer(
         var movementSystem = new MovementSystem(
             CollisionService,
             SpatialHashSystem,
+            ecsEventBus,
             movementLogger
         );
         systemManager.RegisterUpdateSystem(movementSystem);
@@ -139,6 +141,7 @@ public class GameInitializer(
         var mapStreamingSystem = new MapStreamingSystem(
             mapLoader,
             mapDefinitionService,
+            ecsEventBus,
             mapStreamingLogger
         );
         systemManager.RegisterUpdateSystem(mapStreamingSystem);

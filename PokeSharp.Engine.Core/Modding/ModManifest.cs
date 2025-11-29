@@ -63,6 +63,25 @@ public sealed class ModManifest
     /// </summary>
     public Dictionary<string, string> ContentFolders { get; init; } = new();
 
+    /// <summary>
+    ///     Event handlers declared by this mod.
+    /// </summary>
+    /// <remarks>
+    ///     Mods have full access to all gameplay events. Event handlers are executed
+    ///     in priority order, with error isolation to prevent one mod from crashing others.
+    /// </remarks>
+    public List<ModEventHandler> EventHandlers { get; init; } = new();
+
+    /// <summary>
+    ///     Custom events published by this mod (for documentation/discovery).
+    /// </summary>
+    public List<ModCustomEvent> CustomEvents { get; init; } = new();
+
+    /// <summary>
+    ///     Enable verbose event logging for debugging this mod's handlers.
+    /// </summary>
+    public bool DebugEvents { get; init; } = false;
+
     public void Validate()
     {
         if (string.IsNullOrWhiteSpace(ModId))
@@ -82,4 +101,90 @@ public sealed class ModManifest
     {
         return $"{ModId} v{Version} ({Name})";
     }
+}
+
+/// <summary>
+///     Declares an event handler in the mod manifest.
+/// </summary>
+/// <remarks>
+///     Example in mod.json:
+///     <code>
+///     {
+///       "EventHandlers": [
+///         {
+///           "EventType": "TileEnteredEvent",
+///           "ScriptPath": "scripts/on_tile_enter.csx",
+///           "Priority": "Normal",
+///           "Description": "Check for hidden items when stepping on tiles"
+///         }
+///       ]
+///     }
+///     </code>
+/// </remarks>
+public sealed class ModEventHandler
+{
+    /// <summary>
+    ///     Event type name to subscribe to (e.g., "TileEnteredEvent", "BattleStartingEvent").
+    /// </summary>
+    public required string EventType { get; init; }
+
+    /// <summary>
+    ///     Path to the script file containing the handler (relative to mod root).
+    /// </summary>
+    public required string ScriptPath { get; init; }
+
+    /// <summary>
+    ///     Method name in the script to invoke (default: "Handle").
+    /// </summary>
+    public string MethodName { get; init; } = "Handle";
+
+    /// <summary>
+    ///     Handler priority: First, Early, Normal, Late, Last (default: Normal).
+    /// </summary>
+    public string Priority { get; init; } = "Normal";
+
+    /// <summary>
+    ///     Whether this handler can cancel the event (for cancellable events only).
+    /// </summary>
+    public bool CanCancel { get; init; } = false;
+
+    /// <summary>
+    ///     Optional filter condition (e.g., "IsPlayer == true").
+    /// </summary>
+    public string? Condition { get; init; }
+
+    /// <summary>
+    ///     Description of what this handler does.
+    /// </summary>
+    public string? Description { get; init; }
+}
+
+/// <summary>
+///     Declares a custom event type published by the mod.
+/// </summary>
+/// <remarks>
+///     Custom events allow mods to communicate with each other.
+///     Other mods can subscribe to these events if they declare this mod as a dependency.
+/// </remarks>
+public sealed class ModCustomEvent
+{
+    /// <summary>
+    ///     Event type name (should be prefixed with mod ID, e.g., "mymod.CustomEvent").
+    /// </summary>
+    public required string Name { get; init; }
+
+    /// <summary>
+    ///     Description of when this event fires.
+    /// </summary>
+    public string? Description { get; init; }
+
+    /// <summary>
+    ///     Whether the event can be cancelled by other mods.
+    /// </summary>
+    public bool IsCancellable { get; init; } = false;
+
+    /// <summary>
+    ///     Event fields with descriptions (for documentation).
+    /// </summary>
+    public Dictionary<string, string> Fields { get; init; } = new();
 }

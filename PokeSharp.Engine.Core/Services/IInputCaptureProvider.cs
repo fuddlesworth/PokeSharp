@@ -17,4 +17,3 @@ public interface IInputCaptureProvider
     /// </summary>
     bool IsCapturingInput { get; }
 }
-

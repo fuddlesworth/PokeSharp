@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Text;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Common.Configuration;
 using PokeSharp.Engine.Common.Logging;
@@ -117,7 +118,8 @@ public class SystemPerformanceTracker
 
             // Only warn if cooldown period has passed since last warning for this system
             // If lastWarning is 0, it means we've never warned for this system, so allow the first warning
-            var framesSinceLastWarning = lastWarning == 0 ? ulong.MaxValue : FrameCount - lastWarning;
+            var framesSinceLastWarning =
+                lastWarning == 0 ? ulong.MaxValue : FrameCount - lastWarning;
             if (framesSinceLastWarning >= _config.SlowSystemWarningCooldownFrames)
             {
                 // Update warning frame (TryUpdate ensures we don't overwrite a newer value from another thread)
@@ -229,7 +231,7 @@ public class SystemPerformanceTracker
         );
 
         // Build report using StringBuilder for efficient string construction
-        var report = new System.Text.StringBuilder();
+        var report = new StringBuilder();
         report.AppendLine("=== System Performance Report ===");
         report.AppendLine($"Frame Count: {FrameCount}");
         report.AppendLine();
@@ -250,7 +252,7 @@ public class SystemPerformanceTracker
 
         report.AppendLine("=== Summary ===");
         report.AppendLine($"Total Time: {totalTime:F2} ms");
-        report.AppendLine($"Average Time: {(totalTime / _cachedSortedMetrics.Count):F2} ms");
+        report.AppendLine($"Average Time: {totalTime / _cachedSortedMetrics.Count:F2} ms");
         report.AppendLine($"Max Time: {maxTime:F2} ms");
         report.AppendLine($"Total Updates: {totalUpdates}");
         report.AppendLine();

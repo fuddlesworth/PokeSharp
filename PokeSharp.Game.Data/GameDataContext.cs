@@ -17,7 +17,9 @@ public class GameDataContext : DbContext
     // public DbSet<Ability> Abilities { get; set; } = null!;
 
     public GameDataContext(DbContextOptions<GameDataContext> options)
-        : base(options) { }
+        : base(options)
+    {
+    }
 
     // NPC-related entities
     public DbSet<NpcDefinition> Npcs { get; set; } = null!;

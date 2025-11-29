@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using PokeSharp.Engine.Debug;
 using PokeSharp.Game.Infrastructure.Configuration;
 using PokeSharp.Game.Infrastructure.ServiceRegistration;
@@ -46,6 +45,7 @@ public static class ServiceCollectionExtensions
 
         // Register service groups
         services.AddCoreEcsServices();
+        services.AddEventServices(); // Event buses (required before scripting)
         services.AddDataServices();
         services.AddModdingServices();
         services.AddTemplateServices();

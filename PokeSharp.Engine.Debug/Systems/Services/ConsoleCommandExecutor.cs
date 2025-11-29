@@ -6,27 +6,28 @@ using PokeSharp.Engine.Debug.Console.Scripting;
 using PokeSharp.Engine.Debug.Console.UI;
 using PokeSharp.Engine.Debug.Scripting;
 using static PokeSharp.Engine.Debug.Console.Configuration.ConsoleColors;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace PokeSharp.Engine.Debug.Systems.Services;
 
 /// <summary>
-/// Executes console commands (built-in, aliases, scripts).
-/// Extracted from ConsoleSystem to follow Single Responsibility Principle.
+///     Executes console commands (built-in, aliases, scripts).
+///     Extracted from ConsoleSystem to follow Single Responsibility Principle.
 /// </summary>
 public class ConsoleCommandExecutor : IConsoleCommandExecutor
 {
+    private readonly AliasMacroManager _aliasMacroManager;
+    private readonly BookmarkedCommandsManager? _bookmarksManager;
     private readonly QuakeConsole _console;
     private readonly ConsoleScriptEvaluator _evaluator;
     private readonly ConsoleGlobals _globals;
-    private readonly AliasMacroManager _aliasMacroManager;
-    private readonly ScriptManager _scriptManager;
-    private readonly OutputExporter _outputExporter;
     private readonly ConsoleCommandHistory _history;
-    private readonly BookmarkedCommandsManager? _bookmarksManager;
     private readonly ILogger _logger;
+    private readonly OutputExporter _outputExporter;
+    private readonly ScriptManager _scriptManager;
 
     /// <summary>
-    /// Initializes a new instance of the ConsoleCommandExecutor.
+    ///     Initializes a new instance of the ConsoleCommandExecutor.
     /// </summary>
     public ConsoleCommandExecutor(
         QuakeConsole console,
@@ -37,12 +38,14 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         OutputExporter outputExporter,
         ConsoleCommandHistory history,
         ILogger logger,
-        BookmarkedCommandsManager? bookmarksManager = null)
+        BookmarkedCommandsManager? bookmarksManager = null
+    )
     {
         _console = console ?? throw new ArgumentNullException(nameof(console));
         _evaluator = evaluator ?? throw new ArgumentNullException(nameof(evaluator));
         _globals = globals ?? throw new ArgumentNullException(nameof(globals));
-        _aliasMacroManager = aliasMacroManager ?? throw new ArgumentNullException(nameof(aliasMacroManager));
+        _aliasMacroManager =
+            aliasMacroManager ?? throw new ArgumentNullException(nameof(aliasMacroManager));
         _scriptManager = scriptManager ?? throw new ArgumentNullException(nameof(scriptManager));
         _outputExporter = outputExporter ?? throw new ArgumentNullException(nameof(outputExporter));
         _history = history ?? throw new ArgumentNullException(nameof(history));
@@ -50,42 +53,42 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         // Set up globals output action
-        _globals.OutputAction = (text) => _console.AppendOutput(text, Color.White);
+        _globals.OutputAction = text => _console.AppendOutput(text, Color.White);
     }
 
     /// <summary>
-    /// Executes a command and returns the result.
+    ///     Executes a command and returns the result.
     /// </summary>
     public async Task<CommandExecutionResult> ExecuteAsync(string command)
     {
         command = command.Trim();
 
         if (string.IsNullOrWhiteSpace(command))
-        {
-            return CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
-        }
+            return CommandExecutionResult.SuccessNoOutput(true);
 
         try
         {
             // Begin a section for this command
-            string displayCommand = command;
+            var displayCommand = command;
 
             // Check for alias expansion
             if (_aliasMacroManager.TryExpandAlias(command, out var expandedCommand))
             {
-                _logger.LogDebug("Alias expanded: {Original} -> {Expanded}", command, expandedCommand);
+                _logger.LogDebug(
+                    "Alias expanded: {Original} -> {Expanded}",
+                    command,
+                    expandedCommand
+                );
                 displayCommand = $"{command} [alias]";
                 command = expandedCommand;
             }
 
             // Begin section with command as header
-            _console.Output.BeginSection(displayCommand, PokeSharp.Engine.Debug.Console.UI.SectionType.Command);
+            _console.Output.BeginSection(displayCommand, SectionType.Command);
 
             // Display alias expansion if applicable
             if (displayCommand.Contains("[alias]"))
-            {
                 _console.AppendOutput($"  > {command}", Output_AliasExpansion);
-            }
 
             // Handle built-in commands
             if (IsBuiltInCommand(command, out var builtInResult))
@@ -134,7 +137,7 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
     }
 
     /// <summary>
-    /// Checks if the command is a built-in command and executes it.
+    ///     Checks if the command is a built-in command and executes it.
     /// </summary>
     private bool IsBuiltInCommand(string command, out CommandExecutionResult? result)
     {
@@ -144,7 +147,7 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         if (command.Equals("clear", StringComparison.OrdinalIgnoreCase))
         {
             _console.ClearOutput();
-            result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+            result = CommandExecutionResult.SuccessNoOutput(true);
             return true;
         }
 
@@ -153,7 +156,7 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         {
             _evaluator.Reset();
             _console.AppendOutput("Script state reset", Success);
-            result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+            result = CommandExecutionResult.SuccessNoOutput(true);
             return true;
         }
 
@@ -161,7 +164,7 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         if (command.Equals("help", StringComparison.OrdinalIgnoreCase))
         {
             DisplayHelp();
-            result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+            result = CommandExecutionResult.SuccessNoOutput(true);
             return true;
         }
 
@@ -169,7 +172,7 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         if (command.StartsWith("history", StringComparison.OrdinalIgnoreCase))
         {
             HandleHistoryCommand(command);
-            result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+            result = CommandExecutionResult.SuccessNoOutput(true);
             return true;
         }
 
@@ -177,7 +180,7 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         if (command.Equals("scripts", StringComparison.OrdinalIgnoreCase))
         {
             ListScripts();
-            result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+            result = CommandExecutionResult.SuccessNoOutput(true);
             return true;
         }
 
@@ -185,7 +188,7 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         if (command.StartsWith("size ", StringComparison.OrdinalIgnoreCase))
         {
             HandleSizeCommand(command);
-            result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+            result = CommandExecutionResult.SuccessNoOutput(true);
             return true;
         }
 
@@ -193,17 +196,19 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         if (command.StartsWith("log ", StringComparison.OrdinalIgnoreCase))
         {
             HandleLogCommand(command.Substring(4).Trim());
-            result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+            result = CommandExecutionResult.SuccessNoOutput(true);
             return true;
         }
 
         // filter commands
-        if (command.StartsWith("filter ", StringComparison.OrdinalIgnoreCase) ||
-            command.Equals("filter", StringComparison.OrdinalIgnoreCase))
+        if (
+            command.StartsWith("filter ", StringComparison.OrdinalIgnoreCase)
+            || command.Equals("filter", StringComparison.OrdinalIgnoreCase)
+        )
         {
             var args = command.Length > 6 ? command.Substring(7).Trim() : "";
             HandleFilterCommand(args);
-            result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+            result = CommandExecutionResult.SuccessNoOutput(true);
             return true;
         }
 
@@ -212,7 +217,7 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         {
             var args = command.Length > 4 ? command.Substring(4).Trim() : "";
             HandleFoldCommand(args);
-            result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+            result = CommandExecutionResult.SuccessNoOutput(true);
             return true;
         }
 
@@ -221,7 +226,7 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         {
             var args = command.Length > 6 ? command.Substring(6).Trim() : "";
             HandleUnfoldCommand(args);
-            result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+            result = CommandExecutionResult.SuccessNoOutput(true);
             return true;
         }
 
@@ -234,10 +239,10 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
                 _console.AppendOutput("Usage: load <filename>", Output_Warning);
                 _console.AppendOutput("Example: load startup.csx", Color.LightGray);
                 _console.AppendOutput("Use 'scripts' to list available scripts.", Color.LightGray);
-                result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+                result = CommandExecutionResult.SuccessNoOutput(true);
                 return true;
             }
-            
+
             if (command.StartsWith("load ", StringComparison.OrdinalIgnoreCase))
             {
                 var scriptName = command.Substring(5).Trim();
@@ -250,7 +255,8 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
                 {
                     LoadScript(scriptName);
                 }
-                result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+
+                result = CommandExecutionResult.SuccessNoOutput(true);
                 return true;
             }
         }
@@ -263,11 +269,14 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
                 // No filename provided
                 _console.AppendOutput("Usage: save <filename>", Output_Warning);
                 _console.AppendOutput("Example: save myscript.csx", Color.LightGray);
-                _console.AppendOutput("Saves the current multi-line input to a script file.", Color.LightGray);
-                result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+                _console.AppendOutput(
+                    "Saves the current multi-line input to a script file.",
+                    Color.LightGray
+                );
+                result = CommandExecutionResult.SuccessNoOutput(true);
                 return true;
             }
-            
+
             if (command.StartsWith("save ", StringComparison.OrdinalIgnoreCase))
             {
                 var scriptName = command.Substring(5).Trim();
@@ -280,7 +289,8 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
                 {
                     SaveScript(scriptName);
                 }
-                result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+
+                result = CommandExecutionResult.SuccessNoOutput(true);
                 return true;
             }
         }
@@ -289,14 +299,14 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         if (command.StartsWith("alias ", StringComparison.OrdinalIgnoreCase))
         {
             HandleAliasCommand(command.Substring(6).Trim());
-            result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+            result = CommandExecutionResult.SuccessNoOutput(true);
             return true;
         }
 
         if (command.Equals("aliases", StringComparison.OrdinalIgnoreCase))
         {
             ListAliases();
-            result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+            result = CommandExecutionResult.SuccessNoOutput(true);
             return true;
         }
 
@@ -304,7 +314,7 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         {
             var aliasName = command.Substring(8).Trim();
             RemoveAlias(aliasName);
-            result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+            result = CommandExecutionResult.SuccessNoOutput(true);
             return true;
         }
 
@@ -312,14 +322,14 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         if (command.StartsWith("bookmark ", StringComparison.OrdinalIgnoreCase))
         {
             HandleBookmarkCommand(command.Substring(9).Trim());
-            result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+            result = CommandExecutionResult.SuccessNoOutput(true);
             return true;
         }
 
         if (command.Equals("bookmarks", StringComparison.OrdinalIgnoreCase))
         {
             ListBookmarks();
-            result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+            result = CommandExecutionResult.SuccessNoOutput(true);
             return true;
         }
 
@@ -327,27 +337,31 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         {
             var fKeyStr = command.Substring(11).Trim();
             RemoveBookmark(fKeyStr);
-            result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+            result = CommandExecutionResult.SuccessNoOutput(true);
             return true;
         }
 
         // export command (visible output)
-        if (command.StartsWith("export ", StringComparison.OrdinalIgnoreCase) ||
-            command.Equals("export", StringComparison.OrdinalIgnoreCase))
+        if (
+            command.StartsWith("export ", StringComparison.OrdinalIgnoreCase)
+            || command.Equals("export", StringComparison.OrdinalIgnoreCase)
+        )
         {
             var args = command.Length > 6 ? command.Substring(6).Trim() : null;
-            HandleExportCommand(args, exportAll: false);
-            result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+            HandleExportCommand(args, false);
+            result = CommandExecutionResult.SuccessNoOutput(true);
             return true;
         }
 
         // export-all command (entire buffer)
-        if (command.StartsWith("export-all ", StringComparison.OrdinalIgnoreCase) ||
-            command.Equals("export-all", StringComparison.OrdinalIgnoreCase))
+        if (
+            command.StartsWith("export-all ", StringComparison.OrdinalIgnoreCase)
+            || command.Equals("export-all", StringComparison.OrdinalIgnoreCase)
+        )
         {
             var args = command.Length > 10 ? command.Substring(10).Trim() : null;
-            HandleExportCommand(args, exportAll: true);
-            result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+            HandleExportCommand(args, true);
+            result = CommandExecutionResult.SuccessNoOutput(true);
             return true;
         }
 
@@ -355,7 +369,7 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         if (command.Equals("exports", StringComparison.OrdinalIgnoreCase))
         {
             ListExports();
-            result = CommandExecutionResult.SuccessNoOutput(isBuiltIn: true);
+            result = CommandExecutionResult.SuccessNoOutput(true);
             return true;
         }
 
@@ -371,15 +385,30 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         var separatorColor = Text_Disabled;
 
         // Title
-        _console.AppendOutput("╔════════════════════════════════════════════════════════════╗", headerColor);
-        _console.AppendOutput("║           PokeSharp Debug Console - Help                  ║", titleColor);
-        _console.AppendOutput("╚════════════════════════════════════════════════════════════╝", headerColor);
+        _console.AppendOutput(
+            "╔════════════════════════════════════════════════════════════╗",
+            headerColor
+        );
+        _console.AppendOutput(
+            "║           PokeSharp Debug Console - Help                  ║",
+            titleColor
+        );
+        _console.AppendOutput(
+            "╚════════════════════════════════════════════════════════════╝",
+            headerColor
+        );
         _console.AppendOutput("", Color.White);
 
         // Quick Reference
         _console.AppendOutput("═══ QUICK REFERENCE ═══", headerColor);
-        _console.AppendOutput("  Execute any C# code in real-time with full game API access.", textColor);
-        _console.AppendOutput("  Type 'Help()' (uppercase H) for API methods and global objects.", textColor);
+        _console.AppendOutput(
+            "  Execute any C# code in real-time with full game API access.",
+            textColor
+        );
+        _console.AppendOutput(
+            "  Type 'Help()' (uppercase H) for API methods and global objects.",
+            textColor
+        );
         _console.AppendOutput("", Color.White);
 
         // Console Commands
@@ -387,18 +416,33 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         _console.AppendOutput("", Color.White);
         _console.AppendOutput("  Information:", Primary);
         _console.AppendOutput("    help                      Show this help message", textColor);
-        _console.AppendOutput("    Help()                    Show API methods (Player, Map, etc.)", textColor);
-        _console.AppendOutput("    history                   Show command history (see 'history help')", textColor);
+        _console.AppendOutput(
+            "    Help()                    Show API methods (Player, Map, etc.)",
+            textColor
+        );
+        _console.AppendOutput(
+            "    history                   Show command history (see 'history help')",
+            textColor
+        );
         _console.AppendOutput("", Color.White);
         _console.AppendOutput("  Display:", Primary);
         _console.AppendOutput("    clear                     Clear console output", textColor);
         _console.AppendOutput("    size <small|medium|full>  Change console size", textColor);
         _console.AppendOutput("", Color.White);
         _console.AppendOutput("  Script Management:", Primary);
-        _console.AppendOutput("    scripts                   List available .csx scripts", textColor);
+        _console.AppendOutput(
+            "    scripts                   List available .csx scripts",
+            textColor
+        );
         _console.AppendOutput("    load <file>               Load and execute a script", textColor);
-        _console.AppendOutput("    save <file>               Save current input to script", textColor);
-        _console.AppendOutput("    reset                     Reset script state (clear variables)", textColor);
+        _console.AppendOutput(
+            "    save <file>               Save current input to script",
+            textColor
+        );
+        _console.AppendOutput(
+            "    reset                     Reset script state (clear variables)",
+            textColor
+        );
         _console.AppendOutput("", Color.White);
         _console.AppendOutput("  Aliases:", Primary);
         _console.AppendOutput("    alias <name> <command>    Create command shortcut", textColor);
@@ -407,18 +451,30 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         _console.AppendOutput("", Color.White);
         _console.AppendOutput("  Bookmarks (F1-F12 Shortcuts):", Primary);
         _console.AppendOutput("    bookmark <F1-F12> <cmd>   Assign command to F-key", textColor);
-        _console.AppendOutput("    bookmarks                 List all bookmarked commands", textColor);
+        _console.AppendOutput(
+            "    bookmarks                 List all bookmarked commands",
+            textColor
+        );
         _console.AppendOutput("    unbookmark <F1-F12>       Remove a bookmark", textColor);
         _console.AppendOutput("", Color.White);
         _console.AppendOutput("  Logging:", Primary);
         _console.AppendOutput("    log status                Show logging status", textColor);
-        _console.AppendOutput("    log on                    Enable game log output to console", textColor);
+        _console.AppendOutput(
+            "    log on                    Enable game log output to console",
+            textColor
+        );
         _console.AppendOutput("    log off                   Disable game log output", textColor);
-        _console.AppendOutput("    log filter <level>        Filter by level (Debug/Info/Warning/Error)", textColor);
+        _console.AppendOutput(
+            "    log filter <level>        Filter by level (Debug/Info/Warning/Error)",
+            textColor
+        );
         _console.AppendOutput("", Color.White);
         _console.AppendOutput("  Output Filtering:", Primary);
         _console.AppendOutput("    filter                    Show filter status", textColor);
-        _console.AppendOutput("    filter level <lvl> <on|off>  Toggle log level visibility", textColor);
+        _console.AppendOutput(
+            "    filter level <lvl> <on|off>  Toggle log level visibility",
+            textColor
+        );
         _console.AppendOutput("    filter search <text>      Search in output", textColor);
         _console.AppendOutput("    filter regex <pattern>    Regex filter", textColor);
         _console.AppendOutput("    filter clear              Clear all filters", textColor);
@@ -426,13 +482,22 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         _console.AppendOutput("  Section Folding:", Primary);
         _console.AppendOutput("    fold [all|commands|errors]    Collapse sections", textColor);
         _console.AppendOutput("    unfold [all|commands|errors]  Expand sections", textColor);
-        _console.AppendOutput("    Click section headers         Toggle individual sections", textColor);
+        _console.AppendOutput(
+            "    Click section headers         Toggle individual sections",
+            textColor
+        );
         _console.AppendOutput("    Alt+[                         Collapse all sections", textColor);
         _console.AppendOutput("    Alt+]                         Expand all sections", textColor);
         _console.AppendOutput("", Color.White);
         _console.AppendOutput("  Export:", Primary);
-        _console.AppendOutput("    export [filename]         Save visible output to file", textColor);
-        _console.AppendOutput("    export-all [filename]     Save entire buffer to file", textColor);
+        _console.AppendOutput(
+            "    export [filename]         Save visible output to file",
+            textColor
+        );
+        _console.AppendOutput(
+            "    export-all [filename]     Save entire buffer to file",
+            textColor
+        );
         _console.AppendOutput("    exports                   List exported files", textColor);
         _console.AppendOutput("", Color.White);
 
@@ -440,9 +505,18 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         _console.AppendOutput("═══ KEYBOARD SHORTCUTS ═══", headerColor);
         _console.AppendOutput("", Color.White);
         _console.AppendOutput("  Execution:", Primary);
-        _console.AppendOutput("    Enter                     Execute command or accept suggestion", textColor);
-        _console.AppendOutput("    Shift + Enter             New line with auto-indentation", Success);
-        _console.AppendOutput("    Escape                    Close suggestions or console", textColor);
+        _console.AppendOutput(
+            "    Enter                     Execute command or accept suggestion",
+            textColor
+        );
+        _console.AppendOutput(
+            "    Shift + Enter             New line with auto-indentation",
+            Success
+        );
+        _console.AppendOutput(
+            "    Escape                    Close suggestions or console",
+            textColor
+        );
         _console.AppendOutput("", Color.White);
         _console.AppendOutput("  Multi-line Editing:", Primary);
         _console.AppendOutput("    • Auto-indentation after { [ (", exampleColor);
@@ -453,14 +527,26 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         _console.AppendOutput("  Auto-Complete:", Primary);
         _console.AppendOutput("    Tab / Ctrl + Space        Trigger auto-complete", textColor);
         _console.AppendOutput("    Up / Down                 Navigate suggestions", textColor);
-        _console.AppendOutput("    Page Up / Page Down       Scroll suggestions (if many)", textColor);
-            _console.AppendOutput("    F1                        Show detailed docs for selection", headerColor);
-            _console.AppendOutput("    @ prefix                  History suggestions (from past commands)", exampleColor);
+        _console.AppendOutput(
+            "    Page Up / Page Down       Scroll suggestions (if many)",
+            textColor
+        );
+        _console.AppendOutput(
+            "    F1                        Show detailed docs for selection",
+            headerColor
+        );
+        _console.AppendOutput(
+            "    @ prefix                  History suggestions (from past commands)",
+            exampleColor
+        );
         _console.AppendOutput("", Color.White);
         _console.AppendOutput("  Navigation:", Primary);
         _console.AppendOutput("    Up / Down                 Navigate command history", textColor);
         _console.AppendOutput("    Page Up / Page Down       Scroll console output", textColor);
-        _console.AppendOutput("    Ctrl + Home / End         Jump to top/bottom of output", textColor);
+        _console.AppendOutput(
+            "    Ctrl + Home / End         Jump to top/bottom of output",
+            textColor
+        );
         _console.AppendOutput("    Left / Right / Home / End Move cursor in input", textColor);
         _console.AppendOutput("    Ctrl/Cmd + Left / Right   Jump between words", textColor);
         _console.AppendOutput("", Color.White);
@@ -485,7 +571,10 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         _console.AppendOutput("    Ctrl/Cmd + F              Open search in output", textColor);
         _console.AppendOutput("    F3 / Enter (in search)    Next match", textColor);
         _console.AppendOutput("    Shift + F3                Previous match", textColor);
-            _console.AppendOutput("    Ctrl/Cmd + R              Reverse-i-search (history search)", headerColor);
+        _console.AppendOutput(
+            "    Ctrl/Cmd + R              Reverse-i-search (history search)",
+            headerColor
+        );
         _console.AppendOutput("    Ctrl/Cmd + S (in rev-search)  Previous match", textColor);
         _console.AppendOutput("    Escape (in search)        Exit search", textColor);
         _console.AppendOutput("", Color.White);
@@ -493,7 +582,10 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         _console.AppendOutput("    ~ (tilde)                 Toggle console open/close", textColor);
         _console.AppendOutput("    Ctrl/Cmd + Plus           Increase font size", textColor);
         _console.AppendOutput("    Ctrl/Cmd + Minus          Decrease font size", textColor);
-        _console.AppendOutput("    Ctrl/Cmd + 0              Reset font size to default", textColor);
+        _console.AppendOutput(
+            "    Ctrl/Cmd + 0              Reset font size to default",
+            textColor
+        );
         _console.AppendOutput("", Color.White);
 
         // Examples
@@ -520,9 +612,18 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         _console.AppendOutput("", Color.White);
 
         // Footer
-        _console.AppendOutput("────────────────────────────────────────────────────────────", separatorColor);
-        _console.AppendOutput("  TIP: Auto-complete works on everything - try typing 'Player.' and press Tab!", Info_Dim);
-        _console.AppendOutput("────────────────────────────────────────────────────────────", separatorColor);
+        _console.AppendOutput(
+            "────────────────────────────────────────────────────────────",
+            separatorColor
+        );
+        _console.AppendOutput(
+            "  TIP: Auto-complete works on everything - try typing 'Player.' and press Tab!",
+            Info_Dim
+        );
+        _console.AppendOutput(
+            "────────────────────────────────────────────────────────────",
+            separatorColor
+        );
         _console.AppendOutput("", Color.White);
     }
 
@@ -566,7 +667,10 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
             case "on":
                 _console.UpdateConfig(_console.Config.WithLogging(true));
                 _console.AppendOutput("[+] Console logging enabled", Success);
-                _console.AppendOutput($"   Showing logs >= {_console.Config.MinimumLogLevel}", Color.LightGray);
+                _console.AppendOutput(
+                    $"   Showing logs >= {_console.Config.MinimumLogLevel}",
+                    Color.LightGray
+                );
                 break;
 
             case "off":
@@ -578,12 +682,15 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
                 if (parts.Length < 2)
                 {
                     _console.AppendOutput("Usage: log filter <level>", Color.Orange);
-                    _console.AppendOutput("Levels: Trace, Debug, Information, Warning, Error, Critical", Color.LightGray);
+                    _console.AppendOutput(
+                        "Levels: Trace, Debug, Information, Warning, Error, Critical",
+                        Color.LightGray
+                    );
                     return;
                 }
 
                 var levelString = parts[1];
-                if (Enum.TryParse<Microsoft.Extensions.Logging.LogLevel>(levelString, true, out var logLevel))
+                if (Enum.TryParse<LogLevel>(levelString, true, out var logLevel))
                 {
                     _console.UpdateConfig(_console.Config.WithMinimumLogLevel(logLevel));
                     _console.AppendOutput($"[+] Log filter set to: {logLevel}", Success);
@@ -591,14 +698,24 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
                 else
                 {
                     _console.AppendOutput($"[!] Unknown log level: {levelString}", Color.Orange);
-                    _console.AppendOutput("Valid levels: Trace, Debug, Information, Warning, Error, Critical", Color.LightGray);
+                    _console.AppendOutput(
+                        "Valid levels: Trace, Debug, Information, Warning, Error, Critical",
+                        Color.LightGray
+                    );
                 }
+
                 break;
 
             case "status":
                 _console.AppendOutput("=== Console Logging Status ===", Info_Dim);
-                _console.AppendOutput($"  Enabled: {(_console.Config.LoggingEnabled ? "[+] Yes" : "[-] No")}", Color.LightGray);
-                _console.AppendOutput($"  Min Level: {_console.Config.MinimumLogLevel}", Color.LightGray);
+                _console.AppendOutput(
+                    $"  Enabled: {(_console.Config.LoggingEnabled ? "[+] Yes" : "[-] No")}",
+                    Color.LightGray
+                );
+                _console.AppendOutput(
+                    $"  Min Level: {_console.Config.MinimumLogLevel}",
+                    Color.LightGray
+                );
                 break;
 
             default:
@@ -624,10 +741,19 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
 
             _console.AppendOutput("", Color.White);
             _console.AppendOutput("Usage:", Primary);
-            _console.AppendOutput("  filter level <Debug|Info|Warning|Error|System> <on|off>", Color.LightGray);
-            _console.AppendOutput("  filter search <text>          Search in output", Color.LightGray);
+            _console.AppendOutput(
+                "  filter level <Debug|Info|Warning|Error|System> <on|off>",
+                Color.LightGray
+            );
+            _console.AppendOutput(
+                "  filter search <text>          Search in output",
+                Color.LightGray
+            );
             _console.AppendOutput("  filter regex <pattern>        Regex filter", Color.LightGray);
-            _console.AppendOutput("  filter clear                  Clear all filters", Color.LightGray);
+            _console.AppendOutput(
+                "  filter clear                  Clear all filters",
+                Color.LightGray
+            );
             return;
         }
 
@@ -639,26 +765,35 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
             case "level":
                 if (parts.Length < 3)
                 {
-                    _console.AppendOutput("Usage: filter level <Debug|Info|Warning|Error|System> <on|off>", Color.Orange);
+                    _console.AppendOutput(
+                        "Usage: filter level <Debug|Info|Warning|Error|System> <on|off>",
+                        Color.Orange
+                    );
                     return;
                 }
 
                 var levelStr = parts[1];
                 var enabledStr = parts[2].ToLower();
 
-                if (!Enum.TryParse<PokeSharp.Engine.Debug.Console.UI.LogLevel>(levelStr, true, out var level))
+                if (!Enum.TryParse<Console.UI.LogLevel>(levelStr, true, out var level))
                 {
                     _console.AppendOutput($"[!] Unknown log level: {levelStr}", Color.Orange);
-                    _console.AppendOutput("Valid levels: Debug, Info, Warning, Error, System", Color.LightGray);
+                    _console.AppendOutput(
+                        "Valid levels: Debug, Info, Warning, Error, System",
+                        Color.LightGray
+                    );
                     return;
                 }
 
-                bool enabled = enabledStr == "on";
+                var enabled = enabledStr == "on";
                 _console.Output.SetLogLevelFilter(level, enabled);
 
                 var status = enabled ? "enabled" : "disabled";
                 var statusColor = enabled ? Success : Output_Error;
-                _console.AppendOutput($"[{(enabled ? "+" : "-")}] {level} level {status}", statusColor);
+                _console.AppendOutput(
+                    $"[{(enabled ? "+" : "-")}] {level} level {status}",
+                    statusColor
+                );
                 break;
 
             case "search":
@@ -672,8 +807,12 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
                     var searchText = string.Join(" ", parts.Skip(1));
                     _console.Output.SetSearchFilter(searchText);
                     var matchCount = _console.Output.GetFilteredLineCount();
-                    _console.AppendOutput($"[+] Search filter set: \"{searchText}\" ({matchCount} matches)", Success);
+                    _console.AppendOutput(
+                        $"[+] Search filter set: \"{searchText}\" ({matchCount} matches)",
+                        Success
+                    );
                 }
+
                 break;
 
             case "regex":
@@ -688,13 +827,20 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
                     if (_console.Output.SetRegexFilter(pattern))
                     {
                         var matchCount = _console.Output.GetFilteredLineCount();
-                        _console.AppendOutput($"[+] Regex filter set: /{pattern}/ ({matchCount} matches)", Success);
+                        _console.AppendOutput(
+                            $"[+] Regex filter set: /{pattern}/ ({matchCount} matches)",
+                            Success
+                        );
                     }
                     else
                     {
-                        _console.AppendOutput($"[!] Invalid regex pattern: {pattern}", Output_Error);
+                        _console.AppendOutput(
+                            $"[!] Invalid regex pattern: {pattern}",
+                            Output_Error
+                        );
                     }
                 }
+
                 break;
 
             case "clear":
@@ -710,7 +856,7 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
     }
 
     /// <summary>
-    /// Handles fold command (collapse sections).
+    ///     Handles fold command (collapse sections).
     /// </summary>
     private void HandleFoldCommand(string args)
     {
@@ -733,14 +879,18 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
                 break;
 
             case "commands":
-                _console.Output.CollapseAllSections(PokeSharp.Engine.Debug.Console.UI.SectionType.Command);
-                var commandSections = _console.Output.GetAllSections().Count(s => s.Type == PokeSharp.Engine.Debug.Console.UI.SectionType.Command);
+                _console.Output.CollapseAllSections(SectionType.Command);
+                var commandSections = _console
+                    .Output.GetAllSections()
+                    .Count(s => s.Type == SectionType.Command);
                 _console.AppendOutput($"[+] Collapsed {commandSections} command sections", Success);
                 break;
 
             case "errors":
-                _console.Output.CollapseAllSections(PokeSharp.Engine.Debug.Console.UI.SectionType.Error);
-                var errorSections = _console.Output.GetAllSections().Count(s => s.Type == PokeSharp.Engine.Debug.Console.UI.SectionType.Error);
+                _console.Output.CollapseAllSections(SectionType.Error);
+                var errorSections = _console
+                    .Output.GetAllSections()
+                    .Count(s => s.Type == SectionType.Error);
                 _console.AppendOutput($"[+] Collapsed {errorSections} error sections", Success);
                 break;
 
@@ -752,7 +902,7 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
     }
 
     /// <summary>
-    /// Handles unfold command (expand sections).
+    ///     Handles unfold command (expand sections).
     /// </summary>
     private void HandleUnfoldCommand(string args)
     {
@@ -775,14 +925,18 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
                 break;
 
             case "commands":
-                _console.Output.ExpandAllSections(PokeSharp.Engine.Debug.Console.UI.SectionType.Command);
-                var commandSections = _console.Output.GetAllSections().Count(s => s.Type == PokeSharp.Engine.Debug.Console.UI.SectionType.Command);
+                _console.Output.ExpandAllSections(SectionType.Command);
+                var commandSections = _console
+                    .Output.GetAllSections()
+                    .Count(s => s.Type == SectionType.Command);
                 _console.AppendOutput($"[+] Expanded {commandSections} command sections", Success);
                 break;
 
             case "errors":
-                _console.Output.ExpandAllSections(PokeSharp.Engine.Debug.Console.UI.SectionType.Error);
-                var errorSections = _console.Output.GetAllSections().Count(s => s.Type == PokeSharp.Engine.Debug.Console.UI.SectionType.Error);
+                _console.Output.ExpandAllSections(SectionType.Error);
+                var errorSections = _console
+                    .Output.GetAllSections()
+                    .Count(s => s.Type == SectionType.Error);
                 _console.AppendOutput($"[+] Expanded {errorSections} error sections", Success);
                 break;
 
@@ -805,9 +959,7 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
 
         _console.AppendOutput($"=== Available Scripts ({scripts.Count}) ===", Info_Dim);
         foreach (var script in scripts)
-        {
             _console.AppendOutput($"  {script}", Color.LightGray);
-        }
         _console.AppendOutput("Use 'load <filename>' to execute a script.", Color.LightGray);
     }
 
@@ -825,37 +977,46 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         _console.AppendOutput($"--- Start {scriptName} ---", Color.LightGray);
 
         // Execute the script (will be handled async by the caller)
-        _ = _evaluator.EvaluateAsync(scriptResult.Value!, _globals).ContinueWith(task =>
-        {
-            if (task.IsCompletedSuccessfully)
+        _ = _evaluator
+            .EvaluateAsync(scriptResult.Value!, _globals)
+            .ContinueWith(task =>
             {
-                var result = task.Result;
+                if (task.IsCompletedSuccessfully)
+                {
+                    var result = task.Result;
 
-                if (result.IsCompilationError)
-                {
-                    DisplayCompilationErrors(result.Errors!, result.SourceCode!);
-                    _console.AppendOutput($"--- End {scriptName} (compilation error) ---", Color.LightGray);
+                    if (result.IsCompilationError)
+                    {
+                        DisplayCompilationErrors(result.Errors!, result.SourceCode!);
+                        _console.AppendOutput(
+                            $"--- End {scriptName} (compilation error) ---",
+                            Color.LightGray
+                        );
+                    }
+                    else if (result.IsRuntimeError)
+                    {
+                        DisplayRuntimeError(result.RuntimeException!);
+                        _console.AppendOutput(
+                            $"--- End {scriptName} (runtime error) ---",
+                            Color.LightGray
+                        );
+                    }
+                    else if (result.IsSuccess)
+                    {
+                        if (!string.IsNullOrWhiteSpace(result.Output) && result.Output != "null")
+                            _console.AppendOutput(result.Output, Output_Success);
+                        _console.AppendOutput($"--- End {scriptName} ---", Color.LightGray);
+                    }
                 }
-                else if (result.IsRuntimeError)
+                else if (task.IsFaulted)
                 {
-                    DisplayRuntimeError(result.RuntimeException!);
-                    _console.AppendOutput($"--- End {scriptName} (runtime error) ---", Color.LightGray);
+                    _console.AppendOutput(
+                        $"Script error: {task.Exception?.GetBaseException().Message}",
+                        Output_Error
+                    );
+                    _console.AppendOutput($"--- End {scriptName} (error) ---", Color.LightGray);
                 }
-                else if (result.IsSuccess)
-                {
-                    if (!string.IsNullOrWhiteSpace(result.Output) && result.Output != "null")
-                {
-                        _console.AppendOutput(result.Output, Output_Success);
-                }
-                _console.AppendOutput($"--- End {scriptName} ---", Color.LightGray);
-                }
-            }
-            else if (task.IsFaulted)
-            {
-                _console.AppendOutput($"Script error: {task.Exception?.GetBaseException().Message}", Output_Error);
-                _console.AppendOutput($"--- End {scriptName} (error) ---", Color.LightGray);
-            }
-        });
+            });
     }
 
     private void SaveScript(string scriptName)
@@ -870,13 +1031,9 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
 
         var result = _scriptManager.SaveScript(scriptName, content);
         if (result.IsSuccess)
-        {
             _console.AppendOutput($"Script saved: {scriptName}", Success);
-        }
         else
-        {
             _console.AppendOutput($"Error: {result.Error}", Output_Error);
-        }
     }
 
     private void HandleAliasCommand(string args)
@@ -902,7 +1059,10 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         else
         {
             _console.AppendOutput($"[!] Failed to create alias '{name}'", Output_Error);
-            _console.AppendOutput("Alias name must start with a letter or underscore.", Color.LightGray);
+            _console.AppendOutput(
+                "Alias name must start with a letter or underscore.",
+                Color.LightGray
+            );
         }
     }
 
@@ -919,9 +1079,7 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
 
         _console.AppendOutput($"=== Defined Aliases ({aliases.Count}) ===", Info_Dim);
         foreach (var (name, command) in aliases.OrderBy(x => x.Key))
-        {
             _console.AppendOutput($"  {name} > {command}", Color.LightGray);
-        }
     }
 
     private void RemoveAlias(string name)
@@ -958,8 +1116,12 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         var command = parts[1];
 
         // Parse F-key (e.g., "F1" -> 1)
-        if (!fKeyStr.StartsWith("F") || !int.TryParse(fKeyStr.Substring(1), out var fKeyNumber) ||
-            fKeyNumber < 1 || fKeyNumber > BookmarkedCommandsManager.MaxBookmarks)
+        if (
+            !fKeyStr.StartsWith("F")
+            || !int.TryParse(fKeyStr.Substring(1), out var fKeyNumber)
+            || fKeyNumber < 1
+            || fKeyNumber > BookmarkedCommandsManager.MaxBookmarks
+        )
         {
             _console.AppendOutput($"[!] Invalid F-key: {parts[0]}. Must be F1-F12.", Output_Error);
             return;
@@ -996,9 +1158,7 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
 
         _console.AppendOutput($"=== Bookmarked Commands ({bookmarks.Count}) ===", Info_Dim);
         foreach (var (fKey, command) in bookmarks.OrderBy(x => x.Key))
-        {
             _console.AppendOutput($"  F{fKey} > {command}", Color.LightGray);
-        }
     }
 
     private void RemoveBookmark(string fKeyStr)
@@ -1030,9 +1190,9 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
     }
 
     /// <summary>
-    /// Displays compilation errors with context and formatting.
+    ///     Displays compilation errors with context and formatting.
     /// </summary>
-    private void DisplayCompilationErrors(List<PokeSharp.Engine.Debug.Console.Scripting.FormattedError> errors, string sourceCode)
+    private void DisplayCompilationErrors(List<FormattedError> errors, string sourceCode)
     {
         var errorColor = Output_Error;
         var lineNumberColor = Text_Disabled;
@@ -1045,9 +1205,10 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         foreach (var error in errors)
         {
             // Error header with code and location
-            var locationText = error.Line == error.EndLine
-                ? $"Line {error.Line}, Column {error.Column}"
-                : $"Lines {error.Line}-{error.EndLine}";
+            var locationText =
+                error.Line == error.EndLine
+                    ? $"Line {error.Line}, Column {error.Column}"
+                    : $"Lines {error.Line}-{error.EndLine}";
 
             _console.AppendOutput($"[{error.ErrorCode}] {locationText}", headerColor);
             _console.AppendOutput(error.Message, errorColor);
@@ -1065,9 +1226,10 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
                 // Add caret line for error line
                 if (contextLine.IsErrorLine && contextLine.LineNumber == error.Line)
                 {
-                    var caretLine = PokeSharp.Engine.Debug.Console.Scripting.ErrorFormatter.GenerateCaretLine(
+                    var caretLine = ErrorFormatter.GenerateCaretLine(
                         error.Column,
-                        Math.Max(1, error.EndColumn - error.Column));
+                        Math.Max(1, error.EndColumn - error.Column)
+                    );
 
                     // Add spacing for line number prefix
                     var spacingPrefix = "       | "; // Matches the line number formatting
@@ -1080,7 +1242,7 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
     }
 
     /// <summary>
-    /// Displays runtime errors with stack trace.
+    ///     Displays runtime errors with stack trace.
     /// </summary>
     private void DisplayRuntimeError(Exception exception)
     {
@@ -1089,9 +1251,18 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         var stackColor = Text_Secondary;
 
         _console.AppendOutput("", Color.White);
-        _console.AppendOutput("╔══════════════════════════════════════════════════════════╗", errorColor);
-        _console.AppendOutput("║                   RUNTIME ERROR                          ║", errorColor);
-        _console.AppendOutput("╚══════════════════════════════════════════════════════════╝", errorColor);
+        _console.AppendOutput(
+            "╔══════════════════════════════════════════════════════════╗",
+            errorColor
+        );
+        _console.AppendOutput(
+            "║                   RUNTIME ERROR                          ║",
+            errorColor
+        );
+        _console.AppendOutput(
+            "╚══════════════════════════════════════════════════════════╝",
+            errorColor
+        );
         _console.AppendOutput("", Color.White);
 
         // Exception type and message
@@ -1105,34 +1276,42 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
             _console.AppendOutput("Stack Trace:", Text_Secondary);
             var stackLines = exception.StackTrace.Split('\n').Take(5);
             foreach (var line in stackLines)
-            {
                 _console.AppendOutput($"  {line.Trim()}", stackColor);
-            }
             _console.AppendOutput("", Color.White);
         }
 
         // Inner exception if present
         if (exception.InnerException != null)
         {
-            _console.AppendOutput($"Inner Exception: {exception.InnerException.GetType().Name}", headerColor);
+            _console.AppendOutput(
+                $"Inner Exception: {exception.InnerException.GetType().Name}",
+                headerColor
+            );
             _console.AppendOutput(exception.InnerException.Message, errorColor);
             _console.AppendOutput("", Color.White);
         }
     }
 
     /// <summary>
-    /// Handles export command to save console output to file.
+    ///     Handles export command to save console output to file.
     /// </summary>
     private void HandleExportCommand(string? filename, bool exportAll)
     {
-        var result = _outputExporter.ExportOutput(_console.Output, filename, exportAll, includeMetadata: true);
+        var result = _outputExporter.ExportOutput(_console.Output, filename, exportAll);
 
         if (result.Success)
         {
             var typeText = exportAll ? "full buffer" : "visible output";
-            _console.AppendOutput($"[+] Exported {typeText} ({result.LinesExported} lines) to:", Success);
+            _console.AppendOutput(
+                $"[+] Exported {typeText} ({result.LinesExported} lines) to:",
+                Success
+            );
             _console.AppendOutput($"  {result.FilePath}", Primary);
-            _logger.LogInformation("Exported {Lines} lines to {Path}", result.LinesExported, result.FilePath);
+            _logger.LogInformation(
+                "Exported {Lines} lines to {Path}",
+                result.LinesExported,
+                result.FilePath
+            );
         }
         else
         {
@@ -1142,7 +1321,7 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
     }
 
     /// <summary>
-    /// Handles the history command with various subcommands.
+    ///     Handles the history command with various subcommands.
     /// </summary>
     private void HandleHistoryCommand(string command)
     {
@@ -1161,18 +1340,24 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
             _console.AppendOutput("", Color.White);
 
             var entries = _history.GetRecent(20);
-            int index = _history.Count;
+            var index = _history.Count;
 
             foreach (var entry in entries)
             {
                 var timeAgo = GetTimeAgo(entry.LastUsed);
                 var countStr = entry.UseCount > 1 ? $" (×{entry.UseCount})" : "";
-                _console.AppendOutput($"  {index,3}  {timeAgo,-12}  {entry.Command}{countStr}", textColor);
+                _console.AppendOutput(
+                    $"  {index, 3}  {timeAgo, -12}  {entry.Command}{countStr}",
+                    textColor
+                );
                 index--;
             }
 
             _console.AppendOutput("", Color.White);
-            _console.AppendOutput($"Total: {_history.Count} commands  •  Use 'history help' for more options", Text_Disabled);
+            _console.AppendOutput(
+                $"Total: {_history.Count} commands  •  Use 'history help' for more options",
+                Text_Disabled
+            );
             _console.AppendOutput("", Color.White);
         }
         // history stats - show statistics
@@ -1182,19 +1367,20 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
             _console.AppendOutput("Command History Statistics:", headerColor);
             _console.AppendOutput("", Color.White);
 
-            var mostUsed = _history.GetMostUsed(10).ToList();
+            var mostUsed = _history.GetMostUsed().ToList();
 
             _console.AppendOutput($"  Total Commands: {_history.Count}", textColor);
-            _console.AppendOutput($"  Total Executions: {_history.GetAllEntries().Sum(e => e.UseCount)}", textColor);
+            _console.AppendOutput(
+                $"  Total Executions: {_history.GetAllEntries().Sum(e => e.UseCount)}",
+                textColor
+            );
             _console.AppendOutput("", Color.White);
 
             if (mostUsed.Any())
             {
                 _console.AppendOutput("  Most Used Commands:", highlightColor);
                 foreach (var entry in mostUsed)
-                {
-                    _console.AppendOutput($"    {entry.UseCount,3}×  {entry.Command}", textColor);
-                }
+                    _console.AppendOutput($"    {entry.UseCount, 3}×  {entry.Command}", textColor);
             }
 
             _console.AppendOutput("", Color.White);
@@ -1224,13 +1410,13 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
                         var before = cmd.Substring(0, matchIndex);
                         var match = cmd.Substring(matchIndex, searchTerm.Length);
                         var after = cmd.Substring(matchIndex + searchTerm.Length);
-                        _console.AppendOutput($"  {timeAgo,-12}  {before}", textColor);
+                        _console.AppendOutput($"  {timeAgo, -12}  {before}", textColor);
                         _console.AppendOutput(match, Info_Dim);
                         _console.AppendOutput(after + countStr, textColor);
                     }
                     else
                     {
-                        _console.AppendOutput($"  {timeAgo,-12}  {cmd}{countStr}", textColor);
+                        _console.AppendOutput($"  {timeAgo, -12}  {cmd}{countStr}", textColor);
                     }
                 }
 
@@ -1268,7 +1454,7 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
     }
 
     /// <summary>
-    /// Gets a human-readable "time ago" string.
+    ///     Gets a human-readable "time ago" string.
     /// </summary>
     private string GetTimeAgo(DateTime timestamp)
     {
@@ -1287,7 +1473,7 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
     }
 
     /// <summary>
-    /// Lists all exported files.
+    ///     Lists all exported files.
     /// </summary>
     private void ListExports()
     {
@@ -1306,11 +1492,12 @@ public class ConsoleCommandExecutor : IConsoleCommandExecutor
         else
         {
             foreach (var export in exports)
-            {
                 _console.AppendOutput($"  • {export}", Text_Secondary);
-            }
             _console.AppendOutput("", Color.White);
-            _console.AppendOutput($"Total: {exports.Count} file{(exports.Count != 1 ? "s" : "")}", Success);
+            _console.AppendOutput(
+                $"Total: {exports.Count} file{(exports.Count != 1 ? "s" : "")}",
+                Success
+            );
         }
 
         _console.AppendOutput("", Color.White);

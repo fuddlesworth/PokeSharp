@@ -3,13 +3,13 @@ using Microsoft.Xna.Framework.Input;
 namespace PokeSharp.Engine.Debug.Systems.Services;
 
 /// <summary>
-/// Converts MonoGame Keys to characters for text input.
-/// Handles shifted keys and special characters.
+///     Converts MonoGame Keys to characters for text input.
+///     Handles shifted keys and special characters.
 /// </summary>
 public static class KeyToCharConverter
 {
     /// <summary>
-    /// Converts a Keys value to its character representation.
+    ///     Converts a Keys value to its character representation.
     /// </summary>
     /// <param name="key">The key to convert.</param>
     /// <param name="isShiftPressed">Whether Shift is currently pressed.</param>
@@ -19,7 +19,7 @@ public static class KeyToCharConverter
         // Letters
         if (key >= Keys.A && key <= Keys.Z)
         {
-            char baseChar = (char)('a' + (key - Keys.A));
+            var baseChar = (char)('a' + (key - Keys.A));
             return isShiftPressed ? char.ToUpper(baseChar) : baseChar;
         }
 
@@ -27,7 +27,6 @@ public static class KeyToCharConverter
         if (key >= Keys.D0 && key <= Keys.D9)
         {
             if (isShiftPressed)
-            {
                 // Shifted number keys produce symbols
                 return key switch
                 {
@@ -41,17 +40,14 @@ public static class KeyToCharConverter
                     Keys.D7 => '&',
                     Keys.D8 => '*',
                     Keys.D9 => '(',
-                    _ => null
+                    _ => null,
                 };
-            }
             return (char)('0' + (key - Keys.D0));
         }
 
         // Numpad numbers
         if (key >= Keys.NumPad0 && key <= Keys.NumPad9)
-        {
             return (char)('0' + (key - Keys.NumPad0));
-        }
 
         // Special keys and symbols
         return key switch
@@ -79,7 +75,7 @@ public static class KeyToCharConverter
             Keys.Decimal => '.',
 
             // Not a printable character
-            _ => null
+            _ => null,
         };
     }
 }

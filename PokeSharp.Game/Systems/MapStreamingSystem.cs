@@ -1,8 +1,7 @@
 using Arch.Core;
-using Arch.Core.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
-using PokeSharp.Engine.Common.Logging;
+using PokeSharp.Engine.Core.Events.ECS;
 using PokeSharp.Engine.Core.Systems;
 using PokeSharp.Engine.Core.Types;
 using PokeSharp.Game.Components;
@@ -36,30 +35,53 @@ namespace PokeSharp.Game.Systems;
 /// </remarks>
 public class MapStreamingSystem : SystemBase, IUpdateSystem
 {
+    #region Constants
+
+    /// <summary>
+    ///     Initial capacity for map info cache to reduce allocations.
+    /// </summary>
+    private const int MapInfoCacheCapacity = 10;
+
+    #endregion
+
+    private readonly IEcsEventBus? _eventBus;
+
     private readonly ILogger<MapStreamingSystem>? _logger;
-    private readonly MapLoader _mapLoader;
     private readonly MapDefinitionService _mapDefinitionService;
+
+    // Map info cache to avoid nested queries (O(N×M) -> O(N))
+    private readonly Dictionary<
+        string,
+        (MapInfo Info, MapWorldPosition WorldPos, MapDefinition? Definition)
+    > _mapInfoCache = new(MapInfoCacheCapacity);
+
+    private readonly MapLoader _mapLoader;
+
+    // Dirty flag to track when cache needs rebuilding (performance optimization)
+    private bool _cacheIsDirty = true;
+    private QueryDescription _mapInfoQuery;
 
     // Cached queries for performance
     private QueryDescription _playerQuery;
-    private QueryDescription _mapInfoQuery;
-
-    // Map info cache to avoid nested queries (O(N×M) -> O(N))
-    private readonly Dictionary<string, (MapInfo Info, MapWorldPosition WorldPos, MapDefinition? Definition)> _mapInfoCache = new(10);
 
     /// <summary>
     ///     Creates a new MapStreamingSystem with required services.
     /// </summary>
     /// <param name="mapLoader">MapLoader service for loading/unloading maps.</param>
     /// <param name="mapDefinitionService">Service for accessing map definitions and connections.</param>
+    /// <param name="eventBus">Optional event bus for publishing map loading/unloading events.</param>
     /// <param name="logger">Optional logger for debugging streaming operations.</param>
     public MapStreamingSystem(
         MapLoader mapLoader,
         MapDefinitionService mapDefinitionService,
-        ILogger<MapStreamingSystem>? logger = null)
+        IEcsEventBus? eventBus = null,
+        ILogger<MapStreamingSystem>? logger = null
+    )
     {
         _mapLoader = mapLoader ?? throw new ArgumentNullException(nameof(mapLoader));
-        _mapDefinitionService = mapDefinitionService ?? throw new ArgumentNullException(nameof(mapDefinitionService));
+        _mapDefinitionService =
+            mapDefinitionService ?? throw new ArgumentNullException(nameof(mapDefinitionService));
+        _eventBus = eventBus;
         _logger = logger;
     }
 
@@ -75,12 +97,10 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
         base.Initialize(world);
 
         // Query for player with streaming component
-        _playerQuery = new QueryDescription()
-            .WithAll<Player, Position, MapStreaming>();
+        _playerQuery = new QueryDescription().WithAll<Player, Position, MapStreaming>();
 
         // Query for map info entities with world position
-        _mapInfoQuery = new QueryDescription()
-            .WithAll<MapInfo, MapWorldPosition>();
+        _mapInfoQuery = new QueryDescription().WithAll<MapInfo, MapWorldPosition>();
     }
 
     /// <inheritdoc />
@@ -91,8 +111,12 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
 
         EnsureInitialized();
 
-        // Update map info cache once per frame to avoid nested queries
-        UpdateMapInfoCache(world);
+        // Update map info cache only when dirty (when maps load/unload)
+        if (_cacheIsDirty)
+        {
+            UpdateMapInfoCache(world);
+            _cacheIsDirty = false;
+        }
 
         // Process each player with map streaming
         world.Query(
@@ -111,10 +135,13 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
     private void UpdateMapInfoCache(World world)
     {
         _mapInfoCache.Clear();
-        world.Query(in _mapInfoQuery, (ref MapInfo info, ref MapWorldPosition pos) =>
-        {
-            _mapInfoCache[info.MapName] = (info, pos, null);
-        });
+        world.Query(
+            in _mapInfoQuery,
+            (ref MapInfo info, ref MapWorldPosition pos) =>
+            {
+                _mapInfoCache[info.MapName] = (info, pos, null);
+            }
+        );
     }
 
     /// <summary>
@@ -125,7 +152,8 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
         World world,
         Entity playerEntity,
         ref Position position,
-        ref MapStreaming streaming)
+        ref MapStreaming streaming
+    )
     {
         // Create local copy to avoid ref struct capture in lambda
         var streamingCopy = streaming;
@@ -134,7 +162,10 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
         var context = TryGetMapContext(streamingCopy.CurrentMapId);
         if (!context.HasValue)
         {
-            _logger?.LogError("Current map not found for streaming: {MapId}", streamingCopy.CurrentMapId.Value);
+            _logger?.LogError(
+                "Current map not found for streaming: {MapId}",
+                streamingCopy.CurrentMapId.Value
+            );
             return;
         }
 
@@ -142,7 +173,13 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
         LoadAllConnections(world, ref streamingCopy, context.Value);
 
         // Update current map if player has crossed boundary
-        UpdateCurrentMap(world, ref position, ref streamingCopy, context.Value.WorldPosition, context.Value.Info);
+        UpdateCurrentMap(
+            world,
+            ref position,
+            ref streamingCopy,
+            context.Value.WorldPosition,
+            context.Value.Info
+        );
 
         // Unload distant maps
         UnloadDistantMaps(world, ref position, ref streamingCopy);
@@ -169,15 +206,10 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
     /// <summary>
     ///     Loads all connected maps for the given context.
     /// </summary>
-    private void LoadAllConnections(
-        World world,
-        ref MapStreaming streaming,
-        MapLoadContext context)
+    private void LoadAllConnections(World world, ref MapStreaming streaming, MapLoadContext context)
     {
         foreach (var connection in context.GetAllConnections())
-        {
             LoadAdjacentMapIfNeeded(world, ref streaming, context, connection);
-        }
     }
 
     /// <summary>
@@ -190,7 +222,8 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
         World world,
         ref MapStreaming streaming,
         MapLoadContext sourceContext,
-        ConnectionInfo connection)
+        ConnectionInfo connection
+    )
     {
         // Already loaded
         if (streaming.IsMapLoaded(connection.MapId))
@@ -229,13 +262,55 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
             adjacentOffset.Y
         );
 
+        // Publish map loading event
+        if (_eventBus != null)
+        {
+            var loadingEvent = new MapLoadingEvent
+            {
+                MapId = connection.MapId.Value.GetHashCode(),
+                MapName = connection.MapId.Value,
+                Timestamp = 0f, // Will be set by event bus if needed
+                Priority = EventPriority.Normal,
+            };
+            _eventBus.Publish(loadingEvent);
+
+            // Check if loading was cancelled by event handlers
+            if (loadingEvent.IsCancelled)
+            {
+                _logger?.LogInformation(
+                    "Map loading cancelled by event handler: {MapId}",
+                    connection.MapId.Value
+                );
+                return;
+            }
+        }
+
         try
         {
             // Load the map at the calculated world offset
             _mapLoader.LoadMapAtOffset(world, connection.MapId, adjacentOffset);
             streaming.AddLoadedMap(connection.MapId, adjacentOffset);
 
-            _logger?.LogInformation("Successfully loaded adjacent map: {MapId}", connection.MapId.Value);
+            // Mark cache as dirty since a new map was loaded
+            _cacheIsDirty = true;
+
+            _logger?.LogInformation(
+                "Successfully loaded adjacent map: {MapId}",
+                connection.MapId.Value
+            );
+
+            // Publish map loaded event
+            _eventBus?.Publish(
+                new MapLoadedEvent
+                {
+                    MapId = connection.MapId.Value.GetHashCode(),
+                    MapName = connection.MapId.Value,
+                    WorldOffsetX = (int)adjacentOffset.X,
+                    WorldOffsetY = (int)adjacentOffset.Y,
+                    Timestamp = 0f,
+                    Priority = EventPriority.Normal,
+                }
+            );
         }
         catch (Exception ex)
         {
@@ -246,7 +321,10 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
     /// <summary>
     ///     Gets dimensions for an adjacent map, with fallback to source dimensions.
     /// </summary>
-    private (int Width, int Height)? GetAdjacentMapDimensions(MapIdentifier mapId, MapInfo sourceInfo)
+    private (int Width, int Height)? GetAdjacentMapDimensions(
+        MapIdentifier mapId,
+        MapInfo sourceInfo
+    )
     {
         // Get adjacent map definition
         var adjacentMapDef = _mapDefinitionService.GetMap(mapId);
@@ -261,14 +339,19 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
             var dimensions = _mapLoader.GetMapDimensions(mapId);
             _logger?.LogDebug(
                 "Adjacent map {MapId} dimensions: {Width}x{Height} tiles",
-                mapId.Value, dimensions.Width, dimensions.Height);
+                mapId.Value,
+                dimensions.Width,
+                dimensions.Height
+            );
             return (dimensions.Width, dimensions.Height);
         }
         catch (Exception ex)
         {
-            _logger?.LogWarning(ex,
+            _logger?.LogWarning(
+                ex,
                 "Failed to get dimensions for adjacent map: {MapId}, using source dimensions as fallback",
-                mapId.Value);
+                mapId.Value
+            );
             return (sourceInfo.Width, sourceInfo.Height);
         }
     }
@@ -277,7 +360,9 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
     ///     Calculates the world offset for an adjacent map based on direction and connection offset.
     /// </summary>
     /// <remarks>
-    ///     <para><strong>Offset Calculations:</strong></para>
+    ///     <para>
+    ///         <strong>Offset Calculations:</strong>
+    ///     </para>
     ///     <list type="bullet">
     ///         <item>North: Y = sourceOrigin.Y - adjacentHeight, X shifted by connectionOffset</item>
     ///         <item>South: Y = sourceOrigin.Y + sourceHeight, X shifted by connectionOffset</item>
@@ -302,7 +387,8 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
         int adjacentHeightInTiles,
         int tileSize,
         Direction direction,
-        int connectionOffset)
+        int connectionOffset
+    )
     {
         var sourceOrigin = sourceMapWorldPos.WorldOrigin;
         var sourceWidth = sourceWidthInTiles * tileSize;
@@ -315,17 +401,29 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
         {
             // North: Place adjacent map ABOVE source. Adjacent's BOTTOM edge touches source's TOP edge.
             // Y = sourceOrigin.Y - adjacentHeight (use adjacent height!)
-            Direction.North => new Vector2(sourceOrigin.X + offsetPixels, sourceOrigin.Y - adjacentHeight),
+            Direction.North => new Vector2(
+                sourceOrigin.X + offsetPixels,
+                sourceOrigin.Y - adjacentHeight
+            ),
             // South: Place adjacent map BELOW source. Adjacent's TOP edge touches source's BOTTOM edge.
             // Y = sourceOrigin.Y + sourceHeight (use source height)
-            Direction.South => new Vector2(sourceOrigin.X + offsetPixels, sourceOrigin.Y + sourceHeight),
+            Direction.South => new Vector2(
+                sourceOrigin.X + offsetPixels,
+                sourceOrigin.Y + sourceHeight
+            ),
             // East: Place adjacent map RIGHT of source. Adjacent's LEFT edge touches source's RIGHT edge.
             // X = sourceOrigin.X + sourceWidth (use source width)
-            Direction.East => new Vector2(sourceOrigin.X + sourceWidth, sourceOrigin.Y + offsetPixels),
+            Direction.East => new Vector2(
+                sourceOrigin.X + sourceWidth,
+                sourceOrigin.Y + offsetPixels
+            ),
             // West: Place adjacent map LEFT of source. Adjacent's RIGHT edge touches source's LEFT edge.
             // X = sourceOrigin.X - adjacentWidth (use adjacent width!)
-            Direction.West => new Vector2(sourceOrigin.X - adjacentWidth, sourceOrigin.Y + offsetPixels),
-            _ => sourceOrigin
+            Direction.West => new Vector2(
+                sourceOrigin.X - adjacentWidth,
+                sourceOrigin.Y + offsetPixels
+            ),
+            _ => sourceOrigin,
         };
     }
 
@@ -342,7 +440,8 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
         Vector2 point,
         Vector2 rectOrigin,
         int rectWidth,
-        int rectHeight)
+        int rectHeight
+    )
     {
         // Find the closest point on the rectangle to the given point
         var closestX = MathHelper.Clamp(point.X, rectOrigin.X, rectOrigin.X + rectWidth);
@@ -361,7 +460,8 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
         ref Position position,
         ref MapStreaming streaming,
         MapWorldPosition currentMapWorldPos,
-        MapInfo currentMapInfo)
+        MapInfo currentMapInfo
+    )
     {
         var playerPos = new Vector2(position.PixelX, position.PixelY);
 
@@ -378,7 +478,13 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
         if (!offset.HasValue)
             return;
 
-        UpdatePlayerMapPosition(ref position, ref streaming, newMapId.Value, offset.Value, currentMapInfo.TileSize);
+        UpdatePlayerMapPosition(
+            ref position,
+            ref streaming,
+            newMapId.Value,
+            offset.Value,
+            currentMapInfo.TileSize
+        );
     }
 
     /// <summary>
@@ -387,7 +493,8 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
     private MapIdentifier? TryFindContainingMap(
         Vector2 playerPos,
         MapStreaming streaming,
-        MapIdentifier currentMapId)
+        MapIdentifier currentMapId
+    )
     {
         foreach (var loadedMapId in streaming.LoadedMaps)
         {
@@ -402,11 +509,13 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
                 (int)offset.Value.X,
                 (int)offset.Value.Y,
                 mapData.Info.Width * mapData.Info.TileSize,
-                mapData.Info.Height * mapData.Info.TileSize);
+                mapData.Info.Height * mapData.Info.TileSize
+            );
 
             if (bounds.Contains(playerPos))
                 return loadedMapId;
         }
+
         return null;
     }
 
@@ -418,7 +527,8 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
         ref MapStreaming streaming,
         MapIdentifier newMapId,
         Vector2 newMapOffset,
-        int tileSize)
+        int tileSize
+    )
     {
         var oldMapId = position.MapId;
         var oldGridX = position.X;
@@ -426,10 +536,11 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
 
         // Update map reference
         if (_mapInfoCache.TryGetValue(newMapId.Value, out var newMapData))
-        {
             position.MapId = newMapData.Info.MapId;
-        }
         streaming.CurrentMapId = newMapId;
+
+        // Mark cache as dirty when player crosses map boundary
+        _cacheIsDirty = true;
 
         // Recalculate grid coordinates
         position.X = (int)((position.PixelX - newMapOffset.X) / tileSize);
@@ -437,17 +548,20 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
 
         _logger?.LogInformation(
             "Player crossed map boundary: {OldMapId} -> {NewMapId} | Grid: ({OldX},{OldY}) -> ({NewX},{NewY})",
-            oldMapId, position.MapId, oldGridX, oldGridY, position.X, position.Y);
+            oldMapId,
+            position.MapId,
+            oldGridX,
+            oldGridY,
+            position.X,
+            position.Y
+        );
     }
 
     /// <summary>
     ///     Unloads maps that are not connected to the current map.
     ///     Pokemon-style: only keep current map and its direct connections.
     /// </summary>
-    private void UnloadDistantMaps(
-        World world,
-        ref Position position,
-        ref MapStreaming streaming)
+    private void UnloadDistantMaps(World world, ref Position position, ref MapStreaming streaming)
     {
         // Create local copy to avoid ref struct capture
         var currentMapId = streaming.CurrentMapId;
@@ -475,13 +589,9 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
         var loadedMaps = new HashSet<MapIdentifier>(streaming.LoadedMaps);
 
         foreach (var loadedMapId in loadedMaps)
-        {
             // Unload if not in the "keep" set
             if (!mapsToKeep.Contains(loadedMapId.Value))
-            {
                 mapsToUnload.Add(loadedMapId);
-            }
-        }
 
         // Unload maps not connected to current map
         foreach (var mapId in mapsToUnload)
@@ -491,13 +601,50 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
                 mapId.Value
             );
 
+            // Publish map unloading event
+            if (_eventBus != null)
+            {
+                var unloadingEvent = new MapUnloadingEvent
+                {
+                    MapId = mapId.Value.GetHashCode(),
+                    MapName = mapId.Value,
+                    Timestamp = 0f,
+                    Priority = EventPriority.Normal,
+                };
+                _eventBus.Publish(unloadingEvent);
+
+                // Check if unloading was cancelled by event handlers
+                if (unloadingEvent.IsCancelled)
+                {
+                    _logger?.LogInformation(
+                        "Map unloading cancelled by event handler: {MapId}",
+                        mapId.Value
+                    );
+                    continue;
+                }
+            }
+
             try
             {
                 // TODO: Implement map unloading in MapLoader
                 // For now, just remove from tracking
                 streaming.RemoveLoadedMap(mapId);
 
+                // Mark cache as dirty since a map was unloaded
+                _cacheIsDirty = true;
+
                 _logger?.LogDebug("Successfully unloaded map: {MapId}", mapId.Value);
+
+                // Publish map unloaded event
+                _eventBus?.Publish(
+                    new MapUnloadedEvent
+                    {
+                        MapId = mapId.Value.GetHashCode(),
+                        MapName = mapId.Value,
+                        Timestamp = 0f,
+                        Priority = EventPriority.Normal,
+                    }
+                );
             }
             catch (Exception ex)
             {

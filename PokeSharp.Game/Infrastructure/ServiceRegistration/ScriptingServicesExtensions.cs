@@ -1,7 +1,6 @@
 using Arch.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using PokeSharp.Engine.Core.Events;
 using PokeSharp.Game.Data.PropertyMapping;
 using PokeSharp.Game.Scripting.Api;
 using PokeSharp.Game.Scripting.Services;
@@ -18,13 +17,6 @@ public static class ScriptingServicesExtensions
     /// </summary>
     public static IServiceCollection AddScriptingServices(this IServiceCollection services)
     {
-        // Event Bus
-        services.AddSingleton<IEventBus>(sp =>
-        {
-            var logger = sp.GetRequiredService<ILogger<EventBus>>();
-            return new EventBus(logger);
-        });
-
         // Property Mappers (for extensible Tiled property → ECS component mapping)
         services.AddPropertyMappers();
 

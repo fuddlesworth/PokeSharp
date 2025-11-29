@@ -31,7 +31,10 @@ public class BorderProcessor : IBorderProcessor
     /// <returns>A MapBorder if border data exists; otherwise, null.</returns>
     public MapBorder? ParseBorder(TmxDocument tmxDoc, IReadOnlyList<LoadedTileset> tilesets)
     {
-        if (tmxDoc.Properties == null || !tmxDoc.Properties.TryGetValue("border", out var borderValue))
+        if (
+            tmxDoc.Properties == null
+            || !tmxDoc.Properties.TryGetValue("border", out var borderValue)
+        )
         {
             _logger?.LogDebug("No border property found in map");
             return null;
@@ -46,7 +49,10 @@ public class BorderProcessor : IBorderProcessor
             var borderData = ParseBorderData(borderValue);
             if (borderData == null)
             {
-                _logger?.LogWarning("Failed to parse border data from property: {Value}", borderValue);
+                _logger?.LogWarning(
+                    "Failed to parse border data from property: {Value}",
+                    borderValue
+                );
                 return null;
             }
 
@@ -66,7 +72,7 @@ public class BorderProcessor : IBorderProcessor
                 borderData.Value.TopLeft,
                 borderData.Value.TopRight,
                 borderData.Value.BottomLeft,
-                borderData.Value.BottomRight
+                borderData.Value.BottomRight,
             };
 
             var topLayer = new[]
@@ -74,7 +80,7 @@ public class BorderProcessor : IBorderProcessor
                 borderData.Value.TopLeftTop,
                 borderData.Value.TopRightTop,
                 borderData.Value.BottomLeftTop,
-                borderData.Value.BottomRightTop
+                borderData.Value.BottomRightTop,
             };
 
             var mapBorder = new MapBorder(bottomLayer, topLayer, tilesetId);
@@ -84,7 +90,10 @@ public class BorderProcessor : IBorderProcessor
             for (var i = 0; i < 4; i++)
             {
                 var tileGid = mapBorder.BottomLayerGids[i];
-                mapBorder.BottomSourceRects[i] = TilesetUtilities.CalculateSourceRect(tileGid, primaryTileset.Tileset);
+                mapBorder.BottomSourceRects[i] = TilesetUtilities.CalculateSourceRect(
+                    tileGid,
+                    primaryTileset.Tileset
+                );
             }
 
             // Pre-calculate source rectangles for TOP layer border tiles
@@ -93,15 +102,24 @@ public class BorderProcessor : IBorderProcessor
             {
                 var tileGid = mapBorder.TopLayerGids[i];
                 if (tileGid > 0)
-                    mapBorder.TopSourceRects[i] = TilesetUtilities.CalculateSourceRect(tileGid, primaryTileset.Tileset);
+                    mapBorder.TopSourceRects[i] = TilesetUtilities.CalculateSourceRect(
+                        tileGid,
+                        primaryTileset.Tileset
+                    );
             }
 
             _logger?.LogInformation(
-                "Loaded dual-layer border tiles from tileset {TilesetId}: " +
-                "Bottom=[{B0},{B1},{B2},{B3}], Top=[{T0},{T1},{T2},{T3}]",
+                "Loaded dual-layer border tiles from tileset {TilesetId}: "
+                    + "Bottom=[{B0},{B1},{B2},{B3}], Top=[{T0},{T1},{T2},{T3}]",
                 tilesetId,
-                bottomLayer[0], bottomLayer[1], bottomLayer[2], bottomLayer[3],
-                topLayer[0], topLayer[1], topLayer[2], topLayer[3]
+                bottomLayer[0],
+                bottomLayer[1],
+                bottomLayer[2],
+                bottomLayer[3],
+                topLayer[0],
+                topLayer[1],
+                topLayer[2],
+                topLayer[3]
             );
 
             return mapBorder;
@@ -125,7 +143,8 @@ public class BorderProcessor : IBorderProcessor
         World world,
         Entity mapInfoEntity,
         TmxDocument tmxDoc,
-        IReadOnlyList<LoadedTileset> tilesets)
+        IReadOnlyList<LoadedTileset> tilesets
+    )
     {
         var border = ParseBorder(tmxDoc, tilesets);
         if (border == null)
@@ -146,9 +165,7 @@ public class BorderProcessor : IBorderProcessor
         {
             // Handle JsonElement (from System.Text.Json deserialization)
             if (borderValue is JsonElement jsonElement)
-            {
                 if (jsonElement.ValueKind == JsonValueKind.Object)
-                {
                     return new BorderData
                     {
                         // Bottom layer (ground/trunk)
@@ -162,12 +179,9 @@ public class BorderProcessor : IBorderProcessor
                         BottomLeftTop = GetIntProperty(jsonElement, "bottom_left_top"),
                         BottomRightTop = GetIntProperty(jsonElement, "bottom_right_top"),
                     };
-                }
-            }
 
             // Handle Dictionary<string, object> (from parsed properties)
             if (borderValue is Dictionary<string, object> dict)
-            {
                 return new BorderData
                 {
                     // Bottom layer (ground/trunk)
@@ -181,7 +195,6 @@ public class BorderProcessor : IBorderProcessor
                     BottomLeftTop = GetIntFromDict(dict, "bottom_left_top"),
                     BottomRightTop = GetIntFromDict(dict, "bottom_right_top"),
                 };
-            }
 
             _logger?.LogWarning("Unknown border value type: {Type}", borderValue.GetType().Name);
             return null;
@@ -196,10 +209,8 @@ public class BorderProcessor : IBorderProcessor
     private static int GetIntProperty(JsonElement element, string propertyName)
     {
         if (element.TryGetProperty(propertyName, out var prop))
-        {
             if (prop.ValueKind == JsonValueKind.Number)
                 return prop.GetInt32();
-        }
         return 0;
     }
 
@@ -216,6 +227,7 @@ public class BorderProcessor : IBorderProcessor
             if (int.TryParse(value?.ToString(), out var parsed))
                 return parsed;
         }
+
         return 0;
     }
 

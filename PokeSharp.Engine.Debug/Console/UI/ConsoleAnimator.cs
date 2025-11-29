@@ -1,4 +1,3 @@
-using Gum.Wireframe;
 using PokeSharp.Engine.Debug.Console.Configuration;
 
 namespace PokeSharp.Engine.Debug.Console.UI;
@@ -8,19 +7,18 @@ namespace PokeSharp.Engine.Debug.Console.UI;
 /// </summary>
 public class ConsoleAnimator
 {
-    private float _currentY;
-    private float _targetY;
     private const float AnimationSpeed = ConsoleConstants.Animation.SlideSpeed;
+    private float _targetY;
 
     /// <summary>
     ///     Gets whether the animation is currently running.
     /// </summary>
-    public bool IsAnimating => Math.Abs(_currentY - _targetY) > 0.1f;
+    public bool IsAnimating => Math.Abs(CurrentY - _targetY) > 0.1f;
 
     /// <summary>
     ///     Gets the current Y position.
     /// </summary>
-    public float CurrentY => _currentY;
+    public float CurrentY { get; private set; }
 
     /// <summary>
     ///     Initializes the animator with a starting position.
@@ -28,7 +26,7 @@ public class ConsoleAnimator
     /// <param name="initialY">The initial Y position (typically negative to hide).</param>
     public void Initialize(float initialY)
     {
-        _currentY = initialY;
+        CurrentY = initialY;
         _targetY = initialY;
     }
 
@@ -57,20 +55,19 @@ public class ConsoleAnimator
     public float Update(float deltaTime)
     {
         if (!IsAnimating)
-            return _currentY;
+            return CurrentY;
 
-        var direction = Math.Sign(_targetY - _currentY);
+        var direction = Math.Sign(_targetY - CurrentY);
         var distance = AnimationSpeed * deltaTime;
 
-        _currentY += direction * distance;
+        CurrentY += direction * distance;
 
         // Clamp to target
         if (direction > 0)
-            _currentY = Math.Min(_currentY, _targetY);
+            CurrentY = Math.Min(CurrentY, _targetY);
         else
-            _currentY = Math.Max(_currentY, _targetY);
+            CurrentY = Math.Max(CurrentY, _targetY);
 
-        return _currentY;
+        return CurrentY;
     }
 }
-

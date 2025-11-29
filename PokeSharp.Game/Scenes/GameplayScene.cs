@@ -5,10 +5,8 @@ using Microsoft.Xna.Framework.Graphics;
 using PokeSharp.Engine.Scenes;
 using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Game.Infrastructure.Diagnostics;
-using PokeSharp.Game.Infrastructure.Services;
-using PokeSharp.Game.Input;
-using PokeSharp.Game.Initialization;
 using PokeSharp.Game.Initialization.Initializers;
+using PokeSharp.Game.Input;
 using PokeSharp.Game.Systems.Services;
 
 namespace PokeSharp.Game.Scenes;
@@ -19,13 +17,13 @@ namespace PokeSharp.Game.Scenes;
 /// </summary>
 public class GameplayScene : SceneBase
 {
-    private readonly World _world;
-    private readonly SystemManager _systemManager;
     private readonly IGameInitializer _gameInitializer;
-    private readonly IMapInitializer _mapInitializer;
-    private readonly InputManager _inputManager;
-    private readonly PerformanceMonitor _performanceMonitor;
     private readonly IGameTimeService _gameTime;
+    private readonly InputManager _inputManager;
+    private readonly IMapInitializer _mapInitializer;
+    private readonly PerformanceMonitor _performanceMonitor;
+    private readonly SystemManager _systemManager;
+    private readonly World _world;
 
     /// <summary>
     ///     Initializes a new instance of the GameplayScene class.
@@ -74,7 +72,6 @@ public class GameplayScene : SceneBase
     /// <inheritdoc />
     public override void Update(GameTime gameTime)
     {
-
         var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
         var totalSeconds = (float)gameTime.TotalGameTime.TotalSeconds;
         var frameTimeMs = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -106,5 +103,5 @@ public class GameplayScene : SceneBase
         // Render all systems (this includes the ElevationRenderSystem)
         _systemManager.Render(_world);
     }
-}
+
 

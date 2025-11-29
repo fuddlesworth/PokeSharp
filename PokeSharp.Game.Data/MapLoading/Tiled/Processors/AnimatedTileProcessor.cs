@@ -1,7 +1,5 @@
 using Arch.Core;
 using Microsoft.Extensions.Logging;
-using Microsoft.Xna.Framework;
-using PokeSharp.Engine.Core.Types;
 using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Game.Components.Tiles;
 using PokeSharp.Game.Data.MapLoading.Tiled.Services;

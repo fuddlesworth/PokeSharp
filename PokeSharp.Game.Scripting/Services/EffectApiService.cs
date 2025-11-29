@@ -2,8 +2,7 @@ using Arch.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using PokeSharp.Engine.Common.Logging;
-using PokeSharp.Engine.Core.Events;
-using PokeSharp.Engine.Core.Types.Events;
+using PokeSharp.Engine.Core.Events.ECS;
 using PokeSharp.Game.Scripting.Api;
 using PokeSharp.Game.Systems.Services;
 
@@ -15,12 +14,12 @@ namespace PokeSharp.Game.Scripting.Services;
 /// </summary>
 public class EffectApiService(
     World world,
-    IEventBus eventBus,
+    IEcsEventBus eventBus,
     ILogger<EffectApiService> logger,
     IGameTimeService gameTime
 ) : IEffectApi
 {
-    private readonly IEventBus _eventBus =
+    private readonly IEcsEventBus _eventBus =
         eventBus ?? throw new ArgumentNullException(nameof(eventBus));
 
     private readonly IGameTimeService _gameTime =
@@ -48,13 +47,13 @@ public class EffectApiService(
 
         var effectEvent = new EffectRequestedEvent
         {
-            TypeId = "effect-api",
-            Timestamp = _gameTime.TotalSeconds,
             EffectId = effectId,
             Position = position,
             Duration = duration,
             Scale = scale,
             Tint = tint,
+            Timestamp = _gameTime.TotalSeconds,
+            Priority = EventPriority.Normal,
         };
 
         _eventBus.Publish(effectEvent);

@@ -20,6 +20,7 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
     // Cache animation lookups by manifest to avoid repeated LINQ queries
     private readonly Dictionary<string, Dictionary<string, SpriteAnimationInfo>> _animationCache =
         new();
+
     private readonly ILogger<SpriteAnimationSystem>? _logger;
 
     // Cache manifests for performance (avoid repeated async loads)
@@ -114,7 +115,7 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
         animation.FrameTimer += deltaTime;
 
         // Get duration for current frame (use per-frame durations if available, otherwise use uniform duration)
-        float currentFrameDuration = GetFrameDuration(animData, animation.CurrentFrame);
+        var currentFrameDuration = GetFrameDuration(animData, animation.CurrentFrame);
 
         // Check if we need to advance to next frame
         if (animation.FrameTimer >= currentFrameDuration)
@@ -191,13 +192,13 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
     private static float GetFrameDuration(SpriteAnimationInfo animData, int frameIndex)
     {
         // Use per-frame durations if available and valid
-        if (animData.FrameDurations != null 
-            && animData.FrameDurations.Length > 0 
-            && frameIndex >= 0 
-            && frameIndex < animData.FrameDurations.Length)
-        {
+        if (
+            animData.FrameDurations != null
+            && animData.FrameDurations.Length > 0
+            && frameIndex >= 0
+            && frameIndex < animData.FrameDurations.Length
+        )
             return animData.FrameDurations[frameIndex];
-        }
 
         // Fall back to uniform duration (backward compatibility)
         return animData.FrameDuration;

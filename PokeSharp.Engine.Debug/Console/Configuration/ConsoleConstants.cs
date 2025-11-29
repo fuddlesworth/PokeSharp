@@ -1,33 +1,31 @@
-using Microsoft.Xna.Framework;
-
 namespace PokeSharp.Engine.Debug.Console.Configuration;
 
 /// <summary>
-/// Constants for the debug console system.
-/// Centralizes all magic numbers for maintainability.
+///     Constants for the debug console system.
+///     Centralizes all magic numbers for maintainability.
 /// </summary>
 public static class ConsoleConstants
 {
     /// <summary>
-    /// Rendering constants (colors, sizes, padding).
+    ///     Rendering constants (colors, sizes, padding).
     /// </summary>
     public static class Rendering
     {
         // Layout
         public const int LineHeight = 16;
         public const int FontScale = 2;
-        public const int Padding = 10;  // Main padding for console edges
+        public const int Padding = 10; // Main padding for console edges
         public const int InputAreaTopPadding = 5;
         public const int InputAreaBottomPadding = 5;
         public const int MultiLineIndicatorSpacing = 3;
         public const int GeneralSpacing = 5; // General purpose spacing
 
         // Semantic Padding Constants (for consistent spacing throughout UI)
-        public const int Padding_Tiny = 2;       // Minimal spacing (e.g., borders, tight elements)
-        public const int Padding_Small = 4;      // Minor spacing (e.g., between related items)
-        public const int Padding_Medium = 8;     // Standard spacing (e.g., within panels)
-        public const int Padding_Large = 12;     // Section spacing (e.g., between groups)
-        public const int Padding_XLarge = 20;    // Major spacing (e.g., major UI sections)
+        public const int Padding_Tiny = 2; // Minimal spacing (e.g., borders, tight elements)
+        public const int Padding_Small = 4; // Minor spacing (e.g., between related items)
+        public const int Padding_Medium = 8; // Standard spacing (e.g., within panels)
+        public const int Padding_Large = 12; // Section spacing (e.g., between groups)
+        public const int Padding_XLarge = 20; // Major spacing (e.g., major UI sections)
 
         // Parameter hints
         public const int ParameterHintPadding = 10;
@@ -55,15 +53,15 @@ public static class ConsoleConstants
         public const int ScrollIndicatorYOffset = 5;
         public const int ScrollTriangleWidth = 8;
         public const int ScrollTriangleHeight = 6;
-        public const int ScrollTriangleGap = 4;  // Gap between triangle and scrollbar
+        public const int ScrollTriangleGap = 4; // Gap between triangle and scrollbar
 
         // Section folding
         public const int SectionFoldBoxSize = 10;
 
         // Input area
-        public const int InputYOffset = 5;  // Top offset for input text within input box
-        public const int InputPromptOffset = 20;  // X offset after ">" prompt for single-line input
-        public const int InputMultiLineIndicatorGap = 3;  // Gap between input box and multi-line indicator
+        public const int InputYOffset = 5; // Top offset for input text within input box
+        public const int InputPromptOffset = 20; // X offset after ">" prompt for single-line input
+        public const int InputMultiLineIndicatorGap = 3; // Gap between input box and multi-line indicator
         public const int SectionFoldBoxSpacing = 5;
         public const int SectionFoldBoxMargin = 15;
 
@@ -102,83 +100,83 @@ public static class ConsoleConstants
     }
 
     /// <summary>
-    /// Input handling constants (timing, delays).
+    ///     Input handling constants (timing, delays).
     /// </summary>
     public static class Input
     {
         // Key repeat timing
-        public const float InitialKeyRepeatDelay = 0.5f;    // 500ms before repeat starts
-        public const float KeyRepeatInterval = 0.05f;       // 50ms between repeats
+        public const float InitialKeyRepeatDelay = 0.5f; // 500ms before repeat starts
+        public const float KeyRepeatInterval = 0.05f; // 50ms between repeats
 
         // Auto-complete timing
-        public const float AutoCompleteDelay = 0.15f;       // 150ms delay before showing (VS Code-like)
+        public const float AutoCompleteDelay = 0.15f; // 150ms delay before showing (VS Code-like)
 
         // Clipboard
         public const int ClipboardPasteLoggingThreshold = 1; // Log if pasting more than this many chars
     }
 
     /// <summary>
-    /// Console system constants (priorities, ordering).
+    ///     Console system constants (priorities, ordering).
     /// </summary>
     public static class System
     {
         // System execution order
-        public const int UpdatePriority = -100;             // Run before game systems (captures input first)
-        public const int RenderOrder = 1000;                // Render on top of everything
+        public const int UpdatePriority = -100; // Run before game systems (captures input first)
+        public const int RenderOrder = 1000; // Render on top of everything
 
         // Performance thresholds
         public const int FramesBetweenPerformanceLog = 300; // Log every 5 seconds @ 60fps
     }
 
     /// <summary>
-    /// Animation constants (speed, easing).
+    ///     Animation constants (speed, easing).
     /// </summary>
     public static class Animation
     {
-        public const float SlideSpeed = 1200f;              // pixels per second (fast slide animation)
-        public const float AnimationThreshold = 0.1f;       // Stop animating when within this many pixels
-        public const int LoadingDotsAnimationDivisor = 10;  // Divisor for loading dots animation speed
-        public const int LoadingDotsMaxCount = 4;           // Maximum number of animated dots (0-3)
+        public const float SlideSpeed = 1200f; // pixels per second (fast slide animation)
+        public const float AnimationThreshold = 0.1f; // Stop animating when within this many pixels
+        public const int LoadingDotsAnimationDivisor = 10; // Divisor for loading dots animation speed
+        public const int LoadingDotsMaxCount = 4; // Maximum number of animated dots (0-3)
     }
 
     /// <summary>
-    /// Limits and capacity constants.
+    ///     Limits and capacity constants.
     /// </summary>
     public static class Limits
     {
         // History
-        public const int MaxHistorySize = 100;              // Maximum command history entries
+        public const int MaxHistorySize = 100; // Maximum command history entries
 
         // Output buffer
-        public const int MaxOutputLines = 1000;             // Maximum lines in output buffer
+        public const int MaxOutputLines = 1000; // Maximum lines in output buffer
 
         // Auto-complete
-        public const int MaxAutoCompleteSuggestions = 15;   // Maximum suggestions to show
-        public const int MaxSuggestionsInLog = 5;           // Maximum suggestions to log
+        public const int MaxAutoCompleteSuggestions = 15; // Maximum suggestions to show
+        public const int MaxSuggestionsInLog = 5; // Maximum suggestions to log
 
         // Scroll
-        public const int MouseWheelUnitsPerNotch = 120;     // Standard mouse wheel units
-        public const int ScrollLinesPerNotch = 3;           // Lines to scroll per mouse wheel notch
+        public const int MouseWheelUnitsPerNotch = 120; // Standard mouse wheel units
+        public const int ScrollLinesPerNotch = 3; // Lines to scroll per mouse wheel notch
 
         // Script arguments
-        public const int MaxScriptArguments = 9;            // Max $1-$9 in alias macros
+        public const int MaxScriptArguments = 9; // Max $1-$9 in alias macros
 
         // Visible lines calculation
-        public const int DefaultVisibleLines = 25;          // Default if calculation fails
+        public const int DefaultVisibleLines = 25; // Default if calculation fails
     }
 
     /// <summary>
-    /// Console size multipliers.
+    ///     Console size multipliers.
     /// </summary>
     public static class Size
     {
-        public const float SmallMultiplier = 0.25f;         // 25% of screen height
-        public const float MediumMultiplier = 0.5f;         // 50% of screen height
-        public const float FullMultiplier = 1.0f;           // 100% of screen height (fullscreen)
+        public const float SmallMultiplier = 0.25f; // 25% of screen height
+        public const float MediumMultiplier = 0.5f; // 50% of screen height
+        public const float FullMultiplier = 1.0f; // 100% of screen height (fullscreen)
     }
 
     /// <summary>
-    /// File and path constants.
+    ///     File and path constants.
     /// </summary>
     public static class Files
     {
@@ -193,7 +191,7 @@ public static class ConsoleConstants
     }
 
     /// <summary>
-    /// Command names and special strings.
+    ///     Command names and special strings.
     /// </summary>
     public static class Commands
     {
@@ -229,7 +227,7 @@ public static class ConsoleConstants
     }
 
     /// <summary>
-    /// Regular expression patterns for alias validation.
+    ///     Regular expression patterns for alias validation.
     /// </summary>
     public static class Patterns
     {
@@ -240,15 +238,17 @@ public static class ConsoleConstants
     }
 
     /// <summary>
-    /// Display text constants.
+    ///     Display text constants.
     /// </summary>
     public static class Text
     {
         // Multi-line indicator format
-        public const string MultiLineIndicatorFormat = "({0} lines) [Enter] submit • [Shift+Enter] new line";
+        public const string MultiLineIndicatorFormat =
+            "({0} lines) [Enter] submit • [Shift+Enter] new line";
 
         // Symbols
         public const string PromptSymbol = ">";
+
         // Note: Scroll indicators use programmatic drawing (DrawUpTriangle/DrawDownTriangle)
         // instead of text symbols for pixel-perfect control and consistent scaling
         public const string CursorSymbol = "_";
@@ -262,28 +262,53 @@ public static class ConsoleConstants
     }
 
     /// <summary>
-    /// Auto-complete filter characters.
+    ///     Auto-complete filter characters.
     /// </summary>
     public static class AutoComplete
     {
-        public static readonly char[] WordSeparators = { ' ', '.', '(', ')', ',', ';', '=', '+', '-', '*', '/' };
+        public const char MemberAccessChar = '.';
+        public static readonly char[] WordSeparators =
+        {
+            ' ',
+            '.',
+            '(',
+            ')',
+            ',',
+            ';',
+            '=',
+            '+',
+            '-',
+            '*',
+            '/',
+        };
 
         public static readonly char[] SuggestionDismissChars = { ' ', ';', '{', '}' };
-
-        public const char MemberAccessChar = '.';
 
         // C# Keywords for auto-complete
         public static readonly string[] Keywords =
         {
-            "var", "int", "string", "bool", "float", "double",
-            "if", "else", "for", "foreach", "while", "return",
-            "true", "false", "null", "new"
+            "var",
+            "int",
+            "string",
+            "bool",
+            "float",
+            "double",
+            "if",
+            "else",
+            "for",
+            "foreach",
+            "while",
+            "return",
+            "true",
+            "false",
+            "null",
+            "new",
         };
     }
 
     /// <summary>
-    /// Keyboard shortcut documentation for the console.
-    /// These are informational constants describing the key bindings.
+    ///     Keyboard shortcut documentation for the console.
+    ///     These are informational constants describing the key bindings.
     /// </summary>
     public static class KeyboardShortcuts
     {
@@ -344,4 +369,3 @@ public static class ConsoleConstants
         public const string ExitSearch = "Escape (in search)";
     }
 }
-

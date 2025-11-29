@@ -1,7 +1,5 @@
 using System.Collections.Concurrent;
-using System.Text.Json;
 using Microsoft.Extensions.Logging;
-using PokeSharp.Engine.Common.Logging;
 
 namespace PokeSharp.Engine.Core.Types;
 
@@ -43,15 +41,19 @@ public class TypeRegistry<T>(string dataPath, ILogger logger) : IAsyncDisposable
         foreach (var script in _scripts.Values)
             try
             {
-            if (script is IAsyncDisposable asyncDisposable)
-                await asyncDisposable.DisposeAsync();
-            else if (script is IDisposable disposable)
-                disposable.Dispose();
+                if (script is IAsyncDisposable asyncDisposable)
+                    await asyncDisposable.DisposeAsync();
+                else if (script is IDisposable disposable)
+                    disposable.Dispose();
             }
             catch (Exception ex)
             {
                 // Log disposal errors but continue disposing other resources
-                _logger.LogError(ex, "Error disposing script instance of type {Type}", script.GetType().Name);
+                _logger.LogError(
+                    ex,
+                    "Error disposing script instance of type {Type}",
+                    script.GetType().Name
+                );
             }
 
         Clear();

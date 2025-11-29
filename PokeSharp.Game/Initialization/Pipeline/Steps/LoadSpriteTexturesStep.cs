@@ -1,8 +1,6 @@
 using Microsoft.Extensions.Logging;
-using PokeSharp.Engine.Rendering.Systems;
 using PokeSharp.Engine.Scenes;
 using PokeSharp.Game.Systems;
-using PokeSharp.Game.Initialization.Pipeline;
 
 namespace PokeSharp.Game.Initialization.Pipeline.Steps;
 
@@ -56,4 +54,3 @@ public class LoadSpriteTexturesStep : InitializationStepBase
         return Task.CompletedTask;
     }
 }
-

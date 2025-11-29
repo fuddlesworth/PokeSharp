@@ -9,20 +9,20 @@ namespace PokeSharp.Engine.Debug.Console.UI;
 public class ConsoleInputField
 {
     private string _text = string.Empty;
-    private int _cursorPosition = 0;
-    private bool _multiLineMode = false;
+    private int _cursorPosition;
+    private bool _multiLineMode;
 
     // Text selection state
-    private int _selectionStart = 0;
-    private int _selectionEnd = 0;
-    private bool _hasSelection = false;
+    private int _selectionStart;
+    private int _selectionEnd;
+    private bool _hasSelection;
 
     // Undo/Redo state
     private readonly UndoRedoStack _undoRedoStack = new();
 
     // Cached cursor line/column for performance (avoid repeated string iteration)
-    private int _cachedCursorLine = 0;
-    private int _cachedCursorColumn = 0;
+    private int _cachedCursorLine;
+    private int _cachedCursorColumn;
     private int _lastCursorPositionCalculated = -1;
 
     /// <summary>
@@ -68,9 +68,10 @@ public class ConsoleInputField
     /// <summary>
     ///     Gets the selected text.
     /// </summary>
-    public string SelectedText => _hasSelection && SelectionLength > 0
-        ? _text.Substring(SelectionStart, SelectionLength)
-        : string.Empty;
+    public string SelectedText =>
+        _hasSelection && SelectionLength > 0
+            ? _text.Substring(SelectionStart, SelectionLength)
+            : string.Empty;
 
     /// <summary>
     ///     Gets the cursor's current line number (0-based).
@@ -162,7 +163,7 @@ public class ConsoleInputField
             Keys.Back => (_hasSelection || _cursorPosition > 0),
             Keys.Delete => (_hasSelection || _cursorPosition < _text.Length),
             Keys.Enter when isShiftPressed => true,
-            _ => character.HasValue && !char.IsControl(character.Value)
+            _ => character.HasValue && !char.IsControl(character.Value),
         };
 
         if (willModifyText)
@@ -187,7 +188,10 @@ public class ConsoleInputField
                 else if (_cursorPosition > 0 && _text.Length > 0)
                 {
                     // Smart deletion: if deleting an opening bracket/quote with matching closing one immediately after
-                    if (_cursorPosition < _text.Length && IsMatchingPair(_text[_cursorPosition - 1], _text[_cursorPosition]))
+                    if (
+                        _cursorPosition < _text.Length
+                        && IsMatchingPair(_text[_cursorPosition - 1], _text[_cursorPosition])
+                    )
                     {
                         // Delete both the opening and closing characters
                         _text = _text.Remove(_cursorPosition - 1, 2);
@@ -334,15 +338,22 @@ public class ConsoleInputField
 
                         // Insert both opening and closing characters
                         DeleteSelection(); // Just in case
-                        _text = _text.Insert(_cursorPosition, character.Value.ToString() + closingChar);
+                        _text = _text.Insert(
+                            _cursorPosition,
+                            character.Value.ToString() + closingChar
+                        );
                         _cursorPosition++; // Move cursor between the pair
                         InvalidateCursorCache();
                         return true;
                     }
 
                     // Skip over closing bracket/quote if we're about to type it and it's already there
-                    if (!_hasSelection && IsClosingChar(character.Value) &&
-                        _cursorPosition < _text.Length && _text[_cursorPosition] == character.Value)
+                    if (
+                        !_hasSelection
+                        && IsClosingChar(character.Value)
+                        && _cursorPosition < _text.Length
+                        && _text[_cursorPosition] == character.Value
+                    )
                     {
                         // Just move cursor forward instead of inserting
                         _cursorPosition++;
@@ -351,7 +362,10 @@ public class ConsoleInputField
                     }
 
                     // Check for auto-dedenting when typing closing braces
-                    if ((character.Value == '}' || character.Value == ']' || character.Value == ')') && _multiLineMode)
+                    if (
+                        (character.Value == '}' || character.Value == ']' || character.Value == ')')
+                        && _multiLineMode
+                    )
                     {
                         // Check if current line only has whitespace before cursor
                         var lines = _text.Split('\n');
@@ -361,10 +375,16 @@ public class ConsoleInputField
                         {
                             var currentLine = lines[currentLineIndex];
                             var cursorCol = GetCursorColumn();
-                            var textBeforeCursor = currentLine.Substring(0, Math.Min(cursorCol, currentLine.Length));
+                            var textBeforeCursor = currentLine.Substring(
+                                0,
+                                Math.Min(cursorCol, currentLine.Length)
+                            );
 
                             // If line only has whitespace before cursor and has at least 4 spaces, dedent
-                            if (string.IsNullOrWhiteSpace(textBeforeCursor) && textBeforeCursor.Length >= 4)
+                            if (
+                                string.IsNullOrWhiteSpace(textBeforeCursor)
+                                && textBeforeCursor.Length >= 4
+                            )
                             {
                                 // Remove 4 spaces of indentation
                                 int lineStartPos = _cursorPosition - cursorCol;
@@ -904,11 +924,13 @@ public class ConsoleInputField
 
         // Check if we should add extra indentation (after opening brace)
         var charBeforeCursor = _cursorPosition > 0 ? _text[_cursorPosition - 1] : '\0';
-        var shouldIndentExtra = charBeforeCursor == '{' || charBeforeCursor == '[' || charBeforeCursor == '(';
+        var shouldIndentExtra =
+            charBeforeCursor == '{' || charBeforeCursor == '[' || charBeforeCursor == '(';
 
         // Check if next character is a closing brace (we'll put cursor between braces)
         var charAfterCursor = _cursorPosition < _text.Length ? _text[_cursorPosition] : '\0';
-        var hasClosingBrace = charAfterCursor == '}' || charAfterCursor == ']' || charAfterCursor == ')';
+        var hasClosingBrace =
+            charAfterCursor == '}' || charAfterCursor == ']' || charAfterCursor == ')';
 
         if (shouldIndentExtra && hasClosingBrace)
         {
@@ -956,13 +978,32 @@ public class ConsoleInputField
         // Determine bracket type and search direction
         switch (bracket)
         {
-            case '(': matchingBracket = ')'; direction = 1; break;
-            case ')': matchingBracket = '('; direction = -1; break;
-            case '[': matchingBracket = ']'; direction = 1; break;
-            case ']': matchingBracket = '['; direction = -1; break;
-            case '{': matchingBracket = '}'; direction = 1; break;
-            case '}': matchingBracket = '{'; direction = -1; break;
-            default: return -1; // Not a bracket
+            case '(':
+                matchingBracket = ')';
+                direction = 1;
+                break;
+            case ')':
+                matchingBracket = '(';
+                direction = -1;
+                break;
+            case '[':
+                matchingBracket = ']';
+                direction = 1;
+                break;
+            case ']':
+                matchingBracket = '[';
+                direction = -1;
+                break;
+            case '{':
+                matchingBracket = '}';
+                direction = 1;
+                break;
+            case '}':
+                matchingBracket = '{';
+                direction = -1;
+                break;
+            default:
+                return -1; // Not a bracket
         }
 
         int depth = 1;
@@ -1047,11 +1088,11 @@ public class ConsoleInputField
     /// </summary>
     private bool IsMatchingPair(char opening, char closing)
     {
-        return (opening == '(' && closing == ')') ||
-               (opening == '[' && closing == ']') ||
-               (opening == '{' && closing == '}') ||
-               (opening == '"' && closing == '"') ||
-               (opening == '\'' && closing == '\'');
+        return (opening == '(' && closing == ')')
+            || (opening == '[' && closing == ']')
+            || (opening == '{' && closing == '}')
+            || (opening == '"' && closing == '"')
+            || (opening == '\'' && closing == '\'');
     }
 
     /// <summary>
@@ -1074,7 +1115,7 @@ public class ConsoleInputField
             '{' => '}',
             '"' => '"',
             '\'' => '\'',
-            _ => opening
+            _ => opening,
         };
     }
 
@@ -1088,4 +1129,3 @@ public class ConsoleInputField
 
     #endregion
 }
-

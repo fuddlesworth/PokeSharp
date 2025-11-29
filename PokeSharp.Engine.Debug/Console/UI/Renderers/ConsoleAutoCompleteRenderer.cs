@@ -1,10 +1,6 @@
 using Microsoft.CodeAnalysis.Completion;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using PokeSharp.Engine.Debug.Console.Configuration;
-using System.Collections.Generic;
-using static PokeSharp.Engine.Debug.Console.Configuration.ConsoleColors;
-using static PokeSharp.Engine.Debug.Console.Configuration.ConsoleConstants;
 
 namespace PokeSharp.Engine.Debug.Console.UI.Renderers;
 
@@ -18,7 +14,11 @@ public class ConsoleAutoCompleteRenderer
     private readonly SpriteBatch _spriteBatch;
     private readonly Texture2D _pixel;
 
-    public ConsoleAutoCompleteRenderer(ConsoleFontRenderer fontRenderer, SpriteBatch spriteBatch, Texture2D pixel)
+    public ConsoleAutoCompleteRenderer(
+        ConsoleFontRenderer fontRenderer,
+        SpriteBatch spriteBatch,
+        Texture2D pixel
+    )
     {
         _fontRenderer = fontRenderer;
         _spriteBatch = spriteBatch;
@@ -39,18 +39,21 @@ public class ConsoleAutoCompleteRenderer
             y,
             Rendering.LoadingPanelWidth,
             panelHeight,
-            Background_Elevated);
+            Background_Elevated
+        );
 
         // Draw loading text with animated dots
         var loadingText = "Loading suggestions";
-        var dotCount = (int)(animationValue / ConsoleConstants.Animation.LoadingDotsAnimationDivisor)
-                       % ConsoleConstants.Animation.LoadingDotsMaxCount;
+        var dotCount =
+            (int)(animationValue / ConsoleConstants.Animation.LoadingDotsAnimationDivisor)
+            % ConsoleConstants.Animation.LoadingDotsMaxCount;
         var dots = new string('.', dotCount);
         _fontRenderer.DrawString(
             loadingText + dots,
             Rendering.Padding + Rendering.SuggestionVerticalPadding,
             y + Rendering.Padding,
-            AutoComplete_Loading);
+            AutoComplete_Loading
+        );
     }
 
     /// <summary>
@@ -64,7 +67,8 @@ public class ConsoleAutoCompleteRenderer
         int scrollOffset,
         int horizontalScroll,
         int hoverIndex,
-        out int calculatedVisibleCount)
+        out int calculatedVisibleCount
+    )
     {
         calculatedVisibleCount = 0;
 
@@ -74,8 +78,14 @@ public class ConsoleAutoCompleteRenderer
 
         // Calculate maximum available space
         int maxAvailableHeight = bottomY - Rendering.Padding * 2;
-        int maxVisibleSuggestions = Math.Max(1, (maxAvailableHeight - Rendering.Padding * 2) / lineHeight);
-        maxVisibleSuggestions = Math.Min(maxVisibleSuggestions, ConsoleConstants.Limits.MaxAutoCompleteSuggestions);
+        int maxVisibleSuggestions = Math.Max(
+            1,
+            (maxAvailableHeight - Rendering.Padding * 2) / lineHeight
+        );
+        maxVisibleSuggestions = Math.Min(
+            maxVisibleSuggestions,
+            ConsoleConstants.Limits.MaxAutoCompleteSuggestions
+        );
 
         int visibleCount = Math.Min(maxVisibleSuggestions, filteredSuggestions.Count);
         calculatedVisibleCount = visibleCount;
@@ -100,7 +110,8 @@ public class ConsoleAutoCompleteRenderer
             y,
             Rendering.SuggestionPanelWidth,
             panelHeight,
-            Background_Elevated);
+            Background_Elevated
+        );
 
         // Calculate content area (offset by top scroll indicator space - symmetric with bottom)
         int contentStartY = y + scrollIndicatorSpace;
@@ -114,21 +125,46 @@ public class ConsoleAutoCompleteRenderer
 
             var item = filteredSuggestions[itemIndex];
             bool isHovered = (i == hoverIndex);
-            DrawSuggestionItem(item, i, itemIndex == selectedIndex, isHovered, contentStartY, lineHeight, horizontalScroll);
+            DrawSuggestionItem(
+                item,
+                i,
+                itemIndex == selectedIndex,
+                isHovered,
+                contentStartY,
+                lineHeight,
+                horizontalScroll
+            );
         }
 
         // Draw scroll indicators in their dedicated space
-        DrawScrollIndicators(y, panelHeight, visibleCount, lineHeight, filteredSuggestions.Count, scrollOffset, scrollIndicatorSpace);
+        DrawScrollIndicators(
+            y,
+            panelHeight,
+            visibleCount,
+            lineHeight,
+            filteredSuggestions.Count,
+            scrollOffset,
+            scrollIndicatorSpace
+        );
 
         return scrollOffset; // Return adjusted scroll offset
     }
 
-    private void DrawSuggestionItem(CompletionItem item, int displayIndex, bool isSelected, bool isHovered, int contentStartY, int lineHeight, int horizontalScroll)
+    private void DrawSuggestionItem(
+        CompletionItem item,
+        int displayIndex,
+        bool isSelected,
+        bool isHovered,
+        int contentStartY,
+        int lineHeight,
+        int horizontalScroll
+    )
     {
         // Priority: Selected > Hovered > Unselected
-        var color = isSelected ? AutoComplete_Selected :
-                    isHovered ? AutoComplete_Hover :
-                    AutoComplete_Unselected;
+        var color =
+            isSelected ? AutoComplete_Selected
+            : isHovered ? AutoComplete_Hover
+            : AutoComplete_Unselected;
 
         // Build display text
         var displayText = item.DisplayText;
@@ -152,10 +188,18 @@ public class ConsoleAutoCompleteRenderer
         bool needsTruncation = _fontRenderer.MeasureString(displayText).X > maxTextWidth;
 
         // Apply horizontal scrolling for selected item, but only if text needs truncation
-        string renderedText = ApplyHorizontalScroll(displayText, isSelected && needsTruncation, horizontalScroll);
+        string renderedText = ApplyHorizontalScroll(
+            displayText,
+            isSelected && needsTruncation,
+            horizontalScroll
+        );
 
         // Truncate if needed (only mark as scrolled if this item is selected and needs truncation)
-        string finalText = TruncateText(renderedText, maxTextWidth, isSelected && needsTruncation && horizontalScroll > 0);
+        string finalText = TruncateText(
+            renderedText,
+            maxTextWidth,
+            isSelected && needsTruncation && horizontalScroll > 0
+        );
 
         _fontRenderer.DrawString(finalText, textX, textY, color);
 
@@ -171,16 +215,17 @@ public class ConsoleAutoCompleteRenderer
             var descriptionText = item.InlineDescription.Replace("\n", " ↵ ");
             var descSize = _fontRenderer.MeasureString(descriptionText);
 
-            maxTextWidth = Rendering.SuggestionPanelWidth -
-                          Rendering.SuggestionVerticalPadding -
-                          (int)descSize.X -
-                          Rendering.SuggestionDescriptionGap -
-                          Rendering.SuggestionRightPadding;
+            maxTextWidth =
+                Rendering.SuggestionPanelWidth
+                - Rendering.SuggestionVerticalPadding
+                - (int)descSize.X
+                - Rendering.SuggestionDescriptionGap
+                - Rendering.SuggestionRightPadding;
         }
         else
         {
-            maxTextWidth = Rendering.SuggestionPanelWidth -
-                          Rendering.SuggestionVerticalPadding * 2 - 20;
+            maxTextWidth =
+                Rendering.SuggestionPanelWidth - Rendering.SuggestionVerticalPadding * 2 - 20;
         }
 
         return Math.Max(maxTextWidth, Rendering.SuggestionMinTextWidth);
@@ -236,19 +281,25 @@ public class ConsoleAutoCompleteRenderer
         var description = item.InlineDescription.Replace("\n", " ↵ ");
         var descSize = _fontRenderer.MeasureString(description);
 
-        int panelRightEdge = Rendering.Padding +
-                            Rendering.SuggestionPanelMargin +
-                            Rendering.SuggestionPanelWidth;
+        int panelRightEdge =
+            Rendering.Padding + Rendering.SuggestionPanelMargin + Rendering.SuggestionPanelWidth;
         int descX = panelRightEdge - (int)descSize.X - Rendering.SuggestionRightPadding;
 
         _fontRenderer.DrawString(description, descX, textY, AutoComplete_Description);
     }
 
-    private void DrawScrollIndicators(int panelY, int panelHeight, int visibleCount, int lineHeight, int totalCount, int scrollOffset, int scrollIndicatorSpace)
+    private void DrawScrollIndicators(
+        int panelY,
+        int panelHeight,
+        int visibleCount,
+        int lineHeight,
+        int totalCount,
+        int scrollOffset,
+        int scrollIndicatorSpace
+    )
     {
-        int panelRightEdge = Rendering.Padding +
-                            Rendering.SuggestionPanelMargin +
-                            Rendering.SuggestionPanelWidth;
+        int panelRightEdge =
+            Rendering.Padding + Rendering.SuggestionPanelMargin + Rendering.SuggestionPanelWidth;
 
         // Up indicator - in dedicated top space
         if (scrollOffset > 0)
@@ -256,7 +307,8 @@ public class ConsoleAutoCompleteRenderer
             int hiddenAbove = scrollOffset;
             string upIndicator = $"^ {hiddenAbove} more";
             var textSize = _fontRenderer.MeasureString(upIndicator);
-            int indicatorX = panelRightEdge - (int)textSize.X - Rendering.SuggestionScrollIndicatorRightMargin;
+            int indicatorX =
+                panelRightEdge - (int)textSize.X - Rendering.SuggestionScrollIndicatorRightMargin;
             int indicatorY = panelY + (scrollIndicatorSpace / 2) - (lineHeight / 2); // Centered in top space
             _fontRenderer.DrawString(upIndicator, indicatorX, indicatorY, Info_Dim);
         }
@@ -267,8 +319,14 @@ public class ConsoleAutoCompleteRenderer
         {
             string downIndicator = $"v {hiddenBelow} more";
             var textSize = _fontRenderer.MeasureString(downIndicator);
-            int indicatorX = panelRightEdge - (int)textSize.X - Rendering.SuggestionScrollIndicatorRightMargin;
-            int indicatorY = panelY + panelHeight - scrollIndicatorSpace + (scrollIndicatorSpace / 2) - (lineHeight / 2); // Centered in bottom space
+            int indicatorX =
+                panelRightEdge - (int)textSize.X - Rendering.SuggestionScrollIndicatorRightMargin;
+            int indicatorY =
+                panelY
+                + panelHeight
+                - scrollIndicatorSpace
+                + (scrollIndicatorSpace / 2)
+                - (lineHeight / 2); // Centered in bottom space
             _fontRenderer.DrawString(downIndicator, indicatorX, indicatorY, Info_Dim);
         }
     }

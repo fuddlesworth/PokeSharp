@@ -59,69 +59,7 @@ public struct Animation
         FrameTimer = 0f;
         IsPlaying = true;
         IsComplete = false;
-    }
-
-    /// <summary>
-    ///     Changes the current animation to a new one.
-    ///     Resets frame timer and frame index unless the animation is already playing.
-    /// </summary>
-    /// <param name="animationName">The new animation name.</param>
-    /// <param name="forceRestart">Whether to restart even if already playing this animation.</param>
-    /// <param name="playOnce">Whether to play the animation once (ignoring manifest Loop setting).</param>
-    public void ChangeAnimation(string animationName, bool forceRestart = false, bool playOnce = false)
-    {
-        if (CurrentAnimation != animationName || forceRestart)
-        {
-            CurrentAnimation = animationName;
-            CurrentFrame = 0;
-            FrameTimer = 0f;
-            IsPlaying = true;
-            IsComplete = false;
-            PlayOnce = playOnce;
-            TriggeredEventFrames = 0;
-        }
-        else if (playOnce && !PlayOnce)
-        {
-            // Same animation but switching to PlayOnce mode - don't reset frame
-            PlayOnce = true;
-        }
-    }
-
-    /// <summary>
-    ///     Resets the animation to the first frame.
-    /// </summary>
-    public void Reset()
-    {
-        CurrentFrame = 0;
-        FrameTimer = 0f;
-        IsComplete = false;
         PlayOnce = false;
         TriggeredEventFrames = 0;
-    }
-
-    /// <summary>
-    ///     Pauses the animation.
-    /// </summary>
-    public void Pause()
-    {
-        IsPlaying = false;
-    }
-
-    /// <summary>
-    ///     Resumes the animation.
-    /// </summary>
-    public void Resume()
-    {
-        IsPlaying = true;
-        IsComplete = false;
-    }
-
-    /// <summary>
-    ///     Stops the animation and resets to the first frame.
-    /// </summary>
-    public void Stop()
-    {
-        IsPlaying = false;
-        Reset();
     }
 }

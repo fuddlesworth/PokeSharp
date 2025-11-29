@@ -28,13 +28,13 @@ public class ConsoleFontRenderer : IDisposable
         _pixel.SetData(new[] { Color.White });
 
         // Load font (required - no fallback)
-            LoadFont();
+        LoadFont();
 
         if (_font == null)
-        {
-            throw new InvalidOperationException(
-                "Failed to load console font. No suitable TrueType font found on system. " +
-                "Checked paths: Monaco, Menlo, Consolas, Courier, Liberation Mono, DejaVu Sans Mono.");
+        throw new InvalidOperationException(
+            "Failed to load console font. No suitable TrueType font found on system. "
+            + "Checked paths: Monaco, Menlo, Consolas, Courier, Liberation Mono, DejaVu Sans Mono."
+        );
         }
     }
 
@@ -53,14 +53,12 @@ public class ConsoleFontRenderer : IDisposable
             "/System/Library/Fonts/Monaco.ttf",
             "/System/Library/Fonts/Menlo.ttc",
             "/System/Library/Fonts/Courier New.ttf",
-
             // Windows
             "C:\\Windows\\Fonts\\consola.ttf",
             "C:\\Windows\\Fonts\\cour.ttf",
-
             // Linux
             "/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf",
-            "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
+            "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf",
         };
 
         foreach (var path in fontPaths)
@@ -72,7 +70,7 @@ public class ConsoleFontRenderer : IDisposable
                 if (font != null)
                 {
                     _font = font;
-                return;
+                    return;
                 }
             }
         }
@@ -81,7 +79,10 @@ public class ConsoleFontRenderer : IDisposable
     /// <summary>
     /// Gets the current font size.
     /// </summary>
-    public int GetFontSize() => _fontSize;
+    public i
+     {
+         return _fontSize;
+     }() => _fontSize;
 
     /// <summary>
     /// Sets the font size and reloads the font.
@@ -139,9 +140,9 @@ public class ConsoleFontRenderer : IDisposable
     /// Gets the baseline offset (distance from top of line to text baseline).
     /// </summary>
     public int GetBaseline()
-        {
+    {
         // Measure height of capital letter to get baseline position
-            return (int)_font.MeasureString("A").Y;
+        return (int)_font.MeasureString("A").Y;
     }
 
     /// <summary>
@@ -149,15 +150,15 @@ public class ConsoleFontRenderer : IDisposable
     /// </summary>
     public void DrawString(string text, int x, int y, Color color)
     {
-            _spriteBatch.DrawString(_font, text, new Vector2(x, y), color);
+        _spriteBatch.DrawString(_font, text, new Vector2(x, y), color);
     }
 
     /// <summary>
     /// Measures the size of the given text.
     /// </summary>
     public Vector2 MeasureString(string text)
-        {
-            return _font.MeasureString(text);
+    {
+        return _font.MeasureString(text);
     }
 
     /// <summary>
@@ -194,4 +195,3 @@ public class ConsoleFontRenderer : IDisposable
         _disposed = true;
     }
 }
-

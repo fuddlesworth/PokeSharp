@@ -1,8 +1,5 @@
-using System.Text;
 using Arch.Core;
-using Arch.Core.Extensions;
 using Microsoft.Extensions.Logging;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Game.Scripting.Api;
@@ -21,7 +18,13 @@ public class ConsoleGlobals
     /// <summary>
     ///     Initializes a new instance of ConsoleGlobals.
     /// </summary>
-    public ConsoleGlobals(IScriptingApiProvider apis, World world, SystemManager systems, GraphicsDevice graphics, ILogger logger)
+    public ConsoleGlobals(
+        IScriptingApiProvider apis,
+        World world,
+        SystemManager systems,
+        GraphicsDevice graphics,
+        ILogger logger
+    )
     {
         _apis = apis ?? throw new ArgumentNullException(nameof(apis));
         World = world ?? throw new ArgumentNullException(nameof(world));
@@ -343,4 +346,3 @@ public class ConsoleGlobals
 
     #endregion
 }
-

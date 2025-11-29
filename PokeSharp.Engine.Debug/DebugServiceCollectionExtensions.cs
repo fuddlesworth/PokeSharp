@@ -1,7 +1,7 @@
+using Arch.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.Xna.Framework.Graphics;
 using PokeSharp.Engine.Debug.Console.Configuration;
 using PokeSharp.Engine.Debug.Console.Features;
@@ -10,23 +10,28 @@ using PokeSharp.Engine.Debug.Logging;
 using PokeSharp.Engine.Debug.Scripting;
 using PokeSharp.Engine.Debug.Systems;
 using PokeSharp.Engine.Debug.Systems.Services;
+using PokeSharp.Engine.Scenes;
+using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Game.Scripting.Api;
 
 namespace PokeSharp.Engine.Debug;
 
 /// <summary>
-/// Extension methods for registering debug console services in the DI container.
+///     Extension methods for registering debug console services in the DI container.
 /// </summary>
 public static class DebugServiceCollectionExtensions
 {
     /// <summary>
-    /// Adds debug console services to the service collection.
-    /// This enables dependency injection for the console system and its components.
+    ///     Adds debug console services to the service collection.
+    ///     This enables dependency injection for the console system and its components.
     /// </summary>
     /// <param name="services">The service collection.</param>
     /// <param name="configuration">Optional configuration to load console settings from appsettings.json.</param>
     /// <returns>The service collection for chaining.</returns>
-    public static IServiceCollection AddDebugConsole(this IServiceCollection services, IConfiguration? configuration = null)
+    public static IServiceCollection AddDebugConsole(
+        this IServiceCollection services,
+        IConfiguration? configuration = null
+    )
     {
         // Console Logger Provider
         services.AddSingleton<ConsoleLoggerProvider>();
@@ -37,7 +42,7 @@ public static class DebugServiceCollectionExtensions
             // Get configuration from appsettings.json using Get<T>() which supports records
             var consoleConfigSection = configuration.GetSection(ConsoleConfig.SectionName);
             var consoleConfig = consoleConfigSection.Get<ConsoleConfig>() ?? new ConsoleConfig();
-            
+
             // Register as singleton
             services.AddSingleton(consoleConfig);
         }
@@ -54,7 +59,7 @@ public static class DebugServiceCollectionExtensions
                     AutoCompleteEnabled = true,
                     PersistHistory = true,
                     LoggingEnabled = true,
-                    MinimumLogLevel = LogLevel.Debug
+                    MinimumLogLevel = LogLevel.Debug,
                 };
             });
         }
@@ -102,8 +107,8 @@ public static class DebugServiceCollectionExtensions
         services.AddSingleton<ConsoleGlobals>(sp =>
         {
             var apiProvider = sp.GetRequiredService<IScriptingApiProvider>();
-            var world = sp.GetRequiredService<Arch.Core.World>();
-            var systemManager = sp.GetRequiredService<PokeSharp.Engine.Systems.Management.SystemManager>();
+            var world = sp.GetRequiredService<World>();
+            var systemManager = sp.GetRequiredService<SystemManager>();
             var logger = sp.GetRequiredService<ILogger<ConsoleGlobals>>();
             // GraphicsDevice is set later via SetGraphicsDevice
             return new ConsoleGlobals(apiProvider, world, systemManager, null!, logger);
@@ -124,7 +129,7 @@ public static class DebugServiceCollectionExtensions
 }
 
 /// <summary>
-/// Factory for creating ConsoleSystem after GraphicsDevice and SceneManager are available.
+///     Factory for creating ConsoleSystem after GraphicsDevice and SceneManager are available.
 /// </summary>
 public class ConsoleSystemFactory
 {
@@ -132,20 +137,21 @@ public class ConsoleSystemFactory
 
     public ConsoleSystemFactory(IServiceProvider serviceProvider)
     {
-        _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+        _serviceProvider =
+            serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
     }
 
     /// <summary>
-    /// Creates and initializes the console system with the provided GraphicsDevice and SceneManager.
+    ///     Creates and initializes the console system with the provided GraphicsDevice and SceneManager.
     /// </summary>
     /// <param name="graphicsDevice">The graphics device.</param>
     /// <param name="sceneManager">The scene manager for pushing console scenes.</param>
-    public ConsoleSystem Create(GraphicsDevice graphicsDevice, PokeSharp.Engine.Scenes.SceneManager sceneManager)
+    public ConsoleSystem Create(GraphicsDevice graphicsDevice, SceneManager sceneManager)
     {
         // Get dependencies from DI container
-        var world = _serviceProvider.GetRequiredService<Arch.Core.World>();
+        var world = _serviceProvider.GetRequiredService<World>();
         var apiProvider = _serviceProvider.GetRequiredService<IScriptingApiProvider>();
-        var systemManager = _serviceProvider.GetRequiredService<PokeSharp.Engine.Systems.Management.SystemManager>();
+        var systemManager = _serviceProvider.GetRequiredService<SystemManager>();
         var logger = _serviceProvider.GetRequiredService<ILogger<ConsoleSystem>>();
         var consoleLoggerProvider = _serviceProvider.GetService<ConsoleLoggerProvider>();
 

@@ -31,7 +31,7 @@ namespace PokeSharp.Engine.Systems.Queries;
 ///         // Instead of:
 ///         var query = new QueryDescription().WithAll&lt;Position, GridMovement&gt;();
 ///         world.Query(in query, (ref Position pos, ref GridMovement mov) => { });
-///
+/// 
 ///         // Use centralized query:
 ///         world.Query(in Queries.Movement, (ref Position pos, ref GridMovement mov) => { });
 ///     </code>

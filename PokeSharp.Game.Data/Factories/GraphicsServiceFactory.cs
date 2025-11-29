@@ -78,9 +78,7 @@ public class GraphicsServiceFactory : IGraphicsServiceFactory
             _loggerFactory.CreateLogger<AnimatedTileProcessor>()
         );
 
-        var borderProcessor = new BorderProcessor(
-            _loggerFactory.CreateLogger<BorderProcessor>()
-        );
+        var borderProcessor = new BorderProcessor(_loggerFactory.CreateLogger<BorderProcessor>());
 
         return new MapLoader(
             assetManager,

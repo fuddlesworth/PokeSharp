@@ -49,10 +49,7 @@ public struct MapStreaming
     {
         CurrentMapId = currentMapId;
         LoadedMaps = new HashSet<MapIdentifier> { currentMapId };
-        MapWorldOffsets = new Dictionary<MapIdentifier, Vector2>
-        {
-            { currentMapId, Vector2.Zero }
-        };
+        MapWorldOffsets = new Dictionary<MapIdentifier, Vector2> { { currentMapId, Vector2.Zero } };
     }
 
     /// <summary>

@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Scenes;
-using PokeSharp.Game.Initialization.Pipeline;
 
 namespace PokeSharp.Game.Initialization.Pipeline.Steps;
 
@@ -32,10 +31,7 @@ public class LoadInitialMapStep : InitializationStepBase
             );
 
         var logger = context.LoggerFactory.CreateLogger<LoadInitialMapStep>();
-        await context.MapInitializer.LoadMap(
-            context.Configuration.Initialization.InitialMap
-        );
+        await context.MapInitializer.LoadMap(context.Configuration.Initialization.InitialMap);
         logger.LogInformation("Initial map loaded successfully");
     }
 }
-

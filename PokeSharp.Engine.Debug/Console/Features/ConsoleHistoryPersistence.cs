@@ -1,11 +1,10 @@
-using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Debug.Utilities;
 
 namespace PokeSharp.Engine.Debug.Console.Features;
 
 /// <summary>
-/// Handles saving and loading console command history to/from disk.
+///     Handles saving and loading console command history to/from disk.
 /// </summary>
 public class ConsoleHistoryPersistence
 {
@@ -13,7 +12,7 @@ public class ConsoleHistoryPersistence
     private readonly ILogger? _logger;
 
     /// <summary>
-    /// Initializes a new instance of the ConsoleHistoryPersistence class.
+    ///     Initializes a new instance of the ConsoleHistoryPersistence class.
     /// </summary>
     public ConsoleHistoryPersistence(ILogger? logger = null)
     {
@@ -29,19 +28,17 @@ public class ConsoleHistoryPersistence
     }
 
     /// <summary>
-    /// Saves command history to disk.
+    ///     Saves command history to disk.
     /// </summary>
     public void SaveHistory(IEnumerable<string> commands)
     {
         var commandList = commands.ToList();
         if (FileUtilities.WriteJsonFile(_historyFilePath, commandList, _logger))
-        {
             _logger?.LogDebug("Saved {Count} commands to history file", commandList.Count);
-        }
     }
 
     /// <summary>
-    /// Loads command history from disk.
+    ///     Loads command history from disk.
     /// </summary>
     public List<string> LoadHistory()
     {
@@ -57,14 +54,11 @@ public class ConsoleHistoryPersistence
     }
 
     /// <summary>
-    /// Clears the history file.
+    ///     Clears the history file.
     /// </summary>
     public void ClearHistory()
     {
         if (FileUtilities.DeleteFile(_historyFilePath, _logger))
-        {
             _logger?.LogDebug("Cleared console history file");
-        }
     }
 }
-

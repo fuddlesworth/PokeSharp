@@ -1,4 +1,5 @@
 using Microsoft.CodeAnalysis.Completion;
+using Microsoft.CodeAnalysis.Scripting;
 
 namespace PokeSharp.Engine.Debug.Systems.Services;
 
@@ -20,7 +21,7 @@ public interface IConsoleAutoCompleteCoordinator
     /// Updates the auto-complete state with the latest script state.
     /// </summary>
     /// <param name="scriptState">The current script state from the evaluator.</param>
-    void UpdateScriptState(Microsoft.CodeAnalysis.Scripting.ScriptState<object>? scriptState);
+    void UpdateScriptState(ScriptState<object>? scriptState);
 
     /// <summary>
     /// Checks if delayed auto-complete should be triggered based on timing.
@@ -47,4 +48,3 @@ public interface IConsoleAutoCompleteCoordinator
     /// <returns>The selected completion item, or null if no selection.</returns>
     CompletionItem? GetSelectedSuggestion();
 }
-

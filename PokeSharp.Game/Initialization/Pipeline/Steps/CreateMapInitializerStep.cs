@@ -1,8 +1,6 @@
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Scenes;
-using PokeSharp.Game.Initialization;
 using PokeSharp.Game.Initialization.Initializers;
-using PokeSharp.Game.Initialization.Pipeline;
 
 namespace PokeSharp.Game.Initialization.Pipeline.Steps;
 
@@ -29,9 +27,7 @@ public class CreateMapInitializerStep : InitializationStepBase
     )
     {
         if (context.MapLoader == null)
-            throw new InvalidOperationException(
-                "MapLoader must be created before MapInitializer"
-            );
+            throw new InvalidOperationException("MapLoader must be created before MapInitializer");
         if (context.GameInitializer == null)
             throw new InvalidOperationException(
                 "GameInitializer must be initialized before creating MapInitializer"
@@ -54,4 +50,3 @@ public class CreateMapInitializerStep : InitializationStepBase
         return Task.CompletedTask;
     }
 }
-

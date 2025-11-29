@@ -55,7 +55,12 @@ public struct MapWorldPosition
     /// <param name="widthInTiles">Map width in tiles.</param>
     /// <param name="heightInTiles">Map height in tiles.</param>
     /// <param name="tileSize">Size of each tile in pixels (default: 16).</param>
-    public MapWorldPosition(Vector2 worldOrigin, int widthInTiles, int heightInTiles, int tileSize = 16)
+    public MapWorldPosition(
+        Vector2 worldOrigin,
+        int widthInTiles,
+        int heightInTiles,
+        int tileSize = 16
+    )
     {
         WorldOrigin = worldOrigin;
         WidthInPixels = widthInTiles * tileSize;
@@ -68,12 +73,7 @@ public struct MapWorldPosition
     /// <returns>A rectangle representing the map's bounds in world coordinates.</returns>
     public readonly Rectangle GetWorldBounds()
     {
-        return new Rectangle(
-            (int)WorldOrigin.X,
-            (int)WorldOrigin.Y,
-            WidthInPixels,
-            HeightInPixels
-        );
+        return new Rectangle((int)WorldOrigin.X, (int)WorldOrigin.Y, WidthInPixels, HeightInPixels);
     }
 
     /// <summary>
@@ -132,9 +132,9 @@ public struct MapWorldPosition
             return -1f;
 
         var distanceToLeft = worldPosition.X - WorldOrigin.X;
-        var distanceToRight = (WorldOrigin.X + WidthInPixels) - worldPosition.X;
+        var distanceToRight = WorldOrigin.X + WidthInPixels - worldPosition.X;
         var distanceToTop = worldPosition.Y - WorldOrigin.Y;
-        var distanceToBottom = (WorldOrigin.Y + HeightInPixels) - worldPosition.Y;
+        var distanceToBottom = WorldOrigin.Y + HeightInPixels - worldPosition.Y;
 
         return MathF.Min(
             MathF.Min(distanceToLeft, distanceToRight),

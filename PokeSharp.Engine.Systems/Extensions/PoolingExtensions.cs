@@ -26,7 +26,7 @@ public static class PoolingExtensions
             {
                 PoolName = poolName,
                 AcquiredAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-                ReuseCount = 0,
+                ReuseCount = 0
             }
         );
     }
@@ -119,7 +119,7 @@ public static class PoolingExtensions
             if (poolManager == null)
                 throw new InvalidOperationException(
                     "Cannot release pooled entity without EntityPoolManager. "
-                        + "Either provide poolManager parameter or use poolManager.Release() directly."
+                    + "Either provide poolManager parameter or use poolManager.Release() directly."
                 );
 
             poolManager.Release(entity);

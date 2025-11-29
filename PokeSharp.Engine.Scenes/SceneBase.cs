@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -14,8 +13,8 @@ public abstract class SceneBase : IScene
 {
     private readonly object _lock = new();
     private bool _disposed;
-    private bool _isInitialized;
     private bool _isContentLoaded;
+    private bool _isInitialized;
 
     /// <summary>
     ///     Initializes a new instance of the SceneBase class.
@@ -233,4 +232,3 @@ public abstract class SceneBase : IScene
         Dispose(false);
     }
 }
-

@@ -99,5 +99,7 @@ public abstract class TileBehaviorScriptBase : TypeScriptBase
     /// </summary>
     /// <param name="ctx">Script context</param>
     /// <param name="entity">Entity that stepped on tile</param>
-    public virtual void OnStep(ScriptContext ctx, Entity entity) { }
+    public virtual void OnStep(ScriptContext ctx, Entity entity)
+    {
+    }
 }

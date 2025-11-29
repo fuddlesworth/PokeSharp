@@ -41,7 +41,9 @@ public abstract class SystemBase : ISystem
     ///     Called after the world is set during initialization.
     ///     Override this to perform additional initialization logic with access to the World.
     /// </summary>
-    protected virtual void OnInitialized() { }
+    protected virtual void OnInitialized()
+    {
+    }
 
     /// <summary>
     ///     Helper method to ensure the system is initialized before use.

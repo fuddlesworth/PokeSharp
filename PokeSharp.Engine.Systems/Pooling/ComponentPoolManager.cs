@@ -45,8 +45,8 @@ public class ComponentPoolManager
         _positionPool = new ComponentPool<Position>(2000);
         _gridMovementPool = new ComponentPool<GridMovement>(1500);
         _velocityPool = new ComponentPool<Velocity>(1500);
-        _spritePool = new ComponentPool<Sprite>(1000);
-        _animationPool = new ComponentPool<Animation>(1000);
+        _spritePool = new ComponentPool<Sprite>();
+        _animationPool = new ComponentPool<Animation>();
 
         // Register in dictionary for generic access
         _pools[typeof(Position)] = _positionPool;

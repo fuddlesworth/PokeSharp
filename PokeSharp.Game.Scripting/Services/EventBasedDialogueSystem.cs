@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Logging;
-using PokeSharp.Engine.Core.Events;
-using PokeSharp.Engine.Core.Types.Events;
+using PokeSharp.Engine.Core.Events.ECS;
 
 namespace PokeSharp.Game.Scripting.Services;
 
@@ -13,7 +12,7 @@ namespace PokeSharp.Game.Scripting.Services;
 /// </remarks>
 public sealed class EventBasedDialogueSystem : IDialogueSystem
 {
-    private readonly IEventBus _eventBus;
+    private readonly IEcsEventBus _eventBus;
     private readonly ILogger<EventBasedDialogueSystem> _logger;
     private float _gameTime;
 
@@ -22,7 +21,7 @@ public sealed class EventBasedDialogueSystem : IDialogueSystem
     /// </summary>
     /// <param name="eventBus">The event bus for publishing dialogue requests.</param>
     /// <param name="logger">Logger instance.</param>
-    public EventBasedDialogueSystem(IEventBus eventBus, ILogger<EventBasedDialogueSystem> logger)
+    public EventBasedDialogueSystem(IEcsEventBus eventBus, ILogger<EventBasedDialogueSystem> logger)
     {
         _eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -39,11 +38,11 @@ public sealed class EventBasedDialogueSystem : IDialogueSystem
 
         var dialogueEvent = new DialogueRequestedEvent
         {
-            TypeId = "dialogue-system",
             Timestamp = _gameTime,
             Message = message,
             SpeakerName = speakerName,
-            Priority = priority,
+            DisplayPriority = priority,
+            Priority = EventPriority.Normal,
         };
 
         _eventBus.Publish(dialogueEvent);

@@ -37,7 +37,7 @@ public class NpcDefinitionService
             TotalNpcs = await _context.Npcs.CountAsync(),
             TotalTrainers = await _context.Trainers.CountAsync(),
             NpcsCached = _npcCache.Count,
-            TrainersCached = _trainerCache.Count,
+            TrainersCached = _trainerCache.Count
         };
 
         return stats;

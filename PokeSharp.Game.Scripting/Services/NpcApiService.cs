@@ -2,6 +2,7 @@ using Arch.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using PokeSharp.Engine.Common.Logging;
+using PokeSharp.Game.Components.Helpers;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Components.NPCs;
 using PokeSharp.Game.Scripting.Api;
@@ -219,7 +220,7 @@ public class NpcApiService(World world, ILogger<NpcApiService> logger) : INPCApi
         if (_world.Has<GridMovement>(npc))
         {
             ref var movement = ref _world.Get<GridMovement>(npc);
-            movement.CompleteMovement();
+            GridMovementHelpers.CompleteMovement(ref movement);
         }
 
         // Clear any pending movement requests

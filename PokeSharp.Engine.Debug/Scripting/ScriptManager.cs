@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Debug.Common;
 
@@ -22,7 +18,8 @@ public class ScriptManager
     /// <param name="logger">Optional logger for diagnostics</param>
     public ScriptManager(string? scriptsDirectory = null, ILogger? logger = null)
     {
-        _scriptsDirectory = scriptsDirectory ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Scripts");
+        _scriptsDirectory =
+            scriptsDirectory ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Scripts");
         _logger = logger;
 
         // Ensure scripts directory exists
@@ -60,7 +57,11 @@ public class ScriptManager
             }
 
             var content = File.ReadAllText(fullPath);
-            _logger?.LogInformation("Loaded script: {Filename} ({Length} chars)", filename, content.Length);
+            _logger?.LogInformation(
+                "Loaded script: {Filename} ({Length} chars)",
+                filename,
+                content.Length
+            );
             return Result<string>.Success(content);
         }
         catch (Exception ex)
@@ -91,7 +92,11 @@ public class ScriptManager
             var fullPath = pathResult.Value!;
 
             File.WriteAllText(fullPath, content);
-            _logger?.LogInformation("Saved script: {Filename} ({Length} chars)", filename, content.Length);
+            _logger?.LogInformation(
+                "Saved script: {Filename} ({Length} chars)",
+                filename,
+                content.Length
+            );
             return Result.Success();
         }
         catch (Exception ex)
@@ -114,14 +119,19 @@ public class ScriptManager
                 return new List<string>();
             }
 
-            var files = Directory.GetFiles(_scriptsDirectory, "*.csx", SearchOption.TopDirectoryOnly)
+            var files = Directory
+                .GetFiles(_scriptsDirectory, "*.csx", SearchOption.TopDirectoryOnly)
                 .Select(Path.GetFileName)
                 .Where(name => name != null)
                 .Select(name => name!)
                 .OrderBy(name => name)
                 .ToList();
 
-            _logger?.LogDebug("Found {Count} scripts in {Directory}", files.Count, _scriptsDirectory);
+            _logger?.LogDebug(
+                "Found {Count} scripts in {Directory}",
+                files.Count,
+                _scriptsDirectory
+            );
             return files;
         }
         catch (Exception ex)
@@ -244,7 +254,10 @@ public class ScriptManager
             if (!Directory.Exists(_scriptsDirectory))
             {
                 Directory.CreateDirectory(_scriptsDirectory);
-                _logger?.LogInformation("Created scripts directory: {Directory}", _scriptsDirectory);
+                _logger?.LogInformation(
+                    "Created scripts directory: {Directory}",
+                    _scriptsDirectory
+                );
 
                 // Create a default example script
                 CreateDefaultExampleScript();
@@ -252,7 +265,11 @@ public class ScriptManager
         }
         catch (Exception ex)
         {
-            _logger?.LogError(ex, "Failed to create scripts directory: {Directory}", _scriptsDirectory);
+            _logger?.LogError(
+                ex,
+                "Failed to create scripts directory: {Directory}",
+                _scriptsDirectory
+            );
         }
     }
 
@@ -263,7 +280,8 @@ public class ScriptManager
     {
         try
         {
-            var exampleScript = @"// Example Debug Script
+            var exampleScript =
+                @"// Example Debug Script
 // This script demonstrates common debugging tasks using the Scripting API
 // Uses ScriptContext pattern (same as NPC behaviors)
 

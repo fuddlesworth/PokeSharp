@@ -1,10 +1,9 @@
+using Microsoft.CodeAnalysis.Completion;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.CodeAnalysis.Completion;
 using PokeSharp.Engine.Debug.Console.Configuration;
 using PokeSharp.Engine.Debug.Console.Features;
 using PokeSharp.Engine.Debug.Console.UI.Renderers;
-using System.Linq;
 using static PokeSharp.Engine.Debug.Console.Configuration.ConsoleColors;
 
 namespace PokeSharp.Engine.Debug.Console.UI;
@@ -19,87 +18,62 @@ namespace PokeSharp.Engine.Debug.Console.UI;
 /// </summary>
 public class QuakeConsole : IDisposable
 {
-    private readonly SpriteBatch _spriteBatch;
-    private readonly Texture2D _pixel;
-    private readonly ConsoleFontRenderer _fontRenderer;
-    private bool _disposed;
-
-    // Renderer components (following Single Responsibility Principle)
-    private readonly ConsoleAutoCompleteRenderer _autoCompleteRenderer;
-    private readonly ConsoleParameterHintRenderer _parameterHintRenderer;
-    private readonly ConsoleSearchRenderer _searchRenderer;
-    private readonly ConsoleDocumentationRenderer _documentationRenderer;
-    private readonly ConsoleInputRenderer _inputRenderer;
-    private readonly ConsoleOutputRenderer _outputRenderer;
-
-    private readonly ConsoleAnimator _animator;
-    private readonly ConsoleOutput _output;
-    private readonly ConsoleInputField _input;
-    private ConsoleConfig _config; // Not readonly - can be replaced with new immutable instance
-
-    private bool _isVisible;
-    private float _hiddenY;
-
-    // Mouse state for hover effects
-    private Point _currentMousePosition = Point.Zero;
-    private Point _lastHoverCalculationPosition = new Point(-1000, -1000);
-    private int _cachedHoverAutoCompleteIndex = -1;
-    private int _cachedHoverSectionIndex = -1;
     private const int HoverRecalculationThreshold = 3; // pixels
-    private float _consoleHeight;
-    private float _screenWidth;
-    private float _screenHeight;
 
     private const int Padding = 10;
 
-    // Syntax highlighting (null when not highlighting)
-    private List<ConsoleSyntaxHighlighter.ColoredSegment>? _highlightedInput;
+    private readonly ConsoleAnimator _animator;
 
-    // Auto-complete state
-    private List<CompletionItem> _allAutoCompleteSuggestions = new();
-    private List<CompletionItem> _filteredAutoCompleteSuggestions = new();
-    private string _autoCompleteFilterText = string.Empty;
-    private int _selectedSuggestionIndex = -1;
-    private bool _isLoadingSuggestions;
-    private int _suggestionScrollOffset;
-    private int _suggestionHorizontalScroll;
-    private int _lastCalculatedVisibleCount = 10;
+    // Renderer components (following Single Responsibility Principle)
+    private readonly ConsoleAutoCompleteRenderer _autoCompleteRenderer;
+    private readonly ConsoleDocumentationRenderer _documentationRenderer;
+    private readonly ConsoleFontRenderer _fontRenderer;
+    private readonly ConsoleInputRenderer _inputRenderer;
+    private readonly ConsoleOutputRenderer _outputRenderer;
+    private readonly ConsoleParameterHintRenderer _parameterHintRenderer;
+    private readonly Texture2D _pixel;
 
     // Search functionality (managed by ConsoleSearchManager)
     private readonly ConsoleSearchManager _searchManager = new();
+    private readonly ConsoleSearchRenderer _searchRenderer;
+    private readonly SpriteBatch _spriteBatch;
+
+    // Auto-complete state
+    private List<CompletionItem> _allAutoCompleteSuggestions = new();
+    private string _autoCompleteFilterText = string.Empty;
+    private int _cachedHoverAutoCompleteIndex = -1;
+    private int _cachedHoverSectionIndex = -1;
+    private float _consoleHeight;
+
+    // Mouse state for hover effects
+    private Point _currentMousePosition = Point.Zero;
+    private int _currentParameterIndex;
+    private bool _disposed;
+    private string? _documentationText;
+    private List<CompletionItem> _filteredAutoCompleteSuggestions = new();
+    private float _hiddenY;
+
+    // Syntax highlighting (null when not highlighting)
+    private List<ConsoleSyntaxHighlighter.ColoredSegment>? _highlightedInput;
+    private bool _isLoadingSuggestions;
 
     // Documentation display
-    private bool _isShowingDocumentation;
-    private string? _documentationText;
+
+    private int _lastCachedSectionCount;
+    private int _lastCachedTotalLines;
+    private int _lastCalculatedVisibleCount = 10;
+    private Point _lastHoverCalculationPosition = new(-1000, -1000);
 
     // Parameter hints
-    private ParameterHintInfo? _parameterHints = null;
-    private int _currentParameterIndex = 0;
+    private ParameterHintInfo? _parameterHints;
+    private float _screenHeight;
+    private float _screenWidth;
+    private int _selectedSuggestionIndex = -1;
+    private int _suggestionHorizontalScroll;
+    private int _suggestionScrollOffset;
 
     // Line mapping cache (for performance optimization)
     private Dictionary<int, int>? _visibleToOriginalLineMapping;
-    private int _lastCachedTotalLines = 0;
-    private int _lastCachedSectionCount = 0;
-
-    /// <summary>
-    ///     Gets whether the console is visible.
-    /// </summary>
-    public bool IsVisible => _isVisible;
-
-    /// <summary>
-    ///     Gets the input field for text entry.
-    /// </summary>
-    public ConsoleInputField Input => _input;
-
-    /// <summary>
-    ///     Gets the output manager.
-    /// </summary>
-    public ConsoleOutput Output => _output;
-
-    /// <summary>
-    ///     Gets the console configuration.
-    /// </summary>
-    public ConsoleConfig Config => _config;
 
     /// <summary>
     ///     Initializes a new instance of the QuakeConsole.
@@ -108,15 +82,20 @@ public class QuakeConsole : IDisposable
     /// <param name="screenWidth">The screen width.</param>
     /// <param name="screenHeight">The screen height.</param>
     /// <param name="config">Optional console configuration.</param>
-    public QuakeConsole(GraphicsDevice graphicsDevice, float screenWidth, float screenHeight, ConsoleConfig? config = null)
+    public QuakeConsole(
+        GraphicsDevice graphicsDevice,
+        float screenWidth,
+        float screenHeight,
+        ConsoleConfig? config = null
+    )
     {
         _spriteBatch = new SpriteBatch(graphicsDevice);
         _screenWidth = screenWidth;
         _screenHeight = screenHeight;
-        _config = config ?? new ConsoleConfig();
+        Config = config ?? new ConsoleConfig();
 
         // Calculate console height based on config
-        _consoleHeight = screenHeight * _config.GetHeightMultiplier();
+        _consoleHeight = screenHeight * Config.GetHeightMultiplier();
         _hiddenY = -_consoleHeight;
 
         // Create a 1x1 white pixel texture for drawing rectangles
@@ -125,31 +104,81 @@ public class QuakeConsole : IDisposable
 
         // Initialize font renderer
         _fontRenderer = new ConsoleFontRenderer(graphicsDevice, _spriteBatch);
-        _fontRenderer.SetFontSize(_config.FontSize);
+        _fontRenderer.SetFontSize(Config.FontSize);
 
         // Initialize renderer components
-        _autoCompleteRenderer = new ConsoleAutoCompleteRenderer(_fontRenderer, _spriteBatch, _pixel);
-        _parameterHintRenderer = new ConsoleParameterHintRenderer(_fontRenderer, _spriteBatch, _pixel);
-        _searchRenderer = new ConsoleSearchRenderer(_fontRenderer, _spriteBatch, _pixel, screenWidth);
-        _documentationRenderer = new ConsoleDocumentationRenderer(_fontRenderer, _spriteBatch, _pixel, screenWidth, screenHeight);
+        _autoCompleteRenderer = new ConsoleAutoCompleteRenderer(
+            _fontRenderer,
+            _spriteBatch,
+            _pixel
+        );
+        _parameterHintRenderer = new ConsoleParameterHintRenderer(
+            _fontRenderer,
+            _spriteBatch,
+            _pixel
+        );
+        _searchRenderer = new ConsoleSearchRenderer(
+            _fontRenderer,
+            _spriteBatch,
+            _pixel,
+            screenWidth
+        );
+        _documentationRenderer = new ConsoleDocumentationRenderer(
+            _fontRenderer,
+            _spriteBatch,
+            _pixel,
+            screenWidth,
+            screenHeight
+        );
         _inputRenderer = new ConsoleInputRenderer(_spriteBatch, _pixel, _fontRenderer, screenWidth);
-        _outputRenderer = new ConsoleOutputRenderer(_spriteBatch, _pixel, screenWidth, _consoleHeight);
+        _outputRenderer = new ConsoleOutputRenderer(
+            _spriteBatch,
+            _pixel,
+            screenWidth,
+            _consoleHeight
+        );
 
         // Initialize components
         _animator = new ConsoleAnimator();
         _animator.Initialize(_hiddenY);
 
         // Calculate visible lines based on line height
-        int lineHeight = _fontRenderer.GetLineHeight();
-        int inputAreaHeight = lineHeight + 10; // Single line input (5px top + 5px bottom padding)
-        int availableHeight = (int)_consoleHeight - inputAreaHeight - Padding * 3;
-        _output = new ConsoleOutput { VisibleLines = availableHeight / lineHeight };
-        _input = new ConsoleInputField();
+        var lineHeight = _fontRenderer.GetLineHeight();
+        var inputAreaHeight = lineHeight + 10; // Single line input (5px top + 5px bottom padding)
+        var availableHeight = (int)_consoleHeight - inputAreaHeight - Padding * 3;
+        Output = new ConsoleOutput { VisibleLines = availableHeight / lineHeight };
+        Input = new ConsoleInputField();
 
         // Start hidden
-        _isVisible = false;
+        IsVisible = false;
 
         // Note: Welcome message is displayed by ConsoleSystem.Initialize() after full setup
+    }
+
+    /// <summary>
+    ///     Gets whether the console is visible.
+    /// </summary>
+    public bool IsVisible { get; private set; }
+
+    /// <summary>
+    ///     Gets the input field for text entry.
+    /// </summary>
+    public ConsoleInputField Input { get; }
+
+    /// <summary>
+    ///     Gets the output manager.
+    /// </summary>
+    public ConsoleOutput Output { get; }
+
+    /// <summary>
+    ///     Gets the console configuration.
+    /// </summary>
+    public ConsoleConfig Config { get; private set; }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 
     /// <summary>
@@ -157,9 +186,9 @@ public class QuakeConsole : IDisposable
     /// </summary>
     public void Toggle()
     {
-        _isVisible = !_isVisible;
+        IsVisible = !IsVisible;
 
-        if (_isVisible)
+        if (IsVisible)
             _animator.Show();
         else
             _animator.Hide(_hiddenY);
@@ -170,7 +199,7 @@ public class QuakeConsole : IDisposable
     /// </summary>
     public void Show()
     {
-        _isVisible = true;
+        IsVisible = true;
         _animator.Show();
     }
 
@@ -179,7 +208,7 @@ public class QuakeConsole : IDisposable
     /// </summary>
     public void Hide()
     {
-        _isVisible = false;
+        IsVisible = false;
         _animator.Hide(_hiddenY);
     }
 
@@ -192,14 +221,10 @@ public class QuakeConsole : IDisposable
         _animator.Update(deltaTime);
 
         // Update syntax highlighting if enabled
-        if (_config.SyntaxHighlightingEnabled && !string.IsNullOrEmpty(_input.Text))
-        {
-            _highlightedInput = ConsoleSyntaxHighlighter.Highlight(_input.Text);
-        }
+        if (Config.SyntaxHighlightingEnabled && !string.IsNullOrEmpty(Input.Text))
+            _highlightedInput = ConsoleSyntaxHighlighter.Highlight(Input.Text);
         else
-        {
             _highlightedInput = null;
-        }
     }
 
     /// <summary>
@@ -209,14 +234,12 @@ public class QuakeConsole : IDisposable
     /// <param name="newConfig">The new configuration to apply.</param>
     public void UpdateConfig(ConsoleConfig newConfig)
     {
-        var oldSize = _config.Size;
-        _config = newConfig;
+        var oldSize = Config.Size;
+        Config = newConfig;
 
         // Recalculate console size if it changed
         if (oldSize != newConfig.Size)
-        {
             UpdateSize();
-        }
     }
 
     /// <summary>
@@ -224,17 +247,17 @@ public class QuakeConsole : IDisposable
     /// </summary>
     public void UpdateSize()
     {
-        _consoleHeight = _screenHeight * _config.GetHeightMultiplier();
+        _consoleHeight = _screenHeight * Config.GetHeightMultiplier();
         _hiddenY = -_consoleHeight;
 
         // Update output renderer with new console height
         _outputRenderer.UpdateSize(_screenWidth, _consoleHeight);
 
         // Recalculate visible lines
-        int lineHeight = _fontRenderer.GetLineHeight();
-        int inputAreaHeight = lineHeight + 10; // Single line input (5px top + 5px bottom padding)
-        int availableHeight = (int)_consoleHeight - inputAreaHeight - Padding * 3;
-        _output.VisibleLines = availableHeight / lineHeight;
+        var lineHeight = _fontRenderer.GetLineHeight();
+        var inputAreaHeight = lineHeight + 10; // Single line input (5px top + 5px bottom padding)
+        var availableHeight = (int)_consoleHeight - inputAreaHeight - Padding * 3;
+        Output.VisibleLines = availableHeight / lineHeight;
     }
 
     /// <summary>
@@ -249,7 +272,7 @@ public class QuakeConsole : IDisposable
         _screenHeight = screenHeight;
 
         // Recalculate console height based on new screen height
-        _consoleHeight = _screenHeight * _config.GetHeightMultiplier();
+        _consoleHeight = _screenHeight * Config.GetHeightMultiplier();
         _hiddenY = -_consoleHeight;
 
         // Update all renderer components with new dimensions
@@ -259,180 +282,52 @@ public class QuakeConsole : IDisposable
         _outputRenderer.UpdateSize(_screenWidth, _consoleHeight);
 
         // Recalculate visible lines (same as UpdateSize)
-        int lineHeight = _fontRenderer.GetLineHeight();
-        int inputAreaHeight = lineHeight + 10;
-        int availableHeight = (int)_consoleHeight - inputAreaHeight - Padding * 3;
-        _output.VisibleLines = availableHeight / lineHeight;
+        var lineHeight = _fontRenderer.GetLineHeight();
+        var inputAreaHeight = lineHeight + 10;
+        var availableHeight = (int)_consoleHeight - inputAreaHeight - Padding * 3;
+        Output.VisibleLines = availableHeight / lineHeight;
     }
 
     /// <summary>
-    /// Increases the font size and updates the layout.
+    ///     Increases the font size and updates the layout.
     /// </summary>
     public int IncreaseFontSize()
     {
-        int newSize = _fontRenderer.IncreaseFontSize();
+        var newSize = _fontRenderer.IncreaseFontSize();
         UpdateSize(); // Recalculate layout for new font size
-        _config = _config with { FontSize = newSize }; // Update config
+        Config = Config with { FontSize = newSize }; // Update config
         return newSize;
     }
 
     /// <summary>
-    /// Decreases the font size and updates the layout.
+    ///     Decreases the font size and updates the layout.
     /// </summary>
     public int DecreaseFontSize()
     {
-        int newSize = _fontRenderer.DecreaseFontSize();
+        var newSize = _fontRenderer.DecreaseFontSize();
         UpdateSize(); // Recalculate layout for new font size
-        _config = _config with { FontSize = newSize }; // Update config
+        Config = Config with { FontSize = newSize }; // Update config
         return newSize;
     }
 
     /// <summary>
-    /// Resets the font size to default and updates the layout.
+    ///     Resets the font size to default and updates the layout.
     /// </summary>
     public int ResetFontSize()
     {
-        int newSize = _fontRenderer.ResetFontSize();
+        var newSize = _fontRenderer.ResetFontSize();
         UpdateSize(); // Recalculate layout for new font size
-        _config = _config with { FontSize = newSize }; // Update config
+        Config = Config with { FontSize = newSize }; // Update config
         return newSize;
     }
 
     /// <summary>
-    /// Gets the current font size.
+    ///     Gets the current font size.
     /// </summary>
-    public int GetFontSize() => _fontRenderer.GetFontSize();
-
-    #region Search Functionality
-
-    /// <summary>
-    /// Gets whether search mode is active.
-    /// </summary>
-    public bool IsSearchMode => _searchManager.IsSearchMode;
-
-    /// <summary>
-    /// Gets the current search input.
-    /// </summary>
-    public string SearchInput => _searchManager.SearchInput;
-
-    /// <summary>
-    /// Gets the output searcher.
-    /// </summary>
-    public OutputSearcher OutputSearcher => _searchManager.OutputSearcher;
-
-    /// <summary>
-    /// Starts search mode.
-    /// </summary>
-    public void StartSearch() => _searchManager.StartSearch();
-
-    /// <summary>
-    /// Exits search mode.
-    /// </summary>
-    public void ExitSearch() => _searchManager.ExitSearch(_output);
-
-    /// <summary>
-    /// Updates the search query.
-    /// </summary>
-    public void UpdateSearchQuery(string query) => _searchManager.UpdateSearchQuery(query, _output);
-
-    /// <summary>
-    /// Navigates to the next search match.
-    /// </summary>
-    public void NextSearchMatch() => _searchManager.NextSearchMatch(_output);
-
-    /// <summary>
-    /// Navigates to the previous search match.
-    /// </summary>
-    public void PreviousSearchMatch() => _searchManager.PreviousSearchMatch(_output);
-
-    #endregion
-
-    #region Reverse-i-search
-
-    /// <summary>
-    /// Gets whether reverse-i-search mode is active.
-    /// </summary>
-    public bool IsReverseSearchMode => _searchManager.IsReverseSearchMode;
-
-    /// <summary>
-    /// Gets the current reverse-i-search input.
-    /// </summary>
-    public string ReverseSearchInput => _searchManager.ReverseSearchInput;
-
-    /// <summary>
-    /// Gets the current reverse-i-search match.
-    /// </summary>
-    public string? CurrentReverseSearchMatch => _searchManager.CurrentReverseSearchMatch;
-
-    /// <summary>
-    /// Starts reverse-i-search mode.
-    /// </summary>
-    public void StartReverseSearch() => _searchManager.StartReverseSearch();
-
-    /// <summary>
-    /// Exits reverse-i-search mode.
-    /// </summary>
-    public void ExitReverseSearch() => _searchManager.ExitReverseSearch();
-
-    /// <summary>
-    /// Updates the reverse-i-search query and finds matches.
-    /// </summary>
-    public void UpdateReverseSearchQuery(string query, IEnumerable<string> historyCommands) =>
-        _searchManager.UpdateReverseSearchQuery(query, historyCommands);
-
-    /// <summary>
-    /// Moves to the next match in reverse-i-search.
-    /// </summary>
-    public void ReverseSearchNextMatch() => _searchManager.ReverseSearchNextMatch();
-
-    /// <summary>
-    /// Moves to the previous match in reverse-i-search.
-    /// </summary>
-    public void ReverseSearchPreviousMatch() => _searchManager.ReverseSearchPreviousMatch();
-
-    /// <summary>
-    /// Accepts the current reverse-i-search match and exits search mode.
-    /// </summary>
-    public void AcceptReverseSearchMatch()
+    public int GetFontSize()
     {
-        var match = _searchManager.GetCurrentMatch();
-        _searchManager.ExitReverseSearch();
-
-        if (match != null)
-        {
-            _input.SetText(match);
-            _input.SetCursorPosition(match.Length);
-        }
+        return _fontRenderer.GetFontSize();
     }
-
-    #endregion
-
-    #region Documentation Display
-
-    /// <summary>
-    /// Gets whether documentation is currently being displayed.
-    /// </summary>
-    public bool IsShowingDocumentation => _isShowingDocumentation;
-
-    /// <summary>
-    /// Shows documentation popup with the given text.
-    /// </summary>
-    public void ShowDocumentation(string documentationText)
-    {
-        _documentationText = documentationText;
-        _isShowingDocumentation = true;
-    }
-
-    /// <summary>
-    /// Hides the documentation popup.
-    /// </summary>
-    public void HideDocumentation()
-    {
-        _isShowingDocumentation = false;
-        _documentationText = null; // Explicitly null to release memory
-    }
-
-    #endregion
 
     /// <summary>
     ///     Renders the console.
@@ -454,21 +349,24 @@ public class QuakeConsole : IDisposable
 
             // Draw output text (line by line with colors)
             var outputY = yPos + Padding;
-            var visibleLines = _output.GetVisibleLines();
-            int lineY = (int)outputY;
-            int lineHeight = _fontRenderer.GetLineHeight();
+            var visibleLines = Output.GetVisibleLines();
+            var lineY = (int)outputY;
+            var lineHeight = _fontRenderer.GetLineHeight();
 
             // Draw search highlights first (if searching)
             if (_searchManager.OutputSearcher.IsSearching)
-            {
-                _searchRenderer.DrawSearchHighlights((int)outputY, lineHeight, _searchManager.OutputSearcher, _output.ScrollOffset, _output.GetAllLines(), _output);
-            }
+                _searchRenderer.DrawSearchHighlights(
+                    (int)outputY,
+                    lineHeight,
+                    _searchManager.OutputSearcher,
+                    Output.ScrollOffset,
+                    Output.GetAllLines(),
+                    Output
+                );
 
             // Draw output text selection highlight (if any)
-            if (_output.HasOutputSelection)
-            {
+            if (Output.HasOutputSelection)
                 DrawOutputSelectionHighlight((int)outputY, lineHeight, visibleLines);
-            }
 
             // Draw text on top of highlights
             foreach (var line in visibleLines)
@@ -478,43 +376,55 @@ public class QuakeConsole : IDisposable
             }
 
             // Draw section fold/unfold boxes with hover effects
-            int hoveredSectionLineIndex = GetHoveredSectionHeaderIndex();
-            _outputRenderer.DrawSectionFoldBoxes((int)outputY, lineHeight, _output, hoveredSectionLineIndex);
+            var hoveredSectionLineIndex = GetHoveredSectionHeaderIndex();
+            _outputRenderer.DrawSectionFoldBoxes(
+                (int)outputY,
+                lineHeight,
+                Output,
+                hoveredSectionLineIndex
+            );
 
             // Draw scroll indicator if there's more content (considering filters and folding)
-            if (_output.GetEffectiveLineCount() > _output.VisibleLines)
-            {
-                _outputRenderer.DrawScrollIndicator((int)yPos, lineHeight, _output);
-            }
+            if (Output.GetEffectiveLineCount() > Output.VisibleLines)
+                _outputRenderer.DrawScrollIndicator((int)yPos, lineHeight, Output);
 
             // Draw input area - dynamically size based on actual line count
             // Include extra space for multi-line indicator if present
             // Use 10 pixels total padding (5 top + 5 bottom) for balanced spacing
-            int inputHeight = lineHeight * Math.Max(1, _input.LineCount) + 10;
-            int totalInputAreaHeight = inputHeight;
+            var inputHeight = lineHeight * Math.Max(1, Input.LineCount) + 10;
+            var totalInputAreaHeight = inputHeight;
 
             // Add space for indicator if multi-line
-            if (_input.LineCount > 1)
-            {
+            if (Input.LineCount > 1)
                 totalInputAreaHeight += lineHeight + 6; // indicator height + spacing
-            }
 
             var inputY = yPos + _consoleHeight - totalInputAreaHeight - Padding;
-            _inputRenderer.DrawInputArea((int)inputY, inputHeight, lineHeight, _input, _config, _highlightedInput);
+            _inputRenderer.DrawInputArea(
+                (int)inputY,
+                inputHeight,
+                lineHeight,
+                Input,
+                Config,
+                _highlightedInput
+            );
 
             // Draw auto-complete suggestions or loading indicator
-            if (_config.AutoCompleteEnabled)
+            if (Config.AutoCompleteEnabled)
             {
                 if (_isLoadingSuggestions)
                 {
-                    _autoCompleteRenderer.DrawLoading((int)inputY - 5, lineHeight, _animator.CurrentY);
+                    _autoCompleteRenderer.DrawLoading(
+                        (int)inputY - 5,
+                        lineHeight,
+                        _animator.CurrentY
+                    );
                 }
                 else if (_filteredAutoCompleteSuggestions.Count > 0)
                 {
                     // Calculate hover index for visual feedback
-                    int hoverIndex = GetHoveredAutoCompleteItemIndex();
+                    var hoverIndex = GetHoveredAutoCompleteItemIndex();
 
-                    int adjustedScrollOffset = _autoCompleteRenderer.DrawSuggestions(
+                    var adjustedScrollOffset = _autoCompleteRenderer.DrawSuggestions(
                         (int)inputY - 5,
                         lineHeight,
                         _filteredAutoCompleteSuggestions,
@@ -522,7 +432,8 @@ public class QuakeConsole : IDisposable
                         _suggestionScrollOffset,
                         _suggestionHorizontalScroll,
                         hoverIndex,
-                        out _lastCalculatedVisibleCount);
+                        out _lastCalculatedVisibleCount
+                    );
 
                     if (adjustedScrollOffset >= 0)
                         _suggestionScrollOffset = adjustedScrollOffset;
@@ -531,28 +442,36 @@ public class QuakeConsole : IDisposable
 
             // Draw parameter hints if active
             if (_parameterHints != null && _parameterHints.Overloads.Count > 0)
-            {
-                _parameterHintRenderer.DrawParameterHints((int)inputY - 5, lineHeight, _parameterHints, _currentParameterIndex);
-            }
+                _parameterHintRenderer.DrawParameterHints(
+                    (int)inputY - 5,
+                    lineHeight,
+                    _parameterHints,
+                    _currentParameterIndex
+                );
 
             // Draw search bar if in search mode
             if (_searchManager.IsSearchMode)
-            {
-                _searchRenderer.DrawSearchBar((int)_consoleHeight, lineHeight, _searchManager.SearchInput, _searchManager.OutputSearcher);
-            }
+                _searchRenderer.DrawSearchBar(
+                    (int)_consoleHeight,
+                    lineHeight,
+                    _searchManager.SearchInput,
+                    _searchManager.OutputSearcher
+                );
 
             // Draw reverse-i-search bar if in reverse search mode
             if (_searchManager.IsReverseSearchMode)
-            {
-                _searchRenderer.DrawReverseSearchBar((int)_consoleHeight, lineHeight, _searchManager.ReverseSearchInput,
-                                                     _searchManager.ReverseSearchMatches, _searchManager.ReverseSearchIndex, _searchManager.CurrentReverseSearchMatch ?? "");
-            }
+                _searchRenderer.DrawReverseSearchBar(
+                    (int)_consoleHeight,
+                    lineHeight,
+                    _searchManager.ReverseSearchInput,
+                    _searchManager.ReverseSearchMatches,
+                    _searchManager.ReverseSearchIndex,
+                    _searchManager.CurrentReverseSearchMatch ?? ""
+                );
 
             // Draw documentation popup if showing
-            if (_isShowingDocumentation && !string.IsNullOrEmpty(_documentationText))
-            {
+            if (IsShowingDocumentation && !string.IsNullOrEmpty(_documentationText))
                 _documentationRenderer.DrawDocumentationPopup(_documentationText, lineHeight);
-            }
         }
         finally
         {
@@ -574,7 +493,10 @@ public class QuakeConsole : IDisposable
     public void SetAutoCompleteSuggestions(List<CompletionItem> suggestions, string filterText = "")
     {
         // Create a NEW list to prevent external modifications from affecting our internal state
-        _allAutoCompleteSuggestions = suggestions != null ? new List<CompletionItem>(suggestions) : new List<CompletionItem>();
+        _allAutoCompleteSuggestions =
+            suggestions != null
+                ? new List<CompletionItem>(suggestions)
+                : new List<CompletionItem>();
         _autoCompleteFilterText = filterText;
 
         // Apply initial filter
@@ -582,9 +504,7 @@ public class QuakeConsole : IDisposable
 
         // Auto-select first suggestion by default (VS Code/IntelliJ behavior)
         if (_filteredAutoCompleteSuggestions.Count > 0)
-        {
             _selectedSuggestionIndex = 0;
-        }
 
         // Reset scroll to top when new suggestions arrive
         _suggestionScrollOffset = 0;
@@ -610,8 +530,8 @@ public class QuakeConsole : IDisposable
     }
 
     /// <summary>
-    /// Filters the current autocomplete suggestions based on the current input text.
-    /// Supports prefix matching (preferred) and fuzzy matching (fallback).
+    ///     Filters the current autocomplete suggestions based on the current input text.
+    ///     Supports prefix matching (preferred) and fuzzy matching (fallback).
     /// </summary>
     /// <param name="currentInput">The current input text to filter against (null is treated as empty).</param>
     public void FilterSuggestions(string? currentInput)
@@ -627,7 +547,9 @@ public class QuakeConsole : IDisposable
         // Handle null input (treat as empty string)
         if (currentInput == null)
         {
-            _filteredAutoCompleteSuggestions = new List<CompletionItem>(_allAutoCompleteSuggestions);
+            _filteredAutoCompleteSuggestions = new List<CompletionItem>(
+                _allAutoCompleteSuggestions
+            );
             _selectedSuggestionIndex = _filteredAutoCompleteSuggestions.Count > 0 ? 0 : -1;
             return;
         }
@@ -645,21 +567,26 @@ public class QuakeConsole : IDisposable
             endIndex--;
 
         // Extract filter substring (one allocation, but unavoidable for LINQ)
-        var filterText = startIndex < endIndex
-            ? currentInput.Substring(startIndex, endIndex - startIndex)
-            : string.Empty;
+        var filterText =
+            startIndex < endIndex
+                ? currentInput.Substring(startIndex, endIndex - startIndex)
+                : string.Empty;
 
         if (string.IsNullOrEmpty(filterText))
         {
             // No filter, show all
-            _filteredAutoCompleteSuggestions = new List<CompletionItem>(_allAutoCompleteSuggestions);
+            _filteredAutoCompleteSuggestions = new List<CompletionItem>(
+                _allAutoCompleteSuggestions
+            );
         }
         else
         {
             // Filter by prefix match (case-insensitive)
             // Note: We need the string for LINQ (can't use Span in lambda expressions)
             _filteredAutoCompleteSuggestions = _allAutoCompleteSuggestions
-                .Where(item => item.DisplayText.StartsWith(filterText, StringComparison.OrdinalIgnoreCase))
+                .Where(item =>
+                    item.DisplayText.StartsWith(filterText, StringComparison.OrdinalIgnoreCase)
+                )
                 .ToList();
 
             // If no prefix matches, try contains match (fuzzy)
@@ -674,13 +601,9 @@ public class QuakeConsole : IDisposable
 
         // Reset selection or keep it valid
         if (_filteredAutoCompleteSuggestions.Count == 0)
-        {
             _selectedSuggestionIndex = -1;
-        }
         else if (_selectedSuggestionIndex >= _filteredAutoCompleteSuggestions.Count)
-        {
             _selectedSuggestionIndex = 0; // Reset to first item
-        }
 
         // Filter results tracked internally
     }
@@ -703,7 +626,7 @@ public class QuakeConsole : IDisposable
     }
 
     /// <summary>
-    /// Sets parameter hints for the current method call.
+    ///     Sets parameter hints for the current method call.
     /// </summary>
     public void SetParameterHints(ParameterHintInfo? hints, int currentParameterIndex = 0)
     {
@@ -712,7 +635,7 @@ public class QuakeConsole : IDisposable
     }
 
     /// <summary>
-    /// Clears parameter hints.
+    ///     Clears parameter hints.
     /// </summary>
     public void ClearParameterHints()
     {
@@ -721,7 +644,7 @@ public class QuakeConsole : IDisposable
     }
 
     /// <summary>
-    /// Gets whether parameter hints are currently shown.
+    ///     Gets whether parameter hints are currently shown.
     /// </summary>
     public bool HasParameterHints()
     {
@@ -729,18 +652,19 @@ public class QuakeConsole : IDisposable
     }
 
     /// <summary>
-    /// Cycles to the next parameter hint overload.
+    ///     Cycles to the next parameter hint overload.
     /// </summary>
     public void NextParameterHintOverload()
     {
         if (_parameterHints == null || _parameterHints.Overloads.Count <= 1)
             return;
 
-        _parameterHints.CurrentOverloadIndex = (_parameterHints.CurrentOverloadIndex + 1) % _parameterHints.Overloads.Count;
+        _parameterHints.CurrentOverloadIndex =
+            (_parameterHints.CurrentOverloadIndex + 1) % _parameterHints.Overloads.Count;
     }
 
     /// <summary>
-    /// Cycles to the previous parameter hint overload.
+    ///     Cycles to the previous parameter hint overload.
     /// </summary>
     public void PreviousParameterHintOverload()
     {
@@ -753,7 +677,7 @@ public class QuakeConsole : IDisposable
     }
 
     /// <summary>
-    /// Navigates through autocomplete suggestions up or down with wrapping and auto-scrolling.
+    ///     Navigates through autocomplete suggestions up or down with wrapping and auto-scrolling.
     /// </summary>
     /// <param name="up">True to navigate up, false to navigate down.</param>
     /// <returns>True if the selection changed, false otherwise.</returns>
@@ -762,7 +686,7 @@ public class QuakeConsole : IDisposable
         if (_filteredAutoCompleteSuggestions.Count == 0)
             return false;
 
-        int oldIndex = _selectedSuggestionIndex;
+        var oldIndex = _selectedSuggestionIndex;
 
         // Handle initial selection (-1 means no selection)
         if (_selectedSuggestionIndex == -1)
@@ -774,32 +698,28 @@ public class QuakeConsole : IDisposable
         }
 
         if (up)
-        {
             // Move up, wrap to bottom if at top
-            _selectedSuggestionIndex = _selectedSuggestionIndex > 0
-                ? _selectedSuggestionIndex - 1
-                : _filteredAutoCompleteSuggestions.Count - 1;
-        }
+            _selectedSuggestionIndex =
+                _selectedSuggestionIndex > 0
+                    ? _selectedSuggestionIndex - 1
+                    : _filteredAutoCompleteSuggestions.Count - 1;
         else
-        {
             // Move down, wrap to top if at bottom
-            _selectedSuggestionIndex = (_selectedSuggestionIndex + 1) % _filteredAutoCompleteSuggestions.Count;
-        }
+            _selectedSuggestionIndex =
+                (_selectedSuggestionIndex + 1) % _filteredAutoCompleteSuggestions.Count;
 
         // Auto-scroll to keep selected item visible
         EnsureSelectedItemVisible();
 
         // Reset horizontal scroll when changing selection
         if (_selectedSuggestionIndex != oldIndex)
-        {
             _suggestionHorizontalScroll = 0;
-        }
 
         return _selectedSuggestionIndex != oldIndex;
     }
 
     /// <summary>
-    /// Scrolls the selected suggestion text to the left (shows more of the end).
+    ///     Scrolls the selected suggestion text to the left (shows more of the end).
     /// </summary>
     public void ScrollSuggestionLeft()
     {
@@ -810,18 +730,22 @@ public class QuakeConsole : IDisposable
     }
 
     /// <summary>
-    /// Scrolls the selected suggestion text to the right (shows more of the beginning).
+    ///     Scrolls the selected suggestion text to the right (shows more of the beginning).
     /// </summary>
     public void ScrollSuggestionRight()
     {
         if (_selectedSuggestionIndex < 0 || _filteredAutoCompleteSuggestions.Count == 0)
             return;
 
-        _suggestionHorizontalScroll = Math.Max(0, _suggestionHorizontalScroll - ConsoleConstants.Rendering.SuggestionHorizontalScrollAmount);
+        _suggestionHorizontalScroll = Math.Max(
+            0,
+            _suggestionHorizontalScroll
+                - ConsoleConstants.Rendering.SuggestionHorizontalScrollAmount
+        );
     }
 
     /// <summary>
-    /// Adjusts scroll offset to ensure the selected item is visible.
+    ///     Adjusts scroll offset to ensure the selected item is visible.
     /// </summary>
     private void EnsureSelectedItemVisible()
     {
@@ -830,26 +754,22 @@ public class QuakeConsole : IDisposable
 
         // Use the last calculated visible count from DrawAutoCompleteSuggestions
         // This ensures we use the actual number of items that fit on screen
-        int maxVisible = _lastCalculatedVisibleCount;
+        var maxVisible = _lastCalculatedVisibleCount;
 
         // If selected item is above visible range, scroll up
         if (_selectedSuggestionIndex < _suggestionScrollOffset)
-        {
             _suggestionScrollOffset = _selectedSuggestionIndex;
-        }
         // If selected item is below visible range, scroll down
         else if (_selectedSuggestionIndex >= _suggestionScrollOffset + maxVisible)
-        {
             _suggestionScrollOffset = _selectedSuggestionIndex - maxVisible + 1;
-        }
 
         // Ensure scroll offset stays within valid bounds
-        int maxScroll = Math.Max(0, _filteredAutoCompleteSuggestions.Count - maxVisible);
+        var maxScroll = Math.Max(0, _filteredAutoCompleteSuggestions.Count - maxVisible);
         _suggestionScrollOffset = Math.Clamp(_suggestionScrollOffset, 0, maxScroll);
     }
 
     /// <summary>
-    /// Scrolls the suggestions list by the specified number of items.
+    ///     Scrolls the suggestions list by the specified number of items.
     /// </summary>
     /// <param name="delta">Number of items to scroll (positive = down, negative = up).</param>
     public void ScrollSuggestions(int delta)
@@ -858,8 +778,8 @@ public class QuakeConsole : IDisposable
             return;
 
         // Calculate max visible items
-        int maxVisible = ConsoleConstants.Limits.MaxAutoCompleteSuggestions;
-        int maxScroll = Math.Max(0, _filteredAutoCompleteSuggestions.Count - maxVisible);
+        var maxVisible = ConsoleConstants.Limits.MaxAutoCompleteSuggestions;
+        var maxScroll = Math.Max(0, _filteredAutoCompleteSuggestions.Count - maxVisible);
 
         // Update scroll offset
         _suggestionScrollOffset = Math.Clamp(_suggestionScrollOffset + delta, 0, maxScroll);
@@ -869,16 +789,16 @@ public class QuakeConsole : IDisposable
         {
             // Keep selection within visible range
             if (_selectedSuggestionIndex < _suggestionScrollOffset)
-            {
                 _selectedSuggestionIndex = _suggestionScrollOffset;
-            }
             else if (_selectedSuggestionIndex >= _suggestionScrollOffset + maxVisible)
-            {
                 _selectedSuggestionIndex = _suggestionScrollOffset + maxVisible - 1;
-            }
 
             // Ensure selection is still within total bounds
-            _selectedSuggestionIndex = Math.Clamp(_selectedSuggestionIndex, 0, _filteredAutoCompleteSuggestions.Count - 1);
+            _selectedSuggestionIndex = Math.Clamp(
+                _selectedSuggestionIndex,
+                0,
+                _filteredAutoCompleteSuggestions.Count - 1
+            );
         }
     }
 
@@ -887,10 +807,11 @@ public class QuakeConsole : IDisposable
     /// </summary>
     public string? GetSelectedSuggestion()
     {
-        if (_selectedSuggestionIndex >= 0 && _selectedSuggestionIndex < _filteredAutoCompleteSuggestions.Count)
-        {
+        if (
+            _selectedSuggestionIndex >= 0
+            && _selectedSuggestionIndex < _filteredAutoCompleteSuggestions.Count
+        )
             return _filteredAutoCompleteSuggestions[_selectedSuggestionIndex].DisplayText;
-        }
         return null;
     }
 
@@ -899,10 +820,11 @@ public class QuakeConsole : IDisposable
     /// </summary>
     public CompletionItem? GetSelectedCompletionItem()
     {
-        if (_selectedSuggestionIndex >= 0 && _selectedSuggestionIndex < _filteredAutoCompleteSuggestions.Count)
-        {
+        if (
+            _selectedSuggestionIndex >= 0
+            && _selectedSuggestionIndex < _filteredAutoCompleteSuggestions.Count
+        )
             return _filteredAutoCompleteSuggestions[_selectedSuggestionIndex];
-        }
         return null;
     }
 
@@ -927,7 +849,7 @@ public class QuakeConsole : IDisposable
     /// </summary>
     public void AppendOutput(string text)
     {
-        _output.AppendLine(text, Output_Default);
+        Output.AppendLine(text, Output_Default);
     }
 
     /// <summary>
@@ -935,7 +857,7 @@ public class QuakeConsole : IDisposable
     /// </summary>
     public void AppendOutput(string text, Color color)
     {
-        _output.AppendLine(text, color);
+        Output.AppendLine(text, color);
     }
 
     /// <summary>
@@ -943,7 +865,7 @@ public class QuakeConsole : IDisposable
     /// </summary>
     public string GetInputText()
     {
-        return _input.Text;
+        return Input.Text;
     }
 
     /// <summary>
@@ -951,7 +873,7 @@ public class QuakeConsole : IDisposable
     /// </summary>
     public void ClearInput()
     {
-        _input.Clear();
+        Input.Clear();
         _highlightedInput = null;
         ClearAutoCompleteSuggestions();
         ClearParameterHints(); // Clear parameter hints when clearing input
@@ -962,35 +884,27 @@ public class QuakeConsole : IDisposable
     /// </summary>
     public void ClearOutput()
     {
-        _output.Clear();
+        Output.Clear();
     }
 
     /// <summary>
-    /// Scrolls the console output by the specified number of lines.
+    ///     Scrolls the console output by the specified number of lines.
     /// </summary>
     /// <param name="lines">Number of lines to scroll. Positive = down, Negative = up.</param>
     public void ScrollOutput(int lines)
     {
         if (lines > 0)
-        {
             // Scroll down
-            for (int i = 0; i < lines; i++)
-            {
-                _output.ScrollDown();
-            }
-        }
+            for (var i = 0; i < lines; i++)
+                Output.ScrollDown();
         else if (lines < 0)
-        {
             // Scroll up
-            for (int i = 0; i < -lines; i++)
-            {
-                _output.ScrollUp();
-            }
-        }
+            for (var i = 0; i < -lines; i++)
+                Output.ScrollUp();
     }
 
     /// <summary>
-    /// Scrolls the auto-complete list by the specified number of items.
+    ///     Scrolls the auto-complete list by the specified number of items.
     /// </summary>
     /// <param name="items">Number of items to scroll. Positive = down, Negative = up.</param>
     public void ScrollAutoComplete(int items)
@@ -999,67 +913,63 @@ public class QuakeConsole : IDisposable
             return;
 
         if (items > 0)
-        {
             // Scroll down
-            for (int i = 0; i < items; i++)
-            {
-                NavigateSuggestions(up: false); // down
-            }
-        }
+            for (var i = 0; i < items; i++)
+                NavigateSuggestions(false); // down
         else if (items < 0)
-        {
             // Scroll up
-            for (int i = 0; i < -items; i++)
-            {
-                NavigateSuggestions(up: true); // up
-            }
-        }
+            for (var i = 0; i < -items; i++)
+                NavigateSuggestions(true); // up
     }
 
     /// <summary>
-    /// Checks if the mouse is over the auto-complete window.
+    ///     Checks if the mouse is over the auto-complete window.
     /// </summary>
     /// <param name="mousePosition">Mouse position.</param>
     /// <returns>True if mouse is over auto-complete.</returns>
     public bool IsMouseOverAutoComplete(Point mousePosition)
     {
-        if (!HasSuggestions() || !_isVisible)
+        if (!HasSuggestions() || !IsVisible)
             return false;
 
         // Calculate auto-complete bounds using the EXACT same calculation as rendering
-        int lineHeight = _fontRenderer.GetLineHeight();
+        var lineHeight = _fontRenderer.GetLineHeight();
 
         // Match the EXACT calculation from Draw() method
-        int inputHeight = lineHeight * Math.Max(1, _input.LineCount) + 10;
-        int totalInputAreaHeight = inputHeight;
-        if (_input.LineCount > 1)
-        {
+        var inputHeight = lineHeight * Math.Max(1, Input.LineCount) + 10;
+        var totalInputAreaHeight = inputHeight;
+        if (Input.LineCount > 1)
             totalInputAreaHeight += lineHeight + 6;
-        }
 
-        float yPos = _animator.CurrentY;
+        var yPos = _animator.CurrentY;
         var inputY = yPos + _consoleHeight - totalInputAreaHeight - Padding;
-        int bottomY = (int)inputY - 5;
+        var bottomY = (int)inputY - 5;
 
         // Calculate panel dimensions
-        int maxAvailableHeight = bottomY - ConsoleConstants.Rendering.Padding * 2;
-        int maxVisibleSuggestions = Math.Max(1, (maxAvailableHeight - ConsoleConstants.Rendering.Padding * 2) / lineHeight);
-        maxVisibleSuggestions = Math.Min(maxVisibleSuggestions, ConsoleConstants.Limits.MaxAutoCompleteSuggestions);
-        int visibleCount = Math.Min(maxVisibleSuggestions, _filteredAutoCompleteSuggestions.Count);
+        var maxAvailableHeight = bottomY - ConsoleConstants.Rendering.Padding * 2;
+        var maxVisibleSuggestions = Math.Max(
+            1,
+            (maxAvailableHeight - ConsoleConstants.Rendering.Padding * 2) / lineHeight
+        );
+        maxVisibleSuggestions = Math.Min(
+            maxVisibleSuggestions,
+            ConsoleConstants.Limits.MaxAutoCompleteSuggestions
+        );
+        var visibleCount = Math.Min(maxVisibleSuggestions, _filteredAutoCompleteSuggestions.Count);
 
-        int scrollIndicatorSpace = lineHeight;
-        int contentHeight = visibleCount * lineHeight;
-        int panelHeight = contentHeight + scrollIndicatorSpace * 2;
-        int autoCompleteY = bottomY - panelHeight;
+        var scrollIndicatorSpace = lineHeight;
+        var contentHeight = visibleCount * lineHeight;
+        var panelHeight = contentHeight + scrollIndicatorSpace * 2;
+        var autoCompleteY = bottomY - panelHeight;
 
-        return mousePosition.Y >= autoCompleteY &&
-               mousePosition.Y <= autoCompleteY + panelHeight &&
-               mousePosition.X >= 0 &&
-               mousePosition.X <= _screenWidth;
+        return mousePosition.Y >= autoCompleteY
+            && mousePosition.Y <= autoCompleteY + panelHeight
+            && mousePosition.X >= 0
+            && mousePosition.X <= _screenWidth;
     }
 
     /// <summary>
-    /// Updates the current mouse position for hover effects.
+    ///     Updates the current mouse position for hover effects.
     /// </summary>
     /// <param name="mousePosition">Current mouse position.</param>
     public void UpdateMousePosition(Point mousePosition)
@@ -1067,8 +977,8 @@ public class QuakeConsole : IDisposable
         _currentMousePosition = mousePosition;
 
         // Invalidate hover cache if mouse moved significantly
-        int deltaX = Math.Abs(mousePosition.X - _lastHoverCalculationPosition.X);
-        int deltaY = Math.Abs(mousePosition.Y - _lastHoverCalculationPosition.Y);
+        var deltaX = Math.Abs(mousePosition.X - _lastHoverCalculationPosition.X);
+        var deltaY = Math.Abs(mousePosition.Y - _lastHoverCalculationPosition.Y);
 
         if (deltaX > HoverRecalculationThreshold || deltaY > HoverRecalculationThreshold)
         {
@@ -1078,36 +988,34 @@ public class QuakeConsole : IDisposable
     }
 
     /// <summary>
-    /// Checks if the mouse is over the input field area.
+    ///     Checks if the mouse is over the input field area.
     /// </summary>
     /// <param name="mousePosition">Mouse position to check.</param>
     /// <returns>True if mouse is over input field.</returns>
     public bool IsMouseOverInputField(Point mousePosition)
     {
-        if (!_isVisible)
+        if (!IsVisible)
             return false;
 
-        int lineHeight = _fontRenderer.GetLineHeight();
-        int inputHeight = lineHeight * Math.Max(1, _input.LineCount) + 10;
-        int totalInputAreaHeight = inputHeight;
-        if (_input.LineCount > 1)
-        {
+        var lineHeight = _fontRenderer.GetLineHeight();
+        var inputHeight = lineHeight * Math.Max(1, Input.LineCount) + 10;
+        var totalInputAreaHeight = inputHeight;
+        if (Input.LineCount > 1)
             totalInputAreaHeight += lineHeight + 6;
-        }
 
-        float yPos = _animator.CurrentY;
+        var yPos = _animator.CurrentY;
         var inputY = yPos + _consoleHeight - totalInputAreaHeight - Padding;
         var inputAreaY = (int)inputY;
         var inputAreaHeight = totalInputAreaHeight;
 
-        return mousePosition.Y >= inputAreaY &&
-               mousePosition.Y <= inputAreaY + inputAreaHeight &&
-               mousePosition.X >= Padding &&
-               mousePosition.X <= _screenWidth - Padding;
+        return mousePosition.Y >= inputAreaY
+            && mousePosition.Y <= inputAreaY + inputAreaHeight
+            && mousePosition.X >= Padding
+            && mousePosition.X <= _screenWidth - Padding;
     }
 
     /// <summary>
-    /// Gets the character position at the given mouse X coordinate in the input field.
+    ///     Gets the character position at the given mouse X coordinate in the input field.
     /// </summary>
     /// <param name="mousePosition">Mouse position.</param>
     /// <returns>Character index, or -1 if not over input field.</returns>
@@ -1117,48 +1025,44 @@ public class QuakeConsole : IDisposable
             return -1;
 
         // Get the input text
-        string inputText = _input.Text;
+        var inputText = Input.Text;
         if (string.IsNullOrEmpty(inputText))
             return 0;
 
         // Calculate the X position where text starts (with padding and prompt)
-        int textStartX = Padding + ConsoleConstants.Rendering.InputPromptOffset;
+        var textStartX = Padding + ConsoleConstants.Rendering.InputPromptOffset;
 
         // Get relative X position within the text
-        int relativeX = mousePosition.X - textStartX;
+        var relativeX = mousePosition.X - textStartX;
         if (relativeX <= 0)
             return 0;
 
         // Quick check: if click is beyond the entire text, return end position
-        float totalWidth = _fontRenderer.MeasureString(inputText).X;
+        var totalWidth = _fontRenderer.MeasureString(inputText).X;
         if (relativeX >= totalWidth)
             return inputText.Length;
 
         // Binary search for the character position (much faster than linear)
-        int left = 0;
-        int right = inputText.Length;
+        var left = 0;
+        var right = inputText.Length;
 
         while (left < right)
         {
-            int mid = (left + right) / 2;
-            float widthAtMid = _fontRenderer.MeasureString(inputText.Substring(0, mid)).X;
+            var mid = (left + right) / 2;
+            var widthAtMid = _fontRenderer.MeasureString(inputText.Substring(0, mid)).X;
 
             if (widthAtMid < relativeX)
-            {
                 left = mid + 1;
-            }
             else
-            {
                 right = mid;
-            }
         }
 
         // Check if we should round to the previous or next character
         if (left > 0)
         {
-            float widthAtLeft = _fontRenderer.MeasureString(inputText.Substring(0, left)).X;
-            float widthAtPrev = _fontRenderer.MeasureString(inputText.Substring(0, left - 1)).X;
-            float midPoint = (widthAtPrev + widthAtLeft) / 2;
+            var widthAtLeft = _fontRenderer.MeasureString(inputText.Substring(0, left)).X;
+            var widthAtPrev = _fontRenderer.MeasureString(inputText.Substring(0, left - 1)).X;
+            var midPoint = (widthAtPrev + widthAtLeft) / 2;
 
             if (relativeX < midPoint)
                 return left - 1;
@@ -1168,7 +1072,7 @@ public class QuakeConsole : IDisposable
     }
 
     /// <summary>
-    /// Handles a click on the input field to position the cursor.
+    ///     Handles a click on the input field to position the cursor.
     /// </summary>
     /// <param name="mousePosition">Mouse click position.</param>
     /// <returns>True if click was handled.</returns>
@@ -1177,11 +1081,11 @@ public class QuakeConsole : IDisposable
         if (!IsMouseOverInputField(mousePosition))
             return false;
 
-        int charPosition = GetCharacterPositionAtMouse(mousePosition);
+        var charPosition = GetCharacterPositionAtMouse(mousePosition);
         if (charPosition >= 0)
         {
             // Move cursor to the clicked position
-            _input.SetCursorPosition(charPosition);
+            Input.SetCursorPosition(charPosition);
             return true;
         }
 
@@ -1189,34 +1093,32 @@ public class QuakeConsole : IDisposable
     }
 
     /// <summary>
-    /// Checks if the mouse is over the console output area.
+    ///     Checks if the mouse is over the console output area.
     /// </summary>
     /// <param name="mousePosition">Mouse position.</param>
     /// <returns>True if mouse is over output area.</returns>
     public bool IsMouseOverOutputArea(Point mousePosition)
     {
-        float yPos = _animator.CurrentY;
-        int lineHeight = _fontRenderer.GetLineHeight();
-        
+        var yPos = _animator.CurrentY;
+        var lineHeight = _fontRenderer.GetLineHeight();
+
         // Calculate input area height
-        int inputAreaHeight = lineHeight * Math.Max(1, _input.LineCount) + 10;
-        if (_input.LineCount > 1)
-        {
+        var inputAreaHeight = lineHeight * Math.Max(1, Input.LineCount) + 10;
+        if (Input.LineCount > 1)
             inputAreaHeight += lineHeight + 6; // Multi-line indicator
-        }
 
         // Output area is between top padding and input area
-        int outputY = (int)(yPos + Padding);
-        int outputHeight = (int)(_consoleHeight - inputAreaHeight - Padding * 3);
+        var outputY = (int)(yPos + Padding);
+        var outputHeight = (int)(_consoleHeight - inputAreaHeight - Padding * 3);
 
-        return mousePosition.Y >= outputY &&
-               mousePosition.Y < outputY + outputHeight &&
-               mousePosition.X >= Padding &&
-               mousePosition.X <= _screenWidth - Padding;
+        return mousePosition.Y >= outputY
+            && mousePosition.Y < outputY + outputHeight
+            && mousePosition.X >= Padding
+            && mousePosition.X <= _screenWidth - Padding;
     }
 
     /// <summary>
-    /// Gets the line and column position in the output area at the given mouse position.
+    ///     Gets the line and column position in the output area at the given mouse position.
     /// </summary>
     /// <param name="mousePosition">Mouse position.</param>
     /// <returns>Tuple of (line, column) or (-1, -1) if not over output.</returns>
@@ -1225,57 +1127,53 @@ public class QuakeConsole : IDisposable
         if (!IsMouseOverOutputArea(mousePosition))
             return (-1, -1);
 
-        float yPos = _animator.CurrentY;
-        int lineHeight = _fontRenderer.GetLineHeight();
-        int outputY = (int)(yPos + Padding);
+        var yPos = _animator.CurrentY;
+        var lineHeight = _fontRenderer.GetLineHeight();
+        var outputY = (int)(yPos + Padding);
 
         // Calculate which visible line was clicked
-        int relativeY = mousePosition.Y - outputY;
-        int clickedLine = relativeY / lineHeight;
+        var relativeY = mousePosition.Y - outputY;
+        var clickedLine = relativeY / lineHeight;
 
         // Check if line is within visible range
-        var visibleLines = _output.GetVisibleLines();
+        var visibleLines = Output.GetVisibleLines();
         if (clickedLine < 0 || clickedLine >= visibleLines.Count)
             return (-1, -1);
 
         // Get the line text
-        string lineText = visibleLines[clickedLine].Text;
+        var lineText = visibleLines[clickedLine].Text;
 
         // Calculate column position
-        int relativeX = mousePosition.X - Padding;
+        var relativeX = mousePosition.X - Padding;
         if (relativeX <= 0)
             return (clickedLine, 0);
 
         // Quick check: if click is beyond the entire text, return end position
-        float totalWidth = _fontRenderer.MeasureString(lineText).X;
+        var totalWidth = _fontRenderer.MeasureString(lineText).X;
         if (relativeX >= totalWidth)
             return (clickedLine, lineText.Length);
 
         // Binary search for the character position
-        int left = 0;
-        int right = lineText.Length;
+        var left = 0;
+        var right = lineText.Length;
 
         while (left < right)
         {
-            int mid = (left + right) / 2;
-            float widthAtMid = _fontRenderer.MeasureString(lineText.Substring(0, mid)).X;
+            var mid = (left + right) / 2;
+            var widthAtMid = _fontRenderer.MeasureString(lineText.Substring(0, mid)).X;
 
             if (widthAtMid < relativeX)
-            {
                 left = mid + 1;
-            }
             else
-            {
                 right = mid;
-            }
         }
 
         // Check if we should round to the previous or next character
         if (left > 0)
         {
-            float widthAtLeft = _fontRenderer.MeasureString(lineText.Substring(0, left)).X;
-            float widthAtPrev = _fontRenderer.MeasureString(lineText.Substring(0, left - 1)).X;
-            float midPoint = (widthAtPrev + widthAtLeft) / 2;
+            var widthAtLeft = _fontRenderer.MeasureString(lineText.Substring(0, left)).X;
+            var widthAtPrev = _fontRenderer.MeasureString(lineText.Substring(0, left - 1)).X;
+            var midPoint = (widthAtPrev + widthAtLeft) / 2;
 
             if (relativeX < midPoint)
                 return (clickedLine, left - 1);
@@ -1285,14 +1183,14 @@ public class QuakeConsole : IDisposable
     }
 
     /// <summary>
-    /// Gets the auto-complete item index at the given mouse position.
-    /// Returns -1 if no item is at that position.
+    ///     Gets the auto-complete item index at the given mouse position.
+    ///     Returns -1 if no item is at that position.
     /// </summary>
     /// <param name="mousePosition">Mouse position.</param>
     /// <returns>Index of the auto-complete item, or -1 if none.</returns>
     /// <summary>
-    /// Gets the hovered autocomplete item index (display index only, for visual feedback).
-    /// Returns -1 if no item is hovered.
+    ///     Gets the hovered autocomplete item index (display index only, for visual feedback).
+    ///     Returns -1 if no item is hovered.
     /// </summary>
     private int GetHoveredAutoCompleteItemIndex()
     {
@@ -1301,7 +1199,7 @@ public class QuakeConsole : IDisposable
             return _cachedHoverAutoCompleteIndex;
 
         // Calculate new value
-        if (!HasSuggestions() || !_isVisible)
+        if (!HasSuggestions() || !IsVisible)
         {
             _cachedHoverAutoCompleteIndex = -1;
             _lastHoverCalculationPosition = _currentMousePosition;
@@ -1316,33 +1214,37 @@ public class QuakeConsole : IDisposable
         }
 
         // Use the same calculation as GetAutoCompleteItemAt but return display index only
-        int lineHeight = _fontRenderer.GetLineHeight();
+        var lineHeight = _fontRenderer.GetLineHeight();
 
         // Match the EXACT calculation from Draw() method
-        int inputHeight = lineHeight * Math.Max(1, _input.LineCount) + 10;
-        int totalInputAreaHeight = inputHeight;
-        if (_input.LineCount > 1)
-        {
+        var inputHeight = lineHeight * Math.Max(1, Input.LineCount) + 10;
+        var totalInputAreaHeight = inputHeight;
+        if (Input.LineCount > 1)
             totalInputAreaHeight += lineHeight + 6;
-        }
 
-        float yPos = _animator.CurrentY;
+        var yPos = _animator.CurrentY;
         var inputY = yPos + _consoleHeight - totalInputAreaHeight - Padding;
-        int bottomY = (int)inputY - 5;
+        var bottomY = (int)inputY - 5;
 
-        int maxAvailableHeight = bottomY - ConsoleConstants.Rendering.Padding * 2;
-        int maxVisibleSuggestions = Math.Max(1, (maxAvailableHeight - ConsoleConstants.Rendering.Padding * 2) / lineHeight);
-        maxVisibleSuggestions = Math.Min(maxVisibleSuggestions, ConsoleConstants.Limits.MaxAutoCompleteSuggestions);
+        var maxAvailableHeight = bottomY - ConsoleConstants.Rendering.Padding * 2;
+        var maxVisibleSuggestions = Math.Max(
+            1,
+            (maxAvailableHeight - ConsoleConstants.Rendering.Padding * 2) / lineHeight
+        );
+        maxVisibleSuggestions = Math.Min(
+            maxVisibleSuggestions,
+            ConsoleConstants.Limits.MaxAutoCompleteSuggestions
+        );
 
-        int visibleCount = Math.Min(maxVisibleSuggestions, _filteredAutoCompleteSuggestions.Count);
+        var visibleCount = Math.Min(maxVisibleSuggestions, _filteredAutoCompleteSuggestions.Count);
 
-        int scrollIndicatorSpace = lineHeight;
-        int contentHeight = visibleCount * lineHeight;
-        int panelHeight = contentHeight + scrollIndicatorSpace * 2;
-        int autoCompleteY = bottomY - panelHeight;
+        var scrollIndicatorSpace = lineHeight;
+        var contentHeight = visibleCount * lineHeight;
+        var panelHeight = contentHeight + scrollIndicatorSpace * 2;
+        var autoCompleteY = bottomY - panelHeight;
 
-        int contentStartY = autoCompleteY + scrollIndicatorSpace;
-        int relativeY = _currentMousePosition.Y - contentStartY;
+        var contentStartY = autoCompleteY + scrollIndicatorSpace;
+        var relativeY = _currentMousePosition.Y - contentStartY;
 
         if (relativeY < 0 || relativeY >= contentHeight)
         {
@@ -1351,7 +1253,7 @@ public class QuakeConsole : IDisposable
             return -1;
         }
 
-        int displayIndex = relativeY / lineHeight;
+        var displayIndex = relativeY / lineHeight;
 
         // Validate display index is within visible range
         if (displayIndex < 0 || displayIndex >= visibleCount)
@@ -1369,58 +1271,62 @@ public class QuakeConsole : IDisposable
     public int GetAutoCompleteItemAt(Point mousePosition)
     {
         // Early exits without logging - these are normal
-        if (!HasSuggestions() || !_isVisible)
+        if (!HasSuggestions() || !IsVisible)
             return -1;
 
         if (!IsMouseOverAutoComplete(mousePosition))
             return -1;
 
         // Calculate auto-complete bounds (MUST match ConsoleAutoCompleteRenderer.DrawSuggestions exactly!)
-        int lineHeight = _fontRenderer.GetLineHeight();
+        var lineHeight = _fontRenderer.GetLineHeight();
 
         // Match the EXACT calculation from Draw() method (lines 482-492)
-        int inputHeight = lineHeight * Math.Max(1, _input.LineCount) + 10;
-        int totalInputAreaHeight = inputHeight;
-        if (_input.LineCount > 1)
-        {
+        var inputHeight = lineHeight * Math.Max(1, Input.LineCount) + 10;
+        var totalInputAreaHeight = inputHeight;
+        if (Input.LineCount > 1)
             totalInputAreaHeight += lineHeight + 6; // indicator height + spacing
-        }
 
-        float yPos = _animator.CurrentY;
+        var yPos = _animator.CurrentY;
         var inputY = yPos + _consoleHeight - totalInputAreaHeight - Padding;
-        int bottomY = (int)inputY - 5;
+        var bottomY = (int)inputY - 5;
 
         // Calculate max available space (matches renderer line 75-77)
-        int maxAvailableHeight = bottomY - ConsoleConstants.Rendering.Padding * 2;
-        int maxVisibleSuggestions = Math.Max(1, (maxAvailableHeight - ConsoleConstants.Rendering.Padding * 2) / lineHeight);
-        maxVisibleSuggestions = Math.Min(maxVisibleSuggestions, ConsoleConstants.Limits.MaxAutoCompleteSuggestions);
+        var maxAvailableHeight = bottomY - ConsoleConstants.Rendering.Padding * 2;
+        var maxVisibleSuggestions = Math.Max(
+            1,
+            (maxAvailableHeight - ConsoleConstants.Rendering.Padding * 2) / lineHeight
+        );
+        maxVisibleSuggestions = Math.Min(
+            maxVisibleSuggestions,
+            ConsoleConstants.Limits.MaxAutoCompleteSuggestions
+        );
 
         // Get visible count (matches renderer line 79)
-        int visibleCount = Math.Min(maxVisibleSuggestions, _filteredAutoCompleteSuggestions.Count);
+        var visibleCount = Math.Min(maxVisibleSuggestions, _filteredAutoCompleteSuggestions.Count);
 
         // Calculate panel dimensions (matches renderer lines 83-86)
-        int scrollIndicatorSpace = lineHeight; // One line height for each indicator (NOT + Padding!)
-        int contentHeight = visibleCount * lineHeight;
-        int panelHeight = contentHeight + scrollIndicatorSpace * 2;
-        int autoCompleteY = bottomY - panelHeight;
+        var scrollIndicatorSpace = lineHeight; // One line height for each indicator (NOT + Padding!)
+        var contentHeight = visibleCount * lineHeight;
+        var panelHeight = contentHeight + scrollIndicatorSpace * 2;
+        var autoCompleteY = bottomY - panelHeight;
 
         // Content starts after top scroll indicator (matches renderer line 105)
-        int contentStartY = autoCompleteY + scrollIndicatorSpace;
+        var contentStartY = autoCompleteY + scrollIndicatorSpace;
 
         // Calculate which item was clicked (relative to content area)
-        int relativeY = mousePosition.Y - contentStartY;
+        var relativeY = mousePosition.Y - contentStartY;
 
         if (relativeY < 0 || relativeY >= contentHeight)
             return -1;
 
-        int clickedDisplayIndex = relativeY / lineHeight;
+        var clickedDisplayIndex = relativeY / lineHeight;
 
         // Validate display index is within visible range
         if (clickedDisplayIndex < 0 || clickedDisplayIndex >= visibleCount)
             return -1;
 
         // Adjust for scroll offset to get actual item index
-        int actualIndex = _suggestionScrollOffset + clickedDisplayIndex;
+        var actualIndex = _suggestionScrollOffset + clickedDisplayIndex;
 
         // Validate index is within total suggestions
         if (actualIndex >= 0 && actualIndex < _filteredAutoCompleteSuggestions.Count)
@@ -1430,7 +1336,7 @@ public class QuakeConsole : IDisposable
     }
 
     /// <summary>
-    /// Selects a specific auto-complete item by index.
+    ///     Selects a specific auto-complete item by index.
     /// </summary>
     /// <param name="index">Index of the item to select.</param>
     public void SelectAutoCompleteItem(int index)
@@ -1444,8 +1350,8 @@ public class QuakeConsole : IDisposable
     }
 
     /// <summary>
-    /// Gets the hovered section header line index (for visual feedback).
-    /// Returns -1 if no section header is hovered.
+    ///     Gets the hovered section header line index (for visual feedback).
+    ///     Returns -1 if no section header is hovered.
     /// </summary>
     private int GetHoveredSectionHeaderIndex()
     {
@@ -1460,20 +1366,20 @@ public class QuakeConsole : IDisposable
     }
 
     /// <summary>
-    /// Gets the section header line index at the given mouse position, if any.
-    /// Returns -1 if no section header is at that position.
+    ///     Gets the section header line index at the given mouse position, if any.
+    ///     Returns -1 if no section header is at that position.
     /// </summary>
     /// <param name="mousePosition">Mouse position.</param>
     /// <returns>Visual line index of the section header, or -1 if none.</returns>
     public int GetSectionHeaderAtPosition(Point mousePosition)
     {
-        if (!_isVisible)
+        if (!IsVisible)
             return -1;
 
         // Calculate output area bounds
-        int lineHeight = _fontRenderer.GetLineHeight();
-        int inputAreaHeight = lineHeight + 10;
-        var outputY = (int)Padding;
+        var lineHeight = _fontRenderer.GetLineHeight();
+        var inputAreaHeight = lineHeight + 10;
+        var outputY = Padding;
         var outputHeight = (int)(_consoleHeight - inputAreaHeight - Padding * 3);
 
         // Check if click is within output area
@@ -1481,23 +1387,15 @@ public class QuakeConsole : IDisposable
             return -1;
 
         // Calculate which visible line
-        int visualLineIndex = (mousePosition.Y - outputY) / lineHeight;
+        var visualLineIndex = (mousePosition.Y - outputY) / lineHeight;
 
         // Check if this line is a section header
-        var visibleHeaders = _output.GetVisibleSectionHeaders();
+        var visibleHeaders = Output.GetVisibleSectionHeaders();
         foreach (var (section, lineIndex) in visibleHeaders)
-        {
             if (lineIndex == visualLineIndex)
                 return visualLineIndex;
-        }
 
         return -1;
-    }
-
-    public void Dispose()
-    {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
     }
 
     /// <summary>
@@ -1521,23 +1419,23 @@ public class QuakeConsole : IDisposable
     }
 
     /// <summary>
-    /// Handles mouse clicks on the console output area to toggle sections.
-    /// Clicking anywhere on a section header line will toggle it.
+    ///     Handles mouse clicks on the console output area to toggle sections.
+    ///     Clicking anywhere on a section header line will toggle it.
     /// </summary>
     /// <param name="mousePosition">Mouse position.</param>
     /// <returns>True if a section was toggled.</returns>
     public bool HandleOutputClick(Point mousePosition)
     {
         // Only handle clicks when console is visible
-        if (!_isVisible)
+        if (!IsVisible)
             return false;
 
         // Calculate console dimensions (console is at top of screen when open)
         float yPos = 0;
 
         // Calculate output area bounds
-        int lineHeight = _fontRenderer.GetLineHeight();
-        int inputAreaHeight = lineHeight + 10; // Single line input (5px top + 5px bottom padding)
+        var lineHeight = _fontRenderer.GetLineHeight();
+        var inputAreaHeight = lineHeight + 10; // Single line input (5px top + 5px bottom padding)
         var outputY = (int)(yPos + Padding);
         var outputHeight = (int)(_consoleHeight - inputAreaHeight - Padding * 3);
 
@@ -1546,51 +1444,46 @@ public class QuakeConsole : IDisposable
             return false;
 
         // Calculate which visible line was clicked
-        int clickedVisibleLineIndex = (mousePosition.Y - outputY) / lineHeight;
+        var clickedVisibleLineIndex = (mousePosition.Y - outputY) / lineHeight;
 
         // Get visible section headers
-        var visibleHeaders = _output.GetVisibleSectionHeaders();
+        var visibleHeaders = Output.GetVisibleSectionHeaders();
 
         // Check if the clicked line is a section header
         // If so, toggle it (entire line is clickable for better UX)
         foreach (var (section, visualLineIndex) in visibleHeaders)
-        {
             if (visualLineIndex == clickedVisibleLineIndex)
             {
                 // Find the original line index and toggle
-                int originalLineIndex = FindOriginalLineIndex(clickedVisibleLineIndex);
+                var originalLineIndex = FindOriginalLineIndex(clickedVisibleLineIndex);
                 if (originalLineIndex >= 0)
-                {
-                    return _output.ToggleSectionAtLine(originalLineIndex);
-                }
+                    return Output.ToggleSectionAtLine(originalLineIndex);
             }
-        }
 
         return false;
     }
 
     /// <summary>
-    /// Finds the original line index for a visible line index.
-    /// Uses cached mapping for performance when possible.
+    ///     Finds the original line index for a visible line index.
+    ///     Uses cached mapping for performance when possible.
     /// </summary>
     private int FindOriginalLineIndex(int visibleLineIndex)
     {
         // Build or rebuild cache if needed
         if (NeedsCacheRebuild())
-        {
             RebuildLineMapping();
-        }
 
         // Use cached mapping
-        int adjustedIndex = visibleLineIndex + _output.ScrollOffset;
-        return _visibleToOriginalLineMapping?.TryGetValue(adjustedIndex, out int originalIndex) == true
+        var adjustedIndex = visibleLineIndex + Output.ScrollOffset;
+        return
+            _visibleToOriginalLineMapping?.TryGetValue(adjustedIndex, out var originalIndex) == true
             ? originalIndex
             : -1;
     }
 
     /// <summary>
-    /// Checks if the line mapping cache needs to be rebuilt.
-    /// Cache is invalidated when lines are added/removed or sections change.
+    ///     Checks if the line mapping cache needs to be rebuilt.
+    ///     Cache is invalidated when lines are added/removed or sections change.
     /// </summary>
     private bool NeedsCacheRebuild()
     {
@@ -1598,11 +1491,11 @@ public class QuakeConsole : IDisposable
             return true;
 
         // Check if output has changed
-        if (_lastCachedTotalLines != _output.TotalLines)
+        if (_lastCachedTotalLines != Output.TotalLines)
             return true;
 
         // Check if section count changed (folding/unfolding can change this)
-        int currentSectionCount = _output.GetAllSections().Count;
+        var currentSectionCount = Output.GetAllSections().Count;
         if (_lastCachedSectionCount != currentSectionCount)
             return true;
 
@@ -1610,57 +1503,57 @@ public class QuakeConsole : IDisposable
     }
 
     /// <summary>
-    /// Rebuilds the mapping from visible line indices to original line indices.
-    /// This is cached for performance to avoid O(n) scans on every click.
+    ///     Rebuilds the mapping from visible line indices to original line indices.
+    ///     This is cached for performance to avoid O(n) scans on every click.
     /// </summary>
     private void RebuildLineMapping()
     {
         _visibleToOriginalLineMapping = new Dictionary<int, int>();
-        int visibleCount = 0;
+        var visibleCount = 0;
 
-        for (int i = 0; i < _output.TotalLines; i++)
-        {
+        for (var i = 0; i < Output.TotalLines; i++)
             if (IsLineVisible(i))
             {
                 _visibleToOriginalLineMapping[visibleCount] = i;
                 visibleCount++;
             }
-        }
 
         // Update cache validity markers
-        _lastCachedTotalLines = _output.TotalLines;
-        _lastCachedSectionCount = _output.GetAllSections().Count;
+        _lastCachedTotalLines = Output.TotalLines;
+        _lastCachedSectionCount = Output.GetAllSections().Count;
     }
 
     /// <summary>
-    /// Checks if a line at the given original index would be visible
-    /// (after filtering and folding).
+    ///     Checks if a line at the given original index would be visible
+    ///     (after filtering and folding).
     /// </summary>
     private bool IsLineVisible(int originalIndex)
     {
-        if (originalIndex < 0 || originalIndex >= _output.TotalLines)
+        if (originalIndex < 0 || originalIndex >= Output.TotalLines)
             return false;
 
         // Check if section contains this line and is folded
-        var section = _output.GetSectionContainingLine(originalIndex);
+        var section = Output.GetSectionContainingLine(originalIndex);
         if (section != null && section.IsFolded)
-        {
             // Only header is visible in folded sections
             return originalIndex == section.StartLine;
-        }
 
         return true;
     }
 
     /// <summary>
-    /// Draws the output text selection highlight.
+    ///     Draws the output text selection highlight.
     /// </summary>
     /// <param name="outputY">Y position of output area.</param>
     /// <param name="lineHeight">Height of each line.</param>
     /// <param name="visibleLines">The visible lines being rendered.</param>
-    private void DrawOutputSelectionHighlight(int outputY, int lineHeight, IReadOnlyList<ConsoleLine> visibleLines)
+    private void DrawOutputSelectionHighlight(
+        int outputY,
+        int lineHeight,
+        IReadOnlyList<ConsoleLine> visibleLines
+    )
     {
-        var (startLine, startCol, endLine, endCol) = _output.GetSelectionRange();
+        var (startLine, startCol, endLine, endCol) = Output.GetSelectionRange();
 
         // Clamp to visible range
         if (startLine >= visibleLines.Count || endLine < 0)
@@ -1670,59 +1563,227 @@ public class QuakeConsole : IDisposable
         endLine = Math.Min(endLine, visibleLines.Count - 1);
 
         // Selection highlight color (semi-transparent blue, similar to most text editors)
-        Color selectionColor = new Color(51, 153, 255, 80); // Light blue with alpha
+        var selectionColor = new Color(51, 153, 255, 80); // Light blue with alpha
 
-        for (int i = startLine; i <= endLine && i < visibleLines.Count; i++)
+        for (var i = startLine; i <= endLine && i < visibleLines.Count; i++)
         {
-            string lineText = visibleLines[i].Text;
-            int lineY = outputY + (i * lineHeight);
+            var lineText = visibleLines[i].Text;
+            var lineY = outputY + i * lineHeight;
 
             if (i == startLine && i == endLine)
             {
                 // Selection is within a single line
-                int actualStartCol = Math.Min(startCol, lineText.Length);
-                int actualEndCol = Math.Min(endCol, lineText.Length);
+                var actualStartCol = Math.Min(startCol, lineText.Length);
+                var actualEndCol = Math.Min(endCol, lineText.Length);
 
                 if (actualStartCol < actualEndCol)
                 {
-                    string beforeSelection = lineText.Substring(0, actualStartCol);
-                    string selection = lineText.Substring(actualStartCol, actualEndCol - actualStartCol);
+                    var beforeSelection = lineText.Substring(0, actualStartCol);
+                    var selection = lineText.Substring(
+                        actualStartCol,
+                        actualEndCol - actualStartCol
+                    );
 
-                    float startX = Padding + _fontRenderer.MeasureString(beforeSelection).X;
-                    float selectionWidth = _fontRenderer.MeasureString(selection).X;
+                    var startX = Padding + _fontRenderer.MeasureString(beforeSelection).X;
+                    var selectionWidth = _fontRenderer.MeasureString(selection).X;
 
-                    DrawRectangle((int)startX, lineY, (int)selectionWidth, lineHeight, selectionColor);
+                    DrawRectangle(
+                        (int)startX,
+                        lineY,
+                        (int)selectionWidth,
+                        lineHeight,
+                        selectionColor
+                    );
                 }
             }
             else if (i == startLine)
             {
                 // First line of multi-line selection
-                int actualStartCol = Math.Min(startCol, lineText.Length);
-                string beforeSelection = lineText.Substring(0, actualStartCol);
-                string selection = lineText.Substring(actualStartCol);
+                var actualStartCol = Math.Min(startCol, lineText.Length);
+                var beforeSelection = lineText.Substring(0, actualStartCol);
+                var selection = lineText.Substring(actualStartCol);
 
-                float startX = Padding + _fontRenderer.MeasureString(beforeSelection).X;
-                float selectionWidth = _fontRenderer.MeasureString(selection).X;
+                var startX = Padding + _fontRenderer.MeasureString(beforeSelection).X;
+                var selectionWidth = _fontRenderer.MeasureString(selection).X;
 
                 DrawRectangle((int)startX, lineY, (int)selectionWidth, lineHeight, selectionColor);
             }
             else if (i == endLine)
             {
                 // Last line of multi-line selection
-                int actualEndCol = Math.Min(endCol, lineText.Length);
-                string selection = lineText.Substring(0, actualEndCol);
+                var actualEndCol = Math.Min(endCol, lineText.Length);
+                var selection = lineText.Substring(0, actualEndCol);
 
-                float selectionWidth = _fontRenderer.MeasureString(selection).X;
+                var selectionWidth = _fontRenderer.MeasureString(selection).X;
 
                 DrawRectangle(Padding, lineY, (int)selectionWidth, lineHeight, selectionColor);
             }
             else
             {
                 // Middle lines - select entire line
-                float lineWidth = _fontRenderer.MeasureString(lineText).X;
+                var lineWidth = _fontRenderer.MeasureString(lineText).X;
                 DrawRectangle(Padding, lineY, (int)lineWidth, lineHeight, selectionColor);
             }
         }
     }
-}
 
+    #region Search Functionality
+
+    /// <summary>
+    ///     Gets whether search mode is active.
+    /// </summary>
+    public bool IsSearchMode => _searchManager.IsSearchMode;
+
+    /// <summary>
+    ///     Gets the current search input.
+    /// </summary>
+    public string SearchInput => _searchManager.SearchInput;
+
+    /// <summary>
+    ///     Gets the output searcher.
+    /// </summary>
+    public OutputSearcher OutputSearcher => _searchManager.OutputSearcher;
+
+    /// <summary>
+    ///     Starts search mode.
+    /// </summary>
+    public void StartSearch()
+    {
+        _searchManager.StartSearch();
+    }
+
+    /// <summary>
+    ///     Exits search mode.
+    /// </summary>
+    public void ExitSearch()
+    {
+        _searchManager.ExitSearch(Output);
+    }
+
+    /// <summary>
+    ///     Updates the search query.
+    /// </summary>
+    public void UpdateSearchQuery(string query)
+    {
+        _searchManager.UpdateSearchQuery(query, Output);
+    }
+
+    /// <summary>
+    ///     Navigates to the next search match.
+    /// </summary>
+    public void NextSearchMatch()
+    {
+        _searchManager.NextSearchMatch(Output);
+    }
+
+    /// <summary>
+    ///     Navigates to the previous search match.
+    /// </summary>
+    public void PreviousSearchMatch()
+    {
+        _searchManager.PreviousSearchMatch(Output);
+    }
+
+    #endregion
+
+    #region Reverse-i-search
+
+    /// <summary>
+    ///     Gets whether reverse-i-search mode is active.
+    /// </summary>
+    public bool IsReverseSearchMode => _searchManager.IsReverseSearchMode;
+
+    /// <summary>
+    ///     Gets the current reverse-i-search input.
+    /// </summary>
+    public string ReverseSearchInput => _searchManager.ReverseSearchInput;
+
+    /// <summary>
+    ///     Gets the current reverse-i-search match.
+    /// </summary>
+    public string? CurrentReverseSearchMatch => _searchManager.CurrentReverseSearchMatch;
+
+    /// <summary>
+    ///     Starts reverse-i-search mode.
+    /// </summary>
+    public void StartReverseSearch()
+    {
+        _searchManager.StartReverseSearch();
+    }
+
+    /// <summary>
+    ///     Exits reverse-i-search mode.
+    /// </summary>
+    public void ExitReverseSearch()
+    {
+        _searchManager.ExitReverseSearch();
+    }
+
+    /// <summary>
+    ///     Updates the reverse-i-search query and finds matches.
+    /// </summary>
+    public void UpdateReverseSearchQuery(string query, IEnumerable<string> historyCommands)
+    {
+        _searchManager.UpdateReverseSearchQuery(query, historyCommands);
+    }
+
+    /// <summary>
+    ///     Moves to the next match in reverse-i-search.
+    /// </summary>
+    public void ReverseSearchNextMatch()
+    {
+        _searchManager.ReverseSearchNextMatch();
+    }
+
+    /// <summary>
+    ///     Moves to the previous match in reverse-i-search.
+    /// </summary>
+    public void ReverseSearchPreviousMatch()
+    {
+        _searchManager.ReverseSearchPreviousMatch();
+    }
+
+    /// <summary>
+    ///     Accepts the current reverse-i-search match and exits search mode.
+    /// </summary>
+    public void AcceptReverseSearchMatch()
+    {
+        var match = _searchManager.GetCurrentMatch();
+        _searchManager.ExitReverseSearch();
+
+        if (match != null)
+        {
+            Input.SetText(match);
+            Input.SetCursorPosition(match.Length);
+        }
+    }
+
+    #endregion
+
+    #region Documentation Display
+
+    /// <summary>
+    ///     Gets whether documentation is currently being displayed.
+    /// </summary>
+    public bool IsShowingDocumentation { get; private set; }
+
+    /// <summary>
+    ///     Shows documentation popup with the given text.
+    /// </summary>
+    public void ShowDocumentation(string documentationText)
+    {
+        _documentationText = documentationText;
+        IsShowingDocumentation = true;
+    }
+
+    /// <summary>
+    ///     Hides the documentation popup.
+    /// </summary>
+    public void HideDocumentation()
+    {
+        IsShowingDocumentation = false;
+        _documentationText = null; // Explicitly null to release memory
+    }
+
+    #endregion
+}

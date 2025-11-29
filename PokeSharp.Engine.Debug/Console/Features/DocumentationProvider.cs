@@ -1,6 +1,6 @@
+using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Completion;
-using System.Text;
 
 namespace PokeSharp.Engine.Debug.Console.Features;
 
@@ -24,9 +24,9 @@ public class DocumentationProvider
         public string Kind { get; init; } = "Unknown";
 
         public bool HasDetailedInfo =>
-            !string.IsNullOrEmpty(Summary) ||
-            Parameters.Count > 0 ||
-            !string.IsNullOrEmpty(Returns);
+            !string.IsNullOrEmpty(Summary)
+            || Parameters.Count > 0
+            || !string.IsNullOrEmpty(Returns);
     }
 
     /// <summary>
@@ -40,39 +40,31 @@ public class DocumentationProvider
     public async Task<Documentation> GetDocumentationAsync(
         CompletionItem item,
         CompletionService? completionService = null,
-        Document? document = null)
+        Document? document = null
+    )
     {
-        var doc = new Documentation
-        {
-            DisplayText = item.DisplayText,
-            Kind = GetItemKind(item)
-        };
+        var doc = new Documentation { DisplayText = item.DisplayText, Kind = GetItemKind(item) };
 
         // Try to get description from the item itself
-        if (!string.IsNullOrEmpty(item.InlineDescription))
-        {
-            doc = doc with { Summary = item.InlineDescription };
-        }
+        if (!string.IsNullOrEmpty(item.InlineDescription)) doc = doc with { Summary = item.InlineDescription };
 
         // If we have completion service and document, get extended documentation
         if (completionService != null && document != null)
-        {
             try
             {
                 var description = await completionService.GetDescriptionAsync(document, item);
-                if (description != null)
-                {
-                    doc = ParseDescription(doc, description);
-                }
+                if (description != null) doc = ParseDescription(doc, description);
             }
             catch
             {
                 // Fallback to basic info if extended documentation fails
             }
-        }
 
         // Generate signature
-        doc = doc with { Signature = GenerateSignature(item, doc) };
+        doc = doc with
+        {
+            Signature = GenerateSignature(item, doc)
+        };
 
         return doc;
     }
@@ -186,7 +178,8 @@ public class DocumentationProvider
             sb.Append('(');
             for (int i = 0; i < doc.Parameters.Count; i++)
             {
-                if (i > 0) sb.Append(", ");
+                if (i > 0)
+                    sb.Append(", ");
                 var param = doc.Parameters[i];
                 sb.Append(param.Type != "unknown" ? $"{param.Type} {param.Name}" : param.Name);
             }
@@ -304,4 +297,3 @@ public class DocumentationProvider
         }
     }
 }
-

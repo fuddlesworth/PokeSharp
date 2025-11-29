@@ -1,9 +1,9 @@
-using FontStashSharp;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameGum;
-using RenderingLibrary;
+using RenderingLibrary.Graphics;
+using Color = System.Drawing.Color;
 
 namespace PokeSharp.Engine.Scenes.Scenes;
 
@@ -13,20 +13,21 @@ namespace PokeSharp.Engine.Scenes.Scenes;
 /// </summary>
 public class LoadingScene : SceneBase
 {
-    private readonly LoadingProgress _progress;
+    private readonly Game _game;
     private readonly Task<IScene> _initializationTask;
+    private readonly LoadingProgress _progress;
     private readonly SceneManager _sceneManager;
-    private GumService? _gumService;
-    private object? _rootContainer; // GumService.Root - type will be inferred
-    private RenderingLibrary.Graphics.Text? _stepText;
-    private RenderingLibrary.Graphics.Text? _percentageText;
-    private RenderingLibrary.Graphics.SolidRectangle? _progressBarBackground;
-    private RenderingLibrary.Graphics.SolidRectangle? _progressBarFill;
-    private RenderingLibrary.Graphics.SolidRectangle? _errorBar;
-    private RenderingLibrary.Graphics.Text? _errorText;
-    private bool _hasCompleted;
     private IScene? _completedScene;
+    private SolidRectangle? _errorBar;
+    private Text? _errorText;
     private bool _gumInitialized;
+    private GumService? _gumService;
+    private bool _hasCompleted;
+    private Text? _percentageText;
+    private SolidRectangle? _progressBarBackground;
+    private SolidRectangle? _progressBarFill;
+    private object? _rootContainer; // GumService.Root - type will be inferred
+    private Text? _stepText;
 
     /// <summary>
     ///     Initializes a new instance of the LoadingScene class.
@@ -45,7 +46,7 @@ public class LoadingScene : SceneBase
         LoadingProgress progress,
         Task<IScene> initializationTask,
         SceneManager sceneManager,
-        Microsoft.Xna.Framework.Game game
+        Game game
     )
         : base(graphicsDevice, services, logger)
     {
@@ -60,8 +61,6 @@ public class LoadingScene : SceneBase
         _game = game;
     }
 
-    private readonly Microsoft.Xna.Framework.Game _game;
-
     /// <inheritdoc />
     public override void LoadContent()
     {
@@ -72,22 +71,20 @@ public class LoadingScene : SceneBase
         {
             _gumService = GumService.Default;
             _gumService.Initialize(_game);
-            
+
             // Get the SystemManagers to access the rendering system
             var systemManagers = _gumService.SystemManagers;
             if (systemManagers == null)
-            {
-                throw new InvalidOperationException("GumService.SystemManagers is null after initialization");
-            }
-            
+                throw new InvalidOperationException(
+                    "GumService.SystemManagers is null after initialization"
+                );
+
             // Use the Root from GumService
             var root = _gumService.Root;
             if (root == null)
-            {
                 throw new InvalidOperationException("GumService.Root is null after initialization");
-            }
             _rootContainer = root;
-            
+
             // Ensure root has proper dimensions to avoid layout issues
             var viewport = GraphicsDevice.Viewport;
             if (root.Width == 0 || root.Height == 0)
@@ -95,7 +92,7 @@ public class LoadingScene : SceneBase
                 root.Width = viewport.Width;
                 root.Height = viewport.Height;
             }
-            
+
             // Configure root to use absolute dimensions instead of relative
             // This prevents SetDimensionsToCanvas from being called every frame
             // which triggers layout updates that can cause null references
@@ -104,13 +101,14 @@ public class LoadingScene : SceneBase
                 var rootType = root.GetType();
                 var widthUnitsProperty = rootType.GetProperty("WidthUnits");
                 var heightUnitsProperty = rootType.GetProperty("HeightUnits");
-                
+
                 // Try to set to Absolute to prevent automatic dimension updates
                 if (widthUnitsProperty != null)
                 {
                     var absoluteValue = Enum.Parse(widthUnitsProperty.PropertyType, "Absolute");
                     widthUnitsProperty.SetValue(root, absoluteValue);
                 }
+
                 if (heightUnitsProperty != null)
                 {
                     var absoluteValue = Enum.Parse(heightUnitsProperty.PropertyType, "Absolute");
@@ -119,27 +117,30 @@ public class LoadingScene : SceneBase
             }
             catch (Exception ex)
             {
-                Logger.LogDebug(ex, "Could not set root dimension units, SetDimensionsToCanvas may still be called");
+                Logger.LogDebug(
+                    ex,
+                    "Could not set root dimension units, SetDimensionsToCanvas may still be called"
+                );
             }
-            
+
             // Create all elements and set their properties BEFORE adding to collection
             // This prevents reentrancy issues with ObservableCollection
-            
+
             // Create progress bar background
-            _progressBarBackground = new RenderingLibrary.Graphics.SolidRectangle();
+            _progressBarBackground = new SolidRectangle();
             _progressBarBackground.Width = 600;
             _progressBarBackground.Height = 30;
             _progressBarBackground.X = (viewport.Width - 600) / 2;
             _progressBarBackground.Y = viewport.Height / 2;
-            _progressBarBackground.Color = System.Drawing.Color.FromArgb(40, 40, 40);
-            
+            _progressBarBackground.Color = Color.FromArgb(40, 40, 40);
+
             // Create progress bar fill
-            _progressBarFill = new RenderingLibrary.Graphics.SolidRectangle();
+            _progressBarFill = new SolidRectangle();
             _progressBarFill.Height = 22; // 30 - 4*2 padding
             _progressBarFill.X = _progressBarBackground.X + 4;
             _progressBarFill.Y = _progressBarBackground.Y + 4;
-            _progressBarFill.Color = System.Drawing.Color.FromArgb(100, 149, 237); // CornflowerBlue
-            
+            _progressBarFill.Color = Color.FromArgb(100, 149, 237); // CornflowerBlue
+
             // Get or create a default font for text elements
             // Text elements need a font to avoid null reference during layout updates
             SpriteFont? defaultFont = null;
@@ -147,38 +148,43 @@ public class LoadingScene : SceneBase
             {
                 // Try to get the default font from SystemManagers
                 var systemManagersType = systemManagers.GetType();
-                var fontManagerProperty = systemManagersType.GetProperty("FontManager") ?? 
-                                          systemManagersType.GetProperty("TextManager");
-                
+                var fontManagerProperty =
+                    systemManagersType.GetProperty("FontManager")
+                    ?? systemManagersType.GetProperty("TextManager");
+
                 if (fontManagerProperty != null)
                 {
                     var fontManager = fontManagerProperty.GetValue(systemManagers);
                     if (fontManager != null)
                     {
                         var fontManagerType = fontManager.GetType();
-                        var defaultFontProperty = fontManagerType.GetProperty("DefaultFont") ?? 
-                                                  fontManagerType.GetProperty("Font");
+                        var defaultFontProperty =
+                            fontManagerType.GetProperty("DefaultFont")
+                            ?? fontManagerType.GetProperty("Font");
                         if (defaultFontProperty != null)
-                        {
                             defaultFont = defaultFontProperty.GetValue(fontManager) as SpriteFont;
-                        }
                     }
                 }
             }
             catch (Exception ex)
             {
-                Logger.LogWarning(ex, "Failed to get default font from SystemManagers, text may not render correctly");
+                Logger.LogWarning(
+                    ex,
+                    "Failed to get default font from SystemManagers, text may not render correctly"
+                );
             }
-            
+
             // Create step text (no word wrapping - we have plenty of space)
-            _stepText = new RenderingLibrary.Graphics.Text(systemManagers);
+            _stepText = new Text(systemManagers);
             if (defaultFont != null)
             {
                 // Set font using reflection if available
                 var textType = _stepText.GetType();
-                var fontProperty = textType.GetProperty("Font") ?? textType.GetProperty("SpriteFont");
+                var fontProperty =
+                    textType.GetProperty("Font") ?? textType.GetProperty("SpriteFont");
                 fontProperty?.SetValue(_stepText, defaultFont);
             }
+
             _stepText.X = _progressBarBackground.X;
             _stepText.Y = _progressBarBackground.Y - 40;
             _stepText.Red = 255;
@@ -187,43 +193,47 @@ public class LoadingScene : SceneBase
             _stepText.Width = 600; // Set width to prevent wrapping
             // Set initial text to ensure layout can calculate properly
             _stepText.RawText = "Loading...";
-            
+
             // Create percentage text (overlaps the progress bar, centered horizontally and vertically)
-            _percentageText = new RenderingLibrary.Graphics.Text(systemManagers);
+            _percentageText = new Text(systemManagers);
             if (defaultFont != null)
             {
                 var textType = _percentageText.GetType();
-                var fontProperty = textType.GetProperty("Font") ?? textType.GetProperty("SpriteFont");
+                var fontProperty =
+                    textType.GetProperty("Font") ?? textType.GetProperty("SpriteFont");
                 fontProperty?.SetValue(_percentageText, defaultFont);
             }
+
             // Center vertically on progress bar (approximate center - text height varies)
-            _percentageText.Y = _progressBarBackground.Y + (_progressBarBackground.Height / 2) - 10;
+            _percentageText.Y = _progressBarBackground.Y + _progressBarBackground.Height / 2 - 10;
             // Don't set Width - let Gum calculate it automatically based on text content
             // Center horizontally on progress bar - will be recalculated in Update
-            _percentageText.X = _progressBarBackground.X + (_progressBarBackground.Width / 2);
+            _percentageText.X = _progressBarBackground.X + _progressBarBackground.Width / 2;
             _percentageText.Red = 255;
             _percentageText.Green = 255;
             _percentageText.Blue = 255;
             // Set initial text to ensure layout can calculate properly
             _percentageText.RawText = "0%";
-            
+
             // Create error bar (initially hidden)
-            _errorBar = new RenderingLibrary.Graphics.SolidRectangle();
+            _errorBar = new SolidRectangle();
             _errorBar.Width = viewport.Width;
             _errorBar.Height = 80;
             _errorBar.X = 0;
             _errorBar.Y = 0;
-            _errorBar.Color = System.Drawing.Color.FromArgb(80, 0, 0);
+            _errorBar.Color = Color.FromArgb(80, 0, 0);
             _errorBar.Visible = false;
-            
+
             // Create error text (initially hidden)
-            _errorText = new RenderingLibrary.Graphics.Text(systemManagers);
+            _errorText = new Text(systemManagers);
             if (defaultFont != null)
             {
                 var textType = _errorText.GetType();
-                var fontProperty = textType.GetProperty("Font") ?? textType.GetProperty("SpriteFont");
+                var fontProperty =
+                    textType.GetProperty("Font") ?? textType.GetProperty("SpriteFont");
                 fontProperty?.SetValue(_errorText, defaultFont);
             }
+
             _errorText.X = 20;
             _errorText.Y = 20;
             _errorText.Red = 255;
@@ -232,20 +242,20 @@ public class LoadingScene : SceneBase
             _errorText.Visible = false;
             // Set initial text to ensure layout can calculate properly
             _errorText.RawText = "";
-            
+
             // Add all elements to root by setting Parent property
             // IMPORTANT: Add non-text elements first, then text elements
             // This ensures layout calculations have all required properties set
             _progressBarBackground.Parent = root;
             _progressBarFill.Parent = root;
             _errorBar.Parent = root;
-            
+
             // Add text elements last, after all properties (including font and text) are set
             // This prevents null reference during layout updates
             _stepText.Parent = root;
             _percentageText.Parent = root;
             _errorText.Parent = root;
-            
+
             // Mark Gum as fully initialized only after all elements are added
             // We do NOT call UpdateLayout() here as it triggers the null reference
             // The layout will be updated naturally during GumService.Update() calls
@@ -264,20 +274,19 @@ public class LoadingScene : SceneBase
     {
         // Ensure LoadContent has been called before attempting to update Gum
         if (!IsContentLoaded)
-        {
             // LoadContent hasn't been called yet - this shouldn't happen but guard against it
             return;
-        }
-        
+
         // Update Gum only if fully initialized and all systems are ready
         // Check that GumService is initialized and all required properties are set
-        if (_gumInitialized && 
-            _gumService != null && 
-            _gumService.SystemManagers != null && 
-            _gumService.Root != null && 
-            _progressBarBackground != null &&
-            IsGumReadyForUpdate())
-        {
+        if (
+            _gumInitialized
+            && _gumService != null
+            && _gumService.SystemManagers != null
+            && _gumService.Root != null
+            && _progressBarBackground != null
+            && IsGumReadyForUpdate()
+        )
             try
             {
                 _gumService.Update(gameTime);
@@ -287,8 +296,7 @@ public class LoadingScene : SceneBase
                 // Silently catch null reference exceptions from Gum's internal layout updates
                 // This can happen if Text elements don't have fonts set yet
             }
-        }
-        
+
         // Update UI elements only if Gum is fully initialized
         if (_gumInitialized && _gumService != null)
         {
@@ -298,76 +306,76 @@ public class LoadingScene : SceneBase
                 var progressWidth = (int)((_progressBarBackground.Width - 8) * _progress.Progress);
                 _progressBarFill.Width = Math.Max(0, progressWidth);
             }
-            
+
             // Update step text
             if (_stepText != null)
-            {
                 _stepText.RawText = _progress.CurrentStep ?? string.Empty;
-            }
-            
+
             // Update percentage text (centered horizontally on progress bar)
             if (_percentageText != null && _progressBarBackground != null && _gumService != null)
             {
                 var percentage = (int)(_progress.Progress * 100);
                 var percentageText = $"{percentage}%";
                 _percentageText.RawText = percentageText;
-                
+
                 // Calculate progress bar center
-                var progressBarCenterX = _progressBarBackground.X + (_progressBarBackground.Width / 2);
-                
+                var progressBarCenterX =
+                    _progressBarBackground.X + _progressBarBackground.Width / 2;
+
                 // Get actual text width using SpriteFont.MeasureString
                 float textWidth = 0;
-                
-                if (_percentageText is RenderingLibrary.Graphics.Text textElement && _gumService.SystemManagers != null)
+
+                if (_percentageText is Text textElement && _gumService.SystemManagers != null)
                 {
                     // Try to get the SpriteFont from the Text element or SystemManagers
                     var textType = textElement.GetType();
-                    var fontProperty = textType.GetProperty("Font") ?? textType.GetProperty("SpriteFont");
-                    
+                    var fontProperty =
+                        textType.GetProperty("Font") ?? textType.GetProperty("SpriteFont");
+
                     if (fontProperty != null)
                     {
                         var font = fontProperty.GetValue(textElement);
                         if (font is SpriteFont spriteFont)
-                        {
                             textWidth = spriteFont.MeasureString(percentageText).X;
-                        }
                     }
                     else
                     {
                         // Try to get font from SystemManagers
                         var systemManagersType = _gumService.SystemManagers.GetType();
-                        var fontManagerProperty = systemManagersType.GetProperty("FontManager") ?? 
-                                                  systemManagersType.GetProperty("TextManager");
-                        
+                        var fontManagerProperty =
+                            systemManagersType.GetProperty("FontManager")
+                            ?? systemManagersType.GetProperty("TextManager");
+
                         if (fontManagerProperty != null)
                         {
-                            var fontManager = fontManagerProperty.GetValue(_gumService.SystemManagers);
+                            var fontManager = fontManagerProperty.GetValue(
+                                _gumService.SystemManagers
+                            );
                             if (fontManager != null)
                             {
                                 var fontManagerType = fontManager.GetType();
-                                var defaultFontProperty = fontManagerType.GetProperty("DefaultFont") ?? 
-                                                          fontManagerType.GetProperty("Font");
+                                var defaultFontProperty =
+                                    fontManagerType.GetProperty("DefaultFont")
+                                    ?? fontManagerType.GetProperty("Font");
                                 if (defaultFontProperty != null)
                                 {
                                     var font = defaultFontProperty.GetValue(fontManager);
                                     if (font is SpriteFont spriteFont)
-                                    {
                                         textWidth = spriteFont.MeasureString(percentageText).X;
-                                    }
                                 }
                             }
                         }
                     }
                 }
-                
+
                 // Center by subtracting half the text width from the progress bar center
                 if (textWidth > 0)
                 {
-                    var newX = progressBarCenterX - (textWidth / 2);
+                    var newX = progressBarCenterX - textWidth / 2;
                     _percentageText.X = newX;
                 }
             }
-            
+
             // Update error display
             if (_errorBar != null && _errorText != null)
             {
@@ -375,12 +383,10 @@ public class LoadingScene : SceneBase
                 _errorBar.Visible = hasError;
                 _errorText.Visible = hasError;
                 if (hasError)
-                {
                     _errorText.RawText = $"Error: {_progress.Error!.Message}";
-                }
             }
         }
-        
+
         // Check if initialization is complete
         if (!_hasCompleted && _initializationTask.IsCompleted)
         {
@@ -388,20 +394,21 @@ public class LoadingScene : SceneBase
 
             if (_initializationTask.IsFaulted)
             {
-                var exception = _initializationTask.Exception?.GetBaseException() 
-                    ?? _initializationTask.Exception 
+                var exception =
+                    _initializationTask.Exception?.GetBaseException()
+                    ?? _initializationTask.Exception
                     ?? new Exception("Unknown initialization error");
-                
+
                 Logger.LogError(
                     exception,
                     "Game initialization failed: {ErrorMessage}",
                     exception.Message
                 );
-                
+
                 _progress.Error = exception;
                 _progress.IsComplete = true;
                 _progress.CurrentStep = $"Error: {exception.Message}";
-                
+
                 // Don't transition - stay on loading scene to show error
             }
             else if (_initializationTask.IsCanceled)
@@ -421,7 +428,9 @@ public class LoadingScene : SceneBase
                     _progress.CurrentStep = "Initialization complete!";
 
                     // Transition to gameplay scene
-                    Logger.LogInformation("Initialization complete, transitioning to gameplay scene");
+                    Logger.LogInformation(
+                        "Initialization complete, transitioning to gameplay scene"
+                    );
                     _sceneManager.ChangeScene(_completedScene);
                 }
                 catch (Exception ex)
@@ -453,42 +462,44 @@ public class LoadingScene : SceneBase
     {
         if (_gumService?.SystemManagers == null)
             return false;
-        
+
         // Check if Text elements have fonts initialized
         // Text elements without fonts cause null references during layout updates
         try
         {
             var systemManagersType = _gumService.SystemManagers.GetType();
-            var fontManagerProperty = systemManagersType.GetProperty("FontManager") ?? 
-                                      systemManagersType.GetProperty("TextManager");
-            
+            var fontManagerProperty =
+                systemManagersType.GetProperty("FontManager")
+                ?? systemManagersType.GetProperty("TextManager");
+
             if (fontManagerProperty == null)
                 return true; // Can't check, assume ready
-            
+
             var fontManager = fontManagerProperty.GetValue(_gumService.SystemManagers);
             if (fontManager == null)
                 return false; // Font manager not initialized
-            
+
             // Check if we have a default font available
             var fontManagerType = fontManager.GetType();
-            var defaultFontProperty = fontManagerType.GetProperty("DefaultFont") ?? 
-                                      fontManagerType.GetProperty("Font");
+            var defaultFontProperty =
+                fontManagerType.GetProperty("DefaultFont") ?? fontManagerType.GetProperty("Font");
             if (defaultFontProperty == null)
                 return true; // Can't check, assume ready
-            
+
             var defaultFont = defaultFontProperty.GetValue(fontManager);
             if (defaultFont == null)
                 return false; // No default font available yet
-            
+
             // Check if Text elements have fonts set
             var textElements = new[] { _stepText, _percentageText, _errorText };
             foreach (var textElement in textElements)
             {
                 if (textElement == null)
                     continue;
-                
+
                 var textType = textElement.GetType();
-                var fontProperty = textType.GetProperty("Font") ?? textType.GetProperty("SpriteFont");
+                var fontProperty =
+                    textType.GetProperty("Font") ?? textType.GetProperty("SpriteFont");
                 if (fontProperty != null)
                 {
                     var font = fontProperty.GetValue(textElement);
@@ -496,7 +507,7 @@ public class LoadingScene : SceneBase
                         return false; // Text element doesn't have a font set yet
                 }
             }
-            
+
             return true; // All checks passed
         }
         catch
@@ -530,4 +541,3 @@ public class LoadingScene : SceneBase
         base.Dispose(disposing);
     }
 }
-

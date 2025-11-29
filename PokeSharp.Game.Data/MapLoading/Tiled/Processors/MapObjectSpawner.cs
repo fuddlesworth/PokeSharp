@@ -117,7 +117,7 @@ public class MapObjectSpawner
                                 "south" or "down" => Direction.South,
                                 "west" or "left" => Direction.West,
                                 "east" or "right" => Direction.East,
-                                _ => Direction.South,
+                                _ => Direction.South
                             };
                             builder.OverrideComponent(direction);
                         }

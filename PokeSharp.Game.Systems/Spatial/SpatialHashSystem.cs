@@ -20,9 +20,21 @@ public class SpatialHashSystem(ILogger<SpatialHashSystem>? logger = null)
         IUpdateSystem,
         ISpatialQuery
 {
+    #region Constants
+
+    /// <summary>
+    ///     Initial capacity for query result buffer to reduce allocations.
+    /// </summary>
+    private const int QueryResultBufferCapacity = 128;
+
+    #endregion
+
     private readonly SpatialHash _dynamicHash = new(); // For entities with Position (cleared each frame)
     private readonly ILogger<SpatialHashSystem>? _logger = logger;
-    private readonly List<Entity> _queryResultBuffer = new(128); // Pooled buffer for query results
+
+    private readonly List<Entity>
+        _queryResultBuffer = new(QueryResultBufferCapacity); // Pooled buffer for query results
+
     private readonly SpatialHash _staticHash = new(); // For tiles (indexed once)
     private bool _staticTilesIndexed;
 
@@ -109,10 +121,7 @@ public class SpatialHashSystem(ILogger<SpatialHashSystem>? logger = null)
         // Use centralized query for all positioned entities
         world.Query(
             in EcsQueries.AllPositioned,
-            (Entity entity, ref Position pos) =>
-            {
-                _dynamicHash.Add(entity, pos.MapId, pos.X, pos.Y);
-            }
+            (Entity entity, ref Position pos) => { _dynamicHash.Add(entity, pos.MapId, pos.X, pos.Y); }
         );
     }
 

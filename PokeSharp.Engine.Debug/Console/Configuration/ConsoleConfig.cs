@@ -20,7 +20,7 @@ public enum ConsoleSize
     /// <summary>
     /// Full console (100% of screen height).
     /// </summary>
-    Full
+    Full,
 }
 
 /// <summary>
@@ -63,7 +63,7 @@ public record ConsoleConfig
     /// Gets whether console logging is enabled.
     /// Redirects game logs to the console output.
     /// </summary>
-    public bool LoggingEnabled { get; init; } = false; // Off by default
+    public bool LoggingEnabled { get; init; ; // Off by default
 
     /// <summary>
     /// Gets the minimum log level to display in the console.
@@ -83,27 +83,43 @@ public record ConsoleConfig
     /// <summary>
     /// Gets the height multiplier for the given console size.
     /// </summary>
-    public float GetHeightMultiplier() => Size switch
+    public float GetHeightMultiplier(
     {
-        ConsoleSize.Small => ConsoleConstants.Size.SmallMultiplier,
-        ConsoleSize.Medium => ConsoleConstants.Size.MediumMultiplier,
-        ConsoleSize.Full => ConsoleConstants.Size.FullMultiplier,
-        _ => ConsoleConstants.Size.MediumMultiplier
-    };
+        return Size switch
+        {
+            ConsoleSize.Small => ConsoleConstants.Size.SmallMultiplier,
+            ConsoleSize.Medium => ConsoleConstants.Size.MediumMultiplier,
+            ConsoleSize.Full => ConsoleConstants.Size.FullMultiplier,
+            _ => ConsoleConstants.Size.MediumMultiplier
+        };
+    }.Size.MediumMultiplier,
+        };
 
     /// <summary>
     /// Creates a new config with the specified size.
     /// </summary>
-    public ConsoleConfig WithSize(ConsoleSize size) => this with { Size = size };
+    public Consol
+    {
+        return this with { Size = size };
+    }ize) => this with { Size = size };
 
     /// <summary>
     /// Creates a new config with logging enabled/disabled.
     /// </summary>
-    public ConsoleConfig WithLogging(bool enabled) => this with { LoggingEnabled = enabled };
+    public Conso
+    {
+        return this with { LoggingEnabled = enabled };
+    }with { LoggingEnabled = enabled };
 
     /// <summary>
     /// Creates a new config with the specified minimum log level.
     /// </summary>
-    public ConsoleConfig WithMinimumLogLevel(LogLevel level) => this with { MinimumLogLevel = level };
+    public ConsoleConfig W
+    {
+        return this with { MinimumLogLevel = level };
+    }
+   this with
+        {
+            MinimumLogLevel = level,
+        };
 }
-

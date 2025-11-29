@@ -75,9 +75,7 @@ public class PlayerFactory(
         // Add MapStreaming component for seamless map transitions
         if (currentMapName != null)
         {
-            var mapStreaming = new MapStreaming(
-                new MapIdentifier(currentMapName)
-            );
+            var mapStreaming = new MapStreaming(new MapIdentifier(currentMapName));
             world.Add(playerEntity, mapStreaming);
             logger.LogInformation("MapStreaming component added to player");
         }

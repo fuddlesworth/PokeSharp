@@ -2,7 +2,6 @@ using Microsoft.Xna.Framework.Graphics;
 using PokeSharp.Engine.Rendering.Systems;
 using PokeSharp.Engine.Systems.Pooling;
 using PokeSharp.Game.Systems;
-using PokeSharp.Game.Systems.Services;
 
 namespace PokeSharp.Game.Initialization.Initializers;
 
@@ -54,4 +53,3 @@ public interface IGameInitializer
     /// <param name="spriteTextureLoader">The sprite texture loader instance.</param>
     void SetSpriteTextureLoader(SpriteTextureLoader spriteTextureLoader);
 }
-

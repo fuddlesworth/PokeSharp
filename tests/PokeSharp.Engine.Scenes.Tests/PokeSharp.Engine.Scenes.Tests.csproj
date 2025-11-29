@@ -27,4 +27,3 @@
     <ProjectReference Include="..\..\PokeSharp.Engine.Core\PokeSharp.Engine.Core.csproj" />
   </ItemGroup>
 </Project>
-

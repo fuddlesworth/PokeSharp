@@ -1,8 +1,6 @@
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Scenes;
-using PokeSharp.Game.Initialization;
 using PokeSharp.Game.Initialization.Behaviors;
-using PokeSharp.Game.Initialization.Pipeline;
 
 namespace PokeSharp.Game.Initialization.Pipeline.Steps;
 
@@ -71,4 +69,3 @@ public class InitializeBehaviorSystemsStep : InitializationStepBase
         logger.LogInformation("Behavior systems initialized successfully");
     }
 }
-

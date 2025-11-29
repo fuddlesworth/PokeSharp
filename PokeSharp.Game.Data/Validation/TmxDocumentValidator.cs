@@ -9,7 +9,7 @@ namespace PokeSharp.Game.Data.Validation;
 /// </summary>
 /// <remarks>
 ///     This validator works with the current TMX structure where layer.Data is a uint[] array.
-///     For layer data validation (dimensions, tile GIDs), see <see cref="LayerValidator"/>.
+///     For layer data validation (dimensions, tile GIDs), see <see cref="LayerValidator" />.
 /// </remarks>
 public class TmxDocumentValidator : IMapValidator
 {

@@ -1,7 +1,5 @@
 using Arch.Core;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PokeSharp.Engine.Core.Systems;
@@ -68,7 +66,8 @@ public class ConsoleSystem : IUpdateSystem
         SceneManager sceneManager,
         IServiceProvider services,
         ILogger logger,
-        ConsoleLoggerProvider? loggerProvider = null)
+        ConsoleLoggerProvider? loggerProvider = null
+    )
     {
         _world = world ?? throw new ArgumentNullException(nameof(world));
         _apiProvider = apiProvider ?? throw new ArgumentNullException(nameof(apiProvider));
@@ -104,7 +103,13 @@ public class ConsoleSystem : IUpdateSystem
             _evaluator = new ConsoleScriptEvaluator(_logger);
 
             // Create console globals (script API)
-            _globals = new ConsoleGlobals(_apiProvider, _world, _systemManager, _graphicsDevice, _logger);
+            _globals = new ConsoleGlobals(
+                _apiProvider,
+                _world,
+                _systemManager,
+                _graphicsDevice,
+                _logger
+            );
 
             // Create history and persistence
             var history = new ConsoleCommandHistory();
@@ -135,7 +140,10 @@ public class ConsoleSystem : IUpdateSystem
             var aliasMacroManager = new AliasMacroManager(aliasesPath, _logger);
 
             // Create bookmarks manager
-            var bookmarksPath = Path.Combine(scriptManager.ScriptsDirectory, ConsoleConstants.Files.BookmarksFileName);
+            var bookmarksPath = Path.Combine(
+                scriptManager.ScriptsDirectory,
+                ConsoleConstants.Files.BookmarksFileName
+            );
             var bookmarksManager = new BookmarkedCommandsManager(bookmarksPath, _logger);
 
             // Create history suggestion provider
@@ -145,9 +153,32 @@ public class ConsoleSystem : IUpdateSystem
             var outputExporter = new OutputExporter(scriptManager.ScriptsDirectory);
 
             // Initialize services
-            _autoCompleteCoordinator = new ConsoleAutoCompleteCoordinator(_console, autoComplete, historySuggestionProvider, _logger);
-            _inputHandler = new ConsoleInputHandler(_console, history, persistence, _logger, _autoCompleteCoordinator, parameterHintProvider, bookmarksManager);
-            _commandExecutor = new ConsoleCommandExecutor(_console, _evaluator, _globals, aliasMacroManager, scriptManager, outputExporter, history, _logger, bookmarksManager);
+            _autoCompleteCoordinator = new ConsoleAutoCompleteCoordinator(
+                _console,
+                autoComplete,
+                historySuggestionProvider,
+                _logger
+            );
+            _inputHandler = new ConsoleInputHandler(
+                _console,
+                history,
+                persistence,
+                _logger,
+                _autoCompleteCoordinator,
+                parameterHintProvider,
+                bookmarksManager
+            );
+            _commandExecutor = new ConsoleCommandExecutor(
+                _console,
+                _evaluator,
+                _globals,
+                aliasMacroManager,
+                scriptManager,
+                outputExporter,
+                history,
+                _logger,
+                bookmarksManager
+            );
 
             // Load persisted data
             var loadedHistory = persistence.LoadHistory();
@@ -160,35 +191,44 @@ public class ConsoleSystem : IUpdateSystem
             // Set up console logger if provided
             if (_loggerProvider != null)
             {
-                _loggerProvider.SetConsoleWriter((message, color) =>
-                {
-                    // Write logs to console buffer even when closed, so they're visible when reopened
-                    if (_console != null && _console.Config.LoggingEnabled)
+                _loggerProvider.SetConsoleWriter(
+                    (message, color) =>
                     {
-                        _console.AppendOutput(message, color);
+                        // Write logs to console buffer even when closed, so they're visible when reopened
+                        if (_console != null && _console.Config.LoggingEnabled) _console.AppendOutput(message, color);
                     }
-                });
-                
+                );
+
                 // Set up log level filter based on console config
                 _loggerProvider.SetLogLevelFilter(logLevel =>
                 {
-                    if (_console == null) return false;
+                    if (_console == null)
+                        return false;
                     return logLevel >= _console.Config.MinimumLogLevel;
                 });
             }
 
             // Load startup script if enabled
-            if (config.AutoLoadStartupScript)
-            {
-                _ = LoadStartupScriptAsync(scriptManager, config.StartupScriptName);
-            }
+            if (config.AutoLoadStartupScript) _ = LoadStartupScriptAsync(scriptManager, config.StartupScriptName);
 
             // Welcome message with better formatting
-            _console.AppendOutput("╔════════════════════════════════════════════════════════════╗", Primary);
-            _console.AppendOutput("║              PokeSharp Debug Console                      ║", Info_Dim);
-            _console.AppendOutput("╚════════════════════════════════════════════════════════════╝", Primary);
+            _console.AppendOutput(
+                "╔════════════════════════════════════════════════════════════╗",
+                Primary
+            );
+            _console.AppendOutput(
+                "║              PokeSharp Debug Console                      ║",
+                Info_Dim
+            );
+            _console.AppendOutput(
+                "╚════════════════════════════════════════════════════════════╝",
+                Primary
+            );
             _console.AppendOutput("", Text_Primary);
-            _console.AppendOutput("  Execute C# code in real-time  •  Full game API access", Text_Secondary);
+            _console.AppendOutput(
+                "  Execute C# code in real-time  •  Full game API access",
+                Text_Secondary
+            );
             _console.AppendOutput("", Text_Primary);
             _console.AppendOutput("Quick Start:", Primary);
             _console.AppendOutput("  • Type 'help' for commands and shortcuts", Text_Secondary);
@@ -197,8 +237,14 @@ public class ConsoleSystem : IUpdateSystem
             _console.AppendOutput("  • Try: Player.GetMoney()", Success);
             _console.AppendOutput("", Text_Primary);
             _console.AppendOutput("Features:", Primary);
-            _console.AppendOutput($"  Console size: {config.Size,-15} Syntax highlighting: {(config.SyntaxHighlightingEnabled ? "ON " : "OFF")}", Success);
-            _console.AppendOutput($"  Auto-complete: {(config.AutoCompleteEnabled ? "ON " : "OFF"),-14} History: {(config.PersistHistory ? "Persistent" : "Session")}", Success);
+            _console.AppendOutput(
+                $"  Console size: {config.Size, -15} Syntax highlighting: {(config.SyntaxHighlightingEnabled ? "ON " : "OFF")}",
+                Success
+            );
+            _console.AppendOutput(
+                $"  Auto-complete: {(config.AutoCompleteEnabled ? "ON " : "OFF"), -14} History: {(config.PersistHistory ? "Persistent" : "Session")}",
+                Success
+            );
             _console.AppendOutput("", Text_Primary);
 
             _logger.LogInformation("Console system initialized successfully");
@@ -221,10 +267,13 @@ public class ConsoleSystem : IUpdateSystem
             if (!_isConsoleOpen)
             {
                 var currentKeyboard = Keyboard.GetState();
-                bool isShiftPressed = currentKeyboard.IsKeyDown(Keys.LeftShift) || currentKeyboard.IsKeyDown(Keys.RightShift);
-                bool togglePressed = currentKeyboard.IsKeyDown(Keys.OemTilde) && 
-                                     _previousKeyboardState.IsKeyUp(Keys.OemTilde) &&
-                                     !isShiftPressed;
+                bool isShiftPressed =
+                    currentKeyboard.IsKeyDown(Keys.LeftShift)
+                    || currentKeyboard.IsKeyDown(Keys.RightShift);
+                bool togglePressed =
+                    currentKeyboard.IsKeyDown(Keys.OemTilde)
+                    && _previousKeyboardState.IsKeyUp(Keys.OemTilde)
+                    && !isShiftPressed;
 
                 if (togglePressed)
                 {
@@ -269,7 +318,8 @@ public class ConsoleSystem : IUpdateSystem
                 _inputHandler,
                 _autoCompleteCoordinator,
                 _history,
-                _sceneManager);
+                _sceneManager
+            );
 
             // Subscribe to scene events
             _currentConsoleScene.CommandRequested += OnConsoleCommandRequested;
@@ -420,7 +470,11 @@ public class ConsoleSystem : IUpdateSystem
                 _logger.LogInformation("Loading startup script: {ScriptName}", scriptName);
                 var result = await _evaluator.EvaluateAsync(scriptResult.Value!, _globals);
 
-                if (result.IsSuccess && !string.IsNullOrWhiteSpace(result.Output) && result.Output != "null")
+                if (
+                    result.IsSuccess
+                    && !string.IsNullOrWhiteSpace(result.Output)
+                    && result.Output != "null"
+                )
                 {
                     _console.AppendOutput($"Startup: {result.Output}", Success);
                 }

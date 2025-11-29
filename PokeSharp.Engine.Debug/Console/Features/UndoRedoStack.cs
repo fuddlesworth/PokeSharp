@@ -6,15 +6,10 @@ namespace PokeSharp.Engine.Debug.Console.Features;
 /// </summary>
 public class UndoRedoStack
 {
-    private readonly List<TextState> _undoStack = new();
-    private readonly List<TextState> _redoStack = new();
     private const int MaxHistorySize = 100;
+    private readonly List<TextState> _redoStack = new();
+    private readonly List<TextState> _undoStack = new();
     private TextState? _lastSavedState;
-
-    /// <summary>
-    /// Represents a snapshot of text and cursor state.
-    /// </summary>
-    private record TextState(string Text, int CursorPosition);
 
     /// <summary>
     /// Gets whether undo is available.
@@ -97,5 +92,9 @@ public class UndoRedoStack
         _redoStack.Clear();
         _lastSavedState = null;
     }
-}
 
+    /// <summary>
+    /// Represents a snapshot of text and cursor state.
+    /// </summary>
+    private record TextState(string Text, int CursorPosition);
+}

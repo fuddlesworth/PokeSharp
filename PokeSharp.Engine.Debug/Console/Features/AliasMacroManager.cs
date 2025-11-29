@@ -1,37 +1,38 @@
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Debug.Utilities;
-using System.Text.RegularExpressions;
 
 namespace PokeSharp.Engine.Debug.Console.Features;
 
 /// <summary>
-/// Manages console aliases and macros for creating shortcuts to common commands.
-/// Supports parameterized macros with $1, $2, etc. for argument substitution.
+///     Manages console aliases and macros for creating shortcuts to common commands.
+///     Supports parameterized macros with $1, $2, etc. for argument substitution.
 /// </summary>
 public class AliasMacroManager
 {
-    private readonly ILogger? _logger;
     private readonly Dictionary<string, string> _aliases = new();
     private readonly string _aliasesFilePath;
+    private readonly ILogger? _logger;
 
     /// <summary>
-    /// Gets the number of defined aliases.
-    /// </summary>
-    public int Count => _aliases.Count;
-
-    /// <summary>
-    /// Initializes a new instance of AliasMacroManager.
+    ///     Initializes a new instance of AliasMacroManager.
     /// </summary>
     /// <param name="aliasesFilePath">Path to save/load aliases from.</param>
     /// <param name="logger">Optional logger for debugging.</param>
     public AliasMacroManager(string aliasesFilePath, ILogger? logger = null)
     {
-        _aliasesFilePath = aliasesFilePath ?? throw new ArgumentNullException(nameof(aliasesFilePath));
+        _aliasesFilePath =
+            aliasesFilePath ?? throw new ArgumentNullException(nameof(aliasesFilePath));
         _logger = logger;
     }
 
     /// <summary>
-    /// Defines a new alias or updates an existing one.
+    ///     Gets the number of defined aliases.
+    /// </summary>
+    public int Count => _aliases.Count;
+
+    /// <summary>
+    ///     Defines a new alias or updates an existing one.
     /// </summary>
     /// <param name="name">Alias name (e.g., "tp", "gm").</param>
     /// <param name="command">Command to execute (e.g., "Map.TransitionToMap", "Player.GiveMoney($1)").</param>
@@ -44,7 +45,10 @@ public class AliasMacroManager
         // Sanitize alias name (alphanumeric and underscore only)
         if (!Regex.IsMatch(name, @"^[a-zA-Z_][a-zA-Z0-9_]*$"))
         {
-            _logger?.LogWarning("Invalid alias name: {Name}. Must be alphanumeric with underscores.", name);
+            _logger?.LogWarning(
+                "Invalid alias name: {Name}. Must be alphanumeric with underscores.",
+                name
+            );
             return false;
         }
 
@@ -54,7 +58,7 @@ public class AliasMacroManager
     }
 
     /// <summary>
-    /// Removes an alias.
+    ///     Removes an alias.
     /// </summary>
     /// <param name="name">Alias name to remove.</param>
     /// <returns>True if removed, false if not found.</returns>
@@ -65,11 +69,12 @@ public class AliasMacroManager
             _logger?.LogDebug("Alias removed: {Name}", name);
             return true;
         }
+
         return false;
     }
 
     /// <summary>
-    /// Checks if an alias exists.
+    ///     Checks if an alias exists.
     /// </summary>
     public bool HasAlias(string name)
     {
@@ -77,7 +82,7 @@ public class AliasMacroManager
     }
 
     /// <summary>
-    /// Gets all defined aliases.
+    ///     Gets all defined aliases.
     /// </summary>
     public IReadOnlyDictionary<string, string> GetAllAliases()
     {
@@ -85,7 +90,7 @@ public class AliasMacroManager
     }
 
     /// <summary>
-    /// Expands an alias with optional arguments.
+    ///     Expands an alias with optional arguments.
     /// </summary>
     /// <param name="input">User input (e.g., "tp 10 20" or "gm 1000").</param>
     /// <param name="expandedCommand">The expanded command if alias found.</param>
@@ -115,14 +120,14 @@ public class AliasMacroManager
     }
 
     /// <summary>
-    /// Expands parameter placeholders ($1, $2, etc.) in a command template.
+    ///     Expands parameter placeholders ($1, $2, etc.) in a command template.
     /// </summary>
     private string ExpandParameters(string template, string[] args)
     {
         var result = template;
 
         // Replace $1, $2, ..., $9 with actual arguments
-        for (int i = 0; i < args.Length && i < 9; i++)
+        for (var i = 0; i < args.Length && i < 9; i++)
         {
             var placeholder = $"${i + 1}";
             result = result.Replace(placeholder, args[i]);
@@ -130,42 +135,51 @@ public class AliasMacroManager
 
         // Check for missing parameters
         if (Regex.IsMatch(result, @"\$\d"))
-        {
             _logger?.LogWarning("Macro has unfilled parameters: {Template}", result);
-        }
 
         return result;
     }
 
     /// <summary>
-    /// Saves aliases to disk.
+    ///     Saves aliases to disk.
     /// </summary>
     public bool SaveAliases()
     {
-        var content = string.Join(Environment.NewLine, _aliases.Select(kvp => $"{kvp.Key}={kvp.Value}"));
+        var content = string.Join(
+            Environment.NewLine,
+            _aliases.Select(kvp => $"{kvp.Key}={kvp.Value}")
+        );
         if (FileUtilities.WriteTextFile(_aliasesFilePath, content, _logger))
         {
-            _logger?.LogInformation("Saved {Count} aliases to {Path}", _aliases.Count, _aliasesFilePath);
+            _logger?.LogInformation(
+                "Saved {Count} aliases to {Path}",
+                _aliases.Count,
+                _aliasesFilePath
+            );
             return true;
         }
+
         return false;
     }
 
     /// <summary>
-    /// Loads aliases from disk.
+    ///     Loads aliases from disk.
     /// </summary>
     public int LoadAliases()
     {
         var content = FileUtilities.ReadTextFile(_aliasesFilePath, _logger);
         if (content == null)
         {
-            _logger?.LogDebug("Aliases file not found: {Path}. Starting with empty aliases.", _aliasesFilePath);
+            _logger?.LogDebug(
+                "Aliases file not found: {Path}. Starting with empty aliases.",
+                _aliasesFilePath
+            );
             return 0;
         }
 
         _aliases.Clear();
         var lines = content.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-        int loaded = 0;
+        var loaded = 0;
 
         foreach (var line in lines)
         {
@@ -178,9 +192,7 @@ public class AliasMacroManager
                 var name = parts[0].Trim();
                 var command = parts[1].Trim();
                 if (DefineAlias(name, command))
-                {
                     loaded++;
-                }
             }
         }
 
@@ -189,7 +201,7 @@ public class AliasMacroManager
     }
 
     /// <summary>
-    /// Clears all aliases.
+    ///     Clears all aliases.
     /// </summary>
     public void ClearAll()
     {

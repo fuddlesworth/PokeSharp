@@ -3,8 +3,10 @@ using Arch.Core.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using PokeSharp.Engine.Common.Logging;
+using PokeSharp.Engine.Core.Events.ECS;
 using PokeSharp.Engine.Core.Systems;
 using PokeSharp.Game.Components;
+using PokeSharp.Game.Components.Helpers;
 using PokeSharp.Game.Components.Interfaces;
 using PokeSharp.Game.Components.Maps;
 using PokeSharp.Game.Components.Movement;
@@ -34,21 +36,22 @@ public class MovementSystem : SystemBase, IUpdateSystem
         "South", // Index 1 for Direction.South (0 + 1)
         "West", // Index 2 for Direction.West (1 + 1)
         "East", // Index 3 for Direction.East (2 + 1)
-        "North", // Index 4 for Direction.North (3 + 1)
+        "North" // Index 4 for Direction.North (3 + 1)
     };
 
     private readonly ICollisionService _collisionService;
 
     // Cache for entities to remove (reused across frames to avoid allocation)
     private readonly List<Entity> _entitiesToRemove = new(32);
+    private readonly IEcsEventBus? _eventBus;
     private readonly ILogger<MovementSystem>? _logger;
+
+    // Cache for map world offsets (reduces redundant queries)
+    private readonly Dictionary<int, Vector2> _mapWorldOffsetCache = new(10);
     private readonly ISpatialQuery? _spatialQuery;
 
     // Cache for tile sizes per map (reduces redundant queries)
     private readonly Dictionary<int, int> _tileSizeCache = new();
-
-    // Cache for map world offsets (reduces redundant queries)
-    private readonly Dictionary<int, Vector2> _mapWorldOffsetCache = new(10);
 
     private ITileBehaviorSystem? _tileBehaviorSystem;
 
@@ -57,16 +60,19 @@ public class MovementSystem : SystemBase, IUpdateSystem
     /// </summary>
     /// <param name="collisionService">Collision service for movement validation (required).</param>
     /// <param name="spatialQuery">Optional spatial query for getting tile entities.</param>
+    /// <param name="eventBus">Optional ECS event bus for publishing movement events.</param>
     /// <param name="logger">Optional logger for system diagnostics.</param>
     public MovementSystem(
         ICollisionService collisionService,
         ISpatialQuery? spatialQuery = null,
+        IEcsEventBus? eventBus = null,
         ILogger<MovementSystem>? logger = null
     )
     {
         _collisionService =
             collisionService ?? throw new ArgumentNullException(nameof(collisionService));
         _spatialQuery = spatialQuery;
+        _eventBus = eventBus;
         _logger = logger;
     }
 
@@ -76,27 +82,6 @@ public class MovementSystem : SystemBase, IUpdateSystem
     ///     This ensures grid position is updated before map streaming checks boundaries.
     /// </summary>
     public override int Priority => 90;
-
-    /// <summary>
-    ///     Invalidates cached map world offset when maps are loaded/unloaded.
-    ///     Call this from MapStreamingSystem when map entities change.
-    /// </summary>
-    /// <param name="mapId">Specific map ID to invalidate, or -1 to clear all cached offsets.</param>
-    public void InvalidateMapWorldOffset(int mapId = -1)
-    {
-        if (mapId < 0)
-        {
-            _mapWorldOffsetCache.Clear();
-            _tileSizeCache.Clear();
-            _logger?.LogDebug("Cleared all map world offset cache entries");
-        }
-        else
-        {
-            _mapWorldOffsetCache.Remove(mapId);
-            _tileSizeCache.Remove(mapId);
-            _logger?.LogDebug("Invalidated cache for MapId={MapId}", mapId);
-        }
-    }
 
     /// <inheritdoc />
     public override void Update(World world, float deltaTime)
@@ -142,6 +127,27 @@ public class MovementSystem : SystemBase, IUpdateSystem
     }
 
     /// <summary>
+    ///     Invalidates cached map world offset when maps are loaded/unloaded.
+    ///     Call this from MapStreamingSystem when map entities change.
+    /// </summary>
+    /// <param name="mapId">Specific map ID to invalidate, or -1 to clear all cached offsets.</param>
+    public void InvalidateMapWorldOffset(int mapId = -1)
+    {
+        if (mapId < 0)
+        {
+            _mapWorldOffsetCache.Clear();
+            _tileSizeCache.Clear();
+            _logger?.LogDebug("Cleared all map world offset cache entries");
+        }
+        else
+        {
+            _mapWorldOffsetCache.Remove(mapId);
+            _tileSizeCache.Remove(mapId);
+            _logger?.LogDebug("Invalidated cache for MapId={MapId}", mapId);
+        }
+    }
+
+    /// <summary>
     ///     Sets the tile behavior system for behavior-based movement.
     ///     Called after TileBehaviorSystem is initialized.
     /// </summary>
@@ -174,86 +180,172 @@ public class MovementSystem : SystemBase, IUpdateSystem
     {
         if (movement.IsMoving)
         {
-            // Update movement progress based on speed and delta time
-            movement.MovementProgress += movement.MovementSpeed * deltaTime;
-
-            if (movement.MovementProgress >= 1.0f)
-            {
-                // Movement complete - snap to target position
-                movement.MovementProgress = 1.0f;
-                position.PixelX = movement.TargetPosition.X;
-                position.PixelY = movement.TargetPosition.Y;
-
-                // Recalculate grid coordinates from world pixels in case MapId changed during movement
-                // (e.g., player crossed map boundary during interpolation)
-                var tileSize = GetTileSize(world, position.MapId);
-                var mapOffset = GetMapWorldOffset(world, position.MapId);
-                position.X = (int)((position.PixelX - mapOffset.X) / tileSize);
-                position.Y = (int)((position.PixelY - mapOffset.Y) / tileSize);
-
-                movement.CompleteMovement();
-
-                // Switch to idle animation
-                animation.ChangeAnimation(movement.FacingDirection.ToIdleAnimation());
-            }
-            else
-            {
-                // Interpolate between start and target positions
-                position.PixelX = MathHelper.Lerp(
-                    movement.StartPosition.X,
-                    movement.TargetPosition.X,
-                    movement.MovementProgress
-                );
-
-                position.PixelY = MathHelper.Lerp(
-                    movement.StartPosition.Y,
-                    movement.TargetPosition.Y,
-                    movement.MovementProgress
-                );
-
-                // Ensure walk animation is playing
-                var expectedAnimation = movement.FacingDirection.ToWalkAnimation();
-                if (animation.CurrentAnimation != expectedAnimation)
-                    animation.ChangeAnimation(expectedAnimation);
-            }
+            ProcessActiveMovementWithAnimation(
+                world,
+                ref position,
+                ref movement,
+                ref animation,
+                deltaTime
+            );
+            return;
         }
-        else
+
+        // Entity is not moving - sync pixel position and handle turn-in-place
+        SyncPixelPositionToGrid(world, ref position);
+        ProcessIdleAnimationState(ref movement, ref animation);
+    }
+
+    /// <summary>
+    ///     Processes active movement with animation and interpolation.
+    /// </summary>
+    private void ProcessActiveMovementWithAnimation(
+        World world,
+        ref Position position,
+        ref GridMovement movement,
+        ref Animation animation,
+        float deltaTime
+    )
+    {
+        // Update movement progress based on speed and delta time
+        movement.MovementProgress += movement.MovementSpeed * deltaTime;
+
+        if (movement.MovementProgress >= 1.0f)
         {
-            // Ensure pixel position matches grid position when not moving.
-            // Must apply world offset for multi-map support
-            var tileSize = GetTileSize(world, position.MapId);
-            var mapOffset = GetMapWorldOffset(world, position.MapId);
-            position.PixelX = position.X * tileSize + mapOffset.X;
-            position.PixelY = position.Y * tileSize + mapOffset.Y;
-
-            // Handle turn-in-place state (Pokemon Emerald behavior)
-            if (movement.RunningState == RunningState.TurnDirection)
-            {
-                // Play turn animation (walk in place) with PlayOnce=true
-                // Pokemon Emerald uses WALK_IN_PLACE_FAST which plays walk animation for one cycle
-                var turnAnimation = movement.FacingDirection.ToTurnAnimation();
-                if (animation.CurrentAnimation != turnAnimation || !animation.PlayOnce)
-                {
-                    animation.ChangeAnimation(turnAnimation, forceRestart: true, playOnce: true);
-                }
-
-                // Check if turn animation has completed (uses animation framework's timing)
-                if (animation.IsComplete)
-                {
-                    // Turn complete - allow movement on next input
-                    movement.RunningState = RunningState.NotMoving;
-                    // Transition to idle animation
-                    animation.ChangeAnimation(movement.FacingDirection.ToIdleAnimation());
-                }
-            }
-            else
-            {
-                // Ensure idle animation is playing
-                var expectedAnimation = movement.FacingDirection.ToIdleAnimation();
-                if (animation.CurrentAnimation != expectedAnimation)
-                    animation.ChangeAnimation(expectedAnimation);
-            }
+            CompleteMovementWithAnimation(world, ref position, ref movement, ref animation);
+            return;
         }
+
+        // Interpolate between start and target positions
+        InterpolatePosition(ref position, ref movement);
+        EnsureWalkAnimationPlaying(ref movement, ref animation);
+    }
+
+    /// <summary>
+    ///     Completes movement, snaps position, and switches to idle animation.
+    /// </summary>
+    private void CompleteMovementWithAnimation(
+        World world,
+        ref Position position,
+        ref GridMovement movement,
+        ref Animation animation
+    )
+    {
+        // Movement complete - snap to target position
+        movement.MovementProgress = 1.0f;
+        position.PixelX = movement.TargetPosition.X;
+        position.PixelY = movement.TargetPosition.Y;
+
+        // Recalculate grid coordinates from world pixels in case MapId changed during movement
+        var tileSize = GetTileSize(world, position.MapId);
+        var mapOffset = GetMapWorldOffset(world, position.MapId);
+        position.X = (int)((position.PixelX - mapOffset.X) / tileSize);
+        position.Y = (int)((position.PixelY - mapOffset.Y) / tileSize);
+
+        GridMovementHelpers.CompleteMovement(ref movement);
+
+        // Publish tile entered event
+        PublishTileEnteredEvent(movement, position, tileSize, mapOffset);
+
+        // Switch to idle animation
+        AnimationHelpers.ChangeAnimation(ref animation, movement.FacingDirection.ToIdleAnimation());
+    }
+
+    /// <summary>
+    ///     Interpolates pixel position between start and target.
+    /// </summary>
+    private void InterpolatePosition(ref Position position, ref GridMovement movement)
+    {
+        position.PixelX = MathHelper.Lerp(
+            movement.StartPosition.X,
+            movement.TargetPosition.X,
+            movement.MovementProgress
+        );
+
+        position.PixelY = MathHelper.Lerp(
+            movement.StartPosition.Y,
+            movement.TargetPosition.Y,
+            movement.MovementProgress
+        );
+    }
+
+    /// <summary>
+    ///     Ensures the correct walk animation is playing during movement.
+    /// </summary>
+    private void EnsureWalkAnimationPlaying(ref GridMovement movement, ref Animation animation)
+    {
+        var expectedAnimation = movement.FacingDirection.ToWalkAnimation();
+        if (animation.CurrentAnimation != expectedAnimation)
+            AnimationHelpers.ChangeAnimation(ref animation, expectedAnimation);
+    }
+
+    /// <summary>
+    ///     Handles idle animation state including turn-in-place behavior.
+    /// </summary>
+    private void ProcessIdleAnimationState(ref GridMovement movement, ref Animation animation)
+    {
+        // Handle turn-in-place state (Pokemon Emerald behavior)
+        if (movement.RunningState == RunningState.TurnDirection)
+        {
+            ProcessTurnInPlace(ref movement, ref animation);
+            return;
+        }
+
+        // Ensure idle animation is playing
+        var expectedAnimation = movement.FacingDirection.ToIdleAnimation();
+        if (animation.CurrentAnimation != expectedAnimation)
+            AnimationHelpers.ChangeAnimation(ref animation, expectedAnimation);
+    }
+
+    /// <summary>
+    ///     Processes turn-in-place animation and state transition.
+    /// </summary>
+    private void ProcessTurnInPlace(ref GridMovement movement, ref Animation animation)
+    {
+        // Play turn animation (walk in place) with PlayOnce=true
+        var turnAnimation = movement.FacingDirection.ToTurnAnimation();
+        if (animation.CurrentAnimation != turnAnimation || !animation.PlayOnce)
+            AnimationHelpers.ChangeAnimation(
+                ref animation,
+                turnAnimation,
+                true,
+                true
+            );
+
+        // Check if turn animation has completed
+        if (!animation.IsComplete)
+            return;
+
+        // Turn complete - allow movement on next input
+        movement.RunningState = RunningState.NotMoving;
+        AnimationHelpers.ChangeAnimation(ref animation, movement.FacingDirection.ToIdleAnimation());
+    }
+
+    /// <summary>
+    ///     Publishes tile entered event to the event bus.
+    /// </summary>
+    private void PublishTileEnteredEvent(
+        GridMovement movement,
+        Position position,
+        int tileSize,
+        Vector2 mapOffset
+    )
+    {
+        if (_eventBus == null)
+            return;
+
+        var fromX = (int)((movement.StartPosition.X - mapOffset.X) / tileSize);
+        var fromY = (int)((movement.StartPosition.Y - mapOffset.Y) / tileSize);
+        _eventBus.Publish(
+            new TileEnteredEvent
+            {
+                Entity = default, // Not available in this code path
+                FromPosition = (fromX, fromY),
+                ToPosition = (position.X, position.Y),
+                MapId = position.MapId,
+                Timestamp = GetGameTime(),
+                Priority = EventPriority.Normal
+            }
+        );
     }
 
     /// <summary>
@@ -268,57 +360,75 @@ public class MovementSystem : SystemBase, IUpdateSystem
     {
         if (movement.IsMoving)
         {
-            // Update movement progress based on speed and delta time
-            movement.MovementProgress += movement.MovementSpeed * deltaTime;
-
-            if (movement.MovementProgress >= 1.0f)
-            {
-                // Movement complete - snap to target position
-                movement.MovementProgress = 1.0f;
-                position.PixelX = movement.TargetPosition.X;
-                position.PixelY = movement.TargetPosition.Y;
-
-                // Recalculate grid coordinates from world pixels in case MapId changed during movement
-                // (e.g., player crossed map boundary during interpolation)
-                var tileSize = GetTileSize(world, position.MapId);
-                var mapOffset = GetMapWorldOffset(world, position.MapId);
-                position.X = (int)((position.PixelX - mapOffset.X) / tileSize);
-                position.Y = (int)((position.PixelY - mapOffset.Y) / tileSize);
-
-                movement.CompleteMovement();
-            }
-            else
-            {
-                // Interpolate between start and target positions
-                position.PixelX = MathHelper.Lerp(
-                    movement.StartPosition.X,
-                    movement.TargetPosition.X,
-                    movement.MovementProgress
-                );
-
-                position.PixelY = MathHelper.Lerp(
-                    movement.StartPosition.Y,
-                    movement.TargetPosition.Y,
-                    movement.MovementProgress
-                );
-            }
+            ProcessActiveMovementNoAnimation(world, ref position, ref movement, deltaTime);
+            return;
         }
-        else
+
+        // Entity is not moving - sync pixel position and clear turn state
+        SyncPixelPositionToGrid(world, ref position);
+
+        // For entities without animation, turn-in-place completes immediately
+        if (movement.RunningState == RunningState.TurnDirection) movement.RunningState = RunningState.NotMoving;
+    }
+
+    /// <summary>
+    ///     Processes active movement without animation.
+    /// </summary>
+    private void ProcessActiveMovementNoAnimation(
+        World world,
+        ref Position position,
+        ref GridMovement movement,
+        float deltaTime
+    )
+    {
+        // Update movement progress based on speed and delta time
+        movement.MovementProgress += movement.MovementSpeed * deltaTime;
+
+        if (movement.MovementProgress >= 1.0f)
         {
-            // Ensure pixel position matches grid position when not moving
-            // Must apply world offset for multi-map support
-            var tileSize = GetTileSize(world, position.MapId);
-            var mapOffset = GetMapWorldOffset(world, position.MapId);
-            position.PixelX = position.X * tileSize + mapOffset.X;
-            position.PixelY = position.Y * tileSize + mapOffset.Y;
-
-            // For entities without animation, turn-in-place completes immediately
-            // since there's no animation to wait for
-            if (movement.RunningState == RunningState.TurnDirection)
-            {
-                movement.RunningState = RunningState.NotMoving;
-            }
+            CompleteMovementNoAnimation(world, ref position, ref movement);
+            return;
         }
+
+        // Interpolate between start and target positions
+        InterpolatePosition(ref position, ref movement);
+    }
+
+    /// <summary>
+    ///     Completes movement and snaps position for entities without animation.
+    /// </summary>
+    private void CompleteMovementNoAnimation(
+        World world,
+        ref Position position,
+        ref GridMovement movement
+    )
+    {
+        // Movement complete - snap to target position
+        movement.MovementProgress = 1.0f;
+        position.PixelX = movement.TargetPosition.X;
+        position.PixelY = movement.TargetPosition.Y;
+
+        // Recalculate grid coordinates from world pixels in case MapId changed during movement
+        var tileSize = GetTileSize(world, position.MapId);
+        var mapOffset = GetMapWorldOffset(world, position.MapId);
+        position.X = (int)((position.PixelX - mapOffset.X) / tileSize);
+        position.Y = (int)((position.PixelY - mapOffset.Y) / tileSize);
+
+        GridMovementHelpers.CompleteMovement(ref movement);
+
+        // Publish tile entered event
+        PublishTileEnteredEvent(movement, position, tileSize, mapOffset);
+    }
+
+    /// <summary>
+    ///     Synchronizes pixel position to match grid position when entity is not moving.
+    /// </summary>
+    private void SyncPixelPositionToGrid(World world, ref Position position)
+    {
+        var tileSize = GetTileSize(world, position.MapId);
+        var mapOffset = GetMapWorldOffset(world, position.MapId);
+        position.PixelX = position.X * tileSize + mapOffset.X;
+        position.PixelY = position.Y * tileSize + mapOffset.Y;
     }
 
     /// <summary>
@@ -341,8 +451,12 @@ public class MovementSystem : SystemBase, IUpdateSystem
             {
                 // Only process active requests for entities that aren't already moving, aren't locked,
                 // and aren't currently turning in place (Pokemon Emerald: wait for turn to complete)
-                if (request.Active && !movement.IsMoving && !movement.MovementLocked &&
-                    movement.RunningState != RunningState.TurnDirection)
+                if (
+                    request.Active
+                    && !movement.IsMoving
+                    && !movement.MovementLocked
+                    && movement.RunningState != RunningState.TurnDirection
+                )
                 {
                     // Process the movement request
                     TryStartMovement(world, entity, ref position, ref movement, request.Direction);
@@ -370,6 +484,82 @@ public class MovementSystem : SystemBase, IUpdateSystem
         var tileSize = GetTileSize(world, position.MapId);
 
         // Calculate target grid position
+        var (targetX, targetY) = CalculateTargetPosition(position, direction);
+        if (targetX == position.X && targetY == position.Y)
+            return; // Invalid direction
+
+        // Check map boundaries
+        if (!IsWithinMapBounds(world, position.MapId, targetX, targetY))
+        {
+            _logger?.LogMovementBlocked(targetX, targetY, position.MapId);
+            return;
+        }
+
+        // Get entity's elevation for collision checking
+        var entityElevation = world.TryGet(entity, out Elevation elevation)
+            ? elevation.Value
+            : Elevation.Default;
+
+        // Check for forced movement from current tile
+        if (TryGetForcedMovement(world, position, direction, out var forcedDirection))
+        {
+            direction = forcedDirection;
+            (targetX, targetY) = CalculateTargetPosition(position, direction);
+
+            if (!IsWithinMapBounds(world, position.MapId, targetX, targetY))
+                return;
+        }
+
+        // Get collision info for target tile
+        var (isJumpTile, allowedJumpDir, isTargetWalkable) = _collisionService.GetTileCollisionInfo(
+            position.MapId,
+            targetX,
+            targetY,
+            entityElevation,
+            direction
+        );
+
+        // Handle jump behavior if target is a jump tile
+        if (isJumpTile)
+        {
+            TryExecuteJump(
+                world,
+                ref position,
+                ref movement,
+                direction,
+                allowedJumpDir,
+                targetX,
+                targetY,
+                entityElevation,
+                tileSize
+            );
+            return;
+        }
+
+        // Check if target position is walkable
+        if (!isTargetWalkable)
+        {
+            _logger?.LogCollisionBlocked(targetX, targetY, GetDirectionName(direction));
+            return;
+        }
+
+        // Execute normal movement
+        ExecuteNormalMovement(
+            world,
+            ref position,
+            ref movement,
+            direction,
+            targetX,
+            targetY,
+            tileSize
+        );
+    }
+
+    /// <summary>
+    ///     Calculates the target position based on direction.
+    /// </summary>
+    private (int x, int y) CalculateTargetPosition(Position position, Direction direction)
+    {
         var targetX = position.X;
         var targetY = position.Y;
 
@@ -387,186 +577,170 @@ public class MovementSystem : SystemBase, IUpdateSystem
             case Direction.East:
                 targetX++;
                 break;
-            default:
-                return; // Invalid direction
         }
 
-        // Check map boundaries
-        if (!IsWithinMapBounds(world, position.MapId, targetX, targetY))
-        {
-            _logger?.LogMovementBlocked(targetX, targetY, position.MapId);
-            return; // Outside map bounds - block movement
-        }
+        return (targetX, targetY);
+    }
 
-        // Get entity's elevation for collision checking (used throughout this method)
-        // OPTIMIZATION: Single archetype lookup using TryGet instead of Has + Get
-        var entityElevation = world.TryGet(entity, out Elevation elevation)
-            ? elevation.Value
-            : Elevation.Default;
+    /// <summary>
+    ///     Checks for forced movement from tile behaviors on the current tile.
+    /// </summary>
+    private bool TryGetForcedMovement(
+        World world,
+        Position position,
+        Direction requestedDirection,
+        out Direction forcedDirection
+    )
+    {
+        forcedDirection = Direction.None;
 
-        // NEW: Check for forced movement from current tile (before calculating target)
-        if (_tileBehaviorSystem != null && _spatialQuery != null)
-        {
-            var currentTileEntities = _spatialQuery.GetEntitiesAt(
-                position.MapId,
-                position.X,
-                position.Y
-            );
-            foreach (var tileEntity in currentTileEntities)
-                if (tileEntity.Has<TileBehavior>())
-                {
-                    var forcedDir = _tileBehaviorSystem.GetForcedMovement(
-                        world,
-                        tileEntity,
-                        direction
-                    );
-                    if (forcedDir != Direction.None)
-                    {
-                        direction = forcedDir; // Override direction with forced movement
-                        // Recalculate target position with new direction
-                        targetX = position.X;
-                        targetY = position.Y;
-                        switch (forcedDir)
-                        {
-                            case Direction.North:
-                                targetY--;
-                                break;
-                            case Direction.South:
-                                targetY++;
-                                break;
-                            case Direction.West:
-                                targetX--;
-                                break;
-                            case Direction.East:
-                                targetX++;
-                                break;
-                        }
+        if (_tileBehaviorSystem == null || _spatialQuery == null)
+            return false;
 
-                        // Recheck bounds
-                        if (!IsWithinMapBounds(world, position.MapId, targetX, targetY))
-                            return;
-                        break; // Only check first tile with behavior
-                    }
-                }
-        }
-
-        // OPTIMIZATION: Query collision info once instead of 2-3 separate calls
-        // This eliminates redundant spatial hash queries (6.25ms -> ~1.5ms, 75% reduction)
-        // Before: Multiple separate queries for jump behavior and collision checking
-        // After: GetTileCollisionInfo() = 1 query
-        var (isJumpTile, allowedJumpDir, isTargetWalkable) = _collisionService.GetTileCollisionInfo(
+        var currentTileEntities = _spatialQuery.GetEntitiesAt(
             position.MapId,
-            targetX,
-            targetY,
-            entityElevation,
-            direction
+            position.X,
+            position.Y
         );
 
-        // Check if target tile has jump behavior
-        if (isJumpTile)
+        foreach (var tileEntity in currentTileEntities)
         {
-            // Only allow jumping in the specified direction
-            if (direction == allowedJumpDir)
-            {
-                // Calculate landing position (2 tiles in jump direction)
-                var jumpLandX = targetX;
-                var jumpLandY = targetY;
+            if (!tileEntity.Has<TileBehavior>())
+                continue;
 
-                switch (allowedJumpDir)
-                {
-                    case Direction.South:
-                        jumpLandY++;
-                        break;
-                    case Direction.North:
-                        jumpLandY--;
-                        break;
-                    case Direction.West:
-                        jumpLandX--;
-                        break;
-                    case Direction.East:
-                        jumpLandX++;
-                        break;
-                }
+            var forcedDir = _tileBehaviorSystem.GetForcedMovement(
+                world,
+                tileEntity,
+                requestedDirection
+            );
+            if (forcedDir == Direction.None)
+                continue;
 
-                // Check if landing position is within bounds
-                if (!IsWithinMapBounds(world, position.MapId, jumpLandX, jumpLandY))
-                {
-                    _logger?.LogJumpBlocked(jumpLandX, jumpLandY);
-                    return; // Can't jump outside map bounds
-                }
+            forcedDirection = forcedDir;
+            return true;
+        }
 
-                // OPTIMIZATION: Query landing position collision info once
-                var (_, _, isLandingWalkable) = _collisionService.GetTileCollisionInfo(
-                    position.MapId,
-                    jumpLandX,
-                    jumpLandY,
-                    entityElevation,
-                    Direction.None
-                );
+        return false;
+    }
 
-                // Check if landing position is valid (not blocked)
-                if (!isLandingWalkable)
-                {
-                    _logger?.LogJumpLandingBlocked(jumpLandX, jumpLandY);
-                    return; // Can't jump if landing is blocked
-                }
+    /// <summary>
+    ///     Attempts to execute a jump movement if conditions are valid.
+    /// </summary>
+    private void TryExecuteJump(
+        World world,
+        ref Position position,
+        ref GridMovement movement,
+        Direction requestedDirection,
+        Direction allowedJumpDir,
+        int targetX,
+        int targetY,
+        byte entityElevation,
+        int tileSize
+    )
+    {
+        // Only allow jumping in the specified direction
+        if (requestedDirection != allowedJumpDir)
+            return;
 
-                // Perform the jump (2 tiles in jump direction)
-                var jumpStart = new Vector2(position.PixelX, position.PixelY);
+        // Calculate landing position (2 tiles in jump direction)
+        var (jumpLandX, jumpLandY) = CalculateTargetPosition(
+            new Position { X = targetX, Y = targetY },
+            allowedJumpDir
+        );
 
-                // Get map world offset for multi-map support
-                var jumpMapOffset = GetMapWorldOffset(world, position.MapId);
-                var jumpEnd = new Vector2(
-                    jumpLandX * tileSize + jumpMapOffset.X,
-                    jumpLandY * tileSize + jumpMapOffset.Y
-                );
-                movement.StartMovement(jumpStart, jumpEnd);
-
-                // Update grid position immediately to the landing position
-                position.X = jumpLandX;
-                position.Y = jumpLandY;
-
-                // Update facing direction
-                movement.FacingDirection = direction;
-                _logger?.LogJump(
-                    targetX,
-                    targetY,
-                    jumpLandX,
-                    jumpLandY,
-                    GetDirectionName(direction)
-                );
-            }
-
-            // Block all other directions
+        // Check if landing position is within bounds
+        if (!IsWithinMapBounds(world, position.MapId, jumpLandX, jumpLandY))
+        {
+            _logger?.LogJumpBlocked(jumpLandX, jumpLandY);
             return;
         }
 
-        // Check collision with directional blocking (for jump behaviors)
-        // OPTIMIZATION: Use cached walkability from earlier GetTileCollisionInfo() call
-        if (!isTargetWalkable)
+        // Check if landing position is walkable
+        var (_, _, isLandingWalkable) = _collisionService.GetTileCollisionInfo(
+            position.MapId,
+            jumpLandX,
+            jumpLandY,
+            entityElevation,
+            Direction.None
+        );
+
+        if (!isLandingWalkable)
         {
-            _logger?.LogCollisionBlocked(targetX, targetY, GetDirectionName(direction));
-            return; // Position is blocked
+            _logger?.LogJumpLandingBlocked(jumpLandX, jumpLandY);
+            return;
         }
 
-        // Start the grid movement
-        var startPixels = new Vector2(position.PixelX, position.PixelY);
+        // Execute the jump
+        ExecuteJumpMovement(
+            world,
+            ref position,
+            ref movement,
+            requestedDirection,
+            jumpLandX,
+            jumpLandY,
+            targetX,
+            targetY,
+            tileSize
+        );
+    }
 
-        // Get map world offset for multi-map support
-        // Position.PixelX/PixelY must be in world space for rendering and map streaming
+    /// <summary>
+    ///     Executes a jump movement to the landing position.
+    /// </summary>
+    private void ExecuteJumpMovement(
+        World world,
+        ref Position position,
+        ref GridMovement movement,
+        Direction direction,
+        int jumpLandX,
+        int jumpLandY,
+        int jumpTileX,
+        int jumpTileY,
+        int tileSize
+    )
+    {
+        var jumpStart = new Vector2(position.PixelX, position.PixelY);
+        var jumpMapOffset = GetMapWorldOffset(world, position.MapId);
+        var jumpEnd = new Vector2(
+            jumpLandX * tileSize + jumpMapOffset.X,
+            jumpLandY * tileSize + jumpMapOffset.Y
+        );
+
+        GridMovementHelpers.StartMovement(ref movement, jumpStart, jumpEnd);
+
+        // Update grid position immediately to the landing position
+        position.X = jumpLandX;
+        position.Y = jumpLandY;
+        movement.FacingDirection = direction;
+
+        _logger?.LogJump(jumpTileX, jumpTileY, jumpLandX, jumpLandY, GetDirectionName(direction));
+    }
+
+    /// <summary>
+    ///     Executes a normal (non-jump) movement to the target position.
+    /// </summary>
+    private void ExecuteNormalMovement(
+        World world,
+        ref Position position,
+        ref GridMovement movement,
+        Direction direction,
+        int targetX,
+        int targetY,
+        int tileSize
+    )
+    {
+        var startPixels = new Vector2(position.PixelX, position.PixelY);
         var mapOffset = GetMapWorldOffset(world, position.MapId);
         var targetPixels = new Vector2(
             targetX * tileSize + mapOffset.X,
             targetY * tileSize + mapOffset.Y
         );
-        movement.StartMovement(startPixels, targetPixels);
+
+        GridMovementHelpers.StartMovement(ref movement, startPixels, targetPixels);
 
         // Update grid position immediately to prevent entities from passing through each other
-        // The pixel position will still interpolate smoothly for rendering
         position.X = targetX;
         position.Y = targetY;
-
-        // Update facing direction
         movement.FacingDirection = direction;
     }
 
@@ -651,9 +825,7 @@ public class MovementSystem : SystemBase, IUpdateSystem
                 {
                     // Allow movement within current map bounds
                     if (tileX >= 0 && tileX < mapInfo.Width && tileY >= 0 && tileY < mapInfo.Height)
-                    {
                         withinBounds = true;
-                    }
                     // Also allow movement 1 tile outside bounds (map connections)
                     // MapStreamingSystem will handle boundary crossing and map transitions
                     else if (
@@ -662,14 +834,10 @@ public class MovementSystem : SystemBase, IUpdateSystem
                         && tileY >= -1
                         && tileY <= mapInfo.Height
                     )
-                    {
                         withinBounds = true;
-                    }
                     else
-                    {
                         // Too far outside map bounds - block movement
                         withinBounds = false;
-                    }
                 }
             }
         );
@@ -678,4 +846,47 @@ public class MovementSystem : SystemBase, IUpdateSystem
         // This maintains backward compatibility with tests and situations without map metadata
         return withinBounds ?? true;
     }
+
+    /// <summary>
+    ///     Gets the current game time for event timestamps.
+    /// </summary>
+    private float GetGameTime()
+    {
+        return (float)DateTime.UtcNow.TimeOfDay.TotalSeconds;
+    }
+
+    #region Constants
+
+    /// <summary>
+    ///     Default tile size in pixels when MapInfo is unavailable.
+    /// </summary>
+    private const int DefaultTileSize = 16;
+
+    /// <summary>
+    ///     Movement completion threshold (1.0 = 100% complete).
+    /// </summary>
+    private const float MovementCompleteThreshold = 1.0f;
+
+    /// <summary>
+    ///     Direction offset to convert Direction enum (-1 to 3) to array index (0 to 4).
+    /// </summary>
+    private const int DirectionEnumOffset = 1;
+
+    /// <summary>
+    ///     Initial capacity for entity removal buffer to reduce allocations.
+    /// </summary>
+    private const int EntityRemovalBufferCapacity = 32;
+
+    /// <summary>
+    ///     Initial capacity for map info cache.
+    /// </summary>
+    private const int MapInfoCacheCapacity = 10;
+
+    /// <summary>
+    ///     Buffer distance in tiles beyond map boundaries for map connections.
+    ///     Allows movement 1 tile outside bounds for seamless map transitions.
+    /// </summary>
+    private const int MapBoundaryBufferTiles = 1;
+
+    #endregion
 }

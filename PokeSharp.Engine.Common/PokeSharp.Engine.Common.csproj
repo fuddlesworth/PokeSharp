@@ -8,8 +8,14 @@
     <PackageReference Include="Arch" Version="2.1.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.11" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.11" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.11" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="9.0.11" />
+    <PackageReference
+      Include="Microsoft.Extensions.Configuration.EnvironmentVariables"
+      Version="9.0.11"
+    />
+    <PackageReference
+      Include="Microsoft.Extensions.Configuration.FileExtensions"
+      Version="9.0.11"
+    />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.11" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.11" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.4.1" />

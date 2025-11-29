@@ -67,4 +67,3 @@ public interface IScene : IDisposable
     /// <param name="gameTime">Provides timing information.</param>
     void Draw(GameTime gameTime);
 }
-

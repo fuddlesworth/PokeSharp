@@ -28,7 +28,7 @@ public class MovementSystemTests : IDisposable
         _world = World.Create();
         _mockCollisionService = new Mock<ICollisionService>();
         _mockLogger = new Mock<ILogger<MovementSystem>>();
-        _system = new MovementSystem(_mockCollisionService.Object, null, _mockLogger.Object);
+        _system = new MovementSystem(_mockCollisionService.Object, null, null, _mockLogger.Object);
     }
 
     public void Dispose()
@@ -45,7 +45,7 @@ public class MovementSystemTests : IDisposable
         {
             IsMoving = true,
             MovementProgress = 0f,
-            FacingDirection = Direction.South,
+            FacingDirection = Direction.South
         };
         var animation = new Animation { CurrentAnimation = "walk_down", IsPlaying = true };
 
@@ -69,7 +69,7 @@ public class MovementSystemTests : IDisposable
         {
             IsMoving = true,
             MovementProgress = 0f,
-            FacingDirection = Direction.South,
+            FacingDirection = Direction.South
         };
 
         var entity = _world.Create(position, movement);
@@ -172,7 +172,9 @@ public class MovementSystemTests : IDisposable
         // Assert - Should not allocate excessive memory for direction strings
         // Some allocation is expected for movement updates and animation changes, but not for ToString()
         // Increased tolerance to account for animation string allocations (turn_*, go_*, face_*)
-        allocated.Should().BeLessThan(50000, "should not allocate excessive strings for direction logging");
+        allocated
+            .Should()
+            .BeLessThan(50000, "should not allocate excessive strings for direction logging");
     }
 
     [Fact]
@@ -180,7 +182,15 @@ public class MovementSystemTests : IDisposable
     {
         // Arrange
         _mockCollisionService
-            .Setup(x => x.IsPositionWalkable(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<Direction>(), It.IsAny<byte>()))
+            .Setup(x =>
+                x.IsPositionWalkable(
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
+                    It.IsAny<Direction>(),
+                    It.IsAny<byte>()
+                )
+            )
             .Returns(true);
 
         var entity = _world.Create(
@@ -252,7 +262,15 @@ public class MovementSystemTests : IDisposable
     {
         // Arrange - Mock GetTileCollisionInfo (used by MovementSystem for optimized collision checking)
         _mockCollisionService
-            .Setup(x => x.GetTileCollisionInfo(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<byte>(), It.IsAny<Direction>()))
+            .Setup(x =>
+                x.GetTileCollisionInfo(
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
+                    It.IsAny<byte>(),
+                    It.IsAny<Direction>()
+                )
+            )
             .Returns((false, Direction.None, true)); // Not jump tile, no jump dir, walkable
 
         // Entity must already face South to start moving immediately (Pokemon Emerald turn-in-place behavior)
@@ -278,7 +296,15 @@ public class MovementSystemTests : IDisposable
     {
         // Arrange - Mock GetTileCollisionInfo to return blocked
         _mockCollisionService
-            .Setup(x => x.GetTileCollisionInfo(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<byte>(), It.IsAny<Direction>()))
+            .Setup(x =>
+                x.GetTileCollisionInfo(
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
+                    It.IsAny<byte>(),
+                    It.IsAny<Direction>()
+                )
+            )
             .Returns((false, Direction.None, false)); // Not jump tile, no jump dir, NOT walkable
 
         // Entity must already face South to attempt movement (Pokemon Emerald turn-in-place behavior)
@@ -369,7 +395,15 @@ public class MovementSystemIntegrationTests : IDisposable
         _world = World.Create();
         _mockCollisionService = new Mock<ICollisionService>();
         _mockCollisionService
-            .Setup(x => x.IsPositionWalkable(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<Direction>(), It.IsAny<byte>()))
+            .Setup(x =>
+                x.IsPositionWalkable(
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
+                    It.IsAny<Direction>(),
+                    It.IsAny<byte>()
+                )
+            )
             .Returns(true);
         _system = new MovementSystem(_mockCollisionService.Object);
     }

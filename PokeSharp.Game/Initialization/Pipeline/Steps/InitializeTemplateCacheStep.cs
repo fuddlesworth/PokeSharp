@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Scenes;
-using PokeSharp.Game.Initialization.Pipeline;
 
 namespace PokeSharp.Game.Initialization.Pipeline.Steps;
 
@@ -31,4 +30,3 @@ public class InitializeTemplateCacheStep : InitializationStepBase
         logger.LogInformation("Template cache initialized successfully");
     }
 }
-

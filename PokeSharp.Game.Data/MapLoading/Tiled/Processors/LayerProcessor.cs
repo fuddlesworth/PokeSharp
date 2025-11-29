@@ -1,6 +1,6 @@
+using System.Text.Json;
 using Arch.Core;
 using Microsoft.Extensions.Logging;
-using Microsoft.Xna.Framework;
 using PokeSharp.Engine.Common.Logging;
 using PokeSharp.Engine.Core.Types;
 using PokeSharp.Engine.Systems.BulkOperations;
@@ -10,7 +10,6 @@ using PokeSharp.Game.Data.MapLoading.Tiled.Services;
 using PokeSharp.Game.Data.MapLoading.Tiled.Tmx;
 using PokeSharp.Game.Data.MapLoading.Tiled.Utilities;
 using PokeSharp.Game.Data.PropertyMapping;
-using System.Text.Json;
 
 namespace PokeSharp.Game.Data.MapLoading.Tiled.Processors;
 
@@ -76,6 +75,42 @@ public class LayerProcessor : ILayerProcessor
     }
 
     /// <summary>
+    ///     Parses map connection properties from Tiled custom properties.
+    ///     Extracts connection_* properties that define how maps connect to each other.
+    /// </summary>
+    /// <param name="tmxDoc">The Tiled document to parse connections from.</param>
+    /// <returns>A list of map connections parsed from the document.</returns>
+    /// <remarks>
+    ///     Connections are stored as custom properties with names like "connection_north", "connection_south", etc.
+    ///     Each connection contains:
+    ///     - direction: The direction of the connection (North, South, East, West)
+    ///     - map: The identifier of the connected map
+    ///     - offset: Optional alignment offset in tiles (default: 0)
+    /// </remarks>
+    public List<MapConnection> ParseMapConnections(TmxDocument tmxDoc)
+    {
+        var connections = new List<MapConnection>();
+
+        // Tiled stores custom properties at the map level
+        // We need to check if the document has custom properties exposed
+        // For now, we'll return an empty list and implement this when the TmxDocument
+        // structure is extended to include custom properties
+
+        // TODO: Once TmxDocument.Properties is added, implement parsing like this:
+        // foreach (var property in tmxDoc.Properties ?? Enumerable.Empty<TmxProperty>())
+        // {
+        //     if (property.Name?.StartsWith("connection_", StringComparison.OrdinalIgnoreCase) == true)
+        //     {
+        //         var connection = ParseConnectionProperty(property);
+        //         if (connection.HasValue)
+        //             connections.Add(connection.Value);
+        //     }
+        // }
+
+        return connections;
+    }
+
+    /// <summary>
     ///     Creates tile entities for a single layer using bulk operations for performance.
     /// </summary>
     private int CreateTileEntities(
@@ -124,7 +159,7 @@ public class LayerProcessor : ILayerProcessor
                     FlipH = flipH,
                     FlipV = flipV,
                     FlipD = flipD,
-                    TilesetIndex = tilesetIndex,
+                    TilesetIndex = tilesetIndex
                 }
             );
         }
@@ -227,7 +262,7 @@ public class LayerProcessor : ILayerProcessor
         {
             0 => Elevation.Ground, // 0
             1 => 2, // Objects layer - render behind player (elevation 3)
-            _ => Elevation.Overhead, // 9 (2+)
+            _ => Elevation.Overhead // 9 (2+)
         };
     }
 
@@ -326,42 +361,6 @@ public class LayerProcessor : ILayerProcessor
     }
 
     /// <summary>
-    ///     Parses map connection properties from Tiled custom properties.
-    ///     Extracts connection_* properties that define how maps connect to each other.
-    /// </summary>
-    /// <param name="tmxDoc">The Tiled document to parse connections from.</param>
-    /// <returns>A list of map connections parsed from the document.</returns>
-    /// <remarks>
-    ///     Connections are stored as custom properties with names like "connection_north", "connection_south", etc.
-    ///     Each connection contains:
-    ///     - direction: The direction of the connection (North, South, East, West)
-    ///     - map: The identifier of the connected map
-    ///     - offset: Optional alignment offset in tiles (default: 0)
-    /// </remarks>
-    public List<MapConnection> ParseMapConnections(TmxDocument tmxDoc)
-    {
-        var connections = new List<MapConnection>();
-
-        // Tiled stores custom properties at the map level
-        // We need to check if the document has custom properties exposed
-        // For now, we'll return an empty list and implement this when the TmxDocument
-        // structure is extended to include custom properties
-
-        // TODO: Once TmxDocument.Properties is added, implement parsing like this:
-        // foreach (var property in tmxDoc.Properties ?? Enumerable.Empty<TmxProperty>())
-        // {
-        //     if (property.Name?.StartsWith("connection_", StringComparison.OrdinalIgnoreCase) == true)
-        //     {
-        //         var connection = ParseConnectionProperty(property);
-        //         if (connection.HasValue)
-        //             connections.Add(connection.Value);
-        //     }
-        // }
-
-        return connections;
-    }
-
-    /// <summary>
     ///     Parses a single connection property from Tiled.
     ///     Extracts direction, target map, and offset from the property value.
     /// </summary>
@@ -370,9 +369,9 @@ public class LayerProcessor : ILayerProcessor
     /// <remarks>
     ///     Expected property structure:
     ///     {
-    ///         "direction": "North",
-    ///         "map": "route101",
-    ///         "offset": 0
+    ///     "direction": "North",
+    ///     "map": "route101",
+    ///     "offset": 0
     ///     }
     /// </remarks>
     private MapConnection? ParseConnectionProperty(object? propertyValue)
@@ -386,13 +385,10 @@ public class LayerProcessor : ILayerProcessor
             Dictionary<string, object>? connectionData = null;
 
             if (propertyValue is JsonElement jsonElement)
-            {
-                connectionData = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonElement.GetRawText());
-            }
-            else if (propertyValue is Dictionary<string, object> dict)
-            {
-                connectionData = dict;
-            }
+                connectionData = JsonSerializer.Deserialize<Dictionary<string, object>>(
+                    jsonElement.GetRawText()
+                );
+            else if (propertyValue is Dictionary<string, object> dict) connectionData = dict;
 
             if (connectionData == null)
                 return null;
@@ -425,7 +421,10 @@ public class LayerProcessor : ILayerProcessor
             {
                 if (offsetObj is int intOffset)
                     offset = intOffset;
-                else if (offsetObj is JsonElement offsetElement && offsetElement.ValueKind == JsonValueKind.Number)
+                else if (
+                    offsetObj is JsonElement offsetElement
+                    && offsetElement.ValueKind == JsonValueKind.Number
+                )
                     offset = offsetElement.GetInt32();
                 else if (int.TryParse(offsetObj?.ToString(), out var parsedOffset))
                     offset = parsedOffset;
@@ -435,12 +434,9 @@ public class LayerProcessor : ILayerProcessor
         }
         catch (Exception ex)
         {
-            _logger?.LogError(ex, "Failed to parse connection property: {Value}", propertyValue);
-            return null;
-        }
-    }
-
-    /// <summary>
+            _logger?.LogError(ex, "Failed to par/// <summary>
+    ///     Temporary structure to hold tile data before bulk creation.
+    /// </summary>mary>
     ///     Temporary structure to hold tile data before bulk creation.
     /// </summary>
     private struct TileData
@@ -448,7 +444,8 @@ public class LayerProcessor : ILayerProcessor
         public int X;
         public int Y;
         public int TileGid;
-        public bool FlipH;
+        public bool Fli
+H
         public bool FlipV;
         public bool FlipD;
         public int TilesetIndex;

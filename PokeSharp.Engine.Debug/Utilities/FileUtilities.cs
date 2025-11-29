@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
 
 namespace PokeSharp.Engine.Debug.Utilities;
 
@@ -19,10 +18,7 @@ public static class FileUtilities
     {
         try
         {
-            if (!File.Exists(filePath))
-            {
-                return null;
-            }
+            if (!File.Exists(filePath)) return null;
 
             return File.ReadAllText(filePath);
         }
@@ -46,10 +42,7 @@ public static class FileUtilities
         {
             // Ensure directory exists
             var directory = Path.GetDirectoryName(filePath);
-            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
+            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory)) Directory.CreateDirectory(directory);
 
             File.WriteAllText(filePath, content);
             return true;
@@ -68,7 +61,8 @@ public static class FileUtilities
     /// <param name="filePath">Path to the JSON file.</param>
     /// <param name="logger">Optional logger for error reporting.</param>
     /// <returns>Deserialized object, or default(T) if file doesn't exist or an error occurs.</returns>
-    public static T? ReadJsonFile<T>(string filePath, ILogger? logger = null) where T : class
+    public static T? ReadJsonFile<T>(string filePath, ILogger? logger = null)
+        where T : class
     {
         try
         {
@@ -95,7 +89,8 @@ public static class FileUtilities
     /// <param name="data">Object to serialize.</param>
     /// <param name="logger">Optional logger for error reporting.</param>
     /// <returns>True if successful, false otherwise.</returns>
-    public static bool WriteJsonFile<T>(string filePath, T data, ILogger? logger = null) where T : class
+    public static bool WriteJsonFile<T>(string filePath, T data, ILogger? logger = null)
+        where T : class
     {
         try
         {
@@ -106,10 +101,7 @@ public static class FileUtilities
                 Directory.CreateDirectory(directory);
             }
 
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true
-            };
+            var options = new JsonSerializerOptions { WriteIndented = true };
             var json = JsonSerializer.Serialize(data, options);
             File.WriteAllText(filePath, json);
             return true;
@@ -169,4 +161,3 @@ public static class FileUtilities
         }
     }
 }
-

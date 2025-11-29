@@ -15,4 +15,3 @@
     <ProjectReference Include="..\PokeSharp.Engine.Common\PokeSharp.Engine.Common.csproj" />
   </ItemGroup>
 </Project>
-

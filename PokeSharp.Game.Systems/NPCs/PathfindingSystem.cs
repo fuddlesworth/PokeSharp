@@ -12,16 +12,21 @@ namespace PokeSharp.Game.Systems;
 /// <summary>
 ///     System that processes NPC path data and generates movement requests for NPCs.
 ///     Integrates A* pathfinding with the existing MovementSystem.
+///     Uses batched processing to spread pathfinding calculations across multiple frames.
 /// </summary>
 /// <remarks>
 ///     This system runs after SpatialHashSystem but before MovementSystem.
 ///     It generates MovementRequest components based on the current path state.
+///     Batching prevents performance spikes when many NPCs need pathfinding simultaneously.
 /// </remarks>
 public class PathfindingSystem : SystemBase, IUpdateSystem
 {
     private readonly ILogger<PathfindingSystem>? _logger;
+    private readonly List<Entity> _npcBuffer = new();
     private readonly PathfindingService _pathfindingService;
     private readonly ISpatialQuery _spatialQuery;
+    private int _currentBatchIndex;
+    private int _lastMapId = InvalidMapId;
 
     public PathfindingSystem(ISpatialQuery spatialQuery, ILogger<PathfindingSystem>? logger = null)
     {
@@ -44,7 +49,31 @@ public class PathfindingSystem : SystemBase, IUpdateSystem
     {
         EnsureInitialized();
 
-        // Use centralized query for path followers
+        // Clear buffer and collect all NPCs needing pathfinding
+        _npcBuffer.Clear();
+
+        Point? playerPosition = null;
+        var currentMapId = -1;
+
+        // Get player position for priority calculations (if player exists)
+        world.Query(
+            in EcsQueries.Player,
+            (Entity playerEntity, ref Position pos) =>
+            {
+                playerPosition = new Point(pos.X, pos.Y);
+                currentMapId = pos.MapId;
+            }
+        );
+
+        // Reset batch index if map changed
+        if (currentMapId != _lastMapId && currentMapId != InvalidMapId)
+        {
+            _currentBatchIndex = 0;
+            _lastMapId = currentMapId;
+            _logger?.LogDebug("Map changed to {MapId}, resetting batch index", currentMapId);
+        }
+
+        // Collect all NPCs with movement routes into buffer
         world.Query(
             in EcsQueries.PathFollowers,
             (
@@ -54,15 +83,81 @@ public class PathfindingSystem : SystemBase, IUpdateSystem
                 ref MovementRoute movementRoute
             ) =>
             {
-                ProcessMovementRoute(
-                    world,
-                    entity,
-                    ref position,
-                    ref movement,
-                    ref movementRoute,
-                    deltaTime
-                );
+                // Only buffer NPCs that need processing
+                if (
+                    movementRoute.Waypoints != null
+                    && movementRoute.Waypoints.Length > 0
+                    && !movement.IsMoving
+                    && !movementRoute.IsAtEnd
+                )
+                    _npcBuffer.Add(entity);
             }
+        );
+
+        // Separate priority NPCs (near player) from regular NPCs
+        var priorityNpcs = new List<Entity>();
+        var regularNpcs = new List<Entity>();
+
+        if (playerPosition.HasValue)
+            foreach (var entity in _npcBuffer)
+            {
+                ref var position = ref world.Get<Position>(entity);
+                var npcPos = new Point(position.X, position.Y);
+                var distance = Vector2.Distance(
+                    new Vector2(npcPos.X, npcPos.Y),
+                    new Vector2(playerPosition.Value.X, playerPosition.Value.Y)
+                );
+
+                if (distance <= PriorityDistanceThreshold)
+                    priorityNpcs.Add(entity);
+                else
+                    regularNpcs.Add(entity);
+            }
+        else
+            // No player, treat all as regular
+            regularNpcs.AddRange(_npcBuffer);
+
+        // Process ALL priority NPCs (near player) every frame for smooth experience
+        foreach (var entity in priorityNpcs)
+            ProcessNpcPathfinding(world, entity, deltaTime);
+
+        // Process only a batch of regular NPCs this frame
+        var startIndex = _currentBatchIndex * NPCsPerFrame;
+        var endIndex = Math.Min(startIndex + NPCsPerFrame, regularNpcs.Count);
+
+        for (var i = startIndex; i < endIndex; i++)
+            ProcessNpcPathfinding(world, regularNpcs[i], deltaTime);
+
+        // Advance to next batch, wrap around if needed
+        _currentBatchIndex++;
+        if (regularNpcs.Count > 0 && _currentBatchIndex * NPCsPerFrame >= regularNpcs.Count)
+            _currentBatchIndex = 0;
+
+        _logger?.LogTrace(
+            "Processed {PriorityCount} priority NPCs and {BatchCount} regular NPCs (batch {BatchIndex}/{TotalBatches})",
+            priorityNpcs.Count,
+            endIndex - startIndex,
+            _currentBatchIndex,
+            regularNpcs.Count > 0 ? (regularNpcs.Count + NPCsPerFrame - 1) / NPCsPerFrame : 0
+        );
+    }
+
+    /// <summary>
+    ///     Processes pathfinding for a single NPC entity.
+    /// </summary>
+    private void ProcessNpcPathfinding(World world, Entity entity, float deltaTime)
+    {
+        ref var position = ref world.Get<Position>(entity);
+        ref var movement = ref world.Get<GridMovement>(entity);
+        ref var movementRoute = ref world.Get<MovementRoute>(entity);
+
+        ProcessMovementRoute(
+            world,
+            entity,
+            ref position,
+            ref movement,
+            ref movementRoute,
+            deltaTime
         );
     }
 
@@ -182,7 +277,13 @@ public class PathfindingSystem : SystemBase, IUpdateSystem
             return;
 
         // Use A* to find path
-        var path = _pathfindingService.FindPath(current, target, mapId, _spatialQuery, 500);
+        var path = _pathfindingService.FindPath(
+            current,
+            target,
+            mapId,
+            _spatialQuery,
+            MaxPathfindingIterations
+        );
 
         if (path == null || path.Count == 0)
         {
@@ -247,4 +348,29 @@ public class PathfindingSystem : SystemBase, IUpdateSystem
         // Reset wait time for the new waypoint
         movementRoute.CurrentWaitTime = 0f;
     }
+
+    #region Constants
+
+    /// <summary>
+    ///     Maximum number of NPCs to process per frame for pathfinding to prevent performance spikes.
+    /// </summary>
+    private const int NPCsPerFrame = 10;
+
+    /// <summary>
+    ///     Distance threshold in tiles for priority processing.
+    ///     NPCs within this distance from the player are processed every frame.
+    /// </summary>
+    private const float PriorityDistanceThreshold = 15.0f;
+
+    /// <summary>
+    ///     Maximum iterations for A* pathfinding algorithm to prevent infinite loops.
+    /// </summary>
+    private const int MaxPathfindingIterations = 500;
+
+    /// <summary>
+    ///     Sentinel value indicating no map is currently tracked.
+    /// </summary>
+    private const int InvalidMapId = -1;
+
+    #endregion
 }

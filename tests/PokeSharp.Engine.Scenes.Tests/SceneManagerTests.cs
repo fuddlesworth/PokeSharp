@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Moq;
-using PokeSharp.Engine.Scenes;
 using Xunit;
 
 namespace PokeSharp.Engine.Scenes.Tests;
@@ -43,9 +42,9 @@ public class SceneManagerTests : IDisposable
             // This is a known limitation of XNA/MonoGame in CI/headless environments
             // For now, we'll use a mock/null pattern or skip tests that require graphics
             throw new InvalidOperationException(
-                "GraphicsDevice cannot be created in this environment. " +
-                "GraphicsAdapter is not available (typically in headless CI environments). " +
-                "Consider using mock GraphicsDevice or marking tests as [Fact(Skip = \"Requires graphics adapter\")]"
+                "GraphicsDevice cannot be created in this environment. "
+                    + "GraphicsAdapter is not available (typically in headless CI environments). "
+                    + "Consider using mock GraphicsDevice or marking tests as [Fact(Skip = \"Requires graphics adapter\")]"
             );
         }
     }
@@ -202,4 +201,3 @@ public class SceneManagerTests : IDisposable
         scene.Verify(s => s.Draw(gameTime), Times.Once);
     }
 }
-

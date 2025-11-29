@@ -1,8 +1,7 @@
 using Arch.Core;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Common.Logging;
-using PokeSharp.Engine.Core.Events;
-using PokeSharp.Engine.Core.Types.Events;
+using PokeSharp.Engine.Core.Events.ECS;
 using PokeSharp.Game.Scripting.Api;
 using PokeSharp.Game.Systems.Services;
 
@@ -14,12 +13,12 @@ namespace PokeSharp.Game.Scripting.Services;
 /// </summary>
 public class DialogueApiService(
     World world,
-    IEventBus eventBus,
+    IEcsEventBus eventBus,
     ILogger<DialogueApiService> logger,
     IGameTimeService gameTime
 ) : IDialogueApi
 {
-    private readonly IEventBus _eventBus =
+    private readonly IEcsEventBus _eventBus =
         eventBus ?? throw new ArgumentNullException(nameof(eventBus));
 
     private readonly IGameTimeService _gameTime =
@@ -44,11 +43,12 @@ public class DialogueApiService(
 
         var dialogueEvent = new DialogueRequestedEvent
         {
-            TypeId = "dialogue-api",
-            Timestamp = _gameTime.TotalSeconds,
             Message = message,
             SpeakerName = speakerName,
-            Priority = priority,
+            DisplayPriority = priority,
+            Tint = null,
+            Timestamp = _gameTime.TotalSeconds,
+            Priority = EventPriority.Normal,
         };
 
         _eventBus.Publish(dialogueEvent);

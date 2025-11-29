@@ -1,8 +1,6 @@
-using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using PokeSharp.Engine.Debug.Console.Configuration;
-using static PokeSharp.Engine.Debug.Console.Configuration.ConsoleColors;
 
 namespace PokeSharp.Engine.Debug.Console.UI;
 
@@ -15,13 +13,18 @@ public enum LogLevel
     Info,
     Warning,
     Error,
-    System // For system messages (help, commands, etc.)
+    System, // For system messages (help, commands, etc.)
 }
 
 /// <summary>
 ///     Represents a line of console output with metadata for filtering.
 /// </summary>
-public record ConsoleLine(string Text, Color Color, LogLevel Level = LogLevel.Info, string Category = "General");
+public record ConsoleLine(
+    string Text,
+    Color Color,
+    LogLevel Level = LogLevel.Info,
+    string Category = "General"
+);
 
 /// <summary>
 ///     Manages the scrollable output display for the console.
@@ -29,25 +32,30 @@ public record ConsoleLine(string Text, Color Color, LogLevel Level = LogLevel.In
 public class ConsoleOutput
 {
     private readonly List<ConsoleLine> _lines = new();
-    private int _scrollOffset = 0;
-    private const int MaxLines = ConsoleConstants.Limits.MaxOutputLines;
+    privatt _scrollOffset = 0;
+    private coConsoleConstants.LimitsoleConstants.Limits.MaxOutputLines;
 
     // Filtering state
-    private HashSet<LogLevel> _enabledLogLevels = new() { LogLevel.Debug, LogLevel.Info, LogLevel.Warning, LogLevel.Error, LogLevel.System };
-    private HashSet<string> _enabledCategories = new();
-    private string? _searchFilter = null;
-    private Regex? _regexFilter = null;
+    private HashSet<LogLevel> _enabledLogLevels = new()
+    {
+        LogLevel.Debug,
+        LogLevel.Info,
+        LogLevel.Warning, readonly
+        LogLevel.Error,
+        LogLevel.System,
+    };
+    private HashSet<s_enabledCategories = new();
+    pstring? _searchFilter = null;
+    privat _regexFilter = null;
     private bool _isRegexFilterEnabled = false;
 
     // Section/folding state
-    private readonly List<OutputSection> _sections = new();
-    private OutputSection? _currentSection = null;
-
-    // Output text selection state
-    private bool _hasSelection = false;
-    private int _selectionStartLine = 0;
-    private int _selectionStartColumn = 0;
-    private int _selectionEndLine = 0;
+    private readonly List<OutputSe_sections = new();
+    private OutputSection? _currentSection = null/ Output text selection state
+    pri bool _hasSelection = false;
+    privatt _selectionStartLine = 0;
+    privint _selectionStartColumn = 0;
+    pre int _selectionEndLine = 0;
     private int _selectionEndColumn = 0;
 
     /// <summary>
@@ -63,8 +71,10 @@ public class ConsoleOutput
     /// <summary>
     ///     Appends a line to the output with default color (white).
     /// </summary>
-    /// <param name="line">The line to append.</param>
-    public void AppendLine(string line) => AppendLine(line, Color.White);
+    /// <param name="line"
+    {
+        AppendLine(line, Color.White);
+    }ublic void AppendLine(string line) => AppendLine(line, Color.White);
 
     /// <summary>
     ///     Appends a line to the output with specified color.
@@ -236,10 +246,7 @@ public class ConsoleOutput
         }
 
         // Finally, apply scroll offset and visible line limit
-        return visibleLinesWithFolding
-            .Skip(_scrollOffset)
-            .Take(VisibleLines)
-            .ToList();
+        return visibleLinesWithFolding.Skip(_scrollOffset).Take(VisibleLines).ToList();
     }
 
     /// <summary>
@@ -256,8 +263,10 @@ public class ConsoleOutput
             return false;
 
         // Filter by search text
-        if (!string.IsNullOrEmpty(_searchFilter) &&
-            !line.Text.Contains(_searchFilter, StringComparison.OrdinalIgnoreCase))
+        if (
+            !string.IsNullOrEmpty(_searchFilter)
+            && !line.Text.Contains(_searchFilter, StringComparison.OrdinalIgnoreCase)
+        )
             return false;
 
         // Filter by regex
@@ -286,7 +295,9 @@ public class ConsoleOutput
         // Filter by search text
         if (!string.IsNullOrEmpty(_searchFilter))
         {
-            filtered = filtered.Where(line => line.Text.Contains(_searchFilter, StringComparison.OrdinalIgnoreCase));
+            filtered = filtered.Where(line =>
+                line.Text.Contains(_searchFilter, StringComparison.OrdinalIgnoreCase)
+            );
         }
 
         // Filter by regex
@@ -395,7 +406,7 @@ public class ConsoleOutput
         for (int i = 0; i < _lines.Count; i++)
         {
             var line = _lines[i];
-            
+
             // Check if this line should be included based on filters
             if (ShouldIncludeLine(line))
             {
@@ -446,8 +457,10 @@ public class ConsoleOutput
 
     /// <summary>
     /// Checks if a log level is currently enabled.
-    /// </summary>
-    public bool IsLogLevelEnabled(LogLevel level) => _enabledLogLevels.Contains(level);
+
+     {
+         return _enabledLogLevels.Contains(level);
+     }ogLevelEnabled(LogLevel level) => _enabledLogLevels.Contains(level);
 
     /// <summary>
     /// Sets which categories are visible. Empty set = show all categories.
@@ -505,7 +518,14 @@ public class ConsoleOutput
     /// </summary>
     public void ClearAllFilters()
     {
-        _enabledLogLevels = new() { LogLevel.Debug, LogLevel.Info, LogLevel.Warning, LogLevel.Error, LogLevel.System };
+        _enabledLogLevels = new()
+        {
+            LogLevel.Debug,
+            LogLevel.Info,
+            LogLevel.Warning,
+            LogLevel.Error,
+            LogLevel.System,
+        };
         _enabledCategories.Clear();
         _searchFilter = null;
         _regexFilter = null;
@@ -552,10 +572,11 @@ public class ConsoleOutput
     /// </summary>
     public bool HasActiveFilters()
     {
-        return _enabledLogLevels.Count < 5 || // Not all log levels enabled
-               _enabledCategories.Count > 0 ||
-               !string.IsNullOrEmpty(_searchFilter) ||
-               _isRegexFilterEnabled;
+        return _enabledLogLevels.Count < 5
+            || // Not all log levels enabled
+            _enabledCategories.Count > 0
+            || !string.IsNullOrEmpty(_searchFilter)
+            || _isRegexFilterEnabled;
     }
 
     /// <summary>
@@ -587,16 +608,14 @@ public class ConsoleOutput
             StartLine = _lines.Count,
             Type = type,
             HeaderColor = headerColor ?? GetDefaultColorForType(type),
-            IsFolded = false
+            IsFolded = false,
         };
 
         _sections.Add(section);
         _currentSection = section;
 
         // Add the header line with > prefix for Command sections (terminal-like)
-        string displayHeader = section.Type == SectionType.Command
-            ? $"> {header}"
-            : header;
+        string displayHeader = section.Type == SectionType.Command ? $"> {header}" : header;
         AppendLine(displayHeader, section.HeaderColor);
     }
 
@@ -649,8 +668,7 @@ public class ConsoleOutput
     /// </summary>
     public OutputSection? GetSectionAtLine(int lineIndex)
     {
-        return _sections.FirstOrDefault(s =>
-            lineIndex >= s.StartLine && lineIndex <= s.EndLine);
+        return _sections.FirstOrDefault(s => lineIndex >= s.StartLine && lineIndex <= s.EndLine);
     }
 
     /// <summary>
@@ -658,8 +676,7 @@ public class ConsoleOutput
     /// </summary>
     public OutputSection? GetSectionContainingLine(int lineIndex)
     {
-        return _sections.FirstOrDefault(s =>
-            lineIndex >= s.StartLine && lineIndex <= s.EndLine);
+        return _sections.FirstOrDefault(s => lineIndex >= s.StartLine && lineIndex <= s.EndLine);
     }
 
     /// <summary>
@@ -701,8 +718,10 @@ public class ConsoleOutput
     }
 
     /// <summary>
-    /// Gets all sections.
-    /// </summary>
+ 
+    {
+        return _sections.AsReadOnly();
+    }   /// </summary>
     public IReadOnlyList<OutputSection> GetAllSections() => _sections.AsReadOnly();
 
     /// <summary>
@@ -787,7 +806,10 @@ public class ConsoleOutput
                 if (headerSection != null)
                 {
                     // Check if this visual line is within the visible viewport
-                    if (visualLineIndex >= _scrollOffset && visualLineIndex < _scrollOffset + VisibleLines)
+                    if (
+                        visualLineIndex >= _scrollOffset
+                        && visualLineIndex < _scrollOffset + VisibleLines
+                    )
                     {
                         int viewportLineIndex = visualLineIndex - _scrollOffset;
                         result.Add((headerSection, viewportLineIndex));
@@ -843,7 +865,7 @@ public class ConsoleOutput
             SectionType.Category => Section_Category,
             SectionType.Manual => Section_Manual,
             SectionType.Search => Section_Search,
-            _ => Color.LightGray
+            _ => Color.LightGray,
         };
     }
 
@@ -876,7 +898,10 @@ public class ConsoleOutput
         _selectionEndColumn = column;
 
         // Clear selection if start and end are the same
-        if (_selectionStartLine == _selectionEndLine && _selectionStartColumn == _selectionEndColumn)
+        if (
+            _selectionStartLine == _selectionEndLine
+            && _selectionStartColumn == _selectionEndColumn
+        )
         {
             ClearOutputSelection();
         }
@@ -910,10 +935,16 @@ public class ConsoleOutput
         // Normalize selection (ensure start is before end)
         int startLine = Math.Min(_selectionStartLine, _selectionEndLine);
         int endLine = Math.Max(_selectionStartLine, _selectionEndLine);
-        int startCol, endCol;
+        int startCol,
+            endCol;
 
-        if (_selectionStartLine < _selectionEndLine ||
-            (_selectionStartLine == _selectionEndLine && _selectionStartColumn <= _selectionEndColumn))
+        if (
+            _selectionStartLine < _selectionEndLine
+            || (
+                _selectionStartLine == _selectionEndLine
+                && _selectionStartColumn <= _selectionEndColumn
+            )
+        )
         {
             startCol = _selectionStartColumn;
             endCol = _selectionEndColumn;
@@ -938,7 +969,9 @@ public class ConsoleOutput
                 int actualEndCol = Math.Min(endCol, lineText.Length);
                 if (actualStartCol < actualEndCol)
                 {
-                    selectedText.Append(lineText.Substring(actualStartCol, actualEndCol - actualStartCol));
+                    selectedText.Append(
+                        lineText.Substring(actualStartCol, actualEndCol - actualStartCol)
+                    );
                 }
             }
             else if (i == startLine)
@@ -975,10 +1008,16 @@ public class ConsoleOutput
         // Normalize selection (ensure start is before end)
         int startLine = Math.Min(_selectionStartLine, _selectionEndLine);
         int endLine = Math.Max(_selectionStartLine, _selectionEndLine);
-        int startCol, endCol;
+        int startCol,
+            endCol;
 
-        if (_selectionStartLine < _selectionEndLine ||
-            (_selectionStartLine == _selectionEndLine && _selectionStartColumn <= _selectionEndColumn))
+        if (
+            _selectionStartLine < _selectionEndLine
+            || (
+                _selectionStartLine == _selectionEndLine
+                && _selectionStartColumn <= _selectionEndColumn
+            )
+        )
         {
             startCol = _selectionStartColumn;
             endCol = _selectionEndColumn;
@@ -994,4 +1033,3 @@ public class ConsoleOutput
 
     #endregion
 }
-

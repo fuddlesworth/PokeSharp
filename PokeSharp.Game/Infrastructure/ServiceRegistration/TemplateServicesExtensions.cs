@@ -4,7 +4,6 @@ using PokeSharp.Engine.Core.Templates;
 using PokeSharp.Engine.Core.Templates.Loading;
 using PokeSharp.Engine.Core.Types;
 using PokeSharp.Engine.Systems.Factories;
-using PokeSharp.Game.Initialization;
 using PokeSharp.Game.Initialization.Initializers;
 using PokeSharp.Game.Templates;
 

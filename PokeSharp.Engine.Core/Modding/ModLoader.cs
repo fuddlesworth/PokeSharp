@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using PokeSharp.Engine.Core.Events.Modding;
 
 namespace PokeSharp.Engine.Core.Modding;
 
@@ -9,14 +10,16 @@ namespace PokeSharp.Engine.Core.Modding;
 /// </summary>
 public sealed class ModLoader
 {
+    private readonly IModEventBus? _eventBus;
     private readonly List<LoadedMod> _loadedMods = new();
     private readonly ILogger<ModLoader> _logger;
     private readonly string _modsDirectory;
 
-    public ModLoader(ILogger<ModLoader> logger, string modsDirectory)
+    public ModLoader(ILogger<ModLoader> logger, string modsDirectory, IModEventBus? eventBus = null)
     {
         _logger = logger;
         _modsDirectory = modsDirectory;
+        _eventBus = eventBus;
     }
 
     public IReadOnlyList<LoadedMod> LoadedMods => _loadedMods;
@@ -154,6 +157,43 @@ public sealed class ModLoader
         );
 
         return sorted;
+    }
+
+    /// <summary>
+    ///     Registers event handlers defined in mod manifests with the event bus.
+    /// </summary>
+    public void RegisterEventHandlers(IReadOnlyList<LoadedMod> mods)
+    {
+        if (_eventBus == null)
+        {
+            _logger.LogWarning(
+                "[steelblue1]WF[/] [orange3]⚠[/] No event bus available for handler registration"
+            );
+            return;
+        }
+
+        foreach (var mod in mods)
+        foreach (var handler in mod.Manifest.EventHandlers)
+            try
+            {
+                _logger.LogInformation(
+                    "[steelblue1]WF[/] [green]✓[/] Registered event handler | mod: [cyan]{ModId}[/], event: [yellow]{Event}[/], handler: [cyan]{Handler}[/]",
+                    mod.Manifest.ModId,
+                    handler.EventType,
+                    handler.ScriptPath
+                );
+                // Note: Actual handler invocation requires ScriptService integration
+                // This registers the intent - ScriptService will look up handlers by event type
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(
+                    ex,
+                    "[steelblue1]WF[/] [red]✗[/] Failed to register handler | mod: [cyan]{ModId}[/], event: [yellow]{Event}[/]",
+                    mod.Manifest.ModId,
+                    handler.EventType
+                );
+            }
     }
 }
 

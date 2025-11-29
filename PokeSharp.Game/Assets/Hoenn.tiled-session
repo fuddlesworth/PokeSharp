@@ -1,5 +1,5 @@
 {
-    "activeFile": "Data/Maps/hoenn/route126.json",
+    "activeFile": "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Data/Maps/hoenn/route110.json",
     "expandedProjectPaths": [
         ".",
         "Data",
@@ -7,7 +7,105 @@
         "Data/Maps/hoenn",
         "Data/Worlds"
     ],
+    "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Data/Maps/hoenn/mauville_city.json": {
+            "scale": 1.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 292.99999999999994,
+                "y": 163
+            }
+        },
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Data/Maps/hoenn/route109.json": {
+            "scale": 4,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": -1147.75,
+                "y": -901.125
+            }
+        },
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Data/Maps/hoenn/route110.json": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 159.5,
+                "y": 1009.5
+            }
+        },
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Data/Maps/hoenn/route130.json": {
+            "scale": 1.4034765624999999,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": -4259.422750424449,
+                "y": 497.6926716579922
+            }
+        },
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Data/Maps/hoenn/route131.json": {
+            "scale": 0.75,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": -4897.333333333333,
+                "y": 146
+            }
+        },
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Data/Maps/hoenn/route134.json": {
+            "scale": 1.4034765624999999,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 860.7197528458906,
+                "y": 497.6926716579922
+            }
+        },
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Sprites/TileAnimations/flower.json": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1
+        },
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Sprites/TileAnimations/flower_1.json": {
+            "scaleInDock": 1
+        },
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Sprites/TileAnimations/flower_2.json": {
+            "scaleInDock": 1
+        },
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Sprites/TileAnimations/land_water_edge.json": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1
+        },
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Sprites/TileAnimations/lava.json": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1
+        },
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Sprites/TileAnimations/log_bridges.json": {
+            "scaleInDock": 1
+        },
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Sprites/TileAnimations/sand_water_edge.json": {
+            "scaleInDock": 1
+        },
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Sprites/TileAnimations/water.json": {
+            "scaleInDock": 1
+        },
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Sprites/TileAnimations/water_currents.json": {
+            "scaleInDock": 1
+        },
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Sprites/TileAnimations/waterfall.json": {
+            "scaleInDock": 1
+        },
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Tilesets/hoenn/cave.json": {
+            "dynamicWrapping": false,
+            "scaleInDock": 2
+        },
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Tilesets/hoenn/general.json": {
+            "scaleInDock": 2
+        },
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Tilesets/hoenn/mauville.json": {
+            "scaleInDock": 1
+        },
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Tilesets/hoenn/pacifidlog.json": {
+            "scaleInDock": 2
+        },
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Tilesets/hoenn/slateport.json": {
+            "scaleInDock": 1
+        },
         "Data/Maps/hoenn/battle_frontier_battle_arena_battle_room.json": {
             "scale": 8,
             "selectedLayer": 0,
@@ -129,11 +227,11 @@
             }
         },
         "Data/Maps/hoenn/route104.json": {
-            "scale": 2,
+            "scale": 0.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 9211.75,
-                "y": -164.25
+                "x": 650,
+                "y": -239
             }
         },
         "Data/Maps/hoenn/route105.json": {
@@ -172,7 +270,7 @@
             "scale": 0.125,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 2972,
+                "x": 1528,
                 "y": -1644
             }
         },
@@ -328,6 +426,24 @@
         "Data/Tilesets/hoenn/slateport_city/slateport_city.json": {
             "scaleInDock": 1
         },
+        "Tilesets/hoenn/battle_frontier_battle_arena_battle_room/battle_frontier_battle_arena_battle_room.json": {
+            "scaleInDock": 1
+        },
+        "Tilesets/hoenn/battle_frontier_battle_arena_corridor/battle_frontier_battle_arena_corridor.json": {
+            "scaleInDock": 1
+        },
+        "Tilesets/hoenn/battle_frontier_battle_dome_battle_room/battle_frontier_battle_dome_battle_room.json": {
+            "scaleInDock": 1
+        },
+        "Tilesets/hoenn/battle_frontier_battle_pyramid_floor/battle_frontier_battle_pyramid_floor.json": {
+            "scaleInDock": 1
+        },
+        "Tilesets/hoenn/battle_frontier_battle_pyramid_lobby/battle_frontier_battle_pyramid_lobby.json": {
+            "scaleInDock": 1
+        },
+        "Tilesets/hoenn/battle_frontier_battle_pyramid_top/battle_frontier_battle_pyramid_top.json": {
+            "scaleInDock": 1
+        },
         "Tilesets/hoenn/dewford_town/dewford_town.json": {
             "scaleInDock": 1
         },
@@ -394,6 +510,9 @@
         "Tilesets/hoenn/route126/route126.json": {
             "scaleInDock": 1
         },
+        "Tilesets/hoenn/route132/route132.json": {
+            "scaleInDock": 1
+        },
         "Tilesets/hoenn/route133/route133.json": {
             "scaleInDock": 1
         },
@@ -401,7 +520,7 @@
             "scaleInDock": 1
         },
         "Tilesets/hoenn/rustboro_city/rustboro_city.json": {
-            "scaleInDock": 1
+            "scaleInDock": 2
         },
         "Tilesets/hoenn/slateport_city/slateport_city.json": {
             "scaleInDock": 3
@@ -411,41 +530,28 @@
         }
     },
     "loadedWorlds": [
-        "C:/Users/nate0/RiderProjects/PokeSharp/PokeSharp.Game/Assets/Data/Worlds/hoenn.world"
+        "C:/Users/nate0/RiderProjects/PokeSharp/PokeSharp.Game/Assets/Data/Worlds/hoenn.world",
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Data/Worlds/hoenn.world"
     ],
     "openFiles": [
-        "Data/Maps/hoenn/route112.json",
-        "Data/Maps/hoenn/route104.json",
-        "Data/Maps/hoenn/route105.json",
-        "Data/Maps/hoenn/route134.json",
-        "Data/Maps/hoenn/route109.json",
-        "Data/Maps/hoenn/slateport_city.json",
-        "Data/Maps/hoenn/petalburg_city.json",
-        "Data/Maps/hoenn/route102.json",
-        "Data/Maps/hoenn/rustboro_city.json",
-        "Data/Maps/hoenn/route116.json",
-        "Data/Maps/hoenn/route117.json",
-        "Data/Maps/hoenn/route115.json",
-        "Data/Maps/hoenn/route113.json",
-        "Data/Maps/hoenn/route111.json",
-        "Data/Maps/hoenn/oldale_town.json",
-        "Data/Maps/hoenn/route126.json"
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Data/Maps/hoenn/mauville_city.json",
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Data/Maps/hoenn/route110.json"
     ],
     "project": "Hoenn.tiled-project",
     "property.type": "object",
     "recentFiles": [
-        "Data/Maps/hoenn/route112.json",
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Data/Maps/hoenn/mauville_city.json",
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Data/Maps/hoenn/route110.json",
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Data/Maps/hoenn/route130.json",
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Data/Maps/hoenn/route134.json",
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Data/Maps/hoenn/route131.json",
         "Data/Maps/hoenn/route104.json",
+        "C:/Users/nate0/RiderProjects/PokeSharp/porycon/test_output/Data/Maps/hoenn/route109.json",
+        "Data/Maps/hoenn/battle_frontier_battle_pyramid_floor.json",
+        "Data/Maps/hoenn/route112.json",
         "Data/Maps/hoenn/route105.json",
         "Data/Maps/hoenn/route134.json",
-        "Data/Maps/hoenn/route109.json",
-        "Data/Maps/hoenn/slateport_city.json",
-        "Data/Maps/hoenn/petalburg_city.json",
-        "Data/Maps/hoenn/route102.json",
-        "Data/Maps/hoenn/rustboro_city.json",
-        "Data/Maps/hoenn/route116.json",
-        "Data/Maps/hoenn/route117.json",
-        "Data/Maps/hoenn/route115.json"
+        "Data/Maps/hoenn/route109.json"
     ],
     "textEdit.monospace": true
 }

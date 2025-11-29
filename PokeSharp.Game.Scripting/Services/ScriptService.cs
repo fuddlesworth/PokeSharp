@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using PokeSharp.Engine.Common.Logging;
+using PokeSharp.Engine.Core.Events.Modding;
 using PokeSharp.Game.Scripting.Api;
 using PokeSharp.Game.Scripting.Runtime;
 
@@ -26,6 +27,7 @@ public class ScriptService : IAsyncDisposable
     private readonly IScriptingApiProvider _apis;
     private readonly ScriptCache _cache;
     private readonly ScriptCompiler _compiler;
+    private readonly IModEventBus? _eventBus;
     private readonly ILogger<ScriptService> _logger;
     private readonly string _scriptsBasePath;
 
@@ -36,17 +38,20 @@ public class ScriptService : IAsyncDisposable
     /// <param name="logger">Logger instance.</param>
     /// <param name="loggerFactory">Logger factory for creating child loggers.</param>
     /// <param name="apis">Scripting API provider.</param>
+    /// <param name="eventBus">Optional event bus for mod events.</param>
     public ScriptService(
         string scriptsBasePath,
         ILogger<ScriptService> logger,
         ILoggerFactory loggerFactory,
-        IScriptingApiProvider apis
+        IScriptingApiProvider apis,
+        IModEventBus? eventBus = null
     )
     {
         _scriptsBasePath =
             scriptsBasePath ?? throw new ArgumentNullException(nameof(scriptsBasePath));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _apis = apis ?? throw new ArgumentNullException(nameof(apis));
+        _eventBus = eventBus;
 
         // Create dependencies
         var compilerLogger = loggerFactory.CreateLogger<ScriptCompiler>();
@@ -157,11 +162,7 @@ public class ScriptService : IAsyncDisposable
         }
         catch (FileNotFoundException ex)
         {
-            _logger.LogWarning(
-                ex,
-                "Script file not found: {Path}",
-                scriptPath
-            );
+            _logger.LogWarning(ex, "Script file not found: {Path}", scriptPath);
             return null;
         }
         catch (IOException ex)
@@ -292,7 +293,7 @@ public class ScriptService : IAsyncDisposable
 
             // Create ScriptContext for initialization (use NullLogger if no logger provided)
             var effectiveLogger = logger ?? NullLogger.Instance;
-            var context = new ScriptContext(world, entity, effectiveLogger, _apis);
+            var context = new ScriptContext(world, entity, effectiveLogger, _apis, _eventBus);
             initMethod.Invoke(scriptBase, new object[] { context });
 
             _logger.LogDebug(

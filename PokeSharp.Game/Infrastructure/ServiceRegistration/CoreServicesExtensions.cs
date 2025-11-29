@@ -2,6 +2,9 @@ using Arch.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using PokeSharp.Engine.Core.Events;
+using PokeSharp.Engine.Core.Events.ECS;
+using PokeSharp.Engine.Core.Events.Modding;
 using PokeSharp.Engine.Core.Modding;
 using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Engine.Systems.Pooling;
@@ -42,6 +45,38 @@ public static class CoreServicesExtensions
         {
             var world = sp.GetRequiredService<World>();
             return new EntityPoolManager(world);
+        });
+
+        return services;
+    }
+
+    /// <summary>
+    ///     Registers event bus services (ECS events and Mod events).
+    /// </summary>
+    public static IServiceCollection AddEventServices(this IServiceCollection services)
+    {
+        // High-performance ECS event bus for internal engine events
+        services.AddSingleton<IEcsEventBus>(sp =>
+        {
+            var logger = sp.GetService<ILogger<ArchEcsEventBus>>();
+            return new ArchEcsEventBus(logger);
+        });
+
+        // Mod-facing event bus with error isolation
+        services.AddSingleton<IModEventBus>(sp =>
+        {
+            var logger = sp.GetService<ILogger<ModEventBus>>();
+            return new ModEventBus(logger);
+        });
+
+        // Bridge that forwards ECS events to mod-safe events
+        // This enables mods to react to internal engine events without accessing raw Entity references
+        services.AddSingleton<EcsToModEventBridge>(sp =>
+        {
+            var ecsEventBus = sp.GetRequiredService<IEcsEventBus>();
+            var modEventBus = sp.GetRequiredService<IModEventBus>();
+            var logger = sp.GetService<ILogger<EcsToModEventBridge>>();
+            return new EcsToModEventBridge(ecsEventBus, modEventBus, logger);
         });
 
         return services;

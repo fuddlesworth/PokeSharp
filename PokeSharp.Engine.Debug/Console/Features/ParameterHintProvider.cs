@@ -1,25 +1,28 @@
-using Microsoft.CodeAnalysis.Scripting;
-using Microsoft.Extensions.Logging;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Microsoft.CodeAnalysis.Scripting;
+using Microsoft.Extensions.Logging;
 
 namespace PokeSharp.Engine.Debug.Console.Features;
 
 /// <summary>
-/// Provides parameter hints for method calls, showing signatures and highlighting current parameter.
+///     Provides parameter hints for method calls, showing signatures and highlighting current parameter.
 /// </summary>
 public class ParameterHintProvider
 {
-    private readonly ILogger? _logger;
-    private object? _globalsInstance;
-    private ScriptState<object>? _scriptState;
-    private List<Assembly>? _referencedAssemblies;
-    private List<string>? _importedNamespaces;
-
     // Regex to detect method call pattern: methodName(
     private static readonly Regex MethodCallRegex = new(@"(\w+)\($", RegexOptions.Compiled);
+
     // Regex to detect member method call: object.methodName(
-    private static readonly Regex MemberMethodCallRegex = new(@"(\w+)\.(\w+)\($", RegexOptions.Compiled);
+    private static readonly Regex MemberMethodCallRegex = new(
+        @"(\w+)\.(\w+)\($",
+        RegexOptions.Compiled
+    );
+    private readonly ILogger? _logger;
+    private object? _globalsInstance;
+    private List<string>? _importedNamespaces;
+    private List<Assembly>? _referencedAssemblies;
+    private ScriptState<object>? _scriptState;
 
     public ParameterHintProvider(ILogger? logger = null)
     {
@@ -27,7 +30,7 @@ public class ParameterHintProvider
     }
 
     /// <summary>
-    /// Set the globals instance to enable member completion
+    ///     Set the globals instance to enable member completion
     /// </summary>
     public void SetGlobals(object globals)
     {
@@ -35,7 +38,7 @@ public class ParameterHintProvider
     }
 
     /// <summary>
-    /// Update the script state after execution to track variables
+    ///     Update the script state after execution to track variables
     /// </summary>
     public void UpdateScriptState(ScriptState<object>? state)
     {
@@ -43,7 +46,7 @@ public class ParameterHintProvider
     }
 
     /// <summary>
-    /// Set the referenced assemblies and imported namespaces
+    ///     Set the referenced assemblies and imported namespaces
     /// </summary>
     public void SetReferences(IEnumerable<Assembly> assemblies, IEnumerable<string> namespaces)
     {
@@ -52,8 +55,8 @@ public class ParameterHintProvider
     }
 
     /// <summary>
-    /// Gets parameter hints for the method at the cursor position.
-    /// Returns null if no method call is detected.
+    ///     Gets parameter hints for the method at the cursor position.
+    ///     Returns null if no method call is detected.
     /// </summary>
     public ParameterHintInfo? GetParameterHints(string code, int cursorPosition)
     {
@@ -70,7 +73,11 @@ public class ParameterHintProvider
             {
                 var objectName = memberMatch.Groups[1].Value;
                 var methodName = memberMatch.Groups[2].Value;
-                _logger?.LogDebug("Detected member method call: {Object}.{Method}", objectName, methodName);
+                _logger?.LogDebug(
+                    "Detected member method call: {Object}.{Method}",
+                    objectName,
+                    methodName
+                );
                 return GetMemberMethodHints(objectName, methodName);
             }
 
@@ -93,7 +100,7 @@ public class ParameterHintProvider
     }
 
     /// <summary>
-    /// Gets hints for a member method (e.g., Console.WriteLine)
+    ///     Gets hints for a member method (e.g., Console.WriteLine)
     /// </summary>
     private ParameterHintInfo? GetMemberMethodHints(string objectName, string methodName)
     {
@@ -103,21 +110,24 @@ public class ParameterHintProvider
         if (_scriptState != null)
         {
             var variable = _scriptState.Variables.FirstOrDefault(v =>
-                string.Equals(v.Name, objectName, StringComparison.OrdinalIgnoreCase));
+                string.Equals(v.Name, objectName, StringComparison.OrdinalIgnoreCase)
+            );
             if (variable != null)
-            {
                 targetType = variable.Type;
-            }
         }
 
         // Try to find in globals
         if (targetType == null && _globalsInstance != null)
         {
             var globalsType = _globalsInstance.GetType();
-            var property = globalsType.GetProperty(objectName,
-                BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-            var field = globalsType.GetField(objectName,
-                BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+            var property = globalsType.GetProperty(
+                objectName,
+                BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase
+            );
+            var field = globalsType.GetField(
+                objectName,
+                BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase
+            );
 
             if (property != null)
                 targetType = property.PropertyType;
@@ -127,15 +137,14 @@ public class ParameterHintProvider
 
         // Try to find as a type name
         if (targetType == null)
-        {
             targetType = FindTypeByName(objectName);
-        }
 
         if (targetType == null)
             return null;
 
         // Get method overloads
-        var methods = targetType.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static)
+        var methods = targetType
+            .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static)
             .Where(m => string.Equals(m.Name, methodName, StringComparison.OrdinalIgnoreCase))
             .ToList();
 
@@ -146,12 +155,12 @@ public class ParameterHintProvider
         {
             MethodName = methodName,
             Overloads = methods.Select(CreateMethodSignature).ToList(),
-            CurrentOverloadIndex = 0
+            CurrentOverloadIndex = 0,
         };
     }
 
     /// <summary>
-    /// Gets hints for a direct method call (globals or imported)
+    ///     Gets hints for a direct method call (globals or imported)
     /// </summary>
     private ParameterHintInfo? GetDirectMethodHints(string methodName)
     {
@@ -161,7 +170,8 @@ public class ParameterHintProvider
         if (_globalsInstance != null)
         {
             var globalsType = _globalsInstance.GetType();
-            var globalMethods = globalsType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+            var globalMethods = globalsType
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
                 .Where(m => string.Equals(m.Name, methodName, StringComparison.OrdinalIgnoreCase));
             methods.AddRange(globalMethods);
         }
@@ -173,22 +183,23 @@ public class ParameterHintProvider
         {
             MethodName = methodName,
             Overloads = methods.Select(CreateMethodSignature).ToList(),
-            CurrentOverloadIndex = 0
+            CurrentOverloadIndex = 0,
         };
     }
 
     /// <summary>
-    /// Creates a formatted method signature string
+    ///     Creates a formatted method signature string
     /// </summary>
     private MethodSignature CreateMethodSignature(MethodInfo method)
     {
-        var parameters = method.GetParameters()
+        var parameters = method
+            .GetParameters()
             .Select(p => new ParameterInfo
             {
                 Name = p.Name ?? "arg",
                 Type = GetFriendlyTypeName(p.ParameterType),
                 IsOptional = p.IsOptional,
-                DefaultValue = p.IsOptional ? p.DefaultValue?.ToString() : null
+                DefaultValue = p.IsOptional ? p.DefaultValue?.ToString() : null,
             })
             .ToList();
 
@@ -196,12 +207,12 @@ public class ParameterHintProvider
         {
             MethodName = method.Name,
             ReturnType = GetFriendlyTypeName(method.ReturnType),
-            Parameters = parameters
+            Parameters = parameters,
         };
     }
 
     /// <summary>
-    /// Find a type by name from referenced assemblies
+    ///     Find a type by name from referenced assemblies
     /// </summary>
     private Type? FindTypeByName(string typeName)
     {
@@ -209,15 +220,17 @@ public class ParameterHintProvider
             return null;
 
         foreach (var assembly in _referencedAssemblies)
-        {
             try
             {
                 var types = assembly.GetExportedTypes();
                 var match = types.FirstOrDefault(t =>
-                    t.Name.Equals(typeName, StringComparison.OrdinalIgnoreCase) &&
-                    t.IsPublic &&
-                    _importedNamespaces.Any(ns => t.Namespace != null &&
-                        (t.Namespace == ns || t.Namespace.StartsWith(ns + "."))));
+                    t.Name.Equals(typeName, StringComparison.OrdinalIgnoreCase)
+                    && t.IsPublic
+                    && _importedNamespaces.Any(ns =>
+                        t.Namespace != null
+                        && (t.Namespace == ns || t.Namespace.StartsWith(ns + "."))
+                    )
+                );
 
                 if (match != null)
                     return match;
@@ -226,13 +239,12 @@ public class ParameterHintProvider
             {
                 // Ignore assembly load errors
             }
-        }
 
         return null;
     }
 
     /// <summary>
-    /// Converts a .NET Type to a friendly C# display name
+    ///     Converts a .NET Type to a friendly C# display name
     /// </summary>
     private string GetFriendlyTypeName(Type type)
     {
@@ -265,13 +277,13 @@ public class ParameterHintProvider
             "Single" => "float",
             "Double" => "double",
             "Void" => "void",
-            _ => type.Name
+            _ => type.Name,
         };
     }
 }
 
 /// <summary>
-/// Contains parameter hint information for a method call
+///     Contains parameter hint information for a method call
 /// </summary>
 public class ParameterHintInfo
 {
@@ -281,7 +293,7 @@ public class ParameterHintInfo
 }
 
 /// <summary>
-/// Represents a method signature with parameters
+///     Represents a method signature with parameters
 /// </summary>
 public class MethodSignature
 {
@@ -304,7 +316,7 @@ public class MethodSignature
 }
 
 /// <summary>
-/// Represents a method parameter
+///     Represents a method parameter
 /// </summary>
 public class ParameterInfo
 {
@@ -313,4 +325,3 @@ public class ParameterInfo
     public bool IsOptional { get; set; }
     public string? DefaultValue { get; set; }
 }
-

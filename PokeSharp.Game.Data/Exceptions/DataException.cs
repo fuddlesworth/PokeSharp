@@ -58,12 +58,12 @@ public class MapNotFoundException : DataException
     public MapNotFoundException(string mapId, string expectedPath)
         : base("DATA_MAP_NOT_FOUND", $"Map file not found: {expectedPath}")
     {
-        WithContext("MapId", mapId)
-            .WithContext("ExpectedPath", expectedPath);
+        WithContext("MapId", mapId).WithContext("ExpectedPath", expectedPath);
     }
 
     public string MapId => Context.TryGetValue("MapId", out var id) ? id?.ToString() ?? "" : "";
-    public string ExpectedPath => Context.TryGetValue("ExpectedPath", out var path) ? path?.ToString() ?? "" : "";
+    public string ExpectedPath =>
+        Context.TryGetValue("ExpectedPath", out var path) ? path?.ToString() ?? "" : "";
 
     public override bool IsRecoverable => true;
 
@@ -90,7 +90,8 @@ public class TilesetLoadException : DataException
         WithContext("TilesetId", tilesetId);
     }
 
-    public string TilesetId => Context.TryGetValue("TilesetId", out var id) ? id?.ToString() ?? "" : "";
+    public string TilesetId =>
+        Context.TryGetValue("TilesetId", out var id) ? id?.ToString() ?? "" : "";
 
     public override bool IsRecoverable => false; // Map can't render without tileset
 
@@ -144,7 +145,8 @@ public class TrainerLoadException : DataException
         WithContext("TrainerId", trainerId);
     }
 
-    public string TrainerId => Context.TryGetValue("TrainerId", out var id) ? id?.ToString() ?? "" : "";
+    public string TrainerId =>
+        Context.TryGetValue("TrainerId", out var id) ? id?.ToString() ?? "" : "";
 
     public override bool IsRecoverable => true; // Map can load without this trainer
 
@@ -171,7 +173,8 @@ public class DataParsingException : DataException
         WithContext("FilePath", filePath);
     }
 
-    public string FilePath => Context.TryGetValue("FilePath", out var path) ? path?.ToString() ?? "" : "";
+    public string FilePath =>
+        Context.TryGetValue("FilePath", out var path) ? path?.ToString() ?? "" : "";
 
     public override bool IsRecoverable => false;
 
@@ -189,12 +192,13 @@ public class DataValidationException : DataException
     public DataValidationException(string entityType, string entityId, string validationMessage)
         : base("DATA_VALIDATION_FAILED", validationMessage)
     {
-        WithContext("EntityType", entityType)
-            .WithContext("EntityId", entityId);
+        WithContext("EntityType", entityType).WithContext("EntityId", entityId);
     }
 
-    public string EntityType => Context.TryGetValue("EntityType", out var type) ? type?.ToString() ?? "" : "";
-    public string EntityId => Context.TryGetValue("EntityId", out var id) ? id?.ToString() ?? "" : "";
+    public string EntityType =>
+        Context.TryGetValue("EntityType", out var type) ? type?.ToString() ?? "" : "";
+    public string EntityId =>
+        Context.TryGetValue("EntityId", out var id) ? id?.ToString() ?? "" : "";
 
     public override bool IsRecoverable => true; // Skip invalid data
 

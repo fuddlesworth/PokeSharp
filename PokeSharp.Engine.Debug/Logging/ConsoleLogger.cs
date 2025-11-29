@@ -1,7 +1,6 @@
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
-using System;
-using System.Text.RegularExpressions;
 
 namespace PokeSharp.Engine.Debug.Logging;
 
@@ -11,17 +10,22 @@ namespace PokeSharp.Engine.Debug.Logging;
 public class ConsoleLogger : ILogger
 {
     private readonly string _categoryName;
-    private readonly Action<string, Color> _writeToConsole;
     private readonly Func<LogLevel, bool> _isEnabled;
+    private readonly Action<string, Color> _writeToConsole;
 
-    public ConsoleLogger(string categoryName, Action<string, Color> writeToConsole, Func<LogLevel, bool> isEnabled)
+    public ConsoleLogger(
+        string categoryName,
+        Action<string, Color> writeToConsole,
+        Func<LogLevel, bool> isEnabled
+    )
     {
         _categoryName = categoryName;
         _writeToConsole = writeToConsole;
         _isEnabled = isEnabled;
     }
 
-    public IDisposable? BeginScope<TState>(TState state) where TState : notnull
+    public IDisposable? BeginScope<TState>(TState state)
+        where TState : notnull
     {
         return null; // Scopes not supported for now
     }
@@ -31,7 +35,13 @@ public class ConsoleLogger : ILogger
         return _isEnabled(logLevel);
     }
 
-    public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
+    public void Log<TState>(
+        LogLevel logLevel,
+        EventId eventId,
+        TState state,
+        Exception? exception,
+        Func<TState, Exception?, string> formatter
+    )
     {
         if (!IsEnabled(logLevel))
             return;
@@ -51,9 +61,7 @@ public class ConsoleLogger : ILogger
         var formattedMessage = $"[{timestamp}] [{level}] \"{category}\": {message}";
 
         if (exception != null)
-        {
             formattedMessage += $"\n{exception}";
-        }
 
         // Get color based on log level
         var color = GetColorForLogLevel(logLevel);
@@ -71,7 +79,7 @@ public class ConsoleLogger : ILogger
             LogLevel.Warning => "WARNI",
             LogLevel.Error => "ERROR",
             LogLevel.Critical => "CRIT!",
-            _ => "UNKNO"
+            _ => "UNKNO",
         };
     }
 
@@ -80,9 +88,7 @@ public class ConsoleLogger : ILogger
         // Shorten category name if it's too long
         var lastDot = category.LastIndexOf('.');
         if (lastDot >= 0 && lastDot < category.Length - 1)
-        {
             return category.Substring(lastDot + 1);
-        }
         return category;
     }
 
@@ -90,13 +96,13 @@ public class ConsoleLogger : ILogger
     {
         return logLevel switch
         {
-            LogLevel.Trace => new Color(150, 150, 150),       // Gray
-            LogLevel.Debug => new Color(180, 180, 255),       // Light Blue
-            LogLevel.Information => Color.White,              // White
-            LogLevel.Warning => new Color(255, 200, 100),     // Orange
-            LogLevel.Error => new Color(255, 100, 100),       // Red
-            LogLevel.Critical => new Color(255, 50, 255),     // Magenta
-            _ => Color.LightGray
+            LogLevel.Trace => new Color(150, 150, 150), // Gray
+            LogLevel.Debug => new Color(180, 180, 255), // Light Blue
+            LogLevel.Information => Color.White, // White
+            LogLevel.Warning => new Color(255, 200, 100), // Orange
+            LogLevel.Error => new Color(255, 100, 100), // Red
+            LogLevel.Critical => new Color(255, 50, 255), // Magenta
+            _ => Color.LightGray,
         };
     }
 

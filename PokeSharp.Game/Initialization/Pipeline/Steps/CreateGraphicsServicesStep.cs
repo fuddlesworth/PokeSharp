@@ -4,7 +4,6 @@ using PokeSharp.Engine.Scenes;
 using PokeSharp.Game.Data.MapLoading.Tiled.Core;
 using PokeSharp.Game.Data.MapLoading.Tiled.Processors;
 using PokeSharp.Game.Data.PropertyMapping;
-using PokeSharp.Game.Initialization.Pipeline;
 
 namespace PokeSharp.Game.Initialization.Pipeline.Steps;
 
@@ -43,8 +42,9 @@ public class CreateGraphicsServicesStep : InitializationStepBase
 
         // Create PropertyMapperRegistry for tile property mapping
         var mapperRegistryLogger = context.LoggerFactory.CreateLogger<PropertyMapperRegistry>();
-        var propertyMapperRegistry =
-            PropertyMapperServiceExtensions.CreatePropertyMapperRegistry(mapperRegistryLogger);
+        var propertyMapperRegistry = PropertyMapperServiceExtensions.CreatePropertyMapperRegistry(
+            mapperRegistryLogger
+        );
 
         // Create processors with proper loggers
         var layerProcessor = new LayerProcessor(
@@ -77,4 +77,3 @@ public class CreateGraphicsServicesStep : InitializationStepBase
         return Task.CompletedTask;
     }
 }
-

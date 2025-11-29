@@ -44,7 +44,7 @@ public class TemplateCacheInitializer
     public async Task InitializeAsync(string templatesBasePath = "Assets/Templates")
     {
         // Load base game JSON templates as JSON (before deserialization)
-        var templateJsonCache = await _jsonLoader.LoadTemplateJsonAsync(templatesBasePath, true);
+        var templateJsonCache = await _jsonLoader.LoadTemplateJsonAsync(templatesBasePath);
 
         _logger?.LogInformation(
             "[steelblue1]WF[/] Template JSON loaded | count: [yellow]{Count}[/], source: [cyan]base[/]",
@@ -75,8 +75,7 @@ public class TemplateCacheInitializer
                 if (Directory.Exists(modTemplatesDir))
                 {
                     var modJsonCache = await _jsonLoader.LoadTemplateJsonAsync(
-                        modTemplatesDir,
-                        true
+                        modTemplatesDir
                     );
 
                     // Add mod templates to the main cache
