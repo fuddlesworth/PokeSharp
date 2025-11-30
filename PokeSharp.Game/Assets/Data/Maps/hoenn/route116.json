@@ -6478,7 +6478,7 @@
       "value": {
         "direction": "West",
         "map": "rustboro_city",
-        "offset": 1
+        "offset": 0
       }
     }
   ],

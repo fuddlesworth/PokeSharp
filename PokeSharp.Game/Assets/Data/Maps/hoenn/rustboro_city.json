@@ -8264,7 +8264,7 @@
       "value": {
         "direction": "East",
         "map": "route116",
-        "offset": -1
+        "offset": 0
       }
     }
   ],

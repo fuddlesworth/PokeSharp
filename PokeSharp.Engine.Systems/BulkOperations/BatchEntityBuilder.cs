@@ -27,10 +27,7 @@ namespace PokeSharp.Engine.Systems.BulkOperations;
 ///         playerPos.X + Random.Shared.Next(-10, 10),
 ///         playerPos.Y + Random.Shared.Next(-10, 10)
 ///     ))
-///     .WithComponentFactory(i => new Velocity(
-///         MathF.Cos(i * MathF.PI * 2 / 100) * 5,
-///         MathF.Sin(i * MathF.PI * 2 / 100) * 5
-///     ))
+///     .WithComponentFactory(i => new GridMovement(2.0f))
 ///     .Build();
 /// </code>
 ///     </example>

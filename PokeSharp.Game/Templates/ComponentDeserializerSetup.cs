@@ -123,14 +123,6 @@ public static class ComponentDeserializerSetup
             return new Position(x, y, mapId);
         });
 
-        // Velocity
-        registry.Register(json =>
-        {
-            float velocityX = json.GetProperty("velocityX").GetSingle();
-            float velocityY = json.GetProperty("velocityY").GetSingle();
-            return new Velocity(velocityX, velocityY);
-        });
-
         // GridMovement
         registry.Register(json =>
         {

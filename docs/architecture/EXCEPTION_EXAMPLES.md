@@ -294,11 +294,14 @@ public void UpdateMovement(Entity entity, Vector2 velocity, float deltaTime)
         ref var position = ref entity.Get<Position>();
         ref var movement = ref entity.Get<Movement>();
 
-        var newPosition = position.Pixel + velocity * deltaTime;
+        // Calculate target grid position based on movement direction
+        var targetTileX = position.TileX + (movement.Direction == Direction.East ? 1 : movement.Direction == Direction.West ? -1 : 0);
+        var targetTileY = position.TileY + (movement.Direction == Direction.North ? -1 : movement.Direction == Direction.South ? 1 : 0);
+        var newPosition = new Vector2(targetTileX * _tileSize, targetTileY * _tileSize);
 
         // Validate bounds
-        if (newPosition.X < 0 || newPosition.X > _mapWidth * _tileSize ||
-            newPosition.Y < 0 || newPosition.Y > _mapHeight * _tileSize)
+        if (targetTileX < 0 || targetTileX >= _mapWidth ||
+            targetTileY < 0 || targetTileY >= _mapHeight)
         {
             throw new MovementException(
                 entity.Id,
@@ -306,11 +309,12 @@ public void UpdateMovement(Entity entity, Vector2 velocity, float deltaTime)
             ).WithContext("CurrentPosition", position.Pixel)
              .WithContext("NewPosition", newPosition)
              .WithContext("MapBounds", new { Width = _mapWidth, Height = _mapHeight })
-             .WithContext("Velocity", velocity);
+             .WithContext("Direction", movement.Direction);
         }
 
         position.Pixel = newPosition;
-        movement.Velocity = velocity;
+        position.TileX = targetTileX;
+        position.TileY = targetTileY;
     }
     catch (MovementException ex)
     {

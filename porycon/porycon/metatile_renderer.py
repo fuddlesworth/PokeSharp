@@ -267,14 +267,14 @@ class MetatileRenderer:
             
             # Determine which tileset this tile belongs to
             # CRITICAL: In Pokemon Emerald's VRAM system:
-            # - VRAM slots 0-511 are ALWAYS filled from the primary tileset (usually General)
+            # - VRAM slots 0-511 are ALWAYS filled from the primary tileset
             # - VRAM slots 512-1023 are filled from the secondary tileset (if it has enough tiles)
             # - Tile IDs in metatiles.bin reference VRAM positions directly (0-1023)
             # - If secondary tileset has fewer than 512 tiles, higher VRAM slots (672-1023) remain empty/black
-            # - When a metatile references an empty VRAM slot, we fall back to General tileset
+            # - When a metatile references an empty VRAM slot, we fall back to primary tileset
             if tile_id < NUM_TILES_IN_PRIMARY_VRAM:
                 # Tile IDs 0-511 always reference primary tileset (VRAM 0-511)
-                tileset_name = "General"
+                tileset_name = primary_tileset_name
                 actual_tile_id = tile_id
                 use_fallback = False
             else:
@@ -287,9 +287,9 @@ class MetatileRenderer:
             # Load tileset image
             tileset_image = self.load_tileset_image(tileset_name)
             if not tileset_image:
-                # Tileset not found - if this was a secondary tileset, fall back to General
-                if use_fallback and tileset_name != "General":
-                    tileset_name = "General"
+                # Tileset not found - if this was a secondary tileset, fall back to primary tileset
+                if use_fallback and tileset_name != primary_tileset_name:
+                    tileset_name = primary_tileset_name
                     actual_tile_id = tile_id - NUM_TILES_IN_PRIMARY_VRAM  # Keep the same offset
                     tileset_image = self.load_tileset_image(tileset_name)
                     use_fallback = False  # Don't fall back again
@@ -304,25 +304,25 @@ class MetatileRenderer:
             max_tile_id = (tiles_per_row * tiles_per_col) - 1
             
             if actual_tile_id < 0 or actual_tile_id > max_tile_id:
-                # Tile ID out of bounds - if this was a secondary tileset, try General as fallback
-                if use_fallback and tileset_name != "General":
-                    # Fall back to General tileset
-                    fallback_tileset_image = self.load_tileset_image("General")
+                # Tile ID out of bounds - if this was a secondary tileset, try primary tileset as fallback
+                if use_fallback and tileset_name != primary_tileset_name:
+                    # Fall back to primary tileset
+                    fallback_tileset_image = self.load_tileset_image(primary_tileset_name)
                     if fallback_tileset_image:
                         fallback_tiles_per_row = fallback_tileset_image.width // self.tile_size
                         fallback_tiles_per_col = fallback_tileset_image.height // self.tile_size
                         fallback_max_tile_id = (fallback_tiles_per_row * fallback_tiles_per_col) - 1
                         if 0 <= actual_tile_id <= fallback_max_tile_id:
-                            # General has this tile - use it
-                            tileset_name = "General"
+                            # Primary tileset has this tile - use it
+                            tileset_name = primary_tileset_name
                             tileset_image = fallback_tileset_image
                             max_tile_id = fallback_max_tile_id
                             use_fallback = False
                         else:
-                            # Still out of bounds even in General - skip
+                            # Still out of bounds even in primary tileset - skip
                             continue
                     else:
-                        # General tileset not found - skip
+                        # Primary tileset not found - skip
                         continue
                 else:
                     # No fallback possible - skip this tile
@@ -349,7 +349,7 @@ class MetatileRenderer:
                 palette_source_tileset = secondary_tileset_name
             else:
                 # Use primary tileset's palette for slots 0-5
-                palette_source_tileset = "General"
+                palette_source_tileset = primary_tileset_name
             
             palettes = self.load_tileset_palettes_cached(palette_source_tileset)
             if palettes and 0 <= palette_index < len(palettes) and palettes[palette_index]:

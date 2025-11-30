@@ -867,7 +867,7 @@ public class GameInitializer
         var playerEntity = world.Create(
             new Player(),
             new Position(160, 160),  // Center of 20x20 tile map
-            new Velocity(),
+            new GridMovement(2.0f),  // 2 tiles per second movement speed
             streaming
         );
 

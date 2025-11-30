@@ -10,7 +10,7 @@ dotnet run -c Release
 ## What This Tests
 
 1. **Entity Pooling**: Create/destroy 10K entities with and without pooling
-2. **Query Performance**: Update 50K entities with Position + Velocity components
+2. **Query Performance**: Update 50K entities with Position + GridMovement components
 3. **System Execution**: Run movement and render prep systems
 4. **GC Behavior**: Create 100K entities and run 10 query cycles
 

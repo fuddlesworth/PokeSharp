@@ -1486,7 +1486,7 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
         }
 
         // Movement-related
-        if (key.Contains("Moving") || key.Contains("Speed") || key.Contains("Velocity"))
+        if (key.Contains("Moving") || key.Contains("Speed"))
         {
             return ThemeManager.Current.Warning; // Orange for movement
         }

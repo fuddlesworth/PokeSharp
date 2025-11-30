@@ -355,7 +355,7 @@ Player Position → MapStreamingSystem → Detect Boundaries
 
 2. **Predictive Loading:** Load maps in player's direction of movement
    ```csharp
-   if (player.Velocity.X > 0)
+   if (player.Direction == Direction.East)
        PreloadMap(mapId, Direction.East);
    ```
 

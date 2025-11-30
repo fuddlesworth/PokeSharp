@@ -50,7 +50,7 @@ public class FormatOutputTests
         // Act & Assert
         var act = () =>
             logger.LogInformation(
-                "Entity {EntityId} at position ({X}, {Y}) with velocity {Velocity:F2}",
+                "Entity {EntityId} at position ({X}, {Y}) with movement speed {Speed:F2}",
                 123,
                 10,
                 20,

@@ -19,7 +19,6 @@ operations and complex initialization.
 
 - `Position` (~7 accesses/frame): Movement, collision, rendering
 - `GridMovement` (~8 accesses/frame): Movement calculations
-- `Velocity`: Physics and movement updates
 - `Sprite`: Rendering updates
 - `Animation`: Frame updates and state management
 

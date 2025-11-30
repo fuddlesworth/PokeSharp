@@ -26,6 +26,9 @@ class TilesetBuilder:
         self.used_tiles_with_palettes: Dict[str, Set[Tuple[int, int]]] = {}  # tileset_name -> set of (tile_id, palette) tuples
         self.tileset_info: Dict[str, Dict] = {}  # tileset_name -> tileset metadata
         self.animation_scanner = AnimationScanner(input_dir)
+        # Track primary/secondary tileset relationships: tileset_name -> (primary_tileset, secondary_tileset) pairs
+        # A tileset can be primary in some maps and secondary in others, so we track all pairs
+        self.tileset_relationships: Dict[str, Set[Tuple[str, str]]] = {}  # tileset_name -> set of (primary, secondary) pairs
     
     def add_tiles(self, tileset_name: str, tile_ids: List[int]):
         """Record that these tiles are used in this tileset."""
@@ -44,6 +47,18 @@ class TilesetBuilder:
             if len(unique_palettes) > 1 or (len(unique_palettes) == 1 and 0 not in unique_palettes):
                 # Only print if we have non-zero palettes to avoid spam
                 pass  # Don't print here, too verbose
+    
+    def record_tileset_relationship(self, primary_tileset: str, secondary_tileset: str):
+        """Record that a primary and secondary tileset are used together."""
+        # Record for primary tileset
+        if primary_tileset not in self.tileset_relationships:
+            self.tileset_relationships[primary_tileset] = set()
+        self.tileset_relationships[primary_tileset].add((primary_tileset, secondary_tileset))
+        
+        # Record for secondary tileset
+        if secondary_tileset not in self.tileset_relationships:
+            self.tileset_relationships[secondary_tileset] = set()
+        self.tileset_relationships[secondary_tileset].add((primary_tileset, secondary_tileset))
     
     def load_tileset_graphics(self, tileset_name: str) -> Optional[Image.Image]:
         """
@@ -100,7 +115,7 @@ class TilesetBuilder:
         result = resolver.find_tileset_path(tileset_name)
         tileset_dir = result[1] if result else None
         
-        # Load palettes
+        # Load palettes from current tileset
         palettes = None
         if tileset_dir:
             palettes = load_tileset_palettes(tileset_dir)
@@ -114,6 +129,37 @@ class TilesetBuilder:
                         logger.warning(f"Palette {i:02d}.pal has only {len(p)} colors (expected 16)")
             else:
                 logger.warning(f"No palettes loaded from {tileset_dir}")
+        
+        # CRITICAL: In Pokemon Emerald, palettes are combined in VRAM:
+        # - Palette slots 0-5 come from primary tileset palettes 0-5
+        # - Palette slots 6-12 come from secondary tileset palettes 6-12
+        # For secondary tilesets, we need to load palettes from the primary tileset for indices 0-5
+        # Determine which tileset is the primary tileset for this tileset
+        primary_tileset_name = None
+        primary_palettes = None
+        
+        # Check if this tileset is used as a secondary tileset (paired with a primary)
+        if tileset_name in self.tileset_relationships:
+            # Find the primary tileset this tileset is paired with
+            # If this tileset appears as secondary in any relationship, use that primary
+            for primary, secondary in self.tileset_relationships[tileset_name]:
+                if secondary == tileset_name and primary != tileset_name:
+                    primary_tileset_name = primary
+                    break
+            # If not found as secondary, check if it's always primary (paired with itself or no secondary)
+            if primary_tileset_name is None:
+                # This tileset is always used as primary, so it uses its own palettes for 0-5
+                primary_tileset_name = tileset_name
+        
+        # Load primary tileset palettes if we found a primary tileset and it's different from current
+        if primary_tileset_name and primary_tileset_name != tileset_name and (source_image is not None or tileset_dir is not None):
+            primary_result = resolver.find_tileset_path(primary_tileset_name)
+            if primary_result:
+                primary_dir = primary_result[1]
+                primary_palettes = load_tileset_palettes(primary_dir)
+                if primary_palettes:
+                    loaded_count = sum(1 for p in primary_palettes if p is not None)
+                    logger.debug(f"Loaded {loaded_count}/16 palettes from {primary_tileset_name} tileset for palette indices 0-5")
         
         # Get used tiles with palettes, or fall back to tiles without palettes
         used_with_palettes = sorted(self.used_tiles_with_palettes.get(tileset_name, set()))
@@ -202,11 +248,38 @@ class TilesetBuilder:
                     # Apply palette if available
                     # The tile is in 'P' mode with pixel values 0-15 (palette indices)
                     # We need to apply the correct .pal file based on palette_index from metatiles.bin
-                    if palettes and 0 <= palette_index < len(palettes) and palettes[palette_index]:
+                    # CRITICAL: Palette indices 0-5 come from primary tileset
+                    #           Palette indices 6-12 come from secondary tileset (current tileset)
+                    #           When building the primary tileset itself, use its own palettes for all indices
+                    palette_to_use = None
+                    if palette_index < 6:
+                        # Palette indices 0-5: use primary tileset palettes
+                        if primary_tileset_name == tileset_name:
+                            # When building the primary tileset, use its own palettes
+                            if palettes and 0 <= palette_index < len(palettes) and palettes[palette_index]:
+                                palette_to_use = palettes[palette_index]
+                        elif primary_palettes is not None:
+                            # For secondary tilesets, use primary tileset palettes if available
+                            if 0 <= palette_index < len(primary_palettes) and primary_palettes[palette_index]:
+                                palette_to_use = primary_palettes[palette_index]
+                            # Fallback: if primary palettes not available, try current tileset's palettes
+                            elif palettes and 0 <= palette_index < len(palettes) and palettes[palette_index]:
+                                palette_to_use = palettes[palette_index]
+                        else:
+                            # No primary palettes loaded (might be per-map tileset or no relationship recorded), use current tileset's palettes
+                            if palettes and 0 <= palette_index < len(palettes) and palettes[palette_index]:
+                                palette_to_use = palettes[palette_index]
+                    else:
+                        # Palette indices 6-12: use secondary tileset (current tileset) palettes
+                        # For the primary tileset, this also uses its own palettes
+                        if palettes and 0 <= palette_index < len(palettes) and palettes[palette_index]:
+                            palette_to_use = palettes[palette_index]
+                    
+                    if palette_to_use:
                         if tile.mode == 'P':
                             # Apply the palette from .pal file
                             # The pixel values in the tile are color indices (0-15) within that palette
-                            tile = apply_palette_to_tile(tile, palettes[palette_index])
+                            tile = apply_palette_to_tile(tile, palette_to_use)
                             # Check if tile is mostly black (might indicate palette issue)
                             if tile.mode == 'RGBA':
                                 pixels = tile.load()

@@ -154,11 +154,10 @@ public class ComponentPoolManagerTests
 
         // Assert - Should have pre-configured pools
         var stats = manager.GetAllStatistics();
-        Assert.Equal(5, stats.Count); // Position, GridMovement, Velocity, Sprite, Animation
+        Assert.Equal(4, stats.Count); // Position, GridMovement, Sprite, Animation
 
         Assert.Contains(stats, s => s.ComponentType == "Position");
         Assert.Contains(stats, s => s.ComponentType == "GridMovement");
-        Assert.Contains(stats, s => s.ComponentType == "Velocity");
         Assert.Contains(stats, s => s.ComponentType == "Sprite");
         Assert.Contains(stats, s => s.ComponentType == "Animation");
     }
@@ -178,11 +177,6 @@ public class ComponentPoolManagerTests
         var movement = manager.RentGridMovement();
         Assert.NotNull(movement);
         manager.ReturnGridMovement(movement);
-
-        // Act & Assert - Velocity
-        var velocity = manager.RentVelocity();
-        Assert.NotNull(velocity);
-        manager.ReturnVelocity(velocity);
 
         // Act & Assert - Sprite
         var sprite = manager.RentSprite();

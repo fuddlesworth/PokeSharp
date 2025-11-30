@@ -1,13 +1,21 @@
 {
-    "activeFile": "Data/Maps/hoenn/route126.json",
+    "activeFile": "Data/Maps/hoenn/littleroot_town_brendans_house_1f.json",
     "expandedProjectPaths": [
         ".",
-        "Data",
         "Data/Maps",
-        "Data/Maps/hoenn",
-        "Data/Worlds"
+        "Data/Worlds",
+        "Data",
+        "Data/Maps/hoenn"
     ],
     "fileStates": {
+        "Data/Maps/hoenn/battle_colosseum_2p.json": {
+            "scale": 11.616294642857142,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 90.90678503487635,
+                "y": 72.01091447128225
+            }
+        },
         "Data/Maps/hoenn/battle_frontier_battle_arena_battle_room.json": {
             "scale": 8,
             "selectedLayer": 0,
@@ -80,6 +88,14 @@
                 "y": -1843.3333333333333
             }
         },
+        "Data/Maps/hoenn/littleroot_town_brendans_house_1f.json": {
+            "scale": 16,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 82.125,
+                "y": 73.21875
+            }
+        },
         "Data/Maps/hoenn/mauville_city.json": {
             "scale": 1,
             "selectedLayer": 3,
@@ -92,7 +108,7 @@
             "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": -1323.6666666666665,
+                "x": -1487.3333333333333,
                 "y": 93
             }
         },
@@ -100,7 +116,7 @@
             "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 632.9999999999999,
+                "x": 469.33333333333326,
                 "y": 2172.333333333333
             }
         },
@@ -116,7 +132,7 @@
             "scale": 0.25,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 3138,
+                "x": 2156,
                 "y": 1126
             }
         },
@@ -132,16 +148,16 @@
             "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 9211.75,
+                "x": 9089.5,
                 "y": -164.25
             }
         },
         "Data/Maps/hoenn/route105.json": {
-            "scale": 2,
+            "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 726.25,
-                "y": -707.75
+                "x": 3635,
+                "y": -314.5
             }
         },
         "Data/Maps/hoenn/route107.json": {
@@ -164,7 +180,7 @@
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 455.5,
+                "x": 210,
                 "y": 220.5
             }
         },
@@ -180,7 +196,7 @@
             "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": -2870.333333333333,
+                "x": -3034,
                 "y": 4207
             }
         },
@@ -188,7 +204,7 @@
             "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 591,
+                "x": 427.33333333333326,
                 "y": 743
             }
         },
@@ -196,7 +212,7 @@
             "scale": 0.25,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 2658,
+                "x": 1676,
                 "y": 1578
             }
         },
@@ -204,7 +220,7 @@
             "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 724.25,
+                "x": 602,
                 "y": 1598.75
             }
         },
@@ -212,7 +228,7 @@
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 6440.5,
+                "x": 6196,
                 "y": 2445.5
             }
         },
@@ -220,7 +236,7 @@
             "scale": 0.25,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 2018,
+                "x": 1036,
                 "y": 2742
             }
         },
@@ -228,7 +244,7 @@
             "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": -8248.333333333332,
+                "x": -8411.333333333332,
                 "y": -1105.6666666666665
             }
         },
@@ -252,7 +268,7 @@
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": -184.5,
+                "x": -430,
                 "y": 1180.5
             }
         },
@@ -260,7 +276,7 @@
             "scale": 0.25,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 4258,
+                "x": 3276,
                 "y": 3046
             }
         },
@@ -268,7 +284,7 @@
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 455.5,
+                "x": 210,
                 "y": 1180.5
             }
         },
@@ -328,6 +344,9 @@
         "Data/Tilesets/hoenn/slateport_city/slateport_city.json": {
             "scaleInDock": 1
         },
+        "Tilesets/hoenn/battle_colosseum_2p/battle_colosseum_2p.json": {
+            "scaleInDock": 1
+        },
         "Tilesets/hoenn/dewford_town/dewford_town.json": {
             "scaleInDock": 1
         },
@@ -336,6 +355,9 @@
         },
         "Tilesets/hoenn/littleroot_town/littleroot_town.json": {
             "scaleInDock": 1
+        },
+        "Tilesets/hoenn/littleroot_town_brendans_house_1f/littleroot_town_brendans_house_1f.json": {
+            "scaleInDock": 3
         },
         "Tilesets/hoenn/mauville_city/mauville_city.json": {
             "scaleInDock": 1
@@ -414,26 +436,12 @@
         "C:/Users/nate0/RiderProjects/PokeSharp/PokeSharp.Game/Assets/Data/Worlds/hoenn.world"
     ],
     "openFiles": [
-        "Data/Maps/hoenn/route112.json",
-        "Data/Maps/hoenn/route104.json",
-        "Data/Maps/hoenn/route105.json",
-        "Data/Maps/hoenn/route134.json",
-        "Data/Maps/hoenn/route109.json",
-        "Data/Maps/hoenn/slateport_city.json",
-        "Data/Maps/hoenn/petalburg_city.json",
-        "Data/Maps/hoenn/route102.json",
-        "Data/Maps/hoenn/rustboro_city.json",
-        "Data/Maps/hoenn/route116.json",
-        "Data/Maps/hoenn/route117.json",
-        "Data/Maps/hoenn/route115.json",
-        "Data/Maps/hoenn/route113.json",
-        "Data/Maps/hoenn/route111.json",
-        "Data/Maps/hoenn/oldale_town.json",
-        "Data/Maps/hoenn/route126.json"
+        "Data/Maps/hoenn/littleroot_town_brendans_house_1f.json"
     ],
     "project": "Hoenn.tiled-project",
     "property.type": "object",
     "recentFiles": [
+        "Data/Maps/hoenn/littleroot_town_brendans_house_1f.json",
         "Data/Maps/hoenn/route112.json",
         "Data/Maps/hoenn/route104.json",
         "Data/Maps/hoenn/route105.json",
@@ -444,8 +452,7 @@
         "Data/Maps/hoenn/route102.json",
         "Data/Maps/hoenn/rustboro_city.json",
         "Data/Maps/hoenn/route116.json",
-        "Data/Maps/hoenn/route117.json",
-        "Data/Maps/hoenn/route115.json"
+        "Data/Maps/hoenn/route117.json"
     ],
     "textEdit.monospace": true
 }

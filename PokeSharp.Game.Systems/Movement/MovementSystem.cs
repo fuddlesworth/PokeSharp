@@ -534,14 +534,13 @@ public class MovementSystem : SystemBase, IUpdateSystem
                     (jumpLandX * tileSize) + jumpMapOffset.X,
                     (jumpLandY * tileSize) + jumpMapOffset.Y
                 );
-                movement.StartMovement(jumpStart, jumpEnd);
+                movement.StartMovement(jumpStart, jumpEnd, direction);
 
                 // Update grid position immediately to the landing position
                 position.X = jumpLandX;
                 position.Y = jumpLandY;
 
-                // Update facing direction
-                movement.FacingDirection = direction;
+                // Note: FacingDirection and MovementDirection are already set by StartMovement
                 _logger?.LogJump(
                     targetX,
                     targetY,
@@ -573,15 +572,14 @@ public class MovementSystem : SystemBase, IUpdateSystem
             (targetX * tileSize) + mapOffset.X,
             (targetY * tileSize) + mapOffset.Y
         );
-        movement.StartMovement(startPixels, targetPixels);
+                movement.StartMovement(startPixels, targetPixels, direction);
 
-        // Update grid position immediately to prevent entities from passing through each other
-        // The pixel position will still interpolate smoothly for rendering
-        position.X = targetX;
-        position.Y = targetY;
+                // Update grid position immediately to prevent entities from passing through each other
+                // The pixel position will still interpolate smoothly for rendering
+                position.X = targetX;
+                position.Y = targetY;
 
-        // Update facing direction
-        movement.FacingDirection = direction;
+                // Note: FacingDirection and MovementDirection are already set by StartMovement
     }
 
     /// <summary>

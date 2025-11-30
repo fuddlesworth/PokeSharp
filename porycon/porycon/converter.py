@@ -358,6 +358,9 @@ class MapConverter:
         self.tileset_builder.add_tiles_with_palettes(primary_tileset, list(used_primary_tiles_with_palettes))
         self.tileset_builder.add_tiles_with_palettes(secondary_tileset, list(used_secondary_tiles_with_palettes))
         
+        # Record the primary/secondary tileset relationship
+        self.tileset_builder.record_tileset_relationship(primary_tileset, secondary_tileset)
+        
         # Create Tiled map structure
         tiled_map = {
             "compressionlevel": -1,

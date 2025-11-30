@@ -141,10 +141,10 @@ public sealed class BulkEntityOperations
     /// <returns>Array of created entities</returns>
     /// <example>
     ///     <code>
-    /// // Create 200 entities with Position and Velocity
+    /// // Create 200 entities with Position and GridMovement
     /// var entities = bulkOps.CreateEntities(200,
     ///     i => new Position(i * 5, 100),
-    ///     i => new Velocity(Random.Shared.NextSingle() * 2, 0)
+    ///     i => new GridMovement(2.0f)
     /// );
     /// </code>
     /// </example>
@@ -340,9 +340,9 @@ public sealed class BulkEntityOperations
     /// <param name="componentFactory">Factory function to create component per entity</param>
     /// <example>
     ///     <code>
-    /// // Add different velocities to each entity
+    /// // Add GridMovement to each entity
     /// bulkOps.AddComponent(entities,
-    ///     entity => new Velocity(Random.Shared.NextSingle() * 5, Random.Shared.NextSingle() * 5)
+    ///     entity => new GridMovement(2.0f)
     /// );
     /// </code>
     /// </example>

@@ -115,9 +115,14 @@ public class InputSystem(
                     direction = currentDirection;
 
                     // Check if we need to turn in place first (pokeemerald behavior)
-                    // If input direction != facing direction AND not already moving -> TURN_DIRECTION
+                    // CRITICAL: Compare against MovementDirection (last actual movement), not FacingDirection
+                    // This matches pokeemerald/src/field_player_avatar.c:588 behavior:
+                    //   direction != GetPlayerMovementDirection() && runningState != MOVING
+                    // MovementDirection only updates when starting actual movement, not during turn-in-place
+                    // Exception: If already facing the input direction, allow immediate movement (no turn needed)
                     if (
-                        currentDirection != movement.FacingDirection
+                        currentDirection != movement.MovementDirection
+                        && currentDirection != movement.FacingDirection // Already facing this direction - no turn needed
                         && movement.RunningState != RunningState.Moving
                         && !movement.IsMoving
                     )
@@ -127,9 +132,10 @@ public class InputSystem(
                         // This allows tapping to just face a direction without moving
                         movement.StartTurnInPlace(currentDirection);
                         _logger?.LogTrace(
-                            "Turning in place from {From} to {To}",
-                            movement.FacingDirection,
-                            currentDirection
+                            "Turning in place from movement direction {From} to {To} (facing: {Facing})",
+                            movement.MovementDirection,
+                            currentDirection,
+                            movement.FacingDirection
                         );
                     }
                     else if (movement.RunningState != RunningState.TurnDirection)

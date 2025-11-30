@@ -118,9 +118,9 @@ public sealed class BulkQueryOperations
     /// <returns>List of entity with two components</returns>
     /// <example>
     ///     <code>
-    /// // Get all entities with position and velocity
-    /// var query = new QueryDescription().WithAll&lt;Position, Velocity&gt;();
-    /// var movingEntities = bulkQuery.CollectWithComponents&lt;Position, Velocity&gt;(query);
+    /// // Get all entities with position and grid movement
+    /// var query = new QueryDescription().WithAll&lt;Position, GridMovement&gt;();
+    /// var movingEntities = bulkQuery.CollectWithComponents&lt;Position, GridMovement&gt;(query);
     ///
     /// foreach (var (entity, pos, vel) in movingEntities)
     /// {

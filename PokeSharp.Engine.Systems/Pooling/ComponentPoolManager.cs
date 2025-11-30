@@ -28,7 +28,6 @@ public class ComponentPoolManager
     // Pre-configured pools for frequently used components
     private readonly ComponentPool<Position> _positionPool;
     private readonly ComponentPool<Sprite> _spritePool;
-    private readonly ComponentPool<Velocity> _velocityPool;
 
     /// <summary>
     ///     Creates a new component pool manager.
@@ -44,14 +43,12 @@ public class ComponentPoolManager
         // Pool sizes based on typical usage patterns in game loops
         _positionPool = new ComponentPool<Position>(2000);
         _gridMovementPool = new ComponentPool<GridMovement>(1500);
-        _velocityPool = new ComponentPool<Velocity>(1500);
         _spritePool = new ComponentPool<Sprite>();
         _animationPool = new ComponentPool<Animation>();
 
         // Register in dictionary for generic access
         _pools[typeof(Position)] = _positionPool;
         _pools[typeof(GridMovement)] = _gridMovementPool;
-        _pools[typeof(Velocity)] = _velocityPool;
         _pools[typeof(Sprite)] = _spritePool;
         _pools[typeof(Animation)] = _animationPool;
 
@@ -119,22 +116,6 @@ public class ComponentPoolManager
     }
 
     /// <summary>
-    ///     Rent a Velocity component from pool.
-    /// </summary>
-    public Velocity RentVelocity()
-    {
-        return _velocityPool.Rent();
-    }
-
-    /// <summary>
-    ///     Return a Velocity component to pool.
-    /// </summary>
-    public void ReturnVelocity(Velocity velocity)
-    {
-        _velocityPool.Return(velocity);
-    }
-
-    /// <summary>
     ///     Rent a Sprite component from pool.
     /// </summary>
     public Sprite RentSprite()
@@ -182,10 +163,6 @@ public class ComponentPoolManager
             else if (poolObj is ComponentPool<GridMovement> gmPool)
             {
                 stats.Add(gmPool.GetStatistics());
-            }
-            else if (poolObj is ComponentPool<Velocity> velPool)
-            {
-                stats.Add(velPool.GetStatistics());
             }
             else if (poolObj is ComponentPool<Sprite> sprPool)
             {
@@ -261,10 +238,6 @@ public class ComponentPoolManager
             else if (poolObj is ComponentPool<GridMovement> gmPool)
             {
                 gmPool.Clear();
-            }
-            else if (poolObj is ComponentPool<Velocity> velPool)
-            {
-                velPool.Clear();
             }
             else if (poolObj is ComponentPool<Sprite> sprPool)
             {

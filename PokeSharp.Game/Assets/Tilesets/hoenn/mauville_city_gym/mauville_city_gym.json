@@ -15,11 +15,11 @@
       "id": 38,
       "animation": [
         {
-          "tileid": 58,
+          "tileid": 57,
           "duration": 133
         },
         {
-          "tileid": 59,
+          "tileid": 58,
           "duration": 133
         }
       ]
@@ -28,11 +28,11 @@
       "id": 41,
       "animation": [
         {
-          "tileid": 62,
+          "tileid": 61,
           "duration": 133
         },
         {
-          "tileid": 63,
+          "tileid": 62,
           "duration": 133
         }
       ]
@@ -41,11 +41,11 @@
       "id": 26,
       "animation": [
         {
-          "tileid": 66,
+          "tileid": 65,
           "duration": 133
         },
         {
-          "tileid": 67,
+          "tileid": 66,
           "duration": 133
         }
       ]
@@ -54,11 +54,11 @@
       "id": 27,
       "animation": [
         {
-          "tileid": 70,
+          "tileid": 69,
           "duration": 133
         },
         {
-          "tileid": 71,
+          "tileid": 70,
           "duration": 133
         }
       ]
@@ -67,11 +67,11 @@
       "id": 31,
       "animation": [
         {
-          "tileid": 74,
+          "tileid": 73,
           "duration": 133
         },
         {
-          "tileid": 75,
+          "tileid": 74,
           "duration": 133
         }
       ]
@@ -80,11 +80,11 @@
       "id": 32,
       "animation": [
         {
-          "tileid": 78,
+          "tileid": 77,
           "duration": 133
         },
         {
-          "tileid": 79,
+          "tileid": 78,
           "duration": 133
         }
       ]

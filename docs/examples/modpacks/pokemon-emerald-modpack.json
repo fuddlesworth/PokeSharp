@@ -1,0 +1,642 @@
+{
+  "$schema": "https://pokesharp.dev/schemas/modpack-v1.json",
+  "$comment": "Example Pokemon Emerald Modpack Manifest for PokeSharp Engine",
+
+  "metadata": {
+    "modId": "official.pokemon-emerald",
+    "name": "Pokemon Emerald",
+    "version": "3.0.0",
+    "author": "Game Freak / PokeSharp Team",
+    "description": "Complete Pokemon Emerald implementation for PokeSharp with Battle Frontier, all 386 Gen 3 Pokemon, and Hoenn region",
+    "homepage": "https://pokesharp.dev/mods/emerald",
+    "repository": "https://github.com/pokesharp/modpack-emerald",
+    "license": "MIT",
+    "tags": ["official", "gen3", "hoenn", "complete-game", "battle-frontier"],
+    "engineVersion": ">=1.0.0",
+    "apiVersion": "1.0",
+    "icon": "assets/graphics/ui/icon.png",
+    "screenshots": [
+      "assets/screenshots/battle.png",
+      "assets/screenshots/overworld.png",
+      "assets/screenshots/battle-frontier.png"
+    ]
+  },
+
+  "dependencies": {
+    "required": [],
+    "optional": [
+      "community.enhanced-ui",
+      "community.battle-animations-plus"
+    ],
+    "loadAfter": [],
+    "loadBefore": [],
+    "incompatible": [
+      "official.pokemon-ruby",
+      "official.pokemon-sapphire",
+      "official.pokemon-firered",
+      "official.pokemon-leafgreen"
+    ],
+    "conflicts": [
+      {
+        "modId": "community.hoenn-expansion",
+        "reason": "Both mods modify the Hoenn region"
+      }
+    ]
+  },
+
+  "loadPriority": 50,
+
+  "assets": {
+    "graphics": {
+      "spritesheets": [
+        {
+          "id": "pokemon-sprites",
+          "path": "assets/graphics/pokemon/sprites.png",
+          "tileWidth": 64,
+          "tileHeight": 64,
+          "metadata": "assets/graphics/pokemon/sprites.json",
+          "compression": "none",
+          "mipmap": false
+        },
+        {
+          "id": "pokemon-sprites-shiny",
+          "path": "assets/graphics/pokemon/sprites-shiny.png",
+          "tileWidth": 64,
+          "tileHeight": 64
+        },
+        {
+          "id": "pokemon-back-sprites",
+          "path": "assets/graphics/pokemon/back-sprites.png",
+          "tileWidth": 64,
+          "tileHeight": 64
+        },
+        {
+          "id": "pokemon-icons",
+          "path": "assets/graphics/pokemon/icons.png",
+          "tileWidth": 32,
+          "tileHeight": 32
+        },
+        {
+          "id": "trainer-sprites",
+          "path": "assets/graphics/trainers/*.png",
+          "glob": true,
+          "filter": "*.png"
+        },
+        {
+          "id": "trainer-brendan",
+          "path": "assets/graphics/trainers/brendan.png",
+          "tileWidth": 32,
+          "tileHeight": 32
+        },
+        {
+          "id": "trainer-may",
+          "path": "assets/graphics/trainers/may.png",
+          "tileWidth": 32,
+          "tileHeight": 32
+        }
+      ],
+      "tilesets": [
+        {
+          "id": "hoenn-tileset",
+          "path": "assets/graphics/tilesets/hoenn.tsx",
+          "format": "tiled",
+          "image": "assets/graphics/tilesets/hoenn.png"
+        },
+        {
+          "id": "indoor-tileset",
+          "path": "assets/graphics/tilesets/indoor.tsx",
+          "format": "tiled",
+          "image": "assets/graphics/tilesets/indoor.png"
+        },
+        {
+          "id": "battle-frontier-tileset",
+          "path": "assets/graphics/tilesets/battle-frontier.tsx",
+          "format": "tiled"
+        }
+      ],
+      "ui": [
+        {
+          "id": "battle-ui",
+          "path": "assets/graphics/ui/battle/*.png",
+          "glob": true
+        },
+        {
+          "id": "menu-ui",
+          "path": "assets/graphics/ui/menus/*.png",
+          "glob": true
+        },
+        {
+          "id": "battle-hud",
+          "path": "assets/graphics/ui/battle/hud.png"
+        },
+        {
+          "id": "pokeball-throw-animation",
+          "path": "assets/graphics/ui/battle/pokeball-throw.png",
+          "tileWidth": 32,
+          "tileHeight": 32,
+          "frameCount": 8
+        }
+      ],
+      "animations": [
+        {
+          "id": "surf-animation",
+          "path": "assets/graphics/animations/surf.png",
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "frameCount": 12,
+          "fps": 12
+        }
+      ]
+    },
+
+    "audio": {
+      "music": [
+        {
+          "id": "title-screen",
+          "path": "assets/audio/music/title-screen.ogg",
+          "loop": true,
+          "volume": 0.8
+        },
+        {
+          "id": "route101",
+          "path": "assets/audio/music/route101.ogg",
+          "loop": true,
+          "volume": 0.7
+        },
+        {
+          "id": "littleroot-town",
+          "path": "assets/audio/music/littleroot-town.ogg",
+          "loop": true
+        },
+        {
+          "id": "battle-wild",
+          "path": "assets/audio/music/battle-wild.ogg",
+          "loop": true,
+          "loopStart": 1.5
+        },
+        {
+          "id": "battle-trainer",
+          "path": "assets/audio/music/battle-trainer.ogg",
+          "loop": true
+        },
+        {
+          "id": "battle-gym-leader",
+          "path": "assets/audio/music/battle-gym-leader.ogg",
+          "loop": true
+        },
+        {
+          "id": "battle-frontier",
+          "path": "assets/audio/music/battle-frontier.ogg",
+          "loop": true
+        }
+      ],
+      "sfx": [
+        {
+          "id": "pokemon-cries",
+          "path": "assets/audio/sfx/cries/*.ogg",
+          "glob": true,
+          "volume": 0.9
+        },
+        {
+          "id": "menu-select",
+          "path": "assets/audio/sfx/menu-select.ogg",
+          "volume": 0.5
+        },
+        {
+          "id": "menu-back",
+          "path": "assets/audio/sfx/menu-back.ogg",
+          "volume": 0.5
+        },
+        {
+          "id": "pokeball-throw",
+          "path": "assets/audio/sfx/pokeball-throw.ogg"
+        },
+        {
+          "id": "pokeball-open",
+          "path": "assets/audio/sfx/pokeball-open.ogg"
+        },
+        {
+          "id": "pokemon-faint",
+          "path": "assets/audio/sfx/pokemon-faint.ogg"
+        },
+        {
+          "id": "level-up",
+          "path": "assets/audio/sfx/level-up.ogg"
+        },
+        {
+          "id": "evolution",
+          "path": "assets/audio/sfx/evolution.ogg"
+        },
+        {
+          "id": "move-effects",
+          "path": "assets/audio/sfx/moves/*.ogg",
+          "glob": true
+        }
+      ],
+      "streamingMusic": true,
+      "compressionFormat": "ogg"
+    },
+
+    "maps": {
+      "worlds": [
+        {
+          "id": "hoenn",
+          "path": "assets/maps/hoenn.tmx",
+          "format": "tiled",
+          "layers": ["terrain", "objects", "triggers", "collision"],
+          "tilesets": ["hoenn-tileset", "indoor-tileset"]
+        }
+      ],
+      "routes": [
+        {
+          "id": "route101",
+          "path": "assets/maps/routes/route101.tmx",
+          "format": "tiled",
+          "connectsTo": ["littleroot-town", "oldale-town"]
+        },
+        {
+          "id": "route102",
+          "path": "assets/maps/routes/route102.tmx",
+          "format": "tiled"
+        }
+      ],
+      "towns": [
+        {
+          "id": "littleroot-town",
+          "path": "assets/maps/towns/littleroot-town.tmx",
+          "format": "tiled",
+          "music": "littleroot-town",
+          "buildings": [
+            "player-house",
+            "rival-house",
+            "professor-birch-lab"
+          ]
+        },
+        {
+          "id": "oldale-town",
+          "path": "assets/maps/towns/oldale-town.tmx",
+          "format": "tiled"
+        },
+        {
+          "id": "petalburg-city",
+          "path": "assets/maps/towns/petalburg-city.tmx",
+          "format": "tiled"
+        }
+      ],
+      "dungeons": [
+        {
+          "id": "meteor-falls",
+          "path": "assets/maps/dungeons/meteor-falls.tmx",
+          "format": "tiled",
+          "encounterRate": 0.1
+        }
+      ]
+    },
+
+    "data": {
+      "templates": "data/templates/**/*.json",
+      "scripts": "scripts/**/*.csx",
+      "localization": "data/localization/{locale}/*.json",
+      "databases": "data/databases/*.json"
+    }
+  },
+
+  "patches": [
+    "patches/pokemon-stats.patch.json",
+    "patches/move-data.patch.json",
+    "patches/type-chart.patch.json",
+    "patches/evolution-methods.patch.json",
+    "patches/trainer-ai.patch.json"
+  ],
+
+  "scripts": {
+    "global": [
+      "scripts/global/game-initialization.csx",
+      "scripts/global/save-system.csx",
+      "scripts/global/settings-manager.csx",
+      "scripts/global/cheats.csx"
+    ],
+    "systems": [
+      {
+        "id": "battle-system",
+        "path": "scripts/systems/battle/battle-controller.csx",
+        "priority": 100,
+        "dependencies": [
+          "damage-calculator.csx",
+          "status-effects.csx",
+          "ai-controller.csx"
+        ]
+      },
+      {
+        "id": "damage-calculator",
+        "path": "scripts/systems/battle/damage-calculator.csx",
+        "priority": 100
+      },
+      {
+        "id": "status-effects",
+        "path": "scripts/systems/battle/status-effects.csx",
+        "priority": 90
+      },
+      {
+        "id": "ai-controller",
+        "path": "scripts/systems/battle/ai-controller.csx",
+        "priority": 80
+      },
+      {
+        "id": "wild-encounters",
+        "path": "scripts/systems/encounters/wild-pokemon.csx",
+        "priority": 50
+      },
+      {
+        "id": "encounter-table",
+        "path": "scripts/systems/encounters/encounter-table.csx",
+        "priority": 50
+      },
+      {
+        "id": "player-movement",
+        "path": "scripts/systems/movement/player-movement.csx",
+        "priority": 70
+      },
+      {
+        "id": "npc-movement",
+        "path": "scripts/systems/movement/npc-movement.csx",
+        "priority": 60
+      },
+      {
+        "id": "menu-controller",
+        "path": "scripts/systems/ui/menu-controller.csx",
+        "priority": 40
+      },
+      {
+        "id": "dialogue-system",
+        "path": "scripts/systems/ui/dialogue-system.csx",
+        "priority": 40
+      },
+      {
+        "id": "evolution-system",
+        "path": "scripts/systems/pokemon/evolution-system.csx",
+        "priority": 30
+      },
+      {
+        "id": "exp-distribution",
+        "path": "scripts/systems/pokemon/exp-distribution.csx",
+        "priority": 30
+      }
+    ],
+    "behaviors": [
+      {
+        "id": "pokemon-behavior",
+        "path": "scripts/behaviors/pokemon/*.csx",
+        "glob": true
+      },
+      {
+        "id": "trainer-behavior",
+        "path": "scripts/behaviors/trainers/*.csx",
+        "glob": true
+      },
+      {
+        "id": "item-behavior",
+        "path": "scripts/behaviors/items/*.csx",
+        "glob": true
+      }
+    ],
+    "references": [
+      "System.dll",
+      "System.Core.dll",
+      "System.Linq.dll"
+    ],
+    "imports": [
+      "System",
+      "System.Collections.Generic",
+      "System.Linq"
+    ]
+  },
+
+  "events": {
+    "hooks": [
+      {
+        "eventType": "BattleStartedEvent",
+        "handler": "scripts/events/on-battle-start.csx",
+        "priority": 100,
+        "mode": "before",
+        "optional": false
+      },
+      {
+        "eventType": "WildEncounterEvent",
+        "handler": "scripts/events/on-wild-encounter.csx",
+        "priority": 50,
+        "mode": "after",
+        "optional": false
+      },
+      {
+        "eventType": "DialogueRequestedEvent",
+        "handler": "scripts/events/on-dialogue.csx",
+        "priority": 0,
+        "mode": "replace",
+        "optional": false
+      },
+      {
+        "eventType": "PokemonLevelUpEvent",
+        "handler": "scripts/events/on-level-up.csx",
+        "priority": 50,
+        "mode": "after"
+      },
+      {
+        "eventType": "PokemonEvolutionEvent",
+        "handler": "scripts/events/on-evolution.csx",
+        "priority": 100,
+        "mode": "before"
+      },
+      {
+        "eventType": "ItemUsedEvent",
+        "handler": "scripts/events/on-item-used.csx",
+        "priority": 50,
+        "mode": "after"
+      },
+      {
+        "eventType": "PlayerMovementEvent",
+        "handler": "scripts/events/on-player-move.csx",
+        "priority": 10,
+        "mode": "intercept"
+      }
+    ],
+    "customEvents": [
+      {
+        "name": "PokemonCaughtEvent",
+        "namespace": "PokeSharp.Game.Events.Emerald",
+        "baseType": "TypeEventBase",
+        "properties": {
+          "pokemonId": "string",
+          "species": "string",
+          "level": "int",
+          "location": "string",
+          "caughtWithBall": "string",
+          "isShiny": "bool",
+          "nickname": "string?",
+          "trainerId": "string"
+        }
+      },
+      {
+        "name": "BattleFrontierChallengeStartedEvent",
+        "namespace": "PokeSharp.Game.Events.Emerald",
+        "properties": {
+          "facilityId": "string",
+          "challengeType": "string",
+          "streak": "int"
+        }
+      },
+      {
+        "name": "ContestPerformanceEvent",
+        "namespace": "PokeSharp.Game.Events.Emerald",
+        "properties": {
+          "contestType": "string",
+          "pokemonId": "string",
+          "appeal": "int",
+          "jamming": "int"
+        }
+      },
+      {
+        "name": "SecretBaseVisitedEvent",
+        "namespace": "PokeSharp.Game.Events.Emerald",
+        "properties": {
+          "baseId": "string",
+          "ownerId": "string",
+          "location": "string"
+        }
+      }
+    ],
+    "globalHandlers": {
+      "error": "scripts/events/on-error.csx",
+      "save": "scripts/events/on-save.csx",
+      "load": "scripts/events/on-load.csx"
+    }
+  },
+
+  "dataOverrides": {
+    "pokemon": "data/pokemon/*.json",
+    "moves": "data/moves/*.json",
+    "abilities": "data/abilities/*.json",
+    "items": "data/items/*.json",
+    "trainers": "data/trainers/*.json",
+    "encounters": "data/encounters/*.json",
+    "learnsets": "data/learnsets/*.json",
+    "evolutions": "data/evolutions/*.json",
+    "type-chart": "data/type-chart.json"
+  },
+
+  "configuration": {
+    "features": {
+      "physicalSpecialSplit": false,
+      "fairyType": false,
+      "megaEvolution": false,
+      "battleFrontier": true,
+      "contests": true,
+      "secretBases": true,
+      "berryGrowing": true,
+      "pokeblocks": true,
+      "recordMixing": false,
+      "wirelessBattles": false
+    },
+    "settings": {
+      "startingPokemon": ["treecko", "torchic", "mudkip"],
+      "startingLocation": "littleroot-town",
+      "defaultPlayerName": "Brendan",
+      "defaultRivalName": "May",
+      "defaultProfessorName": "Birch",
+      "gameVersion": "Emerald",
+      "region": "Hoenn",
+      "generation": 3
+    },
+    "gameplay": {
+      "expShareMode": "single",
+      "evYield": "gen3",
+      "criticalHitRatio": "gen3",
+      "randomBattles": true,
+      "nuzlockeMode": false,
+      "shinyRate": 8192,
+      "ivRange": [0, 31],
+      "evCap": 510
+    },
+    "debug": {
+      "enableCheats": false,
+      "skipIntro": false,
+      "unlockAllAreas": false,
+      "maxMoney": false,
+      "allPokemonShiny": false
+    }
+  },
+
+  "templates": {
+    "contentFolders": {
+      "pokemon": "data/templates/pokemon",
+      "trainers": "data/templates/trainers",
+      "items": "data/templates/items",
+      "npcs": "data/templates/npcs",
+      "triggers": "data/templates/triggers",
+      "buildings": "data/templates/buildings"
+    },
+    "baseTemplates": [
+      "data/templates/base/pokemon-base.json",
+      "data/templates/base/trainer-base.json",
+      "data/templates/base/npc-base.json",
+      "data/templates/base/item-base.json"
+    ]
+  },
+
+  "localization": {
+    "defaultLocale": "en-US",
+    "supported": [
+      "en-US",
+      "ja-JP",
+      "es-ES",
+      "fr-FR",
+      "de-DE",
+      "it-IT",
+      "ko-KR"
+    ],
+    "textPath": "data/localization/{locale}/text.json",
+    "fallbackLocale": "en-US"
+  },
+
+  "compatibility": {
+    "minimumRam": "512MB",
+    "recommendedRam": "1GB",
+    "diskSpace": "500MB",
+    "platform": ["Windows", "Linux", "macOS"],
+    "architecture": ["x64", "arm64"]
+  },
+
+  "metadata_extended": {
+    "credits": [
+      {
+        "role": "Original Game",
+        "names": ["Game Freak", "Nintendo"]
+      },
+      {
+        "role": "PokeSharp Port",
+        "names": ["PokeSharp Team"]
+      },
+      {
+        "role": "Assets",
+        "names": ["Veekun", "PokeCommunity"]
+      }
+    ],
+    "changelog": [
+      {
+        "version": "3.0.0",
+        "date": "2025-11-29",
+        "changes": [
+          "Initial PokeSharp modpack release",
+          "All 386 Gen 3 Pokemon implemented",
+          "Complete Hoenn region maps",
+          "Battle Frontier fully functional",
+          "Contests and Secret Bases implemented"
+        ]
+      }
+    ],
+    "knownIssues": [
+      "Record Mixing not yet implemented",
+      "Wireless battles require additional networking module"
+    ]
+  }
+}

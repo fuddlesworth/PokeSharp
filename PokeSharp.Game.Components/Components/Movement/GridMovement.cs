@@ -59,8 +59,17 @@ public struct GridMovement
 
     /// <summary>
     ///     Gets or sets the current facing direction.
+    ///     This is which way the sprite is facing and can change during turn-in-place.
     /// </summary>
     public Direction FacingDirection { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the direction of the last actual movement.
+    ///     This is used for turn detection - only updated when starting actual movement (not turn-in-place).
+    ///     In pokeemerald, this corresponds to ObjectEvent.movementDirection.
+    ///     See pokeemerald/src/field_player_avatar.c:588 - compares against GetPlayerMovementDirection().
+    /// </summary>
+    public Direction MovementDirection { get; set; }
 
     /// <summary>
     ///     Gets or sets whether movement is locked (e.g., during cutscenes, dialogue, or battles).
@@ -86,6 +95,7 @@ public struct GridMovement
         MovementProgress = 0f;
         MovementSpeed = speed;
         FacingDirection = Direction.South;
+        MovementDirection = Direction.South;
         MovementLocked = false;
         RunningState = RunningState.NotMoving;
     }
@@ -103,6 +113,7 @@ public struct GridMovement
         TargetPosition = target;
         MovementProgress = 0f;
         FacingDirection = direction;
+        MovementDirection = direction; // Update movement direction when starting actual movement
     }
 
     /// <summary>
@@ -132,14 +143,17 @@ public struct GridMovement
 
     /// <summary>
     ///     Starts a turn-in-place animation (player turns to face direction without moving).
-    ///     Called when input direction differs from current facing direction.
+    ///     Called when input direction differs from current movement direction (not facing direction).
     ///     The actual turn duration is determined by the animation system (PlayOnce on go_* animation).
+    ///     Note: Only updates FacingDirection, NOT MovementDirection - matches pokeemerald behavior.
     /// </summary>
     /// <param name="direction">The direction to turn and face.</param>
     public void StartTurnInPlace(Direction direction)
     {
         RunningState = RunningState.TurnDirection;
         FacingDirection = direction;
+        // DON'T update MovementDirection here - it stays as the last actual movement direction
+        // This matches pokeemerald behavior where movementDirection != facingDirection during turn-in-place
     }
 
     /// <summary>

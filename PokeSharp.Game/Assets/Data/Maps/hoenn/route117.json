@@ -3816,7 +3816,7 @@
       "value": {
         "direction": "East",
         "map": "mauville_city",
-        "offset": -1
+        "offset": 0
       }
     }
   ],
