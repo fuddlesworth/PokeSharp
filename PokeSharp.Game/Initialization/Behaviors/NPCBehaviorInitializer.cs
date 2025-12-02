@@ -1,6 +1,7 @@
 using Arch.Core;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Common.Logging;
+using PokeSharp.Engine.Core.Events;
 using PokeSharp.Engine.Core.Types;
 using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Game.Scripting.Api;
@@ -19,7 +20,8 @@ public class NPCBehaviorInitializer(
     SystemManager systemManager,
     TypeRegistry<BehaviorDefinition> behaviorRegistry,
     ScriptService scriptService,
-    IScriptingApiProvider apiProvider
+    IScriptingApiProvider apiProvider,
+    IEventBus eventBus
 )
 {
     /// <summary>
@@ -83,7 +85,8 @@ public class NPCBehaviorInitializer(
             var npcBehaviorSystem = new NPCBehaviorSystem(
                 npcBehaviorLogger,
                 loggerFactory,
-                apiProvider
+                apiProvider,
+                eventBus
             );
             npcBehaviorSystem.SetBehaviorRegistry(behaviorRegistry);
             systemManager.RegisterUpdateSystem(npcBehaviorSystem);

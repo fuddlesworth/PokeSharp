@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using PokeSharp.Engine.Common.Logging;
+using PokeSharp.Engine.Core.Events;
 using PokeSharp.Game.Scripting.Api;
 using PokeSharp.Game.Scripting.Runtime;
 
@@ -26,6 +27,7 @@ public class ScriptService : IAsyncDisposable
     private readonly IScriptingApiProvider _apis;
     private readonly ScriptCache _cache;
     private readonly ScriptCompiler _compiler;
+    private readonly IEventBus _eventBus;
     private readonly ILogger<ScriptService> _logger;
     private readonly string _scriptsBasePath;
 
@@ -36,17 +38,20 @@ public class ScriptService : IAsyncDisposable
     /// <param name="logger">Logger instance.</param>
     /// <param name="loggerFactory">Logger factory for creating child loggers.</param>
     /// <param name="apis">Scripting API provider.</param>
+    /// <param name="eventBus">Event bus for script event subscriptions.</param>
     public ScriptService(
         string scriptsBasePath,
         ILogger<ScriptService> logger,
         ILoggerFactory loggerFactory,
-        IScriptingApiProvider apis
+        IScriptingApiProvider apis,
+        IEventBus eventBus
     )
     {
         _scriptsBasePath =
             scriptsBasePath ?? throw new ArgumentNullException(nameof(scriptsBasePath));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _apis = apis ?? throw new ArgumentNullException(nameof(apis));
+        _eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
 
         // Create dependencies
         ILogger<ScriptCompiler> compilerLogger = loggerFactory.CreateLogger<ScriptCompiler>();
@@ -66,6 +71,12 @@ public class ScriptService : IAsyncDisposable
         {
             try
             {
+                // Call OnUnload for TypeScriptBase instances to cleanup event handlers
+                if (instance is TypeScriptBase scriptBase)
+                {
+                    scriptBase.OnUnload();
+                }
+
                 if (instance is IAsyncDisposable asyncDisposable)
                 {
                     await asyncDisposable.DisposeAsync();
@@ -208,22 +219,41 @@ public class ScriptService : IAsyncDisposable
 
         try
         {
-            // Load new instance FIRST
-            object? newInstance = await LoadScriptAsync(scriptPath);
-
-            // Then dispose and replace old instance atomically
+            // Get old instance and call OnUnload to cleanup event handlers FIRST
             if (_cache.TryRemoveInstance(scriptPath, out object? oldInstance))
             {
-                if (oldInstance is IAsyncDisposable asyncDisposable)
+                try
                 {
-                    await asyncDisposable.DisposeAsync();
+                    // Call OnUnload to cleanup event subscriptions
+                    if (oldInstance is TypeScriptBase oldScriptBase)
+                    {
+                        oldScriptBase.OnUnload();
+                    }
+
+                    // Dispose the old instance
+                    if (oldInstance is IAsyncDisposable asyncDisposable)
+                    {
+                        await asyncDisposable.DisposeAsync();
+                    }
+                    else if (oldInstance is IDisposable disposable)
+                    {
+                        disposable.Dispose();
+                    }
                 }
-                else if (oldInstance is IDisposable disposable)
+                catch (Exception ex)
                 {
-                    disposable.Dispose();
+                    _logger.LogWarning(
+                        ex,
+                        "Error cleaning up old script instance during reload: {Path}",
+                        scriptPath
+                    );
+                    // Continue with reload even if cleanup fails
                 }
             }
 
+            // Load and compile new instance
+            // Note: InitializeScript must be called separately by the caller to register events
+            object? newInstance = await LoadScriptAsync(scriptPath);
             return newInstance;
         }
         catch (Exception ex)
@@ -291,7 +321,11 @@ public class ScriptService : IAsyncDisposable
 
         try
         {
-            // Get or cache the OnInitialize method using reflection
+            // Create ScriptContext for initialization (use NullLogger if no logger provided)
+            ILogger effectiveLogger = logger ?? NullLogger.Instance;
+            var context = new ScriptContext(world, entity, effectiveLogger, _apis, _eventBus);
+
+            // Call OnInitialize (sets up initial state)
             Type scriptType = scriptBase.GetType();
             MethodInfo initMethod = _onInitializeMethodCache.GetOrAdd(
                 scriptType,
@@ -315,11 +349,10 @@ public class ScriptService : IAsyncDisposable
                     return method;
                 }
             );
-
-            // Create ScriptContext for initialization (use NullLogger if no logger provided)
-            ILogger effectiveLogger = logger ?? NullLogger.Instance;
-            var context = new ScriptContext(world, entity, effectiveLogger, _apis);
             initMethod.Invoke(scriptBase, new object[] { context });
+
+            // Call RegisterEventHandlers (subscribes to events)
+            scriptBase.RegisterEventHandlers(context);
 
             _logger.LogDebug(
                 "Successfully initialized script instance of type {Type}",

@@ -1,4 +1,6 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using PokeSharp.Engine.Core.Events;
 using PokeSharp.Engine.Scenes;
 using PokeSharp.Game.Initialization.Behaviors;
 
@@ -39,6 +41,7 @@ public class InitializeBehaviorSystemsStep : InitializationStepBase
         // Initialize NPC behavior system
         ILogger<NPCBehaviorInitializer> npcBehaviorInitializerLogger =
             context.LoggerFactory.CreateLogger<NPCBehaviorInitializer>();
+        IEventBus eventBus = context.Services.GetRequiredService<IEventBus>();
         var npcBehaviorInitializer = new NPCBehaviorInitializer(
             npcBehaviorInitializerLogger,
             context.LoggerFactory,
@@ -46,7 +49,8 @@ public class InitializeBehaviorSystemsStep : InitializationStepBase
             context.SystemManager,
             context.BehaviorRegistry,
             context.ScriptService,
-            context.ApiProvider
+            context.ApiProvider,
+            eventBus
         );
         await npcBehaviorInitializer.InitializeAsync();
 
@@ -61,6 +65,7 @@ public class InitializeBehaviorSystemsStep : InitializationStepBase
             context.TileBehaviorRegistry,
             context.ScriptService,
             context.ApiProvider,
+            eventBus,
             context.GameInitializer.CollisionService
         );
         await tileBehaviorInitializer.InitializeAsync();

@@ -1,6 +1,7 @@
 using Arch.Core;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Common.Logging;
+using PokeSharp.Engine.Core.Events;
 using PokeSharp.Engine.Core.Types;
 using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Game.Scripting.Api;
@@ -21,6 +22,7 @@ public class TileBehaviorInitializer(
     TypeRegistry<TileBehaviorDefinition> behaviorRegistry,
     ScriptService scriptService,
     IScriptingApiProvider apiProvider,
+    IEventBus eventBus,
     CollisionService? collisionService = null
 )
 {
@@ -85,7 +87,8 @@ public class TileBehaviorInitializer(
             var tileBehaviorSystem = new TileBehaviorSystem(
                 tileBehaviorLogger,
                 loggerFactory,
-                apiProvider
+                apiProvider,
+                eventBus
             );
             tileBehaviorSystem.SetBehaviorRegistry(behaviorRegistry);
             systemManager.RegisterUpdateSystem(tileBehaviorSystem);

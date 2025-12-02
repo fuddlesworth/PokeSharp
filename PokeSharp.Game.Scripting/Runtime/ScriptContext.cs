@@ -1,5 +1,9 @@
 using Arch.Core;
 using Microsoft.Extensions.Logging;
+using PokeSharp.Engine.Core.Events;
+using PokeSharp.Engine.Core.Events.Collision;
+using PokeSharp.Engine.Core.Events.Movement;
+using PokeSharp.Engine.Core.Events.Tile;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Scripting.Api;
 using PokeSharp.Game.Scripting.Services;
@@ -64,21 +68,29 @@ public sealed class ScriptContext
     /// <param name="entity">The target entity for entity-level scripts, or null for global scripts.</param>
     /// <param name="logger">Logger instance for this script's execution.</param>
     /// <param name="apis">The scripting API provider facade (provides access to all domain-specific APIs).</param>
+    /// <param name="eventBus">The event bus for subscribing to and publishing game events.</param>
     /// <remarks>
     ///     <para>
-    ///         This constructor uses the facade pattern to reduce parameter count from 9 to 4.
+    ///         This constructor uses the facade pattern to reduce parameter count.
     ///         The <paramref name="apis" /> provider supplies all domain-specific API services.
     ///     </para>
     ///     <para>
     ///         Typically, you won't construct this directly - ScriptService handles instantiation.
     ///     </para>
     /// </remarks>
-    public ScriptContext(World world, Entity? entity, ILogger logger, IScriptingApiProvider apis)
+    public ScriptContext(
+        World world,
+        Entity? entity,
+        ILogger logger,
+        IScriptingApiProvider apis,
+        IEventBus eventBus
+    )
     {
         World = world ?? throw new ArgumentNullException(nameof(world));
         Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _entity = entity;
         _apis = apis ?? throw new ArgumentNullException(nameof(apis));
+        Events = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
     }
 
     #region Core Properties
@@ -208,6 +220,34 @@ public sealed class ScriptContext
     /// </code>
     /// </example>
     public EffectApiService Effects => _apis.Effects;
+
+    /// <summary>
+    ///     Gets the Event Bus for subscribing to and publishing game events.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         Use this to subscribe to gameplay events like movement, collisions, and tile interactions.
+    ///         Scripts can react to events published by the ECS systems or publish custom events.
+    ///     </para>
+    ///     <para>
+    ///         For convenience, use the helper methods like <see cref="OnMovementStarted" />
+    ///         or the generic <see cref="On{TEvent}" /> method for typed event subscriptions.
+    ///     </para>
+    /// </remarks>
+    /// <example>
+    ///     <code>
+    /// // Subscribe to movement events
+    /// ctx.OnMovementStarted(evt =>
+    /// {
+    ///     ctx.Logger.LogInformation("Entity moving from ({FromX},{FromY}) to ({ToX},{ToY})",
+    ///         evt.FromX, evt.FromY, evt.ToX, evt.ToY);
+    /// });
+    ///
+    /// // Subscribe to custom events
+    /// ctx.On&lt;MyCustomEvent&gt;(evt => HandleCustomEvent(evt), priority: 1000);
+    /// </code>
+    /// </example>
+    public IEventBus Events { get; }
 
     #endregion
 
@@ -454,6 +494,177 @@ public sealed class ScriptContext
     ///     Returns false for global scripts or entities without positions.
     /// </remarks>
     public bool HasPosition => HasState<Position>();
+
+    #endregion
+
+    #region Event Subscription Helpers
+
+    /// <summary>
+    ///     Subscribes to a game event with optional priority.
+    /// </summary>
+    /// <typeparam name="TEvent">The type of event to subscribe to (must implement IGameEvent).</typeparam>
+    /// <param name="handler">The handler to invoke when the event is published.</param>
+    /// <param name="priority">
+    ///     The priority of this handler (higher numbers execute first).
+    ///     Default is 500. Use higher values for critical handlers, lower for logging/analytics.
+    /// </param>
+    /// <returns>A disposable subscription that can be used to unsubscribe.</returns>
+    /// <remarks>
+    ///     <para>
+    ///         This is the primary method for subscribing to events from scripts.
+    ///         The subscription will remain active until disposed or the script context is destroyed.
+    ///     </para>
+    ///     <para>
+    ///         Priority determines handler execution order. Higher priority handlers run first:
+    ///         - 1000+: Validation and anti-cheat systems
+    ///         - 500: Normal game logic (default)
+    ///         - 0: Post-processing and effects
+    ///         - -1000: Logging and analytics
+    ///     </para>
+    ///     <para>
+    ///         NOTE: Priority parameter is currently accepted but not fully implemented in EventBus.
+    ///         All handlers execute in registration order until EventBus is upgraded to support priority-based dispatch.
+    ///     </para>
+    /// </remarks>
+    /// <example>
+    ///     <code>
+    /// // Subscribe to any event type with custom priority
+    /// var subscription = ctx.On&lt;MovementStartedEvent&gt;(evt =>
+    /// {
+    ///     if (evt.ToX == 10 &amp;&amp; evt.ToY == 10)
+    ///     {
+    ///         ctx.Logger.LogInformation("Player reached special tile!");
+    ///     }
+    /// }, priority: 1000);
+    ///
+    /// // Later: unsubscribe when no longer needed
+    /// subscription.Dispose();
+    /// </code>
+    /// </example>
+    public IDisposable On<TEvent>(Action<TEvent> handler, int priority = 500)
+        where TEvent : class, IGameEvent
+    {
+        if (handler == null)
+        {
+            throw new ArgumentNullException(nameof(handler));
+        }
+
+        // NOTE: Priority is accepted but not yet used by EventBus.Subscribe()
+        // This maintains API compatibility for when EventBus is upgraded to support priority.
+        // For now, all handlers execute in registration order.
+        Logger.LogDebug(
+            "Subscribing to {EventType} with priority {Priority} (priority not yet implemented)",
+            typeof(TEvent).Name,
+            priority
+        );
+
+        return Events.Subscribe(handler);
+    }
+
+    /// <summary>
+    ///     Subscribes to MovementStartedEvent with default priority.
+    /// </summary>
+    /// <param name="handler">The handler to invoke when movement starts.</param>
+    /// <returns>A disposable subscription.</returns>
+    /// <remarks>
+    ///     Convenience method for subscribing to movement start events.
+    ///     Equivalent to calling <c>On&lt;MovementStartedEvent&gt;(handler, priority: 500)</c>.
+    /// </remarks>
+    /// <example>
+    ///     <code>
+    /// ctx.OnMovementStarted(evt =>
+    /// {
+    ///     ctx.Logger.LogInformation("Entity {EntityId} moving to ({ToX},{ToY})",
+    ///         evt.Entity.Id, evt.ToX, evt.ToY);
+    ///
+    ///     // Can cancel movement by calling evt.PreventDefault()
+    ///     if (IsBlockedByScript(evt.ToX, evt.ToY))
+    ///     {
+    ///         evt.PreventDefault("Script blocked movement");
+    ///     }
+    /// });
+    /// </code>
+    /// </example>
+    public IDisposable OnMovementStarted(Action<MovementStartedEvent> handler)
+        => On(handler, priority: 500);
+
+    /// <summary>
+    ///     Subscribes to MovementCompletedEvent with default priority.
+    /// </summary>
+    /// <param name="handler">The handler to invoke when movement completes.</param>
+    /// <returns>A disposable subscription.</returns>
+    /// <remarks>
+    ///     Convenience method for subscribing to movement completion events.
+    ///     Equivalent to calling <c>On&lt;MovementCompletedEvent&gt;(handler, priority: 500)</c>.
+    /// </remarks>
+    /// <example>
+    ///     <code>
+    /// ctx.OnMovementCompleted(evt =>
+    /// {
+    ///     ctx.Logger.LogInformation("Entity {EntityId} reached ({CurrentX},{CurrentY})",
+    ///         evt.Entity.Id, evt.CurrentX, evt.CurrentY);
+    ///
+    ///     // Trigger follow-up actions after movement
+    ///     CheckForRandomEncounter(evt.CurrentX, evt.CurrentY);
+    /// });
+    /// </code>
+    /// </example>
+    public IDisposable OnMovementCompleted(Action<MovementCompletedEvent> handler)
+        => On(handler, priority: 500);
+
+    /// <summary>
+    ///     Subscribes to CollisionDetectedEvent with default priority.
+    /// </summary>
+    /// <param name="handler">The handler to invoke when a collision occurs.</param>
+    /// <returns>A disposable subscription.</returns>
+    /// <remarks>
+    ///     Convenience method for subscribing to collision events.
+    ///     Equivalent to calling <c>On&lt;CollisionDetectedEvent&gt;(handler, priority: 500)</c>.
+    /// </remarks>
+    /// <example>
+    ///     <code>
+    /// ctx.OnCollisionDetected(evt =>
+    /// {
+    ///     ctx.Logger.LogInformation("Collision: Entity {A} hit Entity {B} at ({X},{Y})",
+    ///         evt.EntityA.Id, evt.EntityB.Id, evt.ContactX, evt.ContactY);
+    ///
+    ///     // Handle collision based on type
+    ///     if (evt.CollisionType == CollisionType.PlayerNPC)
+    ///     {
+    ///         StartNPCInteraction(evt.EntityB);
+    ///     }
+    /// });
+    /// </code>
+    /// </example>
+    public IDisposable OnCollisionDetected(Action<CollisionDetectedEvent> handler)
+        => On(handler, priority: 500);
+
+    /// <summary>
+    ///     Subscribes to TileSteppedOnEvent with default priority.
+    /// </summary>
+    /// <param name="handler">The handler to invoke when an entity steps on a tile.</param>
+    /// <returns>A disposable subscription.</returns>
+    /// <remarks>
+    ///     Convenience method for subscribing to tile step events.
+    ///     Equivalent to calling <c>On&lt;TileSteppedOnEvent&gt;(handler, priority: 500)</c>.
+    /// </remarks>
+    /// <example>
+    ///     <code>
+    /// ctx.OnTileSteppedOn(evt =>
+    /// {
+    ///     ctx.Logger.LogInformation("Entity {EntityId} stepped on {TileType} at ({X},{Y})",
+    ///         evt.Entity.Id, evt.TileType, evt.TileX, evt.TileY);
+    ///
+    ///     // Can cancel tile entry by calling evt.PreventDefault()
+    ///     if (evt.TileType == "lava" &amp;&amp; !HasFireResistance(evt.Entity))
+    ///     {
+    ///         evt.PreventDefault("Cannot walk on lava without protection");
+    ///     }
+    /// });
+    /// </code>
+    /// </example>
+    public IDisposable OnTileSteppedOn(Action<TileSteppedOnEvent> handler)
+        => On(handler, priority: 500);
 
     #endregion
 }

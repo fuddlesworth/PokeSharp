@@ -27,6 +27,7 @@
     <ProjectReference Include="..\..\PokeSharp.Engine.Core\PokeSharp.Engine.Core.csproj" />
     <ProjectReference Include="..\..\PokeSharp.Game\PokeSharp.Game.csproj" />
     <ProjectReference Include="..\..\PokeSharp.Game.Systems\PokeSharp.Game.Systems.csproj" />
+    <ProjectReference Include="..\..\PokeSharp.Game.Scripting\PokeSharp.Game.Scripting.csproj" />
   </ItemGroup>
 
 </Project>

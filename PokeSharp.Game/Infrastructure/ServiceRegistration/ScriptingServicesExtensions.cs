@@ -55,8 +55,9 @@ public static class ScriptingServicesExtensions
             ILogger<ScriptService> logger = sp.GetRequiredService<ILogger<ScriptService>>();
             ILoggerFactory loggerFactory = sp.GetRequiredService<ILoggerFactory>();
             IScriptingApiProvider apis = sp.GetRequiredService<IScriptingApiProvider>();
+            IEventBus eventBus = sp.GetRequiredService<IEventBus>();
             string scriptsPath = pathResolver.Resolve("Scripts");
-            return new ScriptService(scriptsPath, logger, loggerFactory, apis);
+            return new ScriptService(scriptsPath, logger, loggerFactory, apis, eventBus);
         });
 
         return services;

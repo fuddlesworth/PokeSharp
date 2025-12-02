@@ -93,7 +93,13 @@ public class TileBehaviorSystem : SystemBase, IUpdateSystem, ITileBehaviorSystem
             return false;
         }
 
-        var context = new ScriptContext(world, tileEntity, _logger, _apis);
+        var context = new ScriptContext(
+            world,
+            tileEntity,
+            _logger,
+            _apis,
+            _eventBus ?? throw new InvalidOperationException("EventBus is required for ScriptContext")
+        );
 
         // Check both directions (like Pokemon Emerald's two-way check)
         if (script.IsBlockedFrom(context, fromDirection, toDirection))
@@ -137,7 +143,13 @@ public class TileBehaviorSystem : SystemBase, IUpdateSystem, ITileBehaviorSystem
             return Direction.None;
         }
 
-        var context = new ScriptContext(world, tileEntity, _logger, _apis);
+        var context = new ScriptContext(
+            world,
+            tileEntity,
+            _logger,
+            _apis,
+            _eventBus ?? throw new InvalidOperationException("EventBus is required for ScriptContext")
+        );
         return script.GetForcedMovement(context, currentDirection);
     }
 
@@ -169,7 +181,13 @@ public class TileBehaviorSystem : SystemBase, IUpdateSystem, ITileBehaviorSystem
             return Direction.None;
         }
 
-        var context = new ScriptContext(world, tileEntity, _logger, _apis);
+        var context = new ScriptContext(
+            world,
+            tileEntity,
+            _logger,
+            _apis,
+            _eventBus ?? throw new InvalidOperationException("EventBus is required for ScriptContext")
+        );
         return script.GetJumpDirection(context, fromDirection);
     }
 
@@ -201,7 +219,13 @@ public class TileBehaviorSystem : SystemBase, IUpdateSystem, ITileBehaviorSystem
             return null;
         }
 
-        var context = new ScriptContext(world, tileEntity, _logger, _apis);
+        var context = new ScriptContext(
+            world,
+            tileEntity,
+            _logger,
+            _apis,
+            _eventBus ?? throw new InvalidOperationException("EventBus is required for ScriptContext")
+        );
         return script.GetRequiredMovementMode(context);
     }
 
@@ -233,7 +257,13 @@ public class TileBehaviorSystem : SystemBase, IUpdateSystem, ITileBehaviorSystem
             return true;
         }
 
-        var context = new ScriptContext(world, tileEntity, _logger, _apis);
+        var context = new ScriptContext(
+            world,
+            tileEntity,
+            _logger,
+            _apis,
+            _eventBus ?? throw new InvalidOperationException("EventBus is required for ScriptContext")
+        );
         return script.AllowsRunning(context);
     }
 
@@ -303,7 +333,13 @@ public class TileBehaviorSystem : SystemBase, IUpdateSystem, ITileBehaviorSystem
                     // Create ScriptContext for this entity
                     string loggerKey = $"{behavior.BehaviorTypeId}.{entity.Id}";
                     ILogger scriptLogger = GetOrCreateLogger(loggerKey);
-                    var context = new ScriptContext(world, entity, scriptLogger, _apis);
+                    var context = new ScriptContext(
+                        world,
+                        entity,
+                        scriptLogger,
+                        _apis,
+                        _eventBus ?? throw new InvalidOperationException("EventBus is required for ScriptContext")
+                    );
 
                     // Initialize on first tick
                     if (!behavior.IsInitialized)
@@ -431,7 +467,13 @@ public class TileBehaviorSystem : SystemBase, IUpdateSystem, ITileBehaviorSystem
                 {
                     try
                     {
-                        var context = new ScriptContext(world, tileEntity, _logger, _apis);
+                        var context = new ScriptContext(
+                            world,
+                            tileEntity,
+                            _logger,
+                            _apis,
+                            _eventBus ?? throw new InvalidOperationException("EventBus is required for ScriptContext")
+                        );
                         script.OnStep(context, entity);
                     }
                     catch (Exception ex)

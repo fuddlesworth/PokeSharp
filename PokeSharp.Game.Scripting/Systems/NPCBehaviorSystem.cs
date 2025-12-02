@@ -3,6 +3,7 @@ using Arch.Core;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Common.Configuration;
 using PokeSharp.Engine.Common.Logging;
+using PokeSharp.Engine.Core.Events;
 using PokeSharp.Engine.Core.Systems;
 using PokeSharp.Engine.Core.Types;
 using PokeSharp.Game.Components.NPCs;
@@ -26,6 +27,7 @@ public class NPCBehaviorSystem : SystemBase, IUpdateSystem
 {
     private readonly IScriptingApiProvider _apis;
     private readonly PerformanceConfiguration _config;
+    private readonly IEventBus? _eventBus;
     private readonly ILogger<NPCBehaviorSystem> _logger;
     private readonly ILoggerFactory _loggerFactory;
     private readonly ConcurrentDictionary<string, ILogger> _scriptLoggerCache = new();
@@ -37,12 +39,14 @@ public class NPCBehaviorSystem : SystemBase, IUpdateSystem
         ILogger<NPCBehaviorSystem> logger,
         ILoggerFactory loggerFactory,
         IScriptingApiProvider apis,
+        IEventBus? eventBus = null,
         PerformanceConfiguration? config = null
     )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
         _apis = apis ?? throw new ArgumentNullException(nameof(apis));
+        _eventBus = eventBus;
         _config = config ?? PerformanceConfiguration.Default;
     }
 
@@ -143,7 +147,13 @@ public class NPCBehaviorSystem : SystemBase, IUpdateSystem
                     // Create ScriptContext for this entity (with cached logger and API services)
                     string loggerKey = $"{behavior.BehaviorTypeId}.{npc.NpcId}";
                     ILogger scriptLogger = GetOrCreateLogger(loggerKey);
-                    var context = new ScriptContext(world, entity, scriptLogger, _apis);
+                    var context = new ScriptContext(
+                        world,
+                        entity,
+                        scriptLogger,
+                        _apis,
+                        _eventBus ?? throw new InvalidOperationException("EventBus is required for ScriptContext")
+                    );
 
                     // Initialize on first tick
                     if (!behavior.IsInitialized)
@@ -178,7 +188,13 @@ public class NPCBehaviorSystem : SystemBase, IUpdateSystem
                     {
                         string loggerKey = $"{behavior.BehaviorTypeId}.{npc.NpcId}";
                         ILogger scriptLogger = GetOrCreateLogger(loggerKey);
-                        var context = new ScriptContext(world, entity, scriptLogger, _apis);
+                        var context = new ScriptContext(
+                            world,
+                            entity,
+                            scriptLogger,
+                            _apis,
+                            _eventBus ?? throw new InvalidOperationException("EventBus is required for ScriptContext")
+                        );
                         DeactivateBehavior(
                             script,
                             ref behavior,

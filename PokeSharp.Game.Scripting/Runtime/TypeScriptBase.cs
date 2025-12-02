@@ -1,3 +1,8 @@
+using Microsoft.Extensions.Logging;
+using PokeSharp.Engine.Core.Events;
+using PokeSharp.Engine.Core.Events.Tile;
+using PokeSharp.Game.Systems.Events;
+
 namespace PokeSharp.Game.Scripting.Runtime;
 
 /// <summary>
@@ -39,6 +44,9 @@ public abstract class TypeScriptBase
     // NO INSTANCE FIELDS OR PROPERTIES!
     // Scripts must be stateless - use ScriptContext.GetState<T>() for persistent data.
 
+    // Track event subscriptions for automatic cleanup
+    private readonly List<IDisposable> _eventSubscriptions = new();
+
     // ============================================================================
     // Lifecycle Hooks
     // ============================================================================
@@ -52,6 +60,17 @@ public abstract class TypeScriptBase
     ///     Use <c>ctx.SetState&lt;T&gt;(key, value)</c> to initialize persistent data.
     /// </remarks>
     public virtual void OnInitialize(ScriptContext ctx) { }
+
+    /// <summary>
+    ///     Called after OnInitialize to register event handlers.
+    ///     Override to subscribe to game events.
+    /// </summary>
+    /// <param name="ctx">Script execution context providing access to World, Entity, Logger, and events.</param>
+    /// <remarks>
+    ///     Use helper methods like On&lt;TEvent&gt;() to subscribe to events.
+    ///     Event subscriptions are automatically tracked and cleaned up on script unload.
+    /// </remarks>
+    public virtual void RegisterEventHandlers(ScriptContext ctx) { }
 
     /// <summary>
     ///     Called when the type is activated on an entity or globally.
@@ -74,4 +93,120 @@ public abstract class TypeScriptBase
     /// </summary>
     /// <param name="ctx">Script execution context providing access to World, Entity, Logger, and state.</param>
     public virtual void OnDeactivated(ScriptContext ctx) { }
+
+    /// <summary>
+    ///     Called when script is being unloaded or reloaded.
+    ///     Automatically disposes all tracked event subscriptions.
+    /// </summary>
+    public virtual void OnUnload()
+    {
+        // Dispose all event subscriptions
+        foreach (var subscription in _eventSubscriptions)
+        {
+            subscription?.Dispose();
+        }
+        _eventSubscriptions.Clear();
+    }
+
+    // ============================================================================
+    // Event Subscription Helpers
+    // ============================================================================
+
+    /// <summary>
+    ///     Track an event subscription for automatic cleanup.
+    ///     Used internally by event helper methods.
+    /// </summary>
+    /// <param name="subscription">The subscription to track.</param>
+    protected void TrackSubscription(IDisposable subscription)
+    {
+        if (subscription != null)
+        {
+            _eventSubscriptions.Add(subscription);
+        }
+    }
+
+    /// <summary>
+    ///     Subscribe to a game event with automatic cleanup tracking.
+    ///     The subscription will be automatically disposed when the script is unloaded.
+    /// </summary>
+    /// <typeparam name="TEvent">The event type to subscribe to (must implement IGameEvent or be a class).</typeparam>
+    /// <param name="ctx">Script execution context providing access to the event bus.</param>
+    /// <param name="handler">The handler to invoke when the event is published.</param>
+    /// <remarks>
+    ///     Event subscriptions are automatically tracked and cleaned up on OnUnload().
+    /// </remarks>
+    /// <example>
+    ///     <code>
+    /// public override void RegisterEventHandlers(ScriptContext ctx)
+    /// {
+    ///     On&lt;MovementStartedEvent&gt;(ctx, evt =&gt;
+    ///     {
+    ///         ctx.Logger.LogInformation("Movement started to {Target}", evt.TargetPosition);
+    ///     });
+    /// }
+    /// </code>
+    /// </example>
+    protected void On<TEvent>(ScriptContext ctx, Action<TEvent> handler)
+        where TEvent : class
+    {
+        if (ctx?.Events == null)
+        {
+            ctx?.Logger?.LogWarning(
+                "Cannot subscribe to {EventType}: Events system not available in ScriptContext",
+                typeof(TEvent).Name
+            );
+            return;
+        }
+
+        var subscription = ctx.Events.Subscribe(handler);
+        TrackSubscription(subscription);
+    }
+
+    /// <summary>
+    ///     Subscribe to MovementStartedEvent with automatic cleanup.
+    /// </summary>
+    /// <param name="ctx">Script execution context.</param>
+    /// <param name="handler">Handler to invoke when movement starts.</param>
+    /// <remarks>
+    ///     Convenience method for subscribing to movement start events.
+    ///     Requires Phase 2.1 (ctx.Events) to be implemented.
+    /// </remarks>
+    protected void OnMovementStarted(ScriptContext ctx, Action<MovementStartedEvent> handler)
+        => On(ctx, handler);
+
+    /// <summary>
+    ///     Subscribe to MovementCompletedEvent with automatic cleanup.
+    /// </summary>
+    /// <param name="ctx">Script execution context.</param>
+    /// <param name="handler">Handler to invoke when movement completes.</param>
+    /// <remarks>
+    ///     Convenience method for subscribing to movement completion events.
+    ///     Requires Phase 2.1 (ctx.Events) to be implemented.
+    /// </remarks>
+    protected void OnMovementCompleted(ScriptContext ctx, Action<MovementCompletedEvent> handler)
+        => On(ctx, handler);
+
+    /// <summary>
+    ///     Subscribe to CollisionDetectedEvent with automatic cleanup.
+    /// </summary>
+    /// <param name="ctx">Script execution context.</param>
+    /// <param name="handler">Handler to invoke when collision is detected.</param>
+    /// <remarks>
+    ///     Convenience method for subscribing to collision events.
+    ///     Requires Phase 2.1 (ctx.Events) to be implemented.
+    /// </remarks>
+    protected void OnCollisionDetected(ScriptContext ctx, Action<CollisionDetectedEvent> handler)
+        => On(ctx, handler);
+
+    /// <summary>
+    ///     Subscribe to TileSteppedOnEvent with automatic cleanup.
+    /// </summary>
+    /// <param name="ctx">Script execution context.</param>
+    /// <param name="handler">Handler to invoke when tile is stepped on.</param>
+    /// <remarks>
+    ///     Convenience method for subscribing to tile step events.
+    ///     Requires Phase 2.1 (ctx.Events) to be implemented.
+    /// </remarks>
+    protected void OnTileSteppedOn(ScriptContext ctx, Action<TileSteppedOnEvent> handler)
+        => On(ctx, handler);
 }
