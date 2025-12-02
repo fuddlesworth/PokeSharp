@@ -453,8 +453,8 @@ public class ConsoleScene : SceneBase
 
             // Add tabs to container
             _tabContainer.AddTab("Console", _consolePanel);
-            _tabContainer.AddTab("Watch", _watchPanel);
             _tabContainer.AddTab("Logs", _logsPanel);
+            _tabContainer.AddTab("Watch", _watchPanel);
             _tabContainer.AddTab("Variables", _variablesPanel);
             _tabContainer.AddTab("Entities", _entitiesPanel);
             _tabContainer.AddTab("Profiler", _profilerPanel);

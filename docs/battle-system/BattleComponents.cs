@@ -157,8 +157,8 @@ public struct BattleSideState
     /// <summary>
     ///     Entry hazard layers.
     /// </summary>
-    public byte SpikesLayers { get; set; }        // 0-3 layers
-    public byte ToxicSpikesLayers { get; set; }   // 0-2 layers
+    public byte SpikesLayers { get; set; } // 0-3 layers
+    public byte ToxicSpikesLayers { get; set; } // 0-2 layers
     public bool StealthRock { get; set; }
     public bool StickyWeb { get; set; }
 
@@ -368,14 +368,14 @@ public struct TurnExecutionState
 /// </summary>
 public enum BattlePhase : byte
 {
-    Initialize = 0,      // Battle setup
-    SendOut = 1,         // Send out initial Pokemon
-    TurnStart = 2,       // Start of turn (abilities, weather damage)
-    InputWait = 3,       // Waiting for player/AI input
-    ActionSelect = 4,    // Collecting actions from all participants
-    TurnExecute = 5,     // Executing turn actions
-    TurnEnd = 6,         // End of turn (status damage, field effects)
-    BattleEnd = 7        // Battle complete
+    Initialize = 0, // Battle setup
+    SendOut = 1, // Send out initial Pokemon
+    TurnStart = 2, // Start of turn (abilities, weather damage)
+    InputWait = 3, // Waiting for player/AI input
+    ActionSelect = 4, // Collecting actions from all participants
+    TurnExecute = 5, // Executing turn actions
+    TurnEnd = 6, // End of turn (status damage, field effects)
+    BattleEnd = 7, // Battle complete
 }
 
 /// <summary>
@@ -387,7 +387,7 @@ public enum BattleActionType : byte
     Switch = 1,
     Item = 2,
     Run = 3,
-    Pass = 4  // For double battles when one Pokemon faints
+    Pass = 4, // For double battles when one Pokemon faints
 }
 
 /// <summary>
@@ -396,13 +396,13 @@ public enum BattleActionType : byte
 public enum WeatherCondition : byte
 {
     None = 0,
-    Sun = 1,         // Harsh sunlight
-    Rain = 2,        // Rain
-    Sandstorm = 3,   // Sandstorm
-    Hail = 4,        // Hail
-    HarshSun = 5,    // Extremely harsh sunlight (Primal Groudon)
-    HeavyRain = 6,   // Heavy rain (Primal Kyogre)
-    StrongWinds = 7  // Mysterious air current (Mega Rayquaza)
+    Sun = 1, // Harsh sunlight
+    Rain = 2, // Rain
+    Sandstorm = 3, // Sandstorm
+    Hail = 4, // Hail
+    HarshSun = 5, // Extremely harsh sunlight (Primal Groudon)
+    HeavyRain = 6, // Heavy rain (Primal Kyogre)
+    StrongWinds = 7, // Mysterious air current (Mega Rayquaza)
 }
 
 /// <summary>
@@ -411,8 +411,8 @@ public enum WeatherCondition : byte
 public enum TerrainType : byte
 {
     None = 0,
-    Electric = 1,  // Electric Terrain
-    Grassy = 2,    // Grassy Terrain
-    Misty = 3,     // Misty Terrain
-    Psychic = 4    // Psychic Terrain
+    Electric = 1, // Electric Terrain
+    Grassy = 2, // Grassy Terrain
+    Misty = 3, // Misty Terrain
+    Psychic = 4, // Psychic Terrain
 }

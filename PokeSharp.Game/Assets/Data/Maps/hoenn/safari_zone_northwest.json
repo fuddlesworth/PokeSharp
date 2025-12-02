@@ -4860,6 +4860,61 @@
       "value": "SafariZone_Northwest"
     },
     {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_SAFARI_ZONE"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_SAFARI_ZONE"
+    },
+    {
       "name": "border",
       "propertytype": "Border",
       "type": "class",

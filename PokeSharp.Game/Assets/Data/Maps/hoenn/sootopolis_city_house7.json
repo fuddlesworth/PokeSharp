@@ -235,9 +235,13 @@
               "value": {
                 "map": "sootopolis_city",
                 "x": 8,
-                "y": 35,
-                "elevation": 0
+                "y": 35
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -257,9 +261,13 @@
               "value": {
                 "map": "sootopolis_city",
                 "x": 8,
-                "y": 35,
-                "elevation": 0
+                "y": 35
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -281,6 +289,61 @@
       "name": "display_name",
       "type": "string",
       "value": "SootopolisCity_House7"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_SOOTOPOLIS"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_SOOTOPOLIS_CITY"
     },
     {
       "name": "border",

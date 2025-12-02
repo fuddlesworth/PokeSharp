@@ -487,9 +487,13 @@
               "value": {
                 "map": "ever_grande_city_pokemon_center_1f",
                 "x": 1,
-                "y": 6,
-                "elevation": 4
+                "y": 6
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 4
             }
           ]
         },
@@ -509,9 +513,13 @@
               "value": {
                 "map": "union_room",
                 "x": 7,
-                "y": 11,
-                "elevation": 3
+                "y": 11
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -531,9 +539,13 @@
               "value": {
                 "map": "trade_center",
                 "x": 5,
-                "y": 8,
-                "elevation": 3
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -555,6 +567,61 @@
       "name": "display_name",
       "type": "string",
       "value": "EverGrandeCity_PokemonCenter_2F"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_POKE_CENTER"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_EVER_GRANDE_CITY"
     },
     {
       "name": "border",

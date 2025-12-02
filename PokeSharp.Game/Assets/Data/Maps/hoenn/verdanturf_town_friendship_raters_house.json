@@ -331,9 +331,13 @@
               "value": {
                 "map": "verdanturf_town",
                 "x": 1,
-                "y": 14,
-                "elevation": 0
+                "y": 14
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -353,9 +357,13 @@
               "value": {
                 "map": "verdanturf_town",
                 "x": 1,
-                "y": 14,
-                "elevation": 0
+                "y": 14
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -377,6 +385,61 @@
       "name": "display_name",
       "type": "string",
       "value": "VerdanturfTown_FriendshipRatersHouse"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_VERDANTURF"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_VERDANTURF_TOWN"
     },
     {
       "name": "border",

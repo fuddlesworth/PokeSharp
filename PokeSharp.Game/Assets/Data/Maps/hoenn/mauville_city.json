@@ -2467,9 +2467,13 @@
               "value": {
                 "map": "mauville_city_gym",
                 "x": 4,
-                "y": 20,
-                "elevation": 0
+                "y": 20
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2489,9 +2493,13 @@
               "value": {
                 "map": "mauville_city_pokemon_center_1f",
                 "x": 7,
-                "y": 8,
-                "elevation": 3
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2511,9 +2519,13 @@
               "value": {
                 "map": "mauville_city_bike_shop",
                 "x": 3,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2533,9 +2545,13 @@
               "value": {
                 "map": "mauville_city_mart",
                 "x": 3,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2555,9 +2571,13 @@
               "value": {
                 "map": "mauville_city_house1",
                 "x": 3,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2577,9 +2597,13 @@
               "value": {
                 "map": "mauville_city_game_corner",
                 "x": 11,
-                "y": 10,
-                "elevation": 3
+                "y": 10
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2599,9 +2623,13 @@
               "value": {
                 "map": "mauville_city_house2",
                 "x": 3,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -2631,9 +2659,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemonCenterSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2651,9 +2683,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/MauvilleCity_EventScript_GymSign.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/MauvilleCity_EventScript_GymSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2672,9 +2708,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemartSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2693,9 +2733,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemartSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2714,9 +2758,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemonCenterSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2734,9 +2782,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/MauvilleCity_EventScript_CitySign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/MauvilleCity_EventScript_CitySign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2754,9 +2806,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/MauvilleCity_EventScript_BikeShopSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/MauvilleCity_EventScript_BikeShopSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2774,9 +2830,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/MauvilleCity_EventScript_GameCornerSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/MauvilleCity_EventScript_GameCornerSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -2798,6 +2858,61 @@
       "name": "display_name",
       "type": "string",
       "value": "MauvilleCity"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_RUSTBORO"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_CITY"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_MAUVILLE_CITY"
     },
     {
       "name": "border",

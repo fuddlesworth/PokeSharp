@@ -2497,9 +2497,13 @@
               "value": {
                 "map": "terra_cave_entrance",
                 "x": 14,
-                "y": 1,
-                "elevation": 3
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -2530,9 +2534,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 1,
-                "triggerScript": "Triggers/TerraCave_End_EventScript_Groudon.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/TerraCave_End_EventScript_Groudon.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -2554,6 +2562,61 @@
       "name": "display_name",
       "type": "string",
       "value": "TerraCave_End"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_PETALBURG_WOODS"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_FOG_HORIZONTAL"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERGROUND"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_TERRA_CAVE"
     },
     {
       "name": "border",

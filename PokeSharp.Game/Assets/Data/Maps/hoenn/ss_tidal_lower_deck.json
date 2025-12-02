@@ -730,9 +730,13 @@
               "value": {
                 "map": "ss_tidal_corridor",
                 "x": 16,
-                "y": 2,
-                "elevation": 3
+                "y": 2
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -762,8 +766,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_LEFTOVERS",
-                "flag": "FLAG_HIDDEN_ITEM_SS_TIDAL_LOWER_DECK_LEFTOVERS",
-                "elevation": 0
+                "flag": "FLAG_HIDDEN_ITEM_SS_TIDAL_LOWER_DECK_LEFTOVERS"
               }
             }
           ]
@@ -786,6 +789,61 @@
       "name": "display_name",
       "type": "string",
       "value": "SSTidalLowerDeck"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_SAILING"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_DYNAMIC"
     },
     {
       "name": "border",

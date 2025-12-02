@@ -3793,9 +3793,13 @@
               "value": {
                 "map": "seafloor_cavern_room8",
                 "x": 5,
-                "y": 2,
-                "elevation": 3
+                "y": 2
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -3826,9 +3830,13 @@
               "value": {
                 "variable": "VAR_SEAFLOOR_CAVERN_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/SeafloorCavern_Room9_EventScript_ArchieAwakenKyogre.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/SeafloorCavern_Room9_EventScript_ArchieAwakenKyogre.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -3850,6 +3858,61 @@
       "name": "display_name",
       "type": "string",
       "value": "SeafloorCavern_Room9"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_MT_CHIMNEY"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_FOG_HORIZONTAL"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERGROUND"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_SEAFLOOR_CAVERN"
     },
     {
       "name": "border",

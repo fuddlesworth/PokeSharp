@@ -2167,9 +2167,13 @@
               "value": {
                 "map": "navel_rock_up4",
                 "x": 5,
-                "y": 5,
-                "elevation": 3
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -2200,9 +2204,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/NavelRock_Top_EventScript_HoOh.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/NavelRock_Top_EventScript_HoOh.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -2232,8 +2240,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_SACRED_ASH",
-                "flag": "FLAG_HIDDEN_ITEM_NAVEL_ROCK_TOP_SACRED_ASH",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_NAVEL_ROCK_TOP_SACRED_ASH"
               }
             }
           ]
@@ -2256,6 +2263,61 @@
       "name": "display_name",
       "type": "string",
       "value": "NavelRock_Top"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_RG_SEVII_CAVE"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SHADE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERGROUND"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_NAVEL_ROCK"
     },
     {
       "name": "border",

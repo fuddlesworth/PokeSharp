@@ -6067,9 +6067,13 @@
               "value": {
                 "map": "rusturf_tunnel",
                 "x": 4,
-                "y": 10,
-                "elevation": 3
+                "y": 10
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -6089,9 +6093,13 @@
               "value": {
                 "map": "route116_tunnelers_rest_house",
                 "x": 4,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -6111,9 +6119,13 @@
               "value": {
                 "map": "rusturf_tunnel",
                 "x": 18,
-                "y": 20,
-                "elevation": 3
+                "y": 20
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -6133,9 +6145,13 @@
               "value": {
                 "map": "terra_cave_entrance",
                 "x": 8,
-                "y": 18,
-                "elevation": 0
+                "y": 18
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -6155,9 +6171,13 @@
               "value": {
                 "map": "terra_cave_entrance",
                 "x": 8,
-                "y": 18,
-                "elevation": 0
+                "y": 18
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -6188,9 +6208,13 @@
               "value": {
                 "variable": "VAR_ROUTE116_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/Route116_EventScript_BrineyTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route116_EventScript_BrineyTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -6219,9 +6243,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route116_EventScript_RouteSignRustboro.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route116_EventScript_RouteSignRustboro.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -6239,9 +6267,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route116_EventScript_RusturfTunnelSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route116_EventScript_RusturfTunnelSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -6259,9 +6291,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route116_EventScript_TunnelersRestHouseSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route116_EventScript_TunnelersRestHouseSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -6279,8 +6315,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BLUE_CAVE1_1",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BLUE_CAVE1_1"
               }
             }
           ]
@@ -6299,8 +6334,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BLUE_CAVE2_1",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BLUE_CAVE2_1"
               }
             }
           ]
@@ -6319,9 +6353,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route116_EventScript_TrainerTipsBToStopEvolution.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route116_EventScript_TrainerTipsBToStopEvolution.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -6339,9 +6377,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route116_EventScript_TrainerTipsBagHasPockets.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route116_EventScript_TrainerTipsBagHasPockets.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -6359,8 +6401,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BLUE_CAVE3_2",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BLUE_CAVE3_2"
               }
             }
           ]
@@ -6379,8 +6420,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BLUE_CAVE4_2",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BLUE_CAVE4_2"
               }
             }
           ]
@@ -6400,8 +6440,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_SUPER_POTION",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_116_SUPER_POTION",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_116_SUPER_POTION"
               }
             }
           ]
@@ -6421,8 +6460,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_BLACK_GLASSES",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_116_BLACK_GLASSES",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_116_BLACK_GLASSES"
               }
             }
           ]
@@ -6445,6 +6483,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route116"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_ROUTE104"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_116"
     },
     {
       "name": "border",

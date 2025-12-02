@@ -7267,9 +7267,13 @@
               "value": {
                 "map": "sky_pillar_entrance",
                 "x": 6,
-                "y": 16,
-                "elevation": 3
+                "y": 16
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -7291,6 +7295,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route131"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_ROUTE119"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_OCEAN_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_131"
     },
     {
       "name": "border",

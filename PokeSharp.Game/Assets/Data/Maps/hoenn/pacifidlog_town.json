@@ -2467,9 +2467,13 @@
               "value": {
                 "map": "pacifidlog_town_pokemon_center_1f",
                 "x": 7,
-                "y": 8,
-                "elevation": 3
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2489,9 +2493,13 @@
               "value": {
                 "map": "pacifidlog_town_house1",
                 "x": 4,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2511,9 +2519,13 @@
               "value": {
                 "map": "pacifidlog_town_house2",
                 "x": 4,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2533,9 +2545,13 @@
               "value": {
                 "map": "pacifidlog_town_house3",
                 "x": 4,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2555,9 +2571,13 @@
               "value": {
                 "map": "pacifidlog_town_house4",
                 "x": 4,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2577,9 +2597,13 @@
               "value": {
                 "map": "pacifidlog_town_house5",
                 "x": 4,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -2609,9 +2633,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemonCenterSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2629,9 +2657,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/PacifidlogTown_EventScript_TownSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/PacifidlogTown_EventScript_TownSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2650,9 +2682,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemonCenterSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -2674,6 +2710,61 @@
       "name": "display_name",
       "type": "string",
       "value": "PacifidlogTown"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_LILYCOVE"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_TOWN"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_PACIFIDLOG_TOWN"
     },
     {
       "name": "border",

@@ -1567,9 +1567,13 @@
               "value": {
                 "map": "fortree_city",
                 "x": 22,
-                "y": 11,
-                "elevation": 0
+                "y": 11
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1589,9 +1593,13 @@
               "value": {
                 "map": "fortree_city",
                 "x": 22,
-                "y": 11,
-                "elevation": 0
+                "y": 11
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -1621,9 +1629,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/FortreeCity_Gym_EventScript_LeftGymStatue.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1642,9 +1654,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/FortreeCity_Gym_EventScript_RightGymStatue.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -1666,6 +1682,61 @@
       "name": "display_name",
       "type": "string",
       "value": "FortreeCity_Gym"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_GYM"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_GYM"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_FORTREE_CITY"
     },
     {
       "name": "border",

@@ -6277,9 +6277,13 @@
               "value": {
                 "map": "ever_grande_city",
                 "x": 18,
-                "y": 41,
-                "elevation": 0
+                "y": 41
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -6299,9 +6303,13 @@
               "value": {
                 "map": "ever_grande_city",
                 "x": 18,
-                "y": 27,
-                "elevation": 0
+                "y": 27
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -6321,9 +6329,13 @@
               "value": {
                 "map": "victory_road_b1f",
                 "x": 20,
-                "y": 21,
-                "elevation": 3
+                "y": 21
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -6343,9 +6355,13 @@
               "value": {
                 "map": "victory_road_b1f",
                 "x": 42,
-                "y": 25,
-                "elevation": 3
+                "y": 25
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 4
             }
           ]
         },
@@ -6365,9 +6381,13 @@
               "value": {
                 "map": "victory_road_b1f",
                 "x": 8,
-                "y": 3,
-                "elevation": 3
+                "y": 3
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 4
             }
           ]
         }
@@ -6398,9 +6418,13 @@
               "value": {
                 "variable": "VAR_VICTORY_ROAD_1F_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/VictoryRoad_1F_EventScript_WallyBattleTrigger1.csx",
-                "elevation": 4
+                "triggerScript": "Triggers/VictoryRoad_1F_EventScript_WallyBattleTrigger1.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 4
             }
           ]
         },
@@ -6420,9 +6444,13 @@
               "value": {
                 "variable": "VAR_VICTORY_ROAD_1F_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/VictoryRoad_1F_EventScript_WallyBattleTrigger2.csx",
-                "elevation": 4
+                "triggerScript": "Triggers/VictoryRoad_1F_EventScript_WallyBattleTrigger2.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 4
             }
           ]
         }
@@ -6452,8 +6480,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_ULTRA_BALL",
-                "flag": "FLAG_HIDDEN_ITEM_VICTORY_ROAD_1F_ULTRA_BALL",
-                "elevation": 4
+                "flag": "FLAG_HIDDEN_ITEM_VICTORY_ROAD_1F_ULTRA_BALL"
               }
             }
           ]
@@ -6476,6 +6503,61 @@
       "name": "display_name",
       "type": "string",
       "value": "VictoryRoad_1F"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_VICTORY_ROAD"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERGROUND"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_VICTORY_ROAD"
     },
     {
       "name": "border",

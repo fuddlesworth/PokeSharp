@@ -607,9 +607,13 @@
               "value": {
                 "map": "slateport_city_oceanic_museum_1f",
                 "x": 6,
-                "y": 1,
-                "elevation": 0
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -638,9 +642,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_WaterQualitySample1.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_WaterQualitySample1.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -658,9 +666,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_WaterQualitySample2.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_WaterQualitySample2.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -678,9 +690,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SubmersibleReplica.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SubmersibleReplica.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -698,9 +714,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SubmersibleReplica.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SubmersibleReplica.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -718,9 +738,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SubmarineReplica.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SubmarineReplica.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -738,9 +762,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SubmarineReplica.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SubmarineReplica.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -758,9 +786,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SubmarineReplica.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SubmarineReplica.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -778,9 +810,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SSTidalReplica.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SSTidalReplica.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -798,9 +834,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SSTidalReplica.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SSTidalReplica.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -818,9 +858,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SSAnneReplica.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SSAnneReplica.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -838,9 +882,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SSAnneReplica.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SSAnneReplica.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -858,9 +906,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SurfaceSeawaterDisplay.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SurfaceSeawaterDisplay.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -878,9 +930,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SurfaceSeawaterDisplay.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SurfaceSeawaterDisplay.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -898,9 +954,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_DeepSeawaterDisplay.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_DeepSeawaterDisplay.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -918,9 +978,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_DeepSeawaterDisplay.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_DeepSeawaterDisplay.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -938,9 +1002,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_HoennModel.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_HoennModel.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -958,9 +1026,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_HoennModel.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_HoennModel.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -978,9 +1050,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_PressureExperiment.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_PressureExperiment.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -998,9 +1074,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_PressureExperiment.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_PressureExperiment.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1018,9 +1098,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SSTidalReplica.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SSTidalReplica.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1038,9 +1122,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SSTidalReplica.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SlateportCity_OceanicMuseum_2F_EventScript_SSTidalReplica.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -1062,6 +1150,61 @@
       "name": "display_name",
       "type": "string",
       "value": "SlateportCity_OceanicMuseum_2F"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_OCEANIC_MUSEUM"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_SLATEPORT_CITY"
     },
     {
       "name": "border",

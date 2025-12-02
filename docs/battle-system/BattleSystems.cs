@@ -15,18 +15,20 @@ public class BattleInitializationSystem : SystemBase
     public override void Update(World world, float deltaTime)
     {
         // Query for battles in Initialize phase
-        var query = new QueryDescription()
-            .WithAll<BattleState>();
+        var query = new QueryDescription().WithAll<BattleState>();
 
-        world.Query(in query, (ref BattleState battle) =>
-        {
-            if (battle.Phase == (byte)BattlePhase.Initialize)
+        world.Query(
+            in query,
+            (ref BattleState battle) =>
             {
-                // Initialize battle participants, field state, side states
-                // Transition to SendOut phase
-                battle.Phase = (byte)BattlePhase.SendOut;
+                if (battle.Phase == (byte)BattlePhase.Initialize)
+                {
+                    // Initialize battle participants, field state, side states
+                    // Transition to SendOut phase
+                    battle.Phase = (byte)BattlePhase.SendOut;
+                }
             }
-        });
+        );
     }
 }
 
@@ -41,36 +43,39 @@ public class BattleTurnSystem : SystemBase
     public override void Update(World world, float deltaTime)
     {
         // Query for active battles
-        var query = new QueryDescription()
-            .WithAll<BattleState>();
+        var query = new QueryDescription().WithAll<BattleState>();
 
-        world.Query(in query, (Entity battleEntity, ref BattleState battle) =>
-        {
-            if (battle.IsComplete) return;
-
-            switch ((BattlePhase)battle.Phase)
+        world.Query(
+            in query,
+            (Entity battleEntity, ref BattleState battle) =>
             {
-                case BattlePhase.TurnStart:
-                    HandleTurnStart(world, battleEntity, ref battle);
-                    break;
+                if (battle.IsComplete)
+                    return;
 
-                case BattlePhase.InputWait:
-                    // Waiting for player input (UI handles this)
-                    break;
+                switch ((BattlePhase)battle.Phase)
+                {
+                    case BattlePhase.TurnStart:
+                        HandleTurnStart(world, battleEntity, ref battle);
+                        break;
 
-                case BattlePhase.ActionSelect:
-                    HandleActionSelection(world, battleEntity, ref battle);
-                    break;
+                    case BattlePhase.InputWait:
+                        // Waiting for player input (UI handles this)
+                        break;
 
-                case BattlePhase.TurnExecute:
-                    HandleTurnExecution(world, battleEntity, ref battle);
-                    break;
+                    case BattlePhase.ActionSelect:
+                        HandleActionSelection(world, battleEntity, ref battle);
+                        break;
 
-                case BattlePhase.TurnEnd:
-                    HandleTurnEnd(world, battleEntity, ref battle);
-                    break;
+                    case BattlePhase.TurnExecute:
+                        HandleTurnExecution(world, battleEntity, ref battle);
+                        break;
+
+                    case BattlePhase.TurnEnd:
+                        HandleTurnEnd(world, battleEntity, ref battle);
+                        break;
+                }
             }
-        });
+        );
     }
 
     private void HandleTurnStart(World world, Entity battleEntity, ref BattleState battle)
@@ -127,41 +132,43 @@ public class MoveExecutionSystem : SystemBase
     public override void Update(World world, float deltaTime)
     {
         // Query for active move action requests
-        var query = new QueryDescription()
-            .WithAll<BattleActionRequest>();
+        var query = new QueryDescription().WithAll<BattleActionRequest>();
 
-        world.Query(in query, (Entity actionEntity, ref BattleActionRequest action) =>
-        {
-            if (!action.Active || action.ActionType != (byte)BattleActionType.Move)
-                return;
-
-            // Validate actor and target
-            if (!action.ActorRef.IsValid(world))
+        world.Query(
+            in query,
+            (Entity actionEntity, ref BattleActionRequest action) =>
             {
+                if (!action.Active || action.ActionType != (byte)BattleActionType.Move)
+                    return;
+
+                // Validate actor and target
+                if (!action.ActorRef.IsValid(world))
+                {
+                    action.Active = false;
+                    return;
+                }
+
+                // Get actor Pokemon
+                var actor = action.ActorRef.Value;
+                if (!world.TryGet<Pokemon>(actor, out var pokemon))
+                {
+                    action.Active = false;
+                    return;
+                }
+
+                // Execute move:
+                // 1. Check PP
+                // 2. Check if Pokemon can move (paralysis, sleep, confusion)
+                // 3. Calculate accuracy
+                // 4. Apply move effects (damage, status, stat changes)
+                // 5. Trigger abilities and held item effects
+                // 6. Decrement PP
+
+                ExecuteMove(world, actor, action.TargetRef.Value, action.MoveSlot);
+
                 action.Active = false;
-                return;
             }
-
-            // Get actor Pokemon
-            var actor = action.ActorRef.Value;
-            if (!world.TryGet<Pokemon>(actor, out var pokemon))
-            {
-                action.Active = false;
-                return;
-            }
-
-            // Execute move:
-            // 1. Check PP
-            // 2. Check if Pokemon can move (paralysis, sleep, confusion)
-            // 3. Calculate accuracy
-            // 4. Apply move effects (damage, status, stat changes)
-            // 5. Trigger abilities and held item effects
-            // 6. Decrement PP
-
-            ExecuteMove(world, actor, action.TargetRef.Value, action.MoveSlot);
-
-            action.Active = false;
-        });
+        );
     }
 
     private void ExecuteMove(World world, Entity attacker, Entity target, byte moveSlot)
@@ -198,15 +205,18 @@ public class DamageCalculationSystem : SystemBase
         Entity defender,
         ushort moveId,
         byte movePower,
-        bool isPhysical)
+        bool isPhysical
+    )
     {
         // Get Pokemon components
-        if (!world.TryGet<Pokemon>(attacker, out var atkPokemon) ||
-            !world.TryGet<Pokemon>(defender, out var defPokemon) ||
-            !world.TryGet<PokemonStats>(attacker, out var atkStats) ||
-            !world.TryGet<PokemonStats>(defender, out var defStats) ||
-            !world.TryGet<PokemonStatModifiers>(attacker, out var atkMods) ||
-            !world.TryGet<PokemonStatModifiers>(defender, out var defMods))
+        if (
+            !world.TryGet<Pokemon>(attacker, out var atkPokemon)
+            || !world.TryGet<Pokemon>(defender, out var defPokemon)
+            || !world.TryGet<PokemonStats>(attacker, out var atkStats)
+            || !world.TryGet<PokemonStats>(defender, out var defStats)
+            || !world.TryGet<PokemonStatModifiers>(attacker, out var atkMods)
+            || !world.TryGet<PokemonStatModifiers>(defender, out var defMods)
+        )
         {
             return 0;
         }
@@ -243,7 +253,8 @@ public class DamageCalculationSystem : SystemBase
         Entity attacker,
         Entity defender,
         ushort moveId,
-        float baseDamage)
+        float baseDamage
+    )
     {
         float modifiers = 1.0f;
 
@@ -269,16 +280,18 @@ public class StatusEffectSystem : SystemBase
     public override void Update(World world, float deltaTime)
     {
         // Query Pokemon with status conditions
-        var query = new QueryDescription()
-            .WithAll<Pokemon, ActiveInBattle>();
+        var query = new QueryDescription().WithAll<Pokemon, ActiveInBattle>();
 
-        world.Query(in query, (Entity entity, ref Pokemon pokemon) =>
-        {
-            if (pokemon.StatusCondition == (byte)StatusCondition.None)
-                return;
+        world.Query(
+            in query,
+            (Entity entity, ref Pokemon pokemon) =>
+            {
+                if (pokemon.StatusCondition == (byte)StatusCondition.None)
+                    return;
 
-            ApplyStatusEffect(world, entity, ref pokemon);
-        });
+                ApplyStatusEffect(world, entity, ref pokemon);
+            }
+        );
     }
 
     private void ApplyStatusEffect(World world, Entity entity, ref Pokemon pokemon)
@@ -357,7 +370,7 @@ public class StatusEffectSystem : SystemBase
         return status switch
         {
             StatusCondition.Asleep => (byte)Random.Shared.Next(1, 4), // 1-3 turns
-            _ => 0
+            _ => 0,
         };
     }
 }
@@ -373,39 +386,54 @@ public class BattleAISystem : SystemBase
     public override void Update(World world, float deltaTime)
     {
         // Query for AI-controlled participants waiting for input
-        var query = new QueryDescription()
-            .WithAll<BattleParticipant, BattleState>();
+        var query = new QueryDescription().WithAll<BattleParticipant, BattleState>();
 
-        world.Query(in query, (Entity participantEntity, ref BattleParticipant participant) =>
-        {
-            if (!participant.IsAI) return;
-
-            var battle = participant.BattleRef.Value;
-            if (!world.TryGet<BattleState>(battle, out var battleState))
-                return;
-
-            if (battleState.Phase != (byte)BattlePhase.InputWait)
-                return;
-
-            // Get active Pokemon for this participant
-            var activeQuery = new QueryDescription()
-                .WithAll<ActiveInBattle, Pokemon, PokemonMoveSet>();
-
-            world.Query(in activeQuery, (Entity pokemonEntity,
-                ref ActiveInBattle active,
-                ref Pokemon pokemon,
-                ref PokemonMoveSet moves) =>
+        world.Query(
+            in query,
+            (Entity participantEntity, ref BattleParticipant participant) =>
             {
-                if (active.BattleRef.Value != battle)
+                if (!participant.IsAI)
                     return;
 
-                // AI decision making based on difficulty
-                var action = SelectBestAction(world, pokemonEntity, participant.AIDifficulty);
+                var battle = participant.BattleRef.Value;
+                if (!world.TryGet<BattleState>(battle, out var battleState))
+                    return;
 
-                // Create action request
-                CreateActionRequest(world, pokemonEntity, action);
-            });
-        });
+                if (battleState.Phase != (byte)BattlePhase.InputWait)
+                    return;
+
+                // Get active Pokemon for this participant
+                var activeQuery = new QueryDescription().WithAll<
+                    ActiveInBattle,
+                    Pokemon,
+                    PokemonMoveSet
+                >();
+
+                world.Query(
+                    in activeQuery,
+                    (
+                        Entity pokemonEntity,
+                        ref ActiveInBattle active,
+                        ref Pokemon pokemon,
+                        ref PokemonMoveSet moves
+                    ) =>
+                    {
+                        if (active.BattleRef.Value != battle)
+                            return;
+
+                        // AI decision making based on difficulty
+                        var action = SelectBestAction(
+                            world,
+                            pokemonEntity,
+                            participant.AIDifficulty
+                        );
+
+                        // Create action request
+                        CreateActionRequest(world, pokemonEntity, action);
+                    }
+                );
+            }
+        );
     }
 
     private BattleActionRequest SelectBestAction(World world, Entity pokemon, byte difficulty)
@@ -426,7 +454,7 @@ public class BattleAISystem : SystemBase
 
         return new BattleActionRequest((byte)BattleActionType.Move, pokemon)
         {
-            MoveSlot = 0 // Placeholder
+            MoveSlot = 0, // Placeholder
         };
     }
 
@@ -454,37 +482,39 @@ public class FieldEffectSystem : SystemBase
     public override void Update(World world, float deltaTime)
     {
         // Query battles with field states
-        var query = new QueryDescription()
-            .WithAll<BattleState, BattleFieldState>();
+        var query = new QueryDescription().WithAll<BattleState, BattleFieldState>();
 
-        world.Query(in query, (Entity battleEntity, ref BattleFieldState field) =>
-        {
-            // Decrement weather duration
-            if (field.Weather != (byte)WeatherCondition.None && field.WeatherTurns > 0)
+        world.Query(
+            in query,
+            (Entity battleEntity, ref BattleFieldState field) =>
             {
-                field.WeatherTurns--;
-                if (field.WeatherTurns == 0)
+                // Decrement weather duration
+                if (field.Weather != (byte)WeatherCondition.None && field.WeatherTurns > 0)
                 {
-                    field.Weather = (byte)WeatherCondition.None;
+                    field.WeatherTurns--;
+                    if (field.WeatherTurns == 0)
+                    {
+                        field.Weather = (byte)WeatherCondition.None;
+                    }
                 }
-            }
 
-            // Decrement terrain duration
-            if (field.Terrain != 0 && field.TerrainTurns > 0)
-            {
-                field.TerrainTurns--;
-                if (field.TerrainTurns == 0)
+                // Decrement terrain duration
+                if (field.Terrain != 0 && field.TerrainTurns > 0)
                 {
-                    field.Terrain = 0;
+                    field.TerrainTurns--;
+                    if (field.TerrainTurns == 0)
+                    {
+                        field.Terrain = 0;
+                    }
                 }
-            }
 
-            // Decrement room effects
-            DecrementRoomEffect(ref field.TrickRoom, ref field.TrickRoomTurns);
-            DecrementRoomEffect(ref field.MagicRoom, ref field.MagicRoomTurns);
-            DecrementRoomEffect(ref field.WonderRoom, ref field.WonderRoomTurns);
-            DecrementRoomEffect(ref field.Gravity, ref field.GravityTurns);
-        });
+                // Decrement room effects
+                DecrementRoomEffect(ref field.TrickRoom, ref field.TrickRoomTurns);
+                DecrementRoomEffect(ref field.MagicRoom, ref field.MagicRoomTurns);
+                DecrementRoomEffect(ref field.WonderRoom, ref field.WonderRoomTurns);
+                DecrementRoomEffect(ref field.Gravity, ref field.GravityTurns);
+            }
+        );
     }
 
     private void DecrementRoomEffect(ref bool active, ref byte turns)

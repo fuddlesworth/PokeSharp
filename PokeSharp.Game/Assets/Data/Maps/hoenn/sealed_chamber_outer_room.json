@@ -1516,9 +1516,13 @@
               "value": {
                 "map": "sealed_chamber_inner_room",
                 "x": 10,
-                "y": 19,
-                "elevation": 3
+                "y": 19
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -1547,9 +1551,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleABC.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleABC.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1567,9 +1575,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleGHI.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleGHI.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1587,9 +1599,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleMNO.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleMNO.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1607,9 +1623,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleTUV.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleTUV.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1627,9 +1647,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleDEF.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleDEF.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1647,9 +1671,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleJKL.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleJKL.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1667,9 +1695,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BraillePQRS.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BraillePQRS.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1687,9 +1719,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleWXYZ.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleWXYZ.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1707,9 +1743,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BraillePeriod.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BraillePeriod.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1727,9 +1767,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleComma.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleComma.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1747,9 +1791,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_InnerRoomEntranceWall.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_InnerRoomEntranceWall.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1767,9 +1815,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleABC.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleABC.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1787,9 +1839,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleABC.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleABC.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1807,9 +1863,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleGHI.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleGHI.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1827,9 +1887,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleGHI.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleGHI.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1847,9 +1911,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleMNO.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleMNO.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1867,9 +1935,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleMNO.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleMNO.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1887,9 +1959,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleTUV.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleTUV.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1907,9 +1983,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleTUV.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleTUV.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1927,9 +2007,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleDEF.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleDEF.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1947,9 +2031,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleDEF.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleDEF.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1967,9 +2055,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleJKL.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleJKL.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1987,9 +2079,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleJKL.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleJKL.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2007,9 +2103,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BraillePQRS.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BraillePQRS.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2027,9 +2127,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BraillePQRS.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BraillePQRS.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2047,9 +2151,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleWXYZ.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleWXYZ.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2067,9 +2175,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleWXYZ.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleWXYZ.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2087,9 +2199,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleDigHere.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleDigHere.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2107,9 +2223,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleDigHere.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_OuterRoom_EventScript_BrailleDigHere.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -2131,6 +2251,61 @@
       "name": "display_name",
       "type": "string",
       "value": "SealedChamber_OuterRoom"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_SEALED_CHAMBER"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERGROUND"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_SEALED_CHAMBER"
     },
     {
       "name": "border",

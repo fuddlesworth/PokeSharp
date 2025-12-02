@@ -283,9 +283,13 @@
               "value": {
                 "map": "littleroot_town_brendans_house_1f",
                 "x": 8,
-                "y": 2,
-                "elevation": 0
+                "y": 2
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -315,9 +319,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/LittlerootTown_BrendansHouse_2F_EventScript_PC.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -335,9 +343,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/PlayersHouse_2F_EventScript_Notebook.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/PlayersHouse_2F_EventScript_Notebook.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -355,9 +367,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LittlerootTown_BrendansHouse_2F_EventScript_WallClock.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LittlerootTown_BrendansHouse_2F_EventScript_WallClock.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -375,9 +391,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/PlayersHouse_2F_EventScript_GameCube.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/PlayersHouse_2F_EventScript_GameCube.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -399,6 +419,61 @@
       "name": "display_name",
       "type": "string",
       "value": "LittlerootTown_BrendansHouse_2F"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_LITTLEROOT"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_LITTLEROOT_TOWN"
     },
     {
       "name": "border",

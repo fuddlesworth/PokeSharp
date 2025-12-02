@@ -9667,9 +9667,13 @@
               "value": {
                 "map": "meteor_falls_1f_1r",
                 "x": 6,
-                "y": 39,
-                "elevation": 3
+                "y": 39
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9689,9 +9693,13 @@
               "value": {
                 "map": "terra_cave_entrance",
                 "x": 8,
-                "y": 18,
-                "elevation": 0
+                "y": 18
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9711,9 +9719,13 @@
               "value": {
                 "map": "terra_cave_entrance",
                 "x": 8,
-                "y": 18,
-                "elevation": 0
+                "y": 18
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -9742,8 +9754,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BROWN_CAVE4_2",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BROWN_CAVE4_2"
               }
             }
           ]
@@ -9762,8 +9773,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BROWN_CAVE3_2",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BROWN_CAVE3_2"
               }
             }
           ]
@@ -9782,9 +9792,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route115_EventScript_RouteSignRustboro.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route115_EventScript_RouteSignRustboro.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9802,9 +9816,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route115_EventScript_MeteorFallsSign.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/Route115_EventScript_MeteorFallsSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -9822,8 +9840,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_YELLOW_CAVE2_3",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_YELLOW_CAVE2_3"
               }
             }
           ]
@@ -9842,8 +9859,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BROWN_CAVE1_2",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BROWN_CAVE1_2"
               }
             }
           ]
@@ -9862,8 +9878,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BROWN_CAVE2_2",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BROWN_CAVE2_2"
               }
             }
           ]
@@ -9882,8 +9897,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BROWN_CAVE1_3",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BROWN_CAVE1_3"
               }
             }
           ]
@@ -9902,8 +9916,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BROWN_CAVE2_3",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BROWN_CAVE2_3"
               }
             }
           ]
@@ -9922,8 +9935,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_TREE2_4",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_TREE2_4"
               }
             }
           ]
@@ -9942,8 +9954,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_TREE3_3",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_TREE3_3"
               }
             }
           ]
@@ -9962,8 +9973,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BROWN_CAVE3_3",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BROWN_CAVE3_3"
               }
             }
           ]
@@ -9982,8 +9992,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_RED_CAVE3_1",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_RED_CAVE3_1"
               }
             }
           ]
@@ -10003,8 +10012,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_HEART_SCALE",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_115_HEART_SCALE",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_115_HEART_SCALE"
               }
             }
           ]
@@ -10027,6 +10035,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route115"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_ROUTE104"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_115"
     },
     {
       "name": "border",

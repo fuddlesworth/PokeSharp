@@ -9667,9 +9667,13 @@
               "value": {
                 "map": "route104_mr_brineys_house",
                 "x": 5,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9689,9 +9693,13 @@
               "value": {
                 "map": "route104_pretty_petal_flower_shop",
                 "x": 2,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9711,9 +9719,13 @@
               "value": {
                 "map": "petalburg_woods",
                 "x": 14,
-                "y": 5,
-                "elevation": 0
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -9733,9 +9745,13 @@
               "value": {
                 "map": "petalburg_woods",
                 "x": 15,
-                "y": 5,
-                "elevation": 0
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -9755,9 +9771,13 @@
               "value": {
                 "map": "petalburg_woods",
                 "x": 16,
-                "y": 38,
-                "elevation": 0
+                "y": 38
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -9777,9 +9797,13 @@
               "value": {
                 "map": "petalburg_woods",
                 "x": 17,
-                "y": 38,
-                "elevation": 0
+                "y": 38
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -9799,9 +9823,13 @@
               "value": {
                 "map": "petalburg_woods",
                 "x": 36,
-                "y": 38,
-                "elevation": 0
+                "y": 38
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -9821,9 +9849,13 @@
               "value": {
                 "map": "petalburg_woods",
                 "x": 37,
-                "y": 38,
-                "elevation": 0
+                "y": 38
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -9854,9 +9886,13 @@
               "value": {
                 "variable": "VAR_ROUTE104_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/Route104_EventScript_RivalTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route104_EventScript_RivalTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -9885,9 +9921,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route104_EventScript_BrineysCottageSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route104_EventScript_BrineysCottageSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9905,9 +9945,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route104_EventScript_RouteSignPetalburg.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route104_EventScript_RouteSignPetalburg.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9925,9 +9969,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route104_EventScript_RouteSignRustboro.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route104_EventScript_RouteSignRustboro.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9945,9 +9993,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route104_EventScript_FlowerShopSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route104_EventScript_FlowerShopSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9965,9 +10017,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route104_EventScript_TrainerTipsDoubleBattles.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/Route104_EventScript_TrainerTipsDoubleBattles.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -9986,8 +10042,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_SUPER_POTION",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_104_SUPER_POTION",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_104_SUPER_POTION"
               }
             }
           ]
@@ -10007,8 +10062,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_POKE_BALL",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_104_POKE_BALL",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_104_POKE_BALL"
               }
             }
           ]
@@ -10028,8 +10082,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_POTION",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_104_POTION",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_104_POTION"
               }
             }
           ]
@@ -10049,8 +10102,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_ANTIDOTE",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_104_ANTIDOTE",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_104_ANTIDOTE"
               }
             }
           ]
@@ -10070,8 +10122,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_HEART_SCALE",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_104_HEART_SCALE",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_104_HEART_SCALE"
               }
             }
           ]
@@ -10094,6 +10145,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route104"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_ROUTE104"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_104"
     },
     {
       "name": "border",

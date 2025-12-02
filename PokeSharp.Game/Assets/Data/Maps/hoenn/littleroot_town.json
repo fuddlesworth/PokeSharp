@@ -1267,9 +1267,13 @@
               "value": {
                 "map": "littleroot_town_mays_house_1f",
                 "x": 2,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1289,9 +1293,13 @@
               "value": {
                 "map": "littleroot_town_brendans_house_1f",
                 "x": 8,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1311,9 +1319,13 @@
               "value": {
                 "map": "littleroot_town_professor_birchs_lab",
                 "x": 6,
-                "y": 12,
-                "elevation": 0
+                "y": 12
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -1344,9 +1356,13 @@
               "value": {
                 "variable": "VAR_LITTLEROOT_TOWN_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/LittlerootTown_EventScript_NeedPokemonTriggerLeft.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/LittlerootTown_EventScript_NeedPokemonTriggerLeft.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1366,9 +1382,13 @@
               "value": {
                 "variable": "VAR_LITTLEROOT_TOWN_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/LittlerootTown_EventScript_NeedPokemonTriggerRight.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/LittlerootTown_EventScript_NeedPokemonTriggerRight.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1388,9 +1408,13 @@
               "value": {
                 "variable": "VAR_LITTLEROOT_TOWN_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/LittlerootTown_EventScript_GoSaveBirchTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/LittlerootTown_EventScript_GoSaveBirchTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1410,9 +1434,13 @@
               "value": {
                 "variable": "VAR_LITTLEROOT_TOWN_STATE",
                 "value": 3,
-                "triggerScript": "Triggers/LittlerootTown_EventScript_GiveRunningShoesTrigger4.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/LittlerootTown_EventScript_GiveRunningShoesTrigger4.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1432,9 +1460,13 @@
               "value": {
                 "variable": "VAR_LITTLEROOT_TOWN_STATE",
                 "value": 3,
-                "triggerScript": "Triggers/LittlerootTown_EventScript_GiveRunningShoesTrigger5.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/LittlerootTown_EventScript_GiveRunningShoesTrigger5.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1454,9 +1486,13 @@
               "value": {
                 "variable": "VAR_LITTLEROOT_TOWN_STATE",
                 "value": 3,
-                "triggerScript": "Triggers/LittlerootTown_EventScript_GiveRunningShoesTrigger2.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/LittlerootTown_EventScript_GiveRunningShoesTrigger2.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1476,9 +1512,13 @@
               "value": {
                 "variable": "VAR_LITTLEROOT_TOWN_STATE",
                 "value": 3,
-                "triggerScript": "Triggers/LittlerootTown_EventScript_GiveRunningShoesTrigger3.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/LittlerootTown_EventScript_GiveRunningShoesTrigger3.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1498,9 +1538,13 @@
               "value": {
                 "variable": "VAR_LITTLEROOT_TOWN_STATE",
                 "value": 3,
-                "triggerScript": "Triggers/LittlerootTown_EventScript_GiveRunningShoesTrigger0.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/LittlerootTown_EventScript_GiveRunningShoesTrigger0.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1520,9 +1564,13 @@
               "value": {
                 "variable": "VAR_LITTLEROOT_TOWN_STATE",
                 "value": 3,
-                "triggerScript": "Triggers/LittlerootTown_EventScript_GiveRunningShoesTrigger1.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/LittlerootTown_EventScript_GiveRunningShoesTrigger1.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -1551,9 +1599,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LittlerootTown_EventScript_TownSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LittlerootTown_EventScript_TownSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1571,9 +1623,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LittlerootTown_EventScript_BirchsLabSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LittlerootTown_EventScript_BirchsLabSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1591,9 +1647,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LittlerootTown_EventScript_BrendansHouseSign.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/LittlerootTown_EventScript_BrendansHouseSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1611,9 +1671,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LittlerootTown_EventScript_MaysHouseSign.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/LittlerootTown_EventScript_MaysHouseSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -1635,6 +1699,61 @@
       "name": "display_name",
       "type": "string",
       "value": "LittlerootTown"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_LITTLEROOT"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_TOWN"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_LITTLEROOT_TOWN"
     },
     {
       "name": "border",

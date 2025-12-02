@@ -16867,9 +16867,13 @@
               "value": {
                 "map": "route111_winstrate_familys_house",
                 "x": 3,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -16889,9 +16893,13 @@
               "value": {
                 "map": "desert_ruins",
                 "x": 8,
-                "y": 29,
-                "elevation": 3
+                "y": 29
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -16911,9 +16919,13 @@
               "value": {
                 "map": "route111_old_ladys_rest_stop",
                 "x": 3,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -16933,9 +16945,13 @@
               "value": {
                 "map": "mirage_tower_1f",
                 "x": 10,
-                "y": 14,
-                "elevation": 3
+                "y": 14
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -16955,9 +16971,13 @@
               "value": {
                 "map": "trainer_hill_entrance",
                 "x": 9,
-                "y": 16,
-                "elevation": 3
+                "y": 16
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -16988,9 +17008,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17010,9 +17034,13 @@
               "value": {
                 "variable": "VAR_TEMP_3",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_ViciousSandstormTriggerDown.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_ViciousSandstormTriggerDown.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17032,9 +17060,13 @@
               "value": {
                 "variable": "VAR_TEMP_3",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_ViciousSandstormTriggerDown.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_ViciousSandstormTriggerDown.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17054,9 +17086,13 @@
               "value": {
                 "variable": "VAR_TEMP_3",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_ViciousSandstormTriggerDown.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_ViciousSandstormTriggerDown.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17076,9 +17112,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17098,9 +17138,13 @@
               "value": {
                 "variable": "VAR_TEMP_3",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_ViciousSandstormTriggerLeft.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_ViciousSandstormTriggerLeft.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17120,9 +17164,13 @@
               "value": {
                 "variable": "VAR_TEMP_3",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_ViciousSandstormTriggerLeft.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_ViciousSandstormTriggerLeft.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17142,9 +17190,13 @@
               "value": {
                 "variable": "VAR_TEMP_3",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_ViciousSandstormTriggerLeft.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_ViciousSandstormTriggerLeft.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17164,9 +17216,13 @@
               "value": {
                 "variable": "VAR_TEMP_3",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_ViciousSandstormTriggerLeft.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_ViciousSandstormTriggerLeft.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17186,9 +17242,13 @@
               "value": {
                 "variable": "VAR_TEMP_3",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_ViciousSandstormTriggerDown.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_ViciousSandstormTriggerDown.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17208,9 +17268,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17230,9 +17294,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17252,9 +17320,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17274,9 +17346,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17296,9 +17372,13 @@
               "value": {
                 "variable": "VAR_TEMP_3",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_ViciousSandstormTriggerLeft.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_ViciousSandstormTriggerLeft.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17318,9 +17398,13 @@
               "value": {
                 "variable": "VAR_TEMP_3",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_ViciousSandstormTriggerLeft.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_ViciousSandstormTriggerLeft.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17340,9 +17424,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17362,9 +17450,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17384,9 +17476,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17406,9 +17502,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17428,9 +17528,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17450,9 +17554,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17472,9 +17580,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SunTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17494,9 +17606,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17516,9 +17632,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17538,9 +17658,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17560,9 +17684,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17582,9 +17710,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17604,9 +17736,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17626,9 +17762,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17648,9 +17788,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17670,9 +17814,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17692,9 +17840,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -17714,9 +17866,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route111_EventScript_SandstormTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -17745,9 +17901,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route111_EventScript_WinstrateHouseSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route111_EventScript_WinstrateHouseSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -17765,9 +17925,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route111_EventScript_RouteSignMauville.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route111_EventScript_RouteSignMauville.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -17785,9 +17949,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route111_EventScript_RouteSign112.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route111_EventScript_RouteSign112.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -17805,9 +17973,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route111_EventScript_RouteSign113.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route111_EventScript_RouteSign113.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -17825,8 +17997,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_YELLOW_CAVE2_1",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_YELLOW_CAVE2_1"
               }
             }
           ]
@@ -17845,8 +18016,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_YELLOW_CAVE3_1",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_YELLOW_CAVE3_1"
               }
             }
           ]
@@ -17865,8 +18035,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_YELLOW_CAVE1_1",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_YELLOW_CAVE1_1"
               }
             }
           ]
@@ -17885,9 +18054,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route111_EventScript_OldLadysRestStopSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route111_EventScript_OldLadysRestStopSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -17905,8 +18078,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_RED_CAVE2_3",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_RED_CAVE2_3"
               }
             }
           ]
@@ -17925,8 +18097,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_YELLOW_CAVE4_3",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_YELLOW_CAVE4_3"
               }
             }
           ]
@@ -17946,8 +18117,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_STARDUST",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_111_STARDUST",
-                "elevation": 0
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_111_STARDUST"
               }
             }
           ]
@@ -17966,8 +18136,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_RED_CAVE4_3",
-                "elevation": 3
+                "secret_base_id": "SECRET_BASE_RED_CAVE4_3"
               }
             }
           ]
@@ -17986,9 +18155,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route111_EventScript_TrainerTipsSpAtkSpDef.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/Route111_EventScript_TrainerTipsSpAtkSpDef.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -18006,8 +18179,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_TREE1_4",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_TREE1_4"
               }
             }
           ]
@@ -18026,8 +18198,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_TREE1_1",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_TREE1_1"
               }
             }
           ]
@@ -18047,8 +18218,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_PROTEIN",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_111_PROTEIN",
-                "elevation": 0
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_111_PROTEIN"
               }
             }
           ]
@@ -18068,8 +18238,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_RARE_CANDY",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_111_RARE_CANDY",
-                "elevation": 0
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_111_RARE_CANDY"
               }
             }
           ]
@@ -18088,9 +18257,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route111_EventScript_TrainerHillSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route111_EventScript_TrainerHillSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -18112,6 +18285,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route111"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_ROUTE110"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_111"
     },
     {
       "name": "border",

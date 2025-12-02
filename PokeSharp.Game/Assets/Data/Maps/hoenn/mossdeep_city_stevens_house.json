@@ -331,9 +331,13 @@
               "value": {
                 "map": "mossdeep_city",
                 "x": 19,
-                "y": 10,
-                "elevation": 0
+                "y": 10
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -353,9 +357,13 @@
               "value": {
                 "map": "mossdeep_city",
                 "x": 19,
-                "y": 10,
-                "elevation": 0
+                "y": 10
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -384,9 +392,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/MossdeepCity_StevensHouse_EventScript_RockDisplay.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/MossdeepCity_StevensHouse_EventScript_RockDisplay.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -404,9 +416,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/MossdeepCity_StevensHouse_EventScript_RockDisplay.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/MossdeepCity_StevensHouse_EventScript_RockDisplay.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -424,9 +440,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/MossdeepCity_StevensHouse_EventScript_RockDisplay.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/MossdeepCity_StevensHouse_EventScript_RockDisplay.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -444,9 +464,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/MossdeepCity_StevensHouse_EventScript_RockDisplay.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/MossdeepCity_StevensHouse_EventScript_RockDisplay.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -468,6 +492,61 @@
       "name": "display_name",
       "type": "string",
       "value": "MossdeepCity_StevensHouse"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_RUSTBORO"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_MOSSDEEP_CITY"
     },
     {
       "name": "border",

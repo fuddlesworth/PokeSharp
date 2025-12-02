@@ -1057,9 +1057,13 @@
               "value": {
                 "map": "route110_trick_house_entrance",
                 "x": 5,
-                "y": 2,
-                "elevation": 3
+                "y": 2
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1079,9 +1083,13 @@
               "value": {
                 "map": "route110_trick_house_entrance",
                 "x": 5,
-                "y": 2,
-                "elevation": 3
+                "y": 2
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1101,9 +1109,13 @@
               "value": {
                 "map": "route110_trick_house_end",
                 "x": 10,
-                "y": 1,
-                "elevation": 3
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -1132,9 +1144,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route110_TrickHousePuzzle8_EventScript_Scroll.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/Route110_TrickHousePuzzle8_EventScript_Scroll.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -1156,6 +1172,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route110_TrickHousePuzzle8"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_TRICK_HOUSE"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_110"
     },
     {
       "name": "border",

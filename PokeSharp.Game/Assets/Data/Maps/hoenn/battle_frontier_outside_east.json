@@ -15619,9 +15619,13 @@
               "value": {
                 "map": "battle_frontier_battle_tower_lobby",
                 "x": 12,
-                "y": 9,
-                "elevation": 3
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -15641,9 +15645,13 @@
               "value": {
                 "map": "battle_frontier_battle_arena_lobby",
                 "x": 7,
-                "y": 12,
-                "elevation": 3
+                "y": 12
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -15663,9 +15671,13 @@
               "value": {
                 "map": "battle_frontier_battle_palace_lobby",
                 "x": 12,
-                "y": 11,
-                "elevation": 0
+                "y": 11
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -15685,9 +15697,13 @@
               "value": {
                 "map": "battle_frontier_battle_pyramid_lobby",
                 "x": 7,
-                "y": 17,
-                "elevation": 4
+                "y": 17
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -15707,9 +15723,13 @@
               "value": {
                 "map": "battle_frontier_ranking_hall",
                 "x": 26,
-                "y": 14,
-                "elevation": 3
+                "y": 14
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -15729,9 +15749,13 @@
               "value": {
                 "map": "battle_frontier_lounge1",
                 "x": 4,
-                "y": 9,
-                "elevation": 0
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -15751,9 +15775,13 @@
               "value": {
                 "map": "battle_frontier_exchange_service_corner",
                 "x": 7,
-                "y": 10,
-                "elevation": 0
+                "y": 10
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -15773,9 +15801,13 @@
               "value": {
                 "map": "battle_frontier_lounge5",
                 "x": 1,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -15795,9 +15827,13 @@
               "value": {
                 "map": "battle_frontier_lounge6",
                 "x": 4,
-                "y": 9,
-                "elevation": 0
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -15817,9 +15853,13 @@
               "value": {
                 "map": "battle_frontier_lounge3",
                 "x": 4,
-                "y": 9,
-                "elevation": 0
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -15839,9 +15879,13 @@
               "value": {
                 "map": "battle_frontier_lounge8",
                 "x": 4,
-                "y": 9,
-                "elevation": 0
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -15861,9 +15905,13 @@
               "value": {
                 "map": "battle_frontier_lounge9",
                 "x": 1,
-                "y": 9,
-                "elevation": 0
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -15883,9 +15931,13 @@
               "value": {
                 "map": "battle_frontier_pokemon_center_1f",
                 "x": 7,
-                "y": 8,
-                "elevation": 3
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -15905,9 +15957,13 @@
               "value": {
                 "map": "artisan_cave_1f",
                 "x": 10,
-                "y": 17,
-                "elevation": 0
+                "y": 17
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -15936,9 +15992,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/BattleFrontier_OutsideEast_EventScript_BattleTowerSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/BattleFrontier_OutsideEast_EventScript_BattleTowerSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -15956,9 +16016,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/BattleFrontier_OutsideEast_EventScript_BattlePalaceSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/BattleFrontier_OutsideEast_EventScript_BattlePalaceSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -15976,9 +16040,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/BattleFrontier_OutsideEast_EventScript_BattleArenaSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/BattleFrontier_OutsideEast_EventScript_BattleArenaSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -15996,9 +16064,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/BattleFrontier_OutsideEast_EventScript_BattlePyramidSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/BattleFrontier_OutsideEast_EventScript_BattlePyramidSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -16016,9 +16088,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/BattleFrontier_OutsideEast_EventScript_ExchangeCornerSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/BattleFrontier_OutsideEast_EventScript_ExchangeCornerSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -16036,9 +16112,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/BattleFrontier_OutsideEast_EventScript_RankingHallSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/BattleFrontier_OutsideEast_EventScript_RankingHallSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -16056,9 +16136,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Common_EventScript_ShowPokemonCenterSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Common_EventScript_ShowPokemonCenterSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -16076,9 +16160,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Common_EventScript_ShowPokemonCenterSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Common_EventScript_ShowPokemonCenterSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -16100,6 +16188,61 @@
       "name": "display_name",
       "type": "string",
       "value": "BattleFrontier_OutsideEast"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_B_FRONTIER"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_BATTLE_FRONTIER"
     },
     {
       "name": "border",

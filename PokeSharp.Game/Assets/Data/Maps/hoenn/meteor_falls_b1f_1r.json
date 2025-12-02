@@ -3373,9 +3373,13 @@
               "value": {
                 "map": "meteor_falls_1f_2r",
                 "x": 4,
-                "y": 14,
-                "elevation": 3
+                "y": 14
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 4
             }
           ]
         },
@@ -3395,9 +3399,13 @@
               "value": {
                 "map": "meteor_falls_1f_2r",
                 "x": 7,
-                "y": 20,
-                "elevation": 3
+                "y": 20
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 5
             }
           ]
         },
@@ -3417,9 +3425,13 @@
               "value": {
                 "map": "meteor_falls_1f_2r",
                 "x": 21,
-                "y": 23,
-                "elevation": 3
+                "y": 23
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 4
             }
           ]
         },
@@ -3439,9 +3451,13 @@
               "value": {
                 "map": "meteor_falls_b1f_2r",
                 "x": 5,
-                "y": 15,
-                "elevation": 3
+                "y": 15
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3461,9 +3477,13 @@
               "value": {
                 "map": "meteor_falls_1f_1r",
                 "x": 5,
-                "y": 4,
-                "elevation": 3
+                "y": 4
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 5
             }
           ]
         },
@@ -3483,9 +3503,13 @@
               "value": {
                 "map": "meteor_falls_1f_1r",
                 "x": 26,
-                "y": 28,
-                "elevation": 3
+                "y": 28
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -3507,6 +3531,61 @@
       "name": "display_name",
       "type": "string",
       "value": "MeteorFalls_B1F_1R"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_CAVE_OF_ORIGIN"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERGROUND"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_METEOR_FALLS"
     },
     {
       "name": "border",

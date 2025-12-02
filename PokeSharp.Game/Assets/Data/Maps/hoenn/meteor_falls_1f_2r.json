@@ -2947,9 +2947,13 @@
               "value": {
                 "map": "meteor_falls_1f_1r",
                 "x": 10,
-                "y": 3,
-                "elevation": 3
+                "y": 3
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2969,9 +2973,13 @@
               "value": {
                 "map": "meteor_falls_b1f_1r",
                 "x": 5,
-                "y": 6,
-                "elevation": 4
+                "y": 6
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2991,9 +2999,13 @@
               "value": {
                 "map": "meteor_falls_b1f_1r",
                 "x": 7,
-                "y": 11,
-                "elevation": 5
+                "y": 11
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3013,9 +3025,13 @@
               "value": {
                 "map": "meteor_falls_b1f_1r",
                 "x": 18,
-                "y": 15,
-                "elevation": 4
+                "y": 15
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -3044,9 +3060,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/0x0.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/0x0.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -3068,6 +3088,61 @@
       "name": "display_name",
       "type": "string",
       "value": "MeteorFalls_1F_2R"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_CAVE_OF_ORIGIN"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERGROUND"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_METEOR_FALLS"
     },
     {
       "name": "border",

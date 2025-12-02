@@ -949,9 +949,13 @@
               "value": {
                 "map": "lilycove_city",
                 "x": 11,
-                "y": 5,
-                "elevation": 0
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -971,9 +975,13 @@
               "value": {
                 "map": "lilycove_city",
                 "x": 12,
-                "y": 5,
-                "elevation": 0
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -993,9 +1001,13 @@
               "value": {
                 "map": "lilycove_city_lilycove_museum_2f",
                 "x": 13,
-                "y": 1,
-                "elevation": 0
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -1024,9 +1036,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_FantasyPainting.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_FantasyPainting.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1044,9 +1060,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_FantasyPainting.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_FantasyPainting.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1064,9 +1084,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_BerryPainting.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_BerryPainting.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1084,9 +1108,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_BerryPainting.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_BerryPainting.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1104,9 +1132,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_OldPainting.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_OldPainting.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1124,9 +1156,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_WomanPainting.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_WomanPainting.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1144,9 +1180,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_WomanPainting.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_WomanPainting.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1164,9 +1204,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_EventScript_BirdSculpture.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_EventScript_BirdSculpture.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1184,9 +1228,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_OldPainting.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_OldPainting.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1204,9 +1252,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_GrassPokemonPainting.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_GrassPokemonPainting.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1224,9 +1276,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_StoneTablet.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_StoneTablet.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1244,9 +1300,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_LegendaryPokemonPainting.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_LegendaryPokemonPainting.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1264,9 +1324,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_LegendaryPokemonPainting.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_LegendaryPokemonPainting.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1284,9 +1348,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_StoneTablet.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_StoneTablet.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1304,9 +1372,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_PokeBallSculpture.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_PokeBallSculpture.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1324,9 +1396,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_StoneTablet.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_LilycoveMuseum_1F_EventScript_StoneTablet.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -1348,6 +1424,61 @@
       "name": "display_name",
       "type": "string",
       "value": "LilycoveCity_LilycoveMuseum_1F"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_LILYCOVE_MUSEUM"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_LILYCOVE_CITY"
     },
     {
       "name": "border",

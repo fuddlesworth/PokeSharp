@@ -1093,9 +1093,13 @@
               "value": {
                 "map": "seafloor_cavern_room2",
                 "x": 4,
-                "y": 10,
-                "elevation": 3
+                "y": 10
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1115,9 +1119,13 @@
               "value": {
                 "map": "seafloor_cavern_room5",
                 "x": 15,
-                "y": 12,
-                "elevation": 3
+                "y": 12
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1137,9 +1145,13 @@
               "value": {
                 "map": "seafloor_cavern_room5",
                 "x": 7,
-                "y": 17,
-                "elevation": 3
+                "y": 17
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1159,9 +1171,13 @@
               "value": {
                 "map": "seafloor_cavern_entrance",
                 "x": 10,
-                "y": 1,
-                "elevation": 3
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -1183,6 +1199,61 @@
       "name": "display_name",
       "type": "string",
       "value": "SeafloorCavern_Room4"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_MT_CHIMNEY"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERGROUND"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_SEAFLOOR_CAVERN"
     },
     {
       "name": "border",

@@ -4867,9 +4867,13 @@
               "value": {
                 "map": "granite_cave_1f",
                 "x": 37,
-                "y": 12,
-                "elevation": 3
+                "y": 12
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -4899,8 +4903,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_POKE_BALL",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_106_POKE_BALL",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_106_POKE_BALL"
               }
             }
           ]
@@ -4920,8 +4923,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_STARDUST",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_106_STARDUST",
-                "elevation": 0
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_106_STARDUST"
               }
             }
           ]
@@ -4941,8 +4943,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_HEART_SCALE",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_106_HEART_SCALE",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_106_HEART_SCALE"
               }
             }
           ]
@@ -4961,9 +4962,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route106_EventScript_TrainerTipsSign.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/Route106_EventScript_TrainerTipsSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -4985,6 +4990,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route106"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_ROUTE104"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_106"
     },
     {
       "name": "border",

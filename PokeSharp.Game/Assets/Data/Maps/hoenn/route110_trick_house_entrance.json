@@ -355,9 +355,13 @@
               "value": {
                 "map": "route110",
                 "x": 11,
-                "y": 66,
-                "elevation": 0
+                "y": 66
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -377,9 +381,13 @@
               "value": {
                 "map": "route110",
                 "x": 11,
-                "y": 66,
-                "elevation": 0
+                "y": 66
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -399,9 +407,13 @@
               "value": {
                 "map": "route110_trick_house_puzzle1",
                 "x": 0,
-                "y": 21,
-                "elevation": 3
+                "y": 21
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -432,9 +444,13 @@
               "value": {
                 "variable": "VAR_TRICK_HOUSE_BEING_WATCHED_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/Route110_TrickHouseEntrance_EventScript_TrickMasterHiding.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route110_TrickHouseEntrance_EventScript_TrickMasterHiding.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -454,9 +470,13 @@
               "value": {
                 "variable": "VAR_TRICK_HOUSE_BEING_WATCHED_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/Route110_TrickHouseEntrance_EventScript_TrickMasterHiding.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route110_TrickHouseEntrance_EventScript_TrickMasterHiding.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -476,9 +496,13 @@
               "value": {
                 "variable": "VAR_TRICK_HOUSE_BEING_WATCHED_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/Route110_TrickHouseEntrance_EventScript_TrickMasterHiding.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route110_TrickHouseEntrance_EventScript_TrickMasterHiding.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -498,9 +522,13 @@
               "value": {
                 "variable": "VAR_TRICK_HOUSE_BEING_WATCHED_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/Route110_TrickHouseEntrance_EventScript_TrickMasterHiding.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route110_TrickHouseEntrance_EventScript_TrickMasterHiding.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -530,9 +558,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Route110_TrickHouseEntrance_EventScript_Door.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -554,6 +586,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route110_TrickHouseEntrance"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_TRICK_HOUSE"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_110"
     },
     {
       "name": "border",

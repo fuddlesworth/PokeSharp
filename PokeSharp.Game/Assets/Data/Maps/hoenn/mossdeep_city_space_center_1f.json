@@ -547,9 +547,13 @@
               "value": {
                 "map": "mossdeep_city",
                 "x": 64,
-                "y": 15,
-                "elevation": 0
+                "y": 15
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -569,9 +573,13 @@
               "value": {
                 "map": "mossdeep_city",
                 "x": 64,
-                "y": 15,
-                "elevation": 0
+                "y": 15
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -591,9 +599,13 @@
               "value": {
                 "map": "mossdeep_city_space_center_2f",
                 "x": 13,
-                "y": 1,
-                "elevation": 0
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -615,6 +627,61 @@
       "name": "display_name",
       "type": "string",
       "value": "MossdeepCity_SpaceCenter_1F"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_RUSTBORO"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_MOSSDEEP_CITY"
     },
     {
       "name": "border",

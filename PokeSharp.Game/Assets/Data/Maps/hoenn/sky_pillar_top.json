@@ -2011,9 +2011,13 @@
               "value": {
                 "map": "sky_pillar_5f",
                 "x": 10,
-                "y": 1,
-                "elevation": 3
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -2044,9 +2048,13 @@
               "value": {
                 "variable": "VAR_SKY_PILLAR_RAYQUAZA_CRY_DONE",
                 "value": 0,
-                "triggerScript": "Triggers/SkyPillar_Top_EventScript_AwakenRayquaza.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/SkyPillar_Top_EventScript_AwakenRayquaza.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -2068,6 +2076,61 @@
       "name": "display_name",
       "type": "string",
       "value": "SkyPillar_Top"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_MT_CHIMNEY"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_SKY_PILLAR"
     },
     {
       "name": "border",

@@ -14466,8 +14466,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_HEART_SCALE",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_128_HEART_SCALE_1",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_128_HEART_SCALE_1"
               }
             }
           ]
@@ -14487,8 +14486,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_HEART_SCALE",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_128_HEART_SCALE_2",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_128_HEART_SCALE_2"
               }
             }
           ]
@@ -14508,8 +14506,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_HEART_SCALE",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_128_HEART_SCALE_3",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_128_HEART_SCALE_3"
               }
             }
           ]
@@ -14532,6 +14529,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route128"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_ROUTE120"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_OCEAN_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_128"
     },
     {
       "name": "border",

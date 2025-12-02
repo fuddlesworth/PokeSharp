@@ -1081,9 +1081,13 @@
               "value": {
                 "map": "route114_fossil_maniacs_house",
                 "x": 4,
-                "y": 1,
-                "elevation": 0
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1103,9 +1107,13 @@
               "value": {
                 "map": "route114_fossil_maniacs_house",
                 "x": 4,
-                "y": 1,
-                "elevation": 0
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1125,9 +1133,13 @@
               "value": {
                 "map": "desert_underpass",
                 "x": 10,
-                "y": 12,
-                "elevation": 0
+                "y": 12
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -1158,9 +1170,13 @@
               "value": {
                 "variable": "VAR_FOSSIL_MANIAC_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/Route114_FossilManiacsTunnel_EventScript_ManiacMentionCaveIn.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route114_FossilManiacsTunnel_EventScript_ManiacMentionCaveIn.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1180,9 +1196,13 @@
               "value": {
                 "variable": "VAR_FOSSIL_MANIAC_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/Route114_FossilManiacsTunnel_EventScript_ManiacMentionCaveIn.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route114_FossilManiacsTunnel_EventScript_ManiacMentionCaveIn.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -1204,6 +1224,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route114_FossilManiacsTunnel"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_FALLARBOR"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_114"
     },
     {
       "name": "border",

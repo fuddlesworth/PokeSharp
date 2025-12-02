@@ -5881,9 +5881,13 @@
               "value": {
                 "map": "mt_pyre_1f",
                 "x": 3,
-                "y": 6,
-                "elevation": 3
+                "y": 6
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5903,9 +5907,13 @@
               "value": {
                 "map": "mt_pyre_summit",
                 "x": 23,
-                "y": 31,
-                "elevation": 3
+                "y": 31
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5925,9 +5933,13 @@
               "value": {
                 "map": "mt_pyre_summit",
                 "x": 23,
-                "y": 31,
-                "elevation": 3
+                "y": 31
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -5958,9 +5970,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/MtPyre_Exterior_EventScript_FogTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/MtPyre_Exterior_EventScript_FogTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5980,9 +5996,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/MtPyre_Exterior_EventScript_FogTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/MtPyre_Exterior_EventScript_FogTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -6002,9 +6022,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/MtPyre_Exterior_EventScript_SunTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/MtPyre_Exterior_EventScript_SunTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -6024,9 +6048,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/MtPyre_Exterior_EventScript_SunTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/MtPyre_Exterior_EventScript_SunTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -6046,9 +6074,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/MtPyre_Exterior_EventScript_FogTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/MtPyre_Exterior_EventScript_FogTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -6078,8 +6110,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_ULTRA_BALL",
-                "flag": "FLAG_HIDDEN_ITEM_MT_PYRE_EXTERIOR_ULTRA_BALL",
-                "elevation": 0
+                "flag": "FLAG_HIDDEN_ITEM_MT_PYRE_EXTERIOR_ULTRA_BALL"
               }
             }
           ]
@@ -6099,8 +6130,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_MAX_ETHER",
-                "flag": "FLAG_HIDDEN_ITEM_MT_PYRE_EXTERIOR_MAX_ETHER",
-                "elevation": 0
+                "flag": "FLAG_HIDDEN_ITEM_MT_PYRE_EXTERIOR_MAX_ETHER"
               }
             }
           ]
@@ -6123,6 +6153,61 @@
       "name": "display_name",
       "type": "string",
       "value": "MtPyre_Exterior"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_MT_PYRE_EXTERIOR"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_MT_PYRE"
     },
     {
       "name": "border",

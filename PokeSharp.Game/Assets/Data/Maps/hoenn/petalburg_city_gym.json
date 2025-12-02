@@ -3091,9 +3091,13 @@
               "value": {
                 "map": "petalburg_city",
                 "x": 15,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3113,9 +3117,13 @@
               "value": {
                 "map": "petalburg_city",
                 "x": 15,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3135,9 +3143,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 7,
-                "y": 85,
-                "elevation": 3
+                "y": 85
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3157,9 +3169,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 1,
-                "y": 105,
-                "elevation": 3
+                "y": 105
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3179,9 +3195,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 1,
-                "y": 105,
-                "elevation": 3
+                "y": 105
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3201,9 +3221,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 1,
-                "y": 98,
-                "elevation": 3
+                "y": 98
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3223,9 +3247,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 7,
-                "y": 105,
-                "elevation": 3
+                "y": 105
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3245,9 +3273,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 7,
-                "y": 105,
-                "elevation": 3
+                "y": 105
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3267,9 +3299,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 7,
-                "y": 46,
-                "elevation": 3
+                "y": 46
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3289,9 +3325,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 1,
-                "y": 59,
-                "elevation": 3
+                "y": 59
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3311,9 +3351,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 1,
-                "y": 79,
-                "elevation": 3
+                "y": 79
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3333,9 +3377,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 1,
-                "y": 79,
-                "elevation": 3
+                "y": 79
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3355,9 +3403,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 7,
-                "y": 79,
-                "elevation": 3
+                "y": 79
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3377,9 +3429,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 7,
-                "y": 79,
-                "elevation": 3
+                "y": 79
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3399,9 +3455,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 7,
-                "y": 59,
-                "elevation": 3
+                "y": 59
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3421,9 +3481,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 1,
-                "y": 72,
-                "elevation": 3
+                "y": 72
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3443,9 +3507,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 1,
-                "y": 92,
-                "elevation": 3
+                "y": 92
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3465,9 +3533,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 1,
-                "y": 92,
-                "elevation": 3
+                "y": 92
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3487,9 +3559,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 7,
-                "y": 92,
-                "elevation": 3
+                "y": 92
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3509,9 +3585,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 7,
-                "y": 92,
-                "elevation": 3
+                "y": 92
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3531,9 +3611,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 1,
-                "y": 20,
-                "elevation": 3
+                "y": 20
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3553,9 +3637,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 7,
-                "y": 20,
-                "elevation": 3
+                "y": 20
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3575,9 +3663,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 1,
-                "y": 33,
-                "elevation": 3
+                "y": 33
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3597,9 +3689,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 7,
-                "y": 33,
-                "elevation": 3
+                "y": 33
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3619,9 +3715,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 7,
-                "y": 40,
-                "elevation": 3
+                "y": 40
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3641,9 +3741,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 7,
-                "y": 40,
-                "elevation": 3
+                "y": 40
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3663,9 +3767,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 1,
-                "y": 53,
-                "elevation": 3
+                "y": 53
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3685,9 +3793,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 1,
-                "y": 53,
-                "elevation": 3
+                "y": 53
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3707,9 +3819,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 7,
-                "y": 53,
-                "elevation": 3
+                "y": 53
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3729,9 +3845,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 7,
-                "y": 53,
-                "elevation": 3
+                "y": 53
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3751,9 +3871,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 1,
-                "y": 66,
-                "elevation": 3
+                "y": 66
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3773,9 +3897,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 1,
-                "y": 66,
-                "elevation": 3
+                "y": 66
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3795,9 +3923,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 1,
-                "y": 7,
-                "elevation": 3
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3817,9 +3949,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 7,
-                "y": 7,
-                "elevation": 3
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3839,9 +3975,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 7,
-                "y": 14,
-                "elevation": 3
+                "y": 14
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3861,9 +4001,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 7,
-                "y": 14,
-                "elevation": 3
+                "y": 14
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3883,9 +4027,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 1,
-                "y": 27,
-                "elevation": 3
+                "y": 27
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3905,9 +4053,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 1,
-                "y": 27,
-                "elevation": 3
+                "y": 27
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -3936,9 +4088,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_SpeedRoomDoor.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_SpeedRoomDoor.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3956,9 +4112,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_AccuracyRoomDoor.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_AccuracyRoomDoor.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3976,9 +4136,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_ConfusionRoomDoor.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_ConfusionRoomDoor.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3996,9 +4160,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_LeftDefenseRoomDoor.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_LeftDefenseRoomDoor.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4016,9 +4184,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_RightDefenseRoomDoor.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_RightDefenseRoomDoor.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4036,9 +4208,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_RecoveryRoomDoor.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_RecoveryRoomDoor.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4056,9 +4232,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_LeftStrengthRoomDoor.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_LeftStrengthRoomDoor.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4076,9 +4256,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_RightStrengthRoomDoor.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_RightStrengthRoomDoor.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4096,9 +4280,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_LeftOHKORoomDoor.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_LeftOHKORoomDoor.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4116,9 +4304,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_RightOHKORoomDoor.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_RightOHKORoomDoor.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4136,9 +4328,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_LeftGymLeadersRoomDoor.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_LeftGymLeadersRoomDoor.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4156,9 +4352,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_RightGymLeadersRoomDoor.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_RightGymLeadersRoomDoor.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4177,9 +4377,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_LeftGymStatue.csx",
-                "elevation": 3,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4198,9 +4402,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/PetalburgCity_Gym_EventScript_RightGymStatue.csx",
-                "elevation": 3,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -4222,6 +4430,61 @@
       "name": "display_name",
       "type": "string",
       "value": "PetalburgCity_Gym"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_GYM"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_GYM"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_PETALBURG_CITY"
     },
     {
       "name": "border",

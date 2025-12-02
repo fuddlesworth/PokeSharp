@@ -8,9 +8,3 @@ replacing metatiles with individual tile layers.
 __version__ = "0.1.0"
 
 
-
-
-
-
-
-

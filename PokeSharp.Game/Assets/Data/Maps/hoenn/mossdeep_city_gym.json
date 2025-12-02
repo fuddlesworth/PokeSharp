@@ -2875,9 +2875,13 @@
               "value": {
                 "map": "mossdeep_city",
                 "x": 38,
-                "y": 9,
-                "elevation": 0
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2897,9 +2901,13 @@
               "value": {
                 "map": "mossdeep_city",
                 "x": 38,
-                "y": 9,
-                "elevation": 0
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2919,9 +2927,13 @@
               "value": {
                 "map": "mossdeep_city_gym",
                 "x": 1,
-                "y": 23,
-                "elevation": 3
+                "y": 23
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2941,9 +2953,13 @@
               "value": {
                 "map": "mossdeep_city_gym",
                 "x": 3,
-                "y": 28,
-                "elevation": 0
+                "y": 28
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2963,9 +2979,13 @@
               "value": {
                 "map": "mossdeep_city_gym",
                 "x": 8,
-                "y": 12,
-                "elevation": 0
+                "y": 12
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2985,9 +3005,13 @@
               "value": {
                 "map": "mossdeep_city_gym",
                 "x": 7,
-                "y": 18,
-                "elevation": 0
+                "y": 18
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -3007,9 +3031,13 @@
               "value": {
                 "map": "mossdeep_city_gym",
                 "x": 23,
-                "y": 20,
-                "elevation": 0
+                "y": 20
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -3029,9 +3057,13 @@
               "value": {
                 "map": "mossdeep_city_gym",
                 "x": 9,
-                "y": 18,
-                "elevation": 0
+                "y": 18
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -3051,9 +3083,13 @@
               "value": {
                 "map": "mossdeep_city_gym",
                 "x": 20,
-                "y": 24,
-                "elevation": 0
+                "y": 24
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3073,9 +3109,13 @@
               "value": {
                 "map": "mossdeep_city_gym",
                 "x": 1,
-                "y": 33,
-                "elevation": 3
+                "y": 33
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -3095,9 +3135,13 @@
               "value": {
                 "map": "mossdeep_city_gym",
                 "x": 11,
-                "y": 35,
-                "elevation": 3
+                "y": 35
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -3117,9 +3161,13 @@
               "value": {
                 "map": "mossdeep_city_gym",
                 "x": 11,
-                "y": 3,
-                "elevation": 0
+                "y": 3
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3139,9 +3187,13 @@
               "value": {
                 "map": "mossdeep_city_gym",
                 "x": 21,
-                "y": 10,
-                "elevation": 0
+                "y": 10
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -3161,9 +3213,13 @@
               "value": {
                 "map": "mossdeep_city_gym",
                 "x": 13,
-                "y": 32,
-                "elevation": 0
+                "y": 32
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -3194,9 +3250,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/MossdeepCity_Gym_EventScript_YellowFloorSwitch.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/MossdeepCity_Gym_EventScript_YellowFloorSwitch.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3216,9 +3276,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/MossdeepCity_Gym_EventScript_BlueFloorSwitch.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/MossdeepCity_Gym_EventScript_BlueFloorSwitch.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3238,9 +3302,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/MossdeepCity_Gym_EventScript_BlueFloorSwitch.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/MossdeepCity_Gym_EventScript_BlueFloorSwitch.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3260,9 +3328,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/MossdeepCity_Gym_EventScript_GreenFloorSwitch.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/MossdeepCity_Gym_EventScript_GreenFloorSwitch.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3282,9 +3354,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/MossdeepCity_Gym_EventScript_PurpleFloorSwitch.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/MossdeepCity_Gym_EventScript_PurpleFloorSwitch.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3304,9 +3380,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/MossdeepCity_Gym_EventScript_PurpleFloorSwitch.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/MossdeepCity_Gym_EventScript_PurpleFloorSwitch.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3326,9 +3406,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/MossdeepCity_Gym_EventScript_RedFloorSwitch.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/MossdeepCity_Gym_EventScript_RedFloorSwitch.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3348,9 +3432,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/MossdeepCity_Gym_EventScript_WarpToEntrance.csx",
-                "elevation": 0
+                "triggerScript": "Triggers/MossdeepCity_Gym_EventScript_WarpToEntrance.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -3370,9 +3458,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/MossdeepCity_Gym_EventScript_YellowFloorSwitch.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/MossdeepCity_Gym_EventScript_YellowFloorSwitch.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -3402,9 +3494,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/MossdeepCity_Gym_EventScript_LeftGymStatue.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -3423,9 +3519,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/MossdeepCity_Gym_EventScript_RightGymStatue.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -3447,6 +3547,61 @@
       "name": "display_name",
       "type": "string",
       "value": "MossdeepCity_Gym"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_GYM"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_GYM"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_MOSSDEEP_CITY"
     },
     {
       "name": "border",

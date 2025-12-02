@@ -391,9 +391,13 @@
               "value": {
                 "map": "lilycove_city",
                 "x": 37,
-                "y": 24,
-                "elevation": 0
+                "y": 24
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -413,9 +417,13 @@
               "value": {
                 "map": "lilycove_city",
                 "x": 37,
-                "y": 24,
-                "elevation": 0
+                "y": 24
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -435,9 +443,13 @@
               "value": {
                 "map": "lilycove_city_cove_lily_motel_2f",
                 "x": 2,
-                "y": 1,
-                "elevation": 0
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -468,9 +480,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/LilycoveCity_CoveLilyMotel_1F_EventScript_BlockingTV.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/LilycoveCity_CoveLilyMotel_1F_EventScript_BlockingTV.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -492,6 +508,61 @@
       "name": "display_name",
       "type": "string",
       "value": "LilycoveCity_CoveLilyMotel_1F"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_LILYCOVE"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_LILYCOVE_CITY"
     },
     {
       "name": "border",

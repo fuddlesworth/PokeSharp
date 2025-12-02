@@ -6,6 +6,7 @@ using PokeSharp.Engine.Core.Types;
 using PokeSharp.Game.Components.Maps;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Components.Player;
+using PokeSharp.Game.Components.Rendering;
 using PokeSharp.Game.Components.Warps;
 
 namespace PokeSharp.Game.Systems.Warps;
@@ -171,8 +172,25 @@ public class WarpSystem : SystemBase, IUpdateSystem
             warpState.ClearLastDestination();
         }
 
+        // Get player elevation for warp matching (Pokemon Emerald behavior)
+        byte playerElevation = 3; // Default elevation
+        if (playerEntity.Has<Elevation>())
+        {
+            ref Elevation elevation = ref playerEntity.Get<Elevation>();
+            playerElevation = elevation.Value;
+        }
+
         // O(1) warp lookup using map's spatial index
-        if (!TryFindWarp(position.MapId, position.X, position.Y, out WarpPoint warp))
+        // Must match player elevation with warp source elevation (elevation 0 = wildcard)
+        if (
+            !TryFindWarp(
+                position.MapId,
+                position.X,
+                position.Y,
+                playerElevation,
+                out WarpPoint warp
+            )
+        )
         {
             return;
         }
@@ -201,13 +219,25 @@ public class WarpSystem : SystemBase, IUpdateSystem
 
     /// <summary>
     ///     Tries to find a warp at the specified position using O(1) spatial lookup.
+    ///     Matches player elevation with warp source elevation (Pokemon Emerald behavior).
     /// </summary>
     /// <param name="mapId">The map's runtime ID.</param>
     /// <param name="x">The X tile coordinate.</param>
     /// <param name="y">The Y tile coordinate.</param>
+    /// <param name="playerElevation">The player's current elevation.</param>
     /// <param name="warp">The warp point if found.</param>
-    /// <returns>True if a warp exists at this position.</returns>
-    private bool TryFindWarp(MapRuntimeId mapId, int x, int y, out WarpPoint warp)
+    /// <returns>True if a warp exists at this position matching the elevation.</returns>
+    /// <remarks>
+    ///     Matches pokeemerald behavior: warp elevation 0 acts as a wildcard (matches any elevation).
+    ///     Otherwise, warp source elevation must exactly match player elevation.
+    /// </remarks>
+    private bool TryFindWarp(
+        MapRuntimeId mapId,
+        int x,
+        int y,
+        byte playerElevation,
+        out WarpPoint warp
+    )
     {
         warp = default;
 
@@ -228,6 +258,21 @@ public class WarpSystem : SystemBase, IUpdateSystem
         {
             _logger?.LogWarning("Warp entity at ({X}, {Y}) missing WarpPoint component", x, y);
             return false;
+        }
+
+        // Check elevation match (Pokemon Emerald behavior)
+        // Elevation 0 acts as a wildcard that matches any player elevation
+        if (warpEntity.Has<Elevation>())
+        {
+            ref Elevation warpElevation = ref warpEntity.Get<Elevation>();
+            byte warpElevationValue = warpElevation.Value;
+
+            // Elevation 0 = wildcard (matches any elevation)
+            // Otherwise, must exactly match player elevation
+            if (warpElevationValue != 0 && warpElevationValue != playerElevation)
+            {
+                return false; // Elevation mismatch
+            }
         }
 
         warp = warpEntity.Get<WarpPoint>();

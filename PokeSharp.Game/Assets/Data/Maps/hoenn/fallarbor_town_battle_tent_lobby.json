@@ -457,9 +457,13 @@
               "value": {
                 "map": "fallarbor_town",
                 "x": 8,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -479,9 +483,13 @@
               "value": {
                 "map": "fallarbor_town",
                 "x": 8,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -510,9 +518,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/FallarborTown_BattleTentLobby_EventScript_RulesBoard.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/FallarborTown_BattleTentLobby_EventScript_RulesBoard.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -534,6 +546,61 @@
       "name": "display_name",
       "type": "string",
       "value": "FallarborTown_BattleTentLobby"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_B_TOWER_RS"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_FALLARBOR_TOWN"
     },
     {
       "name": "border",

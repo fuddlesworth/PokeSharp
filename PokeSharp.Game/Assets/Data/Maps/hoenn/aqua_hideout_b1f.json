@@ -3739,9 +3739,13 @@
               "value": {
                 "map": "aqua_hideout_1f",
                 "x": 22,
-                "y": 1,
-                "elevation": 3
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3761,9 +3765,13 @@
               "value": {
                 "map": "aqua_hideout_b2f",
                 "x": 18,
-                "y": 1,
-                "elevation": 3
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3783,9 +3791,13 @@
               "value": {
                 "map": "aqua_hideout_b2f",
                 "x": 12,
-                "y": 1,
-                "elevation": 3
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3805,9 +3817,13 @@
               "value": {
                 "map": "aqua_hideout_b2f",
                 "x": 3,
-                "y": 3,
-                "elevation": 3
+                "y": 3
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3827,9 +3843,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 27,
-                "y": 12,
-                "elevation": 3
+                "y": 12
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3849,9 +3869,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 3,
-                "y": 15,
-                "elevation": 3
+                "y": 15
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3871,9 +3895,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 32,
-                "y": 19,
-                "elevation": 3
+                "y": 19
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3893,9 +3921,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 31,
-                "y": 4,
-                "elevation": 3
+                "y": 4
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3915,9 +3947,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 27,
-                "y": 4,
-                "elevation": 3
+                "y": 4
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3937,9 +3973,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 45,
-                "y": 3,
-                "elevation": 3
+                "y": 3
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3959,9 +3999,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 20,
-                "y": 4,
-                "elevation": 3
+                "y": 4
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3981,9 +4025,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 42,
-                "y": 17,
-                "elevation": 3
+                "y": 17
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4003,9 +4051,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 3,
-                "y": 20,
-                "elevation": 3
+                "y": 20
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4025,9 +4077,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 48,
-                "y": 9,
-                "elevation": 3
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4047,9 +4103,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 45,
-                "y": 3,
-                "elevation": 3
+                "y": 3
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4069,9 +4129,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 42,
-                "y": 9,
-                "elevation": 3
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4091,9 +4155,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 48,
-                "y": 5,
-                "elevation": 3
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4113,9 +4181,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 45,
-                "y": 13,
-                "elevation": 3
+                "y": 13
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4135,9 +4207,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 42,
-                "y": 5,
-                "elevation": 3
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4157,9 +4233,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 48,
-                "y": 17,
-                "elevation": 3
+                "y": 17
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4179,9 +4259,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 45,
-                "y": 9,
-                "elevation": 3
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4201,9 +4285,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 45,
-                "y": 3,
-                "elevation": 3
+                "y": 3
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4223,9 +4311,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 23,
-                "y": 10,
-                "elevation": 3
+                "y": 10
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4245,9 +4337,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 45,
-                "y": 9,
-                "elevation": 3
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4267,9 +4363,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 42,
-                "y": 13,
-                "elevation": 3
+                "y": 13
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -4291,6 +4391,61 @@
       "name": "display_name",
       "type": "string",
       "value": "AquaHideout_B1F"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_AQUA_MAGMA_HIDEOUT"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_AQUA"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_AQUA_HIDEOUT"
     },
     {
       "name": "border",

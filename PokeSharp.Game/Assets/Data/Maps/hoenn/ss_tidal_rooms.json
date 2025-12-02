@@ -2011,9 +2011,13 @@
               "value": {
                 "map": "ss_tidal_corridor",
                 "x": 4,
-                "y": 9,
-                "elevation": 3
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2033,9 +2037,13 @@
               "value": {
                 "map": "ss_tidal_corridor",
                 "x": 4,
-                "y": 9,
-                "elevation": 3
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2055,9 +2063,13 @@
               "value": {
                 "map": "ss_tidal_corridor",
                 "x": 7,
-                "y": 9,
-                "elevation": 3
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2077,9 +2089,13 @@
               "value": {
                 "map": "ss_tidal_corridor",
                 "x": 7,
-                "y": 9,
-                "elevation": 3
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2099,9 +2115,13 @@
               "value": {
                 "map": "ss_tidal_corridor",
                 "x": 10,
-                "y": 9,
-                "elevation": 3
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2121,9 +2141,13 @@
               "value": {
                 "map": "ss_tidal_corridor",
                 "x": 10,
-                "y": 9,
-                "elevation": 3
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2143,9 +2167,13 @@
               "value": {
                 "map": "ss_tidal_corridor",
                 "x": 13,
-                "y": 9,
-                "elevation": 3
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2165,9 +2193,13 @@
               "value": {
                 "map": "ss_tidal_corridor",
                 "x": 13,
-                "y": 9,
-                "elevation": 3
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2187,9 +2219,13 @@
               "value": {
                 "map": "ss_tidal_corridor",
                 "x": 4,
-                "y": 3,
-                "elevation": 3
+                "y": 3
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2209,9 +2245,13 @@
               "value": {
                 "map": "ss_tidal_corridor",
                 "x": 7,
-                "y": 3,
-                "elevation": 3
+                "y": 3
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2231,9 +2271,13 @@
               "value": {
                 "map": "ss_tidal_corridor",
                 "x": 10,
-                "y": 3,
-                "elevation": 3
+                "y": 3
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2253,9 +2297,13 @@
               "value": {
                 "map": "ss_tidal_corridor",
                 "x": 13,
-                "y": 3,
-                "elevation": 3
+                "y": 3
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -2284,9 +2332,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SSTidalRooms_EventScript_Bed.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SSTidalRooms_EventScript_Bed.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2304,9 +2356,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SSTidalRooms_EventScript_Bed.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SSTidalRooms_EventScript_Bed.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -2328,6 +2384,61 @@
       "name": "display_name",
       "type": "string",
       "value": "SSTidalRooms"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_SAILING"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_DYNAMIC"
     },
     {
       "name": "border",

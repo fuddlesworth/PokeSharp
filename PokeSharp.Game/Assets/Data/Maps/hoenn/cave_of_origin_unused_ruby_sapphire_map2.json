@@ -1390,9 +1390,13 @@
               "value": {
                 "map": "cave_of_origin_unused_ruby_sapphire_map1",
                 "x": 5,
-                "y": 11,
-                "elevation": 3
+                "y": 11
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1412,9 +1416,13 @@
               "value": {
                 "map": "cave_of_origin_unused_ruby_sapphire_map3",
                 "x": 7,
-                "y": 14,
-                "elevation": 3
+                "y": 14
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -1436,6 +1444,61 @@
       "name": "display_name",
       "type": "string",
       "value": "CaveOfOrigin_UnusedRubySapphireMap2"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_CAVE_OF_ORIGIN"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_FOG_HORIZONTAL"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERGROUND"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_CAVE_OF_ORIGIN"
     },
     {
       "name": "border",

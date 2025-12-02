@@ -16867,9 +16867,13 @@
               "value": {
                 "map": "route119_weather_institute_1f",
                 "x": 9,
-                "y": 12,
-                "elevation": 0
+                "y": 12
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -16889,9 +16893,13 @@
               "value": {
                 "map": "route119_house",
                 "x": 3,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -16922,9 +16930,13 @@
               "value": {
                 "variable": "VAR_ROUTE119_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/Route119_EventScript_RivalTrigger1.csx",
-                "elevation": 0
+                "triggerScript": "Triggers/Route119_EventScript_RivalTrigger1.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -16944,9 +16956,13 @@
               "value": {
                 "variable": "VAR_ROUTE119_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/Route119_EventScript_RivalTrigger2.csx",
-                "elevation": 0
+                "triggerScript": "Triggers/Route119_EventScript_RivalTrigger2.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -16975,9 +16991,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route119_EventScript_WeatherInstituteSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route119_EventScript_WeatherInstituteSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -16995,9 +17015,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route119_EventScript_RouteSignFortree.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route119_EventScript_RouteSignFortree.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -17015,8 +17039,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_SHRUB1_1",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_SHRUB1_1"
               }
             }
           ]
@@ -17035,8 +17058,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_SHRUB1_2",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_SHRUB1_2"
               }
             }
           ]
@@ -17055,8 +17077,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_SHRUB2_1",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_SHRUB2_1"
               }
             }
           ]
@@ -17075,8 +17096,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_SHRUB2_2",
-                "elevation": 3
+                "secret_base_id": "SECRET_BASE_SHRUB2_2"
               }
             }
           ]
@@ -17095,8 +17115,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_SHRUB3_1",
-                "elevation": 3
+                "secret_base_id": "SECRET_BASE_SHRUB3_1"
               }
             }
           ]
@@ -17115,8 +17134,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_SHRUB4_1",
-                "elevation": 3
+                "secret_base_id": "SECRET_BASE_SHRUB4_1"
               }
             }
           ]
@@ -17135,8 +17153,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BLUE_CAVE3_3",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BLUE_CAVE3_3"
               }
             }
           ]
@@ -17155,8 +17172,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BLUE_CAVE4_3",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BLUE_CAVE4_3"
               }
             }
           ]
@@ -17176,8 +17192,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_CALCIUM",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_119_CALCIUM",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_119_CALCIUM"
               }
             }
           ]
@@ -17197,8 +17212,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_ULTRA_BALL",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_119_ULTRA_BALL",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_119_ULTRA_BALL"
               }
             }
           ]
@@ -17217,8 +17231,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_RED_CAVE3_3",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_RED_CAVE3_3"
               }
             }
           ]
@@ -17237,8 +17250,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_TREE2_3",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_TREE2_3"
               }
             }
           ]
@@ -17257,8 +17269,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_TREE4_3",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_TREE4_3"
               }
             }
           ]
@@ -17277,8 +17288,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_SHRUB3_3",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_SHRUB3_3"
               }
             }
           ]
@@ -17297,8 +17307,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_SHRUB4_3",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_SHRUB4_3"
               }
             }
           ]
@@ -17318,8 +17327,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_FULL_HEAL",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_119_FULL_HEAL",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_119_FULL_HEAL"
               }
             }
           ]
@@ -17339,8 +17347,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_MAX_ETHER",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_119_MAX_ETHER",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_119_MAX_ETHER"
               }
             }
           ]
@@ -17359,9 +17366,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route119_EventScript_TrainerTipsDecoration.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route119_EventScript_TrainerTipsDecoration.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -17383,6 +17394,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route119"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_ROUTE119"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_119"
     },
     {
       "name": "border",

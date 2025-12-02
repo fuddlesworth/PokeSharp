@@ -1267,9 +1267,13 @@
               "value": {
                 "variable": "VAR_ROUTE101_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/Route101_EventScript_StartBirchRescue.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route101_EventScript_StartBirchRescue.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1289,9 +1293,13 @@
               "value": {
                 "variable": "VAR_ROUTE101_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/Route101_EventScript_StartBirchRescue.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route101_EventScript_StartBirchRescue.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1311,9 +1319,13 @@
               "value": {
                 "variable": "VAR_ROUTE101_STATE",
                 "value": 2,
-                "triggerScript": "Triggers/Route101_EventScript_PreventExitSouth.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route101_EventScript_PreventExitSouth.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1333,9 +1345,13 @@
               "value": {
                 "variable": "VAR_ROUTE101_STATE",
                 "value": 2,
-                "triggerScript": "Triggers/Route101_EventScript_PreventExitSouth.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route101_EventScript_PreventExitSouth.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1355,9 +1371,13 @@
               "value": {
                 "variable": "VAR_ROUTE101_STATE",
                 "value": 2,
-                "triggerScript": "Triggers/Route101_EventScript_PreventExitWest.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route101_EventScript_PreventExitWest.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1377,9 +1397,13 @@
               "value": {
                 "variable": "VAR_ROUTE101_STATE",
                 "value": 2,
-                "triggerScript": "Triggers/Route101_EventScript_PreventExitWest.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route101_EventScript_PreventExitWest.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1399,9 +1423,13 @@
               "value": {
                 "variable": "VAR_ROUTE101_STATE",
                 "value": 2,
-                "triggerScript": "Triggers/Route101_EventScript_PreventExitWest.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route101_EventScript_PreventExitWest.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1421,9 +1449,13 @@
               "value": {
                 "variable": "VAR_ROUTE101_STATE",
                 "value": 2,
-                "triggerScript": "Triggers/Route101_EventScript_PreventExitWest.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route101_EventScript_PreventExitWest.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1443,9 +1475,13 @@
               "value": {
                 "variable": "VAR_ROUTE101_STATE",
                 "value": 2,
-                "triggerScript": "Triggers/Route101_EventScript_PreventExitNorth.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route101_EventScript_PreventExitNorth.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -1474,9 +1510,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route101_EventScript_RouteSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route101_EventScript_RouteSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -1498,6 +1538,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route101"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_ROUTE101"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_101"
     },
     {
       "name": "border",

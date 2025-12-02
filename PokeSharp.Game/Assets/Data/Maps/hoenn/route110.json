@@ -12067,9 +12067,13 @@
               "value": {
                 "map": "new_mauville_entrance",
                 "x": 4,
-                "y": 6,
-                "elevation": 3
+                "y": 6
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -12089,9 +12093,13 @@
               "value": {
                 "map": "route110_trick_house_entrance",
                 "x": 5,
-                "y": 7,
-                "elevation": 3
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12111,9 +12119,13 @@
               "value": {
                 "map": "route110_seaside_cycling_road_north_entrance",
                 "x": 1,
-                "y": 5,
-                "elevation": 0
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12133,9 +12145,13 @@
               "value": {
                 "map": "route110_seaside_cycling_road_north_entrance",
                 "x": 12,
-                "y": 5,
-                "elevation": 0
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12155,9 +12171,13 @@
               "value": {
                 "map": "route110_seaside_cycling_road_south_entrance",
                 "x": 1,
-                "y": 5,
-                "elevation": 0
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12177,9 +12197,13 @@
               "value": {
                 "map": "route110_seaside_cycling_road_south_entrance",
                 "x": 12,
-                "y": 5,
-                "elevation": 0
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -12210,9 +12234,13 @@
               "value": {
                 "variable": "VAR_CYCLING_CHALLENGE_STATE",
                 "value": 2,
-                "triggerScript": "Triggers/Route110_EventScript_CyclingChallengeEnd.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route110_EventScript_CyclingChallengeEnd.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -12232,9 +12260,13 @@
               "value": {
                 "variable": "VAR_CYCLING_CHALLENGE_STATE",
                 "value": 2,
-                "triggerScript": "Triggers/Route110_EventScript_CyclingChallengeEnd.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route110_EventScript_CyclingChallengeEnd.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -12254,9 +12286,13 @@
               "value": {
                 "variable": "VAR_ROUTE110_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/Route110_EventScript_RivalTrigger1.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route110_EventScript_RivalTrigger1.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -12276,9 +12312,13 @@
               "value": {
                 "variable": "VAR_ROUTE110_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/Route110_EventScript_RivalTrigger2.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route110_EventScript_RivalTrigger2.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -12298,9 +12338,13 @@
               "value": {
                 "variable": "VAR_ROUTE110_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/Route110_EventScript_RivalTrigger3.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route110_EventScript_RivalTrigger3.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -12320,9 +12364,13 @@
               "value": {
                 "variable": "VAR_REGISTER_BIRCH_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/Route110_EventScript_BirchScene1.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route110_EventScript_BirchScene1.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -12342,9 +12390,13 @@
               "value": {
                 "variable": "VAR_REGISTER_BIRCH_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/Route110_EventScript_BirchScene2.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route110_EventScript_BirchScene2.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -12364,9 +12416,13 @@
               "value": {
                 "variable": "VAR_REGISTER_BIRCH_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/Route110_EventScript_BirchScene3.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route110_EventScript_BirchScene3.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -12386,9 +12442,13 @@
               "value": {
                 "variable": "VAR_REGISTER_BIRCH_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/Route110_EventScript_BirchScene4.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route110_EventScript_BirchScene4.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -12417,9 +12477,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route110_EventScript_VandalizedSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route110_EventScript_VandalizedSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12437,9 +12501,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route110_EventScript_SeasideParkingSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route110_EventScript_SeasideParkingSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12457,9 +12525,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route110_EventScript_CyclingRoadSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route110_EventScript_CyclingRoadSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12477,9 +12549,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route110_EventScript_SlateportCitySign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route110_EventScript_SlateportCitySign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12497,9 +12573,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route110_EventScript_Route103Sign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route110_EventScript_Route103Sign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12517,9 +12597,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route110_EventScript_MauvilleCitySign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route110_EventScript_MauvilleCitySign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12537,8 +12621,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_TREE3_1",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_TREE3_1"
               }
             }
           ]
@@ -12557,8 +12640,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_TREE4_1",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_TREE4_1"
               }
             }
           ]
@@ -12577,9 +12659,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route110_EventScript_TrainerTipsPrlzSleep.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/Route110_EventScript_TrainerTipsPrlzSleep.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -12597,9 +12683,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route110_EventScript_TrainerTipsRegisterItems.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/Route110_EventScript_TrainerTipsRegisterItems.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -12617,9 +12707,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route110_EventScript_TrickHouseSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route110_EventScript_TrickHouseSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12637,9 +12731,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route110_EventScript_CyclingRoadResultsSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route110_EventScript_CyclingRoadResultsSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12658,8 +12756,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_REVIVE",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_110_REVIVE",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_110_REVIVE"
               }
             }
           ]
@@ -12679,8 +12776,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_GREAT_BALL",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_110_GREAT_BALL",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_110_GREAT_BALL"
               }
             }
           ]
@@ -12700,8 +12796,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_POKE_BALL",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_110_POKE_BALL",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_110_POKE_BALL"
               }
             }
           ]
@@ -12721,8 +12816,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_FULL_HEAL",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_110_FULL_HEAL",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_110_FULL_HEAL"
               }
             }
           ]
@@ -12741,9 +12835,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route110_EventScript_CyclingRoadSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route110_EventScript_CyclingRoadSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -12765,6 +12863,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route110"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_ROUTE110"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_110"
     },
     {
       "name": "border",

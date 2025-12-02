@@ -9667,9 +9667,13 @@
               "value": {
                 "map": "mossdeep_city_house1",
                 "x": 3,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9689,9 +9693,13 @@
               "value": {
                 "map": "mossdeep_city_gym",
                 "x": 6,
-                "y": 35,
-                "elevation": 3
+                "y": 35
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9711,9 +9719,13 @@
               "value": {
                 "map": "mossdeep_city_pokemon_center_1f",
                 "x": 7,
-                "y": 8,
-                "elevation": 3
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9733,9 +9745,13 @@
               "value": {
                 "map": "mossdeep_city_house2",
                 "x": 3,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9755,9 +9771,13 @@
               "value": {
                 "map": "mossdeep_city_mart",
                 "x": 3,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9777,9 +9797,13 @@
               "value": {
                 "map": "mossdeep_city_house3",
                 "x": 3,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9799,9 +9823,13 @@
               "value": {
                 "map": "mossdeep_city_stevens_house",
                 "x": 3,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9821,9 +9849,13 @@
               "value": {
                 "map": "mossdeep_city_house4",
                 "x": 3,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9843,9 +9875,13 @@
               "value": {
                 "map": "mossdeep_city_space_center_1f",
                 "x": 7,
-                "y": 9,
-                "elevation": 0
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9865,9 +9901,13 @@
               "value": {
                 "map": "mossdeep_city_game_corner_1f",
                 "x": 5,
-                "y": 9,
-                "elevation": 0
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -9898,9 +9938,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/MossdeepCity_EventScript_VisitedMossdeep.csx",
-                "elevation": 0
+                "triggerScript": "Triggers/MossdeepCity_EventScript_VisitedMossdeep.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9920,9 +9964,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/MossdeepCity_EventScript_VisitedMossdeep.csx",
-                "elevation": 0
+                "triggerScript": "Triggers/MossdeepCity_EventScript_VisitedMossdeep.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9942,9 +9990,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/MossdeepCity_EventScript_VisitedMossdeep.csx",
-                "elevation": 0
+                "triggerScript": "Triggers/MossdeepCity_EventScript_VisitedMossdeep.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9964,9 +10016,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/MossdeepCity_EventScript_VisitedMossdeep.csx",
-                "elevation": 0
+                "triggerScript": "Triggers/MossdeepCity_EventScript_VisitedMossdeep.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9986,9 +10042,13 @@
               "value": {
                 "variable": "VAR_MOSSDEEP_CITY_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/MossdeepCity_EventScript_TeamMagmaEnterSpaceCenter.csx",
-                "elevation": 5
+                "triggerScript": "Triggers/MossdeepCity_EventScript_TeamMagmaEnterSpaceCenter.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 5
             }
           ]
         },
@@ -10008,9 +10068,13 @@
               "value": {
                 "variable": "VAR_MOSSDEEP_CITY_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/MossdeepCity_EventScript_TeamMagmaEnterSpaceCenter.csx",
-                "elevation": 5
+                "triggerScript": "Triggers/MossdeepCity_EventScript_TeamMagmaEnterSpaceCenter.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 5
             }
           ]
         },
@@ -10030,9 +10094,13 @@
               "value": {
                 "variable": "VAR_MOSSDEEP_CITY_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/MossdeepCity_EventScript_TeamMagmaEnterSpaceCenter.csx",
-                "elevation": 5
+                "triggerScript": "Triggers/MossdeepCity_EventScript_TeamMagmaEnterSpaceCenter.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 5
             }
           ]
         },
@@ -10052,9 +10120,13 @@
               "value": {
                 "variable": "VAR_MOSSDEEP_CITY_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/MossdeepCity_EventScript_TeamMagmaEnterSpaceCenter.csx",
-                "elevation": 5
+                "triggerScript": "Triggers/MossdeepCity_EventScript_TeamMagmaEnterSpaceCenter.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 5
             }
           ]
         },
@@ -10074,9 +10146,13 @@
               "value": {
                 "variable": "VAR_MOSSDEEP_CITY_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/MossdeepCity_EventScript_TeamMagmaEnterSpaceCenter.csx",
-                "elevation": 5
+                "triggerScript": "Triggers/MossdeepCity_EventScript_TeamMagmaEnterSpaceCenter.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 5
             }
           ]
         },
@@ -10096,9 +10172,13 @@
               "value": {
                 "variable": "VAR_MOSSDEEP_CITY_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/MossdeepCity_EventScript_TeamMagmaEnterSpaceCenter.csx",
-                "elevation": 5
+                "triggerScript": "Triggers/MossdeepCity_EventScript_TeamMagmaEnterSpaceCenter.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 5
             }
           ]
         }
@@ -10127,9 +10207,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/MossdeepCity_EventScript_CitySign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/MossdeepCity_EventScript_CitySign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -10147,9 +10231,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/MossdeepCity_EventScript_GymSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/MossdeepCity_EventScript_GymSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -10168,9 +10256,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemonCenterSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -10189,9 +10281,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemartSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -10209,9 +10305,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/MossdeepCity_EventScript_SpaceCenterSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/MossdeepCity_EventScript_SpaceCenterSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -10230,9 +10330,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemonCenterSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -10251,9 +10355,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemartSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -10271,9 +10379,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/MossdeepCity_EventScript_WhiteRock.csx",
-                "elevation": 7
+                "interactionScript": "Interactions/MossdeepCity_EventScript_WhiteRock.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 7
             }
           ]
         }
@@ -10295,6 +10407,61 @@
       "name": "display_name",
       "type": "string",
       "value": "MossdeepCity"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_RUSTBORO"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_CITY"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_MOSSDEEP_CITY"
     },
     {
       "name": "border",

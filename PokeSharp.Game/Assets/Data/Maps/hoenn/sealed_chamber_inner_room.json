@@ -1516,9 +1516,13 @@
               "value": {
                 "map": "sealed_chamber_outer_room",
                 "x": 10,
-                "y": 2,
-                "elevation": 3
+                "y": 2
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -1547,9 +1551,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_InnerRoom_EventScript_BrailleBackWall.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_InnerRoom_EventScript_BrailleBackWall.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1567,9 +1575,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_InnerRoom_EventScript_BrailleStoryPart1.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_InnerRoom_EventScript_BrailleStoryPart1.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1587,9 +1599,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_InnerRoom_EventScript_BrailleStoryPart2.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_InnerRoom_EventScript_BrailleStoryPart2.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1607,9 +1623,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_InnerRoom_EventScript_BrailleStoryPart3.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_InnerRoom_EventScript_BrailleStoryPart3.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1627,9 +1647,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_InnerRoom_EventScript_BrailleStoryPart4.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_InnerRoom_EventScript_BrailleStoryPart4.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1647,9 +1671,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_InnerRoom_EventScript_BrailleStoryPart5.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_InnerRoom_EventScript_BrailleStoryPart5.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1667,9 +1695,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_InnerRoom_EventScript_BrailleStoryPart6.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_InnerRoom_EventScript_BrailleStoryPart6.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1687,9 +1719,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_InnerRoom_EventScript_BrailleBackWall.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_InnerRoom_EventScript_BrailleBackWall.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1707,9 +1743,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/SealedChamber_InnerRoom_EventScript_BrailleBackWall.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/SealedChamber_InnerRoom_EventScript_BrailleBackWall.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -1731,6 +1771,61 @@
       "name": "display_name",
       "type": "string",
       "value": "SealedChamber_InnerRoom"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_SEALED_CHAMBER"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERGROUND"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_SEALED_CHAMBER"
     },
     {
       "name": "border",

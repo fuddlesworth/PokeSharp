@@ -7627,9 +7627,13 @@
               "value": {
                 "map": "route109_seashore_house",
                 "x": 6,
-                "y": 9,
-                "elevation": 0
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -7658,9 +7662,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route109_EventScript_SeashoreHouseSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route109_EventScript_SeashoreHouseSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -7678,9 +7686,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route109_EventScript_TrainerTipsSign.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/Route109_EventScript_TrainerTipsSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -7699,8 +7711,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_REVIVE",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_109_REVIVE",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_109_REVIVE"
               }
             }
           ]
@@ -7720,8 +7731,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_HEART_SCALE",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_109_HEART_SCALE_1",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_109_HEART_SCALE_1"
               }
             }
           ]
@@ -7741,8 +7751,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_GREAT_BALL",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_109_GREAT_BALL",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_109_GREAT_BALL"
               }
             }
           ]
@@ -7762,8 +7771,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_ETHER",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_109_ETHER",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_109_ETHER"
               }
             }
           ]
@@ -7783,8 +7791,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_HEART_SCALE",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_109_HEART_SCALE_2",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_109_HEART_SCALE_2"
               }
             }
           ]
@@ -7804,8 +7811,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_HEART_SCALE",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_109_HEART_SCALE_3",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_109_HEART_SCALE_3"
               }
             }
           ]
@@ -7828,6 +7834,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route109"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_ROUTE104"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_109"
     },
     {
       "name": "border",

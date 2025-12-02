@@ -1183,9 +1183,13 @@
               "value": {
                 "map": "lilycove_city",
                 "x": 23,
-                "y": 24,
-                "elevation": 0
+                "y": 24
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1205,9 +1209,13 @@
               "value": {
                 "map": "lilycove_city",
                 "x": 23,
-                "y": 24,
-                "elevation": 0
+                "y": 24
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1227,9 +1235,13 @@
               "value": {
                 "map": "lilycove_city_contest_hall",
                 "x": 19,
-                "y": 32,
-                "elevation": 0
+                "y": 32
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1249,9 +1261,13 @@
               "value": {
                 "map": "lilycove_city_contest_hall",
                 "x": 30,
-                "y": 32,
-                "elevation": 0
+                "y": 32
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -1280,9 +1296,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/BerryBlender_EventScript_BerryBlenderLink.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/BerryBlender_EventScript_BerryBlenderLink.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1300,9 +1320,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/BerryBlender_EventScript_BerryBlender3.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/BerryBlender_EventScript_BerryBlender3.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1320,9 +1344,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_ContestWinner4.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_ContestWinner4.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1340,9 +1368,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_ContestWinner5.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_ContestWinner5.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1360,9 +1392,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_ContestWinner6.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_ContestWinner6.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1380,9 +1416,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_BerryBlenderSpeedRecords.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_BerryBlenderSpeedRecords.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1400,9 +1440,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_ContestWinner1.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_ContestWinner1.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1420,9 +1464,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_ContestWinner2.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_ContestWinner2.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1440,9 +1488,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_ContestWinner3.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_ContestWinner3.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1460,9 +1512,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/BerryBlender_EventScript_BerryBlender1.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/BerryBlender_EventScript_BerryBlender1.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1480,9 +1536,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/BerryBlender_EventScript_BerryBlender2.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/BerryBlender_EventScript_BerryBlender2.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1500,9 +1560,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_LinkContestResults.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_LinkContestResults.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -1524,6 +1588,61 @@
       "name": "display_name",
       "type": "string",
       "value": "LilycoveCity_ContestLobby"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_CONTEST_LOBBY"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_LILYCOVE_CITY"
     },
     {
       "name": "border",

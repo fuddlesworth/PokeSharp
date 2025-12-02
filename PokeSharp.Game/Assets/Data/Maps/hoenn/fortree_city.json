@@ -2467,9 +2467,13 @@
               "value": {
                 "map": "fortree_city_pokemon_center_1f",
                 "x": 7,
-                "y": 8,
-                "elevation": 3
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2489,9 +2493,13 @@
               "value": {
                 "map": "fortree_city_house1",
                 "x": 3,
-                "y": 5,
-                "elevation": 0
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2511,9 +2519,13 @@
               "value": {
                 "map": "fortree_city_gym",
                 "x": 15,
-                "y": 24,
-                "elevation": 0
+                "y": 24
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2533,9 +2545,13 @@
               "value": {
                 "map": "fortree_city_mart",
                 "x": 3,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2555,9 +2571,13 @@
               "value": {
                 "map": "fortree_city_house2",
                 "x": 3,
-                "y": 5,
-                "elevation": 0
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2577,9 +2597,13 @@
               "value": {
                 "map": "fortree_city_house3",
                 "x": 3,
-                "y": 5,
-                "elevation": 0
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2599,9 +2623,13 @@
               "value": {
                 "map": "fortree_city_house4",
                 "x": 3,
-                "y": 5,
-                "elevation": 0
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2621,9 +2649,13 @@
               "value": {
                 "map": "fortree_city_house5",
                 "x": 3,
-                "y": 5,
-                "elevation": 0
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2643,9 +2675,13 @@
               "value": {
                 "map": "fortree_city_decoration_shop",
                 "x": 3,
-                "y": 5,
-                "elevation": 0
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -2674,9 +2710,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/FortreeCity_EventScript_CitySign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/FortreeCity_EventScript_CitySign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2695,9 +2735,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemonCenterSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2716,9 +2760,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemartSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2736,9 +2784,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/FortreeCity_EventScript_GymSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/FortreeCity_EventScript_GymSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2757,9 +2809,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemonCenterSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2778,9 +2834,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemartSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -2802,6 +2862,61 @@
       "name": "display_name",
       "type": "string",
       "value": "FortreeCity"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_FORTREE"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_CITY"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_FORTREE_CITY"
     },
     {
       "name": "border",

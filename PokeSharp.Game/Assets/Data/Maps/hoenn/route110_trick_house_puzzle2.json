@@ -1057,9 +1057,13 @@
               "value": {
                 "map": "route110_trick_house_entrance",
                 "x": 5,
-                "y": 2,
-                "elevation": 3
+                "y": 2
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1079,9 +1083,13 @@
               "value": {
                 "map": "route110_trick_house_entrance",
                 "x": 5,
-                "y": 2,
-                "elevation": 3
+                "y": 2
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1101,9 +1109,13 @@
               "value": {
                 "map": "route110_trick_house_end",
                 "x": 10,
-                "y": 1,
-                "elevation": 3
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -1134,9 +1146,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/Route110_TrickHousePuzzle2_EventScript_Button1.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route110_TrickHousePuzzle2_EventScript_Button1.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1156,9 +1172,13 @@
               "value": {
                 "variable": "VAR_TEMP_2",
                 "value": 0,
-                "triggerScript": "Triggers/Route110_TrickHousePuzzle2_EventScript_Button2.csx",
-                "elevation": 0
+                "triggerScript": "Triggers/Route110_TrickHousePuzzle2_EventScript_Button2.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1178,9 +1198,13 @@
               "value": {
                 "variable": "VAR_TEMP_3",
                 "value": 0,
-                "triggerScript": "Triggers/Route110_TrickHousePuzzle2_EventScript_Button3.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route110_TrickHousePuzzle2_EventScript_Button3.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1200,9 +1224,13 @@
               "value": {
                 "variable": "VAR_TEMP_4",
                 "value": 0,
-                "triggerScript": "Triggers/Route110_TrickHousePuzzle2_EventScript_Button4.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route110_TrickHousePuzzle2_EventScript_Button4.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -1231,9 +1259,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route110_TrickHousePuzzle2_EventScript_Scroll.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route110_TrickHousePuzzle2_EventScript_Scroll.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -1255,6 +1287,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route110_TrickHousePuzzle2"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_TRICK_HOUSE"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_110"
     },
     {
       "name": "border",

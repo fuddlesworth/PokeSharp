@@ -526,9 +526,13 @@
               "value": {
                 "map": "dewford_town",
                 "x": 3,
-                "y": 3,
-                "elevation": 0
+                "y": 3
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -548,9 +552,13 @@
               "value": {
                 "map": "dewford_town",
                 "x": 3,
-                "y": 3,
-                "elevation": 0
+                "y": 3
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -579,9 +587,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/DewfordTown_Hall_EventScript_Bookshelf.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/DewfordTown_Hall_EventScript_Bookshelf.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -599,9 +611,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/DewfordTown_Hall_EventScript_Painting.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/DewfordTown_Hall_EventScript_Painting.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -623,6 +639,61 @@
       "name": "display_name",
       "type": "string",
       "value": "DewfordTown_Hall"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_DEWFORD"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_DEWFORD_TOWN"
     },
     {
       "name": "border",

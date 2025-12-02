@@ -3667,9 +3667,13 @@
               "value": {
                 "map": "route117_pokemon_day_care",
                 "x": 2,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -3698,9 +3702,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route117_EventScript_RouteSignVerdanturf.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route117_EventScript_RouteSignVerdanturf.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -3718,9 +3726,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route117_EventScript_RouteSignMauville.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route117_EventScript_RouteSignMauville.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -3738,9 +3750,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route117_EventScript_DayCareSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route117_EventScript_DayCareSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -3759,8 +3775,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_REPEL",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_117_REPEL",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_117_REPEL"
               }
             }
           ]
@@ -3783,6 +3798,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route117"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_ROUTE110"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_117"
     },
     {
       "name": "border",

@@ -5707,9 +5707,13 @@
               "value": {
                 "map": "mt_chimney_cable_car_station",
                 "x": 6,
-                "y": 11,
-                "elevation": 0
+                "y": 11
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -5729,9 +5733,13 @@
               "value": {
                 "map": "mt_chimney_cable_car_station",
                 "x": 7,
-                "y": 11,
-                "elevation": 0
+                "y": 11
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -5751,9 +5759,13 @@
               "value": {
                 "map": "jagged_pass",
                 "x": 13,
-                "y": 5,
-                "elevation": 3
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5773,9 +5785,13 @@
               "value": {
                 "map": "jagged_pass",
                 "x": 14,
-                "y": 5,
-                "elevation": 3
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -5804,9 +5820,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/MtChimney_EventScript_MeteoriteMachine.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/MtChimney_EventScript_MeteoriteMachine.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -5824,9 +5844,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/MtChimney_EventScript_RouteSign.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/MtChimney_EventScript_RouteSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -5848,6 +5872,61 @@
       "name": "display_name",
       "type": "string",
       "value": "MtChimney"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_MT_CHIMNEY"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_VOLCANIC_ASH"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_MT_CHIMNEY"
     },
     {
       "name": "border",

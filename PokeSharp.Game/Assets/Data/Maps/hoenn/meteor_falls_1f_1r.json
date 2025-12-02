@@ -3847,9 +3847,13 @@
               "value": {
                 "map": "route114",
                 "x": 8,
-                "y": 63,
-                "elevation": 0
+                "y": 63
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 4
             }
           ]
         },
@@ -3869,9 +3873,13 @@
               "value": {
                 "map": "route115",
                 "x": 27,
-                "y": 37,
-                "elevation": 0
+                "y": 37
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3891,9 +3899,13 @@
               "value": {
                 "map": "meteor_falls_1f_2r",
                 "x": 10,
-                "y": 29,
-                "elevation": 3
+                "y": 29
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3913,9 +3925,13 @@
               "value": {
                 "map": "meteor_falls_b1f_1r",
                 "x": 3,
-                "y": 23,
-                "elevation": 5
+                "y": 23
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3935,9 +3951,13 @@
               "value": {
                 "map": "meteor_falls_b1f_1r",
                 "x": 20,
-                "y": 36,
-                "elevation": 3
+                "y": 36
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3957,9 +3977,13 @@
               "value": {
                 "map": "meteor_falls_stevens_cave",
                 "x": 10,
-                "y": 29,
-                "elevation": 3
+                "y": 29
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -3990,9 +4014,13 @@
               "value": {
                 "variable": "VAR_METEOR_FALLS_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/MeteorFalls_1F_1R_EventScript_MagmaStealsMeteoriteScene.csx",
-                "elevation": 4
+                "triggerScript": "Triggers/MeteorFalls_1F_1R_EventScript_MagmaStealsMeteoriteScene.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 4
             }
           ]
         }
@@ -4021,9 +4049,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/0x0.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/0x0.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -4045,6 +4077,61 @@
       "name": "display_name",
       "type": "string",
       "value": "MeteorFalls_1F_1R"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_CAVE_OF_ORIGIN"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERGROUND"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_METEOR_FALLS"
     },
     {
       "name": "border",

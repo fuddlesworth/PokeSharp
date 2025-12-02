@@ -3235,9 +3235,13 @@
               "value": {
                 "map": "underwater_route134",
                 "x": 8,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -3266,9 +3270,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Underwater_SealedChamber_EventScript_Braille.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Underwater_SealedChamber_EventScript_Braille.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -3290,6 +3298,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Underwater_SealedChamber"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_UNDERWATER"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_UNDERWATER_BUBBLES"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERWATER"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_UNDERWATER_SEALED_CHAMBER"
     },
     {
       "name": "border",

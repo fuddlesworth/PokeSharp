@@ -4867,9 +4867,13 @@
               "value": {
                 "map": "terra_cave_entrance",
                 "x": 8,
-                "y": 18,
-                "elevation": 0
+                "y": 18
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -4889,9 +4893,13 @@
               "value": {
                 "map": "terra_cave_entrance",
                 "x": 8,
-                "y": 18,
-                "elevation": 0
+                "y": 18
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -4922,9 +4930,13 @@
               "value": {
                 "variable": "VAR_ROUTE118_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/Route118_EventScript_StevenTrigger0.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route118_EventScript_StevenTrigger0.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4944,9 +4956,13 @@
               "value": {
                 "variable": "VAR_ROUTE118_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/Route118_EventScript_StevenTrigger1.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route118_EventScript_StevenTrigger1.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4966,9 +4982,13 @@
               "value": {
                 "variable": "VAR_ROUTE118_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/Route118_EventScript_StevenTrigger2.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route118_EventScript_StevenTrigger2.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -4997,8 +5017,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_RED_CAVE1_1",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_RED_CAVE1_1"
               }
             }
           ]
@@ -5017,9 +5036,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route118_EventScript_RouteSignMauville.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route118_EventScript_RouteSignMauville.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -5037,9 +5060,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route118_EventScript_RouteSign119.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route118_EventScript_RouteSign119.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -5057,8 +5084,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_RED_CAVE2_1",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_RED_CAVE2_1"
               }
             }
           ]
@@ -5077,8 +5103,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_YELLOW_CAVE1_2",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_YELLOW_CAVE1_2"
               }
             }
           ]
@@ -5097,8 +5122,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_TREE1_3",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_TREE1_3"
               }
             }
           ]
@@ -5117,8 +5141,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_TREE2_1",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_TREE2_1"
               }
             }
           ]
@@ -5138,8 +5161,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_IRON",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_118_IRON",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_118_IRON"
               }
             }
           ]
@@ -5159,8 +5181,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_HEART_SCALE",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_118_HEART_SCALE",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_118_HEART_SCALE"
               }
             }
           ]
@@ -5183,6 +5204,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route118"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_ROUTE118"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_118"
     },
     {
       "name": "border",

@@ -9667,9 +9667,13 @@
               "value": {
                 "map": "lilycove_city_department_store_1f",
                 "x": 8,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9689,9 +9693,13 @@
               "value": {
                 "map": "lilycove_city_cove_lily_motel_1f",
                 "x": 5,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9711,9 +9719,13 @@
               "value": {
                 "map": "lilycove_city_pokemon_center_1f",
                 "x": 7,
-                "y": 8,
-                "elevation": 3
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9733,9 +9745,13 @@
               "value": {
                 "map": "lilycove_city_lilycove_museum_1f",
                 "x": 9,
-                "y": 13,
-                "elevation": 0
+                "y": 13
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9755,9 +9771,13 @@
               "value": {
                 "map": "lilycove_city_contest_lobby",
                 "x": 14,
-                "y": 11,
-                "elevation": 0
+                "y": 11
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9777,9 +9797,13 @@
               "value": {
                 "map": "lilycove_city_pokemon_trainer_fan_club",
                 "x": 5,
-                "y": 13,
-                "elevation": 0
+                "y": 13
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9799,9 +9823,13 @@
               "value": {
                 "map": "aqua_hideout_1f",
                 "x": 13,
-                "y": 27,
-                "elevation": 1
+                "y": 27
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 1
             }
           ]
         },
@@ -9821,9 +9849,13 @@
               "value": {
                 "map": "lilycove_city_move_deleters_house",
                 "x": 3,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9843,9 +9875,13 @@
               "value": {
                 "map": "lilycove_city_house1",
                 "x": 3,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9865,9 +9901,13 @@
               "value": {
                 "map": "lilycove_city_house2",
                 "x": 2,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9887,9 +9927,13 @@
               "value": {
                 "map": "lilycove_city_house3",
                 "x": 3,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9909,9 +9953,13 @@
               "value": {
                 "map": "lilycove_city_house4",
                 "x": 3,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9931,9 +9979,13 @@
               "value": {
                 "map": "lilycove_city_harbor",
                 "x": 11,
-                "y": 14,
-                "elevation": 0
+                "y": 14
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9953,9 +10005,13 @@
               "value": {
                 "map": "lilycove_city_lilycove_museum_1f",
                 "x": 10,
-                "y": 13,
-                "elevation": 0
+                "y": 13
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -9984,9 +10040,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_EventScript_MuseumSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_EventScript_MuseumSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -10005,9 +10065,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemonCenterSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -10025,9 +10089,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_EventScript_DepartmentStoreSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_EventScript_DepartmentStoreSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -10046,9 +10114,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemonCenterSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -10066,9 +10138,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_EventScript_CitySign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_EventScript_CitySign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -10086,9 +10162,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_EventScript_ContestHallSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_EventScript_ContestHallSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -10106,9 +10186,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_EventScript_MotelSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_EventScript_MotelSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -10126,9 +10210,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_EventScript_HarborSign.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/LilycoveCity_EventScript_HarborSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -10146,9 +10234,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_EventScript_TrainerFanClubSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_EventScript_TrainerFanClubSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -10166,9 +10258,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LilycoveCity_EventScript_MoveDeletersHouseSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LilycoveCity_EventScript_MoveDeletersHouseSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -10187,8 +10283,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_HEART_SCALE",
-                "flag": "FLAG_HIDDEN_ITEM_LILYCOVE_CITY_HEART_SCALE",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_LILYCOVE_CITY_HEART_SCALE"
               }
             }
           ]
@@ -10208,8 +10303,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_PP_UP",
-                "flag": "FLAG_HIDDEN_ITEM_LILYCOVE_CITY_PP_UP",
-                "elevation": 0
+                "flag": "FLAG_HIDDEN_ITEM_LILYCOVE_CITY_PP_UP"
               }
             }
           ]
@@ -10229,8 +10323,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_POKE_BALL",
-                "flag": "FLAG_HIDDEN_ITEM_LILYCOVE_CITY_POKE_BALL",
-                "elevation": 0
+                "flag": "FLAG_HIDDEN_ITEM_LILYCOVE_CITY_POKE_BALL"
               }
             }
           ]
@@ -10253,6 +10346,61 @@
       "name": "display_name",
       "type": "string",
       "value": "LilycoveCity"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_LILYCOVE"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_CITY"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_LILYCOVE_CITY"
     },
     {
       "name": "border",

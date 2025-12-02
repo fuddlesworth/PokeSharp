@@ -445,9 +445,13 @@
               "value": {
                 "variable": "VAR_TEMP_0",
                 "value": 0,
-                "triggerScript": "Triggers/EventScript_BattleColosseum_4P_PlayerSpot0.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/EventScript_BattleColosseum_4P_PlayerSpot0.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -467,9 +471,13 @@
               "value": {
                 "variable": "VAR_TEMP_0",
                 "value": 0,
-                "triggerScript": "Triggers/EventScript_BattleColosseum_4P_PlayerSpot2.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/EventScript_BattleColosseum_4P_PlayerSpot2.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -489,9 +497,13 @@
               "value": {
                 "variable": "VAR_TEMP_0",
                 "value": 0,
-                "triggerScript": "Triggers/EventScript_BattleColosseum_4P_PlayerSpot1.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/EventScript_BattleColosseum_4P_PlayerSpot1.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -511,9 +523,13 @@
               "value": {
                 "variable": "VAR_TEMP_0",
                 "value": 0,
-                "triggerScript": "Triggers/EventScript_BattleColosseum_4P_PlayerSpot3.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/EventScript_BattleColosseum_4P_PlayerSpot3.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -535,6 +551,61 @@
       "name": "display_name",
       "type": "string",
       "value": "BattleColosseum_4P"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_EVER_GRANDE"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_FRONTIER"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_DYNAMIC"
     },
     {
       "name": "border",

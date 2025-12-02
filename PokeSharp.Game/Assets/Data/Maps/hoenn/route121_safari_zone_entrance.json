@@ -823,9 +823,13 @@
               "value": {
                 "map": "safari_zone_south",
                 "x": 32,
-                "y": 33,
-                "elevation": 0
+                "y": 33
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -845,9 +849,13 @@
               "value": {
                 "map": "safari_zone_south",
                 "x": 32,
-                "y": 33,
-                "elevation": 0
+                "y": 33
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -867,9 +875,13 @@
               "value": {
                 "map": "route121",
                 "x": 37,
-                "y": 5,
-                "elevation": 0
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -889,9 +901,13 @@
               "value": {
                 "map": "route121",
                 "x": 37,
-                "y": 5,
-                "elevation": 0
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -922,9 +938,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/Route121_SafariZoneEntrance_EventScript_EntranceCounterTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route121_SafariZoneEntrance_EventScript_EntranceCounterTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -953,9 +973,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route121_SafariZoneEntrance_EventScript_TrainerTipSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route121_SafariZoneEntrance_EventScript_TrainerTipSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -977,6 +1001,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route121_SafariZoneEntrance"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_FORTREE"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_121"
     },
     {
       "name": "border",

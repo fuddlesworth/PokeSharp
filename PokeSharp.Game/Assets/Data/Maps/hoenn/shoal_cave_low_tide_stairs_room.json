@@ -1012,9 +1012,13 @@
               "value": {
                 "map": "shoal_cave_low_tide_inner_room",
                 "x": 38,
-                "y": 15,
-                "elevation": 3
+                "y": 15
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1034,9 +1038,13 @@
               "value": {
                 "map": "shoal_cave_low_tide_inner_room",
                 "x": 42,
-                "y": 4,
-                "elevation": 3
+                "y": 4
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -1065,9 +1073,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/ShoalCave_LowTideStairsRoom_EventScript_ShoalSalt3.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/ShoalCave_LowTideStairsRoom_EventScript_ShoalSalt3.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -1089,6 +1101,61 @@
       "name": "display_name",
       "type": "string",
       "value": "ShoalCave_LowTideStairsRoom"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_MT_PYRE"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERGROUND"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_SHOAL_CAVE"
     },
     {
       "name": "border",

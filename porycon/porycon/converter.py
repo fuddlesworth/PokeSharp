@@ -7,8 +7,8 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple, Set
 from PIL import Image
 from .metatile import (
-    extract_metatile_id, extract_elevation,
-    convert_metatile_to_tile_layers, MetatileLayerType,
+    extract_metatile_id,
+    MetatileLayerType,
     NUM_TILES_PER_METATILE
 )
 from .utils import load_json, save_json, sanitize_filename, camel_to_snake, TilesetPathResolver
@@ -82,14 +82,6 @@ class MapConverter:
         """
         return self.map_reader.read_metatile_attributes(tileset_name)
     
-    def load_metatiles(self, tileset_name: str) -> List[int]:
-        """
-        Load metatiles array (list of tile IDs, 8 per metatile).
-        
-        Delegates to MapReader.
-        """
-        return self.map_reader.read_metatiles(tileset_name)
-    
     def load_metatiles_with_attributes(self, tileset_name: str) -> List[Tuple[int, int, int]]:
         """
         Load metatiles with full tile attributes (tile_id, flip_flags, palette_index).
@@ -97,428 +89,6 @@ class MapConverter:
         Delegates to MapReader.
         """
         return self.map_reader.read_metatiles_with_attributes(tileset_name)
-    
-    def convert_map(
-        self,
-        map_data: Dict[str, Any],
-        layout_data: Dict[str, Any],
-        region: str
-    ) -> Optional[Dict[str, Any]]:
-        """
-        Convert a single map to Tiled format.
-        
-        Returns:
-            Tiled map JSON structure
-        """
-        layout_id = map_data.get("layout", "")
-        if not layout_id or layout_id not in layout_data:
-            logger.warning(f"Layout {layout_id} not found in layout_data")
-            return None
-        
-        layout = layout_data[layout_id]
-        map_bin = layout.get("map_bin")
-        if not map_bin:
-            logger.warning(f"No map_bin path for layout {layout_id}")
-            return None
-        
-        map_bin_path = Path(map_bin)
-        if not map_bin_path.exists():
-            logger.warning(f"map.bin not found at {map_bin_path} (resolved from {map_bin})")
-            return None
-        
-        # Read map data
-        width = layout["width"]
-        height = layout["height"]
-        
-        try:
-            map_entries = self.map_reader.read_map_bin(map_bin_path, width, height)
-        except Exception as e:
-            logger.error(f"Error reading map.bin at {map_bin_path}: {e}", exc_info=True)
-            return None
-        
-        # Load tilesets
-        primary_tileset = self._get_tileset_name(layout["primary_tileset"])
-        secondary_tileset = self._get_tileset_name(layout["secondary_tileset"])
-        
-        # Load metatiles with full attributes (tile_id, flip, palette)
-        primary_metatiles_with_attrs = self.load_metatiles_with_attributes(primary_tileset)
-        secondary_metatiles_with_attrs = self.load_metatiles_with_attributes(secondary_tileset)
-        
-        # Also load simple metatiles for backward compatibility
-        primary_metatiles = self.load_metatiles(primary_tileset)
-        secondary_metatiles = self.load_metatiles(secondary_tileset)
-        primary_attributes = self.load_metatile_attributes(primary_tileset)
-        secondary_attributes = self.load_metatile_attributes(secondary_tileset)
-        
-        if not primary_metatiles or len(primary_metatiles) == 0:
-            logger.error(f"Could not load metatiles for {primary_tileset}")
-            return None
-        
-        # Convert metatiles to tile layers
-        tile_width = width * 2  # Each metatile is 2x2 tiles
-        tile_height = height * 2
-        
-        # Three BG layers
-        bg3_data = [0] * (tile_width * tile_height)  # Bottom layer
-        bg2_data = [0] * (tile_width * tile_height)   # Middle layer
-        bg1_data = [0] * (tile_width * tile_height)  # Top layer
-        
-        # Track which tileset each tile belongs to for remapping
-        # Format: (tile_id, tileset_name) tuples, or just tile_id if we can infer tileset
-        # We'll store this as metadata in the map
-        bg3_tilesets = [None] * (tile_width * tile_height)
-        bg2_tilesets = [None] * (tile_width * tile_height)
-        bg1_tilesets = [None] * (tile_width * tile_height)
-        
-        # Track used tiles for tileset building
-        used_primary_tiles = set()
-        used_secondary_tiles = set()
-        used_primary_tiles_with_palettes = set()  # (tile_id, palette_index)
-        used_secondary_tiles_with_palettes = set()  # (tile_id, palette_index)
-        
-        # Store palette info for each tile position (for remapping)
-        bg3_palettes = [0] * (tile_width * tile_height)
-        bg2_palettes = [0] * (tile_width * tile_height)
-        bg1_palettes = [0] * (tile_width * tile_height)
-        
-        # Process each metatile
-        for y in range(height):
-            for x in range(width):
-                entry = map_entries[y][x]
-                metatile_id = extract_metatile_id(entry)
-                elevation = extract_elevation(entry)
-                
-                # Determine which tileset
-                if metatile_id < NUM_METATILES_IN_PRIMARY:
-                    metatiles = primary_metatiles
-                    attributes = primary_attributes
-                    tileset_name = primary_tileset
-                else:
-                    metatiles = secondary_metatiles
-                    attributes = secondary_attributes
-                    tileset_name = secondary_tileset
-                    metatile_id -= NUM_METATILES_IN_PRIMARY
-                
-                # Get layer type
-                layer_type_val = attributes.get(metatile_id, 0)
-                layer_type = MetatileLayerType(layer_type_val)
-                
-                # Convert metatile to tile layers with palette info
-                # Use metatiles with attributes if available, otherwise fall back to simple metatiles
-                metatiles_with_attrs = None
-                if tileset_name == primary_tileset and primary_metatiles_with_attrs and len(primary_metatiles_with_attrs) > 0:
-                    metatiles_with_attrs = primary_metatiles_with_attrs
-                elif tileset_name == secondary_tileset and secondary_metatiles_with_attrs and len(secondary_metatiles_with_attrs) > 0:
-                    metatiles_with_attrs = secondary_metatiles_with_attrs
-                
-                if metatiles_with_attrs and len(metatiles_with_attrs) > 0:
-                    from .metatile import convert_metatile_to_tile_layers_with_attrs
-                    bg3_tiles, bg2_tiles, bg1_tiles = convert_metatile_to_tile_layers_with_attrs(
-                        metatile_id, metatiles_with_attrs, layer_type, x, y, width
-                    )
-                else:
-                    # Fallback to simple conversion (no palette info)
-                    # This happens if metatiles_with_attrs is None or empty
-                    bg3_tiles, bg2_tiles, bg1_tiles = convert_metatile_to_tile_layers(
-                        metatile_id, metatiles, layer_type, x, y, width
-                    )
-                    # Convert to (tile_id, palette=0) format
-                    bg3_tiles = {(k[0], k[1]): (v, 0) for k, v in bg3_tiles.items()}
-                    bg2_tiles = {(k[0], k[1]): (v, 0) for k, v in bg2_tiles.items()}
-                    bg1_tiles = {(k[0], k[1]): (v, 0) for k, v in bg1_tiles.items()}
-                
-                # Helper function to determine which tileset a tile ID belongs to
-                # Use processor method
-                def get_tile_tileset(tile_id: int, current_tileset_name: str) -> Tuple[str, int]:
-                    """Returns (tileset_name, adjusted_tile_id)"""
-                    return self.metatile_processor.determine_tileset_for_tile(
-                        tile_id, current_tileset_name, primary_tileset, secondary_tileset
-                    )
-                
-                # Apply tiles to layer data arrays
-                # Helper to add tile to correct used_tiles set (with palette)
-                def add_used_tile_with_palette(tile_id: int, palette_index: int, tileset_name_for_tile: str):
-                    """Add (tile_id, palette) to the correct used_tiles set based on which tileset it belongs to."""
-                    # Explicit routing logic to prevent bugs:
-                    # - If from primary metatile: always goes to primary
-                    # - If from secondary metatile:
-                    #   - tile_id < NUM_TILES_IN_PRIMARY_VRAM: goes to PRIMARY (references primary tileset)
-                    #   - tile_id >= NUM_TILES_IN_PRIMARY_VRAM: goes to SECONDARY (offset by NUM_TILES_IN_PRIMARY_VRAM)
-                    if tileset_name_for_tile == primary_tileset:
-                        # Primary metatile: all tiles go to primary
-                        used_primary_tiles.add(tile_id)
-                        used_primary_tiles_with_palettes.add((tile_id, palette_index))
-                    else:
-                        # Secondary metatile: route based on tile_id
-                        if tile_id < NUM_TILES_IN_PRIMARY_VRAM:
-                            # Tile IDs 0-511 reference PRIMARY tileset
-                            used_primary_tiles.add(tile_id)
-                            used_primary_tiles_with_palettes.add((tile_id, palette_index))
-                        else:
-                            # Tile IDs 512+ reference SECONDARY tileset (offset by NUM_TILES_IN_PRIMARY_VRAM)
-                            adjusted_id = tile_id - NUM_TILES_IN_PRIMARY_VRAM
-                            used_secondary_tiles.add(adjusted_id)
-                            used_secondary_tiles_with_palettes.add((adjusted_id, palette_index))
-                
-                # Process bg3_tiles (now contains (tile_id, palette) tuples)
-                for (tx, ty), tile_data in bg3_tiles.items():
-                    if isinstance(tile_data, tuple):
-                        tile_id, palette_index = tile_data
-                    else:
-                        # Fallback for old format
-                        tile_id = tile_data
-                        palette_index = 0
-                    
-                    if 0 <= tx < tile_width and 0 <= ty < tile_height:
-                        idx = ty * tile_width + tx
-                        actual_tileset, adjusted_tile_id = get_tile_tileset(tile_id, tileset_name)
-                        bg3_data[idx] = adjusted_tile_id  # Store adjusted ID for map
-                        bg3_tilesets[idx] = actual_tileset  # Store tileset name for remapping
-                        bg3_palettes[idx] = palette_index  # Store palette index
-                        add_used_tile_with_palette(tile_id, palette_index, tileset_name)
-                
-                # Process bg2_tiles
-                for (tx, ty), tile_data in bg2_tiles.items():
-                    if isinstance(tile_data, tuple):
-                        tile_id, palette_index = tile_data
-                    else:
-                        tile_id = tile_data
-                        palette_index = 0
-                    
-                    if 0 <= tx < tile_width and 0 <= ty < tile_height:
-                        idx = ty * tile_width + tx
-                        actual_tileset, adjusted_tile_id = get_tile_tileset(tile_id, tileset_name)
-                        bg2_data[idx] = adjusted_tile_id
-                        bg2_tilesets[idx] = actual_tileset
-                        bg2_palettes[idx] = palette_index
-                        add_used_tile_with_palette(tile_id, palette_index, tileset_name)
-                
-                # Process bg1_tiles
-                for (tx, ty), tile_data in bg1_tiles.items():
-                    if isinstance(tile_data, tuple):
-                        tile_id, palette_index = tile_data
-                    else:
-                        tile_id = tile_data
-                        palette_index = 0
-                    
-                    if 0 <= tx < tile_width and 0 <= ty < tile_height:
-                        idx = ty * tile_width + tx
-                        actual_tileset, adjusted_tile_id = get_tile_tileset(tile_id, tileset_name)
-                        bg1_data[idx] = adjusted_tile_id
-                        bg1_tilesets[idx] = actual_tileset
-                        bg1_palettes[idx] = palette_index
-                        add_used_tile_with_palette(tile_id, palette_index, tileset_name)
-        
-        # Get maximum tile IDs for each tileset to validate tile IDs
-        primary_max_tile = self._get_max_tile_id(primary_tileset)
-        secondary_max_tile = self._get_max_tile_id(secondary_tileset)
-        
-        # Debug: Check for invalid tile IDs and trace their origin
-        if primary_max_tile is not None:
-            invalid_primary = {tid for tid in used_primary_tiles if tid > primary_max_tile}
-            if invalid_primary:
-                # This shouldn't happen - primary tiles should always be valid
-                logger.error(f"Found {len(invalid_primary)} invalid tile IDs in {primary_tileset}: {sorted(list(invalid_primary))[:10]}... (max: {primary_max_tile})")
-                logger.error("This indicates a bug in tile ID routing logic!")
-            used_primary_tiles = {tid for tid in used_primary_tiles if 0 <= tid <= primary_max_tile}
-        
-        if secondary_max_tile is not None:
-            invalid_secondary = {tid for tid in used_secondary_tiles if tid > secondary_max_tile}
-            if invalid_secondary:
-                # Check if these are actually primary tileset tiles that got misrouted
-                # Tile IDs < 512 in secondary metatiles should go to primary, not secondary
-                misrouted = {tid for tid in invalid_secondary if tid < 512}
-                if misrouted:
-                    # This is the bug - tile IDs < 512 should never be in secondary_tiles
-                    # They should have been routed to primary by get_tile_tileset
-                    logger.warning(f"Moving {len(misrouted)} misrouted tile IDs from {secondary_tileset} to {primary_tileset}: {sorted(list(misrouted))[:10]}...")
-                    logger.warning("These tile IDs (< 512) from secondary metatiles should reference primary tileset!")
-                    # Move them to primary
-                    used_primary_tiles.update(misrouted)
-                    used_secondary_tiles = {tid for tid in used_secondary_tiles if tid not in misrouted}
-                
-                # Check remaining invalid IDs (these are >= 512 but out of bounds for secondary)
-                remaining_invalid = {tid for tid in used_secondary_tiles if tid > secondary_max_tile}
-                if remaining_invalid:
-                    logger.warning(f"Filtering {len(remaining_invalid)} invalid tile IDs from {secondary_tileset}: {sorted(list(remaining_invalid))[:10]}... (max: {secondary_max_tile})")
-                used_secondary_tiles = {tid for tid in used_secondary_tiles if 0 <= tid <= secondary_max_tile}
-        
-        # Record used tiles (for backward compatibility)
-        self.tileset_builder.add_tiles(primary_tileset, list(used_primary_tiles))
-        self.tileset_builder.add_tiles(secondary_tileset, list(used_secondary_tiles))
-        
-        # Record used tiles with palettes (for palette-aware tileset building)
-        if used_primary_tiles_with_palettes:
-            unique_palettes = set(p[1] for p in used_primary_tiles_with_palettes)
-            logger.debug(f"Recording {len(used_primary_tiles_with_palettes)} tiles with palettes for {primary_tileset}, unique palettes: {sorted(unique_palettes)}")
-        if used_secondary_tiles_with_palettes:
-            unique_palettes = set(p[1] for p in used_secondary_tiles_with_palettes)
-            logger.debug(f"Recording {len(used_secondary_tiles_with_palettes)} tiles with palettes for {secondary_tileset}, unique palettes: {sorted(unique_palettes)}")
-        
-        self.tileset_builder.add_tiles_with_palettes(primary_tileset, list(used_primary_tiles_with_palettes))
-        self.tileset_builder.add_tiles_with_palettes(secondary_tileset, list(used_secondary_tiles_with_palettes))
-        
-        # Record the primary/secondary tileset relationship
-        self.tileset_builder.record_tileset_relationship(primary_tileset, secondary_tileset)
-        
-        # Create Tiled map structure
-        tiled_map = {
-            "compressionlevel": -1,
-            "height": tile_height,
-            "infinite": False,
-            "layers": [],
-            "nextlayerid": 1,
-            "nextobjectid": 1,
-            "orientation": "orthogonal",
-            "renderorder": "right-down",
-            "tiledversion": "1.11.2",
-            "tileheight": 8,  # Pokemon uses 8x8 tiles
-            "tilewidth": 8,
-            "type": "map",
-            "version": "1.11",
-            "width": tile_width,
-            "properties": []
-        }
-        
-        # Add properties from map_data
-        if "name" in map_data:
-            tiled_map["properties"].append({
-                "name": "displayName",
-                "type": "string",
-                "value": map_data["name"]
-            })
-        
-        if "region_map_section" in map_data:
-            tiled_map["properties"].append({
-                "name": "region",
-                "type": "string",
-                "value": region
-            })
-        
-        # Add other properties...
-        for key in ["music", "weather", "map_type", "show_map_name", "can_fly"]:
-            if key in map_data:
-                value = map_data[key]
-                prop_type = "bool" if isinstance(value, bool) else "string"
-                tiled_map["properties"].append({
-                    "name": key,
-                    "type": prop_type,
-                    "value": value
-                })
-        
-        # Add BG layers (in reverse order: Bg3, Bg2, Bg1)
-        # Store tileset and palette info as custom properties for remapping
-        layer_id = 1
-        for layer_name, layer_data, layer_tilesets, layer_palettes in [
-            ("Ground", bg3_data, bg3_tilesets, bg3_palettes),
-            ("Objects", bg2_data, bg2_tilesets, bg2_palettes),
-            ("Overhead", bg1_data, bg1_tilesets, bg1_palettes)
-        ]:
-            # Store tileset and palette info as properties (we'll use this during remapping)
-            layer_obj = {
-                "data": layer_data,
-                "height": tile_height,
-                "id": layer_id,
-                "name": layer_name,
-                "opacity": 1,
-                "type": "tilelayer",
-                "visible": True,
-                "width": tile_width,
-                "x": 0,
-                "y": 0,
-                "properties": [
-                    {
-                        "name": "_tileset_info",
-                        "type": "string",
-                        "value": json.dumps(layer_tilesets)  # Store as JSON string
-                    },
-                    {
-                        "name": "_palette_info",
-                        "type": "string",
-                        "value": json.dumps(layer_palettes)  # Store palette indices
-                    }
-                ]
-            }
-            tiled_map["layers"].append(layer_obj)
-            layer_id += 1
-        
-        # Add tilesets
-        # Note: We'll need to update tile IDs after tilesets are built
-        # For now, use relative paths
-        tilesets = []
-        first_gid = 1
-        
-        # Primary tileset
-        tilesets.append({
-            "firstgid": first_gid,
-            "source": self.tileset_builder.get_tileset_path(primary_tileset, region)
-        })
-        
-        # Secondary tileset (if different and used)
-        if secondary_tileset != primary_tileset and used_secondary_tiles:
-            # Calculate firstgid for secondary (after primary)
-            primary_tilecount = len(used_primary_tiles) if used_primary_tiles else 1
-            first_gid += primary_tilecount
-            tilesets.append({
-                "firstgid": first_gid,
-                "source": self.tileset_builder.get_tileset_path(secondary_tileset, region)
-            })
-        
-        tiled_map["tilesets"] = tilesets
-        
-        # Add object layer for NPCs, warps, etc.
-        objects_layer = {
-            "id": layer_id,
-            "name": "Objects",
-            "objects": [],
-            "opacity": 1,
-            "type": "objectgroup",
-            "visible": True,
-            "x": 0,
-            "y": 0
-        }
-        
-        # Convert object events
-        object_id = 1
-        for obj in map_data.get("object_events", []):
-            objects_layer["objects"].append({
-                "id": object_id,
-                "name": f"NPC_{object_id}",
-                "type": "npc",
-                "x": obj.get("x", 0) * 8,  # Convert to pixels
-                "y": obj.get("y", 0) * 8,
-                "width": 16,
-                "height": 16,
-                "properties": [
-                    {"name": "elevation", "type": "int", "value": obj.get("elevation", 3)},
-                    {"name": "graphics_id", "type": "string", "value": obj.get("graphics_id", "")},
-                ]
-            })
-            object_id += 1
-        
-        # Convert warp events
-        for warp in map_data.get("warp_events", []):
-            objects_layer["objects"].append({
-                "id": object_id,
-                "name": f"Warp_{object_id}",
-                "type": "warp_event",
-                "x": warp.get("x", 0) * 8,
-                "y": warp.get("y", 0) * 8,
-                "width": 8,
-                "height": 8,
-                "properties": [
-                    {"name": "elevation", "type": "int", "value": warp.get("elevation", 0)},
-                    {"name": "dest_map", "type": "string", "value": warp.get("dest_map", "")},
-                    {"name": "dest_warp_id", "type": "string", "value": str(warp.get("dest_warp_id", "0"))},
-                ]
-            })
-            object_id += 1
-        
-        if objects_layer["objects"]:
-            tiled_map["layers"].append(objects_layer)
-            tiled_map["nextobjectid"] = object_id
-        
-        return tiled_map
     
     def remap_map_tiles(self, map_path: Path, tile_mappings: Dict[str, Dict[Tuple[int, int], int]]) -> bool:
         """
@@ -1302,6 +872,39 @@ class MapConverter:
                 "value": map_data["name"]
             })
         
+        # Add region property (extracted from region_map_section or defaults to "hoenn")
+        tiled_map["properties"].append({
+            "name": "region",
+            "type": "string",
+            "value": region
+        })
+        
+        # Add other properties from pokeemerald map.json
+        # Map pokeemerald property names to Tiled property names (camelCase)
+        property_mapping = {
+            "music": "music",
+            "weather": "weather",
+            "map_type": "mapType",
+            "show_map_name": "showMapName",
+            "can_fly": "canFly",
+            "requires_flash": "requiresFlash",
+            "allow_cycling": "allowCycling",
+            "allow_escaping": "allowEscaping",
+            "allow_running": "allowRunning",
+            "battle_scene": "battleScene",
+            "region_map_section": "regionMapSection"
+        }
+        
+        for pokeemerald_key, tiled_key in property_mapping.items():
+            if pokeemerald_key in map_data:
+                value = map_data[pokeemerald_key]
+                prop_type = "bool" if isinstance(value, bool) else "string"
+                tiled_map["properties"].append({
+                    "name": tiled_key,
+                    "type": prop_type,
+                    "value": value
+                })
+        
         # Add border tiles as property if available (using translated GIDs and Border class type)
         # Now includes both bottom layer (ground) and top layer (overhead) tiles
         if border_gids and len(border_gids) >= 4:
@@ -1478,10 +1081,10 @@ class MapConverter:
                                 "value": {
                                     "map": dest_map_name,
                                     "x": dest_x,
-                                    "y": dest_y,
-                                    "elevation": dest_elevation
+                                    "y": dest_y
                                 }
-                            }
+                            },
+                            {"name": "elevation", "type": "int", "value": source_elevation}
                         ]
                     }
                     warp_objects.append(warp_obj)
@@ -1551,10 +1154,10 @@ class MapConverter:
                             "value": {
                                 "variable": var,
                                 "value": var_value_int,
-                                "triggerScript": trigger_script_path,
-                                "elevation": elevation
+                                "triggerScript": trigger_script_path
                             }
-                        }
+                        },
+                        {"name": "elevation", "type": "int", "value": elevation}
                     ]
                 }
                 coord_objects.append(coord_obj)
@@ -1622,8 +1225,7 @@ class MapConverter:
                     
                     # Build value object
                     sign_value = {
-                        "interactionScript": interaction_script_path,
-                        "elevation": elevation
+                        "interactionScript": interaction_script_path
                     }
                     # Only include facing if it's not None (i.e., not "Any")
                     if facing is not None:
@@ -1643,7 +1245,8 @@ class MapConverter:
                                 "propertytype": "SignEvent",
                                 "type": "class",
                                 "value": sign_value
-                            }
+                            },
+                            {"name": "elevation", "type": "int", "value": elevation}
                         ]
                     }
                     bg_objects.append(bg_obj)
@@ -1671,8 +1274,7 @@ class MapConverter:
                                 "type": "class",
                                 "value": {
                                     "item": item,
-                                    "flag": flag,
-                                    "elevation": elevation
+                                    "flag": flag
                                 }
                             }
                         ]
@@ -1700,8 +1302,7 @@ class MapConverter:
                                 "propertytype": "SecretBaseEvent",
                                 "type": "class",
                                 "value": {
-                                    "secret_base_id": secret_base_id,
-                                    "elevation": elevation
+                                    "secret_base_id": secret_base_id
                                 }
                             }
                         ]

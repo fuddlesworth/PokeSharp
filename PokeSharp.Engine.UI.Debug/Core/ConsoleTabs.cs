@@ -10,8 +10,8 @@ public static class ConsoleTabs
 {
     // Tab definitions
     public static readonly TabDefinition Console = new(0, "Console", ["console", "con"], Keys.D1);
-    public static readonly TabDefinition Watch = new(1, "Watch", ["watch", "w"], Keys.D2);
-    public static readonly TabDefinition Logs = new(2, "Logs", ["logs", "log", "l"], Keys.D3);
+    public static readonly TabDefinition Logs = new(1, "Logs", ["logs", "log", "l"], Keys.D2);
+    public static readonly TabDefinition Watch = new(2, "Watch", ["watch", "w"], Keys.D3);
 
     public static readonly TabDefinition Variables = new(
         3,
@@ -47,8 +47,8 @@ public static class ConsoleTabs
     public static readonly IReadOnlyList<TabDefinition> All = new[]
     {
         Console,
-        Watch,
         Logs,
+        Watch,
         Variables,
         Entities,
         Profiler,

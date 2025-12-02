@@ -5617,9 +5617,13 @@
               "value": {
                 "map": "mt_pyre_exterior",
                 "x": 19,
-                "y": 10,
-                "elevation": 3
+                "y": 10
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5639,9 +5643,13 @@
               "value": {
                 "map": "mt_pyre_exterior",
                 "x": 19,
-                "y": 10,
-                "elevation": 3
+                "y": 10
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5661,9 +5669,13 @@
               "value": {
                 "map": "mt_pyre_exterior",
                 "x": 19,
-                "y": 10,
-                "elevation": 3
+                "y": 10
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -5694,9 +5706,13 @@
               "value": {
                 "variable": "VAR_MT_PYRE_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/MtPyre_Summit_EventScript_TeamAquaTrigger0.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/MtPyre_Summit_EventScript_TeamAquaTrigger0.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5716,9 +5732,13 @@
               "value": {
                 "variable": "VAR_MT_PYRE_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/MtPyre_Summit_EventScript_TeamAquaTrigger1.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/MtPyre_Summit_EventScript_TeamAquaTrigger1.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5738,9 +5758,13 @@
               "value": {
                 "variable": "VAR_MT_PYRE_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/MtPyre_Summit_EventScript_TeamAquaTrigger2.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/MtPyre_Summit_EventScript_TeamAquaTrigger2.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5760,9 +5784,13 @@
               "value": {
                 "variable": "VAR_MT_PYRE_STATE",
                 "value": 2,
-                "triggerScript": "Triggers/MtPyre_Summit_EventScript_ArchieMaxieTrigger0.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/MtPyre_Summit_EventScript_ArchieMaxieTrigger0.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5782,9 +5810,13 @@
               "value": {
                 "variable": "VAR_MT_PYRE_STATE",
                 "value": 2,
-                "triggerScript": "Triggers/MtPyre_Summit_EventScript_ArchieMaxieTrigger1.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/MtPyre_Summit_EventScript_ArchieMaxieTrigger1.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5804,9 +5836,13 @@
               "value": {
                 "variable": "VAR_MT_PYRE_STATE",
                 "value": 2,
-                "triggerScript": "Triggers/MtPyre_Summit_EventScript_ArchieMaxieTrigger2.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/MtPyre_Summit_EventScript_ArchieMaxieTrigger2.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -5836,8 +5872,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_ZINC",
-                "flag": "FLAG_HIDDEN_ITEM_MT_PYRE_SUMMIT_ZINC",
-                "elevation": 0
+                "flag": "FLAG_HIDDEN_ITEM_MT_PYRE_SUMMIT_ZINC"
               }
             }
           ]
@@ -5857,8 +5892,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_RARE_CANDY",
-                "flag": "FLAG_HIDDEN_ITEM_MT_PYRE_SUMMIT_RARE_CANDY",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_MT_PYRE_SUMMIT_RARE_CANDY"
               }
             }
           ]
@@ -5881,6 +5915,61 @@
       "name": "display_name",
       "type": "string",
       "value": "MtPyre_Summit"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_MT_PYRE_EXTERIOR"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_FOG_HORIZONTAL"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_MT_PYRE"
     },
     {
       "name": "border",

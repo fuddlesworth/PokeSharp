@@ -4207,9 +4207,13 @@
               "value": {
                 "map": "route112",
                 "x": 6,
-                "y": 46,
-                "elevation": 3
+                "y": 46
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4229,9 +4233,13 @@
               "value": {
                 "map": "route112",
                 "x": 7,
-                "y": 46,
-                "elevation": 3
+                "y": 46
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4251,9 +4259,13 @@
               "value": {
                 "map": "mt_chimney",
                 "x": 20,
-                "y": 41,
-                "elevation": 3
+                "y": 41
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4273,9 +4285,13 @@
               "value": {
                 "map": "mt_chimney",
                 "x": 21,
-                "y": 41,
-                "elevation": 3
+                "y": 41
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4295,9 +4311,13 @@
               "value": {
                 "map": "magma_hideout_1f",
                 "x": 10,
-                "y": 34,
-                "elevation": 3
+                "y": 34
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -4328,9 +4348,13 @@
               "value": {
                 "variable": "VAR_JAGGED_PASS_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/JaggedPass_EventScript_OpenMagmaHideout.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/JaggedPass_EventScript_OpenMagmaHideout.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4350,9 +4374,13 @@
               "value": {
                 "variable": "VAR_JAGGED_PASS_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/JaggedPass_EventScript_OpenMagmaHideout.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/JaggedPass_EventScript_OpenMagmaHideout.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4372,9 +4400,13 @@
               "value": {
                 "variable": "VAR_JAGGED_PASS_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/JaggedPass_EventScript_OpenMagmaHideout.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/JaggedPass_EventScript_OpenMagmaHideout.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4394,9 +4426,13 @@
               "value": {
                 "variable": "VAR_JAGGED_PASS_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/JaggedPass_EventScript_OpenMagmaHideout.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/JaggedPass_EventScript_OpenMagmaHideout.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4416,9 +4452,13 @@
               "value": {
                 "variable": "VAR_JAGGED_PASS_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/JaggedPass_EventScript_OpenMagmaHideout.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/JaggedPass_EventScript_OpenMagmaHideout.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -4448,8 +4488,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_FULL_HEAL",
-                "flag": "FLAG_HIDDEN_ITEM_JAGGED_PASS_FULL_HEAL",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_JAGGED_PASS_FULL_HEAL"
               }
             }
           ]
@@ -4469,8 +4508,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_GREAT_BALL",
-                "flag": "FLAG_HIDDEN_ITEM_JAGGED_PASS_GREAT_BALL",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_JAGGED_PASS_GREAT_BALL"
               }
             }
           ]
@@ -4493,6 +4531,61 @@
       "name": "display_name",
       "type": "string",
       "value": "JaggedPass"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_PETALBURG_WOODS"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_JAGGED_PASS"
     },
     {
       "name": "border",

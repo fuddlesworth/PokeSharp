@@ -12067,9 +12067,13 @@
               "value": {
                 "map": "ancient_tomb",
                 "x": 8,
-                "y": 29,
-                "elevation": 3
+                "y": 29
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12089,9 +12093,13 @@
               "value": {
                 "map": "scorched_slab",
                 "x": 7,
-                "y": 16,
-                "elevation": 1
+                "y": 16
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 1
             }
           ]
         }
@@ -12120,9 +12128,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route120_EventScript_RouteSignFortree.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/Route120_EventScript_RouteSignFortree.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -12140,9 +12152,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route120_EventScript_RouteSign121.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/Route120_EventScript_RouteSign121.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -12160,8 +12176,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BLUE_CAVE3_1",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BLUE_CAVE3_1"
               }
             }
           ]
@@ -12180,8 +12195,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BLUE_CAVE4_1",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BLUE_CAVE4_1"
               }
             }
           ]
@@ -12200,8 +12214,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_SHRUB3_2",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_SHRUB3_2"
               }
             }
           ]
@@ -12220,8 +12233,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_SHRUB4_2",
-                "elevation": 5
+                "secret_base_id": "SECRET_BASE_SHRUB4_2"
               }
             }
           ]
@@ -12240,8 +12252,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BLUE_CAVE2_3",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BLUE_CAVE2_3"
               }
             }
           ]
@@ -12260,8 +12271,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_SHRUB1_3",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_SHRUB1_3"
               }
             }
           ]
@@ -12280,8 +12290,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_SHRUB2_3",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_SHRUB2_3"
               }
             }
           ]
@@ -12301,8 +12310,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_RARE_CANDY",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_120_RARE_CANDY_1",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_120_RARE_CANDY_1"
               }
             }
           ]
@@ -12322,8 +12330,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_REVIVE",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_120_REVIVE",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_120_REVIVE"
               }
             }
           ]
@@ -12343,8 +12350,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_RARE_CANDY",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_120_RARE_CANDY_2",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_120_RARE_CANDY_2"
               }
             }
           ]
@@ -12364,8 +12370,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_ZINC",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_120_ZINC",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_120_ZINC"
               }
             }
           ]
@@ -12384,8 +12389,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_SHRUB1_4",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_SHRUB1_4"
               }
             }
           ]
@@ -12408,6 +12412,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route120"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_ROUTE120"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_120"
     },
     {
       "name": "border",

@@ -2329,9 +2329,13 @@
               "value": {
                 "map": "faraway_island_entrance",
                 "x": 22,
-                "y": 7,
-                "elevation": 3
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2351,9 +2355,13 @@
               "value": {
                 "map": "faraway_island_entrance",
                 "x": 23,
-                "y": 7,
-                "elevation": 3
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -2375,6 +2383,61 @@
       "name": "display_name",
       "type": "string",
       "value": "FarawayIsland_Interior"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_ABANDONED_SHIP"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SHADE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_FARAWAY_ISLAND"
     },
     {
       "name": "border",

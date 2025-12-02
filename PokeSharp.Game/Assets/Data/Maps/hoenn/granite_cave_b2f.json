@@ -2563,9 +2563,13 @@
               "value": {
                 "map": "granite_cave_b1f",
                 "x": 29,
-                "y": 13,
-                "elevation": 3
+                "y": 13
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2585,9 +2589,13 @@
               "value": {
                 "map": "granite_cave_b1f",
                 "x": 28,
-                "y": 21,
-                "elevation": 3
+                "y": 21
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2607,9 +2615,13 @@
               "value": {
                 "map": "granite_cave_b1f",
                 "x": 8,
-                "y": 5,
-                "elevation": 3
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2629,9 +2641,13 @@
               "value": {
                 "map": "granite_cave_b1f",
                 "x": 12,
-                "y": 3,
-                "elevation": 3
+                "y": 3
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2651,9 +2667,13 @@
               "value": {
                 "map": "granite_cave_b1f",
                 "x": 29,
-                "y": 2,
-                "elevation": 3
+                "y": 2
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -2683,8 +2703,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_EVERSTONE",
-                "flag": "FLAG_HIDDEN_ITEM_GRANITE_CAVE_B2F_EVERSTONE_1",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_GRANITE_CAVE_B2F_EVERSTONE_1"
               }
             }
           ]
@@ -2704,8 +2723,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_EVERSTONE",
-                "flag": "FLAG_HIDDEN_ITEM_GRANITE_CAVE_B2F_EVERSTONE_2",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_GRANITE_CAVE_B2F_EVERSTONE_2"
               }
             }
           ]
@@ -2728,6 +2746,61 @@
       "name": "display_name",
       "type": "string",
       "value": "GraniteCave_B2F"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_PETALBURG_WOODS"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERGROUND"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_GRANITE_CAVE"
     },
     {
       "name": "border",

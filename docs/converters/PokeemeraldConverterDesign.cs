@@ -36,7 +36,8 @@ namespace PokeSharp.Tools.Converters
     /// Converts Pokemon species data from pokeemerald C structs to PokeSharp JSON.
     /// Source: pokeemerald/src/data/pokemon/species_info.h (SpeciesInfo struct)
     /// </summary>
-    public interface IPokemonDataConverter : IDataConverter<EmeraldSpeciesInfo, PokemonSpeciesTemplate>
+    public interface IPokemonDataConverter
+        : IDataConverter<EmeraldSpeciesInfo, PokemonSpeciesTemplate>
     {
         /// <summary>Parse SpeciesInfo from C struct definition</summary>
         EmeraldSpeciesInfo ParseSpeciesInfo(string cStructText, int speciesId);
@@ -101,7 +102,9 @@ namespace PokeSharp.Tools.Converters
         IEnumerable<WarpEvent> ConvertWarps(IEnumerable<EmeraldWarpEvent> warps);
 
         /// <summary>Convert script triggers</summary>
-        IEnumerable<ScriptTrigger> ConvertScriptTriggers(IEnumerable<EmeraldCoordEvent> coordEvents);
+        IEnumerable<ScriptTrigger> ConvertScriptTriggers(
+            IEnumerable<EmeraldCoordEvent> coordEvents
+        );
 
         /// <summary>Convert background events (signs, hidden items)</summary>
         IEnumerable<BackgroundEvent> ConvertBgEvents(IEnumerable<EmeraldBgEvent> bgEvents);

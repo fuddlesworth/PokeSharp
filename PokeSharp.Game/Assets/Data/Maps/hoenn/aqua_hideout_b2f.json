@@ -2515,9 +2515,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 18,
-                "y": 1,
-                "elevation": 3
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2537,9 +2541,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 12,
-                "y": 1,
-                "elevation": 3
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2559,9 +2567,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 3,
-                "y": 3,
-                "elevation": 3
+                "y": 3
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2581,9 +2593,13 @@
               "value": {
                 "map": "aqua_hideout_b2f",
                 "x": 5,
-                "y": 8,
-                "elevation": 3
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2603,9 +2619,13 @@
               "value": {
                 "map": "aqua_hideout_b2f",
                 "x": 31,
-                "y": 17,
-                "elevation": 3
+                "y": 17
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2625,9 +2645,13 @@
               "value": {
                 "map": "aqua_hideout_b2f",
                 "x": 31,
-                "y": 8,
-                "elevation": 3
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2647,9 +2671,13 @@
               "value": {
                 "map": "aqua_hideout_b2f",
                 "x": 12,
-                "y": 13,
-                "elevation": 3
+                "y": 13
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2669,9 +2697,13 @@
               "value": {
                 "map": "aqua_hideout_b2f",
                 "x": 18,
-                "y": 13,
-                "elevation": 3
+                "y": 13
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2691,9 +2723,13 @@
               "value": {
                 "map": "aqua_hideout_b2f",
                 "x": 8,
-                "y": 8,
-                "elevation": 3
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2713,9 +2749,13 @@
               "value": {
                 "map": "aqua_hideout_b1f",
                 "x": 31,
-                "y": 4,
-                "elevation": 3
+                "y": 4
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -2746,9 +2786,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/AquaHideout_B2F_EventScript_MattNoticePlayer.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/AquaHideout_B2F_EventScript_MattNoticePlayer.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2768,9 +2812,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/AquaHideout_B2F_EventScript_MattNoticePlayer.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/AquaHideout_B2F_EventScript_MattNoticePlayer.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -2792,6 +2840,61 @@
       "name": "display_name",
       "type": "string",
       "value": "AquaHideout_B2F"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_AQUA_MAGMA_HIDEOUT"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_AQUA"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_AQUA_HIDEOUT"
     },
     {
       "name": "border",

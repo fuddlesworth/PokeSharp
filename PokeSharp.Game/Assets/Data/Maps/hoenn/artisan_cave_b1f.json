@@ -7519,9 +7519,13 @@
               "value": {
                 "map": "battle_frontier_outside_west",
                 "x": 39,
-                "y": 55,
-                "elevation": 0
+                "y": 55
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -7541,9 +7545,13 @@
               "value": {
                 "map": "artisan_cave_1f",
                 "x": 6,
-                "y": 5,
-                "elevation": 0
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -7573,8 +7581,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_ZINC",
-                "flag": "FLAG_HIDDEN_ITEM_ARTISAN_CAVE_B1F_ZINC",
-                "elevation": 0
+                "flag": "FLAG_HIDDEN_ITEM_ARTISAN_CAVE_B1F_ZINC"
               }
             }
           ]
@@ -7594,8 +7601,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_CALCIUM",
-                "flag": "FLAG_HIDDEN_ITEM_ARTISAN_CAVE_B1F_CALCIUM",
-                "elevation": 0
+                "flag": "FLAG_HIDDEN_ITEM_ARTISAN_CAVE_B1F_CALCIUM"
               }
             }
           ]
@@ -7615,8 +7621,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_PROTEIN",
-                "flag": "FLAG_HIDDEN_ITEM_ARTISAN_CAVE_B1F_PROTEIN",
-                "elevation": 0
+                "flag": "FLAG_HIDDEN_ITEM_ARTISAN_CAVE_B1F_PROTEIN"
               }
             }
           ]
@@ -7636,8 +7641,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_IRON",
-                "flag": "FLAG_HIDDEN_ITEM_ARTISAN_CAVE_B1F_IRON",
-                "elevation": 0
+                "flag": "FLAG_HIDDEN_ITEM_ARTISAN_CAVE_B1F_IRON"
               }
             }
           ]
@@ -7660,6 +7664,61 @@
       "name": "display_name",
       "type": "string",
       "value": "ArtisanCave_B1F"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_PETALBURG_WOODS"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERGROUND"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ARTISAN_CAVE"
     },
     {
       "name": "border",

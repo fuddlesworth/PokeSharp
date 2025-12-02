@@ -574,9 +574,13 @@
               "value": {
                 "map": "littleroot_town",
                 "x": 7,
-                "y": 16,
-                "elevation": 0
+                "y": 16
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -596,9 +600,13 @@
               "value": {
                 "map": "littleroot_town",
                 "x": 7,
-                "y": 16,
-                "elevation": 0
+                "y": 16
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -628,9 +636,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_Machine.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -649,9 +661,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_Machine.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -669,9 +685,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_Book.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_Book.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -689,9 +709,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_Book.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_Book.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -709,9 +733,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -729,9 +757,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -749,9 +781,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -769,9 +805,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -789,9 +829,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -809,9 +853,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_PC.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_PC.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -829,9 +877,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_PC.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_PC.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -849,9 +901,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_PC.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_PC.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -869,9 +925,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_PC.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_PC.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -889,9 +949,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_PC.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_PC.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -909,9 +973,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_PC.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LittlerootTown_ProfessorBirchsLab_EventScript_PC.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -933,6 +1001,61 @@
       "name": "display_name",
       "type": "string",
       "value": "LittlerootTown_ProfessorBirchsLab"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_BIRCH_LAB"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_LITTLEROOT_TOWN"
     },
     {
       "name": "border",

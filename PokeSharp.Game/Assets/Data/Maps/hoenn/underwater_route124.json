@@ -19266,8 +19266,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_CARBOS",
-                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_124_CARBOS",
-                "elevation": 0
+                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_124_CARBOS"
               }
             }
           ]
@@ -19287,8 +19286,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_GREEN_SHARD",
-                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_124_GREEN_SHARD",
-                "elevation": 0
+                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_124_GREEN_SHARD"
               }
             }
           ]
@@ -19308,8 +19306,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_PEARL",
-                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_124_PEARL",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_124_PEARL"
               }
             }
           ]
@@ -19329,8 +19326,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_BIG_PEARL",
-                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_124_BIG_PEARL",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_124_BIG_PEARL"
               }
             }
           ]
@@ -19350,8 +19346,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_HEART_SCALE",
-                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_124_HEART_SCALE_1",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_124_HEART_SCALE_1"
               }
             }
           ]
@@ -19371,8 +19366,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_CALCIUM",
-                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_124_CALCIUM",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_124_CALCIUM"
               }
             }
           ]
@@ -19392,8 +19386,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_HEART_SCALE",
-                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_124_HEART_SCALE_2",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_124_HEART_SCALE_2"
               }
             }
           ]
@@ -19416,6 +19409,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Underwater_Route124"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_UNDERWATER"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_UNDERWATER_BUBBLES"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERWATER"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_UNDERWATER_124"
     },
     {
       "name": "border",

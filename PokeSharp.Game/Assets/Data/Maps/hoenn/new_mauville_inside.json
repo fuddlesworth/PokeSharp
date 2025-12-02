@@ -5110,9 +5110,13 @@
               "value": {
                 "map": "new_mauville_entrance",
                 "x": 4,
-                "y": 1,
-                "elevation": 3
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -5143,9 +5147,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/NewMauville_Inside_EventScript_BlueButton.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/NewMauville_Inside_EventScript_BlueButton.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5165,9 +5173,13 @@
               "value": {
                 "variable": "VAR_TEMP_2",
                 "value": 0,
-                "triggerScript": "Triggers/NewMauville_Inside_EventScript_GreenButton.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/NewMauville_Inside_EventScript_GreenButton.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5187,9 +5199,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/NewMauville_Inside_EventScript_BlueButton.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/NewMauville_Inside_EventScript_BlueButton.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5209,9 +5225,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/NewMauville_Inside_EventScript_BlueButton.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/NewMauville_Inside_EventScript_BlueButton.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5231,9 +5251,13 @@
               "value": {
                 "variable": "VAR_TEMP_2",
                 "value": 0,
-                "triggerScript": "Triggers/NewMauville_Inside_EventScript_GreenButton.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/NewMauville_Inside_EventScript_GreenButton.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5253,9 +5277,13 @@
               "value": {
                 "variable": "VAR_TEMP_2",
                 "value": 0,
-                "triggerScript": "Triggers/NewMauville_Inside_EventScript_GreenButton.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/NewMauville_Inside_EventScript_GreenButton.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5275,9 +5303,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/NewMauville_Inside_EventScript_BlueButton.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/NewMauville_Inside_EventScript_BlueButton.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5297,9 +5329,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/NewMauville_Inside_EventScript_BlueButton.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/NewMauville_Inside_EventScript_BlueButton.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5319,9 +5355,13 @@
               "value": {
                 "variable": "VAR_TEMP_2",
                 "value": 0,
-                "triggerScript": "Triggers/NewMauville_Inside_EventScript_GreenButton.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/NewMauville_Inside_EventScript_GreenButton.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5341,9 +5381,13 @@
               "value": {
                 "variable": "VAR_NEW_MAUVILLE_STATE",
                 "value": 1,
-                "triggerScript": "Triggers/NewMauville_Inside_EventScript_RedButton.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/NewMauville_Inside_EventScript_RedButton.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -5372,9 +5416,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/NewMauville_Inside_EventScript_Generator.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/NewMauville_Inside_EventScript_Generator.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5392,9 +5440,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/NewMauville_Inside_EventScript_Generator.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/NewMauville_Inside_EventScript_Generator.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5412,9 +5464,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/NewMauville_Inside_EventScript_Generator.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/NewMauville_Inside_EventScript_Generator.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -5432,9 +5488,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/NewMauville_Inside_EventScript_Generator.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/NewMauville_Inside_EventScript_Generator.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5452,9 +5512,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/NewMauville_Inside_EventScript_Generator.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/NewMauville_Inside_EventScript_Generator.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5472,9 +5536,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/NewMauville_Inside_EventScript_Generator.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/NewMauville_Inside_EventScript_Generator.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5492,9 +5560,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/NewMauville_Inside_EventScript_Generator.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/NewMauville_Inside_EventScript_Generator.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5512,9 +5584,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/NewMauville_Inside_EventScript_Generator.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/NewMauville_Inside_EventScript_Generator.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -5536,6 +5612,61 @@
       "name": "display_name",
       "type": "string",
       "value": "NewMauville_Inside"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_MT_PYRE"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERGROUND"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_NEW_MAUVILLE"
     },
     {
       "name": "border",

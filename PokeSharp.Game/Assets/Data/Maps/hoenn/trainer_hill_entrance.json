@@ -1036,9 +1036,13 @@
               "value": {
                 "map": "route111",
                 "x": 31,
-                "y": 113,
-                "elevation": 0
+                "y": 113
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1058,9 +1062,13 @@
               "value": {
                 "map": "route111",
                 "x": 31,
-                "y": 113,
-                "elevation": 0
+                "y": 113
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -1080,9 +1088,13 @@
               "value": {
                 "map": "trainer_hill_1f",
                 "x": 2,
-                "y": 1,
-                "elevation": 3
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -1113,9 +1125,13 @@
               "value": {
                 "variable": "VAR_TRAINER_HILL_IS_ACTIVE",
                 "value": 0,
-                "triggerScript": "Triggers/TrainerHill_Entrance_EventScript_EntryTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/TrainerHill_Entrance_EventScript_EntryTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -1145,9 +1161,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/TrainerHill_Entrance_EventScript_Records.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -1169,6 +1189,61 @@
       "name": "display_name",
       "type": "string",
       "value": "TrainerHill_Entrance"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_B_TOWER_RS"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_TRAINER_HILL"
     },
     {
       "name": "border",

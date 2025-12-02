@@ -283,9 +283,13 @@
               "value": {
                 "variable": "VAR_TEMP_1",
                 "value": 0,
-                "triggerScript": "Triggers/BattleFrontier_BattlePikeRoomNormal_EventScript_Exit.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/BattleFrontier_BattlePikeRoomNormal_EventScript_Exit.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -305,9 +309,13 @@
               "value": {
                 "variable": "VAR_TEMP_2",
                 "value": 0,
-                "triggerScript": "Triggers/BattleFrontier_BattlePikeRoomNormal_EventScript_SetEnteredRoom.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/BattleFrontier_BattlePikeRoomNormal_EventScript_SetEnteredRoom.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -327,9 +335,13 @@
               "value": {
                 "variable": "VAR_TEMP_3",
                 "value": 1,
-                "triggerScript": "Triggers/BattleFrontier_BattlePikeRoomNormal_EventScript_NoTurningBack.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/BattleFrontier_BattlePikeRoomNormal_EventScript_NoTurningBack.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -349,9 +361,13 @@
               "value": {
                 "variable": "VAR_TEMP_2",
                 "value": 0,
-                "triggerScript": "Triggers/BattleFrontier_BattlePikeRoomNormal_EventScript_SetEnteredRoom.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/BattleFrontier_BattlePikeRoomNormal_EventScript_SetEnteredRoom.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -371,9 +387,13 @@
               "value": {
                 "variable": "VAR_TEMP_2",
                 "value": 0,
-                "triggerScript": "Triggers/BattleFrontier_BattlePikeRoomNormal_EventScript_SetEnteredRoom.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/BattleFrontier_BattlePikeRoomNormal_EventScript_SetEnteredRoom.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -393,9 +413,13 @@
               "value": {
                 "variable": "VAR_TEMP_3",
                 "value": 1,
-                "triggerScript": "Triggers/BattleFrontier_BattlePikeRoomNormal_EventScript_NoTurningBack.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/BattleFrontier_BattlePikeRoomNormal_EventScript_NoTurningBack.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -415,9 +439,13 @@
               "value": {
                 "variable": "VAR_TEMP_3",
                 "value": 1,
-                "triggerScript": "Triggers/BattleFrontier_BattlePikeRoomNormal_EventScript_NoTurningBack.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/BattleFrontier_BattlePikeRoomNormal_EventScript_NoTurningBack.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -439,6 +467,61 @@
       "name": "display_name",
       "type": "string",
       "value": "BattleFrontier_BattlePikeRoomNormal"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_B_PIKE"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_BATTLE_FRONTIER"
     },
     {
       "name": "border",

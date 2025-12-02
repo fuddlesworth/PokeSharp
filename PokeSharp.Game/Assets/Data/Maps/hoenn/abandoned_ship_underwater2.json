@@ -508,9 +508,13 @@
               "value": {
                 "map": "abandoned_ship_underwater1",
                 "x": 3,
-                "y": 7,
-                "elevation": 3
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -532,6 +536,61 @@
       "name": "display_name",
       "type": "string",
       "value": "AbandonedShip_Underwater2"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_UNDERWATER"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_UNDERWATER_BUBBLES"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERWATER"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ABANDONED_SHIP"
     },
     {
       "name": "border",

@@ -2659,9 +2659,13 @@
               "value": {
                 "map": "route116",
                 "x": 47,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2681,9 +2685,13 @@
               "value": {
                 "map": "verdanturf_town",
                 "x": 8,
-                "y": 1,
-                "elevation": 0
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2703,9 +2711,13 @@
               "value": {
                 "map": "route116",
                 "x": 65,
-                "y": 10,
-                "elevation": 0
+                "y": 10
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -2736,9 +2748,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/RusturfTunnel_EventScript_TunnelBlockagePos1.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/RusturfTunnel_EventScript_TunnelBlockagePos1.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2758,9 +2774,13 @@
               "value": {
                 "variable": "VAR_RUSTURF_TUNNEL_STATE",
                 "value": 2,
-                "triggerScript": "Triggers/RusturfTunnel_EventScript_AquaGruntBackUp.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/RusturfTunnel_EventScript_AquaGruntBackUp.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2780,9 +2800,13 @@
               "value": {
                 "variable": "VAR_RUSTURF_TUNNEL_STATE",
                 "value": 2,
-                "triggerScript": "Triggers/RusturfTunnel_EventScript_AquaGruntBackUp.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/RusturfTunnel_EventScript_AquaGruntBackUp.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2802,9 +2826,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/RusturfTunnel_EventScript_TunnelBlockagePos2.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/RusturfTunnel_EventScript_TunnelBlockagePos2.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2824,9 +2852,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/RusturfTunnel_EventScript_TunnelBlockagePos3.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/RusturfTunnel_EventScript_TunnelBlockagePos3.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -2848,6 +2880,61 @@
       "name": "display_name",
       "type": "string",
       "value": "RusturfTunnel"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_PETALBURG_WOODS"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_FOG_HORIZONTAL"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERGROUND"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_RUSTURF_TUNNEL"
     },
     {
       "name": "border",

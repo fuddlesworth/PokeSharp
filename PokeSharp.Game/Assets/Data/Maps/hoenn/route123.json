@@ -8467,9 +8467,13 @@
               "value": {
                 "map": "route123_berry_masters_house",
                 "x": 3,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -8498,9 +8502,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route123_EventScript_RouteSignMtPyre.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route123_EventScript_RouteSignMtPyre.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -8518,8 +8526,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BLUE_CAVE1_2",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BLUE_CAVE1_2"
               }
             }
           ]
@@ -8538,8 +8545,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BLUE_CAVE2_2",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BLUE_CAVE2_2"
               }
             }
           ]
@@ -8558,9 +8564,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route123_EventScript_RouteSign.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/Route123_EventScript_RouteSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -8579,8 +8589,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_SUPER_REPEL",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_123_SUPER_REPEL",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_123_SUPER_REPEL"
               }
             }
           ]
@@ -8599,9 +8608,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route123_EventScript_BerryMastersHouseSign.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/Route123_EventScript_BerryMastersHouseSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -8619,8 +8632,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BLUE_CAVE1_3",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BLUE_CAVE1_3"
               }
             }
           ]
@@ -8640,8 +8652,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_REVIVE",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_123_REVIVE",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_123_REVIVE"
               }
             }
           ]
@@ -8661,8 +8672,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_HYPER_POTION",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_123_HYPER_POTION",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_123_HYPER_POTION"
               }
             }
           ]
@@ -8682,8 +8692,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_PP_UP",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_123_PP_UP",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_123_PP_UP"
               }
             }
           ]
@@ -8703,8 +8712,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_RARE_CANDY",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_123_RARE_CANDY",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_123_RARE_CANDY"
               }
             }
           ]
@@ -8727,6 +8735,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route123"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_ROUTE122"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_123"
     },
     {
       "name": "border",

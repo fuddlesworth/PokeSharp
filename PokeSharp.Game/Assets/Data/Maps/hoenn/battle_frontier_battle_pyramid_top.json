@@ -2413,9 +2413,13 @@
               "value": {
                 "variable": "VAR_TEMP_2",
                 "value": 0,
-                "triggerScript": "Triggers/BattleFrontier_BattlePyramidTop_EventScript_BattleBrandon.csx",
-                "elevation": 4
+                "triggerScript": "Triggers/BattleFrontier_BattlePyramidTop_EventScript_BattleBrandon.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 4
             }
           ]
         }
@@ -2437,6 +2441,61 @@
       "name": "display_name",
       "type": "string",
       "value": "BattleFrontier_BattlePyramidTop"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_NONE"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_BATTLE_FRONTIER"
     },
     {
       "name": "border",

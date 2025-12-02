@@ -7267,9 +7267,13 @@
               "value": {
                 "map": "route112_cable_car_station",
                 "x": 6,
-                "y": 11,
-                "elevation": 0
+                "y": 11
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -7289,9 +7293,13 @@
               "value": {
                 "map": "route112_cable_car_station",
                 "x": 7,
-                "y": 11,
-                "elevation": 0
+                "y": 11
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -7311,9 +7319,13 @@
               "value": {
                 "map": "jagged_pass",
                 "x": 14,
-                "y": 40,
-                "elevation": 3
+                "y": 40
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -7333,9 +7345,13 @@
               "value": {
                 "map": "jagged_pass",
                 "x": 15,
-                "y": 40,
-                "elevation": 3
+                "y": 40
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -7355,9 +7371,13 @@
               "value": {
                 "map": "fiery_path",
                 "x": 26,
-                "y": 36,
-                "elevation": 3
+                "y": 36
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -7377,9 +7397,13 @@
               "value": {
                 "map": "fiery_path",
                 "x": 26,
-                "y": 4,
-                "elevation": 3
+                "y": 4
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -7408,9 +7432,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route112_EventScript_MtChimneySign.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/Route112_EventScript_MtChimneySign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -7428,9 +7456,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route112_EventScript_MtChimneyCableCarSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route112_EventScript_MtChimneyCableCarSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -7448,9 +7480,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route112_EventScript_RouteSignLavaridge.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route112_EventScript_RouteSignLavaridge.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -7472,6 +7508,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route112"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_ROUTE110"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_112"
     },
     {
       "name": "border",

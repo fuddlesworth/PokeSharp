@@ -8,7 +8,7 @@ testability and separation of concerns.
 import struct
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
-from .utils import TilesetPathResolver, load_json
+from .utils import TilesetPathResolver
 from .logging_config import get_logger
 
 logger = get_logger('map_reader')
@@ -26,26 +26,6 @@ class MapReader:
         """
         self.input_dir = Path(input_dir)
         self.path_resolver = TilesetPathResolver(self.input_dir)
-    
-    def read_map_json(self, map_file: Path) -> Optional[Dict[str, any]]:
-        """
-        Read and parse map.json file.
-        
-        Args:
-            map_file: Path to map.json file
-        
-        Returns:
-            Parsed map data dictionary, or None if file doesn't exist or parsing fails
-        """
-        if not map_file.exists():
-            logger.warning(f"Map JSON file not found: {map_file}")
-            return None
-        
-        try:
-            return load_json(str(map_file))
-        except Exception as e:
-            logger.error(f"Error reading map JSON {map_file}: {e}", exc_info=True)
-            return None
     
     def read_map_bin(self, map_bin_path: Path, width: int, height: int) -> List[List[int]]:
         """
@@ -138,54 +118,6 @@ class MapReader:
         except Exception as e:
             logger.warning(f"Error reading {attributes_path}: {e}")
             return {}
-    
-    def read_metatiles(self, tileset_name: str) -> List[int]:
-        """
-        Load metatiles array (list of tile IDs, 8 per metatile).
-        
-        Tile IDs in metatiles.bin are u16 values where:
-        - Bits 0-9: Tile ID (0-1023)
-        - Bit 10: Horizontal flip
-        - Bit 11: Vertical flip  
-        - Bits 12-15: Palette (0-15)
-        
-        We only need the tile ID (bits 0-9), so we mask with 0x3FF.
-        
-        Args:
-            tileset_name: Name of the tileset (e.g., "General")
-        
-        Returns:
-            List of tile IDs (one per tile in metatiles.bin)
-        """
-        # Get tileset directory
-        result = self.path_resolver.find_tileset_path(tileset_name)
-        if not result:
-            logger.warning(f"Tileset '{tileset_name}' not found")
-            return []
-        
-        category, tileset_dir = result
-        metatiles_path = tileset_dir / "metatiles.bin"
-        
-        if not metatiles_path.exists():
-            logger.warning(f"metatiles.bin not found for {tileset_name} at {metatiles_path}")
-            return []
-        
-        try:
-            with open(metatiles_path, 'rb') as f:
-                data = f.read()
-            
-            metatiles = []
-            for i in range(0, len(data), 2):
-                if i + 1 < len(data):
-                    tile_attr = struct.unpack('<H', data[i:i+2])[0]
-                    # Extract only tile ID (bits 0-9), mask out flip/palette bits
-                    tile_id = tile_attr & 0x3FF
-                    metatiles.append(tile_id)
-            
-            return metatiles
-        except Exception as e:
-            logger.warning(f"Error reading {metatiles_path}: {e}")
-            return []
     
     def read_metatiles_with_attributes(self, tileset_name: str) -> List[Tuple[int, int, int]]:
         """

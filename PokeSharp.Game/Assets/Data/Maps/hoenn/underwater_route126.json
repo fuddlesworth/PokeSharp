@@ -19267,9 +19267,13 @@
               "value": {
                 "map": "underwater_sootopolis_city",
                 "x": 9,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -19299,8 +19303,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_HEART_SCALE",
-                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_126_HEART_SCALE",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_126_HEART_SCALE"
               }
             }
           ]
@@ -19320,8 +19323,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_ULTRA_BALL",
-                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_126_ULTRA_BALL",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_126_ULTRA_BALL"
               }
             }
           ]
@@ -19341,8 +19343,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_STARDUST",
-                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_126_STARDUST",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_126_STARDUST"
               }
             }
           ]
@@ -19362,8 +19363,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_PEARL",
-                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_126_PEARL",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_126_PEARL"
               }
             }
           ]
@@ -19383,8 +19383,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_IRON",
-                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_126_IRON",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_126_IRON"
               }
             }
           ]
@@ -19404,8 +19403,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_YELLOW_SHARD",
-                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_126_YELLOW_SHARD",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_126_YELLOW_SHARD"
               }
             }
           ]
@@ -19425,8 +19423,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_BIG_PEARL",
-                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_126_BIG_PEARL",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_126_BIG_PEARL"
               }
             }
           ]
@@ -19446,8 +19443,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_BLUE_SHARD",
-                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_126_BLUE_SHARD",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_126_BLUE_SHARD"
               }
             }
           ]
@@ -19470,6 +19466,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Underwater_Route126"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_UNDERWATER"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_UNDERWATER_BUBBLES"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERWATER"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_UNDERWATER_126"
     },
     {
       "name": "border",

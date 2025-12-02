@@ -2011,9 +2011,13 @@
               "value": {
                 "map": "southern_island_exterior",
                 "x": 14,
-                "y": 5,
-                "elevation": 3
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2033,9 +2037,13 @@
               "value": {
                 "map": "southern_island_exterior",
                 "x": 15,
-                "y": 5,
-                "elevation": 3
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -2065,9 +2073,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/SouthernIsland_Interior_EventScript_TryLatiEncounter.csx",
-                "elevation": 3,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -2089,6 +2101,61 @@
       "name": "display_name",
       "type": "string",
       "value": "SouthernIsland_Interior"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_ABANDONED_SHIP"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SHADE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_SOUTHERN_ISLAND"
     },
     {
       "name": "border",

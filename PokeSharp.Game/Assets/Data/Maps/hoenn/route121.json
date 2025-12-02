@@ -4867,9 +4867,13 @@
               "value": {
                 "map": "route121_safari_zone_entrance",
                 "x": 14,
-                "y": 13,
-                "elevation": 0
+                "y": 13
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -4900,9 +4904,13 @@
               "value": {
                 "variable": "VAR_ROUTE121_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/Route121_EventScript_AquaGruntsMoveOut.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route121_EventScript_AquaGruntsMoveOut.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4922,9 +4930,13 @@
               "value": {
                 "variable": "VAR_ROUTE121_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/Route121_EventScript_AquaGruntsMoveOut.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route121_EventScript_AquaGruntsMoveOut.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4944,9 +4956,13 @@
               "value": {
                 "variable": "VAR_ROUTE121_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/Route121_EventScript_AquaGruntsMoveOut.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route121_EventScript_AquaGruntsMoveOut.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -4966,9 +4982,13 @@
               "value": {
                 "variable": "VAR_ROUTE121_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/Route121_EventScript_AquaGruntsMoveOut.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/Route121_EventScript_AquaGruntsMoveOut.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -4997,9 +5017,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route121_EventScript_MtPyrePierSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route121_EventScript_MtPyrePierSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -5017,8 +5041,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_RED_CAVE2_2",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_RED_CAVE2_2"
               }
             }
           ]
@@ -5037,8 +5060,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_RED_CAVE3_2",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_RED_CAVE3_2"
               }
             }
           ]
@@ -5057,8 +5079,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_TREE1_2",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_TREE1_2"
               }
             }
           ]
@@ -5077,8 +5098,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_TREE2_2",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_TREE2_2"
               }
             }
           ]
@@ -5097,9 +5117,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route121_EventScript_SafariZoneSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route121_EventScript_SafariZoneSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -5118,8 +5142,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_HP_UP",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_121_HP_UP",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_121_HP_UP"
               }
             }
           ]
@@ -5139,8 +5162,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_NUGGET",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_121_NUGGET",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_121_NUGGET"
               }
             }
           ]
@@ -5160,8 +5182,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_FULL_HEAL",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_121_FULL_HEAL",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_121_FULL_HEAL"
               }
             }
           ]
@@ -5181,8 +5202,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_MAX_REVIVE",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_121_MAX_REVIVE",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_121_MAX_REVIVE"
               }
             }
           ]
@@ -5205,6 +5225,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route121"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_ROUTE120"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_121"
     },
     {
       "name": "border",

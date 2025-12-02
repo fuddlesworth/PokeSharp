@@ -12163,9 +12163,13 @@
               "value": {
                 "map": "battle_frontier_battle_pike_lobby",
                 "x": 5,
-                "y": 12,
-                "elevation": 0
+                "y": 12
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12185,9 +12189,13 @@
               "value": {
                 "map": "battle_frontier_battle_dome_lobby",
                 "x": 11,
-                "y": 16,
-                "elevation": 0
+                "y": 16
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12207,9 +12215,13 @@
               "value": {
                 "map": "battle_frontier_battle_factory_lobby",
                 "x": 9,
-                "y": 11,
-                "elevation": 0
+                "y": 11
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12229,9 +12241,13 @@
               "value": {
                 "map": "battle_frontier_lounge2",
                 "x": 1,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12251,9 +12267,13 @@
               "value": {
                 "map": "battle_frontier_mart",
                 "x": 3,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12273,9 +12293,13 @@
               "value": {
                 "map": "battle_frontier_scotts_house",
                 "x": 2,
-                "y": 7,
-                "elevation": 3
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12295,9 +12319,13 @@
               "value": {
                 "map": "battle_frontier_lounge4",
                 "x": 4,
-                "y": 9,
-                "elevation": 0
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12317,9 +12345,13 @@
               "value": {
                 "map": "battle_frontier_lounge7",
                 "x": 4,
-                "y": 9,
-                "elevation": 0
+                "y": 9
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12339,9 +12371,13 @@
               "value": {
                 "map": "battle_frontier_reception_gate",
                 "x": 4,
-                "y": 13,
-                "elevation": 0
+                "y": 13
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12361,9 +12397,13 @@
               "value": {
                 "map": "battle_frontier_reception_gate",
                 "x": 4,
-                "y": 1,
-                "elevation": 0
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12383,9 +12423,13 @@
               "value": {
                 "map": "artisan_cave_b1f",
                 "x": 8,
-                "y": 48,
-                "elevation": 0
+                "y": 48
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -12414,9 +12458,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/BattleFrontier_OutsideWest_EventScript_BattleDomeSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/BattleFrontier_OutsideWest_EventScript_BattleDomeSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12434,9 +12482,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/BattleFrontier_OutsideWest_EventScript_BattlePikeSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/BattleFrontier_OutsideWest_EventScript_BattlePikeSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12454,9 +12506,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/BattleFrontier_OutsideWest_EventScript_BattleFactorySign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/BattleFrontier_OutsideWest_EventScript_BattleFactorySign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12474,9 +12530,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Common_EventScript_ShowPokemartSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Common_EventScript_ShowPokemartSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -12494,9 +12554,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Common_EventScript_ShowPokemartSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Common_EventScript_ShowPokemartSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -12518,6 +12582,61 @@
       "name": "display_name",
       "type": "string",
       "value": "BattleFrontier_OutsideWest"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_B_FRONTIER"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_BATTLE_FRONTIER"
     },
     {
       "name": "border",

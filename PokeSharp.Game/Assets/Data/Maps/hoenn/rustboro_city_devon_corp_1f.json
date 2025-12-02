@@ -580,9 +580,13 @@
               "value": {
                 "map": "rustboro_city",
                 "x": 11,
-                "y": 15,
-                "elevation": 0
+                "y": 15
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -602,9 +606,13 @@
               "value": {
                 "map": "rustboro_city",
                 "x": 12,
-                "y": 15,
-                "elevation": 0
+                "y": 15
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -624,9 +632,13 @@
               "value": {
                 "map": "rustboro_city_devon_corp_2f",
                 "x": 14,
-                "y": 1,
-                "elevation": 0
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -655,9 +667,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/RustboroCity_DevonCorp_1F_EventScript_ProductsDisplay.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/RustboroCity_DevonCorp_1F_EventScript_ProductsDisplay.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -675,9 +691,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/RustboroCity_DevonCorp_1F_EventScript_RocksMetalDisplay.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/RustboroCity_DevonCorp_1F_EventScript_RocksMetalDisplay.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -699,6 +719,61 @@
       "name": "display_name",
       "type": "string",
       "value": "RustboroCity_DevonCorp_1F"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_RUSTBORO"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_RUSTBORO_CITY"
     },
     {
       "name": "border",

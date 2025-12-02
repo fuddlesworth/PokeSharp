@@ -33,13 +33,13 @@ namespace PokeSharp.Tools.Converters.Implementation
         /// <summary>
         /// Parse a single SpeciesInfo struct from C code
         /// </summary>
-        public EmeraldSpeciesInfo ParseSpeciesInfo(string structText, int speciesId, string speciesName)
+        public EmeraldSpeciesInfo ParseSpeciesInfo(
+            string structText,
+            int speciesId,
+            string speciesName
+        )
         {
-            var info = new EmeraldSpeciesInfo
-            {
-                SpeciesId = speciesId,
-                SpeciesName = speciesName
-            };
+            var info = new EmeraldSpeciesInfo { SpeciesId = speciesId, SpeciesName = speciesName };
 
             // Parse base stats
             info.BaseHP = ParseByteField(structText, "baseHP");
@@ -52,9 +52,8 @@ namespace PokeSharp.Tools.Converters.Implementation
             // Parse types (array syntax)
             var types = ParseArrayField(structText, "types");
             info.Type1 = _constantResolver.ResolveTypeName(types[0]);
-            info.Type2 = types.Length > 1
-                ? _constantResolver.ResolveTypeName(types[1])
-                : info.Type1;
+            info.Type2 =
+                types.Length > 1 ? _constantResolver.ResolveTypeName(types[1]) : info.Type1;
 
             // Parse catch/experience
             info.CatchRate = ParseByteField(structText, "catchRate");
@@ -70,34 +69,40 @@ namespace PokeSharp.Tools.Converters.Implementation
 
             // Parse items
             info.ItemCommon = _constantResolver.ResolveItemName(
-                ParseStringField(structText, "itemCommon"));
+                ParseStringField(structText, "itemCommon")
+            );
             info.ItemRare = _constantResolver.ResolveItemName(
-                ParseStringField(structText, "itemRare"));
+                ParseStringField(structText, "itemRare")
+            );
 
             // Parse breeding
             info.GenderRatio = ParseGenderRatio(structText);
             info.EggCycles = ParseByteField(structText, "eggCycles");
             info.Friendship = ParseFriendship(structText);
             info.GrowthRate = _constantResolver.ResolveGrowthRate(
-                ParseStringField(structText, "growthRate"));
+                ParseStringField(structText, "growthRate")
+            );
 
             var eggGroups = ParseArrayField(structText, "eggGroups");
             info.EggGroup1 = _constantResolver.ResolveEggGroup(eggGroups[0]);
-            info.EggGroup2 = eggGroups.Length > 1
-                ? _constantResolver.ResolveEggGroup(eggGroups[1])
-                : info.EggGroup1;
+            info.EggGroup2 =
+                eggGroups.Length > 1
+                    ? _constantResolver.ResolveEggGroup(eggGroups[1])
+                    : info.EggGroup1;
 
             // Parse abilities
             var abilities = ParseArrayField(structText, "abilities");
             info.Ability1 = _constantResolver.ResolveAbilityName(abilities[0]);
-            info.Ability2 = abilities.Length > 1 && abilities[1] != "ABILITY_NONE"
-                ? _constantResolver.ResolveAbilityName(abilities[1])
-                : null;
+            info.Ability2 =
+                abilities.Length > 1 && abilities[1] != "ABILITY_NONE"
+                    ? _constantResolver.ResolveAbilityName(abilities[1])
+                    : null;
 
             // Parse misc
             info.SafariZoneFleeRate = ParseByteField(structText, "safariZoneFleeRate");
             info.BodyColor = _constantResolver.ResolveBodyColor(
-                ParseStringField(structText, "bodyColor"));
+                ParseStringField(structText, "bodyColor")
+            );
             info.NoFlip = ParseBoolField(structText, "noFlip");
 
             return info;
@@ -121,10 +126,12 @@ namespace PokeSharp.Tools.Converters.Implementation
         {
             var pattern = $@"\.{fieldName}\s*=\s*\{{\s*([^}}]+)\s*\}}";
             var match = Regex.Match(structText, pattern);
-            if (!match.Success) return Array.Empty<string>();
+            if (!match.Success)
+                return Array.Empty<string>();
 
-            return match.Groups[1].Value
-                .Split(',')
+            return match
+                .Groups[1]
+                .Value.Split(',')
                 .Select(s => s.Trim())
                 .Where(s => !string.IsNullOrEmpty(s))
                 .ToArray();
@@ -140,7 +147,8 @@ namespace PokeSharp.Tools.Converters.Implementation
         {
             var pattern = @"\.genderRatio\s*=\s*(.+?)[,\n]";
             var match = Regex.Match(structText, pattern);
-            if (!match.Success) return 127; // Default 50/50
+            if (!match.Success)
+                return 127; // Default 50/50
 
             var value = match.Groups[1].Value.Trim();
 
@@ -173,7 +181,8 @@ namespace PokeSharp.Tools.Converters.Implementation
         private byte ParseFriendship(string structText)
         {
             var value = ParseStringField(structText, "friendship");
-            if (value == "STANDARD_FRIENDSHIP") return 70;
+            if (value == "STANDARD_FRIENDSHIP")
+                return 70;
             return byte.Parse(value ?? "70");
         }
     }
@@ -343,7 +352,7 @@ namespace PokeSharp.Tools.Converters.Implementation
                     Defense = source.BaseDefense,
                     SpAttack = source.BaseSpAttack,
                     SpDefense = source.BaseSpDefense,
-                    Speed = source.BaseSpeed
+                    Speed = source.BaseSpeed,
                 },
 
                 Types = GetTypes(source),
@@ -361,20 +370,16 @@ namespace PokeSharp.Tools.Converters.Implementation
                     Defense = source.EvYieldDefense,
                     SpAttack = source.EvYieldSpAttack,
                     SpDefense = source.EvYieldSpDefense,
-                    Speed = source.EvYieldSpeed
+                    Speed = source.EvYieldSpeed,
                 },
 
-                HeldItems = new HeldItems
-                {
-                    Common = source.ItemCommon,
-                    Rare = source.ItemRare
-                },
+                HeldItems = new HeldItems { Common = source.ItemCommon, Rare = source.ItemRare },
 
                 Breeding = new BreedingData
                 {
                     EggGroups = GetEggGroups(source),
                     EggCycles = source.EggCycles,
-                    GenderRatio = ConvertGenderRatio(source.GenderRatio)
+                    GenderRatio = ConvertGenderRatio(source.GenderRatio),
                 },
 
                 Learnset = GetLearnset(source.SpeciesId),
@@ -388,13 +393,14 @@ namespace PokeSharp.Tools.Converters.Implementation
                     BaseFriendship = source.Friendship,
                     GrowthRate = source.GrowthRate,
                     SafariZoneFleeRate = source.SafariZoneFleeRate,
-                    SpriteFlipped = !source.NoFlip
-                }
+                    SpriteFlipped = !source.NoFlip,
+                },
             };
         }
 
         public IEnumerable<PokemonSpeciesTemplate> ConvertAll(
-            IEnumerable<EmeraldSpeciesInfo> sources)
+            IEnumerable<EmeraldSpeciesInfo> sources
+        )
         {
             return sources.Select(Convert);
         }
@@ -403,16 +409,26 @@ namespace PokeSharp.Tools.Converters.Implementation
         {
             var result = new ValidationResult { IsValid = true };
 
-            var totalStats = source.BaseHP + source.BaseAttack + source.BaseDefense +
-                           source.BaseSpeed + source.BaseSpAttack + source.BaseSpDefense;
+            var totalStats =
+                source.BaseHP
+                + source.BaseAttack
+                + source.BaseDefense
+                + source.BaseSpeed
+                + source.BaseSpAttack
+                + source.BaseSpDefense;
 
             if (totalStats < 200 || totalStats > 780)
             {
                 result.Warnings.Add($"Unusual base stat total: {totalStats}");
             }
 
-            var totalEvs = source.EvYieldHP + source.EvYieldAttack + source.EvYieldDefense +
-                          source.EvYieldSpeed + source.EvYieldSpAttack + source.EvYieldSpDefense;
+            var totalEvs =
+                source.EvYieldHP
+                + source.EvYieldAttack
+                + source.EvYieldDefense
+                + source.EvYieldSpeed
+                + source.EvYieldSpAttack
+                + source.EvYieldSpDefense;
 
             if (totalEvs > 3)
             {
@@ -458,7 +474,12 @@ namespace PokeSharp.Tools.Converters.Implementation
         {
             if (genderRatio == 255)
             {
-                return new GenderRatio { Male = 0, Female = 0, Genderless = true };
+                return new GenderRatio
+                {
+                    Male = 0,
+                    Female = 0,
+                    Genderless = true,
+                };
             }
 
             float femalePercent = (genderRatio / 254f) * 100f;
@@ -466,7 +487,7 @@ namespace PokeSharp.Tools.Converters.Implementation
             {
                 Male = 100f - femalePercent,
                 Female = femalePercent,
-                Genderless = false
+                Genderless = false,
             };
         }
 
@@ -486,7 +507,7 @@ namespace PokeSharp.Tools.Converters.Implementation
                 LevelUp = new LevelUpMove[0],
                 TmHm = new string[0],
                 EggMoves = new string[0],
-                TutorMoves = new string[0]
+                TutorMoves = new string[0],
             };
         }
 
@@ -506,7 +527,7 @@ namespace PokeSharp.Tools.Converters.Implementation
                 Category = "Unknown",
                 PokedexEntry = "No description available.",
                 Height = 0,
-                Weight = 0
+                Weight = 0,
             };
         }
 
@@ -524,7 +545,7 @@ namespace PokeSharp.Tools.Converters.Implementation
                 Icon = $"{basePath}/icon.png",
                 Footprint = $"{basePath}/footprint.png",
                 Palette = $"Palettes/Pokemon/{id}_{speciesName}/normal.pal",
-                ShinyPalette = $"Palettes/Pokemon/{id}_{speciesName}/shiny.pal"
+                ShinyPalette = $"Palettes/Pokemon/{id}_{speciesName}/shiny.pal",
             };
         }
 
@@ -535,8 +556,7 @@ namespace PokeSharp.Tools.Converters.Implementation
             return _parser.ParseSpeciesInfo(cStructText, speciesId, speciesName);
         }
 
-        public PokemonDescription GetDescription(int speciesId) =>
-            GetDescription(speciesId);
+        public PokemonDescription GetDescription(int speciesId) => GetDescription(speciesId);
 
         public EvolutionData GetEvolutions(int speciesId) =>
             new EvolutionData { Evolutions = GetEvolutions(speciesId).ToList() };
@@ -574,8 +594,7 @@ namespace PokeSharp.Tools.Converters.Implementation
             var converter = new PokemonDataConverter(pokeemeraldPath);
 
             // Read species_info.h
-            var speciesFile = Path.Combine(pokeemeraldPath,
-                "src/data/pokemon/species_info.h");
+            var speciesFile = Path.Combine(pokeemeraldPath, "src/data/pokemon/species_info.h");
             var fileContent = File.ReadAllText(speciesFile);
 
             // Extract all species (simplified - would need proper parsing)
@@ -584,7 +603,7 @@ namespace PokeSharp.Tools.Converters.Implementation
             var jsonOptions = new JsonSerializerOptions
             {
                 WriteIndented = true,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             };
 
             int successCount = 0;

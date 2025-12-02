@@ -817,9 +817,13 @@
               "value": {
                 "map": "battle_frontier_outside_east",
                 "x": 16,
-                "y": 14,
-                "elevation": 0
+                "y": 14
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -839,9 +843,13 @@
               "value": {
                 "map": "battle_frontier_outside_east",
                 "x": 16,
-                "y": 14,
-                "elevation": 0
+                "y": 14
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -861,9 +869,13 @@
               "value": {
                 "map": "battle_frontier_battle_tower_battle_room",
                 "x": 5,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -893,9 +905,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/BattleFrontier_BattleTowerLobby_EventScript_ShowSinglesResults.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -914,9 +930,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/BattleFrontier_BattleTowerLobby_EventScript_ShowDoublesResults.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -935,9 +955,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/BattleFrontier_BattleTowerLobby_EventScript_ShowMultisResults.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -956,9 +980,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/BattleFrontier_BattleTowerLobby_EventScript_ShowLinkMultisResults.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -976,9 +1004,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/BattleFrontier_BattleTowerLobby_EventScript_RulesBoard.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/BattleFrontier_BattleTowerLobby_EventScript_RulesBoard.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -1000,6 +1032,61 @@
       "name": "display_name",
       "type": "string",
       "value": "BattleFrontier_BattleTowerLobby"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_B_TOWER"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_BATTLE_FRONTIER"
     },
     {
       "name": "border",

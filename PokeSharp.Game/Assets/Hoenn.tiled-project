@@ -126,11 +126,6 @@
                     "name": "y",
                     "type": "int",
                     "value": 0
-                },
-                {
-                    "name": "elevation",
-                    "type": "int",
-                    "value": 0
                 }
             ],
             "name": "Warp",
@@ -159,11 +154,6 @@
                     "name": "triggerScript",
                     "type": "string",
                     "value": ""
-                },
-                {
-                    "name": "elevation",
-                    "type": "int",
-                    "value": 0
                 }
             ],
             "name": "Trigger",
@@ -188,11 +178,6 @@
                     "propertyType": "Direction",
                     "type": "string",
                     "value": "Any"
-                },
-                {
-                    "name": "elevation",
-                    "type": "int",
-                    "value": 0
                 }
             ],
             "name": "SignEvent",
@@ -216,11 +201,6 @@
                     "name": "flag",
                     "type": "string",
                     "value": ""
-                },
-                {
-                    "name": "elevation",
-                    "type": "int",
-                    "value": 0
                 }
             ],
             "name": "HiddenItemEvent",
@@ -239,11 +219,6 @@
                     "name": "secret_base_id",
                     "type": "string",
                     "value": ""
-                },
-                {
-                    "name": "elevation",
-                    "type": "int",
-                    "value": 0
                 }
             ],
             "name": "SecretBaseEvent",

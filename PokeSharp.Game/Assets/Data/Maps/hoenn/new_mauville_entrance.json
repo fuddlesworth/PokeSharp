@@ -310,9 +310,13 @@
               "value": {
                 "map": "route110",
                 "x": 35,
-                "y": 24,
-                "elevation": 3
+                "y": 24
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -332,9 +336,13 @@
               "value": {
                 "map": "new_mauville_inside",
                 "x": 32,
-                "y": 33,
-                "elevation": 3
+                "y": 33
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -365,9 +373,13 @@
               "value": {
                 "variable": "VAR_NEW_MAUVILLE_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/NewMauville_Entrance_EventScript_Door.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/NewMauville_Entrance_EventScript_Door.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -389,6 +401,61 @@
       "name": "display_name",
       "type": "string",
       "value": "NewMauville_Entrance"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_MT_PYRE"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERGROUND"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_NEW_MAUVILLE"
     },
     {
       "name": "border",

@@ -457,9 +457,13 @@
               "value": {
                 "map": "abandoned_ship_rooms2_b1f",
                 "x": 13,
-                "y": 7,
-                "elevation": 3
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -479,9 +483,13 @@
               "value": {
                 "map": "abandoned_ship_rooms2_b1f",
                 "x": 4,
-                "y": 7,
-                "elevation": 3
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -501,9 +509,13 @@
               "value": {
                 "map": "abandoned_ship_rooms_b1f",
                 "x": 4,
-                "y": 1,
-                "elevation": 3
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -523,9 +535,13 @@
               "value": {
                 "map": "abandoned_ship_rooms_b1f",
                 "x": 13,
-                "y": 1,
-                "elevation": 3
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -545,9 +561,13 @@
               "value": {
                 "map": "abandoned_ship_rooms_b1f",
                 "x": 22,
-                "y": 1,
-                "elevation": 3
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -567,9 +587,13 @@
               "value": {
                 "map": "abandoned_ship_room_b1f",
                 "x": 4,
-                "y": 7,
-                "elevation": 3
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -589,9 +613,13 @@
               "value": {
                 "map": "abandoned_ship_corridors_1f",
                 "x": 5,
-                "y": 2,
-                "elevation": 3
+                "y": 2
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -611,9 +639,13 @@
               "value": {
                 "map": "abandoned_ship_corridors_1f",
                 "x": 16,
-                "y": 2,
-                "elevation": 3
+                "y": 2
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -642,9 +674,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/AbandonedShip_Corridors_B1F_EventScript_StorageRoomDoor.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/AbandonedShip_Corridors_B1F_EventScript_StorageRoomDoor.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -666,6 +702,61 @@
       "name": "display_name",
       "type": "string",
       "value": "AbandonedShip_Corridors_B1F"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_ABANDONED_SHIP"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SHADE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERGROUND"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ABANDONED_SHIP"
     },
     {
       "name": "border",

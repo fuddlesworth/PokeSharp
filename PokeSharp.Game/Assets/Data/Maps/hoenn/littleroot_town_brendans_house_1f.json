@@ -364,9 +364,13 @@
               "value": {
                 "map": "littleroot_town",
                 "x": 5,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -386,9 +390,13 @@
               "value": {
                 "map": "littleroot_town",
                 "x": 5,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -408,9 +416,13 @@
               "value": {
                 "map": "littleroot_town_brendans_house_2f",
                 "x": 7,
-                "y": 1,
-                "elevation": 0
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -441,9 +453,13 @@
               "value": {
                 "variable": "VAR_LITTLEROOT_INTRO_STATE",
                 "value": 4,
-                "triggerScript": "Triggers/LittlerootTown_BrendansHouse_1F_EventScript_GoSeeRoom.csx",
-                "elevation": 0
+                "triggerScript": "Triggers/LittlerootTown_BrendansHouse_1F_EventScript_GoSeeRoom.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -463,9 +479,13 @@
               "value": {
                 "variable": "VAR_LITTLEROOT_RIVAL_STATE",
                 "value": 2,
-                "triggerScript": "Triggers/LittlerootTown_BrendansHouse_1F_EventScript_MeetRival0.csx",
-                "elevation": 0
+                "triggerScript": "Triggers/LittlerootTown_BrendansHouse_1F_EventScript_MeetRival0.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -485,9 +505,13 @@
               "value": {
                 "variable": "VAR_LITTLEROOT_RIVAL_STATE",
                 "value": 2,
-                "triggerScript": "Triggers/LittlerootTown_BrendansHouse_1F_EventScript_MeetRival1.csx",
-                "elevation": 0
+                "triggerScript": "Triggers/LittlerootTown_BrendansHouse_1F_EventScript_MeetRival1.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -507,9 +531,13 @@
               "value": {
                 "variable": "VAR_LITTLEROOT_RIVAL_STATE",
                 "value": 2,
-                "triggerScript": "Triggers/LittlerootTown_BrendansHouse_1F_EventScript_MeetRival2.csx",
-                "elevation": 0
+                "triggerScript": "Triggers/LittlerootTown_BrendansHouse_1F_EventScript_MeetRival2.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -531,6 +559,61 @@
       "name": "display_name",
       "type": "string",
       "value": "LittlerootTown_BrendansHouse_1F"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_LITTLEROOT"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_LITTLEROOT_TOWN"
     },
     {
       "name": "border",

@@ -5311,9 +5311,13 @@
               "value": {
                 "map": "shoal_cave_low_tide_entrance_room",
                 "x": 19,
-                "y": 5,
-                "elevation": 3
+                "y": 5
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5333,9 +5337,13 @@
               "value": {
                 "map": "shoal_cave_low_tide_stairs_room",
                 "x": 3,
-                "y": 12,
-                "elevation": 3
+                "y": 12
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5355,9 +5363,13 @@
               "value": {
                 "map": "shoal_cave_low_tide_stairs_room",
                 "x": 7,
-                "y": 4,
-                "elevation": 3
+                "y": 4
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5377,9 +5389,13 @@
               "value": {
                 "map": "shoal_cave_low_tide_lower_room",
                 "x": 7,
-                "y": 2,
-                "elevation": 3
+                "y": 2
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 4
             }
           ]
         },
@@ -5399,9 +5415,13 @@
               "value": {
                 "map": "shoal_cave_low_tide_lower_room",
                 "x": 2,
-                "y": 6,
-                "elevation": 3
+                "y": 6
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5421,9 +5441,13 @@
               "value": {
                 "map": "shoal_cave_low_tide_lower_room",
                 "x": 19,
-                "y": 11,
-                "elevation": 3
+                "y": 11
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5443,9 +5467,13 @@
               "value": {
                 "map": "shoal_cave_low_tide_entrance_room",
                 "x": 6,
-                "y": 2,
-                "elevation": 3
+                "y": 2
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 5
             }
           ]
         },
@@ -5465,9 +5493,13 @@
               "value": {
                 "map": "shoal_cave_low_tide_entrance_room",
                 "x": 27,
-                "y": 2,
-                "elevation": 3
+                "y": 2
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 5
             }
           ]
         }
@@ -5496,9 +5528,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/ShoalCave_LowTideInnerRoom_EventScript_ShoalSalt1.csx",
-                "elevation": 5
+                "interactionScript": "Interactions/ShoalCave_LowTideInnerRoom_EventScript_ShoalSalt1.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 5
             }
           ]
         },
@@ -5516,9 +5552,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/ShoalCave_LowTideInnerRoom_EventScript_ShoalSalt2.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/ShoalCave_LowTideInnerRoom_EventScript_ShoalSalt2.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5536,9 +5576,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/ShoalCave_LowTideInnerRoom_EventScript_ShoalShell1.csx",
-                "elevation": 5
+                "interactionScript": "Interactions/ShoalCave_LowTideInnerRoom_EventScript_ShoalShell1.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 5
             }
           ]
         },
@@ -5556,9 +5600,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/ShoalCave_LowTideInnerRoom_EventScript_ShoalShell2.csx",
-                "elevation": 5
+                "interactionScript": "Interactions/ShoalCave_LowTideInnerRoom_EventScript_ShoalShell2.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 5
             }
           ]
         },
@@ -5576,9 +5624,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/ShoalCave_LowTideInnerRoom_EventScript_ShoalShell3.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/ShoalCave_LowTideInnerRoom_EventScript_ShoalShell3.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -5596,9 +5648,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/ShoalCave_LowTideInnerRoom_EventScript_ShoalShell4.csx",
-                "elevation": 5
+                "interactionScript": "Interactions/ShoalCave_LowTideInnerRoom_EventScript_ShoalShell4.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 5
             }
           ]
         }
@@ -5620,6 +5676,61 @@
       "name": "display_name",
       "type": "string",
       "value": "ShoalCave_LowTideInnerRoom"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_MT_PYRE"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERGROUND"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_SHOAL_CAVE"
     },
     {
       "name": "border",

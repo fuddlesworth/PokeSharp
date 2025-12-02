@@ -1267,9 +1267,13 @@
               "value": {
                 "map": "lavaridge_town_herb_shop",
                 "x": 3,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1289,9 +1293,13 @@
               "value": {
                 "map": "lavaridge_town_gym_1f",
                 "x": 13,
-                "y": 18,
-                "elevation": 3
+                "y": 18
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1311,9 +1319,13 @@
               "value": {
                 "map": "lavaridge_town_mart",
                 "x": 3,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1333,9 +1345,13 @@
               "value": {
                 "map": "lavaridge_town_pokemon_center_1f",
                 "x": 7,
-                "y": 8,
-                "elevation": 3
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1355,9 +1371,13 @@
               "value": {
                 "map": "lavaridge_town_house",
                 "x": 3,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1377,9 +1397,13 @@
               "value": {
                 "map": "lavaridge_town_pokemon_center_1f",
                 "x": 2,
-                "y": 1,
-                "elevation": 0
+                "y": 1
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -1410,9 +1434,13 @@
               "value": {
                 "variable": "TRIGGER_RUN_IMMEDIATELY",
                 "value": 0,
-                "triggerScript": "Triggers/LavaridgeTown_EventScript_HotSpringsTrigger.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/LavaridgeTown_EventScript_HotSpringsTrigger.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -1441,9 +1469,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LavaridgeTown_EventScript_HerbShopSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LavaridgeTown_EventScript_HerbShopSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1461,9 +1493,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LavaridgeTown_EventScript_GymSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LavaridgeTown_EventScript_GymSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1482,9 +1518,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemartSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1502,9 +1542,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/LavaridgeTown_EventScript_TownSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/LavaridgeTown_EventScript_TownSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1523,9 +1567,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemonCenterSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1544,9 +1592,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemartSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1565,9 +1617,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemonCenterSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -1586,8 +1642,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_ICE_HEAL",
-                "flag": "FLAG_HIDDEN_ITEM_LAVARIDGE_TOWN_ICE_HEAL",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_LAVARIDGE_TOWN_ICE_HEAL"
               }
             }
           ]
@@ -1610,6 +1665,61 @@
       "name": "display_name",
       "type": "string",
       "value": "LavaridgeTown"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_OLDALE"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_TOWN"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_LAVARIDGE_TOWN"
     },
     {
       "name": "border",

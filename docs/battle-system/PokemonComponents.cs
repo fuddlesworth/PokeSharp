@@ -135,7 +135,7 @@ public struct PokemonIVs
             Defense = (byte)rng.Next(32),
             SpecialAttack = (byte)rng.Next(32),
             SpecialDefense = (byte)rng.Next(32),
-            Speed = (byte)rng.Next(32)
+            Speed = (byte)rng.Next(32),
         };
     }
 }
@@ -246,9 +246,7 @@ public struct PokemonStatModifiers
         stage = Math.Max((sbyte)-6, Math.Min((sbyte)6, stage));
 
         // Stage formula: positive = (2+stage)/2, negative = 2/(2-stage)
-        return stage >= 0
-            ? (2 + stage) / 2.0f
-            : 2.0f / (2 - stage);
+        return stage >= 0 ? (2 + stage) / 2.0f : 2.0f / (2 - stage);
     }
 }
 
@@ -293,7 +291,7 @@ public struct PokemonMoveSet
             1 => Move2Id,
             2 => Move3Id,
             3 => Move4Id,
-            _ => 0
+            _ => 0,
         };
     }
 
@@ -308,7 +306,7 @@ public struct PokemonMoveSet
             1 => Move2PP,
             2 => Move3PP,
             3 => Move4PP,
-            _ => 0
+            _ => 0,
         };
     }
 
@@ -327,10 +325,22 @@ public struct PokemonMoveSet
     {
         switch (slot)
         {
-            case 0: if (Move1PP > 0) Move1PP--; break;
-            case 1: if (Move2PP > 0) Move2PP--; break;
-            case 2: if (Move3PP > 0) Move3PP--; break;
-            case 3: if (Move4PP > 0) Move4PP--; break;
+            case 0:
+                if (Move1PP > 0)
+                    Move1PP--;
+                break;
+            case 1:
+                if (Move2PP > 0)
+                    Move2PP--;
+                break;
+            case 2:
+                if (Move3PP > 0)
+                    Move3PP--;
+                break;
+            case 3:
+                if (Move4PP > 0)
+                    Move4PP--;
+                break;
         }
     }
 }
@@ -494,5 +504,5 @@ public enum StatusCondition : byte
     Burned = 3,
     Paralyzed = 4,
     Asleep = 5,
-    Frozen = 6
+    Frozen = 6,
 }

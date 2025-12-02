@@ -9667,9 +9667,13 @@
               "value": {
                 "map": "meteor_falls_1f_1r",
                 "x": 27,
-                "y": 18,
-                "elevation": 4
+                "y": 18
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9689,9 +9693,13 @@
               "value": {
                 "map": "route114_fossil_maniacs_house",
                 "x": 4,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9711,9 +9719,13 @@
               "value": {
                 "map": "route114_lanettes_house",
                 "x": 5,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9733,9 +9745,13 @@
               "value": {
                 "map": "terra_cave_entrance",
                 "x": 8,
-                "y": 18,
-                "elevation": 0
+                "y": 18
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9755,9 +9771,13 @@
               "value": {
                 "map": "terra_cave_entrance",
                 "x": 8,
-                "y": 18,
-                "elevation": 0
+                "y": 18
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -9786,9 +9806,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route114_EventScript_MeteorFallsSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route114_EventScript_MeteorFallsSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9806,9 +9830,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route114_EventScript_FossilManiacsHouseSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/Route114_EventScript_FossilManiacsHouseSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -9826,8 +9854,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BROWN_CAVE1_1",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BROWN_CAVE1_1"
               }
             }
           ]
@@ -9846,8 +9873,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BROWN_CAVE2_1",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BROWN_CAVE2_1"
               }
             }
           ]
@@ -9866,8 +9892,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BROWN_CAVE3_1",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BROWN_CAVE3_1"
               }
             }
           ]
@@ -9886,8 +9911,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BROWN_CAVE4_1",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BROWN_CAVE4_1"
               }
             }
           ]
@@ -9906,8 +9930,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_TREE3_2",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_TREE3_2"
               }
             }
           ]
@@ -9926,8 +9949,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_TREE4_2",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_TREE4_2"
               }
             }
           ]
@@ -9946,9 +9968,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/Route114_EventScript_LanettesHouseSign.csx",
-                "elevation": 3
+                "interactionScript": "Interactions/Route114_EventScript_LanettesHouseSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -9967,8 +9993,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_CARBOS",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_114_CARBOS",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_114_CARBOS"
               }
             }
           ]
@@ -9987,8 +10012,7 @@
               "propertytype": "SecretBaseEvent",
               "type": "class",
               "value": {
-                "secret_base_id": "SECRET_BASE_BROWN_CAVE4_3",
-                "elevation": 0
+                "secret_base_id": "SECRET_BASE_BROWN_CAVE4_3"
               }
             }
           ]
@@ -10008,8 +10032,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_REVIVE",
-                "flag": "FLAG_HIDDEN_ITEM_ROUTE_114_REVIVE",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_ROUTE_114_REVIVE"
               }
             }
           ]
@@ -10032,6 +10055,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Route114"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_ROUTE110"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_ROUTE"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_ROUTE_114"
     },
     {
       "name": "border",

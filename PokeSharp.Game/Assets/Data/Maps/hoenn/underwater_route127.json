@@ -19267,9 +19267,13 @@
               "value": {
                 "map": "underwater_marine_cave",
                 "x": 9,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -19289,9 +19293,13 @@
               "value": {
                 "map": "underwater_marine_cave",
                 "x": 9,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -19321,8 +19329,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_STAR_PIECE",
-                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_127_STAR_PIECE",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_127_STAR_PIECE"
               }
             }
           ]
@@ -19342,8 +19349,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_HP_UP",
-                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_127_HP_UP",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_127_HP_UP"
               }
             }
           ]
@@ -19363,8 +19369,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_HEART_SCALE",
-                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_127_HEART_SCALE",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_127_HEART_SCALE"
               }
             }
           ]
@@ -19384,8 +19389,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_RED_SHARD",
-                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_127_RED_SHARD",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_127_RED_SHARD"
               }
             }
           ]
@@ -19408,6 +19412,61 @@
       "name": "display_name",
       "type": "string",
       "value": "Underwater_Route127"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_UNDERWATER"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_UNDERWATER_BUBBLES"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERWATER"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_UNDERWATER_127"
     },
     {
       "name": "border",

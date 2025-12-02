@@ -2767,9 +2767,13 @@
               "value": {
                 "map": "petalburg_city_house1",
                 "x": 3,
-                "y": 8,
-                "elevation": 0
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2789,9 +2793,13 @@
               "value": {
                 "map": "petalburg_city_wallys_house",
                 "x": 3,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2811,9 +2819,13 @@
               "value": {
                 "map": "petalburg_city_gym",
                 "x": 4,
-                "y": 111,
-                "elevation": 3
+                "y": 111
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2833,9 +2845,13 @@
               "value": {
                 "map": "petalburg_city_pokemon_center_1f",
                 "x": 7,
-                "y": 8,
-                "elevation": 3
+                "y": 8
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2855,9 +2871,13 @@
               "value": {
                 "map": "petalburg_city_house2",
                 "x": 3,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -2877,9 +2897,13 @@
               "value": {
                 "map": "petalburg_city_mart",
                 "x": 3,
-                "y": 7,
-                "elevation": 0
+                "y": 7
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         }
@@ -2910,9 +2934,13 @@
               "value": {
                 "variable": "VAR_PETALBURG_CITY_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/PetalburgCity_EventScript_ShowGymToPlayer0.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/PetalburgCity_EventScript_ShowGymToPlayer0.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2932,9 +2960,13 @@
               "value": {
                 "variable": "VAR_PETALBURG_CITY_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/PetalburgCity_EventScript_ShowGymToPlayer1.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/PetalburgCity_EventScript_ShowGymToPlayer1.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2954,9 +2986,13 @@
               "value": {
                 "variable": "VAR_PETALBURG_CITY_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/PetalburgCity_EventScript_ShowGymToPlayer2.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/PetalburgCity_EventScript_ShowGymToPlayer2.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2976,9 +3012,13 @@
               "value": {
                 "variable": "VAR_PETALBURG_CITY_STATE",
                 "value": 0,
-                "triggerScript": "Triggers/PetalburgCity_EventScript_ShowGymToPlayer3.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/PetalburgCity_EventScript_ShowGymToPlayer3.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -2998,9 +3038,13 @@
               "value": {
                 "variable": "VAR_SCOTT_PETALBURG_ENCOUNTER",
                 "value": 0,
-                "triggerScript": "Triggers/PetalburgCity_EventScript_Scott0.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/PetalburgCity_EventScript_Scott0.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3020,9 +3064,13 @@
               "value": {
                 "variable": "VAR_SCOTT_PETALBURG_ENCOUNTER",
                 "value": 0,
-                "triggerScript": "Triggers/PetalburgCity_EventScript_Scott1.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/PetalburgCity_EventScript_Scott1.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3042,9 +3090,13 @@
               "value": {
                 "variable": "VAR_SCOTT_PETALBURG_ENCOUNTER",
                 "value": 0,
-                "triggerScript": "Triggers/PetalburgCity_EventScript_Scott2.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/PetalburgCity_EventScript_Scott2.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         },
@@ -3064,9 +3116,13 @@
               "value": {
                 "variable": "VAR_SCOTT_PETALBURG_ENCOUNTER",
                 "value": 0,
-                "triggerScript": "Triggers/PetalburgCity_EventScript_Scott3.csx",
-                "elevation": 3
+                "triggerScript": "Triggers/PetalburgCity_EventScript_Scott3.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
             }
           ]
         }
@@ -3095,9 +3151,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/PetalburgCity_EventScript_GymSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/PetalburgCity_EventScript_GymSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -3116,9 +3176,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemartSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -3137,9 +3201,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemonCenterSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -3157,9 +3225,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/PetalburgCity_EventScript_CitySign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/PetalburgCity_EventScript_CitySign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -3178,9 +3250,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemonCenterSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -3199,9 +3275,13 @@
               "type": "class",
               "value": {
                 "interactionScript": "Interactions/Common_EventScript_ShowPokemartSign.csx",
-                "elevation": 0,
                 "facing": "North"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -3219,9 +3299,13 @@
               "propertytype": "SignEvent",
               "type": "class",
               "value": {
-                "interactionScript": "Interactions/PetalburgCity_EventScript_WallyHouseSign.csx",
-                "elevation": 0
+                "interactionScript": "Interactions/PetalburgCity_EventScript_WallyHouseSign.csx"
               }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
             }
           ]
         },
@@ -3240,8 +3324,7 @@
               "type": "class",
               "value": {
                 "item": "ITEM_RARE_CANDY",
-                "flag": "FLAG_HIDDEN_ITEM_PETALBURG_CITY_RARE_CANDY",
-                "elevation": 3
+                "flag": "FLAG_HIDDEN_ITEM_PETALBURG_CITY_RARE_CANDY"
               }
             }
           ]
@@ -3264,6 +3347,61 @@
       "name": "display_name",
       "type": "string",
       "value": "PetalburgCity"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_PETALBURG"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_SUNNY"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_CITY"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "MAPSEC_PETALBURG_CITY"
     },
     {
       "name": "border",

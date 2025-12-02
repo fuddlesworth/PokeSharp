@@ -209,11 +209,14 @@ def main():
                 logger.debug(f"Map bin: {layout.get('map_bin')}")
                 logger.debug(f"Map bin exists: {layout.get('map_bin') and Path(layout['map_bin']).exists()}")
                 
-                logger.debug("Calling convert_map...")
-                tiled_map = converter.convert_map(map_data, layouts, first_map_info.get("region", "hoenn"))
+                logger.debug("Calling convert_map_with_metatiles...")
+                region = first_map_info.get("region", "hoenn")
+                tiled_map = converter.convert_map_with_metatiles(
+                    first_map_id, map_data, layouts, region, warp_lookup
+                )
                 logger.debug(f"Result: {tiled_map is not None}")
                 if tiled_map is None:
-                    logger.debug("convert_map returned None - check error messages above")
+                    logger.debug("convert_map_with_metatiles returned None - check error messages above")
         except Exception as e:
             logger.debug(f"Exception during debug conversion: {e}", exc_info=True)
     
