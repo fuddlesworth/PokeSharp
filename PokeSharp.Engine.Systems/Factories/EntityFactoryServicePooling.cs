@@ -66,7 +66,7 @@ public sealed class EntityFactoryServicePooling : IEntityFactoryService
         EntitySpawnContext? context = null
     )
     {
-        return SpawnFromTemplateInternal(templateId, world, context, false, "default");
+        return SpawnFromTemplateInternal(templateId, world, context, false, PoolNames.Default);
     }
 
     /// <inheritdoc />
@@ -310,7 +310,7 @@ public sealed class EntityFactoryServicePooling : IEntityFactoryService
         World world,
         EntitySpawnContext? context,
         bool usePooling,
-        string poolName = "default"
+        string poolName = PoolNames.Default
     )
     {
         return SpawnFromTemplateInternal(templateId, world, context, usePooling, poolName);

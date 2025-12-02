@@ -1452,6 +1452,7 @@ public class ConsoleSystem : IUpdateSystem
             IsActive = _world.IsAlive(entity),
             Components = new List<string>(),
             Properties = new Dictionary<string, string>(),
+            ComponentData = new Dictionary<string, Dictionary<string, string>>(),
         };
 
         try
@@ -1464,9 +1465,12 @@ public class ConsoleSystem : IUpdateSystem
             info.Name = DetermineEntityName(entity, detectedComponents);
             info.Tag = DetermineEntityTag(detectedComponents);
 
-            // Get properties
+            // Get properties (simple flattened view)
             info.Properties = GetEntityProperties(entity, detectedComponents);
             info.Properties["Components"] = detectedComponents.Count.ToString();
+            
+            // Get component data (structured by component name) using Arch's built-in inspection
+            info.ComponentData = _componentRegistry.GetComponentData(entity);
         }
         catch (Exception ex)
         {

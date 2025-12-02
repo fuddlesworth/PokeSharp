@@ -3,6 +3,7 @@ using Arch.Core.Extensions;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Core.Systems;
 using PokeSharp.Engine.Core.Types;
+using PokeSharp.Engine.Systems.Queries;
 using PokeSharp.Game.Components.Maps;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Components.Player;
@@ -44,10 +45,6 @@ public class WarpSystem : SystemBase, IUpdateSystem
     // Per-frame cache of map warp lookups
     private readonly Dictionary<MapRuntimeId, MapWarps> _mapWarpCache = new(4);
 
-    // Cached queries
-    private QueryDescription _mapQuery;
-    private QueryDescription _playerQuery;
-
     /// <summary>
     ///     Creates a new WarpSystem with optional logger.
     /// </summary>
@@ -70,14 +67,7 @@ public class WarpSystem : SystemBase, IUpdateSystem
     public override void Initialize(World world)
     {
         base.Initialize(world);
-
-        // Query for player with position, movement, and warp state
-        _playerQuery = new QueryDescription().WithAll<Player, Position, GridMovement, WarpState>();
-
-        // Query for map entities with warp spatial index
-        _mapQuery = new QueryDescription().WithAll<MapInfo, MapWarps>();
-
-        _logger?.LogDebug("WarpSystem initialized (pure ECS mode)");
+        _logger?.LogDebug("WarpSystem initialized (using static queries)");
     }
 
     /// <inheritdoc />
@@ -95,7 +85,7 @@ public class WarpSystem : SystemBase, IUpdateSystem
 
         // Process each player
         world.Query(
-            in _playerQuery,
+            in Queries.PlayerWithWarpState,
             (
                 Entity playerEntity,
                 ref Position position,
@@ -117,7 +107,7 @@ public class WarpSystem : SystemBase, IUpdateSystem
         _mapWarpCache.Clear();
 
         world.Query(
-            in _mapQuery,
+            in Queries.MapWithWarps,
             (ref MapInfo info, ref MapWarps warps) =>
             {
                 _mapWarpCache[info.MapId] = warps;

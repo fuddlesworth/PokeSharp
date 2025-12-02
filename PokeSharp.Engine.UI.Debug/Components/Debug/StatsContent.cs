@@ -15,7 +15,7 @@ namespace PokeSharp.Engine.UI.Debug.Components.Debug;
 /// </summary>
 public class StatsContent : UIComponent
 {
-    // Performance thresholds for color coding
+    // Performance thresholds for color coding (domain-specific constants)
     private const float FpsExcellent = 60f;
     private const float FpsGood = 55f;
     private const float FpsFair = 30f;
@@ -32,14 +32,14 @@ public class StatsContent : UIComponent
     private const float TotalSystemTimeGood = 10f;
     private const float TotalSystemTimeWarning = 16f;
 
-    // Layout constants
-    private const int SectionSpacing = 8;
-    private const int GcColumnWidth = 80;
+    // Content-specific layout constants
     private const int MaxSystemNameLength = 18;
     private const int TruncatedNameLength = 15;
 
-    // Scrolling constants
-    private const int ScrollSpeed = 30;
+    // Layout values from theme (accessed dynamically for theme switching)
+    private int SectionSpacing => ThemeManager.Current.SectionSpacing;
+    private int GcColumnWidth => ThemeManager.Current.TableColumnWidth;
+    private int ScrollSpeed => ThemeManager.Current.ScrollSpeed;
 
     // Sparkline component for frame time history
     private readonly Sparkline _frameTimeSparkline;

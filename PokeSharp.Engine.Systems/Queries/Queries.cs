@@ -1,11 +1,13 @@
 using Arch.Core;
 using PokeSharp.Engine.Systems.Management;
+using PokeSharp.Game.Components;
 using PokeSharp.Game.Components.Maps;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Components.NPCs;
 using PokeSharp.Game.Components.Player;
 using PokeSharp.Game.Components.Rendering;
 using PokeSharp.Game.Components.Tiles;
+using PokeSharp.Game.Components.Warps;
 
 namespace PokeSharp.Engine.Systems.Queries;
 
@@ -296,5 +298,35 @@ public static class Queries
         Position,
         GridMovement,
         MovementRoute
+    >();
+
+    // ============================================================================
+    // WARP QUERIES
+    // ============================================================================
+
+    /// <summary>
+    ///     Player entities with warp state for warp detection and handling.
+    ///     Used by WarpSystem to check for warp triggers.
+    /// </summary>
+    public static readonly QueryDescription PlayerWithWarpState = QueryCache.Get<
+        Player,
+        Position,
+        GridMovement,
+        WarpState
+    >();
+
+    /// <summary>
+    ///     Map entities with warp definitions and spatial index.
+    ///     Used by WarpSystem to query available warps per map.
+    /// </summary>
+    public static readonly QueryDescription MapWithWarps = QueryCache.Get<MapInfo, MapWarps>();
+
+    /// <summary>
+    ///     Map entities with world position for multi-map rendering.
+    ///     Used by systems that need world coordinates of maps.
+    /// </summary>
+    public static readonly QueryDescription MapWithWorldPosition = QueryCache.Get<
+        MapInfo,
+        MapWorldPosition
     >();
 }

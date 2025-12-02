@@ -17,6 +17,9 @@ public class EntityInfo
     /// <summary>List of component types attached</summary>
     public List<string> Components { get; set; } = new();
 
+    /// <summary>Component data with their field values (ComponentName -> Fields)</summary>
+    public Dictionary<string, Dictionary<string, string>> ComponentData { get; set; } = new();
+
     /// <summary>Whether this entity is currently active</summary>
     public bool IsActive { get; set; } = true;
 

@@ -10,6 +10,7 @@ using PokeSharp.Game.Data.Loading;
 using PokeSharp.Game.Data.Services;
 using PokeSharp.Game.Infrastructure.Configuration;
 using PokeSharp.Game.Infrastructure.Services;
+using static PokeSharp.Engine.Systems.Pooling.PoolNames;
 
 namespace PokeSharp.Game.Infrastructure.ServiceRegistration;
 
@@ -67,7 +68,7 @@ public static class CoreServicesExtensions
             PoolConfig tilePool = gameplayConfig.Pools.Tile;
 
             poolManager.RegisterPool(
-                "player",
+                PoolNames.Player,
                 playerPool.InitialSize,
                 playerPool.MaxSize,
                 playerPool.Warmup,
@@ -76,7 +77,7 @@ public static class CoreServicesExtensions
                 playerPool.AbsoluteMaxSize
             );
             poolManager.RegisterPool(
-                "npc",
+                PoolNames.Npc,
                 npcPool.InitialSize,
                 npcPool.MaxSize,
                 npcPool.Warmup,
@@ -85,7 +86,7 @@ public static class CoreServicesExtensions
                 npcPool.AbsoluteMaxSize
             );
             poolManager.RegisterPool(
-                "tile",
+                PoolNames.Tile,
                 tilePool.InitialSize,
                 tilePool.MaxSize,
                 tilePool.Warmup,

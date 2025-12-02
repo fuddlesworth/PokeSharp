@@ -205,6 +205,20 @@ public class UITheme
             PanelEdgeGap = 20f,
             SuggestionPadding = 20f,
 
+            // Panel sizing constraints
+            PanelMaxWidth = 800f,
+            PanelMaxHeight = 600f,
+            DropdownMaxHeight = 300f,
+            DocumentationMinWidth = 400f,
+            DocumentationMaxWidth = 600f,
+
+            // Scrolling
+            ScrollSpeed = 30,
+
+            // Table layouts
+            TableColumnWidth = 80,
+            SectionSpacing = 8,
+
             // Interactive thresholds
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
@@ -346,6 +360,14 @@ public class UITheme
             ComponentGap = 10f,
             PanelEdgeGap = 20f,
             SuggestionPadding = 20f,
+            PanelMaxWidth = 800f,
+            PanelMaxHeight = 600f,
+            DropdownMaxHeight = 300f,
+            DocumentationMinWidth = 400f,
+            DocumentationMaxWidth = 600f,
+            ScrollSpeed = 30,
+            TableColumnWidth = 80,
+            SectionSpacing = 8,
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
             DoubleClickThreshold = 0.5f,
@@ -480,6 +502,14 @@ public class UITheme
             ComponentGap = 10f,
             PanelEdgeGap = 20f,
             SuggestionPadding = 20f,
+            PanelMaxWidth = 800f,
+            PanelMaxHeight = 600f,
+            DropdownMaxHeight = 300f,
+            DocumentationMinWidth = 400f,
+            DocumentationMaxWidth = 600f,
+            ScrollSpeed = 30,
+            TableColumnWidth = 80,
+            SectionSpacing = 8,
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
             DoubleClickThreshold = 0.5f,
@@ -614,6 +644,14 @@ public class UITheme
             ComponentGap = 10f,
             PanelEdgeGap = 20f,
             SuggestionPadding = 20f,
+            PanelMaxWidth = 800f,
+            PanelMaxHeight = 600f,
+            DropdownMaxHeight = 300f,
+            DocumentationMinWidth = 400f,
+            DocumentationMaxWidth = 600f,
+            ScrollSpeed = 30,
+            TableColumnWidth = 80,
+            SectionSpacing = 8,
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
             DoubleClickThreshold = 0.5f,
@@ -748,6 +786,14 @@ public class UITheme
             ComponentGap = 10f,
             PanelEdgeGap = 20f,
             SuggestionPadding = 20f,
+            PanelMaxWidth = 800f,
+            PanelMaxHeight = 600f,
+            DropdownMaxHeight = 300f,
+            DocumentationMinWidth = 400f,
+            DocumentationMaxWidth = 600f,
+            ScrollSpeed = 30,
+            TableColumnWidth = 80,
+            SectionSpacing = 8,
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
             DoubleClickThreshold = 0.5f,
@@ -882,6 +928,14 @@ public class UITheme
             ComponentGap = 10f,
             PanelEdgeGap = 20f,
             SuggestionPadding = 20f,
+            PanelMaxWidth = 800f,
+            PanelMaxHeight = 600f,
+            DropdownMaxHeight = 300f,
+            DocumentationMinWidth = 400f,
+            DocumentationMaxWidth = 600f,
+            ScrollSpeed = 30,
+            TableColumnWidth = 80,
+            SectionSpacing = 8,
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
             DoubleClickThreshold = 0.5f,
@@ -1061,6 +1115,14 @@ public class UITheme
             ComponentGap = 10f,
             PanelEdgeGap = 20f,
             SuggestionPadding = 20f,
+            PanelMaxWidth = 800f,
+            PanelMaxHeight = 600f,
+            DropdownMaxHeight = 300f,
+            DocumentationMinWidth = 400f,
+            DocumentationMaxWidth = 600f,
+            ScrollSpeed = 30,
+            TableColumnWidth = 80,
+            SectionSpacing = 8,
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
             DoubleClickThreshold = 0.5f,
@@ -1237,6 +1299,14 @@ public class UITheme
             ComponentGap = 10f,
             PanelEdgeGap = 20f,
             SuggestionPadding = 20f,
+            PanelMaxWidth = 800f,
+            PanelMaxHeight = 600f,
+            DropdownMaxHeight = 300f,
+            DocumentationMinWidth = 400f,
+            DocumentationMaxWidth = 600f,
+            ScrollSpeed = 30,
+            TableColumnWidth = 80,
+            SectionSpacing = 8,
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
             DoubleClickThreshold = 0.5f,
@@ -1425,6 +1495,20 @@ public class UITheme
     public float ComponentGap { get; init; }
     public float PanelEdgeGap { get; init; }
     public float SuggestionPadding { get; init; }
+
+    // Panel sizing constraints
+    public float PanelMaxWidth { get; init; }
+    public float PanelMaxHeight { get; init; }
+    public float DropdownMaxHeight { get; init; }
+    public float DocumentationMinWidth { get; init; }
+    public float DocumentationMaxWidth { get; init; }
+
+    // Scrolling
+    public int ScrollSpeed { get; init; }
+
+    // Table layouts
+    public int TableColumnWidth { get; init; }
+    public int SectionSpacing { get; init; }
 
     // Interactive thresholds
     public float DragThreshold { get; init; }

@@ -165,6 +165,7 @@ public class ConsolePanelBuilder
 
     private TextEditor CreateDefaultCommandEditor()
     {
+        var theme = ThemeManager.Current;
         return new TextEditor("console_input")
         {
             Prompt = NerdFontIcons.Prompt,
@@ -175,26 +176,25 @@ public class ConsolePanelBuilder
             {
                 Anchor = Anchor.StretchBottom,
                 OffsetY = 0,
-                Height = 30, // Fixed height
+                Height = theme.InputHeight,
             },
         };
     }
 
     private SuggestionsDropdown CreateDefaultSuggestionsDropdown()
     {
+        var theme = ThemeManager.Current;
         return new SuggestionsDropdown("console_suggestions")
         {
             MaxVisibleItems = _maxVisibleSuggestions,
             Constraint = new LayoutConstraint
             {
                 Anchor = Anchor.BottomLeft,
-                OffsetX = ThemeManager.Current.ComponentGap,
-                OffsetY = -(
-                    ThemeManager.Current.MinInputHeight + ThemeManager.Current.ComponentGap
-                ),
+                OffsetX = theme.ComponentGap,
+                OffsetY = -(theme.MinInputHeight + theme.ComponentGap),
                 WidthPercent = 0.5f,
-                MinWidth = 400f,
-                MaxWidth = 800f,
+                MinWidth = 400f, // Keep as-is for suggestions width
+                MaxWidth = theme.PanelMaxWidth,
                 Height = 0,
             },
         };
@@ -216,6 +216,7 @@ public class ConsolePanelBuilder
 
     private SearchBar CreateDefaultSearchBar()
     {
+        var theme = ThemeManager.Current;
         return new SearchBar("console_search")
         {
             // BackgroundColor uses theme fallback - don't set explicitly
@@ -224,7 +225,7 @@ public class ConsolePanelBuilder
             {
                 Anchor = Anchor.StretchBottom,
                 OffsetY = 0,
-                Height = 30, // Fixed height
+                Height = theme.InputHeight,
             },
         };
     }
@@ -245,6 +246,7 @@ public class ConsolePanelBuilder
 
     private ParameterHintTooltip CreateDefaultParameterHints()
     {
+        var theme = ThemeManager.Current;
         return new ParameterHintTooltip("parameter_hints")
         {
             Constraint = new LayoutConstraint
@@ -253,24 +255,25 @@ public class ConsolePanelBuilder
                 OffsetY = 0,
                 Height = 0,
                 Width = 0,
-                MaxWidth = 800f,
-                MaxHeight = 300f,
+                MaxWidth = theme.PanelMaxWidth,
+                MaxHeight = theme.DropdownMaxHeight,
             },
         };
     }
 
     private DocumentationPopup CreateDefaultDocumentationPopup()
     {
+        var theme = ThemeManager.Current;
         return new DocumentationPopup("documentation_popup")
         {
             Constraint = new LayoutConstraint
             {
                 Anchor = Anchor.TopRight,
-                OffsetX = -ThemeManager.Current.PanelEdgeGap,
-                OffsetY = ThemeManager.Current.PanelEdgeGap,
+                OffsetX = -theme.PanelEdgeGap,
+                OffsetY = theme.PanelEdgeGap,
                 WidthPercent = 0.35f,
-                MinWidth = 400f,
-                MaxWidth = 600f,
+                MinWidth = theme.DocumentationMinWidth,
+                MaxWidth = theme.DocumentationMaxWidth,
                 HeightPercent = 0.7f,
                 Height = 0,
             },

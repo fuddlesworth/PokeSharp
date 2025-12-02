@@ -313,19 +313,32 @@ Examples:
         context.WriteLine($"  Active: {entity.IsActive}", theme.TextPrimary);
         context.WriteLine($"  Tag: {entity.Tag ?? "(none)"}", theme.TextPrimary);
 
-        if (entity.Properties.Count > 0)
-        {
-            context.WriteLine("  Properties:", theme.Success);
-            foreach ((string key, string value) in entity.Properties)
-            {
-                context.WriteLine($"    {key}: {value}", theme.TextSecondary);
-            }
-        }
-
         context.WriteLine($"  Components ({entity.Components.Count}):", theme.Warning);
         foreach (string component in entity.Components)
         {
             context.WriteLine($"    • {component}", theme.TextSecondary);
+            
+            // Show component field values if available
+            if (entity.ComponentData.TryGetValue(component, out Dictionary<string, string>? fields) && fields.Count > 0)
+            {
+                foreach ((string fieldName, string fieldValue) in fields)
+                {
+                    // Handle multiline values (arrays, dictionaries, etc.)
+                    if (fieldValue.Contains('\n'))
+                    {
+                        string[] lines = fieldValue.Split('\n');
+                        context.WriteLine($"        {fieldName}: {lines[0]}", theme.TextDim);
+                        for (int i = 1; i < lines.Length; i++)
+                        {
+                            context.WriteLine($"        {lines[i]}", theme.TextDim);
+                        }
+                    }
+                    else
+                    {
+                        context.WriteLine($"        {fieldName}: {fieldValue}", theme.TextDim);
+                    }
+                }
+            }
         }
 
         // Also expand it in the panel

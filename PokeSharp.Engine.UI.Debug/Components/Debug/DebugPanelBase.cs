@@ -15,13 +15,9 @@ namespace PokeSharp.Engine.UI.Debug.Components.Debug;
 public abstract class DebugPanelBase : Panel
 {
     /// <summary>
-    ///     Standard padding for all debug panels.
-    /// </summary>
-    public const int StandardPadding = 8;
-
-    /// <summary>
     ///     Standard line padding for content alignment.
     ///     Should match TextBuffer.LinePadding and StatusBar.Padding.
+    ///     This is a specific alignment value, not general padding.
     /// </summary>
     public const int StandardLinePadding = 5;
 
@@ -31,9 +27,10 @@ public abstract class DebugPanelBase : Panel
     {
         StatusBar = statusBar;
 
-        // Standard panel configuration
-        BorderThickness = 1;
-        Constraint.Padding = StandardPadding;
+        // Standard panel configuration using theme
+        var theme = ThemeManager.Current;
+        BorderThickness = theme.BorderWidth;
+        Constraint.Padding = theme.PaddingMedium;
 
         // StatusBar anchored to bottom
         StatusBar.Constraint.Anchor = Anchor.StretchBottom;

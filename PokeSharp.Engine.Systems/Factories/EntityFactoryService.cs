@@ -75,35 +75,59 @@ public sealed class EntityFactoryService(
 
         // Create empty entity first (use pool if available)
         Entity entity;
-        try
+        string poolName = GetPoolNameFromTemplateId(templateId);
+        PoolAcquireResult poolResult = _poolManager.TryAcquireDetailed(poolName);
+
+        if (poolResult.IsSuccess)
         {
-            string poolName = GetPoolNameFromTemplateId(templateId);
-            entity = _poolManager.Acquire(poolName);
+            // Successfully acquired entity from pool
+            entity = poolResult.Entity;
             _logger.LogDebug(
-                "Acquired entity from pool '{PoolName}' for template '{TemplateId}'",
+                "Acquired entity {EntityId} from pool '{PoolName}' for template '{TemplateId}'",
+                entity.Id,
                 poolName,
                 templateId
             );
         }
-        catch (KeyNotFoundException ex)
+        else
         {
-            // Pool doesn't exist - this indicates a configuration error
-            _logger.LogError(
-                "Pool not found for template '{TemplateId}': {Error}. This may cause memory leaks. Register pool or update template configuration.",
-                templateId,
-                ex.Message
-            );
-            entity = world.Create();
-        }
-        catch (InvalidOperationException ex) when (ex.Message.Contains("exhausted"))
-        {
-            // Pool exhausted - this indicates insufficient pool size
-            _logger.LogError(
-                "Pool exhausted for template '{TemplateId}': {Error}. Increase maxSize or release entities more aggressively.",
-                templateId,
-                ex.Message
-            );
-            throw; // Don't fall back - fail fast to reveal the problem
+            // Handle pool acquisition failure based on reason
+            switch (poolResult.FailureReason)
+            {
+                case PoolAcquireFailureReason.PoolNotFound:
+                    _logger.LogWarning(
+                        "Pool '{PoolName}' not found for template '{TemplateId}'. " +
+                        "Creating entity normally. Consider registering pool or updating template configuration.",
+                        poolName,
+                        templateId
+                    );
+                    entity = world.Create();
+                    break;
+
+                case PoolAcquireFailureReason.PoolExhausted:
+                    _logger.LogError(
+                        "Pool '{PoolName}' exhausted ({PoolSize} entities) for template '{TemplateId}'. " +
+                        "Increase maxSize or release entities more aggressively.",
+                        poolName,
+                        poolResult.PoolSize,
+                        templateId
+                    );
+                    // Fail fast to reveal the problem - don't fall back to world.Create()
+                    throw new InvalidOperationException(
+                        $"Entity pool '{poolName}' exhausted (size: {poolResult.PoolSize}). " +
+                        $"Cannot spawn template '{templateId}'."
+                    );
+
+                default:
+                    _logger.LogError(
+                        "Unexpected pool acquire failure for '{PoolName}' (template '{TemplateId}'): {Reason}",
+                        poolName,
+                        templateId,
+                        poolResult.FailureReason
+                    );
+                    entity = world.Create();
+                    break;
+            }
         }
 
         // Add each component using reflection (Arch requires compile-time types)

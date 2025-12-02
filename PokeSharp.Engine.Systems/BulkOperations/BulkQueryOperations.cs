@@ -155,14 +155,22 @@ public sealed class BulkQueryOperations
     /// <param name="action">Action to apply to each entity</param>
     /// <example>
     ///     <code>
-    /// // Tag all enemies as "aggressive"
+    /// // Process all enemies (non-structural changes only)
     /// var query = new QueryDescription().WithAll&lt;Enemy&gt;();
     /// bulkQuery.ForEach(query, entity =>
     /// {
-    ///     entity.Add(new AggressiveTag());
+    ///     // ✅ SAFE: Read operations, logging, etc.
+    ///     Console.WriteLine($"Enemy: {entity.Id}");
+    ///     
+    ///     // ❌ UNSAFE: Don't add/remove components here!
+    ///     // Use AddComponentToMatching() instead for structural changes
     /// });
     /// </code>
     /// </example>
+    /// <remarks>
+    ///     WARNING: Do not perform structural changes (Add/Remove components, Destroy entity)
+    ///     in the action callback. Use AddComponentToMatching() or RemoveComponentFromMatching() instead.
+    /// </remarks>
     public void ForEach(in QueryDescription query, Action<Entity> action)
     {
         ArgumentNullException.ThrowIfNull(action);
@@ -240,6 +248,7 @@ public sealed class BulkQueryOperations
 
     /// <summary>
     ///     Batch add the same component to all entities matching the query.
+    ///     Uses safe collect-then-modify pattern to avoid structural changes during iteration.
     /// </summary>
     /// <typeparam name="T">Component type to add</typeparam>
     /// <param name="query">Query description to match</param>
@@ -254,10 +263,15 @@ public sealed class BulkQueryOperations
     /// );
     /// </code>
     /// </example>
+    /// <remarks>
+    ///     IMPORTANT: This method collects entities first, then applies changes.
+    ///     This prevents undefined behavior from structural changes during query iteration.
+    /// </remarks>
     public int AddComponentToMatching<T>(in QueryDescription query, T component)
         where T : struct
     {
-        int count = 0;
+        // STEP 1: Collect entities that need the component (read-only pass)
+        var entitiesToModify = new List<Entity>();
 
         _world.Query(
             in query,
@@ -265,17 +279,29 @@ public sealed class BulkQueryOperations
             {
                 if (!entity.Has<T>())
                 {
-                    entity.Add(component);
-                    count++;
+                    entitiesToModify.Add(entity);
                 }
             }
         );
 
-        return count;
+        // STEP 2: Apply structural changes after iteration completes
+        int modifiedCount = 0;
+        foreach (Entity entity in entitiesToModify)
+        {
+            // Verify entity is still alive and still needs the component
+            if (_world.IsAlive(entity) && !entity.Has<T>())
+            {
+                entity.Add(component);
+                modifiedCount++;
+            }
+        }
+
+        return modifiedCount;
     }
 
     /// <summary>
     ///     Batch remove a component from all entities matching the query.
+    ///     Uses safe collect-then-modify pattern to avoid structural changes during iteration.
     /// </summary>
     /// <typeparam name="T">Component type to remove</typeparam>
     /// <param name="query">Query description to match</param>
@@ -287,10 +313,15 @@ public sealed class BulkQueryOperations
     /// int removed = bulkQuery.RemoveComponentFromMatching&lt;InvulnerableStatus&gt;(query);
     /// </code>
     /// </example>
+    /// <remarks>
+    ///     IMPORTANT: This method collects entities first, then applies changes.
+    ///     This prevents undefined behavior from structural changes during query iteration.
+    /// </remarks>
     public int RemoveComponentFromMatching<T>(in QueryDescription query)
         where T : struct
     {
-        int count = 0;
+        // STEP 1: Collect entities that have the component (read-only pass)
+        var entitiesToModify = new List<Entity>();
 
         _world.Query(
             in query,
@@ -298,13 +329,24 @@ public sealed class BulkQueryOperations
             {
                 if (entity.Has<T>())
                 {
-                    entity.Remove<T>();
-                    count++;
+                    entitiesToModify.Add(entity);
                 }
             }
         );
 
-        return count;
+        // STEP 2: Apply structural changes after iteration completes
+        int modifiedCount = 0;
+        foreach (Entity entity in entitiesToModify)
+        {
+            // Verify entity is still alive and still has the component
+            if (_world.IsAlive(entity) && entity.Has<T>())
+            {
+                entity.Remove<T>();
+                modifiedCount++;
+            }
+        }
+
+        return modifiedCount;
     }
 
     /// <summary>

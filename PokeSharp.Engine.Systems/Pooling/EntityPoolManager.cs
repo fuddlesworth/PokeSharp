@@ -31,7 +31,7 @@ public class EntityPoolManager
 
         // Create default pool
         DefaultPool = new EntityPool(_world);
-        _pools["default"] = DefaultPool;
+        _pools[PoolNames.Default] = DefaultPool;
     }
 
     /// <summary>
@@ -131,12 +131,105 @@ public class EntityPoolManager
     /// <summary>
     ///     Acquire entity from a named pool.
     /// </summary>
-    /// <param name="poolName">Pool name (default: "default")</param>
+    /// <param name="poolName">Pool name (uses <see cref="PoolNames.Default"/> if not specified)</param>
     /// <returns>Entity from the pool</returns>
-    public Entity Acquire(string poolName = "default")
+    /// <exception cref="KeyNotFoundException">Thrown if pool doesn't exist</exception>
+    /// <exception cref="InvalidOperationException">Thrown if pool is exhausted</exception>
+    public Entity Acquire(string poolName = PoolNames.Default)
     {
         EntityPool pool = GetPool(poolName);
         return pool.Acquire();
+    }
+
+    /// <summary>
+    ///     Attempts to acquire an entity from a named pool without throwing exceptions.
+    ///     This is the preferred method for entity acquisition in production code.
+    /// </summary>
+    /// <param name="poolName">Name of the pool</param>
+    /// <param name="entity">The acquired entity if successful</param>
+    /// <returns>True if entity was acquired successfully, false if pool doesn't exist or is exhausted</returns>
+    /// <example>
+    ///     <code>
+    /// if (_poolManager.TryAcquire(PoolNames.Npc, out Entity entity))
+    /// {
+    ///     // Successfully acquired entity
+    ///     entity.Add(new Position { X = 10, Y = 20 });
+    /// }
+    /// else
+    /// {
+    ///     // Pool not found or exhausted - handle gracefully
+    ///     entity = world.Create();
+    /// }
+    /// </code>
+    /// </example>
+    public bool TryAcquire(string poolName, out Entity entity)
+    {
+        lock (_lock)
+        {
+            // Check if pool exists
+            if (!_pools.TryGetValue(poolName, out EntityPool? pool))
+            {
+                entity = default;
+                return false;
+            }
+
+            // Try to acquire from pool
+            try
+            {
+                entity = pool.Acquire();
+                return true;
+            }
+            catch (InvalidOperationException)
+            {
+                // Pool exhausted (and auto-resize disabled or at max)
+                entity = default;
+                return false;
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Attempts to acquire an entity from a named pool with detailed result information.
+    ///     Useful when you need to differentiate between "pool not found" and "pool exhausted".
+    /// </summary>
+    /// <param name="poolName">Name of the pool</param>
+    /// <returns>Detailed result including success status and failure reason</returns>
+    /// <example>
+    ///     <code>
+    /// PoolAcquireResult result = _poolManager.TryAcquireDetailed(PoolNames.Npc);
+    /// if (result.IsSuccess)
+    /// {
+    ///     // Use result.Entity
+    /// }
+    /// else if (result.FailureReason == PoolAcquireFailureReason.PoolExhausted)
+    /// {
+    ///     _logger.LogError("Pool '{PoolName}' exhausted at {Size} entities", 
+    ///         result.PoolName, result.PoolSize);
+    /// }
+    /// </code>
+    /// </example>
+    public PoolAcquireResult TryAcquireDetailed(string poolName)
+    {
+        lock (_lock)
+        {
+            // Check if pool exists
+            if (!_pools.TryGetValue(poolName, out EntityPool? pool))
+            {
+                return PoolAcquireResult.PoolNotFound(poolName);
+            }
+
+            // Try to acquire from pool
+            try
+            {
+                Entity entity = pool.Acquire();
+                return PoolAcquireResult.Success(entity);
+            }
+            catch (InvalidOperationException)
+            {
+                // Pool exhausted (and auto-resize disabled or at max)
+                return PoolAcquireResult.PoolExhausted(poolName, pool.MaxSize);
+            }
+        }
     }
 
     /// <summary>
@@ -156,7 +249,7 @@ public class EntityPoolManager
             }
             else
             {
-                poolName = "default";
+                poolName = PoolNames.Default;
             }
         }
 
@@ -270,4 +363,75 @@ public struct AggregatePoolStatistics
     /// </summary>
     public float OverallReuseRate =>
         TotalCreated > 0 ? 1.0f - ((float)TotalCreated / (TotalActive + TotalAvailable)) : 0f;
+}
+
+/// <summary>
+///     Result of attempting to acquire an entity from a pool.
+///     Provides detailed information about success or failure.
+/// </summary>
+public readonly struct PoolAcquireResult
+{
+    /// <summary>True if entity was successfully acquired</summary>
+    public bool IsSuccess { get; init; }
+
+    /// <summary>The acquired entity (only valid if IsSuccess is true)</summary>
+    public Entity Entity { get; init; }
+
+    /// <summary>Reason for failure (if IsSuccess is false)</summary>
+    public PoolAcquireFailureReason FailureReason { get; init; }
+
+    /// <summary>Name of the pool that was requested</summary>
+    public string? PoolName { get; init; }
+
+    /// <summary>Current size of the pool (if pool exists)</summary>
+    public int? PoolSize { get; init; }
+
+    /// <summary>
+    ///     Creates a success result.
+    /// </summary>
+    public static PoolAcquireResult Success(Entity entity) =>
+        new()
+        {
+            IsSuccess = true,
+            Entity = entity,
+            FailureReason = PoolAcquireFailureReason.None,
+        };
+
+    /// <summary>
+    ///     Creates a "pool not found" failure result.
+    /// </summary>
+    public static PoolAcquireResult PoolNotFound(string poolName) =>
+        new()
+        {
+            IsSuccess = false,
+            FailureReason = PoolAcquireFailureReason.PoolNotFound,
+            PoolName = poolName,
+        };
+
+    /// <summary>
+    ///     Creates a "pool exhausted" failure result.
+    /// </summary>
+    public static PoolAcquireResult PoolExhausted(string poolName, int poolSize) =>
+        new()
+        {
+            IsSuccess = false,
+            FailureReason = PoolAcquireFailureReason.PoolExhausted,
+            PoolName = poolName,
+            PoolSize = poolSize,
+        };
+}
+
+/// <summary>
+///     Reason why entity pool acquisition failed.
+/// </summary>
+public enum PoolAcquireFailureReason
+{
+    /// <summary>No failure - acquisition succeeded</summary>
+    None,
+
+    /// <summary>The requested pool doesn't exist</summary>
+    PoolNotFound,
+
+    /// <summary>The pool exists but has no available entities</summary>
+    PoolExhausted,
 }

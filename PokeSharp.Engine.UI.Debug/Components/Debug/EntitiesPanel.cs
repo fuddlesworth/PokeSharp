@@ -1423,31 +1423,48 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
 
         _entityListBuffer.AppendLine(headerLine, statusColor);
 
-        // If expanded, show components
+        // If expanded, show components with their values
         if (isExpanded)
         {
-            // Basic properties with type-aware formatting
-            foreach (
-                KeyValuePair<string, string> prop in entity.Properties.Take(MaxPropertiesToShow)
-            )
-            {
-                RenderProperty(prop.Key, prop.Value);
-            }
-
-            if (entity.Properties.Count > MaxPropertiesToShow)
-            {
-                _entityListBuffer.AppendLine(
-                    $"      ... ({entity.Properties.Count - MaxPropertiesToShow} more properties)",
-                    ThemeManager.Current.TextDim
-                );
-            }
-
-            // Components
             _entityListBuffer.AppendLine("      Components:", ThemeManager.Current.Info);
+            int componentsShown = 0;
             foreach (string component in entity.Components.Take(MaxComponentsToShow))
             {
                 Color componentColor = GetComponentColor(component);
                 _entityListBuffer.AppendLine($"        - {component}", componentColor);
+                
+                // Show component field values if available
+                if (entity.ComponentData.TryGetValue(component, out Dictionary<string, string>? fields) && fields.Count > 0)
+                {
+                    foreach ((string fieldName, string fieldValue) in fields)
+                    {
+                        // Handle multiline values (arrays, dictionaries, etc.)
+                        if (fieldValue.Contains('\n'))
+                        {
+                            string[] lines = fieldValue.Split('\n');
+                            _entityListBuffer.AppendLine(
+                                $"            {fieldName}: {lines[0]}", 
+                                ThemeManager.Current.TextDim
+                            );
+                            for (int i = 1; i < lines.Length; i++)
+                            {
+                                _entityListBuffer.AppendLine(
+                                    $"            {lines[i]}", 
+                                    ThemeManager.Current.TextDim
+                                );
+                            }
+                        }
+                        else
+                        {
+                            _entityListBuffer.AppendLine(
+                                $"            {fieldName}: {fieldValue}", 
+                                ThemeManager.Current.TextDim
+                            );
+                        }
+                    }
+                }
+                
+                componentsShown++;
             }
 
             if (entity.Components.Count > MaxComponentsToShow)
@@ -1535,35 +1552,68 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     }
 
     /// <summary>
-    ///     Determines the color for a component name based on its category.
+    ///     Determines the color for a component name using hash-based color generation.
+    ///     Each component gets a unique, consistent color based on its name.
     /// </summary>
     private static Color GetComponentColor(string componentName)
     {
-        return componentName switch
+        // Generate a hash from the component name
+        int hash = componentName.GetHashCode();
+        
+        // Use hash to generate HSL values
+        // Hue: 0-360 degrees (full color spectrum)
+        float hue = (Math.Abs(hash) % 360);
+        
+        // Saturation: 50-80% (vibrant but not oversaturated)
+        float saturation = 0.5f + ((Math.Abs(hash >> 8) % 30) / 100f);
+        
+        // Lightness: 50-70% (readable on dark background)
+        float lightness = 0.5f + ((Math.Abs(hash >> 16) % 20) / 100f);
+        
+        return HslToRgb(hue, saturation, lightness);
+    }
+
+    /// <summary>
+    ///     Converts HSL color to RGB.
+    /// </summary>
+    private static Color HslToRgb(float h, float s, float l)
+    {
+        float c = (1 - Math.Abs(2 * l - 1)) * s;
+        float x = c * (1 - Math.Abs((h / 60) % 2 - 1));
+        float m = l - c / 2;
+        
+        float r, g, b;
+        
+        if (h < 60)
         {
-            // Entity types - bright
-            "Player" => ThemeManager.Current.Warning, // Gold/Yellow
-            "Npc" => ThemeManager.Current.Info, // Light blue
-
-            // Movement - green family
-            "Position" or "TilePosition" or "GridMovement" => ThemeManager.Current.Success,
-            "Elevation" or "MovementRequest" or "Collision" => ThemeManager.Current.SuccessDim,
-
-            // Rendering - purple family
-            "Sprite" or "Animation" => ThemeManager.Current.SyntaxType,
-
-            // Tiles - cyan family
-            "TileSprite" or "AnimatedTile" or "TileBehavior" => ThemeManager.Current.SyntaxMethod,
-
-            // NPC-specific - blue family
-            "Behavior" or "Interaction" or "MovementRoute" => ThemeManager.Current.InfoDim,
-
-            // System - dim
-            "Pooled" => ThemeManager.Current.TextDim,
-
-            // Default
-            _ => ThemeManager.Current.Success,
-        };
+            r = c; g = x; b = 0;
+        }
+        else if (h < 120)
+        {
+            r = x; g = c; b = 0;
+        }
+        else if (h < 180)
+        {
+            r = 0; g = c; b = x;
+        }
+        else if (h < 240)
+        {
+            r = 0; g = x; b = c;
+        }
+        else if (h < 300)
+        {
+            r = x; g = 0; b = c;
+        }
+        else
+        {
+            r = c; g = 0; b = x;
+        }
+        
+        return new Color(
+            (byte)((r + m) * 255),
+            (byte)((g + m) * 255),
+            (byte)((b + m) * 255)
+        );
     }
 
     // ═══════════════════════════════════════════════════════════════════════════

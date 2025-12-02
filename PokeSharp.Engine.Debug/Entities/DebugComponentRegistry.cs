@@ -103,12 +103,84 @@ public class DebugComponentRegistry
             Category = category,
             Priority = priority,
             HasComponent = entity => HasComponentDynamic(entity, componentType),
-            GetProperties = entity => GetPropertiesDynamic(entity, componentType),
+            // Create a GetProperties function that uses entity.Get<T> with reflection
+            GetProperties = entity => GetComponentPropertiesReflection(entity, componentType),
         };
 
         _descriptors.Add(descriptor);
         _typeToDescriptor[componentType] = descriptor;
         return this;
+    }
+
+    /// <summary>
+    ///     Gets component properties using reflection on entity.Get<T>().
+    /// </summary>
+    private static Dictionary<string, string> GetComponentPropertiesReflection(
+        Entity entity,
+        Type componentType
+    )
+    {
+        var properties = new Dictionary<string, string>();
+
+        try
+        {
+            if (!HasComponentDynamic(entity, componentType))
+            {
+                return properties;
+            }
+
+            // Get the component using entity.Get<T>() via reflection
+            // Note: Arch's Get method might have "in Entity" or "ref Entity" parameter
+            if (!_getMethodCache.TryGetValue(componentType, out MethodInfo? getMethod))
+            {
+                MethodInfo? genericGet = _entityExtensionsType
+                    .GetMethods(BindingFlags.Public | BindingFlags.Static)
+                    .FirstOrDefault(m =>
+                    {
+                        if (m.Name != "Get" || !m.IsGenericMethod)
+                            return false;
+                        
+                        var parameters = m.GetParameters();
+                        // Check for single Entity parameter (might be by-ref or in)
+                        return parameters.Length == 1;
+                    });
+
+                if (genericGet == null)
+                {
+                    properties["_error"] = "Get<T> method not found via reflection";
+                    return properties;
+                }
+
+                getMethod = genericGet.MakeGenericMethod(componentType);
+                _getMethodCache[componentType] = getMethod;
+            }
+
+            // Invoke Get<T> - even though it returns ref T, Invoke will box it
+            object? component = getMethod.Invoke(null, new object[] { entity });
+            
+            if (component == null)
+            {
+                properties["_error"] = "Get<T> returned null";
+                return properties;
+            }
+
+            // Extract fields and properties
+            properties = ExtractComponentFields(component, componentType);
+            
+            // Empty structs (flags) won't have any fields - this is expected
+            // Don't add debug message for empty components
+        }
+        catch (Exception ex)
+        {
+            // Add detailed error info for debugging
+            properties["_error"] = $"{ex.GetType().Name}: {ex.Message}";
+            if (ex.InnerException != null)
+            {
+                properties["_inner_error"] = ex.InnerException.Message;
+            }
+        }
+
+        return properties;
     }
 
     /// <summary>
@@ -157,23 +229,50 @@ public class DebugComponentRegistry
                 return properties;
             }
 
-            // Get the component value using reflection
-            if (!_getMethodCache.TryGetValue(componentType, out MethodInfo? getMethod))
-            {
-                MethodInfo genericGet = _entityExtensionsType
-                    .GetMethods(BindingFlags.Public | BindingFlags.Static)
-                    .First(m =>
-                        m.Name == "Get"
-                        && m.GetParameters().Length == 1
-                        && m.IsGenericMethod
-                        && !m.ReturnType.IsByRef
-                    );
+            // Note: This method doesn't have access to World, so it can't extract values
+            // Use GetPropertiesDynamicWithWorld instead when World is available
+            return properties;
 
-                getMethod = genericGet.MakeGenericMethod(componentType);
-                _getMethodCache[componentType] = getMethod;
+        }
+        catch
+        {
+            // Return empty on any error
+        }
+
+        return properties;
+    }
+
+    /// <summary>
+    ///     Gets component properties using reflection with World access.
+    ///     Extracts public properties and fields from the component.
+    /// </summary>
+    private static Dictionary<string, string> GetPropertiesDynamicWithWorld(
+        Entity entity,
+        Type componentType,
+        Arch.Core.World world
+    )
+    {
+        var properties = new Dictionary<string, string>();
+
+        try
+        {
+            // Use World.GetComponent<T>(Entity) which returns by value
+            MethodInfo? getComponentMethod = typeof(Arch.Core.World)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .FirstOrDefault(m =>
+                    m.Name == "GetComponent"
+                    && m.IsGenericMethod
+                    && m.GetParameters().Length == 1
+                );
+
+            if (getComponentMethod == null)
+            {
+                return properties;
             }
 
-            object? component = getMethod.Invoke(null, new object[] { entity });
+            MethodInfo genericGet = getComponentMethod.MakeGenericMethod(componentType);
+            object? component = genericGet.Invoke(world, new object[] { entity });
+            
             if (component == null)
             {
                 return properties;
@@ -224,7 +323,7 @@ public class DebugComponentRegistry
     }
 
     /// <summary>
-    ///     Formats a value for display.
+    ///     Formats a value for display with support for arrays, collections, and complex types.
     /// </summary>
     private static string FormatValue(object? value)
     {
@@ -234,14 +333,139 @@ public class DebugComponentRegistry
         }
 
         // Handle common types nicely
-        return value switch
+        switch (value)
         {
-            float f => f.ToString("F2"),
-            double d => d.ToString("F2"),
-            bool b => b.ToString().ToLower(),
-            Enum e => e.ToString(),
-            _ => value.ToString() ?? "?",
-        };
+            case float f:
+                return f.ToString("F2");
+            case double d:
+                return d.ToString("F2");
+            case bool b:
+                return b.ToString().ToLower();
+            case Enum e:
+                return e.ToString();
+            
+            // Handle dictionaries BEFORE ICollection (since IDictionary inherits from ICollection)
+            case System.Collections.IDictionary dict:
+                if (dict.Count == 0)
+                    return "{}";
+                
+                var lines = new List<string> { $"{{{dict.Count} entries}}" };
+                
+                foreach (System.Collections.DictionaryEntry entry in dict)
+                {
+                    string key = FormatValue(entry.Key);
+                    string val = FormatValue(entry.Value);
+                    lines.Add($"  {key}: {val}");
+                }
+                
+                return string.Join("\n", lines);
+            
+            // Handle arrays
+            case Array arr:
+                if (arr.Length == 0)
+                    return "[]";
+                return FormatArray(arr);
+            
+            // Handle common collections (non-generic)
+            case System.Collections.ICollection collection:
+                if (collection.Count == 0)
+                    return "[]";
+                return FormatCollection(collection);
+            
+            // Handle IEnumerable (last resort for collections like HashSet<T>, List<T>, etc.)
+            case System.Collections.IEnumerable enumerable when !(value is string):
+                return FormatEnumerable(enumerable);
+            
+            // Handle XNA/MonoGame types
+            case Microsoft.Xna.Framework.Vector2 v2:
+                return $"({v2.X:F1}, {v2.Y:F1})";
+            case Microsoft.Xna.Framework.Vector3 v3:
+                return $"({v3.X:F1}, {v3.Y:F1}, {v3.Z:F1})";
+            case Microsoft.Xna.Framework.Rectangle rect:
+                return $"({rect.X}, {rect.Y}, {rect.Width}x{rect.Height})";
+            case Microsoft.Xna.Framework.Point pt:
+                return $"({pt.X}, {pt.Y})";
+            case Microsoft.Xna.Framework.Color color:
+                return $"#{color.R:X2}{color.G:X2}{color.B:X2}{(color.A < 255 ? color.A.ToString("X2") : "")}";
+            
+            // Handle ValueTuple types
+            case System.Runtime.CompilerServices.ITuple tuple:
+                var tupleItems = new List<string>();
+                for (int i = 0; i < tuple.Length; i++)
+                {
+                    tupleItems.Add(FormatValue(tuple[i]));
+                }
+                return $"({string.Join(", ", tupleItems)})";
+            
+            // Default: use ToString()
+            default:
+                string str = value.ToString() ?? "?";
+                // If ToString() just returns the type name, it's not helpful
+                if (str == value.GetType().FullName || str == value.GetType().Name)
+                    return $"<{value.GetType().Name}>";
+                return str;
+        }
+    }
+
+    /// <summary>
+    ///     Formats an array for display - always multiline, shows all items.
+    /// </summary>
+    private static string FormatArray(Array arr)
+    {
+        if (arr.Length == 0)
+            return "[]";
+        
+        var lines = new List<string> { $"[{arr.Length} items]" };
+        
+        for (int i = 0; i < arr.Length; i++)
+        {
+            lines.Add($"  [{i}] {FormatValue(arr.GetValue(i))}");
+        }
+        
+        return string.Join("\n", lines);
+    }
+
+    /// <summary>
+    ///     Formats a collection for display - always multiline, shows all items.
+    /// </summary>
+    private static string FormatCollection(System.Collections.ICollection collection)
+    {
+        if (collection.Count == 0)
+            return "[]";
+        
+        var lines = new List<string> { $"[{collection.Count} items]" };
+        
+        int idx = 0;
+        foreach (object? item in collection)
+        {
+            lines.Add($"  [{idx}] {FormatValue(item)}");
+            idx++;
+        }
+        
+        return string.Join("\n", lines);
+    }
+
+    /// <summary>
+    ///     Formats an IEnumerable for display - always multiline, shows all items.
+    /// </summary>
+    private static string FormatEnumerable(System.Collections.IEnumerable enumerable)
+    {
+        var items = new List<object?>();
+        foreach (object? item in enumerable)
+        {
+            items.Add(item);
+        }
+        
+        if (items.Count == 0)
+            return "[]";
+        
+        var lines = new List<string> { $"[{items.Count} items]" };
+        for (int i = 0; i < items.Count; i++)
+        {
+            lines.Add($"  [{i}] {FormatValue(items[i])}");
+        }
+        
+        return string.Join("\n", lines);
     }
 
     /// <summary>
@@ -306,11 +530,107 @@ public class DebugComponentRegistry
     }
 
     /// <summary>
+    ///     Gets component data grouped by component name for structured display.
+    ///     Uses registered GetProperties functions to extract component field values.
+    /// </summary>
+    public Dictionary<string, Dictionary<string, string>> GetComponentData(Entity entity)
+    {
+        var componentData = new Dictionary<string, Dictionary<string, string>>();
+
+        try
+        {
+            var componentsOnEntity = _descriptors.Where(d => d.HasComponent(entity)).ToList();
+            
+            // Iterate through registered descriptors and extract component data
+            foreach (ComponentDescriptor descriptor in componentsOnEntity)
+            {
+                var fields = new Dictionary<string, string>();
+                
+                // If descriptor has GetProperties, use it (already has the component data)
+                if (descriptor.GetProperties != null)
+                {
+                    try
+                    {
+                        Dictionary<string, string> props = descriptor.GetProperties(entity);
+                        fields = props;
+                    }
+                    catch (Exception ex)
+                    {
+                        // Add error for debugging
+                        fields["_error"] = $"Failed: {ex.Message}";
+                    }
+                }
+                
+                // Always add to componentData (even if empty) so we know it's there
+                componentData[descriptor.DisplayName] = fields;
+            }
+        }
+        catch (Exception ex)
+        {
+            // Add error to help debug
+            componentData["_GetComponentData_Error"] = new Dictionary<string, string>
+            {
+                ["error"] = ex.Message
+            };
+        }
+
+        return componentData;
+    }
+
+    /// <summary>
+    ///     Extracts public fields and properties from a component object.
+    /// </summary>
+    private static Dictionary<string, string> ExtractComponentFields(object component, Type componentType)
+    {
+        var fields = new Dictionary<string, string>();
+
+        // Extract public properties
+        foreach (PropertyInfo prop in componentType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+        {
+            try
+            {
+                object? value = prop.GetValue(component);
+                fields[prop.Name] = FormatValue(value);
+            }
+            catch
+            {
+                // Skip properties that can't be read
+            }
+        }
+
+        // Extract public fields
+        foreach (FieldInfo field in componentType.GetFields(BindingFlags.Public | BindingFlags.Instance))
+        {
+            try
+            {
+                object? value = field.GetValue(component);
+                fields[field.Name] = FormatValue(value);
+            }
+            catch
+            {
+                // Skip fields that can't be read
+            }
+        }
+
+        return fields;
+    }
+
+    /// <summary>
     ///     Gets all registered component names.
     /// </summary>
     public IEnumerable<string> GetAllComponentNames()
     {
         return _descriptors.Select(d => d.DisplayName).Distinct();
+    }
+
+    /// <summary>
+    ///     Gets count of registered descriptors with GetProperties function.
+    /// </summary>
+    public (int Total, int WithGetProperties) GetRegistrationStats()
+    {
+        int total = _descriptors.Count;
+        int withProps = _descriptors.Count(d => d.GetProperties != null);
+        return (total, withProps);
     }
 
     /// <summary>

@@ -9,7 +9,7 @@ public class PoolConfiguration
     /// <summary>
     ///     Unique name for this pool configuration.
     /// </summary>
-    public string Name { get; set; } = "default";
+    public string Name { get; set; } = PoolNames.Default;
 
     /// <summary>
     ///     Number of entities to pre-allocate when pool is created.
@@ -43,7 +43,7 @@ public class PoolConfiguration
     public static PoolConfiguration Default =>
         new()
         {
-            Name = "default",
+            Name = PoolNames.Default,
             InitialSize = 100,
             MaxSize = 1000,
         };

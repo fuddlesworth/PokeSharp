@@ -38,7 +38,7 @@ public class EntityPool
     /// <param name="trackStatistics">Whether to track performance statistics (slight overhead)</param>
     public EntityPool(
         World world,
-        string poolName = "default",
+        string poolName = PoolNames.Default,
         int initialSize = 100,
         int maxSize = 1000,
         bool trackStatistics = true
