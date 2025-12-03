@@ -68,6 +68,9 @@ public static class NerdFontIcons
     /// <summary>Warning triangle: nf-fa-warning (exclamation_triangle)</summary>
     public const string Warning = "\uF071";
 
+    /// <summary>Alert circle: nf-fa-exclamation_circle</summary>
+    public const string AlertCircle = "\uF06A";
+
     /// <summary>Info circle: nf-fa-info_circle</summary>
     public const string Info = "\uF05A";
 
@@ -156,6 +159,9 @@ public static class NerdFontIcons
 
     /// <summary>Sync: nf-fa-sync (arrows circle)</summary>
     public const string Sync = "\uF021";
+
+    /// <summary>Spinner/loading: nf-fa-spinner</summary>
+    public const string Spinner = "\uF110";
 
     /// <summary>Search/magnifying glass: nf-fa-search</summary>
     public const string Search = "\uF002";
@@ -322,6 +328,9 @@ public static class NerdFontIcons
 
     /// <summary>Log/file text: nf-fa-file_text_o</summary>
     public const string Log = "\uF0F6";
+
+    /// <summary>File alert/warning: nf-fa-file_text_o (with alert context)</summary>
+    public const string FileAlert = "\uF0F6";
 
     /// <summary>Console/terminal: nf-fa-terminal</summary>
     public const string Console = "\uF120";

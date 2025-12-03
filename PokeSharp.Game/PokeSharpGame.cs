@@ -227,6 +227,9 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
         // IMPORTANT: Allow user resizing - this can fix mouse input issues on macOS
         Window.AllowUserResizing = true;
 
+        // Hook up window resize event to update camera viewport
+        Window.ClientSizeChanged += OnClientSizeChanged;
+
         // FIX for macOS mouse input lag (GitHub issue MonoGame#8011)
         // Disabling both fixed timestep and VSync eliminates the significant input lag
         // that occurs on macOS with default settings. This allows immediate mouse click detection.
@@ -297,6 +300,22 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
         );
 
         _sceneManager.ChangeScene(loadingScene);
+    }
+
+    /// <summary>
+    ///     Handles window resize events to update camera viewport and maintain aspect ratio.
+    /// </summary>
+    private void OnClientSizeChanged(object? sender, EventArgs e)
+    {
+        // Only update camera after initialization is complete
+        if (_gameInitializer?.CameraViewportSystem != null && GraphicsDevice != null)
+        {
+            _gameInitializer.CameraViewportSystem.HandleResize(
+                _world,
+                GraphicsDevice.Viewport.Width,
+                GraphicsDevice.Viewport.Height
+            );
+        }
     }
 
     /// <summary>
@@ -479,6 +498,8 @@ public class PokeSharpGame : Microsoft.Xna.Framework.Game, IAsyncDisposable
     {
         if (disposing)
         {
+            // Unhook window event
+            Window.ClientSizeChanged -= OnClientSizeChanged;
             _world?.Dispose();
         }
 

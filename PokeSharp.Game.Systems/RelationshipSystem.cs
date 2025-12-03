@@ -1,24 +1,21 @@
 using Arch.Core;
 using Arch.Core.Extensions;
+using Arch.Relationships;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Core.Systems;
 using PokeSharp.Game.Components.Relationships;
-using RelationshipQueries = PokeSharp.Engine.Systems.Queries.RelationshipQueries;
 
 namespace PokeSharp.Game.Systems;
 
 /// <summary>
-///     System responsible for validating and maintaining entity relationships.
+///     System responsible for validating and maintaining entity relationships using Arch.Relationships.
 ///     Runs late in the update cycle to clean up broken references.
 /// </summary>
 /// <remarks>
 ///     <para>
-///         This system performs critical maintenance tasks:
-///         - Validates parent-child relationships
-///         - Validates owner-owned relationships
-///         - Removes references to destroyed entities
-///         - Detects and optionally cleans up orphaned entities
-///         - Logs relationship integrity issues
+///         With Arch.Relationships, most relationship management is automatic.
+///         This system primarily validates that related entities are still alive
+///         and removes relationships to destroyed entities.
 ///     </para>
 ///     <para>
 ///         Runs with priority 950 (late update) to allow other systems to complete
@@ -27,31 +24,13 @@ namespace PokeSharp.Game.Systems;
 /// </remarks>
 public class RelationshipSystem : SystemBase, IUpdateSystem
 {
-    // Reusable collections to avoid per-update allocations
-    private readonly List<Entity> _entitiesToFix = new();
     private readonly ILogger<RelationshipSystem> _logger;
-    private int _brokenChildrenFixed;
-    private int _brokenOwnedFixed;
-    private int _brokenOwnersFixed;
-
-    // Statistics for monitoring
-    private int _brokenParentsFixed;
-    private QueryDescription _childrenQuery;
-    private int _orphansDetected;
-    private QueryDescription _ownedQuery;
-    private QueryDescription _ownerQuery;
-    private QueryDescription _parentQuery;
+    private int _brokenRelationshipsFixed;
 
     public RelationshipSystem(ILogger<RelationshipSystem> logger)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
-
-    /// <summary>
-    ///     Gets or sets whether orphaned entities should be automatically destroyed.
-    ///     Default is false for safety.
-    /// </summary>
-    public bool AutoDestroyOrphans { get; set; } = false;
 
     /// <summary>
     ///     Gets the priority of this system (950 - late update).
@@ -61,212 +40,73 @@ public class RelationshipSystem : SystemBase, IUpdateSystem
     public override void Initialize(World world)
     {
         base.Initialize(world);
-
-        // Use centralized relationship queries for better semantics
-        _parentQuery = RelationshipQueries.AllChildren; // Entities with Parent component
-        _childrenQuery = RelationshipQueries.AllParents; // Entities with Children component
-        _ownerQuery = RelationshipQueries.AllOwners; // Entities with Owner component
-        _ownedQuery = RelationshipQueries.AllOwned; // Entities with Owned component
-
-        _logger.LogInformation("RelationshipSystem initialized (Priority: {Priority})", Priority);
+        _logger.LogInformation("RelationshipSystem initialized with Arch.Relationships (Priority: {Priority})", Priority);
     }
 
     public override void Update(World world, float deltaTime)
     {
         // Reset statistics
-        _brokenParentsFixed = 0;
-        _brokenChildrenFixed = 0;
-        _brokenOwnersFixed = 0;
-        _brokenOwnedFixed = 0;
-        _orphansDetected = 0;
+        _brokenRelationshipsFixed = 0;
 
-        // Validate all relationship types
-        ValidateParentRelationships(world);
-        ValidateChildrenRelationships(world);
-        ValidateOwnerRelationships(world);
-        ValidateOwnedRelationships(world);
+        // Validate ParentOf relationships (now used for all hierarchies including maps)
+        ValidateRelationships<ParentOf>(world);
+
+        // Validate OwnerOf relationships
+        ValidateRelationships<OwnerOf>(world);
 
         // Log summary if any issues were found
-        if (
-            _brokenParentsFixed > 0
-            || _brokenChildrenFixed > 0
-            || _brokenOwnersFixed > 0
-            || _brokenOwnedFixed > 0
-        )
+        if (_brokenRelationshipsFixed > 0)
         {
             _logger.LogWarning(
-                "Relationship cleanup: {Parents} parent(s), {Children} child refs, {Owners} owner(s), {Owned} owned refs fixed",
-                _brokenParentsFixed,
-                _brokenChildrenFixed,
-                _brokenOwnersFixed,
-                _brokenOwnedFixed
+                "Relationship cleanup: {Count} broken relationship(s) fixed",
+                _brokenRelationshipsFixed
             );
         }
-
-        if (_orphansDetected > 0)
-        {
-            _logger.LogWarning("Detected {Count} orphaned entities", _orphansDetected);
-        }
     }
 
     /// <summary>
-    ///     Validates all Parent components and removes those referencing destroyed entities.
+    ///     Validates relationships of a specific type and removes broken references.
     /// </summary>
-    private void ValidateParentRelationships(World world)
+    private void ValidateRelationships<T>(World world) where T : struct
     {
-        _entitiesToFix.Clear();
+        var entitiesToClean = new List<(Entity parent, Entity child)>();
 
+        // Query all entities and check if they have relationships of this type
         world.Query(
-            in _parentQuery,
-            (Entity entity, ref Parent parent) =>
+            new QueryDescription(),
+            (Entity entity) =>
             {
-                // Skip already invalid relationships
-                if (!parent.IsValid)
+                if (!entity.HasRelationship<T>())
                 {
                     return;
                 }
 
-                if (!world.IsAlive(parent.Value))
+                // Get the relationships and check if related entities are still alive
+                ref var relationships = ref entity.GetRelationships<T>();
+                foreach (var kvp in relationships)
                 {
-                    _entitiesToFix.Add(entity);
-                    _orphansDetected++;
+                    Entity relatedEntity = kvp.Key;
+                    if (!world.IsAlive(relatedEntity))
+                    {
+                        entitiesToClean.Add((entity, relatedEntity));
+                    }
                 }
             }
         );
 
-        foreach (Entity entity in _entitiesToFix)
+        // Remove broken relationships
+        foreach ((Entity parent, Entity child) in entitiesToClean)
         {
-            if (world.IsAlive(entity))
+            if (world.IsAlive(parent))
             {
-                // Mark as invalid instead of removing to avoid expensive ECS structural changes
-                ref Parent parent = ref entity.Get<Parent>();
-                parent.IsValid = false;
-                _brokenParentsFixed++;
-
-                if (AutoDestroyOrphans)
-                {
-                    _logger.LogDebug("Destroying orphaned entity {Entity}", entity);
-                    world.Destroy(entity);
-                }
-                else
-                {
-                    _logger.LogDebug("Marked invalid parent reference for entity {Entity}", entity);
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    ///     Validates all Children components and removes destroyed entities from child lists.
-    /// </summary>
-    private void ValidateChildrenRelationships(World world)
-    {
-        world.Query(
-            in _childrenQuery,
-            (Entity entity, ref Children children) =>
-            {
-                if (children.Values == null)
-                {
-                    return;
-                }
-
-                int initialCount = children.Values.Count;
-                children.Values.RemoveAll(child => !world.IsAlive(child));
-                int removedCount = initialCount - children.Values.Count;
-
-                if (removedCount > 0)
-                {
-                    _brokenChildrenFixed += removedCount;
-                    _logger.LogDebug(
-                        "Removed {Count} invalid child references from entity {Entity}",
-                        removedCount,
-                        entity
-                    );
-                }
-            }
-        );
-    }
-
-    /// <summary>
-    ///     Validates all Owner components and removes those referencing destroyed entities.
-    /// </summary>
-    private void ValidateOwnerRelationships(World world)
-    {
-        _entitiesToFix.Clear();
-
-        world.Query(
-            in _ownerQuery,
-            (Entity entity, ref Owner owner) =>
-            {
-                // Skip already invalid relationships
-                if (!owner.IsValid)
-                {
-                    return;
-                }
-
-                if (!world.IsAlive(owner.Value))
-                {
-                    _entitiesToFix.Add(entity);
-                }
-            }
-        );
-
-        foreach (Entity entity in _entitiesToFix)
-        {
-            if (world.IsAlive(entity))
-            {
-                // Mark as invalid instead of removing to avoid expensive ECS structural changes
-                ref Owner owner = ref entity.Get<Owner>();
-                owner.IsValid = false;
-                _brokenOwnersFixed++;
-                _logger.LogDebug("Marked invalid owner reference for entity {Entity}", entity);
-            }
-        }
-    }
-
-    /// <summary>
-    ///     Validates all Owned components and removes those referencing destroyed owners.
-    /// </summary>
-    private void ValidateOwnedRelationships(World world)
-    {
-        _entitiesToFix.Clear();
-
-        world.Query(
-            in _ownedQuery,
-            (Entity entity, ref Owned owned) =>
-            {
-                // Skip already invalid relationships
-                if (!owned.IsValid)
-                {
-                    return;
-                }
-
-                if (!world.IsAlive(owned.OwnerEntity))
-                {
-                    _entitiesToFix.Add(entity);
-                    _orphansDetected++;
-                }
-            }
-        );
-
-        foreach (Entity entity in _entitiesToFix)
-        {
-            if (world.IsAlive(entity))
-            {
-                // Mark as invalid instead of removing to avoid expensive ECS structural changes
-                ref Owned owned = ref entity.Get<Owned>();
-                owned.IsValid = false;
-                _brokenOwnedFixed++;
-
-                if (AutoDestroyOrphans)
-                {
-                    _logger.LogDebug("Destroying entity {Entity} with invalid owner", entity);
-                    world.Destroy(entity);
-                }
-                else
-                {
-                    _logger.LogDebug("Marked invalid owned reference for entity {Entity}", entity);
-                }
+                parent.RemoveRelationship<T>(child);
+                _brokenRelationshipsFixed++;
+                _logger.LogDebug(
+                    "Removed broken {RelationType} relationship from {Parent} to {Child}",
+                    typeof(T).Name,
+                    parent,
+                    child
+                );
             }
         }
     }
@@ -274,27 +114,5 @@ public class RelationshipSystem : SystemBase, IUpdateSystem
     /// <summary>
     ///     Gets current relationship validation statistics.
     /// </summary>
-    public RelationshipStats GetStats()
-    {
-        return new RelationshipStats
-        {
-            BrokenParentsFixed = _brokenParentsFixed,
-            BrokenChildrenReferencesFixed = _brokenChildrenFixed,
-            BrokenOwnersFixed = _brokenOwnersFixed,
-            BrokenOwnedFixed = _brokenOwnedFixed,
-            OrphansDetected = _orphansDetected,
-        };
-    }
-}
-
-/// <summary>
-///     Statistics about relationship validation performed in the last update.
-/// </summary>
-public struct RelationshipStats
-{
-    public int BrokenParentsFixed;
-    public int BrokenChildrenReferencesFixed;
-    public int BrokenOwnersFixed;
-    public int BrokenOwnedFixed;
-    public int OrphansDetected;
+    public int GetBrokenRelationshipsFixed() => _brokenRelationshipsFixed;
 }

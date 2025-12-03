@@ -24,19 +24,19 @@ public class GameConfiguration
 
 /// <summary>
 ///     Configuration for game window settings.
-///     Default resolution is 4x GBA (240x160 = 960x640).
+///     Default resolution is 1280x800 (5.33x GBA width, 5x GBA height).
 /// </summary>
 public class GameWindowConfig
 {
     /// <summary>
-    ///     Window width in pixels. Default: 960 (4x GBA width of 240).
+    ///     Window width in pixels. Default: 1280.
     /// </summary>
-    public int Width { get; set; } = 960;
+    public int Width { get; set; } = 1280;
 
     /// <summary>
-    ///     Window height in pixels. Default: 640 (4x GBA height of 160).
+    ///     Window height in pixels. Default: 800.
     /// </summary>
-    public int Height { get; set; } = 640;
+    public int Height { get; set; } = 800;
 
     /// <summary>
     ///     Whether the mouse cursor should be visible.

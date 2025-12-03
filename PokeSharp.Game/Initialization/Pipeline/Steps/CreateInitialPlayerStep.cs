@@ -34,6 +34,18 @@ public class CreateInitialPlayerStep : InitializationStepBase
             context.Graphics.PreferredBackBufferHeight
         );
         logger.LogInformation("Initial player created successfully");
+
+        // Initialize camera viewport with current window size
+        if (context.GameInitializer?.CameraViewportSystem != null)
+        {
+            context.GameInitializer.CameraViewportSystem.HandleResize(
+                context.World,
+                context.Graphics.PreferredBackBufferWidth,
+                context.Graphics.PreferredBackBufferHeight
+            );
+            logger.LogInformation("Camera viewport initialized");
+        }
+
         return Task.CompletedTask;
     }
 }

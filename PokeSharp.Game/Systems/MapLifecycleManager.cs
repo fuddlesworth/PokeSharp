@@ -1,5 +1,6 @@
 using Arch.Core;
 using Arch.Core.Extensions;
+using Arch.Relationships;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Common.Logging;
 using PokeSharp.Engine.Core.Types;
@@ -137,29 +138,8 @@ public class MapLifecycleManager(
         var pooledEntities = new List<Entity>();
         var entitiesToDestroy = new List<Entity>();
 
-        // 1. Collect ALL entities with BelongsToMap relationship to this map
-        // This includes: tiles, warps, NPCs, image layers, etc.
-        QueryDescription belongsToMapQuery = new QueryDescription().WithAll<BelongsToMap>();
-        world.Query(
-            belongsToMapQuery,
-            (Entity entity, ref BelongsToMap relationship) =>
-            {
-                if (relationship.MapId == mapId)
-                {
-                    // Separate pooled tile entities from non-pooled for reuse
-                    if (poolManager != null && entity.Has<Pooled>())
-                    {
-                        pooledEntities.Add(entity);
-                    }
-                    else
-                    {
-                        entitiesToDestroy.Add(entity);
-                    }
-                }
-            }
-        );
-
-        // 2. Collect MapInfo entity for this specific map (it doesn't have BelongsToMap)
+        // 1. Find the MapInfo entity for this map
+        Entity? mapInfoEntity = null;
         QueryDescription mapInfoQuery = new QueryDescription().WithAll<MapInfo>();
         world.Query(
             mapInfoQuery,
@@ -167,10 +147,35 @@ public class MapLifecycleManager(
             {
                 if (info.MapId == mapId)
                 {
+                    mapInfoEntity = entity;
                     entitiesToDestroy.Add(entity);
                 }
             }
         );
+
+        // 2. If we found the map entity, iterate its children using ParentOf relationships
+        if (mapInfoEntity.HasValue && world.IsAlive(mapInfoEntity.Value) && mapInfoEntity.Value.HasRelationship<ParentOf>())
+        {
+            ref var mapChildren = ref mapInfoEntity.Value.GetRelationships<ParentOf>();
+            foreach (var kvp in mapChildren)
+            {
+                Entity childEntity = kvp.Key;
+                if (!world.IsAlive(childEntity))
+                {
+                    continue;
+                }
+
+                // Separate pooled tile entities from non-pooled for reuse
+                if (poolManager != null && childEntity.Has<Pooled>())
+                {
+                    pooledEntities.Add(childEntity);
+                }
+                else
+                {
+                    entitiesToDestroy.Add(childEntity);
+                }
+            }
+        }
 
         // Release pooled entities back to pool for reuse
         int releasedCount = 0;
@@ -178,6 +183,14 @@ public class MapLifecycleManager(
         {
             try
             {
+                // CRITICAL: Remove ParentOf relationship BEFORE releasing to pool
+                // The automatic cleanup only happens when the parent is destroyed,
+                // but we're releasing children to pool BEFORE destroying the parent!
+                if (mapInfoEntity.HasValue && world.IsAlive(mapInfoEntity.Value))
+                {
+                    mapInfoEntity.Value.RemoveRelationship<ParentOf>(entity);
+                }
+
                 // Strip tile-specific components before releasing
                 StripTileComponents(entity);
                 poolManager!.Release(entity);
@@ -241,11 +254,9 @@ public class MapLifecycleManager(
             world.Remove<AnimatedTile>(entity);
         }
 
-        // CRITICAL: Remove BelongsToMap relationship - it will be re-added with new map entity
-        if (entity.Has<BelongsToMap>())
-        {
-            world.Remove<BelongsToMap>(entity);
-        }
+        // Note: ParentOf relationship is now manually removed in DestroyMapEntities BEFORE
+        // releasing to pool (see line ~190). It must be removed explicitly because tiles
+        // are released to pool BEFORE the parent map entity is destroyed.
 
         // Remove optional tile components that may have been added
         // Keep TilePosition, TileSprite - they'll be overwritten on reuse
@@ -386,23 +397,28 @@ public class MapLifecycleManager(
     {
         var entitiesToDestroy = new List<Entity>();
 
-        // 1. Collect ALL entities with BelongsToMap relationship (tiles, NPCs, warps, image layers)
-        QueryDescription belongsToMapQuery = new QueryDescription().WithAll<BelongsToMap>();
-        world.Query(
-            belongsToMapQuery,
-            entity =>
-            {
-                entitiesToDestroy.Add(entity);
-            }
-        );
-
-        // 2. Collect ALL MapInfo entities (they don't have BelongsToMap - they ARE the parent)
+        // 1. Collect ALL MapInfo entities and their children
         QueryDescription mapInfoQuery = new QueryDescription().WithAll<MapInfo>();
         world.Query(
             mapInfoQuery,
             entity =>
             {
+                // Add the map entity itself
                 entitiesToDestroy.Add(entity);
+
+                // If it has children, collect them all
+                if (entity.HasRelationship<ParentOf>())
+                {
+                    ref var mapChildren = ref entity.GetRelationships<ParentOf>();
+                    foreach (var kvp in mapChildren)
+                    {
+                        Entity childEntity = kvp.Key;
+                        if (world.IsAlive(childEntity))
+                        {
+                            entitiesToDestroy.Add(childEntity);
+                        }
+                    }
+                }
             }
         );
 

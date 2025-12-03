@@ -19,6 +19,16 @@ public struct Camera
     public const float MaxZoom = 10.0f;
 
     /// <summary>
+    ///     GBA native resolution width (Game Boy Advance).
+    /// </summary>
+    public const int GbaNativeWidth = 240;
+
+    /// <summary>
+    ///     GBA native resolution height (Game Boy Advance).
+    /// </summary>
+    public const int GbaNativeHeight = 160;
+
+    /// <summary>
     ///     Gets or sets the camera position in world coordinates (center point).
     /// </summary>
     public Vector2 Position { get; set; }
@@ -50,6 +60,24 @@ public struct Camera
     ///     Gets or sets the viewport rectangle for rendering bounds.
     /// </summary>
     public Rectangle Viewport { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the reference (target) width for aspect ratio calculation.
+    ///     This is the initial/desired width that the camera should maintain when resizing.
+    /// </summary>
+    public int ReferenceWidth { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the reference (target) height for aspect ratio calculation.
+    ///     This is the initial/desired height that the camera should maintain when resizing.
+    /// </summary>
+    public int ReferenceHeight { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the virtual viewport rectangle (viewport with borders applied).
+    ///     This is the actual rendering area within the window, accounting for letterboxing/pillarboxing.
+    /// </summary>
+    public Rectangle VirtualViewport { get; set; }
 
     /// <summary>
     ///     Gets or sets the camera smoothing speed (0 = instant, 1 = very smooth).
@@ -101,6 +129,9 @@ public struct Camera
         ZoomTransitionSpeed = 0.1f;
         Rotation = 0f;
         Viewport = Rectangle.Empty;
+        ReferenceWidth = 0;
+        ReferenceHeight = 0;
+        VirtualViewport = Rectangle.Empty;
         SmoothingSpeed = 0.2f;
         LeadDistance = 1.5f;
         FollowTarget = null;
@@ -122,6 +153,9 @@ public struct Camera
         ZoomTransitionSpeed = 0.1f;
         Rotation = 0f;
         Viewport = viewport;
+        ReferenceWidth = viewport.Width;
+        ReferenceHeight = viewport.Height;
+        VirtualViewport = viewport; // Initially same as viewport
         SmoothingSpeed = smoothingSpeed;
         LeadDistance = leadDistance;
         FollowTarget = null;
@@ -153,6 +187,8 @@ public struct Camera
     ///     Gets the transformation matrix for this camera.
     ///     Includes position, rotation, zoom, and viewport centering.
     ///     Rounds the camera position to prevent sub-pixel rendering artifacts (texture bleeding between tiles).
+    ///     Since Viewport and VirtualViewport are now the same size (both integer GBA multiples),
+    ///     no additional scaling is needed - viewportScale is always 1.0 for pixel-perfect rendering.
     /// </summary>
     public readonly Matrix GetTransformMatrix()
     {
@@ -161,10 +197,14 @@ public struct Camera
         float roundedX = MathF.Round(Position.X * Zoom) / Zoom;
         float roundedY = MathF.Round(Position.Y * Zoom) / Zoom;
 
+        // Use Viewport width/height for centering (VirtualViewport is same size, just offset)
+        float centerX = Viewport.Width / 2f;
+        float centerY = Viewport.Height / 2f;
+
         return Matrix.CreateTranslation(-roundedX, -roundedY, 0)
             * Matrix.CreateRotationZ(Rotation)
             * Matrix.CreateScale(Zoom, Zoom, 1)
-            * Matrix.CreateTranslation(Viewport.Width / 2f, Viewport.Height / 2f, 0);
+            * Matrix.CreateTranslation(centerX, centerY, 0);
     }
 
     /// <summary>
@@ -353,6 +393,60 @@ public struct Camera
     {
         Zoom = MathHelper.Clamp(zoom, MinZoom, MaxZoom);
         TargetZoom = Zoom;
+    }
+
+    /// <summary>
+    ///     Updates the viewport to maintain aspect ratio when the window is resized.
+    ///     Uses integer scaling based on GBA native resolution (240x160) to maintain pixel-perfect rendering.
+    ///     The Viewport is set to an integer GBA multiple to ensure viewportScale is always an integer,
+    ///     and zoom is adjusted to maintain the same world-space view and tile count.
+    /// </summary>
+    /// <param name="windowWidth">The new window width.</param>
+    /// <param name="windowHeight">The new window height.</param>
+    public void UpdateViewportForResize(int windowWidth, int windowHeight)
+    {
+        // Calculate the maximum integer scale from GBA native that fits in the window
+        int scaleX = Math.Max(1, windowWidth / GbaNativeWidth);
+        int scaleY = Math.Max(1, windowHeight / GbaNativeHeight);
+
+        // Use the smaller scale to ensure the entire viewport fits
+        int scale = Math.Min(scaleX, scaleY);
+
+        // Calculate viewport and virtual viewport dimensions using integer scale of GBA native
+        // Both are integer multiples of GBA native for pixel-perfect scaling
+        int viewportWidth = GbaNativeWidth * scale;
+        int viewportHeight = GbaNativeHeight * scale;
+
+        // If this is the first resize (initialization), store reference and adjust zoom
+        if (ReferenceWidth == 0 || ReferenceHeight == 0)
+        {
+            ReferenceWidth = windowWidth;
+            ReferenceHeight = windowHeight;
+
+            // Calculate zoom adjustment to maintain same world view
+            // If window is 1280x800 but viewport is 1200x800, we need to scale zoom by 1280/1200
+            float zoomAdjustmentX = (float)windowWidth / viewportWidth;
+            float zoomAdjustmentY = (float)windowHeight / viewportHeight;
+            float zoomAdjustment = Math.Max(zoomAdjustmentX, zoomAdjustmentY);
+
+            // Adjust zoom to maintain the same world-space view as the reference window size
+            Zoom *= zoomAdjustment;
+            TargetZoom *= zoomAdjustment;
+        }
+
+        // Set Viewport to the integer GBA multiple
+        Viewport = new Rectangle(0, 0, viewportWidth, viewportHeight);
+
+        // VirtualViewport is the same as Viewport (both are integer GBA multiples)
+        // This ensures viewportScale = 1.0 always (no scaling artifacts!)
+        VirtualViewport = new Rectangle(
+            (windowWidth - viewportWidth) / 2,
+            (windowHeight - viewportHeight) / 2,
+            viewportWidth,
+            viewportHeight
+        );
+
+        IsDirty = true;
     }
 
     /// <summary>

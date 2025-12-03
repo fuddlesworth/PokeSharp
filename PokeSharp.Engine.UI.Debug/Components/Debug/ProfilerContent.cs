@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using PokeSharp.Engine.Systems.Management;
 using PokeSharp.Engine.UI.Debug.Components.Base;
+using PokeSharp.Engine.UI.Debug.Components.Controls;
 using PokeSharp.Engine.UI.Debug.Core;
 using PokeSharp.Engine.UI.Debug.Input;
 using PokeSharp.Engine.UI.Debug.Interfaces;
@@ -15,7 +16,6 @@ namespace PokeSharp.Engine.UI.Debug.Components.Debug;
 public class ProfilerContent : UIComponent
 {
     // Layout constants from PanelConstants
-    private const float BottomPadding = PanelConstants.Profiler.BottomPadding;
     private const float NameColumnWidth = PanelConstants.Profiler.NameColumnWidth;
     private const float MsColumnWidth = PanelConstants.Profiler.MsColumnWidth;
 
@@ -32,15 +32,50 @@ public class ProfilerContent : UIComponent
     private double _refreshIntervalSeconds = 0.1; // 100ms default
 
     // Scrolling support
-    private int _scrollOffset;
+    private readonly ScrollbarComponent _scrollbar = new();
     private bool _showOnlyActive = true;
     private ProfilerSortMode _sortMode = ProfilerSortMode.ByExecutionTime;
+
+    // Table header
+    private readonly SortableTableHeader<ProfilerSortMode> _tableHeader;
 
     public ProfilerContent(string id, float targetFrameTimeMs, float warningThresholdMs)
     {
         Id = id;
         TargetFrameTimeMs = targetFrameTimeMs;
         _warningThresholdMs = warningThresholdMs;
+
+        // Initialize table header
+        _tableHeader = new SortableTableHeader<ProfilerSortMode>(ProfilerSortMode.ByExecutionTime);
+        _tableHeader.SortChanged += OnSortChanged;
+    }
+
+    private void OnSortChanged(ProfilerSortMode newSort)
+    {
+        // Special handling for Last/Avg column - cycle between ByAverageTime and ByMaxTime
+        if (newSort == ProfilerSortMode.ByAverageTime)
+        {
+            // If we're already on ByAverageTime or ByMaxTime, cycle to the other one
+            if (_sortMode == ProfilerSortMode.ByAverageTime)
+            {
+                _sortMode = ProfilerSortMode.ByMaxTime;
+            }
+            else if (_sortMode == ProfilerSortMode.ByMaxTime)
+            {
+                _sortMode = ProfilerSortMode.ByAverageTime;
+            }
+            else
+            {
+                // Coming from a different sort mode, default to ByAverageTime
+                _sortMode = ProfilerSortMode.ByAverageTime;
+            }
+        }
+        else
+        {
+            _sortMode = newSort;
+        }
+
+        RefreshMetrics();
     }
 
     public bool HasProvider { get; private set; }
@@ -128,17 +163,17 @@ public class ProfilerContent : UIComponent
 
     public void ScrollToTop()
     {
-        _scrollOffset = 0;
+        _scrollbar.ScrollToTop();
     }
 
     public void ScrollToBottom()
     {
-        _scrollOffset = Math.Max(0, _cachedMetrics.Count - 5);
+        _scrollbar.ScrollOffset = Math.Max(0, _cachedMetrics.Count - 5);
     }
 
     public int GetScrollOffset()
     {
-        return _scrollOffset;
+        return (int)_scrollbar.ScrollOffset;
     }
 
     private void RefreshMetrics()
@@ -201,6 +236,8 @@ public class ProfilerContent : UIComponent
         // Use DebugPanelBase.StandardLinePadding for consistent alignment
         // Parent panel already applies Constraint.Padding, so we only add internal line padding
         int linePadding = DebugPanelBase.StandardLinePadding;
+        int scrollbarWidth = theme.ScrollbarWidth;
+
         float y = Rect.Y + linePadding;
         float contentX = Rect.X + linePadding;
         float contentWidth = Rect.Width - (linePadding * 2);
@@ -208,9 +245,14 @@ public class ProfilerContent : UIComponent
         // Empty state handling
         if (!HasProvider)
         {
-            renderer.DrawText("Profiler provider not configured.", contentX, y, theme.TextDim);
-            y += lineHeight;
-            renderer.DrawText("Waiting for system metrics...", contentX, y, theme.TextDim);
+            EmptyStateComponent.DrawLeftAligned(
+                renderer,
+                theme,
+                contentX,
+                y,
+                "Profiler provider not configured.",
+                "Waiting for system metrics..."
+            );
             return;
         }
 
@@ -225,32 +267,12 @@ public class ProfilerContent : UIComponent
             }
         }
 
-        // Handle scroll input
-        if (input != null)
-        {
-            _lastMousePosition = input.MousePosition;
-            if (Rect.Contains(input.MousePosition))
-            {
-                if (input.ScrollWheelDelta > 0)
-                {
-                    _scrollOffset = Math.Max(0, _scrollOffset - 3);
-                }
-                else if (input.ScrollWheelDelta < 0)
-                {
-                    _scrollOffset = Math.Min(
-                        Math.Max(0, _cachedMetrics.Count - 5),
-                        _scrollOffset + 3
-                    );
-                }
-            }
-        }
-
         // Header
         renderer.DrawText("System Profiler", contentX, y, theme.Info);
         string sortText = $"Sort: {_sortMode}";
         float sortWidth = renderer.MeasureText(sortText).X;
         renderer.DrawText(sortText, contentX + contentWidth - sortWidth, y, theme.TextSecondary);
-        y += lineHeight + 4;
+        y += lineHeight + theme.SpacingTight;
 
         // Budget info
         string budgetText = $"Frame Budget: {TargetFrameTimeMs:F1}ms (60fps)";
@@ -259,41 +281,99 @@ public class ProfilerContent : UIComponent
         Color totalColor = TotalFrameTimeMs > TargetFrameTimeMs ? theme.Error : theme.Success;
         float totalWidth = renderer.MeasureText(totalText).X;
         renderer.DrawText(totalText, contentX + contentWidth - totalWidth, y, totalColor);
-        y += lineHeight + 8;
+        y += lineHeight + theme.SpacingRelaxed;
 
-        // Column headers
+        // Pre-calculate scrollbar requirements to determine content width
+        // (need to do this BEFORE configuring headers to get correct width)
+        float tableStartY = y + lineHeight + theme.SpacingTight + 1 + theme.SpacingNormal;
+        int rowHeight = lineHeight + theme.SpacingNormal;
+        float tableBottomY = Rect.Y + Rect.Height - linePadding;
+        float availableHeight = tableBottomY - tableStartY;
+        int maxBarsVisible = Math.Max(1, (int)(availableHeight / rowHeight));
+        int maxScrollOffset = Math.Max(0, _cachedMetrics.Count - maxBarsVisible);
+        bool needsScrollbar = _cachedMetrics.Count > maxBarsVisible;
+
+        // Adjust content width if scrollbar is needed (with padding)
+        float tableContentWidth = needsScrollbar
+            ? contentWidth - scrollbarWidth - theme.PaddingSmall
+            : contentWidth;
+        float tableContentRightEdge = contentX + tableContentWidth;
+
+        // Column headers (now with correct width accounting for scrollbar)
         float nameColWidth = NameColumnWidth;
         float barColStart = contentX + nameColWidth;
-        float barColWidth = contentWidth - nameColWidth - MsColumnWidth;
-        float contentRightEdge = contentX + contentWidth;
+        float barColWidth = tableContentWidth - nameColWidth - MsColumnWidth;
 
-        renderer.DrawText("System", contentX, y, theme.TextSecondary);
-        renderer.DrawText("Execution Time", barColStart, y, theme.TextSecondary);
-        // Right-align "Last/Avg" header to match right edge padding
-        string lastAvgHeader = "Last/Avg";
-        float lastAvgHeaderWidth = renderer.MeasureText(lastAvgHeader).X;
-        renderer.DrawText(
-            lastAvgHeader,
-            contentRightEdge - lastAvgHeaderWidth,
-            y,
-            theme.TextSecondary
+        // Configure table header columns
+        _tableHeader.ClearColumns();
+        _tableHeader.AddColumns(
+            new SortableTableHeader<ProfilerSortMode>.Column
+            {
+                Label = "System",
+                SortMode = ProfilerSortMode.ByName,
+                X = contentX,
+                MaxWidth = nameColWidth,
+                Ascending = true, // Name sorts ascending
+            },
+            new SortableTableHeader<ProfilerSortMode>.Column
+            {
+                Label = "Execution Time",
+                SortMode = ProfilerSortMode.ByExecutionTime,
+                X = barColStart,
+                MaxWidth = barColWidth,
+                Ascending = false, // Time sorts descending
+            },
+            new SortableTableHeader<ProfilerSortMode>.Column
+            {
+                Label = _sortMode == ProfilerSortMode.ByMaxTime ? "Last/Avg(Max)" : "Last/Avg",
+                SortMode = ProfilerSortMode.ByAverageTime, // Always use Average as the sort mode
+                X = tableContentRightEdge - MsColumnWidth,
+                MaxWidth = MsColumnWidth,
+                Alignment = SortableTableHeader<ProfilerSortMode>.HorizontalAlignment.Right,
+                Ascending = false, // Time sorts descending
+            }
         );
-        y += lineHeight + 4;
+
+        // Draw table headers FIRST (to populate click regions)
+        _tableHeader.Draw(renderer, theme, y, lineHeight);
+
+        // Handle column header input AFTER drawing (so click regions are populated)
+        if (input != null)
+        {
+            _tableHeader.HandleInput(input);
+        }
+
+        y += lineHeight + theme.SpacingTight;
 
         // Separator
-        renderer.DrawRectangle(new LayoutRect(contentX, y, contentWidth, 1), theme.BorderPrimary);
-        y += 6;
-
-        // System bars
-        int rowHeight = lineHeight + 6;
-        int maxBarsVisible = (int)((Rect.Y + Rect.Height - BottomPadding - y) / rowHeight);
-        _scrollOffset = Math.Clamp(
-            _scrollOffset,
-            0,
-            Math.Max(0, _cachedMetrics.Count - maxBarsVisible)
+        renderer.DrawRectangle(
+            new LayoutRect(contentX, y, tableContentWidth, 1),
+            theme.BorderPrimary
         );
+        y += theme.SpacingNormal;
 
-        int startIndex = _scrollOffset;
+        // Handle scrollbar input first (before scroll wheel to get priority)
+        if (input != null && needsScrollbar)
+        {
+            var scrollbarRect = new LayoutRect(
+                contentX + tableContentWidth + theme.PaddingSmall,
+                tableStartY,
+                scrollbarWidth,
+                tableBottomY - tableStartY
+            );
+            _scrollbar.HandleInput(context, input, scrollbarRect, _cachedMetrics.Count, maxBarsVisible, Id);
+        }
+
+        // Handle scroll input (mouse wheel)
+        if (input != null && !_scrollbar.IsDragging && Rect.Contains(input.MousePosition))
+        {
+            _scrollbar.HandleMouseWheelLines(input, _cachedMetrics.Count, maxBarsVisible);
+        }
+
+        // Clamp scroll offset
+        _scrollbar.ScrollOffset = Math.Clamp(_scrollbar.ScrollOffset, 0, maxScrollOffset);
+
+        int startIndex = (int)_scrollbar.ScrollOffset;
         int endIndex = Math.Min(_cachedMetrics.Count, startIndex + maxBarsVisible);
 
         for (int i = startIndex; i < endIndex; i++)
@@ -302,19 +382,31 @@ public class ProfilerContent : UIComponent
             float rowY = y + ((i - startIndex) * rowHeight);
 
             Color barColor = GetBarColor(entry.LastMs, theme);
-            string displayName = TruncateName(entry.Name, nameColWidth - 8, renderer);
+            string displayName = renderer.TruncateWithEllipsis(entry.Name, nameColWidth - 8);
             renderer.DrawText(displayName, contentX, rowY, theme.TextPrimary);
 
             // Bar background
-            var barRect = new LayoutRect(barColStart, rowY + 2, barColWidth, lineHeight - 4);
+            var barRect = new LayoutRect(
+                barColStart,
+                rowY + theme.ProfilerBarInset,
+                barColWidth,
+                lineHeight - (theme.ProfilerBarInset * 2)
+            );
             renderer.DrawRectangle(barRect, theme.BackgroundElevated);
 
             // Bar fill
-            float barPercent = Math.Min((float)(entry.LastMs / TargetFrameTimeMs), 2.0f) / 2.0f;
+            float barPercent =
+                Math.Min((float)(entry.LastMs / TargetFrameTimeMs), theme.ProfilerBarMaxScale)
+                / theme.ProfilerBarMaxScale;
             float filledWidth = barColWidth * barPercent;
             if (filledWidth > 0)
             {
-                var filledRect = new LayoutRect(barColStart, rowY + 2, filledWidth, lineHeight - 4);
+                var filledRect = new LayoutRect(
+                    barColStart,
+                    rowY + theme.ProfilerBarInset,
+                    filledWidth,
+                    lineHeight - (theme.ProfilerBarInset * 2)
+                );
                 renderer.DrawRectangle(filledRect, barColor);
             }
 
@@ -322,21 +414,38 @@ public class ProfilerContent : UIComponent
             float budgetLineX = barColStart + (barColWidth * 0.5f);
             renderer.DrawRectangle(
                 new LayoutRect(budgetLineX, rowY, 1, lineHeight),
-                theme.Warning * 0.7f
+                theme.Warning * theme.ProfilerBudgetLineOpacity
             );
 
             // Ms values - right-aligned to match header
             string msText = $"{entry.LastMs:F2}/{entry.AvgMs:F2}";
             float msTextWidth = renderer.MeasureText(msText).X;
-            renderer.DrawText(msText, contentRightEdge - msTextWidth, rowY, theme.TextSecondary);
+            renderer.DrawText(
+                msText,
+                tableContentRightEdge - msTextWidth,
+                rowY,
+                theme.TextSecondary
+            );
         }
 
-        // Scroll indicator
-        if (_cachedMetrics.Count > maxBarsVisible)
+        // Scroll indicator (only show if no scrollbar)
+        if (_cachedMetrics.Count > maxBarsVisible && !needsScrollbar)
         {
             float moreY = y + (maxBarsVisible * rowHeight);
-            string scrollText = $"[{startIndex + 1}-{endIndex} of {_cachedMetrics.Count}] (scroll)";
+            string scrollText = $"[{startIndex + 1}-{endIndex} of {_cachedMetrics.Count}]";
             renderer.DrawText(scrollText, contentX, moreY, theme.TextSecondary);
+        }
+
+        // Draw scrollbar if needed
+        if (needsScrollbar)
+        {
+            var scrollbarRect = new LayoutRect(
+                contentX + tableContentWidth + theme.PaddingSmall,
+                tableStartY,
+                scrollbarWidth,
+                tableBottomY - tableStartY
+            );
+            _scrollbar.Draw(renderer, theme, scrollbarRect, _cachedMetrics.Count, maxBarsVisible);
         }
     }
 
@@ -347,40 +456,17 @@ public class ProfilerContent : UIComponent
             return theme.Error;
         }
 
-        if (ms >= _warningThresholdMs * 0.5f)
+        if (ms >= _warningThresholdMs * theme.ProfilerBarWarningThreshold)
         {
             return theme.Warning;
         }
 
-        if (ms >= _warningThresholdMs * 0.25f)
+        if (ms >= _warningThresholdMs * theme.ProfilerBarMildThreshold)
         {
             return theme.WarningMild;
         }
 
         return theme.Success;
-    }
-
-    private static string TruncateName(string name, float maxWidth, UIRenderer renderer)
-    {
-        if (renderer.MeasureText(name).X <= maxWidth)
-        {
-            return name;
-        }
-
-        string ellipsis = NerdFontIcons.Ellipsis;
-        float ellipsisWidth = renderer.MeasureText(ellipsis).X;
-        float targetWidth = maxWidth - ellipsisWidth;
-
-        for (int len = name.Length - 1; len > 0; len--)
-        {
-            string truncated = name[..len];
-            if (renderer.MeasureText(truncated).X <= targetWidth)
-            {
-                return truncated + ellipsis;
-            }
-        }
-
-        return ellipsis;
     }
 
     protected override bool IsInteractive()

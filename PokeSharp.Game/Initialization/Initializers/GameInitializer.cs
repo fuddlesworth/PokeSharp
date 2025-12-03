@@ -76,6 +76,11 @@ public class GameInitializer(
     public SpriteTextureLoader SpriteTextureLoader { get; private set; } = null!;
 
     /// <summary>
+    ///     Gets the camera viewport system (handles window resize events).
+    /// </summary>
+    public CameraViewportSystem CameraViewportSystem { get; private set; } = null!;
+
+    /// <summary>
     ///     Initializes all game systems and infrastructure.
     /// </summary>
     /// <param name="graphicsDevice">The graphics device for rendering.</param>
@@ -163,6 +168,12 @@ public class GameInitializer(
             mapStreamingLogger
         );
         systemManager.RegisterUpdateSystem(_mapStreamingSystem);
+
+        // Register CameraViewportSystem (Priority: 820, handles window resize events)
+        ILogger<CameraViewportSystem> cameraViewportLogger =
+            loggerFactory.CreateLogger<CameraViewportSystem>();
+        CameraViewportSystem = new CameraViewportSystem(cameraViewportLogger);
+        systemManager.RegisterUpdateSystem(CameraViewportSystem);
 
         // Register CameraFollowSystem (Priority: 825, after PathfindingSystem, before TileAnimation)
         ILogger<CameraFollowSystem> cameraFollowLogger =

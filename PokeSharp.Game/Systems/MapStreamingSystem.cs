@@ -1,5 +1,6 @@
 using Arch.Core;
 using Arch.Core.Extensions;
+using Arch.Relationships;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using PokeSharp.Engine.Core.Systems;
@@ -743,27 +744,14 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
     }
 
     /// <summary>
-    ///     Destroys all entities belonging to a specific map using BelongsToMap relationship.
+    ///     Destroys all entities belonging to a specific map using Arch.Relationships.
     ///     Used for cleaning up streaming-loaded maps which aren't registered with MapLifecycleManager.
     /// </summary>
     private int DestroyMapEntities(World world, MapRuntimeId mapId)
     {
         var entitiesToDestroy = new List<Entity>();
 
-        // Query all entities with BelongsToMap relationship to this map
-        QueryDescription belongsToMapQuery = new QueryDescription().WithAll<BelongsToMap>();
-        world.Query(
-            in belongsToMapQuery,
-            (Entity entity, ref BelongsToMap belongsTo) =>
-            {
-                if (belongsTo.MapId == mapId)
-                {
-                    entitiesToDestroy.Add(entity);
-                }
-            }
-        );
-
-        // Also query MapInfo entities for this map (they ARE the parent, not children)
+        // Find the MapInfo entity and iterate its relationships
         QueryDescription mapInfoQuery = new QueryDescription().WithAll<MapInfo>();
         world.Query(
             in mapInfoQuery,
@@ -771,7 +759,22 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
             {
                 if (info.MapId == mapId)
                 {
+                    // Add the map entity itself
                     entitiesToDestroy.Add(entity);
+
+                    // If it has children, collect them all
+                    if (entity.HasRelationship<ParentOf>())
+                    {
+                        ref var mapChildren = ref entity.GetRelationships<ParentOf>();
+                        foreach (var kvp in mapChildren)
+                        {
+                            Entity childEntity = kvp.Key;
+                            if (world.IsAlive(childEntity))
+                            {
+                                entitiesToDestroy.Add(childEntity);
+                            }
+                        }
+                    }
                 }
             }
         );

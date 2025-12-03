@@ -43,7 +43,7 @@
     {
       "type": "GridMovement",
       "data": {
-        "tilesPerSecond": 4.0
+        "tilesPerSecond": 3.75
       }
     },
     {

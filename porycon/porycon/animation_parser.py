@@ -273,14 +273,23 @@ class PokeemeraldAnimationParser:
         """
         Parse physical frame mappings from pic tables.
         
+        CRITICAL FIX: When a pic table references multiple PNG files (e.g., walking.png + running.png),
+        we need to adjust frame indices based on which PNG they come from:
+        - Frames from walking.png (first PNG): use frame_index as-is (0-8)
+        - Frames from running.png (second PNG): add offset of 9 (walking frame count) to get (9-17)
+        
         Returns:
-            Dictionary mapping sprite name -> list of physical frame indices
+            Dictionary mapping sprite name -> list of physical frame indices in the combined spritesheet
         """
         result: Dict[str, List[int]] = {}
         if not file_path.exists():
             return result
         
         content = file_path.read_text(encoding='utf-8')
+        
+        # First, parse pic table sources to know frame offsets
+        graphics_path = file_path.parent / "object_event_graphics.h"
+        pic_table_sources = self.parse_pic_table_sources(file_path, graphics_path)
         
         # Match: sPicTable_<Name>[] = { ... }
         pattern = re.compile(r'sPicTable_(\w+)\[\]\s*=\s*\{([^}]+)\}', re.DOTALL)
@@ -289,12 +298,26 @@ class PokeemeraldAnimationParser:
             sprite_name = match.group(1)
             table_content = match.group(2)
             
-            # Parse overworld_frame(..., N) to extract the physical frame index N
+            # Get source info for this sprite (to know frame offsets)
+            sources = pic_table_sources.get(sprite_name, [])
+            
+            # Build a map: pic_name -> start_frame_offset
+            pic_to_offset: Dict[str, int] = {}
+            for source in sources:
+                pic_to_offset[source.pic_name] = source.start_frame
+            
+            # Parse overworld_frame(gObjectEventPic_<PicName>, ..., frame_index_in_png)
             frame_mapping: List[int] = []
-            frame_pattern = re.compile(r'overworld_frame\([^,]+,\s*\d+,\s*\d+,\s*(\d+)\)')
+            frame_pattern = re.compile(r'overworld_frame\(gObjectEventPic_(\w+),\s*\d+,\s*\d+,\s*(\d+)\)')
             
             for frame_match in frame_pattern.finditer(table_content):
-                frame_mapping.append(int(frame_match.group(1)))
+                pic_name = frame_match.group(1)
+                frame_index_in_png = int(frame_match.group(2))
+                
+                # Adjust frame index based on which PNG this came from
+                offset = pic_to_offset.get(pic_name, 0)
+                physical_frame_index = offset + frame_index_in_png
+                frame_mapping.append(physical_frame_index)
             
             # Handle obj_frame_tiles (single frame sprites)
             if not frame_mapping and 'obj_frame_tiles' in table_content:

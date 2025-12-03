@@ -96,6 +96,8 @@ public class UITheme
             LineHeight = 20,
             ScrollbarWidth = 10,
             ScrollbarPadding = 4,
+            ScrollbarMinThumbHeight = 20,
+            ScrollbarDragSensitivity = 3,
             BorderWidth = 1,
 
             // Control sizes
@@ -214,10 +216,24 @@ public class UITheme
 
             // Scrolling
             ScrollSpeed = 30,
+            ScrollWheelSensitivity = 3,
 
             // Table layouts
             TableColumnWidth = 80,
             SectionSpacing = 8,
+
+            // Spacing - Fine-grained control
+            SpacingTight = 4,
+            SpacingNormal = 6,
+            SpacingRelaxed = 8,
+            InteractiveClickPadding = 10,
+
+            // Profiler visualization
+            ProfilerBarWarningThreshold = 0.5f,
+            ProfilerBarMildThreshold = 0.25f,
+            ProfilerBarMaxScale = 2.0f,
+            ProfilerBarInset = 2f,
+            ProfilerBudgetLineOpacity = 0.7f,
 
             // Interactive thresholds
             DragThreshold = 5f,
@@ -290,6 +306,8 @@ public class UITheme
             LineHeight = 20,
             ScrollbarWidth = 10,
             ScrollbarPadding = 4,
+            ScrollbarMinThumbHeight = 20,
+            ScrollbarDragSensitivity = 3,
             BorderWidth = 1,
             ButtonHeight = 30,
             InputHeight = 30,
@@ -366,8 +384,18 @@ public class UITheme
             DocumentationMinWidth = 400f,
             DocumentationMaxWidth = 600f,
             ScrollSpeed = 30,
+            ScrollWheelSensitivity = 3,
             TableColumnWidth = 80,
             SectionSpacing = 8,
+            SpacingTight = 4,
+            SpacingNormal = 6,
+            SpacingRelaxed = 8,
+            InteractiveClickPadding = 10,
+            ProfilerBarWarningThreshold = 0.5f,
+            ProfilerBarMildThreshold = 0.25f,
+            ProfilerBarMaxScale = 2.0f,
+            ProfilerBarInset = 2f,
+            ProfilerBudgetLineOpacity = 0.7f,
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
             DoubleClickThreshold = 0.5f,
@@ -432,6 +460,8 @@ public class UITheme
             LineHeight = 20,
             ScrollbarWidth = 10,
             ScrollbarPadding = 4,
+            ScrollbarMinThumbHeight = 20,
+            ScrollbarDragSensitivity = 3,
             BorderWidth = 1,
             ButtonHeight = 30,
             InputHeight = 30,
@@ -508,8 +538,18 @@ public class UITheme
             DocumentationMinWidth = 400f,
             DocumentationMaxWidth = 600f,
             ScrollSpeed = 30,
+            ScrollWheelSensitivity = 3,
             TableColumnWidth = 80,
             SectionSpacing = 8,
+            SpacingTight = 4,
+            SpacingNormal = 6,
+            SpacingRelaxed = 8,
+            InteractiveClickPadding = 10,
+            ProfilerBarWarningThreshold = 0.5f,
+            ProfilerBarMildThreshold = 0.25f,
+            ProfilerBarMaxScale = 2.0f,
+            ProfilerBarInset = 2f,
+            ProfilerBudgetLineOpacity = 0.7f,
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
             DoubleClickThreshold = 0.5f,
@@ -574,6 +614,8 @@ public class UITheme
             LineHeight = 20,
             ScrollbarWidth = 10,
             ScrollbarPadding = 4,
+            ScrollbarMinThumbHeight = 20,
+            ScrollbarDragSensitivity = 3,
             BorderWidth = 1,
             ButtonHeight = 30,
             InputHeight = 30,
@@ -650,8 +692,18 @@ public class UITheme
             DocumentationMinWidth = 400f,
             DocumentationMaxWidth = 600f,
             ScrollSpeed = 30,
+            ScrollWheelSensitivity = 3,
             TableColumnWidth = 80,
             SectionSpacing = 8,
+            SpacingTight = 4,
+            SpacingNormal = 6,
+            SpacingRelaxed = 8,
+            InteractiveClickPadding = 10,
+            ProfilerBarWarningThreshold = 0.5f,
+            ProfilerBarMildThreshold = 0.25f,
+            ProfilerBarMaxScale = 2.0f,
+            ProfilerBarInset = 2f,
+            ProfilerBudgetLineOpacity = 0.7f,
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
             DoubleClickThreshold = 0.5f,
@@ -716,6 +768,8 @@ public class UITheme
             LineHeight = 20,
             ScrollbarWidth = 10,
             ScrollbarPadding = 4,
+            ScrollbarMinThumbHeight = 20,
+            ScrollbarDragSensitivity = 3,
             BorderWidth = 1,
             ButtonHeight = 30,
             InputHeight = 30,
@@ -792,8 +846,18 @@ public class UITheme
             DocumentationMinWidth = 400f,
             DocumentationMaxWidth = 600f,
             ScrollSpeed = 30,
+            ScrollWheelSensitivity = 3,
             TableColumnWidth = 80,
             SectionSpacing = 8,
+            SpacingTight = 4,
+            SpacingNormal = 6,
+            SpacingRelaxed = 8,
+            InteractiveClickPadding = 10,
+            ProfilerBarWarningThreshold = 0.5f,
+            ProfilerBarMildThreshold = 0.25f,
+            ProfilerBarMaxScale = 2.0f,
+            ProfilerBarInset = 2f,
+            ProfilerBudgetLineOpacity = 0.7f,
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
             DoubleClickThreshold = 0.5f,
@@ -858,6 +922,8 @@ public class UITheme
             LineHeight = 20,
             ScrollbarWidth = 10,
             ScrollbarPadding = 4,
+            ScrollbarMinThumbHeight = 20,
+            ScrollbarDragSensitivity = 3,
             BorderWidth = 1,
             ButtonHeight = 30,
             InputHeight = 30,
@@ -934,8 +1000,18 @@ public class UITheme
             DocumentationMinWidth = 400f,
             DocumentationMaxWidth = 600f,
             ScrollSpeed = 30,
+            ScrollWheelSensitivity = 3,
             TableColumnWidth = 80,
             SectionSpacing = 8,
+            SpacingTight = 4,
+            SpacingNormal = 6,
+            SpacingRelaxed = 8,
+            InteractiveClickPadding = 10,
+            ProfilerBarWarningThreshold = 0.5f,
+            ProfilerBarMildThreshold = 0.25f,
+            ProfilerBarMaxScale = 2.0f,
+            ProfilerBarInset = 2f,
+            ProfilerBudgetLineOpacity = 0.7f,
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
             DoubleClickThreshold = 0.5f,
@@ -1027,6 +1103,8 @@ public class UITheme
             LineHeight = 20,
             ScrollbarWidth = 10,
             ScrollbarPadding = 4,
+            ScrollbarMinThumbHeight = 20,
+            ScrollbarDragSensitivity = 3,
             BorderWidth = 1,
             ButtonHeight = 30,
             InputHeight = 30,
@@ -1121,8 +1199,18 @@ public class UITheme
             DocumentationMinWidth = 400f,
             DocumentationMaxWidth = 600f,
             ScrollSpeed = 30,
+            ScrollWheelSensitivity = 3,
             TableColumnWidth = 80,
             SectionSpacing = 8,
+            SpacingTight = 4,
+            SpacingNormal = 6,
+            SpacingRelaxed = 8,
+            InteractiveClickPadding = 10,
+            ProfilerBarWarningThreshold = 0.5f,
+            ProfilerBarMildThreshold = 0.25f,
+            ProfilerBarMaxScale = 2.0f,
+            ProfilerBarInset = 2f,
+            ProfilerBudgetLineOpacity = 0.7f,
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
             DoubleClickThreshold = 0.5f,
@@ -1211,6 +1299,8 @@ public class UITheme
             LineHeight = 20,
             ScrollbarWidth = 10,
             ScrollbarPadding = 4,
+            ScrollbarMinThumbHeight = 20,
+            ScrollbarDragSensitivity = 3,
             BorderWidth = 1,
             ButtonHeight = 30,
             InputHeight = 30,
@@ -1305,8 +1395,18 @@ public class UITheme
             DocumentationMinWidth = 400f,
             DocumentationMaxWidth = 600f,
             ScrollSpeed = 30,
+            ScrollWheelSensitivity = 3,
             TableColumnWidth = 80,
             SectionSpacing = 8,
+            SpacingTight = 4,
+            SpacingNormal = 6,
+            SpacingRelaxed = 8,
+            InteractiveClickPadding = 10,
+            ProfilerBarWarningThreshold = 0.5f,
+            ProfilerBarMildThreshold = 0.25f,
+            ProfilerBarMaxScale = 2.0f,
+            ProfilerBarInset = 2f,
+            ProfilerBudgetLineOpacity = 0.7f,
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
             DoubleClickThreshold = 0.5f,
@@ -1387,6 +1487,8 @@ public class UITheme
     public int LineHeight { get; init; }
     public int ScrollbarWidth { get; init; }
     public int ScrollbarPadding { get; init; }
+    public float ScrollbarMinThumbHeight { get; init; }
+    public int ScrollbarDragSensitivity { get; init; }
     public int BorderWidth { get; init; }
 
     // Control sizes
@@ -1505,10 +1607,24 @@ public class UITheme
 
     // Scrolling
     public int ScrollSpeed { get; init; }
+    public int ScrollWheelSensitivity { get; init; }
 
     // Table layouts
     public int TableColumnWidth { get; init; }
     public int SectionSpacing { get; init; }
+
+    // Spacing - Fine-grained control
+    public int SpacingTight { get; init; }
+    public int SpacingNormal { get; init; }
+    public int SpacingRelaxed { get; init; }
+    public int InteractiveClickPadding { get; init; }
+
+    // Profiler visualization
+    public float ProfilerBarWarningThreshold { get; init; }
+    public float ProfilerBarMildThreshold { get; init; }
+    public float ProfilerBarMaxScale { get; init; }
+    public float ProfilerBarInset { get; init; }
+    public float ProfilerBudgetLineOpacity { get; init; }
 
     // Interactive thresholds
     public float DragThreshold { get; init; }

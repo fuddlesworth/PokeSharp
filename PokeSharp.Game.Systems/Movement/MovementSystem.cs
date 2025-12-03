@@ -102,6 +102,7 @@ public class MovementSystem : SystemBase, IUpdateSystem
                 {
                     ProcessMovementWithAnimation(
                         world,
+                        entity,
                         ref position,
                         ref movement,
                         ref animation,
@@ -166,6 +167,7 @@ public class MovementSystem : SystemBase, IUpdateSystem
     /// </summary>
     private void ProcessMovementWithAnimation(
         World world,
+        Entity entity,
         ref Position position,
         ref GridMovement movement,
         ref Animation animation,
@@ -193,8 +195,17 @@ public class MovementSystem : SystemBase, IUpdateSystem
 
                 movement.CompleteMovement();
 
-                // Switch to idle animation
-                animation.ChangeAnimation(movement.FacingDirection.ToIdleAnimation());
+                // CRITICAL FIX: Don't switch to idle if player will continue moving
+                // Check if there's a pending movement request (player still holding direction)
+                // This prevents animation reset between consecutive tile movements
+                bool hasNextMovement = world.Has<MovementRequest>(entity);
+                
+                if (!hasNextMovement)
+                {
+                    // No more movement - switch to idle
+                    animation.ChangeAnimation(movement.FacingDirection.ToIdleAnimation());
+                }
+                // else: Keep walk animation playing (Pokemon Emerald behavior)
             }
             else
             {
@@ -212,10 +223,15 @@ public class MovementSystem : SystemBase, IUpdateSystem
                 );
 
                 // Ensure walk animation is playing
+                // CRITICAL: Don't reset animation between consecutive tile movements
+                // Pokemon Emerald's walk animation runs continuously while moving
+                // Only change animation if switching from different animation (e.g., idle->walk or turn to different direction)
                 string expectedAnimation = movement.FacingDirection.ToWalkAnimation();
                 if (animation.CurrentAnimation != expectedAnimation)
                 {
-                    animation.ChangeAnimation(expectedAnimation);
+                    // Changing animation (e.g., from idle or different direction)
+                    // Don't force restart - let animation continue from current frame if already walking
+                    animation.ChangeAnimation(expectedAnimation, forceRestart: false);
                 }
             }
         }
@@ -634,7 +650,7 @@ public class MovementSystem : SystemBase, IUpdateSystem
 
         // Query MapWorldPosition for the world offset
         world.Query(
-            in EcsQueries.MapInfo,
+            in EcsQueries.MapWithWorldPosition,
             (ref MapInfo mapInfo, ref MapWorldPosition worldPos) =>
             {
                 if (mapInfo.MapId == mapId)

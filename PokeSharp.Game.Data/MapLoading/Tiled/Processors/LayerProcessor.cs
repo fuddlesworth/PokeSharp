@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Arch.Core;
 using Arch.Core.Extensions;
+using Arch.Relationships;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Common.Logging;
 using PokeSharp.Engine.Core.Types;
@@ -231,7 +232,7 @@ public class LayerProcessor : ILayerProcessor
 
         // Process additional tile properties and components
         // Create relationship data once for all tiles
-        var belongsToMap = new BelongsToMap(mapInfoEntity, mapId);
+        var parentOfData = new ParentOf();
 
         for (int i = 0; i < tileEntities.Length; i++)
         {
@@ -239,15 +240,8 @@ public class LayerProcessor : ILayerProcessor
             TileData data = tileDataList[i];
             TmxTileset tileset = tilesets[data.TilesetIndex].Tileset;
 
-            // Add BelongsToMap relationship (use Set if pooled, Add if not)
-            if (entity.Has<BelongsToMap>())
-            {
-                entity.Set(belongsToMap);
-            }
-            else
-            {
-                world.Add(entity, belongsToMap);
-            }
+            // Add ParentOf relationship - map is parent of all tiles
+            mapInfoEntity.AddRelationship<ParentOf>(entity, parentOfData);
 
             // Get tile properties from tileset
             int localTileId = data.TileGid - tileset.FirstGid;

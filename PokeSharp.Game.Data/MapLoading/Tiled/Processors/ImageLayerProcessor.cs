@@ -1,4 +1,5 @@
 using Arch.Core;
+using Arch.Relationships;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Common.Logging;
 using PokeSharp.Engine.Core.Types;
@@ -115,7 +116,7 @@ public class ImageLayerProcessor
             // We need to determine where this image layer falls in the overall layer order
             float layerDepth = CalculateImageLayerDepth(imageLayer.Id, totalLayerCount);
 
-            // Create entity with ImageLayer component and BelongsToMap relationship
+            // Create entity with ImageLayer component
             var imageLayerComponent = new ImageLayer(
                 textureId,
                 imageLayer.X,
@@ -125,10 +126,10 @@ public class ImageLayerProcessor
                 imageLayer.Id
             );
 
-            Entity entity = world.Create(
-                imageLayerComponent,
-                new BelongsToMap(mapInfoEntity, mapId)
-            );
+            Entity entity = world.Create(imageLayerComponent);
+
+            // Add ParentOf relationship - map is parent of image layers
+            mapInfoEntity.AddRelationship<ParentOf>(entity, new ParentOf());
 
             _logger?.LogDebug(
                 "Created image layer '{LayerName}' with texture '{TextureId}' at ({X}, {Y}) depth {Depth:F2}",

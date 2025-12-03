@@ -62,14 +62,9 @@ public class StatsContent : UIComponent
     private double _refreshIntervalSeconds = 0.033; // ~30fps updates by default
 
     // Scrolling support
-    private float _scrollOffset;
+    private readonly ScrollbarComponent _scrollbar = new();
     private Func<StatsData>? _statsProvider;
     private float _totalContentHeight;
-
-    // Scrollbar drag tracking
-    private bool _isDraggingScrollbar;
-    private float _scrollbarDragStartY;
-    private float _scrollbarDragStartOffset;
 
     public StatsContent(string id)
     {
@@ -205,49 +200,63 @@ public class StatsContent : UIComponent
         // Handle scrollbar input first (before other input to get priority)
         if (context.Input != null && needsScrollbar)
         {
-            HandleScrollbarInput(context, context.Input, visibleHeight, maxScroll);
+            var scrollbarRect = new LayoutRect(
+                Rect.Right - scrollbarWidth,
+                Rect.Y + linePadding,
+                scrollbarWidth,
+                Rect.Height - (linePadding * 2)
+            );
+            _scrollbar.HandleInput(
+                context,
+                context.Input,
+                scrollbarRect,
+                _totalContentHeight,
+                visibleHeight,
+                Id
+            );
         }
 
         // Handle scroll input (mouse wheel and keyboard)
-        if (context.Input != null && Rect.Contains(context.Input.MousePosition) && !_isDraggingScrollbar)
+        if (context.Input != null && Rect.Contains(context.Input.MousePosition) && !_scrollbar.IsDragging)
         {
             // Mouse wheel scrolling
-            if (context.Input.ScrollWheelDelta != 0)
-            {
-                _scrollOffset -= context.Input.ScrollWheelDelta > 0 ? ScrollSpeed : -ScrollSpeed;
-                _scrollOffset = Math.Clamp(_scrollOffset, 0, maxScroll);
-            }
+            _scrollbar.HandleMouseWheel(context.Input, _totalContentHeight, visibleHeight);
 
             // Keyboard scrolling
             if (context.Input.IsKeyPressedWithRepeat(Keys.PageUp))
             {
-                _scrollOffset = Math.Max(0, _scrollOffset - (visibleHeight * 0.8f));
+                _scrollbar.ScrollOffset = Math.Max(0, _scrollbar.ScrollOffset - (visibleHeight * 0.8f));
             }
             else if (context.Input.IsKeyPressedWithRepeat(Keys.PageDown))
             {
-                _scrollOffset = Math.Min(maxScroll, _scrollOffset + (visibleHeight * 0.8f));
+                _scrollbar.ScrollOffset = Math.Min(maxScroll, _scrollbar.ScrollOffset + (visibleHeight * 0.8f));
             }
             else if (context.Input.IsKeyPressed(Keys.Home))
             {
-                _scrollOffset = 0;
+                _scrollbar.ScrollToTop();
             }
             else if (context.Input.IsKeyPressed(Keys.End))
             {
-                _scrollOffset = maxScroll;
+                _scrollbar.ScrollOffset = maxScroll;
             }
         }
 
         // Starting Y position with scroll offset applied
         float baseY = Rect.Y + linePadding;
-        float y = baseY - _scrollOffset;
+        float y = baseY - _scrollbar.ScrollOffset;
 
         // Empty state handling
         if (!HasProvider)
         {
-            renderer.DrawText("Stats provider not configured.", contentX, y, theme.TextDim);
-            y += lineHeight;
-            renderer.DrawText("Waiting for stats data...", contentX, y, theme.TextDim);
-            _totalContentHeight = y - baseY + _scrollOffset + linePadding;
+            y = EmptyStateComponent.DrawLeftAligned(
+                renderer,
+                theme,
+                contentX,
+                y,
+                "Stats provider not configured.",
+                "Waiting for stats data..."
+            );
+            _totalContentHeight = y - baseY + _scrollbar.ScrollOffset + linePadding;
             return;
         }
 
@@ -491,124 +500,21 @@ public class StatsContent : UIComponent
         renderer.PopClip();
 
         // Calculate total content height (from base to final y, plus padding)
-        _totalContentHeight = y - baseY + _scrollOffset + linePadding;
+        _totalContentHeight = y - baseY + _scrollbar.ScrollOffset + linePadding;
 
         // Draw scrollbar if content exceeds visible area
         if (needsScrollbar)
         {
-            DrawScrollbar(renderer, theme, visibleHeight);
+            var scrollbarRect = new LayoutRect(
+                Rect.Right - scrollbarWidth,
+                Rect.Y + linePadding,
+                scrollbarWidth,
+                Rect.Height - (linePadding * 2)
+            );
+            _scrollbar.Draw(renderer, theme, scrollbarRect, _totalContentHeight, visibleHeight);
         }
     }
 
-    /// <summary>
-    ///     Handles all scrollbar mouse interactions with proper input capture.
-    /// </summary>
-    private void HandleScrollbarInput(
-        UIContext context,
-        InputState input,
-        float visibleHeight,
-        float maxScroll
-    )
-    {
-        int scrollbarWidth = ThemeManager.Current.ScrollbarWidth;
-        float trackX = Rect.Right - scrollbarWidth;
-        float trackY = Rect.Y;
-        float trackHeight = Rect.Height;
-
-        var scrollbarRect = new LayoutRect(trackX, trackY, scrollbarWidth, trackHeight);
-
-        // Calculate thumb size and position (minimum thumb height for usability)
-        const float MinThumbHeight = 20f;
-        float thumbHeight = Math.Max(
-            MinThumbHeight,
-            visibleHeight / _totalContentHeight * trackHeight
-        );
-        float scrollRatio = maxScroll > 0 ? _scrollOffset / maxScroll : 0;
-        float thumbY = trackY + (scrollRatio * (trackHeight - thumbHeight));
-
-        var thumbRect = new LayoutRect(trackX, thumbY, scrollbarWidth, thumbHeight);
-
-        bool isOverScrollbar = scrollbarRect.Contains(input.MousePosition);
-
-        // Handle dragging (continues even outside bounds due to input capture)
-        if (_isDraggingScrollbar)
-        {
-            if (input.IsMouseButtonDown(MouseButton.Left))
-            {
-                int deltaY = input.MousePosition.Y - (int)_scrollbarDragStartY;
-                float dragRatio = deltaY / trackHeight;
-                float scrollDelta = dragRatio * _totalContentHeight;
-
-                _scrollOffset = Math.Clamp(_scrollbarDragStartOffset + scrollDelta, 0, maxScroll);
-            }
-
-            // Handle mouse release (end drag)
-            if (input.IsMouseButtonReleased(MouseButton.Left))
-            {
-                _isDraggingScrollbar = false;
-                context.ReleaseCapture();
-            }
-        }
-        // Handle new click on scrollbar
-        else if (isOverScrollbar && input.IsMouseButtonPressed(MouseButton.Left))
-        {
-            // Capture input so drag continues even if mouse leaves scrollbar
-            context.CaptureInput(Id);
-
-            // Check if clicking on thumb (drag) or track (jump)
-            if (thumbRect.Contains(input.MousePosition))
-            {
-                // Start dragging the thumb
-                _isDraggingScrollbar = true;
-                _scrollbarDragStartY = input.MousePosition.Y;
-                _scrollbarDragStartOffset = _scrollOffset;
-            }
-            else
-            {
-                // Click on track - jump to that position immediately
-                float clickRatio = (input.MousePosition.Y - trackY) / trackHeight;
-                float targetScroll = clickRatio * _totalContentHeight - (visibleHeight / 2);
-                _scrollOffset = Math.Clamp(targetScroll, 0, maxScroll);
-
-                // Also start dragging from this new position in case they want to continue dragging
-                _isDraggingScrollbar = true;
-                _scrollbarDragStartY = input.MousePosition.Y;
-                _scrollbarDragStartOffset = _scrollOffset;
-            }
-
-            // Consume the mouse button to prevent other components from processing
-            input.ConsumeMouseButton(MouseButton.Left);
-        }
-    }
-
-    /// <summary>
-    ///     Draws a scrollbar on the right side of the content area.
-    /// </summary>
-    private void DrawScrollbar(UIRenderer renderer, UITheme theme, float visibleHeight)
-    {
-        int scrollbarWidth = theme.ScrollbarWidth;
-        float trackX = Rect.Right - scrollbarWidth;
-        float trackY = Rect.Y;
-        float trackHeight = Rect.Height;
-
-        // Draw track
-        var trackRect = new LayoutRect(trackX, trackY, scrollbarWidth, trackHeight);
-        renderer.DrawRectangle(trackRect, theme.ScrollbarTrack);
-
-        // Calculate thumb size and position (minimum thumb height for usability)
-        const float MinThumbHeight = 20f;
-        float thumbHeight = Math.Max(
-            MinThumbHeight,
-            visibleHeight / _totalContentHeight * trackHeight
-        );
-        float maxScroll = _totalContentHeight - visibleHeight;
-        float scrollRatio = maxScroll > 0 ? _scrollOffset / maxScroll : 0;
-        float thumbY = trackY + (scrollRatio * (trackHeight - thumbHeight));
-
-        // Draw thumb
-        var thumbRect = new LayoutRect(trackX, thumbY, scrollbarWidth, thumbHeight);
-        renderer.DrawRectangle(thumbRect, theme.ScrollbarThumb);
-    }
 
     private void DrawProgressBar(
         UIRenderer renderer,
@@ -670,7 +576,7 @@ public class StatsContent : UIComponent
     /// </summary>
     public void ScrollToTop()
     {
-        _scrollOffset = 0;
+        _scrollbar.ScrollToTop();
     }
 
     /// <summary>
@@ -678,7 +584,6 @@ public class StatsContent : UIComponent
     /// </summary>
     public void ScrollToBottom()
     {
-        float maxScroll = Math.Max(0, _totalContentHeight - _lastVisibleHeight);
-        _scrollOffset = maxScroll;
+        _scrollbar.ScrollToBottom(_totalContentHeight, _lastVisibleHeight);
     }
 }

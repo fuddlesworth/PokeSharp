@@ -184,7 +184,8 @@ public class ProfilerPanel : DebugPanelBase, IProfilerOperations
 
         string activeFilter = _content.GetShowOnlyActive() ? "Active only" : "All";
         int refreshRate = 60 / _content.RefreshFrameInterval;
-        string hints = $"Sort: {_content.GetSortMode()} | {activeFilter} | ~{refreshRate}fps";
+        string hints =
+            $"Click headers to sort | {_content.GetSortMode()} | {activeFilter} | ~{refreshRate}fps";
 
         SetStatusBar(statsText, hints);
 

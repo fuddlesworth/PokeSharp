@@ -1,23 +1,23 @@
 using Arch.Core;
 using Arch.Core.Extensions;
-using PokeSharp.Engine.Systems.Queries;
+using Arch.Relationships;
 using PokeSharp.Game.Components.Relationships;
 
 namespace PokeSharp.Engine.Systems.Extensions;
 
 /// <summary>
-///     Extension methods for easy manipulation of entity relationships.
+///     Extension methods for easy manipulation of entity relationships using Arch.Relationships.
 /// </summary>
 /// <remarks>
 ///     These extensions provide a clean, fluent API for working with parent-child
-///     and owner-owned relationships without directly manipulating components.
+///     and owner-owned relationships using the Arch.Relationships API.
 /// </remarks>
 public static class RelationshipExtensions
 {
     #region Parent-Child Relationships
 
     /// <summary>
-    ///     Sets the parent of a child entity, establishing a parent-child relationship.
+    ///     Sets the parent of a child entity, establishing a parent-child relationship using Arch.Relationships.
     /// </summary>
     /// <param name="child">The child entity.</param>
     /// <param name="parent">The parent entity.</param>
@@ -25,11 +25,8 @@ public static class RelationshipExtensions
     /// <exception cref="ArgumentException">Thrown if either entity is not alive.</exception>
     /// <remarks>
     ///     <para>
-    ///         This method:
-    ///         1. Validates both entities are alive
-    ///         2. Removes any existing parent relationship from the child
-    ///         3. Adds Parent component to child
-    ///         4. Adds or updates Children component on parent
+    ///         This method uses Arch.Relationships API to create a bidirectional relationship
+    ///         automatically. The relationship is stored efficiently and can be queried directly.
     ///     </para>
     ///     <para>
     ///         <b>Example:</b>
@@ -52,38 +49,8 @@ public static class RelationshipExtensions
             throw new ArgumentException("Parent entity is not alive", nameof(parent));
         }
 
-        // Remove existing parent if present
-        if (child.Has<Parent>())
-        {
-            Entity oldParent = child.Get<Parent>().Value;
-            if (world.IsAlive(oldParent) && oldParent.Has<Children>())
-            {
-                ref Children oldChildren = ref oldParent.Get<Children>();
-                oldChildren.Values?.Remove(child);
-            }
-
-            child.Remove<Parent>();
-        }
-
-        // Set new parent
-        child.Add(new Parent { Value = parent, EstablishedAt = DateTime.UtcNow });
-
-        // Add to parent's children list
-        if (!parent.Has<Children>())
-        {
-            parent.Add(new Children { Values = new List<Entity>() });
-        }
-
-        ref Children children = ref parent.Get<Children>();
-        if (children.Values == null)
-        {
-            children.Values = new List<Entity>();
-        }
-
-        if (!children.Values.Contains(child))
-        {
-            children.Values.Add(child);
-        }
+        // Use Arch.Relationships API - this automatically creates bidirectional relationship
+        parent.AddRelationship<ParentOf>(child, new ParentOf());
     }
 
     /// <summary>
@@ -92,27 +59,23 @@ public static class RelationshipExtensions
     /// <param name="child">The child entity.</param>
     /// <param name="world">The world containing the entity.</param>
     /// <remarks>
-    ///     This method safely removes the Parent component and updates the
-    ///     parent's Children component to remove this child reference.
+    ///     This method uses Arch.Relationships API to remove the relationship.
+    ///     The bidirectional relationship is automatically cleaned up.
     /// </remarks>
     public static void RemoveParent(this Entity child, World world)
     {
-        if (!world.IsAlive(child) || !child.Has<Parent>())
+        if (!world.IsAlive(child))
         {
             return;
         }
 
-        Entity parent = child.Get<Parent>().Value;
-
-        // Remove from parent's children list
-        if (world.IsAlive(parent) && parent.Has<Children>())
+        // Find parent by iterating through all entities that have this child as a relationship
+        // This is less efficient but works with Arch.Relationships API
+        var parent = GetParent(child, world);
+        if (parent.HasValue && world.IsAlive(parent.Value))
         {
-            ref Children children = ref parent.Get<Children>();
-            children.Values?.Remove(child);
+            parent.Value.RemoveRelationship<ParentOf>(child);
         }
-
-        // Remove parent component
-        child.Remove<Parent>();
     }
 
     /// <summary>
@@ -132,24 +95,35 @@ public static class RelationshipExtensions
     /// </remarks>
     public static Entity? GetParent(this Entity child, World world)
     {
-        if (!world.IsAlive(child) || !child.Has<Parent>())
+        if (!world.IsAlive(child))
         {
             return null;
         }
 
-        Entity parent = child.Get<Parent>().Value;
-        return world.IsAlive(parent) ? parent : null;
+        // Find parent by querying all entities that might have ParentOf relationships
+        Entity? parentEntity = null;
+        world.Query(
+            new QueryDescription(),
+            (Entity entity) =>
+            {
+                if (entity.HasRelationship<ParentOf>(child))
+                {
+                    parentEntity = entity;
+                }
+            }
+        );
+
+        return parentEntity;
     }
 
     /// <summary>
-    ///     Gets all children of a parent entity.
+    ///     Gets all children of a parent entity using Arch.Relationships.
     /// </summary>
     /// <param name="parent">The parent entity.</param>
     /// <param name="world">The world containing the entities.</param>
     /// <returns>An enumerable of all valid (alive) children.</returns>
     /// <remarks>
-    ///     This method automatically filters out any destroyed entities,
-    ///     ensuring you only get valid child references.
+    ///     This method uses Arch.Relationships API to directly iterate children.
     ///     <para>
     ///         <b>Example:</b>
     ///         <code>
@@ -161,18 +135,25 @@ public static class RelationshipExtensions
     /// </remarks>
     public static IEnumerable<Entity> GetChildren(this Entity parent, World world)
     {
-        if (!world.IsAlive(parent) || !parent.Has<Children>())
+        if (!world.IsAlive(parent) || !parent.HasRelationship<ParentOf>())
         {
             return Enumerable.Empty<Entity>();
         }
 
-        Children children = parent.Get<Children>();
-        if (children.Values == null)
+        // Use Arch.Relationships API to iterate children
+        ref var relationships = ref parent.GetRelationships<ParentOf>();
+        var children = new List<Entity>();
+        
+        foreach (var kvp in relationships)
         {
-            return Enumerable.Empty<Entity>();
+            Entity child = kvp.Key;
+            if (world.IsAlive(child))
+            {
+                children.Add(child);
+            }
         }
 
-        return children.Values.Where(child => world.IsAlive(child));
+        return children;
     }
 
     /// <summary>
@@ -191,7 +172,7 @@ public static class RelationshipExtensions
     #region Owner-Owned Relationships
 
     /// <summary>
-    ///     Sets the owner of an owned entity, establishing an ownership relationship.
+    ///     Sets the owner of an owned entity, establishing an ownership relationship using Arch.Relationships.
     /// </summary>
     /// <param name="owned">The entity to be owned.</param>
     /// <param name="owner">The owner entity.</param>
@@ -200,9 +181,8 @@ public static class RelationshipExtensions
     /// <exception cref="ArgumentException">Thrown if either entity is not alive.</exception>
     /// <remarks>
     ///     <para>
-    ///         This method establishes bidirectional ownership:
-    ///         1. Adds Owned component to the owned entity
-    ///         2. Adds Owner component to the owner entity
+    ///         This method uses Arch.Relationships API to create a bidirectional relationship
+    ///         automatically. The relationship is stored efficiently and can be queried directly.
     ///     </para>
     ///     <para>
     ///         <b>Example:</b>
@@ -230,20 +210,8 @@ public static class RelationshipExtensions
             throw new ArgumentException("Owner entity is not alive", nameof(owner));
         }
 
-        // Remove existing ownership if present
-        if (owned.Has<Owned>())
-        {
-            owned.Remove<Owned>();
-        }
-
-        // Set new owner
-        owned.Add(new Owned { OwnerEntity = owner, AcquiredAt = DateTime.UtcNow });
-
-        // Set owner relationship
-        if (!owner.Has<Owner>() || owner.Get<Owner>().Value != owned)
-        {
-            owner.Set(new Owner { Value = owned, Type = ownershipType });
-        }
+        // Use Arch.Relationships API - this automatically creates bidirectional relationship
+        owner.AddRelationship<OwnerOf>(owned, new OwnerOf(ownershipType));
     }
 
     /// <summary>
@@ -252,30 +220,21 @@ public static class RelationshipExtensions
     /// <param name="owned">The owned entity.</param>
     /// <param name="world">The world containing the entity.</param>
     /// <remarks>
-    ///     This removes both the Owned component from the entity and the Owner
-    ///     component from the owner entity.
+    ///     This uses Arch.Relationships API to remove the bidirectional relationship.
     /// </remarks>
     public static void RemoveOwner(this Entity owned, World world)
     {
-        if (!world.IsAlive(owned) || !owned.Has<Owned>())
+        if (!world.IsAlive(owned))
         {
             return;
         }
 
-        Entity owner = owned.Get<Owned>().OwnerEntity;
-
-        // Remove owner component from owner entity
-        if (world.IsAlive(owner) && owner.Has<Owner>())
+        // Find owner and remove relationship
+        var owner = GetOwner(owned, world);
+        if (owner.HasValue && world.IsAlive(owner.Value))
         {
-            Owner ownerComp = owner.Get<Owner>();
-            if (ownerComp.Value == owned)
-            {
-                owner.Remove<Owner>();
-            }
+            owner.Value.RemoveRelationship<OwnerOf>(owned);
         }
-
-        // Remove owned component
-        owned.Remove<Owned>();
     }
 
     /// <summary>
@@ -295,47 +254,55 @@ public static class RelationshipExtensions
     /// </remarks>
     public static Entity? GetOwner(this Entity owned, World world)
     {
-        if (!world.IsAlive(owned) || !owned.Has<Owned>())
+        if (!world.IsAlive(owned))
         {
             return null;
         }
 
-        Entity owner = owned.Get<Owned>().OwnerEntity;
-        return world.IsAlive(owner) ? owner : null;
+        // Find owner by querying all entities that might have OwnerOf relationships
+        Entity? ownerEntity = null;
+        world.Query(
+            new QueryDescription(),
+            (Entity entity) =>
+            {
+                if (entity.HasRelationship<OwnerOf>(owned))
+                {
+                    ownerEntity = entity;
+                }
+            }
+        );
+
+        return ownerEntity;
     }
 
     /// <summary>
-    ///     Gets all entities owned by an owner entity.
+    ///     Gets all entities owned by an owner entity using Arch.Relationships.
     /// </summary>
     /// <param name="owner">The owner entity.</param>
     /// <param name="world">The world containing the entities.</param>
     /// <returns>An enumerable of all entities owned by this owner.</returns>
     /// <remarks>
-    ///     This queries all Owned components in the world and filters for those
-    ///     referencing this owner. For better performance with many owned entities,
-    ///     consider using the Children component pattern instead.
+    ///     This uses Arch.Relationships API to directly iterate owned entities.
     /// </remarks>
     public static IEnumerable<Entity> GetOwnedEntities(this Entity owner, World world)
     {
-        if (!world.IsAlive(owner))
+        if (!world.IsAlive(owner) || !owner.HasRelationship<OwnerOf>())
         {
             return Enumerable.Empty<Entity>();
         }
 
+        // Use Arch.Relationships API to iterate owned entities
+        ref var relationships = ref owner.GetRelationships<OwnerOf>();
         var ownedEntities = new List<Entity>();
-        // Use centralized relationship query
-        QueryDescription query = RelationshipQueries.AllOwned;
-
-        world.Query(
-            in query,
-            (Entity entity, ref Owned owned) =>
+        
+        foreach (var kvp in relationships)
+        {
+            Entity entity = kvp.Key;
+            if (world.IsAlive(entity))
             {
-                if (owned.OwnerEntity == owner && world.IsAlive(entity))
-                {
-                    ownedEntities.Add(entity);
-                }
+                ownedEntities.Add(entity);
             }
-        );
+        }
 
         return ownedEntities;
     }
@@ -349,12 +316,19 @@ public static class RelationshipExtensions
     public static OwnershipType? GetOwnershipType(this Entity owned, World world)
     {
         Entity? owner = owned.GetOwner(world);
-        if (!owner.HasValue || !owner.Value.Has<Owner>())
+        if (!owner.HasValue)
         {
             return null;
         }
 
-        return owner.Value.Get<Owner>().Type;
+        // Get the relationship data
+        if (!owner.Value.HasRelationship<OwnerOf>(owned))
+        {
+            return null;
+        }
+
+        var ownerOfData = owner.Value.GetRelationship<OwnerOf>(owned);
+        return ownerOfData.Type;
     }
 
     #endregion

@@ -25,4 +25,25 @@ public class EntityInfo
 
     /// <summary>Optional tag/category for filtering</summary>
     public string? Tag { get; set; }
+
+    /// <summary>Entity relationships organized by type</summary>
+    public Dictionary<string, List<EntityRelationship>> Relationships { get; set; } = new();
+}
+
+/// <summary>
+///     Represents a relationship between entities.
+/// </summary>
+public class EntityRelationship
+{
+    /// <summary>The related entity ID</summary>
+    public int EntityId { get; set; }
+
+    /// <summary>Optional display name for the related entity</summary>
+    public string? EntityName { get; set; }
+
+    /// <summary>Additional relationship metadata (e.g., "Type: Permanent", "EstablishedAt: ...")</summary>
+    public Dictionary<string, string> Metadata { get; set; } = new();
+
+    /// <summary>Whether the relationship is valid</summary>
+    public bool IsValid { get; set; } = true;
 }

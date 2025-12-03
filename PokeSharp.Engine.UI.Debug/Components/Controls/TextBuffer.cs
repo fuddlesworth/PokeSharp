@@ -2,6 +2,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using PokeSharp.Engine.UI.Debug.Components.Base;
+using PokeSharp.Engine.UI.Debug.Components.Controls;
 using PokeSharp.Engine.UI.Debug.Core;
 using PokeSharp.Engine.UI.Debug.Input;
 using PokeSharp.Engine.UI.Debug.Layout;
@@ -50,7 +51,7 @@ public class TextBuffer : UIComponent, ITextDisplay
     private bool _isDirty = true;
 
     // Scrollbar tracking
-    private bool _isDraggingScrollbar;
+    private readonly ScrollbarComponent _scrollbar = new();
 
     // Text selection tracking
     private bool _isSelectingText;
@@ -60,8 +61,6 @@ public class TextBuffer : UIComponent, ITextDisplay
     private DateTime _lastClickTime = DateTime.MinValue;
     private Point _lastMousePosition = Point.Zero;
     private int _maxLines = 10000;
-    private int _scrollbarDragStartOffset;
-    private int _scrollbarDragStartY;
     private Color? _scrollbarThumbColor;
     private Color? _scrollbarThumbHoverColor;
     private Color? _scrollbarTrackColor;
@@ -157,7 +156,11 @@ public class TextBuffer : UIComponent, ITextDisplay
     /// <summary>
     ///     Gets the current scroll offset (number of lines scrolled from top).
     /// </summary>
-    public int ScrollOffset { get; private set; }
+    public int ScrollOffset
+    {
+        get => (int)_scrollbar.ScrollOffset;
+        private set => _scrollbar.ScrollOffset = value;
+    }
 
     /// <summary>
     ///     Gets the total line count (unfiltered).
@@ -514,6 +517,21 @@ public class TextBuffer : UIComponent, ITextDisplay
     }
 
     /// <summary>
+    ///     Gets the text content of a specific line by index.
+    /// </summary>
+    /// <param name="lineIndex">The zero-based line index.</param>
+    /// <returns>The text content of the line, or null if the index is out of range.</returns>
+    public string? GetLineText(int lineIndex)
+    {
+        if (lineIndex < 0 || lineIndex >= _lines.Count)
+        {
+            return null;
+        }
+
+        return _lines[lineIndex].Text;
+    }
+
+    /// <summary>
     ///     Exports all text to a string.
     /// </summary>
     public string ExportToString()
@@ -692,21 +710,9 @@ public class TextBuffer : UIComponent, ITextDisplay
             _lastMousePosition = input.MousePosition;
         }
 
-        // Handle input for scrolling (mouse wheel and keyboard)
+        // Handle input for scrolling (keyboard only - mouse wheel handled by ScrollbarComponent)
         if (input != null && resolvedRect.Contains(input.MousePosition))
         {
-            // Handle scroll wheel
-            if (input.ScrollWheelDelta != 0)
-            {
-                if (input.ScrollWheelDelta > 0)
-                {
-                    ScrollUp(3);
-                }
-                else
-                {
-                    ScrollDown(3);
-                }
-            }
 
             // Handle keyboard scrolling with key repeat
             if (input.IsKeyPressedWithRepeat(Keys.PageUp))
@@ -748,18 +754,26 @@ public class TextBuffer : UIComponent, ITextDisplay
         // Handle scrollbar interaction - check BEFORE other input to get priority
         if (context != null && input != null && hasScrollbar)
         {
-            HandleScrollbarInput(
-                context,
-                input,
-                resolvedRect,
-                lines.Count,
-                visibleCount,
-                maxScroll
+            // Apply padding to scrollbar to match content area
+            float scrollbarY = resolvedRect.Y + LinePadding;
+            float scrollbarHeight = resolvedRect.Height - (LinePadding * 2);
+            var scrollbarRect = new LayoutRect(
+                resolvedRect.Right - ScrollbarWidth,
+                scrollbarY,
+                ScrollbarWidth,
+                scrollbarHeight
             );
+            // Use line-based scrolling for TextBuffer
+            _scrollbar.HandleInput(context, input, scrollbarRect, lines.Count, visibleCount, Id);
+            // Also handle mouse wheel separately
+            if (resolvedRect.Contains(input.MousePosition))
+            {
+                _scrollbar.HandleMouseWheelLines(input, lines.Count, visibleCount);
+            }
         }
 
         // Handle text selection via mouse (only if not dragging scrollbar)
-        if (context != null && input != null && !_isDraggingScrollbar)
+        if (context != null && input != null && !_scrollbar.IsDragging)
         {
             HandleTextSelection(context, input, contentRect, lines.Count);
         }
@@ -946,7 +960,17 @@ public class TextBuffer : UIComponent, ITextDisplay
         // Draw scrollbar if needed (after popping clip so scrollbar isn't clipped)
         if (hasScrollbar)
         {
-            DrawScrollbar(renderer, resolvedRect, lines.Count, visibleCount, startIndex);
+            // Apply padding to scrollbar to match content area
+            float scrollbarY = resolvedRect.Y + LinePadding;
+            float scrollbarHeight = resolvedRect.Height - (LinePadding * 2);
+            var scrollbarRect = new LayoutRect(
+                resolvedRect.Right - ScrollbarWidth,
+                scrollbarY,
+                ScrollbarWidth,
+                scrollbarHeight
+            );
+            // Note: Using theme colors - custom colors would require ScrollbarComponent enhancement
+            _scrollbar.Draw(renderer, ThemeManager.Current, scrollbarRect, lines.Count, visibleCount);
         }
     }
 
@@ -1121,145 +1145,6 @@ public class TextBuffer : UIComponent, ITextDisplay
         }
     }
 
-    /// <summary>
-    ///     Handles all scrollbar mouse interactions with proper input capture.
-    /// </summary>
-    private void HandleScrollbarInput(
-        UIContext context,
-        InputState input,
-        LayoutRect resolvedRect,
-        int totalLines,
-        int visibleCount,
-        int maxScroll
-    )
-    {
-        // Apply padding to scrollbar to match content area
-        float scrollbarY = resolvedRect.Y + LinePadding;
-        float scrollbarHeight = resolvedRect.Height - (LinePadding * 2);
-
-        var scrollbarRect = new LayoutRect(
-            resolvedRect.Right - ScrollbarWidth,
-            scrollbarY,
-            ScrollbarWidth,
-            scrollbarHeight
-        );
-
-        // Calculate thumb position and size
-        float thumbHeight = Math.Max(20, (float)visibleCount / totalLines * scrollbarHeight);
-        float thumbY =
-            scrollbarY
-            + (
-                (float)ScrollOffset
-                / Math.Max(1, totalLines - visibleCount)
-                * (scrollbarHeight - thumbHeight)
-            );
-
-        var thumbRect = new LayoutRect(
-            resolvedRect.Right - ScrollbarWidth,
-            thumbY,
-            ScrollbarWidth,
-            thumbHeight
-        );
-
-        bool isOverScrollbar = scrollbarRect.Contains(input.MousePosition);
-
-        // Handle dragging (continues even outside bounds due to input capture)
-        if (_isDraggingScrollbar)
-        {
-            if (input.IsMouseButtonDown(MouseButton.Left))
-            {
-                int deltaY = input.MousePosition.Y - _scrollbarDragStartY;
-                float scrollRatio = deltaY / scrollbarHeight;
-                int scrollDelta = (int)(scrollRatio * totalLines);
-
-                ScrollOffset = Math.Clamp(_scrollbarDragStartOffset + scrollDelta, 0, maxScroll);
-                AutoScroll = false;
-            }
-
-            // Handle mouse release (end drag)
-            if (input.IsMouseButtonReleased(MouseButton.Left))
-            {
-                _isDraggingScrollbar = false;
-                context.ReleaseCapture();
-            }
-        }
-        // Handle new click on scrollbar
-        else if (isOverScrollbar && input.IsMouseButtonPressed(MouseButton.Left))
-        {
-            // Capture input so drag continues even if mouse leaves scrollbar
-            context.CaptureInput(Id);
-
-            // Check if clicking on thumb (drag) or track (jump)
-            if (thumbRect.Contains(input.MousePosition))
-            {
-                // Start dragging the thumb
-                _isDraggingScrollbar = true;
-                _scrollbarDragStartY = input.MousePosition.Y;
-                _scrollbarDragStartOffset = ScrollOffset;
-            }
-            else
-            {
-                // Click on track - jump to that position immediately
-                float clickRatio = (input.MousePosition.Y - scrollbarY) / scrollbarHeight;
-                int targetScroll = (int)(clickRatio * totalLines) - (visibleCount / 2);
-                ScrollOffset = Math.Clamp(targetScroll, 0, maxScroll);
-                AutoScroll = false;
-
-                // Also start dragging from this new position in case they want to continue dragging
-                _isDraggingScrollbar = true;
-                _scrollbarDragStartY = input.MousePosition.Y;
-                _scrollbarDragStartOffset = ScrollOffset;
-            }
-
-            // Consume the mouse button to prevent other components from processing
-            input.ConsumeMouseButton(MouseButton.Left);
-        }
-    }
-
-    private void DrawScrollbar(
-        UIRenderer renderer,
-        LayoutRect rect,
-        int totalLines,
-        int visibleLines,
-        int scrollOffset
-    )
-    {
-        // Apply padding to scrollbar to match content area
-        float scrollbarY = rect.Y + LinePadding;
-        float scrollbarHeight = rect.Height - (LinePadding * 2);
-
-        // Scrollbar track (positioned at the right edge, with padding)
-        var trackRect = new LayoutRect(
-            rect.Right - ScrollbarWidth,
-            scrollbarY,
-            ScrollbarWidth,
-            scrollbarHeight
-        );
-        renderer.DrawRectangle(trackRect, ScrollbarTrackColor);
-
-        // Scrollbar thumb
-        float thumbHeight = Math.Max(20, (float)visibleLines / totalLines * scrollbarHeight);
-        float thumbY =
-            scrollbarY
-            + ((float)scrollOffset / (totalLines - visibleLines) * (scrollbarHeight - thumbHeight));
-
-        var thumbRect = new LayoutRect(
-            rect.Right - ScrollbarWidth,
-            thumbY,
-            ScrollbarWidth,
-            thumbHeight
-        );
-
-        Color thumbColor = IsScrollbarHovered(thumbRect)
-            ? ScrollbarThumbHoverColor
-            : ScrollbarThumbColor;
-        renderer.DrawRectangle(thumbRect, thumbColor);
-    }
-
-    private bool IsScrollbarHovered(LayoutRect thumbRect)
-    {
-        return thumbRect.Contains(_lastMousePosition);
-    }
 
     private int GetLineAtPosition(Point mousePos, LayoutRect rect)
     {

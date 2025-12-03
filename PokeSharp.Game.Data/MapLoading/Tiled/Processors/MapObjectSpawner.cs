@@ -1,5 +1,6 @@
 using Arch.Core;
 using Arch.Core.Extensions;
+using Arch.Relationships;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using PokeSharp.Engine.Common.Logging;
@@ -149,8 +150,8 @@ public class MapObjectSpawner
                     }
                 );
 
-                // Add BelongsToMap relationship for all spawned entities
-                entity.Add(new BelongsToMap(mapInfoEntity, mapId));
+                // Add ParentOf relationship - map is parent of spawned objects
+                mapInfoEntity.AddRelationship<ParentOf>(entity, new ParentOf());
 
                 _logger?.LogDebug(
                     "Spawned '{ObjectName}' ({TemplateId}) at ({X}, {Y})",
@@ -466,12 +467,14 @@ public class MapObjectSpawner
 
         try
         {
-            // Create warp entity with Position, WarpPoint, and BelongsToMap components
+            // Create warp entity with Position and WarpPoint components
             Entity warpEntity = world.Create(
                 new Position(tileX, tileY, mapId, tileHeight),
-                new WarpPoint(targetMap, targetX, targetY),
-                new BelongsToMap(mapInfoEntity, mapId)
+                new WarpPoint(targetMap, targetX, targetY)
             );
+
+            // Add ParentOf relationship - map is parent of warps
+            mapInfoEntity.AddRelationship<ParentOf>(warpEntity, new ParentOf());
 
             // Register warp in MapWarps spatial index for O(1) lookup
             ref MapWarps mapWarps = ref mapInfoEntity.Get<MapWarps>();

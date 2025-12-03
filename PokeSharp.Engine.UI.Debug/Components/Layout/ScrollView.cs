@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using PokeSharp.Engine.UI.Debug.Components.Base;
+using PokeSharp.Engine.UI.Debug.Components.Controls;
 using PokeSharp.Engine.UI.Debug.Core;
 using PokeSharp.Engine.UI.Debug.Layout;
 
@@ -10,10 +11,15 @@ namespace PokeSharp.Engine.UI.Debug.Components.Layout;
 /// </summary>
 public class ScrollView : UIContainer
 {
+    private readonly ScrollbarComponent _scrollbar = new();
     private float _viewportHeight;
 
     /// <summary>Current scroll offset (0 = top)</summary>
-    public float ScrollOffset { get; set; }
+    public float ScrollOffset
+    {
+        get => _scrollbar.ScrollOffset;
+        set => _scrollbar.ScrollOffset = value;
+    }
 
     /// <summary>Total content height</summary>
     public float ContentHeight { get; private set; }
@@ -72,35 +78,45 @@ public class ScrollView : UIContainer
             child.Constraint = originalConstraint;
         }
 
-        // Draw scrollbar if needed
-        if (ShowScrollbar && ContentHeight > _viewportHeight)
+        // Draw scrollbar if needed (now fully interactive!)
+        if (ShowScrollbar && ScrollbarComponent.IsNeeded(ContentHeight, _viewportHeight))
         {
-            DrawScrollbar(context);
+            float scrollbarX = Rect.Right - Theme.ScrollbarWidth - Theme.PaddingSmall;
+            float scrollbarY = Rect.Y + Theme.PaddingSmall;
+            float scrollbarHeight = _viewportHeight;
+
+            var scrollbarRect = new LayoutRect(
+                scrollbarX,
+                scrollbarY,
+                Theme.ScrollbarWidth,
+                scrollbarHeight
+            );
+
+            // Handle scrollbar input (dragging, clicking)
+            if (context.Input != null)
+            {
+                _scrollbar.HandleInput(
+                    context,
+                    context.Input,
+                    scrollbarRect,
+                    ContentHeight,
+                    _viewportHeight,
+                    Id
+                );
+
+                // Handle mouse wheel when hovering over the scroll view
+                if (Rect.Contains(context.Input.MousePosition))
+                {
+                    _scrollbar.HandleMouseWheel(context.Input, ContentHeight, _viewportHeight);
+                }
+            }
+
+            // Draw scrollbar
+            _scrollbar.Draw(context.Renderer, Theme, scrollbarRect, ContentHeight, _viewportHeight);
+
+            // Clamp after input
+            _scrollbar.ClampOffset(ContentHeight, _viewportHeight);
         }
-    }
-
-    private void DrawScrollbar(UIContext context)
-    {
-        float scrollbarX = Rect.Right - Theme.ScrollbarWidth - Theme.PaddingSmall;
-        float scrollbarY = Rect.Y + Theme.PaddingSmall;
-        float scrollbarHeight = _viewportHeight;
-
-        // Track
-        var trackRect = new LayoutRect(
-            scrollbarX,
-            scrollbarY,
-            Theme.ScrollbarWidth,
-            scrollbarHeight
-        );
-        context.Renderer.DrawRectangle(trackRect, Theme.ScrollbarTrack);
-
-        // Thumb
-        float thumbHeight = Math.Max(20, _viewportHeight / ContentHeight * scrollbarHeight);
-        float thumbY = scrollbarY + (ScrollOffset / ContentHeight * scrollbarHeight);
-
-        var thumbRect = new LayoutRect(scrollbarX, thumbY, Theme.ScrollbarWidth, thumbHeight);
-        Color thumbColor = IsHovered() ? Theme.ScrollbarThumbHover : Theme.ScrollbarThumb;
-        context.Renderer.DrawRectangle(thumbRect, thumbColor);
     }
 
     private float CalculateContentHeight()

@@ -215,6 +215,16 @@ public class ElevationRenderSystem(
             UpdateMapWorldOriginsCache(world);
             UpdateMapBordersCache(world);
 
+            // Get camera virtual viewport for letterboxing/pillarboxing
+            Rectangle virtualViewport = GetCameraVirtualViewport(world);
+            Viewport originalViewport = graphicsDevice.Viewport;
+
+            // Clear full screen with black (for borders)
+            graphicsDevice.Clear(Color.Black);
+
+            // Set viewport to virtual viewport (game rendering area)
+            graphicsDevice.Viewport = new Viewport(virtualViewport);
+
             _spriteBatch.Begin(
                 SpriteSortMode.BackToFront, // Sort sprites by layerDepth for proper overlap
                 BlendState.NonPremultiplied, // Use NonPremultiplied for PNG transparency
@@ -264,6 +274,9 @@ public class ElevationRenderSystem(
             _lastSpriteCount = spriteCount;
 
             _spriteBatch.End();
+
+            // Restore original viewport after rendering
+            graphicsDevice.Viewport = originalViewport;
         }
         catch (Exception ex)
         {
@@ -337,8 +350,20 @@ public class ElevationRenderSystem(
     {
         var swSetup = Stopwatch.StartNew();
         UpdateCameraCache(world);
+        UpdateMapWorldOriginsCache(world);
+        UpdateMapBordersCache(world);
         swSetup.Stop();
         _setupTime = swSetup.Elapsed.TotalMilliseconds;
+
+        // Get camera virtual viewport for letterboxing/pillarboxing
+        Rectangle virtualViewport = GetCameraVirtualViewport(world);
+        Viewport originalViewport = graphicsDevice.Viewport;
+
+        // Clear full screen with black (for borders)
+        graphicsDevice.Clear(Color.Black);
+
+        // Set viewport to virtual viewport (game rendering area)
+        graphicsDevice.Viewport = new Viewport(virtualViewport);
 
         var swBatchBegin = Stopwatch.StartNew();
         _spriteBatch.Begin(
@@ -356,6 +381,9 @@ public class ElevationRenderSystem(
         // Render image layers
         int imageLayerCount = RenderImageLayers(world);
 
+        // Render border tiles
+        int borderTilesRendered = RenderBorders(world);
+
         var swTiles = Stopwatch.StartNew();
         int totalTilesRendered = RenderAllTiles(world);
         swTiles.Stop();
@@ -370,6 +398,9 @@ public class ElevationRenderSystem(
         _spriteBatch.End();
         swBatchEnd.Stop();
         _batchEndTime = swBatchEnd.Elapsed.TotalMilliseconds;
+
+        // Restore original viewport after rendering
+        graphicsDevice.Viewport = originalViewport;
 
         if (_frameCounter % 300 == 0)
         {
@@ -519,6 +550,28 @@ public class ElevationRenderSystem(
                 _cachedPlayerMapId = pos.MapId.Value;
             }
         );
+    }
+
+    /// <summary>
+    ///     Gets the camera's virtual viewport for letterboxing/pillarboxing.
+    ///     Returns the full viewport if no camera exists or VirtualViewport is empty.
+    /// </summary>
+    private Rectangle GetCameraVirtualViewport(World world)
+    {
+        Rectangle virtualViewport = graphicsDevice.Viewport.Bounds;
+
+        world.Query(
+            in _cameraQuery,
+            (ref Camera camera) =>
+            {
+                if (camera.VirtualViewport != Rectangle.Empty)
+                {
+                    virtualViewport = camera.VirtualViewport;
+                }
+            }
+        );
+
+        return virtualViewport;
     }
 
     /// <summary>

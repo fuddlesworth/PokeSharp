@@ -53,6 +53,11 @@ public interface IGameInitializer
     SpriteTextureLoader SpriteTextureLoader { get; }
 
     /// <summary>
+    ///     Gets the camera viewport system (handles window resize events).
+    /// </summary>
+    CameraViewportSystem CameraViewportSystem { get; }
+
+    /// <summary>
     ///     Initializes all game systems and infrastructure.
     /// </summary>
     /// <param name="graphicsDevice">The graphics device for rendering.</param>
