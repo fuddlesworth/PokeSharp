@@ -1,6 +1,6 @@
-using PokeSharp.Engine.Core.Events.Collision;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Scripting.Runtime;
+using PokeSharp.Game.Systems.Events;
 
 /// <summary>
 ///     Impassable west behavior.
@@ -12,8 +12,8 @@ public class ImpassableWestBehavior : ScriptBase
     {
         On<CollisionCheckEvent>(evt =>
         {
-            // Block if moving from west (Direction.West = 1)
-            if (evt.FromDirection == 1)
+            // Block if moving from west
+            if (evt.FromDirection == Direction.West)
             {
                 evt.PreventDefault("Cannot pass from west");
             }

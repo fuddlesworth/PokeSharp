@@ -11,38 +11,39 @@ namespace PokeSharp.Game.Systems.Events;
 /// <remarks>
 ///     This is a pre-validation event that allows scripts to intercept and
 ///     prevent collisions. The collision service will respect the IsBlocked flag.
+///     Properties are mutable to support event pooling for performance.
 /// </remarks>
 public record CollisionCheckEvent : TypeEventBase
 {
     /// <summary>
     ///     The entity performing the collision check (e.g., player, NPC).
     /// </summary>
-    public required Entity Entity { get; init; }
+    public Entity Entity { get; set; }
 
     /// <summary>
     ///     The map identifier where collision is being checked.
     /// </summary>
-    public required int MapId { get; init; }
+    public int MapId { get; set; }
 
     /// <summary>
     ///     The tile position being checked (X, Y in tile coordinates).
     /// </summary>
-    public required (int X, int Y) TilePosition { get; init; }
+    public (int X, int Y) TilePosition { get; set; }
 
     /// <summary>
     ///     Direction the entity is moving FROM (player's movement direction).
     /// </summary>
-    public Direction FromDirection { get; init; } = Direction.None;
+    public Direction FromDirection { get; set; } = Direction.None;
 
     /// <summary>
     ///     Direction the entity is moving TO (opposite of FromDirection).
     /// </summary>
-    public Direction ToDirection { get; init; } = Direction.None;
+    public Direction ToDirection { get; set; } = Direction.None;
 
     /// <summary>
     ///     Entity elevation for collision filtering.
     /// </summary>
-    public byte Elevation { get; init; } = Components.Rendering.Elevation.Default;
+    public byte Elevation { get; set; } = Components.Rendering.Elevation.Default;
 
     /// <summary>
     ///     Whether scripts have blocked this collision.
@@ -60,89 +61,95 @@ public record CollisionCheckEvent : TypeEventBase
 ///     Event fired when a collision is detected with a solid object or tile.
 ///     This is an informational event fired AFTER collision detection.
 /// </summary>
+/// <remarks>
+///     Properties are mutable to support event pooling for performance.
+/// </remarks>
 public record CollisionDetectedEvent : TypeEventBase
 {
     /// <summary>
     ///     The entity that attempted to move.
     /// </summary>
-    public required Entity Entity { get; init; }
+    public Entity Entity { get; set; }
 
     /// <summary>
     ///     The entity or tile that was collided with.
     /// </summary>
-    public Entity CollidedWith { get; init; }
+    public Entity CollidedWith { get; set; }
 
     /// <summary>
     ///     Map identifier where collision occurred.
     /// </summary>
-    public required int MapId { get; init; }
+    public int MapId { get; set; }
 
     /// <summary>
     ///     Tile position where collision occurred.
     /// </summary>
-    public required (int X, int Y) TilePosition { get; init; }
+    public (int X, int Y) TilePosition { get; set; }
 
     /// <summary>
     ///     Direction of the collision.
     /// </summary>
-    public Direction CollisionDirection { get; init; }
+    public Direction CollisionDirection { get; set; }
 
     /// <summary>
     ///     Type of collision (entity, tile, boundary).
     /// </summary>
-    public CollisionType CollisionType { get; init; }
+    public CollisionType CollisionType { get; set; }
 
     /// <summary>
     ///     Optional contact point for physics-based collisions.
     /// </summary>
-    public (float X, float Y)? ContactPoint { get; init; }
+    public (float X, float Y)? ContactPoint { get; set; }
 
     /// <summary>
     ///     Optional collision normal vector.
     /// </summary>
-    public (float X, float Y)? CollisionNormal { get; init; }
+    public (float X, float Y)? CollisionNormal { get; set; }
 }
 
 /// <summary>
 ///     Event fired after collision resolution is complete.
 ///     Indicates how the collision was handled.
 /// </summary>
+/// <remarks>
+///     Properties are mutable to support event pooling for performance.
+/// </remarks>
 public record CollisionResolvedEvent : TypeEventBase
 {
     /// <summary>
     ///     The entity involved in the collision.
     /// </summary>
-    public required Entity Entity { get; init; }
+    public Entity Entity { get; set; }
 
     /// <summary>
     ///     Map identifier.
     /// </summary>
-    public required int MapId { get; init; }
+    public int MapId { get; set; }
 
     /// <summary>
     ///     Original target position that was blocked.
     /// </summary>
-    public required (int X, int Y) OriginalTarget { get; init; }
+    public (int X, int Y) OriginalTarget { get; set; }
 
     /// <summary>
     ///     Final position after resolution.
     /// </summary>
-    public required (int X, int Y) FinalPosition { get; init; }
+    public (int X, int Y) FinalPosition { get; set; }
 
     /// <summary>
     ///     Whether the collision prevented movement entirely.
     /// </summary>
-    public bool WasBlocked { get; init; }
+    public bool WasBlocked { get; set; }
 
     /// <summary>
     ///     Optional resolution vector (how position was adjusted).
     /// </summary>
-    public (float X, float Y)? ResolutionVector { get; init; }
+    public (float X, float Y)? ResolutionVector { get; set; }
 
     /// <summary>
     ///     Resolution strategy used (blocked, slid, bounced, etc.).
     /// </summary>
-    public ResolutionStrategy Strategy { get; init; } = ResolutionStrategy.Blocked;
+    public ResolutionStrategy Strategy { get; set; } = ResolutionStrategy.Blocked;
 }
 
 /// <summary>

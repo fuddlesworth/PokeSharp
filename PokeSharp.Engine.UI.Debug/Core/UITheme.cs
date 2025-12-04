@@ -235,6 +235,13 @@ public class UITheme
             ProfilerBarInset = 2f,
             ProfilerBudgetLineOpacity = 0.7f,
 
+            // Event Inspector visualization
+            EventInspectorBarInset = 2f,
+            EventInspectorBarMaxScale = 2.0f,
+            EventInspectorMarkerOpacity = 0.5f,
+            EventInspectorWarningThreshold = 0.5f,
+            EventInspectorMildThreshold = 0.25f,
+
             // Interactive thresholds
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
@@ -396,6 +403,14 @@ public class UITheme
             ProfilerBarMaxScale = 2.0f,
             ProfilerBarInset = 2f,
             ProfilerBudgetLineOpacity = 0.7f,
+
+            // Event Inspector visualization
+            EventInspectorBarInset = 2f,
+            EventInspectorBarMaxScale = 2.0f,
+            EventInspectorMarkerOpacity = 0.5f,
+            EventInspectorWarningThreshold = 0.5f,
+            EventInspectorMildThreshold = 0.25f,
+
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
             DoubleClickThreshold = 0.5f,
@@ -550,6 +565,14 @@ public class UITheme
             ProfilerBarMaxScale = 2.0f,
             ProfilerBarInset = 2f,
             ProfilerBudgetLineOpacity = 0.7f,
+
+            // Event Inspector visualization
+            EventInspectorBarInset = 2f,
+            EventInspectorBarMaxScale = 2.0f,
+            EventInspectorMarkerOpacity = 0.5f,
+            EventInspectorWarningThreshold = 0.5f,
+            EventInspectorMildThreshold = 0.25f,
+
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
             DoubleClickThreshold = 0.5f,
@@ -704,6 +727,14 @@ public class UITheme
             ProfilerBarMaxScale = 2.0f,
             ProfilerBarInset = 2f,
             ProfilerBudgetLineOpacity = 0.7f,
+
+            // Event Inspector visualization
+            EventInspectorBarInset = 2f,
+            EventInspectorBarMaxScale = 2.0f,
+            EventInspectorMarkerOpacity = 0.5f,
+            EventInspectorWarningThreshold = 0.5f,
+            EventInspectorMildThreshold = 0.25f,
+
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
             DoubleClickThreshold = 0.5f,
@@ -858,6 +889,14 @@ public class UITheme
             ProfilerBarMaxScale = 2.0f,
             ProfilerBarInset = 2f,
             ProfilerBudgetLineOpacity = 0.7f,
+
+            // Event Inspector visualization
+            EventInspectorBarInset = 2f,
+            EventInspectorBarMaxScale = 2.0f,
+            EventInspectorMarkerOpacity = 0.5f,
+            EventInspectorWarningThreshold = 0.5f,
+            EventInspectorMildThreshold = 0.25f,
+
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
             DoubleClickThreshold = 0.5f,
@@ -1012,6 +1051,14 @@ public class UITheme
             ProfilerBarMaxScale = 2.0f,
             ProfilerBarInset = 2f,
             ProfilerBudgetLineOpacity = 0.7f,
+
+            // Event Inspector visualization
+            EventInspectorBarInset = 2f,
+            EventInspectorBarMaxScale = 2.0f,
+            EventInspectorMarkerOpacity = 0.5f,
+            EventInspectorWarningThreshold = 0.5f,
+            EventInspectorMildThreshold = 0.25f,
+
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
             DoubleClickThreshold = 0.5f,
@@ -1211,6 +1258,14 @@ public class UITheme
             ProfilerBarMaxScale = 2.0f,
             ProfilerBarInset = 2f,
             ProfilerBudgetLineOpacity = 0.7f,
+
+            // Event Inspector visualization
+            EventInspectorBarInset = 2f,
+            EventInspectorBarMaxScale = 2.0f,
+            EventInspectorMarkerOpacity = 0.5f,
+            EventInspectorWarningThreshold = 0.5f,
+            EventInspectorMildThreshold = 0.25f,
+
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
             DoubleClickThreshold = 0.5f,
@@ -1407,6 +1462,14 @@ public class UITheme
             ProfilerBarMaxScale = 2.0f,
             ProfilerBarInset = 2f,
             ProfilerBudgetLineOpacity = 0.7f,
+
+            // Event Inspector visualization
+            EventInspectorBarInset = 2f,
+            EventInspectorBarMaxScale = 2.0f,
+            EventInspectorMarkerOpacity = 0.5f,
+            EventInspectorWarningThreshold = 0.5f,
+            EventInspectorMildThreshold = 0.25f,
+
             DragThreshold = 5f,
             DoubleClickMaxDistance = 5f,
             DoubleClickThreshold = 0.5f,
@@ -1625,6 +1688,35 @@ public class UITheme
     public float ProfilerBarMaxScale { get; init; }
     public float ProfilerBarInset { get; init; }
     public float ProfilerBudgetLineOpacity { get; init; }
+
+    // ═══════════════════════════════════════════════════════════════
+    // Event Inspector Theme Properties
+    // ═══════════════════════════════════════════════════════════════
+
+    /// <summary>
+    ///     Inset for performance bars in Event Inspector (matches ProfilerBarInset).
+    /// </summary>
+    public float EventInspectorBarInset { get; init; }
+
+    /// <summary>
+    ///     Maximum scale for Event Inspector bars (matches ProfilerBarMaxScale).
+    /// </summary>
+    public float EventInspectorBarMaxScale { get; init; }
+
+    /// <summary>
+    ///     Opacity for warning threshold markers in Event Inspector.
+    /// </summary>
+    public float EventInspectorMarkerOpacity { get; init; }
+
+    /// <summary>
+    ///     Warning threshold multiplier for Event Inspector (matches ProfilerBarWarningThreshold).
+    /// </summary>
+    public float EventInspectorWarningThreshold { get; init; }
+
+    /// <summary>
+    ///     Mild warning threshold multiplier for Event Inspector (matches ProfilerBarMildThreshold).
+    /// </summary>
+    public float EventInspectorMildThreshold { get; init; }
 
     // Interactive thresholds
     public float DragThreshold { get; init; }

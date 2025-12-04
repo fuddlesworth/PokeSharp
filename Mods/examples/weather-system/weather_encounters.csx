@@ -20,8 +20,8 @@ using System.Collections.Generic;
 /// </summary>
 public class WeatherEncounters : ScriptBase
 {
-    // Configuration (hardcoded - previously from mod.json)
-    private const float WeatherEncounterMultiplier = 1.5f;
+    // Configuration value loaded from mod.json
+    private float WeatherEncounterMultiplier => Context.Configuration.GetValueOrDefault("weatherEncounterMultiplier", 1.5f);
 
     public override void Initialize(ScriptContext ctx)
     {

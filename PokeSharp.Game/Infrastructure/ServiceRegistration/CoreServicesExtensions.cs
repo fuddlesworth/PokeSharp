@@ -52,13 +52,13 @@ public static class CoreServicesExtensions
             return new SystemManager(logger);
         });
 
-        // Event Bus - Phase 1 event-driven ECS integration
-        services.AddSingleton<EventBus>(sp =>
+        // Event Bus - Optimized implementation with cached handlers and reduced allocations
+        // Features: cached handler arrays, fast-path for zero subscribers, aggressive inlining
+        services.AddSingleton<IEventBus>(sp =>
         {
-            ILogger<EventBus>? logger = sp.GetService<ILogger<EventBus>>();
+            var logger = sp.GetService<ILogger<EventBus>>();
             return new EventBus(logger);
         });
-        services.AddSingleton<IEventBus>(sp => sp.GetRequiredService<EventBus>());
 
         // Entity Pool Manager - For entity recycling and pooling
         // Register pools immediately to ensure they're available before any service that needs them

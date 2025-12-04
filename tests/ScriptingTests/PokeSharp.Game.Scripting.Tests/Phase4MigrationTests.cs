@@ -12,9 +12,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Xna.Framework;
 using PokeSharp.Engine.Core.Events;
-using PokeSharp.Engine.Core.Events.Movement;
 using PokeSharp.Engine.Core.Events.Tile;
 using PokeSharp.Game.Components.Movement;
+using PokeSharp.Game.Systems.Events;
 using PokeSharp.Game.Scripting.Api;
 using PokeSharp.Game.Scripting.HotReload;
 using PokeSharp.Game.Scripting.Runtime;
@@ -433,13 +433,11 @@ namespace PokeSharp.Tests.ScriptingTests
             var evt = new MovementCompletedEvent
             {
                 Entity = _playerEntity,
-                PreviousX = 5,
-                PreviousY = 5,
-                CurrentX = 6,
-                CurrentY = 5,
-                Direction = 2, // East
-                MovementDuration = 0.5f,
-                TileTransition = false
+                OldPosition = (5, 5),
+                NewPosition = (6, 5),
+                Direction = Direction.East,
+                MovementTime = 0.5f,
+                MapId = 1
             };
             _eventBus.Publish(evt);
 
@@ -465,13 +463,11 @@ namespace PokeSharp.Tests.ScriptingTests
             var evt1 = new MovementCompletedEvent
             {
                 Entity = _playerEntity,
-                PreviousX = 5,
-                PreviousY = 5,
-                CurrentX = 6,
-                CurrentY = 5,
-                Direction = 2,
-                MovementDuration = 0.5f,
-                TileTransition = false
+                OldPosition = (5, 5),
+                NewPosition = (6, 5),
+                Direction = Direction.East,
+                MovementTime = 0.5f,
+                MapId = 1
             };
             _eventBus.Publish(evt1);
             Assert.Equal(1, testScript.EventCount);
@@ -483,13 +479,11 @@ namespace PokeSharp.Tests.ScriptingTests
             var evt2 = new MovementCompletedEvent
             {
                 Entity = _playerEntity,
-                PreviousX = 6,
-                PreviousY = 5,
-                CurrentX = 7,
-                CurrentY = 5,
-                Direction = 2,
-                MovementDuration = 0.5f,
-                TileTransition = false
+                OldPosition = (6, 5),
+                NewPosition = (7, 5),
+                Direction = Direction.East,
+                MovementTime = 0.5f,
+                MapId = 1
             };
             _eventBus.Publish(evt2);
 
@@ -603,13 +597,11 @@ namespace PokeSharp.Tests.ScriptingTests
             var evt1 = new MovementCompletedEvent
             {
                 Entity = _playerEntity,
-                PreviousX = 5,
-                PreviousY = 5,
-                CurrentX = 6,
-                CurrentY = 5,
-                Direction = 2,
-                MovementDuration = 0.5f,
-                TileTransition = false
+                OldPosition = (5, 5),
+                NewPosition = (6, 5),
+                Direction = Direction.East,
+                MovementTime = 0.5f,
+                MapId = 1
             };
             _eventBus.Publish(evt1);
             Assert.Equal(1, testScript.EventCount);
@@ -628,13 +620,11 @@ namespace PokeSharp.Tests.ScriptingTests
             var evt2 = new MovementCompletedEvent
             {
                 Entity = _playerEntity,
-                PreviousX = 6,
-                PreviousY = 5,
-                CurrentX = 7,
-                CurrentY = 5,
-                Direction = 2,
-                MovementDuration = 0.5f,
-                TileTransition = false
+                OldPosition = (6, 5),
+                NewPosition = (7, 5),
+                Direction = Direction.East,
+                MovementTime = 0.5f,
+                MapId = 1
             };
             _eventBus.Publish(evt2);
 
@@ -846,13 +836,12 @@ namespace PokeSharp.Tests.ScriptingTests
                 Publish(new MovementCompletedEvent
                 {
                     Entity = Context.Entity.Value,
-                    PreviousX = (int)_patrolPoints[(_currentPoint - 1 + _patrolPoints.Length) % _patrolPoints.Length].X,
-                    PreviousY = (int)_patrolPoints[(_currentPoint - 1 + _patrolPoints.Length) % _patrolPoints.Length].Y,
-                    CurrentX = (int)targetPos.X,
-                    CurrentY = (int)targetPos.Y,
-                    Direction = 0,
-                    MovementDuration = 1.0f,
-                    TileTransition = true
+                    OldPosition = ((int)_patrolPoints[(_currentPoint - 1 + _patrolPoints.Length) % _patrolPoints.Length].X, 
+                                   (int)_patrolPoints[(_currentPoint - 1 + _patrolPoints.Length) % _patrolPoints.Length].Y),
+                    NewPosition = ((int)targetPos.X, (int)targetPos.Y),
+                    Direction = Direction.South,
+                    MovementTime = 1.0f,
+                    MapId = 1
                 });
             }
         }
@@ -928,11 +917,15 @@ namespace PokeSharp.Tests.ScriptingTests
         public int GetCounter() => _counter;
     }
 
-    public sealed record CustomMigrationEvent : IGameEvent
+    public sealed class CustomMigrationEvent : NotificationEventBase
     {
-        public Guid EventId { get; init; } = Guid.NewGuid();
-        public DateTime Timestamp { get; init; } = DateTime.UtcNow;
-        public string Message { get; init; } = string.Empty;
+        public string Message { get; set; } = string.Empty;
+
+        public override void Reset()
+        {
+            base.Reset();
+            Message = string.Empty;
+        }
     }
 
     #endregion

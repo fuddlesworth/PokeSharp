@@ -24,56 +24,65 @@ namespace PokeSharp.Engine.Core.Events.NPC;
 ///     - Triggering dialogue-related achievements
 ///     - Modifying dialogue content (translation, personalization)
 ///     - Analytics and telemetry
+///
+///     This class supports object pooling via EventPool{T} to reduce allocations.
 /// </remarks>
-public sealed record DialogueStartedEvent : IGameEvent
+public sealed class DialogueStartedEvent : NotificationEventBase
 {
-    /// <inheritdoc />
-    public Guid EventId { get; init; } = Guid.NewGuid();
-
-    /// <inheritdoc />
-    public DateTime Timestamp { get; init; } = DateTime.UtcNow;
-
     /// <summary>
-    ///     Gets the entity that initiated the dialogue (player or script trigger).
+    ///     Gets or sets the entity that initiated the dialogue (player or script trigger).
     /// </summary>
-    public Entity? Initiator { get; init; }
+    public Entity? Initiator { get; set; }
 
     /// <summary>
-    ///     Gets the NPC entity involved in the dialogue, if applicable.
+    ///     Gets or sets the NPC entity involved in the dialogue, if applicable.
     /// </summary>
-    public Entity? NPC { get; init; }
+    public Entity? NPC { get; set; }
 
     /// <summary>
-    ///     Gets the unique identifier for this dialogue sequence.
+    ///     Gets or sets the unique identifier for this dialogue sequence.
     ///     Used to load dialogue script, text, and choices.
     /// </summary>
     /// <example>
     ///     "professor_oak_intro", "nurse_joy_heal", "rival_battle_1"
     /// </example>
-    public required string DialogueId { get; init; }
+    public string DialogueId { get; set; } = string.Empty;
 
     /// <summary>
-    ///     Gets the source of this dialogue (NPC interaction, scripted event, etc.).
+    ///     Gets or sets the source of this dialogue (NPC interaction, scripted event, etc.).
     /// </summary>
-    public DialogueSource Source { get; init; } = DialogueSource.NPC;
+    public DialogueSource Source { get; set; } = DialogueSource.NPC;
 
     /// <summary>
-    ///     Gets the initial dialogue text to display.
+    ///     Gets or sets the initial dialogue text to display.
     ///     May be modified by handlers for localization or personalization.
     /// </summary>
-    public string? InitialDialogueText { get; init; }
+    public string? InitialDialogueText { get; set; }
 
     /// <summary>
-    ///     Gets a value indicating whether this dialogue includes player choices.
+    ///     Gets or sets a value indicating whether this dialogue includes player choices.
     ///     If true, the player will be prompted to select an option.
     /// </summary>
-    public bool HasChoices { get; init; }
+    public bool HasChoices { get; set; }
 
     /// <summary>
-    ///     Gets the dialogue priority for concurrent dialogue scenarios.
+    ///     Gets or sets the dialogue priority for concurrent dialogue scenarios.
     ///     Higher priority dialogue interrupts lower priority.
     /// </summary>
-    public int Priority { get; init; } = 0;
+    public int Priority { get; set; } = 0;
+
+    /// <inheritdoc />
+    public override void Reset()
+    {
+        base.Reset();
+        Initiator = null;
+        NPC = null;
+        DialogueId = string.Empty;
+        Source = DialogueSource.NPC;
+        InitialDialogueText = null;
+        HasChoices = false;
+        Priority = 0;
+    }
 }
 
 /// <summary>

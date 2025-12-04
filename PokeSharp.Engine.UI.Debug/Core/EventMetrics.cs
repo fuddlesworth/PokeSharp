@@ -14,6 +14,11 @@ public class EventMetrics : IEventMetrics
     private readonly ConcurrentDictionary<string, SubscriptionMetrics> _subscriptionMetrics = new();
     private bool _isEnabled;
 
+    // OPTIMIZATION: Cached results to avoid LINQ allocations on every frame
+    private List<EventTypeMetrics>? _cachedEventMetrics;
+    private int _cachedEventMetricsVersion;
+    private int _eventMetricsVersion;
+
     /// <summary>
     ///     Gets or sets whether metrics collection is enabled.
     ///     When disabled, all tracking calls are no-ops for minimal performance impact.
@@ -27,37 +32,55 @@ public class EventMetrics : IEventMetrics
     /// <summary>
     ///     Records a publish operation for an event type.
     /// </summary>
-    public void RecordPublish(string eventTypeName, long elapsedMicroseconds)
+    /// <param name="eventTypeName">Name of the event type.</param>
+    /// <param name="elapsedNanoseconds">Time taken in nanoseconds (from Stopwatch).</param>
+    public void RecordPublish(string eventTypeName, long elapsedNanoseconds)
     {
         if (!_isEnabled) return;
 
-        var metrics = _eventMetrics.GetOrAdd(eventTypeName, _ => new EventTypeMetrics(eventTypeName));
-        metrics.RecordPublish(elapsedMicroseconds);
+        var metrics = _eventMetrics.GetOrAdd(eventTypeName, _ =>
+        {
+            Interlocked.Increment(ref _eventMetricsVersion); // Invalidate cache
+            return new EventTypeMetrics(eventTypeName);
+        });
+        // Convert nanoseconds to milliseconds for consistent display
+        double elapsedMs = elapsedNanoseconds / 1_000_000.0;
+        metrics.RecordPublish(elapsedMs);
     }
 
     /// <summary>
     ///     Records a handler invocation.
     /// </summary>
-    public void RecordHandlerInvoke(string eventTypeName, int handlerId, long elapsedMicroseconds)
+    /// <param name="eventTypeName">Name of the event type.</param>
+    /// <param name="handlerId">Handler identifier.</param>
+    /// <param name="elapsedNanoseconds">Time taken in nanoseconds (from Stopwatch).</param>
+    public void RecordHandlerInvoke(string eventTypeName, int handlerId, long elapsedNanoseconds)
     {
         if (!_isEnabled) return;
 
         var metrics = _eventMetrics.GetOrAdd(eventTypeName, _ => new EventTypeMetrics(eventTypeName));
-        metrics.RecordHandlerInvoke(elapsedMicroseconds);
+        // Convert nanoseconds to milliseconds for consistent display
+        double elapsedMs = elapsedNanoseconds / 1_000_000.0;
+        metrics.RecordHandlerInvoke(elapsedMs);
 
         string key = $"{eventTypeName}:{handlerId}";
         var subMetrics = _subscriptionMetrics.GetOrAdd(key, _ => new SubscriptionMetrics(eventTypeName, handlerId));
-        subMetrics.RecordInvoke(elapsedMicroseconds);
+        subMetrics.RecordInvoke(elapsedMs);
     }
 
     /// <summary>
     ///     Records a subscription being added.
+    ///     NOTE: Always tracks subscriber count regardless of IsEnabled,
+    ///     since subscriptions happen at startup before the inspector is opened.
     /// </summary>
     public void RecordSubscription(string eventTypeName, int handlerId, string? source = null, int priority = 0)
     {
-        if (!_isEnabled) return;
-
-        var metrics = _eventMetrics.GetOrAdd(eventTypeName, _ => new EventTypeMetrics(eventTypeName));
+        // Always track subscriber count (happens at startup before inspector is enabled)
+        var metrics = _eventMetrics.GetOrAdd(eventTypeName, _ =>
+        {
+            Interlocked.Increment(ref _eventMetricsVersion); // Invalidate cache
+            return new EventTypeMetrics(eventTypeName);
+        });
         metrics.IncrementSubscriberCount();
 
         string key = $"{eventTypeName}:{handlerId}";
@@ -68,13 +91,15 @@ public class EventMetrics : IEventMetrics
 
     /// <summary>
     ///     Records a subscription being removed.
+    ///     NOTE: Always tracks subscriber count regardless of IsEnabled.
     /// </summary>
     public void RecordUnsubscription(string eventTypeName, int handlerId)
     {
-        if (!_isEnabled) return;
-
-        var metrics = _eventMetrics.GetOrAdd(eventTypeName, _ => new EventTypeMetrics(eventTypeName));
-        metrics.DecrementSubscriberCount();
+        // Always track subscriber count
+        if (_eventMetrics.TryGetValue(eventTypeName, out var metrics))
+        {
+            metrics.DecrementSubscriberCount();
+        }
 
         string key = $"{eventTypeName}:{handlerId}";
         _subscriptionMetrics.TryRemove(key, out _);
@@ -85,7 +110,14 @@ public class EventMetrics : IEventMetrics
     /// </summary>
     public IReadOnlyCollection<EventTypeMetrics> GetAllEventMetrics()
     {
-        return _eventMetrics.Values.ToList();
+        // OPTIMIZATION: Cache results to avoid ToList() allocation on every frame
+        // Only rebuild cache when metrics have changed
+        if (_cachedEventMetrics == null || _cachedEventMetricsVersion != _eventMetricsVersion)
+        {
+            _cachedEventMetrics = _eventMetrics.Values.ToList();
+            _cachedEventMetricsVersion = _eventMetricsVersion;
+        }
+        return _cachedEventMetrics;
     }
 
     /// <summary>
@@ -135,16 +167,17 @@ public class EventMetrics : IEventMetrics
 
 /// <summary>
 ///     Performance metrics for a specific event type.
+///     All times are stored in milliseconds for consistency with other panels.
 /// </summary>
 public class EventTypeMetrics
 {
     private readonly object _lock = new();
     private long _totalPublishCount;
     private long _totalHandlerInvocations;
-    private long _totalPublishTimeMicroseconds;
-    private long _totalHandlerTimeMicroseconds;
-    private long _maxPublishTimeMicroseconds;
-    private long _maxHandlerTimeMicroseconds;
+    private double _totalPublishTimeMs;
+    private double _totalHandlerTimeMs;
+    private double _maxPublishTimeMs;
+    private double _maxHandlerTimeMs;
     private int _subscriberCount;
 
     public EventTypeMetrics(string eventTypeName)
@@ -158,34 +191,34 @@ public class EventTypeMetrics
     public int SubscriberCount => _subscriberCount;
 
     public double AveragePublishTimeMs =>
-        _totalPublishCount > 0 ? (_totalPublishTimeMicroseconds / (double)_totalPublishCount) / 1000.0 : 0.0;
+        _totalPublishCount > 0 ? _totalPublishTimeMs / _totalPublishCount : 0.0;
 
-    public double MaxPublishTimeMs => _maxPublishTimeMicroseconds / 1000.0;
+    public double MaxPublishTimeMs => _maxPublishTimeMs;
 
     public double AverageHandlerTimeMs =>
-        _totalHandlerInvocations > 0 ? (_totalHandlerTimeMicroseconds / (double)_totalHandlerInvocations) / 1000.0 : 0.0;
+        _totalHandlerInvocations > 0 ? _totalHandlerTimeMs / _totalHandlerInvocations : 0.0;
 
-    public double MaxHandlerTimeMs => _maxHandlerTimeMicroseconds / 1000.0;
+    public double MaxHandlerTimeMs => _maxHandlerTimeMs;
 
-    public void RecordPublish(long elapsedMicroseconds)
+    public void RecordPublish(double elapsedMs)
     {
         lock (_lock)
         {
             _totalPublishCount++;
-            _totalPublishTimeMicroseconds += elapsedMicroseconds;
-            if (elapsedMicroseconds > _maxPublishTimeMicroseconds)
-                _maxPublishTimeMicroseconds = elapsedMicroseconds;
+            _totalPublishTimeMs += elapsedMs;
+            if (elapsedMs > _maxPublishTimeMs)
+                _maxPublishTimeMs = elapsedMs;
         }
     }
 
-    public void RecordHandlerInvoke(long elapsedMicroseconds)
+    public void RecordHandlerInvoke(double elapsedMs)
     {
         lock (_lock)
         {
             _totalHandlerInvocations++;
-            _totalHandlerTimeMicroseconds += elapsedMicroseconds;
-            if (elapsedMicroseconds > _maxHandlerTimeMicroseconds)
-                _maxHandlerTimeMicroseconds = elapsedMicroseconds;
+            _totalHandlerTimeMs += elapsedMs;
+            if (elapsedMs > _maxHandlerTimeMs)
+                _maxHandlerTimeMs = elapsedMs;
         }
     }
 
@@ -205,23 +238,24 @@ public class EventTypeMetrics
         {
             _totalPublishCount = 0;
             _totalHandlerInvocations = 0;
-            _totalPublishTimeMicroseconds = 0;
-            _totalHandlerTimeMicroseconds = 0;
-            _maxPublishTimeMicroseconds = 0;
-            _maxHandlerTimeMicroseconds = 0;
+            _totalPublishTimeMs = 0;
+            _totalHandlerTimeMs = 0;
+            _maxPublishTimeMs = 0;
+            _maxHandlerTimeMs = 0;
         }
     }
 }
 
 /// <summary>
 ///     Performance metrics for a specific subscription.
+///     All times are stored in milliseconds for consistency with other panels.
 /// </summary>
 public class SubscriptionMetrics
 {
     private readonly object _lock = new();
     private long _totalInvocations;
-    private long _totalTimeMicroseconds;
-    private long _maxTimeMicroseconds;
+    private double _totalTimeMs;
+    private double _maxTimeMs;
 
     public SubscriptionMetrics(string eventTypeName, int handlerId)
     {
@@ -237,18 +271,18 @@ public class SubscriptionMetrics
     public long InvocationCount => _totalInvocations;
 
     public double AverageTimeMs =>
-        _totalInvocations > 0 ? (_totalTimeMicroseconds / (double)_totalInvocations) / 1000.0 : 0.0;
+        _totalInvocations > 0 ? _totalTimeMs / _totalInvocations : 0.0;
 
-    public double MaxTimeMs => _maxTimeMicroseconds / 1000.0;
+    public double MaxTimeMs => _maxTimeMs;
 
-    public void RecordInvoke(long elapsedMicroseconds)
+    public void RecordInvoke(double elapsedMs)
     {
         lock (_lock)
         {
             _totalInvocations++;
-            _totalTimeMicroseconds += elapsedMicroseconds;
-            if (elapsedMicroseconds > _maxTimeMicroseconds)
-                _maxTimeMicroseconds = elapsedMicroseconds;
+            _totalTimeMs += elapsedMs;
+            if (elapsedMs > _maxTimeMs)
+                _maxTimeMs = elapsedMs;
         }
     }
 
@@ -257,8 +291,8 @@ public class SubscriptionMetrics
         lock (_lock)
         {
             _totalInvocations = 0;
-            _totalTimeMicroseconds = 0;
-            _maxTimeMicroseconds = 0;
+            _totalTimeMs = 0;
+            _maxTimeMs = 0;
         }
     }
 }

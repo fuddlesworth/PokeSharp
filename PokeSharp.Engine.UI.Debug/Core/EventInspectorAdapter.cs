@@ -22,6 +22,27 @@ public class EventInspectorAdapter
 
         // Attach metrics to event bus
         _eventBus.Metrics = _metrics;
+
+        // Capture existing subscriptions that were registered before metrics was attached
+        CaptureExistingSubscriptions();
+    }
+
+    /// <summary>
+    ///     Captures subscription counts for event types that were registered before metrics was attached.
+    ///     This is necessary because subscriptions happen at startup before the Event Inspector is opened.
+    /// </summary>
+    private void CaptureExistingSubscriptions()
+    {
+        var registeredTypes = _eventBus.GetRegisteredEventTypes();
+        foreach (var eventType in registeredTypes)
+        {
+            var handlerIds = _eventBus.GetHandlerIds(eventType);
+            foreach (var handlerId in handlerIds)
+            {
+                // Record each existing subscription so subscriber counts are accurate
+                _metrics.RecordSubscription(eventType.Name, handlerId);
+            }
+        }
     }
 
     /// <summary>
@@ -45,47 +66,80 @@ public class EventInspectorAdapter
             Filters = new EventFilterOptions()
         };
 
-        // Get all registered event types from the bus
-        var registeredTypes = _eventBus.GetRegisteredEventTypes();
+        // Get ALL event types (not just ones with subscribers)
+        var allEventTypes = DiscoverAllEventTypes();
 
-        foreach (var eventType in registeredTypes)
+        foreach (var eventType in allEventTypes)
         {
             string eventTypeName = eventType.Name;
             var eventMetrics = _metrics.GetEventMetrics(eventTypeName);
 
-            if (eventMetrics == null)
-                continue;
-
+            // Create info even if no metrics (shows all events, not just published ones)
             var eventInfo = new EventTypeInfo
             {
                 EventTypeName = eventTypeName,
-                SubscriberCount = eventMetrics.SubscriberCount,
-                PublishCount = eventMetrics.PublishCount,
-                AverageTimeMs = eventMetrics.AveragePublishTimeMs,
-                MaxTimeMs = eventMetrics.MaxPublishTimeMs,
+                SubscriberCount = eventMetrics?.SubscriberCount ?? 0,
+                PublishCount = eventMetrics?.PublishCount ?? 0,
+                AverageTimeMs = eventMetrics?.AveragePublishTimeMs ?? 0.0,
+                MaxTimeMs = eventMetrics?.MaxPublishTimeMs ?? 0.0,
                 IsCustom = IsCustomEvent(eventType),
                 Subscriptions = new List<SubscriptionInfo>()
             };
 
-            // Get subscription details
-            var subMetrics = _metrics.GetSubscriptionMetrics(eventTypeName);
-            foreach (var sub in subMetrics)
+            // Get subscription details if metrics exist
+            if (eventMetrics != null)
             {
-                eventInfo.Subscriptions.Add(new SubscriptionInfo
+                var subMetrics = _metrics.GetSubscriptionMetrics(eventTypeName);
+                foreach (var sub in subMetrics)
                 {
-                    HandlerId = sub.HandlerId,
-                    Priority = sub.Priority,
-                    Source = sub.Source,
-                    InvocationCount = sub.InvocationCount,
-                    AverageTimeMs = sub.AverageTimeMs,
-                    MaxTimeMs = sub.MaxTimeMs
-                });
+                    eventInfo.Subscriptions.Add(new SubscriptionInfo
+                    {
+                        HandlerId = sub.HandlerId,
+                        Priority = sub.Priority,
+                        Source = sub.Source,
+                        InvocationCount = sub.InvocationCount,
+                        AverageTimeMs = sub.AverageTimeMs,
+                        MaxTimeMs = sub.MaxTimeMs
+                    });
+                }
             }
 
             data.Events.Add(eventInfo);
         }
 
         return data;
+    }
+
+    /// <summary>
+    ///     Discovers all event types in PokeSharp assemblies via reflection.
+    /// </summary>
+    private List<Type> DiscoverAllEventTypes()
+    {
+        var eventTypes = new List<Type>();
+
+        // Get PokeSharp assemblies
+        var assemblies = AppDomain.CurrentDomain.GetAssemblies()
+            .Where(a => !a.IsDynamic && a.GetName().Name?.StartsWith("PokeSharp") == true);
+
+        foreach (var assembly in assemblies)
+        {
+            try
+            {
+                var types = assembly.GetTypes()
+                    .Where(t => 
+                        t.IsClass && 
+                        !t.IsAbstract && 
+                        typeof(IGameEvent).IsAssignableFrom(t));
+
+                eventTypes.AddRange(types);
+            }
+            catch
+            {
+                // Skip assemblies that can't be queried
+            }
+        }
+
+        return eventTypes.OrderBy(t => t.Name).ToList();
     }
 
     /// <summary>

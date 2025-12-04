@@ -21,10 +21,11 @@ public class WeatherController : ScriptBase
     // Weather types
     private static readonly string[] WeatherTypes = { "Clear", "Rain", "Thunder", "Snow", "Sunshine", "Fog" };
 
-    // Configuration (hardcoded - previously loaded from mod.json)
-    private const int ChangeDurationMinutes = 5;
-    private const float ThunderProbability = 0.3f;
-    private const float SnowProbabilityWinter = 0.6f;
+    // Configuration values loaded from mod.json
+    private int ChangeDurationMinutes => Context.Configuration.GetValueOrDefault("weatherChangeDurationMinutes", 5);
+    private float ThunderProbability => Context.Configuration.GetValueOrDefault("thunderProbabilityDuringRain", 0.3f);
+    private float SnowProbabilityWinter => Context.Configuration.GetValueOrDefault("snowProbabilityInWinter", 0.6f);
+    private bool EnableWeatherDamage => Context.Configuration.GetValueOrDefault("enableWeatherDamage", true);
 
     public override void Initialize(ScriptContext ctx)
     {
@@ -257,7 +258,7 @@ public class WeatherController : ScriptBase
         int x = random.Next(0, 100);
         int y = random.Next(0, 100);
 
-        bool enableDamage = true; // Hardcoded (was from Configuration)
+        bool enableDamage = EnableWeatherDamage;
 
         PublishWeatherEvent(new ThunderstrikeEvent
         {

@@ -1,12 +1,11 @@
 using Arch.Core;
 using Microsoft.Extensions.Logging;
 using PokeSharp.Engine.Core.Events;
-using PokeSharp.Engine.Core.Events.Collision;
-using PokeSharp.Engine.Core.Events.Movement;
 using PokeSharp.Engine.Core.Events.Tile;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Scripting.Api;
 using PokeSharp.Game.Scripting.Services;
+using PokeSharp.Game.Systems.Events;
 
 namespace PokeSharp.Game.Scripting.Runtime;
 
@@ -542,7 +541,7 @@ public sealed class ScriptContext
     /// </code>
     /// </example>
     public IDisposable On<TEvent>(Action<TEvent> handler, int priority = 500)
-        where TEvent : class, IGameEvent
+        where TEvent : class
     {
         if (handler == null)
         {

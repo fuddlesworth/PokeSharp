@@ -1,21 +1,32 @@
 namespace PokeSharp.Engine.Core.Events.System;
 
 /// <summary>
-/// Event published every frame for time-based updates.
-/// Used by scripts that need frame-by-frame logic (NPC AI, animations, etc.)
+///     Event published every frame for time-based updates.
+///     Used by scripts that need frame-by-frame logic (NPC AI, animations, etc.)
 /// </summary>
-public sealed record TickEvent : IGameEvent
+/// <remarks>
+///     This is a high-frequency event published every frame (60+ times per second).
+///     Object pooling is essential for this event to avoid GC pressure.
+///
+///     This class supports object pooling via EventPool{T} to reduce allocations.
+/// </remarks>
+public sealed class TickEvent : NotificationEventBase
 {
-    public Guid EventId { get; init; } = Guid.NewGuid();
-    public DateTime Timestamp { get; init; } = DateTime.UtcNow;
+    /// <summary>
+    ///     Gets or sets the time elapsed since the last frame (in seconds).
+    /// </summary>
+    public float DeltaTime { get; set; }
 
     /// <summary>
-    /// Time elapsed since the last frame (in seconds)
+    ///     Gets or sets the total elapsed time since game start (in seconds).
     /// </summary>
-    public float DeltaTime { get; init; }
+    public float TotalTime { get; set; }
 
-    /// <summary>
-    /// Total elapsed time since game start (in seconds)
-    /// </summary>
-    public float TotalTime { get; init; }
+    /// <inheritdoc />
+    public override void Reset()
+    {
+        base.Reset();
+        DeltaTime = 0f;
+        TotalTime = 0f;
+    }
 }

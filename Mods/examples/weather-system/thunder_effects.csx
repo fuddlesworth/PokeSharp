@@ -31,7 +31,7 @@ public class ThunderEffects : ScriptBase
                     new ThunderState
                     {
                         ThunderstrikeCount = 0,
-                        EnableDamage = true // Hardcoded (was from Configuration)
+                        EnableDamage = Context.Configuration.GetValueOrDefault("enableWeatherDamage", true)
                     }
                 );
                 Context.Logger.LogInformation("Thunder state initialized (damage: True)");

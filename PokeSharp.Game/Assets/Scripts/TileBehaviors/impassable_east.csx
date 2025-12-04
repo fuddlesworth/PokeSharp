@@ -1,6 +1,6 @@
-using PokeSharp.Engine.Core.Events.Collision;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Scripting.Runtime;
+using PokeSharp.Game.Systems.Events;
 
 /// <summary>
 ///     Impassable east behavior.
@@ -12,8 +12,8 @@ public class ImpassableEastBehavior : ScriptBase
     {
         On<CollisionCheckEvent>(evt =>
         {
-            // Block if moving from east (Direction.East = 2)
-            if (evt.FromDirection == 2)
+            // Block if moving from east
+            if (evt.FromDirection == Direction.East)
             {
                 evt.PreventDefault("Cannot pass from east");
             }

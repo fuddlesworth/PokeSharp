@@ -1040,7 +1040,8 @@ public class ConsoleSystem : IUpdateSystem
                 () => ToggleConsole(),
                 loggingCallbacks,
                 timeControl,
-                services
+                services,
+                _services
             );
 
             // Try to execute as built-in command first
@@ -1358,6 +1359,9 @@ public class ConsoleSystem : IUpdateSystem
 
             // Pool stats (via reflection to avoid direct reference)
             TryPopulatePoolStats(stats);
+            
+            // Event pool stats (via reflection to avoid direct reference)
+            TryPopulateEventPoolStats(stats);
 
             return stats;
         };
@@ -1431,6 +1435,83 @@ public class ConsoleSystem : IUpdateSystem
         catch
         {
             // Silently fail - pool stats are optional
+        }
+    }
+
+    /// <summary>
+    ///     Attempts to populate event pool statistics via reflection.
+    /// </summary>
+    private void TryPopulateEventPoolStats(StatsData stats)
+    {
+        try
+        {
+            // Get IEventBus from services
+            var eventBus = _services.GetService<IEventBus>();
+            if (eventBus == null)
+            {
+                return;
+            }
+
+            // Call GetPoolStatistics() on EventBus
+            MethodInfo? getStatsMethod = eventBus.GetType().GetMethod("GetPoolStatistics");
+            if (getStatsMethod == null)
+            {
+                return;
+            }
+
+            object? poolStatsObj = getStatsMethod.Invoke(eventBus, null);
+            if (poolStatsObj == null)
+            {
+                return;
+            }
+
+            // poolStatsObj should be IReadOnlyList<EventPoolStatistics>
+            if (poolStatsObj is not System.Collections.IEnumerable enumerable)
+            {
+                return;
+            }
+
+            long totalRented = 0;
+            long totalCreated = 0;
+            long totalInUse = 0;
+            int poolCount = 0;
+            string? hotEventType = null;
+            long hotEventRented = 0;
+
+            foreach (object? statObj in enumerable)
+            {
+                if (statObj == null) continue;
+
+                Type statType = statObj.GetType();
+                string? eventType = statType.GetProperty("EventType")?.GetValue(statObj) as string;
+                long rented = (long)(statType.GetProperty("TotalRented")?.GetValue(statObj) ?? 0L);
+                long created = (long)(statType.GetProperty("TotalCreated")?.GetValue(statObj) ?? 0L);
+                long inUse = (long)(statType.GetProperty("CurrentlyInUse")?.GetValue(statObj) ?? 0L);
+
+                totalRented += rented;
+                totalCreated += created;
+                totalInUse += inUse;
+                poolCount++;
+
+                // Track hottest event type
+                if (rented > hotEventRented)
+                {
+                    hotEventRented = rented;
+                    hotEventType = eventType;
+                }
+            }
+
+            stats.EventPoolCount = poolCount;
+            stats.EventPoolTotalRented = totalRented;
+            stats.EventPoolTotalCreated = totalCreated;
+            stats.EventPoolCurrentlyInUse = totalInUse;
+            stats.EventPoolAvgReuseRate = totalRented > 0 ? 1.0 - ((double)totalCreated / totalRented) : 0.0;
+            stats.MostUsedEventType = hotEventType;
+            stats.MostUsedEventRented = hotEventRented;
+        }
+        catch
+        {
+            // Silently fail - event pool stats are optional
         }
     }
 

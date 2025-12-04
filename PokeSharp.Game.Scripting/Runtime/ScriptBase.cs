@@ -244,15 +244,16 @@ public abstract class ScriptBase
     /// </param>
     /// <remarks>
     ///     <para>
-    ///         Priority determines handler execution order:
+    ///         <strong>⚠️ NOT YET IMPLEMENTED:</strong> The priority parameter is accepted for
+    ///         forward compatibility but currently has NO EFFECT. All handlers execute in
+    ///         registration order. Priority-based execution is planned for a future release.
+    ///     </para>
+    ///     <para>
+    ///         When implemented, priority will determine handler execution order:
     ///         - 1000+: Validation and anti-cheat systems
     ///         - 500: Normal game logic (default)
     ///         - 0: Post-processing and effects
     ///         - -1000: Logging and analytics
-    ///     </para>
-    ///     <para>
-    ///         <strong>NOTE:</strong> Priority is currently accepted but not fully implemented
-    ///         in EventBus. All handlers execute in registration order until EventBus is upgraded.
     ///     </para>
     /// </remarks>
     /// <example>
@@ -275,7 +276,7 @@ public abstract class ScriptBase
     /// </code>
     /// </example>
     protected void On<TEvent>(Action<TEvent> handler, int priority = 500)
-        where TEvent : class, IGameEvent
+        where TEvent : class
     {
         if (handler == null)
         {
@@ -574,7 +575,7 @@ public abstract class ScriptBase
     /// </code>
     /// </example>
     protected void Publish<TEvent>(TEvent evt)
-        where TEvent : class, IGameEvent
+        where TEvent : class
     {
         if (evt == null)
         {
@@ -584,9 +585,8 @@ public abstract class ScriptBase
         Context?.Events?.Publish(evt);
 
         Context?.Logger?.LogDebug(
-            "Published event {EventType} with ID {EventId}",
-            typeof(TEvent).Name,
-            evt.EventId
+            "Published event {EventType}",
+            typeof(TEvent).Name
         );
     }
 }

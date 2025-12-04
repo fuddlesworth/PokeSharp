@@ -1,28 +1,28 @@
 # Event System Optimization Guide
 
-This guide explains how to use the optimized EventBus and EventPool for maximum performance.
+This guide explains how to use the optimized EventBus with automatic event pooling for maximum performance.
 
 ---
 
-## Quick Start: Using EventBusOptimized
+## Quick Start: Publishing Events
 
-The optimized EventBus is a **drop-in replacement** for the original - no code changes required!
+### Basic Usage (Low-Frequency Events)
 
-### Basic Usage (Same as Original)
+For events published infrequently (< 10 times/second), use normal `Publish()`:
 
 ```csharp
 // Subscribe to events
-var subscription = _eventBus.Subscribe<TickEvent>(evt =>
+var subscription = _eventBus.Subscribe<GameStartedEvent>(evt =>
 {
-    // Handle tick
-    UpdateGameLogic(evt.DeltaTime);
+    // Handle game start
+    InitializeGame();
 });
 
-// Publish events
-_eventBus.Publish(new TickEvent
+// Publish events (standard way - fine for rare events)
+_eventBus.Publish(new GameStartedEvent
 {
-    DeltaTime = 0.016f,
-    TotalTime = _elapsedTime
+    Difficulty = DifficultyLevel.Normal,
+    PlayerName = "Red"
 });
 
 // Cleanup
@@ -33,59 +33,128 @@ subscription.Dispose();
 
 ## Advanced: Event Pooling for High-Frequency Events
 
-For events published every frame or very frequently, use `EventPool<T>` to eliminate allocations.
+For events published frequently (10+ times/second), use `PublishPooled()` to **eliminate ALL allocations**:
 
-### Step 1: Identify High-Frequency Events
+### When to Use Pooling
 
-**Candidates for Pooling:**
-- ✅ `TickEvent` - Published every frame (60/sec)
-- ✅ `MovementProgressEvent` - Published during movement
-- ✅ `TileSteppedOnEvent` - Common in gameplay
-- ❌ `GameStartedEvent` - Rare, don't pool
-- ❌ `AchievementUnlockedEvent` - Infrequent, don't pool
+**✅ ALWAYS pool these:**
+- `TickEvent` - Published every frame (60/sec)
+- `MovementStartedEvent` - Published per NPC movement
+- `MovementCompletedEvent` - Published per NPC movement
+- `CollisionCheckEvent` - Published 1-4x per movement
+- `CollisionDetectedEvent` - Published when collisions occur
+- `TileSteppedOnEvent` - Common in gameplay
 
-**Rule of Thumb:** Pool events published >10 times per second.
+**❌ NEVER pool these:**
+- `GameStartedEvent` - Rare (once per game)
+- `AchievementUnlockedEvent` - Infrequent
+- `SaveGameEvent` - Occasional
 
-### Step 2: Rent, Publish, Return
+**Rule of Thumb:** Pool events published >10 times per second, especially in scenarios with many NPCs.
+
+### How to Use Pooling (Simple!)
 
 ```csharp
-// Create pool (once, typically in system constructor)
-private readonly EventPool<TickEvent> _tickPool = EventPool<TickEvent>.Shared;
+// NO manual pool management needed! EventBus handles everything.
 
-// In Update() or system loop
+// In your game loop or system
 public void Update(float deltaTime)
 {
-    // Rent from pool (fast, zero allocations)
-    var tickEvent = _tickPool.Rent();
-
-    // Set event data
-    tickEvent.DeltaTime = deltaTime;
-    tickEvent.TotalTime = _elapsedTime;
-
-    // Publish
-    _eventBus.Publish(tickEvent);
-
-    // Return to pool (IMPORTANT!)
-    _tickPool.Return(tickEvent);
+    // Use PublishPooled with a configuration lambda
+    _eventBus.PublishPooled<TickEvent>(evt =>
+    {
+        evt.DeltaTime = deltaTime;
+        evt.TotalTime = _elapsedTime;
+        evt.FrameNumber = _frameCount;
+    });
+    
+    // Event is automatically:
+    // 1. Rented from pool
+    // 2. Configured with your data
+    // 3. Published to all handlers
+    // 4. Returned to pool
 }
 ```
 
-### Step 3: Extension Method (Optional)
-
-For convenience, use `PublishPooled`:
+### Example: Pooled Movement Events
 
 ```csharp
-// Automatically returns to pool after publishing
-var evt = _tickPool.Rent();
-evt.DeltaTime = deltaTime;
-_eventBus.PublishPooled(evt, _tickPool);
+// BEFORE (allocates new object every time - BAD for 100 NPCs!)
+_eventBus.Publish(new MovementStartedEvent
+{
+    Entity = entity,
+    Direction = Direction.North,
+    TargetPosition = targetPos
+});
+
+// AFTER (zero allocations - GOOD!)
+_eventBus.PublishPooled<MovementStartedEvent>(evt =>
+{
+    evt.Entity = entity;
+    evt.Direction = Direction.North;
+    evt.TargetPosition = targetPos;
+});
 ```
+
+### Important: Capturing Values from Cancellable Events
+
+For cancellable events, you need to capture values **inside the lambda** (before the event returns to pool):
+
+```csharp
+bool wasCancelled = false;
+string? reason = null;
+
+_eventBus.PublishPooled<MovementStartedEvent>(evt =>
+{
+    evt.Entity = entity;
+    evt.Direction = Direction.North;
+    
+    // Capture values BEFORE lambda exits (while event is still valid)
+    wasCancelled = evt.IsCancelled;
+    reason = evt.CancellationReason;
+});
+
+// Now safe to use captured values
+if (wasCancelled)
+{
+    LogCancellation(reason);
+}
+```
+
+---
+
+## Performance Monitoring
+
+### View Pool Statistics
+
+```csharp
+// Get statistics for all pooled events
+var stats = _eventBus.GetPoolStatistics();
+
+foreach (var stat in stats)
+{
+    Console.WriteLine($"{stat.EventType}:");
+    Console.WriteLine($"  Rented: {stat.TotalRented}");
+    Console.WriteLine($"  Created: {stat.TotalCreated}");
+    Console.WriteLine($"  Reuse Rate: {stat.ReuseRate:P1}");
+}
+
+// Or use the built-in monitor
+string report = EventPoolMonitor.GenerateReport(_eventBus);
+Console.WriteLine(report);
+```
+
+### Expected Results
+
+With 100 NPCs wandering:
+- **Without pooling**: ~500-1000 allocations/sec → Frequent GC pauses
+- **With pooling**: ~5-10 allocations/sec (>95% reuse) → Smooth 60 FPS
 
 ---
 
 ## Performance Best Practices
 
-### 1. Reuse Event Instances
+### 1. Pool High-Frequency Events
 
 ❌ **BAD** (allocates every frame):
 ```csharp

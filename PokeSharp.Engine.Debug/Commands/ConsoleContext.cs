@@ -1,5 +1,7 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
+using PokeSharp.Engine.Core.Events;
 using PokeSharp.Engine.Core.Services;
 using PokeSharp.Engine.Debug.Breakpoints;
 using PokeSharp.Engine.Debug.Common;
@@ -22,6 +24,7 @@ public class ConsoleContext : IConsoleContext
     private readonly ConsoleScene _consoleScene;
     private readonly ConsoleLoggingCallbacks _loggingCallbacks;
     private readonly ConsoleServices _services;
+    private readonly IServiceProvider _serviceProvider;
 
     /// <summary>
     ///     Creates a new ConsoleContext with aggregated services.
@@ -32,12 +35,14 @@ public class ConsoleContext : IConsoleContext
     /// <param name="loggingCallbacks">Callbacks for logging control.</param>
     /// <param name="timeControl">Optional time control interface (null if unavailable).</param>
     /// <param name="services">Aggregated console services.</param>
+    /// <param name="serviceProvider">Service provider for accessing game services like EventBus.</param>
     public ConsoleContext(
         ConsoleScene consoleScene,
         Action closeAction,
         ConsoleLoggingCallbacks loggingCallbacks,
         ITimeControl? timeControl,
-        ConsoleServices services
+        ConsoleServices services,
+        IServiceProvider serviceProvider
     )
     {
         _consoleScene = consoleScene ?? throw new ArgumentNullException(nameof(consoleScene));
@@ -46,6 +51,7 @@ public class ConsoleContext : IConsoleContext
             loggingCallbacks ?? throw new ArgumentNullException(nameof(loggingCallbacks));
         TimeControl = timeControl; // Can be null - time control is optional
         _services = services ?? throw new ArgumentNullException(nameof(services));
+        _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
     }
 
     /// <summary>
@@ -55,9 +61,10 @@ public class ConsoleContext : IConsoleContext
         ConsoleScene consoleScene,
         Action closeAction,
         ConsoleLoggingCallbacks loggingCallbacks,
-        ConsoleServices services
+        ConsoleServices services,
+        IServiceProvider serviceProvider
     )
-        : this(consoleScene, closeAction, loggingCallbacks, null, services) { }
+        : this(consoleScene, closeAction, loggingCallbacks, null, services, serviceProvider) { }
 
     public bool EntityAutoRefresh
     {
@@ -103,9 +110,13 @@ public class ConsoleContext : IConsoleContext
     // External dependencies - nullable because they may not be available
     // TimeControl: requires ITimeControl service in DI
     // Profiler: requires SystemMetrics provider
+    // EventInspector: requires EventBus and EventMetrics
+    // EventBus: requires IEventBus service in DI
     // Breakpoints: requires time control and script evaluator
     public IProfilerOperations? Profiler => _consoleScene.ProfilerOperations;
     public IStatsOperations? Stats => _consoleScene.StatsOperations;
+    public IEventInspectorOperations? EventInspector => _consoleScene.EventInspectorOperations;
+    public IEventBus? EventBus => _serviceProvider.GetService<IEventBus>();
     public IBreakpointOperations? Breakpoints => _services.BreakpointManager;
 
     public void WriteLine(string text)

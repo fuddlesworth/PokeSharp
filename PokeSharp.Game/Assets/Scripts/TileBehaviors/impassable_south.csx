@@ -1,6 +1,6 @@
-using PokeSharp.Engine.Core.Events.Collision;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Scripting.Runtime;
+using PokeSharp.Game.Systems.Events;
 
 /// <summary>
 ///     Impassable south behavior.
@@ -12,8 +12,8 @@ public class ImpassableSouthBehavior : ScriptBase
     {
         On<CollisionCheckEvent>(evt =>
         {
-            // Block if moving from south (Direction.South = 0)
-            if (evt.FromDirection == 0)
+            // Block if moving from south
+            if (evt.FromDirection == Direction.South)
             {
                 evt.PreventDefault("Cannot pass from south");
             }

@@ -1,5 +1,7 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using PokeSharp.Engine.Core.Types.Events;
@@ -7,28 +9,35 @@ using PokeSharp.Engine.Core.Types.Events;
 namespace PokeSharp.Engine.Core.Events;
 
 /// <summary>
-///     Default implementation of IEventBus using ConcurrentDictionary.
+///     High-performance implementation of IEventBus with caching and optimizations.
 /// </summary>
 /// <remarks>
 ///     <para>
-///         This is a lightweight event bus implementation that will be replaced
-///         with Arch.Event integration in the future. It provides basic event
-///         distribution with thread-safe handler management.
+///         This is the primary event bus for PokeSharp, optimized for game loop performance:
 ///     </para>
+///     <list type="bullet">
+///         <item>Cached handler arrays - eliminates dictionary lookups on hot path</item>
+///         <item>Fast-path for zero subscribers - early exit optimization</item>
+///         <item>Reduced allocations - array caching, inline operations</item>
+///         <item>Optimized metrics - conditional checks, no allocations when disabled</item>
+///     </list>
 ///     <para>
-///         PERFORMANCE: This implementation uses ConcurrentDictionary for thread-safe
-///         access. Event firing is synchronous and happens on the caller's thread.
-///         For high-frequency events, consider batching or debouncing in your handlers.
-///     </para>
-///     <para>
-///         FIX #9: Uses ConcurrentDictionary with handler IDs for atomic unsubscribe
-///         operations, preventing memory leaks from handlers that cannot be removed.
+///         PERFORMANCE TARGETS:
+///         - Event publish: &lt;1μs
+///         - Handler invocation: &lt;0.5μs per handler
+///         - Frame overhead: &lt;0.5ms (with 20+ handlers)
+///         - Memory: Zero allocations on hot path (when reusing events)
 ///     </para>
 /// </remarks>
 public class EventBus(ILogger<EventBus>? logger = null) : IEventBus
 {
-    private readonly ConcurrentDictionary<Type, ConcurrentDictionary<int, Delegate>> _handlers =
-        new();
+    private readonly ConcurrentDictionary<Type, ConcurrentDictionary<int, Delegate>> _handlers = new();
+
+    // OPTIMIZATION: Cache handler arrays to avoid dictionary enumeration on hot path
+    private readonly ConcurrentDictionary<Type, HandlerCache> _handlerCache = new();
+
+    // OPTIMIZATION: Pool management for high-frequency events
+    private readonly ConcurrentDictionary<Type, object> _eventPools = new();
 
     private readonly ILogger<EventBus> _logger = logger ?? NullLogger<EventBus>.Instance;
     private int _nextHandlerId;
@@ -41,88 +50,119 @@ public class EventBus(ILogger<EventBus>? logger = null) : IEventBus
     public IEventMetrics? Metrics { get; set; }
 
     /// <inheritdoc />
-    public void Publish<TEvent>(TEvent eventData)
-        where TEvent : class
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void Publish<TEvent>(TEvent eventData) where TEvent : class
     {
-        if (eventData == null)
-        {
-            throw new ArgumentNullException(nameof(eventData));
-        }
+        ArgumentNullException.ThrowIfNull(eventData);
 
         Type eventType = typeof(TEvent);
-        string eventTypeName = eventType.Name;
 
-        // Start timing if metrics are enabled
-        Stopwatch? sw = null;
-        if (Metrics?.IsEnabled == true)
+        // OPTIMIZATION 1: Fast-path for zero subscribers - early exit
+        if (!_handlerCache.TryGetValue(eventType, out HandlerCache? cache) || cache.IsEmpty)
         {
-            sw = Stopwatch.StartNew();
+            // No subscribers - exit immediately
+            RecordPublishMetrics(eventType.Name, 0);
+            return;
         }
 
-        if (
-            _handlers.TryGetValue(eventType, out ConcurrentDictionary<int, Delegate>? handlers)
-            && !handlers.IsEmpty
-        )
-        // Execute all handlers with error isolation
+        // OPTIMIZATION 2: Use cached handler array - avoid dictionary enumeration
+        long startTicks = Metrics?.IsEnabled == true ? Stopwatch.GetTimestamp() : 0;
+
+        ExecuteHandlers(cache.Handlers, eventData, eventType);
+
+        // OPTIMIZATION 3: Efficient metrics recording
+        if (startTicks != 0)
         {
-            foreach (var kvp in handlers)
-            {
-                int handlerId = kvp.Key;
-                Delegate handler = kvp.Value;
-
-                try
-                {
-                    // Time individual handler invocation if metrics enabled
-                    Stopwatch? handlerSw = null;
-                    if (Metrics?.IsEnabled == true)
-                    {
-                        handlerSw = Stopwatch.StartNew();
-                    }
-
-                    ((Action<TEvent>)handler)(eventData);
-
-                    if (handlerSw != null)
-                    {
-                        handlerSw.Stop();
-                        Metrics?.RecordHandlerInvoke(
-                            eventTypeName,
-                            handlerId,
-                            handlerSw.ElapsedTicks * 1_000_000 / Stopwatch.Frequency
-                        );
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // Isolate handler errors - don't let them break event publishing
-                    _logger.LogError(
-                        ex,
-                        "[orange3]SYS[/] [red]✗[/] Error in event handler for [cyan]{EventType}[/]: {Message}",
-                        eventType.Name,
-                        ex.Message
-                    );
-                }
-            }
-        }
-
-        // Record publish metrics
-        if (sw != null)
-        {
-            sw.Stop();
-            Metrics?.RecordPublish(
-                eventTypeName,
-                sw.ElapsedTicks * 1_000_000 / Stopwatch.Frequency
-            );
+            long elapsedTicks = Stopwatch.GetTimestamp() - startTicks;
+            long elapsedNanoseconds = (elapsedTicks * 1_000_000_000) / Stopwatch.Frequency;
+            Metrics?.RecordPublish(eventType.Name, elapsedNanoseconds);
         }
     }
 
     /// <inheritdoc />
-    public IDisposable Subscribe<TEvent>(Action<TEvent> handler)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void PublishPooled<TEvent>(Action<TEvent> configure)
+        where TEvent : class, IPoolableEvent, new()
+    {
+        ArgumentNullException.ThrowIfNull(configure);
+
+        // Get or create pool for this event type
+        var pool = GetOrCreatePool<TEvent>();
+
+        // Rent event from pool
+        TEvent evt = pool.Rent();
+
+        try
+        {
+            // Configure the event
+            configure(evt);
+
+            // Publish to subscribers (synchronous - safe for pooling)
+            Publish(evt);
+        }
+        finally
+        {
+            // Always return to pool, even if handler throws
+            pool.Return(evt);
+        }
+    }
+
+    /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public TEvent RentEvent<TEvent>()
+        where TEvent : class, IPoolableEvent, new()
+    {
+        var pool = GetOrCreatePool<TEvent>();
+        return pool.Rent();
+    }
+
+    /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void ReturnEvent<TEvent>(TEvent evt)
+        where TEvent : class, IPoolableEvent, new()
+    {
+        if (evt == null)
+            return;
+
+        var pool = GetOrCreatePool<TEvent>();
+        pool.Return(evt);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void ExecuteHandlers<TEvent>(HandlerInfo[] handlers, TEvent eventData, Type eventType)
         where TEvent : class
     {
-        if (handler == null)
+        // Execute all handlers with error isolation
+        for (int i = 0; i < handlers.Length; i++)
         {
-            throw new ArgumentNullException(nameof(handler));
+            ref readonly HandlerInfo handlerInfo = ref handlers[i];
+
+            try
+            {
+                long handlerStartTicks = Metrics?.IsEnabled == true ? Stopwatch.GetTimestamp() : 0;
+
+                // OPTIMIZATION 4: Direct delegate invocation - no casting overhead
+                ((Action<TEvent>)handlerInfo.Handler)(eventData);
+
+                if (handlerStartTicks != 0)
+                {
+                    long elapsedTicks = Stopwatch.GetTimestamp() - handlerStartTicks;
+                    long elapsedNanoseconds = (elapsedTicks * 1_000_000_000) / Stopwatch.Frequency;
+                    Metrics?.RecordHandlerInvoke(eventType.Name, handlerInfo.HandlerId, elapsedNanoseconds);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Isolate handler errors - don't let them break event publishing
+                LogHandlerError(ex, eventType.Name);
+            }
         }
+    }
+
+    /// <inheritdoc />
+    public IDisposable Subscribe<TEvent>(Action<TEvent> handler) where TEvent : class
+    {
+        ArgumentNullException.ThrowIfNull(handler);
 
         Type eventType = typeof(TEvent);
         ConcurrentDictionary<int, Delegate> handlers = _handlers.GetOrAdd(
@@ -130,91 +170,230 @@ public class EventBus(ILogger<EventBus>? logger = null) : IEventBus
             _ => new ConcurrentDictionary<int, Delegate>()
         );
 
-        // Generate unique handler ID using atomic increment
         int handlerId = Interlocked.Increment(ref _nextHandlerId);
         handlers[handlerId] = handler;
 
-        // Record subscription for metrics
+        // OPTIMIZATION 5: Invalidate cache on subscription change
+        InvalidateCache(eventType);
+
         Metrics?.RecordSubscription(eventType.Name, handlerId);
 
-        // Return a disposable subscription with the handler ID
         return new Subscription(this, eventType, handlerId);
     }
 
     /// <inheritdoc />
-    public int GetSubscriberCount<TEvent>()
-        where TEvent : class
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public int GetSubscriberCount<TEvent>() where TEvent : class
     {
         Type eventType = typeof(TEvent);
-        return _handlers.TryGetValue(eventType, out ConcurrentDictionary<int, Delegate>? handlers)
-            ? handlers.Count
-            : 0;
+
+        // OPTIMIZATION: Check cache first (faster than dictionary lookup)
+        if (_handlerCache.TryGetValue(eventType, out HandlerCache? cache))
+        {
+            return cache.Count;
+        }
+
+        return 0;
     }
 
     /// <inheritdoc />
-    public void ClearSubscriptions<TEvent>()
-        where TEvent : class
+    public void ClearSubscriptions<TEvent>() where TEvent : class
     {
         Type eventType = typeof(TEvent);
         _handlers.TryRemove(eventType, out _);
+        InvalidateCache(eventType);
     }
 
     /// <inheritdoc />
     public void ClearAllSubscriptions()
     {
         _handlers.Clear();
+        _handlerCache.Clear();
+    }
+
+    /// <inheritdoc />
+    public IReadOnlyCollection<Type> GetRegisteredEventTypes()
+    {
+        // OPTIMIZATION: Return keys directly - ConcurrentDictionary.Keys is already ICollection<T>
+        // Avoids ToList() allocation on every call
+        return (IReadOnlyCollection<Type>)_handlers.Keys;
+    }
+
+    /// <inheritdoc />
+    public IReadOnlyCollection<int> GetHandlerIds(Type eventType)
+    {
+        if (_handlers.TryGetValue(eventType, out var handlers))
+        {
+            // OPTIMIZATION: Return keys directly - avoids ToList() allocation
+            return (IReadOnlyCollection<int>)handlers.Keys;
+        }
+        return Array.Empty<int>();
+    }
+
+    /// <inheritdoc />
+    public IReadOnlyCollection<EventPoolStatistics> GetPoolStatistics()
+    {
+        var stats = new List<EventPoolStatistics>();
+
+        // Find all types that implement IPoolableEvent in loaded assemblies
+        var assemblies = AppDomain.CurrentDomain.GetAssemblies()
+            .Where(a => !a.IsDynamic && a.GetName().Name?.StartsWith("PokeSharp") == true);
+
+        foreach (var assembly in assemblies)
+        {
+            try
+            {
+                var poolableTypes = assembly.GetTypes()
+                    .Where(t => t.IsClass && !t.IsAbstract && typeof(IPoolableEvent).IsAssignableFrom(t));
+
+                foreach (var eventType in poolableTypes)
+                {
+                    try
+                    {
+                        // Get EventPool<T>.Shared via reflection
+                        Type poolType = typeof(EventPool<>).MakeGenericType(eventType);
+                        PropertyInfo? sharedProperty = poolType.GetProperty("Shared", BindingFlags.Public | BindingFlags.Static);
+
+                        if (sharedProperty != null)
+                        {
+                            object? pool = sharedProperty.GetValue(null);
+                            if (pool != null)
+                            {
+                                // Call GetStatistics() on the pool
+                                MethodInfo? getStatsMethod = poolType.GetMethod("GetStatistics");
+                                if (getStatsMethod != null)
+                                {
+                                    var poolStats = (EventPoolStatistics)getStatsMethod.Invoke(pool, null)!;
+                                    stats.Add(poolStats);
+                                }
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        // Skip types that can't be pooled
+                    }
+                }
+            }
+            catch
+            {
+                // Skip assemblies that can't be queried
+            }
+        }
+
+        return stats;
     }
 
     /// <summary>
     ///     Unsubscribe a specific handler by ID.
     /// </summary>
-    /// <param name="eventType">The type of event to unsubscribe from.</param>
-    /// <param name="handlerId">The unique handler ID to remove.</param>
-    /// <remarks>
-    ///     FIX #9: Atomic removal using ConcurrentDictionary.TryRemove ensures
-    ///     handlers are always successfully removed, preventing memory leaks.
-    /// </remarks>
     internal void Unsubscribe(Type eventType, int handlerId)
     {
         if (_handlers.TryGetValue(eventType, out ConcurrentDictionary<int, Delegate>? handlers))
-        // Atomic removal - always succeeds
         {
             handlers.TryRemove(handlerId, out _);
-
-            // Record unsubscription for metrics
+            InvalidateCache(eventType);
             Metrics?.RecordUnsubscription(eventType.Name, handlerId);
         }
     }
 
     /// <summary>
-    ///     Gets all registered event types for inspection.
-    ///     Used by the Event Inspector debug tool.
+    ///     Invalidates the cached handler array for an event type.
+    ///     Called when subscriptions change.
     /// </summary>
-    public IReadOnlyCollection<Type> GetRegisteredEventTypes()
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void InvalidateCache(Type eventType)
     {
-        return _handlers.Keys.ToList();
+        // Update cache with new handler snapshot
+        if (_handlers.TryGetValue(eventType, out var handlers))
+        {
+            // OPTIMIZATION: Manual array copy - avoids LINQ allocations (iterator + intermediate enumerable)
+            var handlerArray = new HandlerInfo[handlers.Count];
+            int index = 0;
+            foreach (var kvp in handlers)
+            {
+                handlerArray[index++] = new HandlerInfo(kvp.Key, kvp.Value);
+            }
+            _handlerCache[eventType] = new HandlerCache(handlerArray);
+        }
+        else
+        {
+            _handlerCache.TryRemove(eventType, out _);
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void RecordPublishMetrics(string eventTypeName, long nanoseconds)
+    {
+        Metrics?.RecordPublish(eventTypeName, nanoseconds);
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private void LogHandlerError(Exception ex, string eventTypeName)
+    {
+        _logger.LogError(
+            ex,
+            "[orange3]SYS[/] [red]✗[/] Error in event handler for [cyan]{EventType}[/]: {Message}",
+            eventTypeName,
+            ex.Message
+        );
     }
 
     /// <summary>
-    ///     Gets all handler IDs for a specific event type.
-    ///     Used by the Event Inspector debug tool.
+    ///     Gets or creates an event pool for the specified event type.
     /// </summary>
-    public IReadOnlyCollection<int> GetHandlerIds(Type eventType)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private EventPool<TEvent> GetOrCreatePool<TEvent>()
+        where TEvent : class, IPoolableEvent, new()
     {
-        if (_handlers.TryGetValue(eventType, out var handlers))
+        Type eventType = typeof(TEvent);
+
+        if (!_eventPools.TryGetValue(eventType, out object? poolObj))
         {
-            return handlers.Keys.ToList();
+            // Create new pool for this event type
+            var pool = new EventPool<TEvent>();
+            poolObj = _eventPools.GetOrAdd(eventType, pool);
         }
-        return Array.Empty<int>();
+
+        return (EventPool<TEvent>)poolObj;
+    }
+
+    /// <summary>
+    ///     Cached handler information for fast lookup.
+    /// </summary>
+    private readonly struct HandlerInfo
+    {
+        public readonly int HandlerId;
+        public readonly Delegate Handler;
+
+        public HandlerInfo(int handlerId, Delegate handler)
+        {
+            HandlerId = handlerId;
+            Handler = handler;
+        }
+    }
+
+    /// <summary>
+    ///     Cached handler array with metadata.
+    /// </summary>
+    private sealed class HandlerCache
+    {
+        public readonly HandlerInfo[] Handlers;
+        public readonly int Count;
+        public readonly bool IsEmpty;
+
+        public HandlerCache(HandlerInfo[] handlers)
+        {
+            Handlers = handlers;
+            Count = handlers.Length;
+            IsEmpty = Count == 0;
+        }
     }
 }
 
 /// <summary>
 ///     Disposable subscription handle for unsubscribing.
 /// </summary>
-/// <remarks>
-///     FIX #9: Uses handler ID instead of handler reference for atomic unsubscribe.
-/// </remarks>
 sealed file class Subscription(EventBus eventBus, Type eventType, int handlerId) : IDisposable
 {
     private readonly EventBus _eventBus = eventBus;

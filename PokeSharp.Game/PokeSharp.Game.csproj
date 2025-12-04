@@ -44,15 +44,7 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <!-- Copy example scripts and documentation to the output directory -->
-        <None Include="..\Scripts\**\*.csx">
-            <Link>Scripts\%(RecursiveDir)%(Filename)%(Extension)</Link>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Include="..\Scripts\**\*.md">
-            <Link>Scripts\%(RecursiveDir)%(Filename)%(Extension)</Link>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Include="..\Scripts\**\*.txt">
+        <None Include="..\Scripts\**\*.*">
             <Link>Scripts\%(RecursiveDir)%(Filename)%(Extension)</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>

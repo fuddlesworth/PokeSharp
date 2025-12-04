@@ -1,6 +1,6 @@
-using PokeSharp.Engine.Core.Events.Collision;
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Scripting.Runtime;
+using PokeSharp.Game.Systems.Events;
 
 /// <summary>
 ///     Impassable north behavior.
@@ -12,8 +12,8 @@ public class ImpassableNorthBehavior : ScriptBase
     {
         On<CollisionCheckEvent>(evt =>
         {
-            // Block if moving from north (Direction.North = 3)
-            if (evt.FromDirection == 3)
+            // Block if moving from north
+            if (evt.FromDirection == Direction.North)
             {
                 evt.PreventDefault("Cannot pass from north");
             }

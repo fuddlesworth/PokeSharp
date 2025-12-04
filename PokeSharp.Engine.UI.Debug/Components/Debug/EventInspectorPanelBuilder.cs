@@ -9,7 +9,7 @@ namespace PokeSharp.Engine.UI.Debug.Components.Debug;
 public class EventInspectorPanelBuilder
 {
     private Func<EventInspectorData>? _dataProvider;
-    private int _refreshInterval = 1; // Update every frame by default
+    private int _refreshInterval = 30; // Update every 0.5 seconds (matches content default)
 
     /// <summary>
     ///     Sets the data provider function.
@@ -23,6 +23,10 @@ public class EventInspectorPanelBuilder
     /// <summary>
     ///     Sets the refresh interval in frames.
     /// </summary>
+    /// <param name="frameInterval">
+    ///     Number of frames between refreshes.
+    ///     Default is 30 (~2fps at 60fps). Use 1 for every frame (high CPU cost).
+    /// </param>
     public EventInspectorPanelBuilder WithRefreshInterval(int frameInterval)
     {
         _refreshInterval = Math.Max(1, frameInterval);

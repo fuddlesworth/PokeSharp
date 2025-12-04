@@ -1,3 +1,4 @@
+using PokeSharp.Engine.Core.Events;
 using PokeSharp.Engine.Core.Services;
 using PokeSharp.Engine.Debug.Breakpoints;
 using PokeSharp.Engine.UI.Debug.Interfaces;
@@ -168,6 +169,36 @@ public interface IConsoleContext
     /// </code>
     /// </example>
     IStatsOperations? Stats { get; }
+
+    /// <summary>
+    ///     Gets the event inspector panel operations, or null if event inspector not available.
+    ///     Use for viewing event system statistics and metrics.
+    /// </summary>
+    /// <example>
+    ///     <code>
+    /// if (context.EventInspector != null)
+    /// {
+    ///     var data = context.EventInspector.GetData();
+    ///     context.EventInspector.ClearMetrics();
+    /// }
+    /// </code>
+    /// </example>
+    IEventInspectorOperations? EventInspector { get; }
+
+    /// <summary>
+    ///     Gets the event bus for accessing event pool statistics and event types.
+    ///     Used for advanced event system diagnostics.
+    /// </summary>
+    /// <example>
+    ///     <code>
+    /// if (context.EventBus != null)
+    /// {
+    ///     var poolStats = context.EventBus.GetPoolStatistics();
+    ///     var eventTypes = context.EventBus.GetRegisteredEventTypes();
+    /// }
+    /// </code>
+    /// </example>
+    IEventBus? EventBus { get; }
 
     // ═══════════════════════════════════════════════════════════════════════════
     // Expression-based Watch Operations (require script evaluation)

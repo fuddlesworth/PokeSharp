@@ -1,5 +1,5 @@
-using PokeSharp.Engine.Core.Events.Collision;
 using PokeSharp.Game.Scripting.Runtime;
+using PokeSharp.Game.Systems.Events;
 
 /// <summary>
 ///     Impassable tile behavior.

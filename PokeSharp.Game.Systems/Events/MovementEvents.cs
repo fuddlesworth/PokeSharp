@@ -9,12 +9,15 @@ namespace PokeSharp.Game.Systems.Events;
 ///     Base event for all movement-related events.
 ///     Includes entity reference and timestamp.
 /// </summary>
+/// <remarks>
+///     Properties are mutable to support event pooling for performance.
+/// </remarks>
 public abstract record MovementEventBase : TypeEventBase
 {
     /// <summary>
     ///     The entity that this movement event relates to.
     /// </summary>
-    public required Entity Entity { get; init; }
+    public Entity Entity { get; set; }
 }
 
 /// <summary>
@@ -27,12 +30,12 @@ public record MovementStartedEvent : MovementEventBase
     /// <summary>
     ///     Target grid position where entity will move to.
     /// </summary>
-    public required Vector2 TargetPosition { get; init; }
+    public Vector2 TargetPosition { get; set; }
 
     /// <summary>
     ///     Direction of movement.
     /// </summary>
-    public required Direction Direction { get; init; }
+    public Direction Direction { get; set; }
 
     /// <summary>
     ///     Whether this event has been cancelled by a handler.
@@ -49,7 +52,7 @@ public record MovementStartedEvent : MovementEventBase
     /// <summary>
     ///     Starting pixel position (for interpolation tracking).
     /// </summary>
-    public Vector2 StartPosition { get; init; }
+    public Vector2 StartPosition { get; set; }
 }
 
 /// <summary>
@@ -62,27 +65,27 @@ public record MovementCompletedEvent : MovementEventBase
     /// <summary>
     ///     Previous grid position before movement.
     /// </summary>
-    public required (int X, int Y) OldPosition { get; init; }
+    public (int X, int Y) OldPosition { get; set; }
 
     /// <summary>
     ///     New grid position after movement.
     /// </summary>
-    public required (int X, int Y) NewPosition { get; init; }
+    public (int X, int Y) NewPosition { get; set; }
 
     /// <summary>
     ///     Direction of completed movement.
     /// </summary>
-    public required Direction Direction { get; init; }
+    public Direction Direction { get; set; }
 
     /// <summary>
     ///     Total movement time in seconds.
     /// </summary>
-    public float MovementTime { get; init; }
+    public float MovementTime { get; set; }
 
     /// <summary>
     ///     Map ID where movement occurred.
     /// </summary>
-    public int MapId { get; init; }
+    public int MapId { get; set; }
 }
 
 /// <summary>
@@ -94,22 +97,22 @@ public record MovementBlockedEvent : MovementEventBase
     /// <summary>
     ///     Reason movement was blocked.
     /// </summary>
-    public required string BlockReason { get; init; }
+    public string BlockReason { get; set; } = string.Empty;
 
     /// <summary>
     ///     Target position that was blocked.
     /// </summary>
-    public (int X, int Y) TargetPosition { get; init; }
+    public (int X, int Y) TargetPosition { get; set; }
 
     /// <summary>
     ///     Direction that was blocked.
     /// </summary>
-    public Direction Direction { get; init; }
+    public Direction Direction { get; set; }
 
     /// <summary>
     ///     Map ID where block occurred.
     /// </summary>
-    public int MapId { get; init; }
+    public int MapId { get; set; }
 }
 
 /// <summary>

@@ -474,11 +474,10 @@ public class StatsContent : UIComponent
             y += rowHeight;
         }
 
-        // === POOL STATS ROW (if available) ===
+        // === POOL STATS ROW (Entity/Component pools) ===
         if (_cachedStats.PoolCount > 0)
         {
-            renderer.DrawText("Pools:", contentX, y, theme.TextSecondary);
-            // Format: "4 pools | 1601 active | 3500 avail"
+            renderer.DrawText("Entity Pools:", contentX, y, theme.TextSecondary);
             string poolInfoText = $"{_cachedStats.PoolCount} pools";
             renderer.DrawText(poolInfoText, valueX, y, theme.TextPrimary);
 
@@ -494,6 +493,89 @@ public class StatsContent : UIComponent
             float availX = poolStatusX + renderer.MeasureText(activeText + "  ").X;
             renderer.DrawText(availText, availX, y, theme.TextDim);
             y += rowHeight;
+        }
+
+        // === EVENT POOL STATS SECTION (if available) ===
+        if (_cachedStats.EventPoolCount > 0)
+        {
+            y += SectionSpacing;
+            
+            // Separator
+            renderer.DrawRectangle(new LayoutRect(contentX, y, contentWidth, 1), theme.BorderPrimary);
+            y += SectionSpacing;
+
+            // Section header
+            renderer.DrawText("Event Pools", contentX, y, theme.Info);
+            // Show reuse efficiency indicator on the right
+            string efficiencyText = $"{_cachedStats.EventPoolAvgReuseRate:P0} reuse";
+            Color efficiencyColor = 
+                _cachedStats.EventPoolAvgReuseRate >= 0.95 ? theme.Success
+                : _cachedStats.EventPoolAvgReuseRate >= 0.80 ? theme.Warning
+                : theme.Error;
+            float efficiencyWidth = renderer.MeasureText(efficiencyText).X;
+            renderer.DrawText(efficiencyText, contentX + contentWidth - efficiencyWidth, y, efficiencyColor);
+            y += lineHeight + SectionSpacing;
+
+            // Separator
+            renderer.DrawRectangle(new LayoutRect(contentX, y, contentWidth, 1), theme.BorderPrimary);
+            y += SectionSpacing;
+
+            // Pool count and allocations
+            renderer.DrawText("Event Types:", contentX, y, theme.TextSecondary);
+            renderer.DrawText($"{_cachedStats.EventPoolCount}", valueX, y, theme.TextPrimary);
+            string allocText = $"{_cachedStats.EventPoolTotalCreated:N0} allocs";
+            float allocWidth = renderer.MeasureText(allocText).X;
+            renderer.DrawText(allocText, contentX + contentWidth - allocWidth, y, theme.TextDim);
+            y += rowHeight;
+
+            // Total rented (published events)
+            renderer.DrawText("Published:", contentX, y, theme.TextSecondary);
+            string rentedText = $"{_cachedStats.EventPoolTotalRented:N0}";
+            renderer.DrawText(rentedText, valueX, y, theme.TextPrimary);
+            // Calculate allocation savings
+            long saved = _cachedStats.EventPoolTotalRented - _cachedStats.EventPoolTotalCreated;
+            if (saved > 0)
+            {
+                string savedText = $"{saved:N0} saved";
+                Color savedColor = theme.Success;
+                float savedWidth = renderer.MeasureText(savedText).X;
+                renderer.DrawText(savedText, contentX + contentWidth - savedWidth, y, savedColor);
+            }
+            y += rowHeight;
+
+            // Currently in use (not returned)
+            renderer.DrawText("In Flight:", contentX, y, theme.TextSecondary);
+            string inUseText = $"{_cachedStats.EventPoolCurrentlyInUse}";
+            Color inUseColor = 
+                _cachedStats.EventPoolCurrentlyInUse < 10 ? theme.Success
+                : _cachedStats.EventPoolCurrentlyInUse < 50 ? theme.Warning
+                : theme.Error;
+            renderer.DrawText(inUseText, valueX, y, inUseColor);
+            if (_cachedStats.EventPoolCurrentlyInUse > 0)
+            {
+                string warningText = "Check for leaks!";
+                float warningWidth = renderer.MeasureText(warningText).X;
+                renderer.DrawText(warningText, contentX + contentWidth - warningWidth, y, theme.Warning);
+            }
+            y += rowHeight;
+
+            // Most used event type (if available)
+            if (!string.IsNullOrEmpty(_cachedStats.MostUsedEventType))
+            {
+                renderer.DrawText("Hot Event:", contentX, y, theme.TextSecondary);
+                // Truncate long event names
+                string eventName = _cachedStats.MostUsedEventType.Replace("Event", "");
+                if (eventName.Length > MaxSystemNameLength)
+                {
+                    eventName = eventName.Substring(0, TruncatedNameLength) + "...";
+                }
+                renderer.DrawText(eventName, valueX, y, theme.Info);
+                // Show count on the right
+                string countText = $"{_cachedStats.MostUsedEventRented:N0}x";
+                float countWidth = renderer.MeasureText(countText).X;
+                renderer.DrawText(countText, contentX + contentWidth - countWidth, y, theme.TextPrimary);
+                y += rowHeight;
+            }
         }
 
         // Pop clip rect

@@ -208,9 +208,18 @@ public class StatsData
     public string? SlowestSystemName { get; set; }
     public double SlowestSystemTimeMs { get; set; }
 
-    // Pool stats
+    // Pool stats (Entity/Component pools)
     public int PoolCount { get; set; }
     public int PooledActive { get; set; }
     public int PooledAvailable { get; set; }
     public float PoolReuseRate { get; set; }
+    
+    // Event Pool stats
+    public int EventPoolCount { get; set; }
+    public long EventPoolTotalRented { get; set; }
+    public long EventPoolTotalCreated { get; set; }
+    public double EventPoolAvgReuseRate { get; set; }
+    public long EventPoolCurrentlyInUse { get; set; }
+    public string? MostUsedEventType { get; set; }
+    public long MostUsedEventRented { get; set; }
 }

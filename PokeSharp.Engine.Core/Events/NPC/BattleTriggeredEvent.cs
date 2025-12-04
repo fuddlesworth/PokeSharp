@@ -1,5 +1,4 @@
 using Arch.Core;
-using Microsoft.Xna.Framework;
 
 namespace PokeSharp.Engine.Core.Events.NPC;
 
@@ -29,74 +28,86 @@ namespace PokeSharp.Engine.Core.Events.NPC;
 ///     - Achievement tracking (number of battles, battle types)
 ///     - Difficulty scaling (adjust wild Pokémon levels)
 ///     - Custom battle intros (mod-specific animations)
+///
+///     This class supports object pooling via EventPool{T} to reduce allocations.
 /// </remarks>
-public sealed record BattleTriggeredEvent : IGameEvent
+public sealed class BattleTriggeredEvent : NotificationEventBase
 {
-    /// <inheritdoc />
-    public Guid EventId { get; init; } = Guid.NewGuid();
-
-    /// <inheritdoc />
-    public DateTime Timestamp { get; init; } = DateTime.UtcNow;
-
     /// <summary>
-    ///     Gets the player entity entering the battle.
+    ///     Gets or sets the player entity entering the battle.
     /// </summary>
-    public required Entity Player { get; init; }
+    public Entity Player { get; set; }
 
     /// <summary>
-    ///     Gets the type of battle being triggered.
+    ///     Gets or sets the type of battle being triggered.
     /// </summary>
-    public required BattleType BattleType { get; init; }
+    public BattleType BattleType { get; set; }
 
     /// <summary>
-    ///     Gets the opponent entity (trainer NPC), if applicable.
+    ///     Gets or sets the opponent entity (trainer NPC), if applicable.
     ///     Null for wild Pokémon encounters.
     /// </summary>
-    public Entity? Opponent { get; init; }
+    public Entity? Opponent { get; set; }
 
     /// <summary>
-    ///     Gets the grid X coordinate where the battle was triggered.
+    ///     Gets or sets the grid X coordinate where the battle was triggered.
     ///     Used for battle location-specific features (weather, terrain).
     /// </summary>
-    public required int BattleLocationX { get; init; }
+    public int BattleLocationX { get; set; }
 
     /// <summary>
-    ///     Gets the grid Y coordinate where the battle was triggered.
+    ///     Gets or sets the grid Y coordinate where the battle was triggered.
     ///     Used for battle location-specific features (weather, terrain).
     /// </summary>
-    public required int BattleLocationY { get; init; }
+    public int BattleLocationY { get; set; }
 
     /// <summary>
-    ///     Gets the trigger source that caused this battle.
+    ///     Gets or sets the trigger source that caused this battle.
     /// </summary>
-    public BattleTrigger Trigger { get; init; } = BattleTrigger.WildEncounter;
+    public BattleTrigger Trigger { get; set; } = BattleTrigger.WildEncounter;
 
     /// <summary>
-    ///     Gets the wild Pokémon species identifier, if this is a wild encounter.
+    ///     Gets or sets the wild Pokémon species identifier, if this is a wild encounter.
     /// </summary>
     /// <example>
     ///     "SPECIES_PIKACHU", "SPECIES_RATTATA"
     /// </example>
-    public string? WildPokemonSpecies { get; init; }
+    public string? WildPokemonSpecies { get; set; }
 
     /// <summary>
-    ///     Gets the level of the wild Pokémon or opponent's Pokémon.
+    ///     Gets or sets the level of the wild Pokémon or opponent's Pokémon.
     /// </summary>
-    public int PokemonLevel { get; init; } = 5;
+    public int PokemonLevel { get; set; } = 5;
 
     /// <summary>
-    ///     Gets a value indicating whether the player can flee from this battle.
+    ///     Gets or sets a value indicating whether the player can flee from this battle.
     ///     False for trainer battles, true for wild encounters.
     /// </summary>
-    public bool CanFlee { get; init; } = true;
+    public bool CanFlee { get; set; } = true;
 
     /// <summary>
-    ///     Gets the trainer identifier for trainer battles.
+    ///     Gets or sets the trainer identifier for trainer battles.
     /// </summary>
     /// <example>
     ///     "TRAINER_RIVAL_1", "TRAINER_YOUNGSTER_JOEY"
     /// </example>
-    public string? TrainerIdentifier { get; init; }
+    public string? TrainerIdentifier { get; set; }
+
+    /// <inheritdoc />
+    public override void Reset()
+    {
+        base.Reset();
+        Player = default;
+        BattleType = BattleType.WildSingle;
+        Opponent = null;
+        BattleLocationX = 0;
+        BattleLocationY = 0;
+        Trigger = BattleTrigger.WildEncounter;
+        WildPokemonSpecies = null;
+        PokemonLevel = 5;
+        CanFlee = true;
+        TrainerIdentifier = null;
+    }
 }
 
 /// <summary>

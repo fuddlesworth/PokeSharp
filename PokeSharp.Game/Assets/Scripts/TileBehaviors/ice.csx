@@ -1,7 +1,6 @@
 using PokeSharp.Game.Components.Movement;
 using PokeSharp.Game.Scripting.Runtime;
-using PokeSharp.Engine.Core.Events.Movement;
-using PokeSharp.Engine.Core.Events.Tile;
+using PokeSharp.Game.Systems.Events;
 
 /// <summary>
 ///     Ice tile behavior.
@@ -16,8 +15,8 @@ public class IceBehavior : ScriptBase
         {
             Context.Logger.LogDebug($"Ice tile: Movement completed with direction {evt.Direction}");
 
-            // Continue sliding in current direction if valid (0-3 are valid directions)
-            if (evt.Direction >= 0 && evt.Direction <= 3)
+            // Continue sliding in current direction if valid
+            if (evt.Direction != Direction.None)
             {
                 Context.Logger.LogDebug($"Ice tile: Forcing continued movement in direction {evt.Direction}");
                 // The movement system will pick up the forced direction from tile metadata

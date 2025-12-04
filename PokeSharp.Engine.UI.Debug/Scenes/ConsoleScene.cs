@@ -76,6 +76,9 @@ public class ConsoleScene : SceneBase
     /// <summary>Gets the event inspector panel, or null if panel not loaded.</summary>
     public EventInspectorPanel? EventInspectorPanel => _eventInspectorPanel;
 
+    /// <summary>Gets the event inspector operations, or null if panel not loaded.</summary>
+    public IEventInspectorOperations? EventInspectorOperations => _eventInspectorPanel;
+
     // Events for integration with ConsoleSystem
     public event Action<string>? OnCommandSubmitted;
     public event Action<string>? OnRequestCompletions;
@@ -478,9 +481,9 @@ public class ConsoleScene : SceneBase
             _tabContainer.AddTab("Watch", _watchPanel);
             _tabContainer.AddTab("Variables", _variablesPanel);
             _tabContainer.AddTab("Entities", _entitiesPanel);
+            _tabContainer.AddTab("Events", _eventInspectorPanel);
             _tabContainer.AddTab("Profiler", _profilerPanel);
             _tabContainer.AddTab("Stats", _statsPanel);
-            _tabContainer.AddTab("Events", _eventInspectorPanel);
             _tabContainer.SetActiveTab(0);
 
             // Show the console

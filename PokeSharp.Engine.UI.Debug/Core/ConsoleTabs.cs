@@ -27,18 +27,25 @@ public static class ConsoleTabs
         Keys.D5
     );
 
-    public static readonly TabDefinition Profiler = new(
+    public static readonly TabDefinition Events = new(
         5,
-        "Profiler",
-        ["profiler", "perf", "p"],
+        "Events",
+        ["events", "event", "ev"],
         Keys.D6
     );
 
-    public static readonly TabDefinition Stats = new(
+    public static readonly TabDefinition Profiler = new(
         6,
-        "Stats",
-        ["stats", "stat", "s", "perf"],
+        "Profiler",
+        ["profiler", "perf", "p"],
         Keys.D7
+    );
+
+    public static readonly TabDefinition Stats = new(
+        7,
+        "Stats",
+        ["stats", "stat", "s"],
+        Keys.D8
     );
 
     /// <summary>
@@ -51,6 +58,7 @@ public static class ConsoleTabs
         Watch,
         Variables,
         Entities,
+        Events,
         Profiler,
         Stats,
     };

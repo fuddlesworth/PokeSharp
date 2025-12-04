@@ -1,5 +1,4 @@
 using Arch.Core;
-using Microsoft.Xna.Framework;
 
 namespace PokeSharp.Engine.Core.Events.NPC;
 
@@ -26,59 +25,69 @@ namespace PokeSharp.Engine.Core.Events.NPC;
 ///     2. Medium priority: Dialogue system (conversations)
 ///     3. Low priority: Scripted events (custom behaviors)
 ///
+///     This class supports object pooling via EventPool{T} to reduce allocations.
+///
 ///     See EventSystemArchitecture.md for mod API event subscription patterns.
 /// </remarks>
-public sealed record NPCInteractionEvent : IGameEvent
+public sealed class NPCInteractionEvent : NotificationEventBase
 {
-    /// <inheritdoc />
-    public Guid EventId { get; init; } = Guid.NewGuid();
-
-    /// <inheritdoc />
-    public DateTime Timestamp { get; init; } = DateTime.UtcNow;
-
     /// <summary>
-    ///     Gets the player entity that initiated the interaction.
+    ///     Gets or sets the player entity that initiated the interaction.
     /// </summary>
-    public required Entity Player { get; init; }
+    public Entity Player { get; set; }
 
     /// <summary>
-    ///     Gets the NPC entity being interacted with.
+    ///     Gets or sets the NPC entity being interacted with.
     /// </summary>
-    public required Entity NPC { get; init; }
+    public Entity NPC { get; set; }
 
     /// <summary>
-    ///     Gets the grid X coordinate of the NPC.
+    ///     Gets or sets the grid X coordinate of the NPC.
     /// </summary>
-    public required int NPCX { get; init; }
+    public int NPCX { get; set; }
 
     /// <summary>
-    ///     Gets the grid Y coordinate of the NPC.
+    ///     Gets or sets the grid Y coordinate of the NPC.
     /// </summary>
-    public required int NPCY { get; init; }
+    public int NPCY { get; set; }
 
     /// <summary>
-    ///     Gets the direction the player is facing during interaction (0=South, 1=West, 2=East, 3=North).
+    ///     Gets or sets the direction the player is facing during interaction (0=South, 1=West, 2=East, 3=North).
     ///     Used to orient the NPC to face the player.
     /// </summary>
-    public required int PlayerFacingDirection { get; init; }
+    public int PlayerFacingDirection { get; set; }
 
     /// <summary>
-    ///     Gets the type of NPC being interacted with.
+    ///     Gets or sets the type of NPC being interacted with.
     ///     Used to determine appropriate interaction behavior.
     /// </summary>
-    public NPCType NPCType { get; init; } = NPCType.Generic;
+    public NPCType NPCType { get; set; } = NPCType.Generic;
 
     /// <summary>
-    ///     Gets the unique identifier for this NPC (script name, trainer ID, etc.).
+    ///     Gets or sets the unique identifier for this NPC (script name, trainer ID, etc.).
     ///     Used to load NPC-specific data and behaviors.
     /// </summary>
-    public string? NPCIdentifier { get; init; }
+    public string? NPCIdentifier { get; set; }
 
     /// <summary>
-    ///     Gets a value indicating whether this is the first time the player interacted with this NPC.
+    ///     Gets or sets a value indicating whether this is the first time the player interacted with this NPC.
     ///     Used for one-time events (receiving items, first-time dialogue).
     /// </summary>
-    public bool IsFirstInteraction { get; init; }
+    public bool IsFirstInteraction { get; set; }
+
+    /// <inheritdoc />
+    public override void Reset()
+    {
+        base.Reset();
+        Player = default;
+        NPC = default;
+        NPCX = 0;
+        NPCY = 0;
+        PlayerFacingDirection = 0;
+        NPCType = NPCType.Generic;
+        NPCIdentifier = null;
+        IsFirstInteraction = false;
+    }
 }
 
 /// <summary>

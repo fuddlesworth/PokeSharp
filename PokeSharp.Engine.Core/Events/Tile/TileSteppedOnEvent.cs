@@ -1,5 +1,4 @@
 using Arch.Core;
-using Microsoft.Xna.Framework;
 
 namespace PokeSharp.Engine.Core.Events.Tile;
 
@@ -25,65 +24,61 @@ namespace PokeSharp.Engine.Core.Events.Tile;
 ///     - Warp tiles: Initiate map transition
 ///     - Special tiles: Play animations, sounds, or trigger events
 ///
+///     This class supports object pooling via EventPool{T} to reduce allocations.
+///
 ///     See EventSystemArchitecture.md lines 120-132 for tile behavior integration.
 /// </remarks>
-public sealed record TileSteppedOnEvent : ICancellableEvent
+public sealed class TileSteppedOnEvent : CancellableEventBase
 {
-    /// <inheritdoc />
-    public Guid EventId { get; init; } = Guid.NewGuid();
-
-    /// <inheritdoc />
-    public DateTime Timestamp { get; init; } = DateTime.UtcNow;
-
     /// <summary>
-    ///     Gets the entity that is stepping onto the tile.
+    ///     Gets or sets the entity that is stepping onto the tile.
     /// </summary>
-    public required Entity Entity { get; init; }
+    public Entity Entity { get; set; }
 
     /// <summary>
-    ///     Gets the grid X coordinate of the tile being stepped on.
+    ///     Gets or sets the grid X coordinate of the tile being stepped on.
     /// </summary>
-    public required int TileX { get; init; }
+    public int TileX { get; set; }
 
     /// <summary>
-    ///     Gets the grid Y coordinate of the tile being stepped on.
+    ///     Gets or sets the grid Y coordinate of the tile being stepped on.
     /// </summary>
-    public required int TileY { get; init; }
+    public int TileY { get; set; }
 
     /// <summary>
-    ///     Gets the type identifier of the tile behavior at this position.
+    ///     Gets or sets the type identifier of the tile behavior at this position.
     ///     Examples: "tall_grass", "ice", "jump_south", "warp"
     /// </summary>
-    public required string TileType { get; init; }
+    public string TileType { get; set; } = string.Empty;
 
     /// <summary>
-    ///     Gets the direction from which the entity is entering the tile (0=South, 1=West, 2=East, 3=North).
+    ///     Gets or sets the direction from which the entity is entering the tile (0=South, 1=West, 2=East, 3=North).
     ///     Used for directional tile behaviors (e.g., one-way ledges).
     /// </summary>
-    public int FromDirection { get; init; }
+    public int FromDirection { get; set; }
 
     /// <summary>
-    ///     Gets the elevation layer of the tile.
+    ///     Gets or sets the elevation layer of the tile.
     ///     Used to ensure entities only interact with tiles on their current layer.
     /// </summary>
-    public int Elevation { get; init; }
+    public int Elevation { get; set; }
 
     /// <summary>
-    ///     Gets the tile behavior flags for fast behavior checks.
+    ///     Gets or sets the tile behavior flags for fast behavior checks.
     ///     See TileBehaviorFlags enum for available flags.
     /// </summary>
-    public Engine.Core.Types.TileBehaviorFlags BehaviorFlags { get; init; }
+    public Engine.Core.Types.TileBehaviorFlags BehaviorFlags { get; set; }
 
     /// <inheritdoc />
-    public bool IsCancelled { get; private set; }
-
-    /// <inheritdoc />
-    public string? CancellationReason { get; private set; }
-
-    /// <inheritdoc />
-    public void PreventDefault(string? reason = null)
+    public override void Reset()
     {
-        IsCancelled = true;
-        CancellationReason = reason ?? "Cannot step on tile";
+        base.Reset();
+        Entity = default;
+        TileX = 0;
+        TileY = 0;
+        TileType = string.Empty;
+        FromDirection = 0;
+        Elevation = 0;
+        BehaviorFlags = default;
     }
 }

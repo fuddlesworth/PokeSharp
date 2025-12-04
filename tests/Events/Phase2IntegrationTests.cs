@@ -9,9 +9,9 @@ using Microsoft.Xna.Framework;
 using NUnit.Framework;
 using FluentAssertions;
 using PokeSharp.Engine.Core.Events;
-using PokeSharp.Engine.Core.Events.Movement;
 using PokeSharp.Engine.Core.Events.Tile;
 using PokeSharp.Game.Components.Movement;
+using PokeSharp.Game.Systems.Events;
 using PokeSharp.Game.Scripting.Runtime;
 using PokeSharp.Game.Scripting.HotReload.Cache;
 

@@ -1,117 +1,145 @@
-using System.Collections.Concurrent;
+using System.Runtime.CompilerServices;
 
 namespace PokeSharp.Engine.Core.Events;
 
 /// <summary>
-/// Object pool for event instances to reduce allocations on hot paths.
-/// Provides pooling for frequently-published events like TickEvent, MovementEvent, etc.
+///     Ultra-fast object pool for event instances.
+///     Optimized for single-threaded game loops with minimal overhead.
 /// </summary>
 /// <remarks>
-/// PERFORMANCE OPTIMIZATION:
-/// - Eliminates allocations for high-frequency events
-/// - Uses ConcurrentBag for thread-safe pooling
-/// - Auto-sizing based on usage patterns
-/// - Returns events to pool after publishing
-///
-/// USAGE:
-/// <code>
-/// var pool = EventPool&lt;TickEvent&gt;.Shared;
-/// var evt = pool.Rent();
-/// evt.DeltaTime = deltaTime;
-/// eventBus.Publish(evt);
-/// pool.Return(evt);
-/// </code>
+///     <para>
+///         PERFORMANCE-CRITICAL DESIGN:
+///         - Simple Stack{T} (no locks, no thread-safety overhead)
+///         - Optional statistics (disabled by default)
+///         - Lazy reset (only when needed, not on every rent)
+///         - Bounded size to prevent memory bloat
+///     </para>
+///     <para>
+///         Trade-off: Not thread-safe. Assumes single-threaded event publishing
+///         (typical for game engines). If you need thread-safety, add locks at
+///         the EventBus level, not here.
+///     </para>
 /// </remarks>
-public class EventPool<TEvent> where TEvent : class, new()
+public sealed class EventPool<TEvent> where TEvent : class, IPoolableEvent, new()
 {
-    private readonly ConcurrentBag<TEvent> _pool = new();
-    private readonly int _maxPoolSize;
-    private int _currentSize;
+    private readonly Stack<TEvent> _pool;
+    private readonly int _maxSize;
+    private readonly bool _trackStats;
+    private int _totalRented;
+    private int _totalReturned;
+    private int _totalCreated;
 
     /// <summary>
-    /// Shared singleton pool instance for convenient access.
+    ///     Creates a new event pool with specified configuration.
     /// </summary>
-    public static EventPool<TEvent> Shared { get; } = new EventPool<TEvent>();
-
-    /// <summary>
-    /// Creates a new event pool with specified maximum size.
-    /// </summary>
-    /// <param name="maxPoolSize">Maximum number of pooled instances (default: 100)</param>
-    public EventPool(int maxPoolSize = 100)
+    /// <param name="maxPoolSize">Maximum number of pooled instances (default: 32)</param>
+    /// <param name="trackStatistics">Enable statistics tracking (adds overhead, default: false)</param>
+    public EventPool(int maxPoolSize = 32, bool trackStatistics = false)
     {
-        _maxPoolSize = maxPoolSize;
+        _pool = new Stack<TEvent>(maxPoolSize);
+        _maxSize = maxPoolSize;
+        _trackStats = trackStatistics;
     }
 
     /// <summary>
-    /// Gets an event instance from the pool, or creates a new one if pool is empty.
+    ///     Shared singleton pool instance for this event type.
+    ///     Statistics tracking enabled for debug UI integration.
     /// </summary>
+    public static EventPool<TEvent> Shared { get; } = new(trackStatistics: true);
+
+    /// <summary>
+    ///     Gets an event instance from the pool.
+    ///     Instance is automatically reset to clean state.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public TEvent Rent()
     {
-        if (_pool.TryTake(out TEvent? evt))
+        if (_trackStats)
+            _totalRented++;
+
+        if (_pool.Count > 0)
         {
-            Interlocked.Decrement(ref _currentSize);
+            TEvent evt = _pool.Pop();
+            evt.Reset(); // Reset here for clean state
             return evt;
         }
+
+        if (_trackStats)
+            _totalCreated++;
 
         return new TEvent();
     }
 
     /// <summary>
-    /// Returns an event instance to the pool for reuse.
+    ///     Returns an event instance to the pool for reuse.
     /// </summary>
-    /// <param name="evt">The event to return to the pool</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Return(TEvent evt)
     {
         if (evt == null)
             return;
 
-        // Only pool up to max size to prevent unbounded growth
-        if (_currentSize < _maxPoolSize)
+        if (_trackStats)
+            _totalReturned++;
+
+        // Only pool up to max size
+        if (_pool.Count < _maxSize)
         {
-            _pool.Add(evt);
-            Interlocked.Increment(ref _currentSize);
+            _pool.Push(evt);
         }
     }
 
     /// <summary>
-    /// Clears all pooled instances.
+    ///     Gets pool statistics for monitoring and debugging.
+    /// </summary>
+    public EventPoolStatistics GetStatistics()
+    {
+        return new EventPoolStatistics
+        {
+            EventType = typeof(TEvent).Name,
+            TotalRented = _totalRented,
+            TotalReturned = _totalReturned,
+            TotalCreated = _totalCreated,
+            CurrentlyInUse = _totalRented - _totalReturned,
+            ReuseRate = _totalRented > 0 ? 1.0 - ((double)_totalCreated / _totalRented) : 0.0
+        };
+    }
+
+    /// <summary>
+    ///     Clears all pooled instances and resets statistics.
     /// </summary>
     public void Clear()
     {
         _pool.Clear();
-        _currentSize = 0;
-    }
-
-    /// <summary>
-    /// Gets current pool statistics.
-    /// </summary>
-    public (int CurrentSize, int MaxSize) GetStats()
-    {
-        return (_currentSize, _maxPoolSize);
+        _totalRented = 0;
+        _totalReturned = 0;
+        _totalCreated = 0;
     }
 }
 
 /// <summary>
-/// Extension methods for convenient pooling patterns.
+///     Statistics for an event pool.
 /// </summary>
-public static class EventPoolExtensions
+public sealed class EventPoolStatistics
 {
+    /// <summary>Event type name.</summary>
+    public required string EventType { get; init; }
+
+    /// <summary>Total times rented from pool (lifetime).</summary>
+    public required long TotalRented { get; init; }
+
+    /// <summary>Total times returned to pool (lifetime).</summary>
+    public required long TotalReturned { get; init; }
+
+    /// <summary>Total new instances created (lifetime).</summary>
+    public required long TotalCreated { get; init; }
+
+    /// <summary>Current instances in use (not returned yet).</summary>
+    public required long CurrentlyInUse { get; init; }
+
     /// <summary>
-    /// Publishes an event and automatically returns it to the pool.
+    ///     Reuse efficiency: 1.0 = perfect (all from pool), 0.0 = no pooling benefit.
+    ///     Formula: 1 - (TotalCreated / TotalRented)
     /// </summary>
-    /// <remarks>
-    /// CAUTION: Only use this for events that are safe to pool (no references held by handlers).
-    /// </remarks>
-    public static void PublishPooled<TEvent>(this IEventBus eventBus, TEvent evt, EventPool<TEvent> pool)
-        where TEvent : class, new()
-    {
-        try
-        {
-            eventBus.Publish(evt);
-        }
-        finally
-        {
-            pool.Return(evt);
-        }
-    }
+    public required double ReuseRate { get; init; }
 }

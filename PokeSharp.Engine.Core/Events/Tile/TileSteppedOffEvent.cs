@@ -1,5 +1,4 @@
 using Arch.Core;
-using Microsoft.Xna.Framework;
 
 namespace PokeSharp.Engine.Core.Events.Tile;
 
@@ -22,66 +21,77 @@ namespace PokeSharp.Engine.Core.Events.Tile;
 ///
 ///     Unlike TileSteppedOnEvent, this event cannot prevent the exit since the movement
 ///     has already been completed.
+///
+///     This class supports object pooling via EventPool{T} to reduce allocations.
 /// </remarks>
-public sealed record TileSteppedOffEvent : IGameEvent
+public sealed class TileSteppedOffEvent : NotificationEventBase
 {
-    /// <inheritdoc />
-    public Guid EventId { get; init; } = Guid.NewGuid();
-
-    /// <inheritdoc />
-    public DateTime Timestamp { get; init; } = DateTime.UtcNow;
-
     /// <summary>
-    ///     Gets the entity that stepped off the tile.
+    ///     Gets or sets the entity that stepped off the tile.
     /// </summary>
-    public required Entity Entity { get; init; }
+    public Entity Entity { get; set; }
 
     /// <summary>
-    ///     Gets the grid X coordinate of the tile that was exited.
+    ///     Gets or sets the grid X coordinate of the tile that was exited.
     /// </summary>
-    public required int TileX { get; init; }
+    public int TileX { get; set; }
 
     /// <summary>
-    ///     Gets the grid Y coordinate of the tile that was exited.
+    ///     Gets or sets the grid Y coordinate of the tile that was exited.
     /// </summary>
-    public required int TileY { get; init; }
+    public int TileY { get; set; }
 
     /// <summary>
-    ///     Gets the type identifier of the tile behavior that was exited.
+    ///     Gets or sets the type identifier of the tile behavior that was exited.
     ///     Examples: "tall_grass", "ice", "bridge", "water"
     /// </summary>
-    public required string TileType { get; init; }
+    public string TileType { get; set; } = string.Empty;
 
     /// <summary>
-    ///     Gets the direction in which the entity exited the tile (0=South, 1=West, 2=East, 3=North).
+    ///     Gets or sets the direction in which the entity exited the tile (0=South, 1=West, 2=East, 3=North).
     ///     Used for directional exit behaviors.
     /// </summary>
-    public int ExitDirection { get; init; }
+    public int ExitDirection { get; set; }
 
     /// <summary>
-    ///     Gets the grid X coordinate of the new tile the entity moved to.
+    ///     Gets or sets the grid X coordinate of the new tile the entity moved to.
     /// </summary>
-    public required int NewTileX { get; init; }
+    public int NewTileX { get; set; }
 
     /// <summary>
-    ///     Gets the grid Y coordinate of the new tile the entity moved to.
+    ///     Gets or sets the grid Y coordinate of the new tile the entity moved to.
     /// </summary>
-    public required int NewTileY { get; init; }
+    public int NewTileY { get; set; }
 
     /// <summary>
-    ///     Gets the type identifier of the new tile the entity moved to.
+    ///     Gets or sets the type identifier of the new tile the entity moved to.
     ///     Used to detect tile type transitions (grass -> water, etc.).
     /// </summary>
-    public string? NewTileType { get; init; }
+    public string? NewTileType { get; set; }
 
     /// <summary>
-    ///     Gets the elevation layer of the tile that was exited.
+    ///     Gets or sets the elevation layer of the tile that was exited.
     /// </summary>
-    public int Elevation { get; init; }
+    public int Elevation { get; set; }
 
     /// <summary>
     ///     Gets a value indicating whether the entity transitioned to a different tile type.
     ///     True if NewTileType differs from TileType.
     /// </summary>
     public bool TileTypeChanged => NewTileType != null && NewTileType != TileType;
+
+    /// <inheritdoc />
+    public override void Reset()
+    {
+        base.Reset();
+        Entity = default;
+        TileX = 0;
+        TileY = 0;
+        TileType = string.Empty;
+        ExitDirection = 0;
+        NewTileX = 0;
+        NewTileY = 0;
+        NewTileType = null;
+        Elevation = 0;
+    }
 }
