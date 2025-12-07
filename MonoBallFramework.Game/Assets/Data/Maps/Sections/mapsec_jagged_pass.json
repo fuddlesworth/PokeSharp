@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_JAGGED_PASS",
+  "id": "base:mapsec:hoenn/jagged_pass",
   "name": "JAGGED PASS",
-  "theme": "wood",
+  "theme": "base:theme:popup/wood",
   "x": 6,
   "y": 3,
   "width": 1,

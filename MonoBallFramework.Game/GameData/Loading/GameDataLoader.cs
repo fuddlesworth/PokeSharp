@@ -50,7 +50,7 @@ public class GameDataLoader
 
         // Load Maps (from Regions subdirectory)
         string mapsPath = Path.Combine(dataPath, "Maps", "Regions");
-        loadedCounts["Maps"] = await LoadMapsAsync(mapsPath, ct);
+        loadedCounts["Maps"] = await LoadMapDefinitionsAsync(mapsPath, ct);
 
         // Load Popup Themes
         string themesPath = Path.Combine(dataPath, "Maps", "Popups", "Themes");
@@ -106,13 +106,13 @@ public class GameDataLoader
                 // Convert DTO to entity
                 var npc = new NpcDefinition
                 {
-                    NpcId = dto.NpcId,
+                    NpcId = GameNpcId.Create(dto.NpcId),
                     DisplayName = dto.DisplayName ?? dto.NpcId,
                     NpcType = dto.NpcType,
-                    SpriteId = SpriteId.TryCreate(dto.SpriteId),
+                    SpriteId = GameSpriteId.TryCreate(dto.SpriteId),
                     BehaviorScript = dto.BehaviorScript,
                     DialogueScript = dto.DialogueScript,
-                    MovementSpeed = dto.MovementSpeed ?? 2.0f,
+                    MovementSpeed = dto.MovementSpeed ?? 3.75f, // Matches pokeemerald MOVE_SPEED_NORMAL
                     CustomPropertiesJson =
                         dto.CustomProperties != null
                             ? JsonSerializer.Serialize(dto.CustomProperties, _jsonOptions)
@@ -181,10 +181,10 @@ public class GameDataLoader
                 // Convert DTO to entity
                 var trainer = new TrainerDefinition
                 {
-                    TrainerId = dto.TrainerId,
+                    TrainerId = GameTrainerId.Create(dto.TrainerId),
                     DisplayName = dto.DisplayName ?? dto.TrainerId,
                     TrainerClass = dto.TrainerClass ?? "trainer",
-                    SpriteId = SpriteId.TryCreate(dto.SpriteId),
+                    SpriteId = GameSpriteId.TryCreate(dto.SpriteId),
                     PrizeMoney = dto.PrizeMoney ?? 100,
                     Items = dto.Items != null ? string.Join(",", dto.Items) : null,
                     AiScript = dto.AiScript,
@@ -223,10 +223,11 @@ public class GameDataLoader
     }
 
     /// <summary>
-    ///     Load map definitions from Tiled JSON files.
-    ///     Stores relative path to file instead of full JSON data.
+    ///     Load map definitions from JSON files.
+    ///     Simple schema: Id, DisplayName, Type, Region, Description, TiledPath.
+    ///     Gameplay metadata (music, weather, connections) is read from Tiled at runtime.
     /// </summary>
-    private async Task<int> LoadMapsAsync(string path, CancellationToken ct)
+    private async Task<int> LoadMapDefinitionsAsync(string path, CancellationToken ct)
     {
         if (!Directory.Exists(path))
         {
@@ -234,18 +235,14 @@ public class GameDataLoader
             return 0;
         }
 
-        // Determine Assets root for relative path calculation
-        string assetsRoot = ResolveAssetsRoot(path);
-
         string[] files = Directory
             .GetFiles(path, "*.json", SearchOption.AllDirectories)
-            .Where(f => !IsHiddenOrSystemDirectory(f)) // Skip hidden directories like .claude-flow
+            .Where(f => !IsHiddenOrSystemDirectory(f))
             .ToArray();
         int count = 0;
 
         // OPTIMIZATION: Load all existing maps once to avoid N+1 queries
-        // Using AsNoTracking since we'll manually track changes
-        Dictionary<MapIdentifier, MapDefinition> existingMaps = await _context
+        Dictionary<GameMapId, MapDefinition> existingMaps = await _context
             .Maps.AsNoTracking()
             .ToDictionaryAsync(m => m.MapId, ct);
 
@@ -255,79 +252,45 @@ public class GameDataLoader
 
             try
             {
-                // Read Tiled JSON to extract metadata only
-                string tiledJson = await File.ReadAllTextAsync(file, ct);
+                string json = await File.ReadAllTextAsync(file, ct);
+                MapDefinitionDto? dto = JsonSerializer.Deserialize<MapDefinitionDto>(json, _jsonOptions);
 
-                // Parse to extract metadata (use a lightweight DTO)
-                TiledMapMetadataDto? tiledDoc = JsonSerializer.Deserialize<TiledMapMetadataDto>(
-                    tiledJson,
-                    _jsonOptions
-                );
-
-                if (tiledDoc == null)
+                if (dto == null)
                 {
-                    _logger.LogTiledParseFailed(file);
+                    _logger.LogMapDefinitionLoadFailed(file);
                     continue;
                 }
 
-                // Generate map ID from filename
-                string mapId = Path.GetFileNameWithoutExtension(file);
+                // Validate required fields
+                if (string.IsNullOrWhiteSpace(dto.Id) || string.IsNullOrWhiteSpace(dto.TiledPath))
+                {
+                    _logger.LogMapDefinitionLoadFailed(file);
+                    continue;
+                }
 
-                // Extract metadata from Tiled custom properties (convert array to dictionary)
-                Dictionary<string, object> properties = ConvertTiledPropertiesToDictionary(
-                    tiledDoc.Properties
-                );
+                // Parse GameMapId from the Id field
+                GameMapId? gameMapId = GameMapId.TryCreate(dto.Id);
+                if (gameMapId == null)
+                {
+                    _logger.LogMapDefinitionLoadFailed(file);
+                    continue;
+                }
 
-                // Calculate relative path from Assets root
-                string relativePath = Path.GetRelativePath(assetsRoot, file);
-
-                // Parse map connections from structured Connection properties (includes offsets)
-                (
-                    MapIdentifier? northMapId,
-                    int northOffset,
-                    MapIdentifier? southMapId,
-                    int southOffset,
-                    MapIdentifier? eastMapId,
-                    int eastOffset,
-                    MapIdentifier? westMapId,
-                    int westOffset
-                ) = ParseMapConnections(properties);
-
+                // Convert DTO to entity - only core fields from definition
                 var mapDef = new MapDefinition
                 {
-                    MapId = new MapIdentifier(mapId),
-                    DisplayName = GetPropertyString(properties, "displayName") ?? mapId,
-                    Region = GetPropertyString(properties, "region") ?? "hoenn",
-                    MapType = GetPropertyString(properties, "mapType"),
-                    TiledDataPath = relativePath, // Store relative path instead of JSON
-                    MusicId = GetPropertyString(properties, "music"),
-                    Weather = GetPropertyString(properties, "weather") ?? "clear",
-                    ShowMapName = GetPropertyBool(properties, "showMapName") ?? true,
-                    CanFly = GetPropertyBool(properties, "canFly") ?? false,
-                    RequiresFlash = GetPropertyBool(properties, "requiresFlash") ?? false,
-                    AllowRunning = GetPropertyBool(properties, "allowRunning") ?? true,
-                    AllowCycling = GetPropertyBool(properties, "allowCycling") ?? true,
-                    AllowEscaping = GetPropertyBool(properties, "allowEscaping") ?? false,
-                    BattleScene =
-                        GetPropertyString(properties, "battleScene") ?? "MAP_BATTLE_SCENE_NORMAL",
-                    RegionMapSection = GetPropertyString(properties, "regionMapSection"),
-                    NorthMapId = northMapId,
-                    NorthConnectionOffset = northOffset,
-                    SouthMapId = southMapId,
-                    SouthConnectionOffset = southOffset,
-                    EastMapId = eastMapId,
-                    EastConnectionOffset = eastOffset,
-                    WestMapId = westMapId,
-                    WestConnectionOffset = westOffset,
-                    EncounterDataJson = GetPropertyString(properties, "encounters"),
-                    SourceMod = GetPropertyString(properties, "sourceMod"),
-                    Version = GetPropertyString(properties, "version") ?? "1.0.0",
+                    MapId = gameMapId,
+                    DisplayName = dto.DisplayName ?? gameMapId.MapName,
+                    Region = dto.Region ?? "hoenn",
+                    MapType = dto.Type,
+                    TiledDataPath = dto.TiledPath,
+                    SourceMod = dto.SourceMod,
+                    Version = dto.Version ?? "1.0.0"
                 };
 
-                // Support mod overrides: Check in-memory dictionary instead of querying DB
-                if (existingMaps.TryGetValue(mapId, out MapDefinition? existing))
+                // Support mod overrides
+                if (existingMaps.TryGetValue(gameMapId, out MapDefinition? existing))
                 {
-                    // Mod is overriding base game map - attach and update
                     _context.Maps.Attach(existing);
                     _context.Entry(existing).CurrentValues.SetValues(mapDef);
                     _logger.LogMapOverridden(mapDef.MapId, mapDef.DisplayName);
@@ -338,8 +301,7 @@ public class GameDataLoader
                 }
 
                 count++;
-
-                _logger.LogMapLoadedFromFile(mapDef.MapId, mapDef.DisplayName, relativePath);
+                _logger.LogMapDefinitionLoaded(mapDef.MapId.Value, mapDef.TiledDataPath);
             }
             catch (Exception ex)
             {
@@ -347,9 +309,7 @@ public class GameDataLoader
             }
         }
 
-        // Save to in-memory database
         await _context.SaveChangesAsync(ct);
-
         _logger.LogMapsLoaded(count);
         return count;
     }
@@ -445,19 +405,20 @@ public class GameDataLoader
     ///     Parses map connections from structured Connection class properties.
     ///     Looks for properties named connection_north, connection_south, etc.
     ///     and extracts both the "map" field and "offset" field from the value object.
+    ///     Supports both unified format (base:map:hoenn/name) and legacy format (name).
     /// </summary>
     private static (
-        MapIdentifier? North,
+        GameMapId? North,
         int NorthOffset,
-        MapIdentifier? South,
+        GameMapId? South,
         int SouthOffset,
-        MapIdentifier? East,
+        GameMapId? East,
         int EastOffset,
-        MapIdentifier? West,
+        GameMapId? West,
         int WestOffset
     ) ParseMapConnections(Dictionary<string, object> properties)
     {
-        MapIdentifier? north = null,
+        GameMapId? north = null,
             south = null,
             east = null,
             west = null;
@@ -470,7 +431,7 @@ public class GameDataLoader
         if (properties.TryGetValue("connection_north", out object? northValue))
         {
             (string? mapId, int offset) = ExtractConnectionData(northValue);
-            north = MapIdentifier.TryCreate(mapId);
+            north = GameMapId.TryCreate(mapId);
             northOffset = offset;
         }
 
@@ -478,7 +439,7 @@ public class GameDataLoader
         if (properties.TryGetValue("connection_south", out object? southValue))
         {
             (string? mapId, int offset) = ExtractConnectionData(southValue);
-            south = MapIdentifier.TryCreate(mapId);
+            south = GameMapId.TryCreate(mapId);
             southOffset = offset;
         }
 
@@ -486,7 +447,7 @@ public class GameDataLoader
         if (properties.TryGetValue("connection_east", out object? eastValue))
         {
             (string? mapId, int offset) = ExtractConnectionData(eastValue);
-            east = MapIdentifier.TryCreate(mapId);
+            east = GameMapId.TryCreate(mapId);
             eastOffset = offset;
         }
 
@@ -494,7 +455,7 @@ public class GameDataLoader
         if (properties.TryGetValue("connection_west", out object? westValue))
         {
             (string? mapId, int offset) = ExtractConnectionData(westValue);
-            west = MapIdentifier.TryCreate(mapId);
+            west = GameMapId.TryCreate(mapId);
             westOffset = offset;
         }
 
@@ -631,7 +592,7 @@ public class GameDataLoader
                 // Convert DTO to entity
                 var theme = new PopupTheme
                 {
-                    Id = dto.Id,
+                    Id = GameThemeId.Create(dto.Id),
                     Name = dto.Name ?? dto.Id,
                     Description = dto.Description,
                     Background = dto.Background ?? dto.Id,
@@ -700,9 +661,9 @@ public class GameDataLoader
                 // Convert DTO to entity
                 var section = new MapSection
                 {
-                    Id = dto.Id,
+                    Id = GameMapSectionId.Create(dto.Id),
                     Name = dto.Name ?? dto.Id,
-                    ThemeId = dto.Theme,
+                    ThemeId = GameThemeId.Create(dto.Theme),
                     X = dto.X,
                     Y = dto.Y,
                     Width = dto.Width,
@@ -818,6 +779,22 @@ internal record MapSectionDto
     public int? Y { get; init; }
     public int? Width { get; init; }
     public int? Height { get; init; }
+    public string? SourceMod { get; init; }
+    public string? Version { get; init; }
+}
+
+/// <summary>
+///     DTO for deserializing MapDefinition JSON files.
+///     Simple schema: Id, DisplayName, Type, Region, Description, TiledPath
+/// </summary>
+internal record MapDefinitionDto
+{
+    public string? Id { get; init; }
+    public string? DisplayName { get; init; }
+    public string? Type { get; init; }
+    public string? Region { get; init; }
+    public string? Description { get; init; }
+    public string? TiledPath { get; init; }
     public string? SourceMod { get; init; }
     public string? Version { get; init; }
 }

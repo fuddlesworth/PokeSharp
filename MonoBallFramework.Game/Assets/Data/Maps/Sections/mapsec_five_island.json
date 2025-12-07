@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_FIVE_ISLAND",
+  "id": "base:mapsec:hoenn/five_island",
   "name": "FIVE ISLAND",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

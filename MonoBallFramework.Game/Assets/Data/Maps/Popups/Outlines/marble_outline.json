@@ -1,5 +1,5 @@
 {
-  "Id": "marble_outline",
+  "Id": "base:popup:outline/marble_outline",
   "DisplayName": "Marble Outline",
   "Type": "TileSheet",
   "TexturePath": "Graphics/Maps/Popups/Outlines/marble_outline.png",

@@ -213,7 +213,7 @@ public class EventBus(ILogger<EventBus>? logger = null) : IEventBus
         // Find all types that implement IPoolableEvent in loaded assemblies
         IEnumerable<Assembly> assemblies = AppDomain
             .CurrentDomain.GetAssemblies()
-            .Where(a => !a.IsDynamic && a.GetName().Name?.StartsWith("MonoBall Framework") == true);
+            .Where(a => !a.IsDynamic && a.GetName().Name?.StartsWith("MonoBallFramework") == true);
 
         foreach (Assembly assembly in assemblies)
         {

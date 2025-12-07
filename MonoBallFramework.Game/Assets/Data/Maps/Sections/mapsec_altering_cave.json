@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_ALTERING_CAVE",
+  "id": "base:mapsec:hoenn/altering_cave",
   "name": "ALTERING CAVE",
-  "theme": "stone",
+  "theme": "base:theme:popup/stone",
   "x": 6,
   "y": 8,
   "width": 1,

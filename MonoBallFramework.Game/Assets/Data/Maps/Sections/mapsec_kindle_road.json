@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_KINDLE_ROAD",
+  "id": "base:mapsec:hoenn/kindle_road",
   "name": "KINDLE ROAD",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

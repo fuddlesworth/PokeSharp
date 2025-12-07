@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_TWO_ISLAND",
+  "id": "base:mapsec:hoenn/two_island",
   "name": "TWO ISLAND",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

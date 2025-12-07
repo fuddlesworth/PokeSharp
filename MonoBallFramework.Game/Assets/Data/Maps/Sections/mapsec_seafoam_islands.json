@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_SEAFOAM_ISLANDS",
+  "id": "base:mapsec:hoenn/seafoam_islands",
   "name": "SEAFOAM ISLANDS",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

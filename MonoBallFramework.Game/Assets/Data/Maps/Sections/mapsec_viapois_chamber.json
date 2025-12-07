@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_VIAPOIS_CHAMBER",
+  "id": "base:mapsec:hoenn/viapois_chamber",
   "name": "VIAPOIS CHAMBER",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

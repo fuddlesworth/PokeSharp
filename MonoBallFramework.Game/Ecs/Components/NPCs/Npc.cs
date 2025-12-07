@@ -1,3 +1,5 @@
+using MonoBallFramework.Game.Engine.Core.Types;
+
 namespace MonoBallFramework.Game.Ecs.Components.NPCs;
 
 /// <summary>
@@ -9,7 +11,7 @@ public struct Npc
     /// <summary>
     ///     Unique identifier for this NPC (e.g., "rival_oak_lab", "nurse_joy_pewter").
     /// </summary>
-    public string NpcId { get; set; }
+    public GameNpcId NpcId { get; set; }
 
     /// <summary>
     ///     Whether this NPC is a trainer who can battle the player.
@@ -33,7 +35,7 @@ public struct Npc
     ///     Use <see cref="Components.Common.Name" /> for display names.
     /// </summary>
     /// <param name="npcId">Unique identifier for the NPC.</param>
-    public Npc(string npcId)
+    public Npc(GameNpcId npcId)
     {
         NpcId = npcId;
         IsTrainer = false;

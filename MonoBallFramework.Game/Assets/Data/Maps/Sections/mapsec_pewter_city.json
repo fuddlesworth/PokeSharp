@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_PEWTER_CITY",
+  "id": "base:mapsec:hoenn/pewter_city",
   "name": "PEWTER CITY",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

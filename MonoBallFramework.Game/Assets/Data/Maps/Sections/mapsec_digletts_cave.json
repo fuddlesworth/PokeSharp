@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_DIGLETTS_CAVE",
+  "id": "base:mapsec:hoenn/digletts_cave",
   "name": "DIGLETT'S CAVE",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

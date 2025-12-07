@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_SEVAULT_CANYON",
+  "id": "base:mapsec:hoenn/sevault_canyon",
   "name": "SEVAULT CANYON",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

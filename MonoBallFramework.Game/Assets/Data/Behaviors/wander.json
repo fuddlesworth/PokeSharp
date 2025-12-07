@@ -1,5 +1,5 @@
 {
-  "typeId": "wander",
+  "typeId": "base:behavior:movement/wander",
   "displayName": "Wander Behavior",
   "description": "NPC wanders randomly around the map, changing direction occasionally",
   "behaviorScript": "Behaviors/wander_behavior.csx",

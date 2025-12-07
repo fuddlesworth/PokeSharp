@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_SPECIAL_AREA",
+  "id": "base:mapsec:hoenn/special_area",
   "name": "SPECIAL AREA",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

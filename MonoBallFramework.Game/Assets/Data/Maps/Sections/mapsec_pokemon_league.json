@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_POKEMON_LEAGUE",
+  "id": "base:mapsec:hoenn/pokemon_league",
   "name": "POKéMON LEAGUE",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

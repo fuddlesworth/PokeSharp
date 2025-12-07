@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_SAFARI_ZONE",
+  "id": "base:mapsec:hoenn/safari_zone",
   "name": "SAFARI ZONE",
-  "theme": "wood",
+  "theme": "base:theme:popup/wood",
   "x": 16,
   "y": 2,
   "width": 1,

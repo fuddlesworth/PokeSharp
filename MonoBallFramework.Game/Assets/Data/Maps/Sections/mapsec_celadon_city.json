@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_CELADON_CITY",
+  "id": "base:mapsec:hoenn/celadon_city",
   "name": "CELADON CITY",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

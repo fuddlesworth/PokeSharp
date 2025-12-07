@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_CERULEAN_CAVE",
+  "id": "base:mapsec:hoenn/cerulean_cave",
   "name": "CERULEAN CAVE",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

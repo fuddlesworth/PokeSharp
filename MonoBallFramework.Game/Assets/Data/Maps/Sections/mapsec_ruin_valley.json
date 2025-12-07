@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_RUIN_VALLEY",
+  "id": "base:mapsec:hoenn/ruin_valley",
   "name": "RUIN VALLEY",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_SEALED_CHAMBER",
+  "id": "base:mapsec:hoenn/sealed_chamber",
   "name": "SEALED CHAMBER",
-  "theme": "stone",
+  "theme": "base:theme:popup/stone",
   "x": 11,
   "y": 10,
   "width": 1,

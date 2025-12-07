@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_FARAWAY_ISLAND",
+  "id": "base:mapsec:hoenn/faraway_island",
   "name": "FARAWAY ISLAND",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

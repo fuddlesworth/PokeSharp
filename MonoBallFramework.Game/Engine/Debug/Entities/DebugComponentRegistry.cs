@@ -329,6 +329,17 @@ public class DebugComponentRegistry
     /// </summary>
     private static string FormatValue(object? value)
     {
+        return FormatValue(value, 0);
+    }
+
+    /// <summary>
+    ///     Formats a value for display with support for arrays, collections, and complex types.
+    ///     Supports nested indentation for multi-level collections.
+    /// </summary>
+    /// <param name="value">The value to format.</param>
+    /// <param name="indentLevel">The current indentation level (number of 2-space indents).</param>
+    private static string FormatValue(object? value, int indentLevel)
+    {
         if (value == null)
         {
             return "null";
@@ -353,13 +364,43 @@ public class DebugComponentRegistry
                     return "{}";
                 }
 
-                var lines = new List<string> { $"{{{dict.Count} entries}}" };
+                string dictIndent = new string(' ', indentLevel * 2);
+                string dictItemIndent = new string(' ', (indentLevel + 1) * 2);
+                var lines = new List<string> { $"{dictIndent}{{{dict.Count} entries}}" };
 
                 foreach (DictionaryEntry entry in dict)
                 {
-                    string key = FormatValue(entry.Key);
-                    string val = FormatValue(entry.Value);
-                    lines.Add($"  {key}: {val}");
+                    string key = FormatValue(entry.Key, indentLevel + 1);
+                    string val = FormatValue(entry.Value, indentLevel + 1);
+                    
+                    // Split key and value into lines
+                    string[] keyLines = key.Split('\n');
+                    string[] valLines = val.Split('\n');
+                    
+                    // If key is multiline, put all key lines first, then value on new line
+                    if (keyLines.Length > 1)
+                    {
+                        // Add all key lines
+                        foreach (string keyLine in keyLines)
+                        {
+                            lines.Add($"{dictItemIndent}{keyLine}");
+                        }
+                        // Add value on new line with proper indentation
+                        lines.Add($"{dictItemIndent}→ {valLines[0]}");
+                        for (int i = 1; i < valLines.Length; i++)
+                        {
+                            lines.Add($"{dictItemIndent}  {valLines[i]}");
+                        }
+                    }
+                    else
+                    {
+                        // Simple case: key is single line, value can be multiline
+                        lines.Add($"{dictItemIndent}{key}: {valLines[0]}");
+                        for (int i = 1; i < valLines.Length; i++)
+                        {
+                            lines.Add($"{dictItemIndent}  {valLines[i]}");
+                        }
+                    }
                 }
 
                 return string.Join("\n", lines);
@@ -371,7 +412,7 @@ public class DebugComponentRegistry
                     return "[]";
                 }
 
-                return FormatArray(arr);
+                return FormatArray(arr, indentLevel);
 
             // Handle common collections (non-generic)
             case ICollection collection:
@@ -380,11 +421,11 @@ public class DebugComponentRegistry
                     return "[]";
                 }
 
-                return FormatCollection(collection);
+                return FormatCollection(collection, indentLevel);
 
             // Handle IEnumerable (last resort for collections like HashSet<T>, List<T>, etc.)
             case IEnumerable enumerable when !(value is string):
-                return FormatEnumerable(enumerable);
+                return FormatEnumerable(enumerable, indentLevel);
 
             // Handle XNA/MonoGame types
             case Vector2 v2:
@@ -403,13 +444,20 @@ public class DebugComponentRegistry
                 var tupleItems = new List<string>();
                 for (int i = 0; i < tuple.Length; i++)
                 {
-                    tupleItems.Add(FormatValue(tuple[i]));
+                    tupleItems.Add(FormatValue(tuple[i], indentLevel));
                 }
 
                 return $"({string.Join(", ", tupleItems)})";
 
-            // Default: use ToString()
+            // Default: use ToString() or format as record if applicable
             default:
+                // Check if this is a record type (especially *Id types) that should be formatted nicely
+                Type valueType = value.GetType();
+                if (ShouldFormatAsRecord(valueType, value))
+                {
+                    return FormatRecordType(value, valueType, indentLevel);
+                }
+
                 string str = value.ToString() ?? "?";
                 // If ToString() just returns the type name, it's not helpful
                 if (str == value.GetType().FullName || str == value.GetType().Name)
@@ -424,18 +472,44 @@ public class DebugComponentRegistry
     /// <summary>
     ///     Formats an array for display - always multiline, shows all items.
     /// </summary>
-    private static string FormatArray(Array arr)
+    private static string FormatArray(Array arr, int indentLevel)
     {
         if (arr.Length == 0)
         {
             return "[]";
         }
 
-        var lines = new List<string> { $"[{arr.Length} items]" };
+        string arrayIndent = new string(' ', indentLevel * 2);
+        // Array items get 2 more levels of indentation (4 spaces) for proper nesting
+        string itemIndent = new string(' ', (indentLevel + 2) * 2);
+        var lines = new List<string> { $"{arrayIndent}[{arr.Length} items]" };
 
         for (int i = 0; i < arr.Length; i++)
         {
-            lines.Add($"  [{i}] {FormatValue(arr.GetValue(i))}");
+            string itemValue = FormatValue(arr.GetValue(i), indentLevel + 2);
+            // If the item is multiline, indent each line
+            string[] itemLines = itemValue.Split('\n');
+            lines.Add($"{itemIndent}[{i}]");
+            // If item has content, add it on next line with extra indent
+            if (itemLines.Length > 0 && !string.IsNullOrWhiteSpace(itemLines[0]))
+            {
+                lines.Add($"{itemIndent}  {itemLines[0]}");
+                for (int j = 1; j < itemLines.Length; j++)
+                {
+                    // Skip trailing empty lines from the formatted value
+                    if (j == itemLines.Length - 1 && string.IsNullOrWhiteSpace(itemLines[j]))
+                    {
+                        continue;
+                    }
+                    lines.Add($"{itemIndent}  {itemLines[j]}");
+                }
+            }
+            
+            // Add blank line after each item (except the last) for better readability
+            if (i < arr.Length - 1)
+            {
+                lines.Add("");
+            }
         }
 
         return string.Join("\n", lines);
@@ -444,19 +518,45 @@ public class DebugComponentRegistry
     /// <summary>
     ///     Formats a collection for display - always multiline, shows all items.
     /// </summary>
-    private static string FormatCollection(ICollection collection)
+    private static string FormatCollection(ICollection collection, int indentLevel)
     {
         if (collection.Count == 0)
         {
             return "[]";
         }
 
-        var lines = new List<string> { $"[{collection.Count} items]" };
+        string collectionIndent = new string(' ', indentLevel * 2);
+        // Collection items get 2 more levels of indentation (4 spaces) for proper nesting
+        string itemIndent = new string(' ', (indentLevel + 2) * 2);
+        var lines = new List<string> { $"{collectionIndent}[{collection.Count} items]" };
 
         int idx = 0;
         foreach (object? item in collection)
         {
-            lines.Add($"  [{idx}] {FormatValue(item)}");
+            string itemValue = FormatValue(item, indentLevel + 2);
+            // If the item is multiline, indent each line
+            string[] itemLines = itemValue.Split('\n');
+            lines.Add($"{itemIndent}[{idx}]");
+            // If item has content, add it on next line with extra indent
+            if (itemLines.Length > 0 && !string.IsNullOrWhiteSpace(itemLines[0]))
+            {
+                lines.Add($"{itemIndent}  {itemLines[0]}");
+                for (int j = 1; j < itemLines.Length; j++)
+                {
+                    // Skip trailing empty lines from the formatted value
+                    if (j == itemLines.Length - 1 && string.IsNullOrWhiteSpace(itemLines[j]))
+                    {
+                        continue;
+                    }
+                    lines.Add($"{itemIndent}  {itemLines[j]}");
+                }
+            }
+            
+            // Add blank line after each item (except the last) for better readability
+            if (idx < collection.Count - 1)
+            {
+                lines.Add("");
+            }
             idx++;
         }
 
@@ -466,7 +566,7 @@ public class DebugComponentRegistry
     /// <summary>
     ///     Formats an IEnumerable for display - always multiline, shows all items.
     /// </summary>
-    private static string FormatEnumerable(IEnumerable enumerable)
+    private static string FormatEnumerable(IEnumerable enumerable, int indentLevel)
     {
         var items = new List<object?>();
         foreach (object? item in enumerable)
@@ -479,12 +579,120 @@ public class DebugComponentRegistry
             return "[]";
         }
 
-        var lines = new List<string> { $"[{items.Count} items]" };
+        string enumerableIndent = new string(' ', indentLevel * 2);
+        // Enumerable items get 2 more levels of indentation (4 spaces) for proper nesting
+        string itemIndent = new string(' ', (indentLevel + 2) * 2);
+        var lines = new List<string> { $"{enumerableIndent}[{items.Count} items]" };
         for (int i = 0; i < items.Count; i++)
         {
-            lines.Add($"  [{i}] {FormatValue(items[i])}");
+            string itemValue = FormatValue(items[i], indentLevel + 2);
+            // If the item is multiline, indent each line
+            string[] itemLines = itemValue.Split('\n');
+            lines.Add($"{itemIndent}[{i}]");
+            // If item has content, add it on next line with extra indent
+            if (itemLines.Length > 0 && !string.IsNullOrWhiteSpace(itemLines[0]))
+            {
+                lines.Add($"{itemIndent}  {itemLines[0]}");
+                for (int j = 1; j < itemLines.Length; j++)
+                {
+                    // Skip trailing empty lines from the formatted value
+                    if (j == itemLines.Length - 1 && string.IsNullOrWhiteSpace(itemLines[j]))
+                    {
+                        continue;
+                    }
+                    lines.Add($"{itemIndent}  {itemLines[j]}");
+                }
+            }
+            
+            // Add blank line after each item (except the last) for better readability
+            if (i < items.Count - 1)
+            {
+                lines.Add("");
+            }
         }
 
+        return string.Join("\n", lines);
+    }
+
+    /// <summary>
+    ///     Determines if a type should be formatted as a record (with properties on separate lines).
+    ///     This is especially useful for *Id types like GameNpcId, SpriteId, etc.
+    /// </summary>
+    private static bool ShouldFormatAsRecord(Type type, object value)
+    {
+        // Check if type name ends with "Id" (like GameNpcId, SpriteId, etc.)
+        if (type.Name.EndsWith("Id", StringComparison.Ordinal))
+        {
+            // Check if it has public properties (records typically do)
+            PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            if (properties.Length > 0)
+            {
+                return true;
+            }
+        }
+
+        // Also check for record types by looking for compiler-generated Equals/GetHashCode
+        // Records have these methods, but this is a heuristic
+        return false;
+    }
+
+    /// <summary>
+    ///     Formats a record type with each property on its own line for better readability.
+    ///     Especially useful for *Id types that have multiple properties.
+    /// </summary>
+    private static string FormatRecordType(object value, Type type, int indentLevel)
+    {
+        var lines = new List<string>();
+        PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+        if (properties.Length == 0)
+        {
+            // Fallback to ToString() if no properties
+            return value.ToString() ?? "<unknown>";
+        }
+
+        // For simple records with just a Value property, show it inline
+        if (properties.Length == 1 && properties[0].Name == "Value")
+        {
+            object? propValue = properties[0].GetValue(value);
+            return FormatValue(propValue, indentLevel);
+        }
+
+        // For records with multiple properties, show each on its own line with clear delimiters
+        string recordIndent = new string(' ', indentLevel * 2);
+        string propIndent = new string(' ', (indentLevel + 1) * 2);
+        
+        // Add opening brace for record
+        lines.Add($"{recordIndent}{{");
+        
+        foreach (PropertyInfo prop in properties)
+        {
+            try
+            {
+                object? propValue = prop.GetValue(value);
+                string formattedValue = FormatValue(propValue, indentLevel + 1);
+                // If the value is multiline, indent each line
+                string[] valueLines = formattedValue.Split('\n');
+                lines.Add($"{propIndent}{prop.Name}: {valueLines[0]}");
+                for (int i = 1; i < valueLines.Length; i++)
+                {
+                    lines.Add($"{propIndent}{valueLines[i]}");
+                }
+            }
+            catch
+            {
+                // Skip properties that can't be read
+            }
+        }
+
+        if (lines.Count == 1)
+        {
+            // Only opening brace was added, no properties - fallback
+            return value.ToString() ?? "<unknown>";
+        }
+
+        // Add closing brace
+        lines.Add($"{recordIndent}}}");
         return string.Join("\n", lines);
     }
 

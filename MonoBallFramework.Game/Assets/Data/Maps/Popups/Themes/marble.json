@@ -1,7 +1,7 @@
 {
-  "id": "marble",
+  "id": "base:theme:popup/marble",
   "name": "Marble",
   "description": "Marble frame - used for major cities",
-  "background": "marble",
-  "outline": "marble_outline"
+  "background": "base:popup:background/marble",
+  "outline": "base:popup:outline/marble_outline"
 }

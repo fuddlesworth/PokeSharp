@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_SOOTOPOLIS_CITY",
+  "id": "base:mapsec:hoenn/sootopolis_city",
   "name": "SOOTOPOLIS CITY",
-  "theme": "marble",
+  "theme": "base:theme:popup/marble",
   "x": 21,
   "y": 7,
   "width": 1,

@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_ABANDONED_SHIP",
+  "id": "base:mapsec:hoenn/abandoned_ship",
   "name": "ABANDONED SHIP",
-  "theme": "wood",
+  "theme": "base:theme:popup/wood",
   "x": 6,
   "y": 14,
   "width": 1,

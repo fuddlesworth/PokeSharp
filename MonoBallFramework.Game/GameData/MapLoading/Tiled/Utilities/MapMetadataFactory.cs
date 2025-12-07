@@ -1,8 +1,10 @@
+using System.Text.Json;
 using Arch.Core;
 using Arch.Core.Extensions;
 using Microsoft.Extensions.Logging;
 using MonoBallFramework.Game.Ecs.Components.Maps;
 using MonoBallFramework.Game.Ecs.Components.Tiles;
+using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.GameData.Entities;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Services;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Tmx;
@@ -23,60 +25,6 @@ public class MapMetadataFactory
     }
 
     /// <summary>
-    ///     Creates MapInfo and TilesetInfo metadata entities.
-    /// </summary>
-    public Entity CreateMapMetadata(
-        World world,
-        TmxDocument tmxDoc,
-        string mapPath,
-        int mapId,
-        string mapName,
-        IReadOnlyList<LoadedTileset> tilesets
-    )
-    {
-        // Create MapInfo entity for map metadata with MapWarps spatial index
-        var mapInfo = new MapInfo(mapId, mapName, tmxDoc.Width, tmxDoc.Height, tmxDoc.TileWidth);
-        Entity mapInfoEntity = world.Create(mapInfo, MapWarps.Create());
-
-        foreach (LoadedTileset loadedTileset in tilesets)
-        {
-            TmxTileset tileset = loadedTileset.Tileset;
-            if (tileset.FirstGid <= 0)
-            {
-                throw new InvalidOperationException(
-                    $"Tileset '{tileset.Name ?? loadedTileset.TilesetId}' in '{mapPath}' has invalid firstgid {tileset.FirstGid}."
-                );
-            }
-
-            if (tileset.TileWidth <= 0 || tileset.TileHeight <= 0)
-            {
-                throw new InvalidOperationException(
-                    $"Tileset '{tileset.Name ?? loadedTileset.TilesetId}' in '{mapPath}' has invalid tile size {tileset.TileWidth}x{tileset.TileHeight}."
-                );
-            }
-
-            if (tileset.Image == null || tileset.Image.Width <= 0 || tileset.Image.Height <= 0)
-            {
-                throw new InvalidOperationException(
-                    $"Tileset '{tileset.Name ?? loadedTileset.TilesetId}' in '{mapPath}' is missing valid image dimensions."
-                );
-            }
-
-            var tilesetInfo = new TilesetInfo(
-                loadedTileset.TilesetId,
-                tileset.FirstGid,
-                tileset.TileWidth,
-                tileset.TileHeight,
-                tileset.Image.Width,
-                tileset.Image.Height
-            );
-            world.Create(tilesetInfo);
-        }
-
-        return mapInfoEntity;
-    }
-
-    /// <summary>
     ///     Creates MapInfo and TilesetInfo metadata entities from MapDefinition.
     ///     Used for definition-based map loading.
     /// </summary>
@@ -89,11 +37,11 @@ public class MapMetadataFactory
     )
     {
         // Create MapInfo entity for map metadata with MapWarps spatial index
-        // CRITICAL: Use MapId.Value (identifier like "oldale_town") NOT DisplayName ("Oldale Town")
-        // MapStreamingSystem compares MapInfo.MapName against MapIdentifier.Value for lookups
+        // Use GameMapId for unified identification and MapName (short name) for lookups
         var mapInfo = new MapInfo(
             mapId,
-            mapDef.MapId.Value,
+            mapDef.MapId,
+            mapDef.MapId.MapName,
             tmxDoc.Width,
             tmxDoc.Height,
             tmxDoc.TileWidth
@@ -126,9 +74,9 @@ public class MapMetadataFactory
             mapInfoEntity.Add(new MapType(mapDef.MapType));
         }
 
-        if (!string.IsNullOrEmpty(mapDef.RegionMapSection))
+        if (mapDef.RegionMapSection != null)
         {
-            mapInfoEntity.Add(new RegionSection(mapDef.RegionMapSection));
+            mapInfoEntity.Add(new RegionSection(mapDef.RegionMapSection.Value));
         }
 
         // Add flag components based on bool properties
@@ -162,34 +110,10 @@ public class MapMetadataFactory
             mapInfoEntity.Add<AllowEscaping>();
         }
 
-        // Add map connection components
-        if (mapDef.NorthMapId != null)
-        {
-            mapInfoEntity.Add(
-                new NorthConnection(mapDef.NorthMapId.Value, mapDef.NorthConnectionOffset)
-            );
-        }
-
-        if (mapDef.SouthMapId != null)
-        {
-            mapInfoEntity.Add(
-                new SouthConnection(mapDef.SouthMapId.Value, mapDef.SouthConnectionOffset)
-            );
-        }
-
-        if (mapDef.EastMapId != null)
-        {
-            mapInfoEntity.Add(
-                new EastConnection(mapDef.EastMapId.Value, mapDef.EastConnectionOffset)
-            );
-        }
-
-        if (mapDef.WestMapId != null)
-        {
-            mapInfoEntity.Add(
-                new WestConnection(mapDef.WestMapId.Value, mapDef.WestConnectionOffset)
-            );
-        }
+        // Add map connection components from Tiled properties (runtime data)
+        // Connection data is stored in Tiled JSON as custom properties (connection_north, etc.)
+        // Fall back to MapDefinition for any statically-defined connections
+        AddConnectionsFromTiledProperties(mapInfoEntity, tmxDoc.Properties, mapDef);
 
         // Create TilesetInfo if map has tilesets
         foreach (LoadedTileset loadedTileset in tilesets)
@@ -230,5 +154,118 @@ public class MapMetadataFactory
         }
 
         return mapInfoEntity;
+    }
+
+    /// <summary>
+    ///     Adds connection components from Tiled properties (connection_north, etc.).
+    ///     Falls back to MapDefinition for statically-defined connections.
+    /// </summary>
+    private static void AddConnectionsFromTiledProperties(
+        Entity mapInfoEntity,
+        Dictionary<string, object> properties,
+        MapDefinition mapDef)
+    {
+        // Try to get connections from Tiled properties first
+        var (northId, northOffset) = ExtractConnectionFromProperty(properties, "connection_north");
+        var (southId, southOffset) = ExtractConnectionFromProperty(properties, "connection_south");
+        var (eastId, eastOffset) = ExtractConnectionFromProperty(properties, "connection_east");
+        var (westId, westOffset) = ExtractConnectionFromProperty(properties, "connection_west");
+
+        // Fall back to MapDefinition if Tiled doesn't have the connection
+        if (northId == null && mapDef.NorthMapId != null)
+        {
+            northId = mapDef.NorthMapId;
+            northOffset = mapDef.NorthConnectionOffset;
+        }
+        if (southId == null && mapDef.SouthMapId != null)
+        {
+            southId = mapDef.SouthMapId;
+            southOffset = mapDef.SouthConnectionOffset;
+        }
+        if (eastId == null && mapDef.EastMapId != null)
+        {
+            eastId = mapDef.EastMapId;
+            eastOffset = mapDef.EastConnectionOffset;
+        }
+        if (westId == null && mapDef.WestMapId != null)
+        {
+            westId = mapDef.WestMapId;
+            westOffset = mapDef.WestConnectionOffset;
+        }
+
+        // Add connection components
+        if (northId != null)
+        {
+            mapInfoEntity.Add(new NorthConnection(northId, northOffset));
+        }
+        if (southId != null)
+        {
+            mapInfoEntity.Add(new SouthConnection(southId, southOffset));
+        }
+        if (eastId != null)
+        {
+            mapInfoEntity.Add(new EastConnection(eastId, eastOffset));
+        }
+        if (westId != null)
+        {
+            mapInfoEntity.Add(new WestConnection(westId, westOffset));
+        }
+    }
+
+    /// <summary>
+    ///     Extracts map ID and offset from a Tiled connection property.
+    ///     Handles both JsonElement and Dictionary formats.
+    /// </summary>
+    private static (GameMapId? MapId, int Offset) ExtractConnectionFromProperty(
+        Dictionary<string, object> properties,
+        string propertyName)
+    {
+        if (!properties.TryGetValue(propertyName, out object? value) || value == null)
+        {
+            return (null, 0);
+        }
+
+        string? mapIdStr = null;
+        int offset = 0;
+
+        // Handle JsonElement case (most common from Tiled JSON parsing)
+        if (value is JsonElement je && je.ValueKind == JsonValueKind.Object)
+        {
+            if (je.TryGetProperty("map", out JsonElement mapProp))
+            {
+                mapIdStr = mapProp.GetString();
+            }
+            if (je.TryGetProperty("offset", out JsonElement offsetProp) &&
+                offsetProp.ValueKind == JsonValueKind.Number)
+            {
+                offset = offsetProp.GetInt32();
+            }
+        }
+        // Handle Dictionary case (if pre-converted)
+        else if (value is Dictionary<string, object> dict)
+        {
+            if (dict.TryGetValue("map", out object? mapValue))
+            {
+                mapIdStr = mapValue?.ToString();
+            }
+            if (dict.TryGetValue("offset", out object? offsetValue))
+            {
+                if (offsetValue is int intOffset)
+                {
+                    offset = intOffset;
+                }
+                else if (offsetValue is JsonElement je2 && je2.ValueKind == JsonValueKind.Number)
+                {
+                    offset = je2.GetInt32();
+                }
+                else if (int.TryParse(offsetValue?.ToString(), out int parsedOffset))
+                {
+                    offset = parsedOffset;
+                }
+            }
+        }
+
+        GameMapId? mapId = GameMapId.TryCreate(mapIdStr);
+        return (mapId, offset);
     }
 }

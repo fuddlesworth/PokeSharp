@@ -11,11 +11,12 @@ namespace MonoBallFramework.Game.GameData.Entities;
 public class TrainerDefinition
 {
     /// <summary>
-    ///     Unique identifier (e.g., "trainer/youngster_joey", "trainer/roxanne_1").
+    ///     Unique identifier in unified format (e.g., "base:trainer:youngster/joey").
     /// </summary>
     [Key]
     [MaxLength(100)]
-    public string TrainerId { get; set; } = string.Empty;
+    [Column(TypeName = "nvarchar(100)")]
+    public GameTrainerId TrainerId { get; set; } = null!;
 
     /// <summary>
     ///     Display name (e.g., "YOUNGSTER JOEY", "ROXANNE").
@@ -35,7 +36,7 @@ public class TrainerDefinition
     /// </summary>
     [MaxLength(100)]
     [Column(TypeName = "nvarchar(100)")]
-    public SpriteId? SpriteId { get; set; }
+    public GameSpriteId? SpriteId { get; set; }
 
     /// <summary>
     ///     Prize money (base amount, multiplied by highest level).

@@ -20,7 +20,7 @@ public readonly struct MapConnection
     /// <summary>
     ///     Gets the identifier of the connected map.
     /// </summary>
-    public MapIdentifier TargetMapId { get; }
+    public GameMapId TargetMapId { get; }
 
     /// <summary>
     ///     Gets the alignment offset in tiles.
@@ -41,7 +41,7 @@ public readonly struct MapConnection
     /// <param name="offsetInTiles">The alignment offset in tiles (default: 0).</param>
     public MapConnection(
         ConnectionDirection direction,
-        MapIdentifier targetMapId,
+        GameMapId targetMapId,
         int offsetInTiles = 0
     )
     {

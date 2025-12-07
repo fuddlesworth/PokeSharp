@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_SEVII_ISLE_24",
+  "id": "base:mapsec:hoenn/sevii_isle_24",
   "name": "SEVII ISLE 24",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

@@ -9,6 +9,7 @@ using MonoBallFramework.Game.Ecs.Components.Player;
 using MonoBallFramework.Game.Ecs.Components.Rendering;
 using MonoBallFramework.Game.Ecs.Components.Tiles;
 using MonoBallFramework.Game.Engine.Core.Templates.Loading;
+using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.Engine.Input.Components;
 
 namespace MonoBallFramework.Game.Templates;
@@ -98,6 +99,19 @@ public static class ComponentDeserializerSetup
             int encounterRate = json.GetProperty("encounterRate").GetInt32();
             return new EncounterZone(zoneId, encounterRate);
         });
+
+        // TileBehavior
+        registry.Register(json =>
+        {
+            string behaviorTypeId = json.GetProperty("behaviorTypeId").GetString() ?? "";
+            bool isActive = true;
+            if (json.TryGetProperty("isActive", out JsonElement isActiveElement))
+            {
+                isActive = isActiveElement.GetBoolean();
+            }
+
+            return new TileBehavior(behaviorTypeId) { IsActive = isActive };
+        });
     }
 
     private static void RegisterMovementComponents(ComponentDeserializerRegistry registry)
@@ -134,12 +148,26 @@ public static class ComponentDeserializerSetup
     private static void RegisterRenderingComponents(ComponentDeserializerRegistry registry)
     {
         // Sprite - Uses Pokemon Emerald extracted sprites
+        // Format: spriteId should be full ID like "base:sprite:npcs/generic_twin"
+        // or path format like "npcs/generic_twin"
         registry.Register(json =>
         {
-            string spriteName = json.GetProperty("spriteId").GetString() ?? "boy_1";
-            string category = json.GetProperty("category").GetString() ?? "generic";
+            string spriteIdStr = json.GetProperty("spriteId").GetString() ?? "npcs/generic_boy_1";
 
-            var sprite = new Sprite(spriteName, category);
+            // Support both full ID format and path-only format
+            GameSpriteId spriteId;
+            if (spriteIdStr.Contains(':'))
+            {
+                // Full ID format: "base:sprite:npcs/generic_twin"
+                spriteId = new GameSpriteId(spriteIdStr);
+            }
+            else
+            {
+                // Path format: "npcs/generic_twin" -> "base:sprite:npcs/generic_twin"
+                spriteId = new GameSpriteId($"base:sprite:{spriteIdStr}");
+            }
+
+            var sprite = new Sprite(spriteId);
 
             // Optional: FlipHorizontal for facing left
             if (json.TryGetProperty("flipHorizontal", out JsonElement flipElement))
@@ -264,7 +292,7 @@ public static class ComponentDeserializerSetup
                 isTrainer = isTrainerElement.GetBoolean();
             }
 
-            return new Npc { NpcId = npcId, IsTrainer = isTrainer };
+            return new Npc { NpcId = GameNpcId.Create(npcId), IsTrainer = isTrainer };
         });
 
         // Behavior

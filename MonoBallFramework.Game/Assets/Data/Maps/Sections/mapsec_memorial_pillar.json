@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_MEMORIAL_PILLAR",
+  "id": "base:mapsec:hoenn/memorial_pillar",
   "name": "MEMORIAL PILLAR",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

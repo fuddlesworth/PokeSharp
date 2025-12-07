@@ -11,6 +11,7 @@ using MonoBallFramework.Game.Engine.Systems.Management;
 using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Core;
 using MonoBallFramework.Game.GameData.Services;
+using MonoBallFramework.Game.GameData.Sprites;
 using MonoBallFramework.Game.GameSystems;
 using MonoBallFramework.Game.GameSystems.Movement;
 using MonoBallFramework.Game.GameSystems.NPCs;
@@ -35,7 +36,7 @@ public class GameInitializer(
     SystemManager systemManager,
     AssetManager assetManager,
     EntityPoolManager poolManager,
-    SpriteLoader spriteLoader,
+    SpriteRegistry spriteRegistry,
     MapLoader mapLoader,
     MapDefinitionService mapDefinitionService,
     IEventBus eventBus
@@ -205,11 +206,11 @@ public class GameInitializer(
             loggerFactory.CreateLogger<TileAnimationSystem>();
         systemManager.RegisterUpdateSystem(new TileAnimationSystem(tileAnimLogger));
 
-        // Register SpriteAnimationSystem (Priority: 875, updates NPC/player sprite frames from manifests)
+        // Register SpriteAnimationSystem (Priority: 875, updates NPC/player sprite frames from definitions)
         ILogger<SpriteAnimationSystem> spriteAnimLogger =
             loggerFactory.CreateLogger<SpriteAnimationSystem>();
         systemManager.RegisterUpdateSystem(
-            new SpriteAnimationSystem(spriteLoader, spriteAnimLogger)
+            new SpriteAnimationSystem(spriteRegistry, spriteAnimLogger)
         );
 
         // NOTE: NPCBehaviorSystem is registered separately in NPCBehaviorInitializer

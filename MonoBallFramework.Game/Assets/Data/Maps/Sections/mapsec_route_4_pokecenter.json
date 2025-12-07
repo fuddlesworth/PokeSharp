@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_ROUTE_4_POKECENTER",
+  "id": "base:mapsec:hoenn/route_4_pokecenter",
   "name": "ROUTE 4",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

@@ -390,3 +390,4 @@ The system already supports modding via:
 The system is now ready to display map popups with the correct theme based on region data from pokeemerald!
 
 
+

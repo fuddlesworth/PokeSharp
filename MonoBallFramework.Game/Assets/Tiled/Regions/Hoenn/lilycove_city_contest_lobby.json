@@ -1,0 +1,2680 @@
+{
+  "compressionlevel": -1,
+  "height": 12,
+  "infinite": false,
+  "layers": [
+    {
+      "data": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        3,
+        4,
+        6,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        9,
+        3,
+        4,
+        6,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        11,
+        11,
+        11,
+        11,
+        11,
+        11,
+        11,
+        11,
+        14,
+        15,
+        16,
+        17,
+        11,
+        11,
+        11,
+        11,
+        11,
+        11,
+        17,
+        0,
+        14,
+        15,
+        16,
+        11,
+        11,
+        11,
+        11,
+        11,
+        11,
+        11,
+        11,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        25,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        31,
+        33,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        33,
+        33,
+        33,
+        33,
+        33,
+        33,
+        33,
+        43,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        33,
+        0,
+        0,
+        0,
+        33,
+        0,
+        0,
+        0,
+        36,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        52,
+        36,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        55,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        36,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        33,
+        0,
+        0,
+        0,
+        33,
+        0,
+        0,
+        52,
+        36,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        55,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "height": 12,
+      "id": 1,
+      "name": "Ground",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 31,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "data": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        5,
+        2,
+        2,
+        2,
+        2,
+        7,
+        8,
+        2,
+        2,
+        2,
+        10,
+        2,
+        5,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        12,
+        12,
+        12,
+        13,
+        12,
+        13,
+        12,
+        13,
+        12,
+        12,
+        12,
+        18,
+        12,
+        12,
+        19,
+        20,
+        12,
+        12,
+        18,
+        21,
+        12,
+        12,
+        12,
+        13,
+        12,
+        13,
+        12,
+        13,
+        12,
+        12,
+        22,
+        23,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        26,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        32,
+        34,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        35,
+        36,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        38,
+        39,
+        40,
+        41,
+        41,
+        42,
+        39,
+        44,
+        45,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        46,
+        36,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        47,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        49,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        46,
+        36,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        50,
+        37,
+        37,
+        37,
+        50,
+        37,
+        37,
+        46,
+        51,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        53,
+        54,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        56,
+        36,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        46,
+        51,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        50,
+        37,
+        37,
+        37,
+        50,
+        37,
+        37,
+        53,
+        54,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        56,
+        36,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        57,
+        58,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        46
+      ],
+      "height": 12,
+      "id": 2,
+      "name": "Objects",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 31,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "data": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        12,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        0,
+        27,
+        28,
+        29,
+        29,
+        30,
+        27,
+        0,
+        0,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        0,
+        12,
+        12,
+        12,
+        0,
+        12,
+        12,
+        12,
+        0,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        0,
+        0,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        0,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        0,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        0,
+        12,
+        12,
+        12,
+        0,
+        12,
+        12,
+        0,
+        0,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        0,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12
+      ],
+      "height": 12,
+      "id": 3,
+      "name": "Overhead",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 31,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "id": 4,
+      "name": "Warps",
+      "type": "objectgroup",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 1,
+          "name": "Warp to lilycove_city",
+          "type": "warp_event",
+          "x": 224,
+          "y": 176,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "warp",
+              "propertytype": "Warp",
+              "type": "class",
+              "value": {
+                "map": "base:map:hoenn/lilycove_city",
+                "x": 23,
+                "y": 24
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "Warp to lilycove_city",
+          "type": "warp_event",
+          "x": 240,
+          "y": 176,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "warp",
+              "propertytype": "Warp",
+              "type": "class",
+              "value": {
+                "map": "base:map:hoenn/lilycove_city",
+                "x": 23,
+                "y": 24
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "name": "Warp to lilycove_city_contest_hall",
+          "type": "warp_event",
+          "x": 144,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "warp",
+              "propertytype": "Warp",
+              "type": "class",
+              "value": {
+                "map": "base:map:hoenn/lilycove_city_contest_hall",
+                "x": 19,
+                "y": 32
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "name": "Warp to lilycove_city_contest_hall",
+          "type": "warp_event",
+          "x": 336,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "warp",
+              "propertytype": "Warp",
+              "type": "class",
+              "value": {
+                "map": "base:map:hoenn/lilycove_city_contest_hall",
+                "x": 30,
+                "y": 32
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Interactions",
+      "type": "objectgroup",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 5,
+          "name": "Sign: BerryBlender_EventScript_BerryBlenderLink",
+          "type": "sign_event",
+          "x": 368,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "sign",
+              "propertytype": "SignEvent",
+              "type": "class",
+              "value": {
+                "interactionScript": "Interactions/BerryBlender_EventScript_BerryBlenderLink.csx"
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "name": "Sign: BerryBlender_EventScript_BerryBlender3",
+          "type": "sign_event",
+          "x": 368,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "sign",
+              "propertytype": "SignEvent",
+              "type": "class",
+              "value": {
+                "interactionScript": "Interactions/BerryBlender_EventScript_BerryBlender3.csx"
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "name": "Sign: LilycoveCity_ContestLobby_EventScript_ContestWinner4",
+          "type": "sign_event",
+          "x": 368,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "sign",
+              "propertytype": "SignEvent",
+              "type": "class",
+              "value": {
+                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_ContestWinner4.csx"
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "name": "Sign: LilycoveCity_ContestLobby_EventScript_ContestWinner5",
+          "type": "sign_event",
+          "x": 400,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "sign",
+              "propertytype": "SignEvent",
+              "type": "class",
+              "value": {
+                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_ContestWinner5.csx"
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "name": "Sign: LilycoveCity_ContestLobby_EventScript_ContestWinner6",
+          "type": "sign_event",
+          "x": 432,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "sign",
+              "propertytype": "SignEvent",
+              "type": "class",
+              "value": {
+                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_ContestWinner6.csx"
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "name": "Sign: LilycoveCity_ContestLobby_EventScript_BerryBlenderSpeedRecords",
+          "type": "sign_event",
+          "x": 480,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "sign",
+              "propertytype": "SignEvent",
+              "type": "class",
+              "value": {
+                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_BerryBlenderSpeedRecords.csx"
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "name": "Sign: LilycoveCity_ContestLobby_EventScript_ContestWinner1",
+          "type": "sign_event",
+          "x": 48,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "sign",
+              "propertytype": "SignEvent",
+              "type": "class",
+              "value": {
+                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_ContestWinner1.csx"
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "name": "Sign: LilycoveCity_ContestLobby_EventScript_ContestWinner2",
+          "type": "sign_event",
+          "x": 80,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "sign",
+              "propertytype": "SignEvent",
+              "type": "class",
+              "value": {
+                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_ContestWinner2.csx"
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "name": "Sign: LilycoveCity_ContestLobby_EventScript_ContestWinner3",
+          "type": "sign_event",
+          "x": 112,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "sign",
+              "propertytype": "SignEvent",
+              "type": "class",
+              "value": {
+                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_ContestWinner3.csx"
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 14,
+          "name": "Sign: BerryBlender_EventScript_BerryBlender1",
+          "type": "sign_event",
+          "x": 432,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "sign",
+              "propertytype": "SignEvent",
+              "type": "class",
+              "value": {
+                "interactionScript": "Interactions/BerryBlender_EventScript_BerryBlender1.csx"
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 15,
+          "name": "Sign: BerryBlender_EventScript_BerryBlender2",
+          "type": "sign_event",
+          "x": 432,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "sign",
+              "propertytype": "SignEvent",
+              "type": "class",
+              "value": {
+                "interactionScript": "Interactions/BerryBlender_EventScript_BerryBlender2.csx"
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 16,
+          "name": "Sign: LilycoveCity_ContestLobby_EventScript_LinkContestResults",
+          "type": "sign_event",
+          "x": 288,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "sign",
+              "propertytype": "SignEvent",
+              "type": "class",
+              "value": {
+                "interactionScript": "Interactions/LilycoveCity_ContestLobby_EventScript_LinkContestResults.csx"
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "NPCs",
+      "type": "objectgroup",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 17,
+          "name": "LOCALID_CONTEST_LOBBY_RECEPTIONIST",
+          "type": "npc",
+          "x": 224,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_teala"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "down"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_contest_lobby_event_script_contest_receptionist"
+            }
+          ]
+        },
+        {
+          "id": 18,
+          "name": "LOCALID_CONTEST_LOBBY_LINK_RECEPTIONIST",
+          "type": "npc",
+          "x": 240,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_teala"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "down"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_contest_lobby_event_script_link_contest_receptionist"
+            }
+          ]
+        },
+        {
+          "id": 19,
+          "name": "LOCALID_CONTEST_LOBBY_BLENDER_2_LEADER",
+          "type": "npc",
+          "x": 416,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_man_4"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "right"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/berry_blender_event_script_blender2_man"
+            }
+          ]
+        },
+        {
+          "id": 20,
+          "name": "LOCALID_CONTEST_LOBBY_ARTIST",
+          "type": "npc",
+          "x": 144,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_artist"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/look_around"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/0x0"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_HIDE_LILYCOVE_CONTEST_HALL_CONTEST_ATTENDANT_1"
+            }
+          ]
+        },
+        {
+          "id": 21,
+          "name": "NPC_21",
+          "type": "npc",
+          "x": 288,
+          "y": 128,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_black_belt"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/wander"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "rangeX",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "rangeY",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_contest_lobby_event_script_black_belt"
+            }
+          ]
+        },
+        {
+          "id": 22,
+          "name": "NPC_22",
+          "type": "npc",
+          "x": 64,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_girl_2"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/wander"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "rangeX",
+              "type": "int",
+              "value": 2
+            },
+            {
+              "name": "rangeY",
+              "type": "int",
+              "value": 2
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_contest_lobby_event_script_girl"
+            }
+          ]
+        },
+        {
+          "id": 23,
+          "name": "NPC_23",
+          "type": "npc",
+          "x": 48,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_artist"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/wander"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "rangeX",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "rangeY",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_contest_lobby_event_script_artist"
+            }
+          ]
+        },
+        {
+          "id": 24,
+          "name": "NPC_24",
+          "type": "npc",
+          "x": 208,
+          "y": 160,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_reporter_m"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "right"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_contest_lobby_event_script_reporter"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_HIDE_LILYCOVE_CONTEST_HALL_REPORTER"
+            }
+          ]
+        },
+        {
+          "id": 25,
+          "name": "LOCALID_CONTEST_LOBBY_BLENDER_3_PARTICIPANT_1",
+          "type": "npc",
+          "x": 368,
+          "y": 128,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_boy_1"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "down"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_contest_lobby_event_script_blender3_boy"
+            }
+          ]
+        },
+        {
+          "id": 26,
+          "name": "LOCALID_CONTEST_LOBBY_BLENDER_2_PARTICIPANT",
+          "type": "npc",
+          "x": 448,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_twin"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "left"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/berry_blender_event_script_blender2_twin"
+            }
+          ]
+        },
+        {
+          "id": 27,
+          "name": "LOCALID_CONTEST_LOBBY_LINK_ARTIST",
+          "type": "npc",
+          "x": 336,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_artist"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "down"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/0x0"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_HIDE_LILYCOVE_CONTEST_HALL_CONTEST_ATTENDANT_2"
+            }
+          ]
+        },
+        {
+          "id": 28,
+          "name": "NPC_28",
+          "type": "npc",
+          "x": 80,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_fisherman"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/wander"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "rangeX",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "rangeY",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_contest_lobby_event_script_fisherman"
+            }
+          ]
+        },
+        {
+          "id": 29,
+          "name": "NPC_29",
+          "type": "npc",
+          "x": 0,
+          "y": 128,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_fat_man"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "right"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_contest_lobby_event_script_fat_man"
+            }
+          ]
+        },
+        {
+          "id": 30,
+          "name": "NPC_30",
+          "type": "npc",
+          "x": 128,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_ninja_boy"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/wander_vertical"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "rangeX",
+              "type": "int",
+              "value": 0
+            },
+            {
+              "name": "rangeY",
+              "type": "int",
+              "value": 1
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_contest_lobby_event_script_ninja_boy"
+            }
+          ]
+        },
+        {
+          "id": 31,
+          "name": "LOCALID_CONTEST_LOBBY_BLENDER_3_LEADER",
+          "type": "npc",
+          "x": 352,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_pokefan_f"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "right"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/berry_blender_event_script_blender3_pokefan_f"
+            }
+          ]
+        },
+        {
+          "id": 32,
+          "name": "LOCALID_BLEND_MASTER",
+          "type": "npc",
+          "x": 416,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_expert_m"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "right"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/berry_blender_event_script_blender1_expert_m"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_HIDE_LILYCOVE_CONTEST_HALL_BLEND_MASTER_REPLACEMENT"
+            }
+          ]
+        },
+        {
+          "id": 33,
+          "name": "LOCALID_CONTEST_LOBBY_BLENDER_3_PARTICIPANT_2",
+          "type": "npc",
+          "x": 384,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_girl_1"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "left"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_contest_lobby_event_script_blender3_girl"
+            }
+          ]
+        },
+        {
+          "id": 34,
+          "name": "NPC_34",
+          "type": "npc",
+          "x": 432,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_man_5"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "down"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_contest_lobby_event_script_blend_master_onlooker2"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_HIDE_LILYCOVE_CONTEST_HALL_BLEND_MASTER"
+            }
+          ]
+        },
+        {
+          "id": 35,
+          "name": "NPC_35",
+          "type": "npc",
+          "x": 448,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_camper"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "down"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_contest_lobby_event_script_blend_master_onlooker3"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_HIDE_LILYCOVE_CONTEST_HALL_BLEND_MASTER"
+            }
+          ]
+        },
+        {
+          "id": 36,
+          "name": "NPC_36",
+          "type": "npc",
+          "x": 448,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_little_girl"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "up"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_contest_lobby_event_script_blend_master_onlooker4"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_HIDE_LILYCOVE_CONTEST_HALL_BLEND_MASTER"
+            }
+          ]
+        },
+        {
+          "id": 37,
+          "name": "NPC_37",
+          "type": "npc",
+          "x": 416,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_scientist_2"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "up"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_contest_lobby_event_script_blend_master_onlooker5"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_HIDE_LILYCOVE_CONTEST_HALL_BLEND_MASTER"
+            }
+          ]
+        },
+        {
+          "id": 38,
+          "name": "NPC_38",
+          "type": "npc",
+          "x": 432,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_woman_1"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "up"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_contest_lobby_event_script_blend_master_onlooker6"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_HIDE_LILYCOVE_CONTEST_HALL_BLEND_MASTER"
+            }
+          ]
+        },
+        {
+          "id": 39,
+          "name": "NPC_39",
+          "type": "npc",
+          "x": 416,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_ninja_boy"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "down"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_contest_lobby_event_script_blend_master_onlooker1"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_HIDE_LILYCOVE_CONTEST_HALL_BLEND_MASTER"
+            }
+          ]
+        },
+        {
+          "id": 40,
+          "name": "NPC_40",
+          "type": "npc",
+          "x": 416,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_old_man"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "right"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_contest_lobby_event_script_blend_master"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_HIDE_LILYCOVE_CONTEST_HALL_BLEND_MASTER"
+            }
+          ]
+        },
+        {
+          "id": 41,
+          "name": "NPC_41",
+          "type": "npc",
+          "x": 144,
+          "y": 160,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_little_girl"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "right"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_contest_lobby_event_script_little_girl"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "nextlayerid": 1,
+  "nextobjectid": 42,
+  "orientation": "orthogonal",
+  "renderorder": "right-down",
+  "tiledversion": "1.11.2",
+  "tileheight": 16,
+  "tilewidth": 16,
+  "type": "map",
+  "version": "1.11",
+  "width": 31,
+  "properties": [
+    {
+      "name": "display_name",
+      "type": "string",
+      "value": "LilycoveCity_ContestLobby"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "Hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_CONTEST_LOBBY"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "base:mapsec:hoenn/lilycove_city"
+    },
+    {
+      "name": "border",
+      "propertytype": "Border",
+      "type": "class",
+      "value": {
+        "top_left": 59,
+        "top_right": 59,
+        "bottom_left": 59,
+        "bottom_right": 59,
+        "top_left_top": 12,
+        "top_right_top": 12,
+        "bottom_left_top": 12,
+        "bottom_right_top": 12
+      }
+    }
+  ],
+  "tilesets": [
+    {
+      "firstgid": 1,
+      "source": "../../../Tilesets/hoenn/lilycove_city_contest_lobby/lilycove_city_contest_lobby.json"
+    }
+  ]
+}

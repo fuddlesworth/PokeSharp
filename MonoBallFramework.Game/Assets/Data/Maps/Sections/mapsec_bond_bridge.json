@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_BOND_BRIDGE",
+  "id": "base:mapsec:hoenn/bond_bridge",
   "name": "BOND BRIDGE",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

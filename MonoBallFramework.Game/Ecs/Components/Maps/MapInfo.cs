@@ -9,12 +9,17 @@ namespace MonoBallFramework.Game.Ecs.Components.Maps;
 public struct MapInfo
 {
     /// <summary>
-    ///     Gets or sets the map identifier (0-based).
+    ///     Gets or sets the runtime map identifier (0-based).
     /// </summary>
     public MapRuntimeId MapId { get; set; }
 
     /// <summary>
-    ///     Gets or sets the map name.
+    ///     Gets or sets the unified game map identifier.
+    /// </summary>
+    public GameMapId GameMapId { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the map name (short name for display/lookup).
     /// </summary>
     public string MapName { get; set; }
 
@@ -46,17 +51,20 @@ public struct MapInfo
     /// <summary>
     ///     Initializes a new instance of the MapInfo struct.
     /// </summary>
-    /// <param name="mapId">The map identifier.</param>
-    /// <param name="mapName">The map name.</param>
+    /// <param name="mapId">The runtime map identifier.</param>
+    /// <param name="gameMapId">The unified game map identifier.</param>
+    /// <param name="mapName">The map name (short name).</param>
     /// <param name="width">Map width in tiles.</param>
     /// <param name="height">Map height in tiles.</param>
     /// <param name="tileSize">Tile size in pixels (default: 16).</param>
-    public MapInfo(MapRuntimeId mapId, string mapName, int width, int height, int tileSize = 16)
+    public MapInfo(MapRuntimeId mapId, GameMapId gameMapId, string mapName, int width, int height, int tileSize = 16)
     {
         MapId = mapId;
+        GameMapId = gameMapId;
         MapName = mapName;
         Width = width;
         Height = height;
         TileSize = tileSize;
     }
+
 }

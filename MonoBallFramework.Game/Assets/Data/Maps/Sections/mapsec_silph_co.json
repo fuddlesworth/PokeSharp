@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_SILPH_CO",
+  "id": "base:mapsec:hoenn/silph_co",
   "name": "SILPH CO.",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

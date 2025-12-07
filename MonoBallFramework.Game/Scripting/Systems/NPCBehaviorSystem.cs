@@ -30,7 +30,7 @@ public class NPCBehaviorSystem : SystemBase, IUpdateSystem
 {
     private readonly IScriptingApiProvider _apis;
     private readonly PerformanceConfiguration _config;
-    private readonly ConcurrentDictionary<int, ScriptBase> _entityScriptCache = new();
+    private readonly ConcurrentDictionary<Entity, ScriptBase> _entityScriptCache = new();
     private readonly IEventBus? _eventBus;
     private readonly ILogger<NPCBehaviorSystem> _logger;
     private readonly ILoggerFactory _loggerFactory;
@@ -163,7 +163,7 @@ public class NPCBehaviorSystem : SystemBase, IUpdateSystem
                     errorCount++;
 
                     // Cleanup failed script
-                    _entityScriptCache.TryRemove(entity.Id, out _);
+                    _entityScriptCache.TryRemove(entity, out _);
                     DeactivateBehavior(
                         world,
                         entity,
@@ -212,7 +212,7 @@ public class NPCBehaviorSystem : SystemBase, IUpdateSystem
     private ScriptBase? GetOrCreateEntityScript(Entity entity, string behaviorTypeId)
     {
         // Check cache first
-        if (_entityScriptCache.TryGetValue(entity.Id, out ScriptBase? cachedScript))
+        if (_entityScriptCache.TryGetValue(entity, out ScriptBase? cachedScript))
         {
             return cachedScript;
         }
@@ -238,7 +238,7 @@ public class NPCBehaviorSystem : SystemBase, IUpdateSystem
         }
 
         // Cache and return
-        _entityScriptCache[entity.Id] = newScript;
+        _entityScriptCache[entity] = newScript;
         return newScript;
     }
 
@@ -286,6 +286,64 @@ public class NPCBehaviorSystem : SystemBase, IUpdateSystem
     {
         string key = $"{behaviorTypeId}.{npcId}";
         _scriptLoggerCache.TryRemove(key, out _);
+    }
+
+    /// <summary>
+    ///     Cleans up behavior script for an entity that is about to be destroyed.
+    ///     Called by MapLifecycleManager before destroying NPC entities.
+    ///     This ensures event subscriptions are properly disposed.
+    /// </summary>
+    /// <param name="entity">The entity being destroyed.</param>
+    public void CleanupEntityBehavior(Entity entity)
+    {
+        // Extract NPC info BEFORE removing from cache (entity still has components)
+        string? behaviorTypeId = null;
+        string? npcId = null;
+
+        if (World != null && World.IsAlive(entity))
+        {
+            if (World.Has<Behavior>(entity))
+            {
+                var behavior = World.Get<Behavior>(entity);
+                behaviorTypeId = behavior.BehaviorTypeId;
+            }
+            if (World.Has<Npc>(entity))
+            {
+                var npc = World.Get<Npc>(entity);
+                npcId = npc.NpcId;
+            }
+        }
+
+        if (!_entityScriptCache.TryRemove(entity, out ScriptBase? script))
+        {
+            return; // No script cached for this entity
+        }
+
+        try
+        {
+            // Call OnUnload to dispose event subscriptions
+            script.OnUnload();
+
+            // Cleanup logger to prevent memory leak
+            if (behaviorTypeId != null && npcId != null)
+            {
+                RemoveLogger(behaviorTypeId, npcId);
+            }
+
+            _logger.LogDebug(
+                "Cleaned up behavior script for entity {EntityId} before destruction",
+                entity.Id
+            );
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(
+                ex,
+                "Error during behavior cleanup for entity {EntityId}: {Message}",
+                entity.Id,
+                ex.Message
+            );
+        }
     }
 
     /// <summary>
@@ -341,7 +399,7 @@ public class NPCBehaviorSystem : SystemBase, IUpdateSystem
         world.Set(entity, behavior);
 
         // Clean up entity script instance
-        _entityScriptCache.TryRemove(entity.Id, out _);
+        _entityScriptCache.TryRemove(entity, out _);
 
         // Clean up logger to prevent memory leak
         RemoveLogger(behavior.BehaviorTypeId, npcId);

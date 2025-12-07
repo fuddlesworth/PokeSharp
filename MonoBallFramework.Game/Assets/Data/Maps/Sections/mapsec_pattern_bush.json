@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_PATTERN_BUSH",
+  "id": "base:mapsec:hoenn/pattern_bush",
   "name": "PATTERN BUSH",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

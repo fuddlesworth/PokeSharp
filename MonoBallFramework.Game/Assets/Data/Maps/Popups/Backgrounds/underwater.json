@@ -1,5 +1,5 @@
 {
-  "Id": "underwater",
+  "Id": "base:popup:background/underwater",
   "DisplayName": "Underwater",
   "Type": "Bitmap",
   "TexturePath": "Graphics/Maps/Popups/Backgrounds/underwater.png",

@@ -1,0 +1,455 @@
+{
+  "compressionlevel": -1,
+  "height": 7,
+  "infinite": false,
+  "layers": [
+    {
+      "data": [
+        1,
+        1,
+        3,
+        1,
+        1,
+        3,
+        1,
+        4,
+        6,
+        6,
+        8,
+        6,
+        6,
+        8,
+        6,
+        0,
+        10,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        10,
+        0,
+        0,
+        14,
+        13,
+        17,
+        14,
+        0,
+        0,
+        0,
+        0,
+        14,
+        20,
+        10,
+        14,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        23,
+        24,
+        0,
+        0,
+        0
+      ],
+      "height": 7,
+      "id": 1,
+      "name": "Ground",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 8,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "data": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        5,
+        7,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        9,
+        11,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        12,
+        10,
+        13,
+        15,
+        16,
+        18,
+        19,
+        13,
+        13,
+        10,
+        13,
+        15,
+        21,
+        22,
+        19,
+        13,
+        13,
+        10,
+        13,
+        13,
+        13,
+        13,
+        13,
+        13,
+        13,
+        10,
+        13,
+        13,
+        2,
+        2,
+        13,
+        13,
+        13
+      ],
+      "height": 7,
+      "id": 2,
+      "name": "Objects",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 8,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "data": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        0,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        0,
+        0,
+        2,
+        2,
+        2
+      ],
+      "height": 7,
+      "id": 3,
+      "name": "Overhead",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 8,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "id": 4,
+      "name": "Warps",
+      "type": "objectgroup",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 1,
+          "name": "Warp to sootopolis_city",
+          "type": "warp_event",
+          "x": 48,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "warp",
+              "propertytype": "Warp",
+              "type": "class",
+              "value": {
+                "map": "base:map:hoenn/sootopolis_city",
+                "x": 9,
+                "y": 6
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "Warp to sootopolis_city",
+          "type": "warp_event",
+          "x": 64,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "warp",
+              "propertytype": "Warp",
+              "type": "class",
+              "value": {
+                "map": "base:map:hoenn/sootopolis_city",
+                "x": 9,
+                "y": 6
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "NPCs",
+      "type": "objectgroup",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 3,
+          "name": "NPC_3",
+          "type": "npc",
+          "x": 32,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_black_belt"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "right"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/sootopolis_city_house1_event_script_brick_break_black_belt"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "name": "NPC_4",
+          "type": "npc",
+          "x": 32,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_kecleon"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "down"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/sootopolis_city_house1_event_script_kecleon"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "nextlayerid": 1,
+  "nextobjectid": 5,
+  "orientation": "orthogonal",
+  "renderorder": "right-down",
+  "tiledversion": "1.11.2",
+  "tileheight": 16,
+  "tilewidth": 16,
+  "type": "map",
+  "version": "1.11",
+  "width": 8,
+  "properties": [
+    {
+      "name": "display_name",
+      "type": "string",
+      "value": "SootopolisCity_House1"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "Hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_SOOTOPOLIS"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "base:mapsec:hoenn/sootopolis_city"
+    },
+    {
+      "name": "border",
+      "propertytype": "Border",
+      "type": "class",
+      "value": {
+        "top_left": 25,
+        "top_right": 25,
+        "bottom_left": 25,
+        "bottom_right": 25,
+        "top_left_top": 2,
+        "top_right_top": 2,
+        "bottom_left_top": 2,
+        "bottom_right_top": 2
+      }
+    }
+  ],
+  "tilesets": [
+    {
+      "firstgid": 1,
+      "source": "../../../Tilesets/hoenn/sootopolis_city_house1/sootopolis_city_house1.json"
+    }
+  ]
+}

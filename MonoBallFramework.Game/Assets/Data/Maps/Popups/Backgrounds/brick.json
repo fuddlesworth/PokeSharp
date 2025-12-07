@@ -1,5 +1,5 @@
 {
-  "Id": "brick",
+  "Id": "base:popup:background/brick",
   "DisplayName": "Brick",
   "Type": "Bitmap",
   "TexturePath": "Graphics/Maps/Popups/Backgrounds/brick.png",
@@ -7,4 +7,3 @@
   "Height": 24,
   "Description": "Background bitmap for map popup"
 }
-

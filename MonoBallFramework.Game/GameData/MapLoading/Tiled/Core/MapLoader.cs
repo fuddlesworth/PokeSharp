@@ -13,6 +13,7 @@ using MonoBallFramework.Game.Engine.Systems.Management;
 using MonoBallFramework.Game.GameData.Entities;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Processors;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Services;
+using MonoBallFramework.Game.GameData.MapLoading.Tiled.Spawners;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Tmx;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Utilities;
 using MonoBallFramework.Game.GameData.PropertyMapping;
@@ -80,8 +81,32 @@ public class MapLoader(
     // Initialize MapMetadataFactory (logger handled by MapLoader, so pass null)
     private readonly MapMetadataFactory _mapMetadataFactory = new();
 
-    // Initialize MapObjectSpawner (logger handled by MapLoader, so pass null)
-    private readonly MapObjectSpawner _mapObjectSpawner = new(entityFactory, npcDefinitionService);
+    // Initialize EntitySpawnerRegistry with all available spawners
+    private readonly EntitySpawnerRegistry _entitySpawnerRegistry = CreateSpawnerRegistry(entityFactory, npcDefinitionService);
+
+    // Initialize MapObjectSpawner using registry (lazy init to use already-created registry)
+    private MapObjectSpawner? _mapObjectSpawnerBacking;
+    private MapObjectSpawner _mapObjectSpawner => _mapObjectSpawnerBacking ??= new(_entitySpawnerRegistry);
+
+    private static EntitySpawnerRegistry CreateSpawnerRegistry(
+        IEntityFactoryService? entityFactory,
+        NpcDefinitionService? npcDefinitionService)
+    {
+        var registry = new EntitySpawnerRegistry();
+
+        // Register spawners in priority order (higher priority = checked first)
+        // Priority 100: Exact type match spawners
+        registry.Register(new WarpEntitySpawner());
+        registry.Register(new NpcSpawner());
+
+        // Priority 50: Template-based fallback spawner
+        if (entityFactory != null)
+        {
+            registry.Register(new TemplateEntitySpawner(entityFactory, npcDefinitionService));
+        }
+
+        return registry;
+    }
 
     // Initialize MapPathResolver
     private readonly MapPathResolver _mapPathResolver = new(
@@ -95,7 +120,7 @@ public class MapLoader(
     private readonly PropertyMapperRegistry? _propertyMapperRegistry = propertyMapperRegistry;
 
     // PHASE 2: Track sprite IDs for lazy loading
-    private readonly HashSet<SpriteId> _requiredSpriteIds = new();
+    private readonly HashSet<GameSpriteId> _requiredSpriteIds = new();
 
     private readonly SystemManager _systemManager =
         systemManager ?? throw new ArgumentNullException(nameof(systemManager));
@@ -122,7 +147,7 @@ public class MapLoader(
     /// <returns>The MapInfo entity containing map metadata.</returns>
     /// <exception cref="InvalidOperationException">If MapDefinitionService is not configured.</exception>
     /// <exception cref="FileNotFoundException">If map definition is not found.</exception>
-    public Entity LoadMap(World world, MapIdentifier mapId)
+    public Entity LoadMap(World world, GameMapId mapId)
     {
         if (_mapDefinitionService == null)
         {
@@ -194,7 +219,7 @@ public class MapLoader(
     /// <returns>The MapInfo entity containing map metadata.</returns>
     /// <exception cref="InvalidOperationException">If MapDefinitionService is not configured.</exception>
     /// <exception cref="FileNotFoundException">If map definition is not found.</exception>
-    public Entity LoadMapAtOffset(World world, MapIdentifier mapId, Vector2 worldOffset)
+    public Entity LoadMapAtOffset(World world, GameMapId mapId, Vector2 worldOffset)
     {
         if (_mapDefinitionService == null)
         {
@@ -265,7 +290,7 @@ public class MapLoader(
     /// <returns>Tuple of (Width in tiles, Height in tiles, TileSize in pixels).</returns>
     /// <exception cref="InvalidOperationException">If MapDefinitionService is not configured.</exception>
     /// <exception cref="FileNotFoundException">If map definition is not found.</exception>
-    public (int Width, int Height, int TileSize) GetMapDimensions(MapIdentifier mapId)
+    public (int Width, int Height, int TileSize) GetMapDimensions(GameMapId mapId)
     {
         if (_mapDefinitionService == null)
         {
@@ -301,23 +326,6 @@ public class MapLoader(
     }
 
     /// <summary>
-    ///     Loads a complete map by creating tile entities for each non-empty tile.
-    ///     This is the legacy file-based approach for backward compatibility.
-    ///     Consider using LoadMap(world, mapId) for definition-based loading.
-    /// </summary>
-    /// <param name="world">The ECS world to create entities in.</param>
-    /// <param name="mapPath">Path to the Tiled JSON map file.</param>
-    /// <returns>The MapInfo entity containing map metadata.</returns>
-    public Entity LoadMapEntities(World world, string mapPath)
-    {
-        // Use scoped logging to group all map loading operations
-        using (_logger?.BeginScope($"Loading:{Path.GetFileNameWithoutExtension(mapPath)}"))
-        {
-            return LoadMapEntitiesInternal(world, mapPath);
-        }
-    }
-
-    /// <summary>
     ///     Loads map entities from a TmxDocument and MapDefinition (definition-based flow).
     ///     Used by LoadMap(world, mapId) and LoadMapAtOffset(world, mapId, worldOffset).
     /// </summary>
@@ -334,15 +342,20 @@ public class MapLoader(
     )
     {
         MapRuntimeId mapId = MapIdService.GetMapIdFromIdentifier(mapDef.MapId);
-        // Use MapId.Value (identifier like "oldale_town") NOT DisplayName ("Oldale Town")
-        // MapStreamingSystem compares MapInfo.MapName against MapIdentifier.Value
-        string mapName = mapDef.MapId.Value;
+        // Use MapName (identifier like "oldale_town") NOT DisplayName ("Oldale Town")
+        // MapStreamingSystem compares MapInfo.MapName against GameMapId.MapName
+        string mapName = mapDef.MapId.MapName;
+
+        // Resolve full path to Tiled file for tileset loading
+        string assetRoot = _mapPathResolver.ResolveAssetRoot();
+        string tiledFullPath = Path.Combine(assetRoot, mapDef.TiledDataPath);
+        string tiledDirectory = Path.GetDirectoryName(tiledFullPath) ?? assetRoot;
 
         var context = new MapLoadContext
         {
             MapId = mapId,
             MapName = mapName,
-            ImageLayerPath = $"Data/Maps/{mapDef.MapId.Value}",
+            ImageLayerPath = Path.GetDirectoryName(mapDef.TiledDataPath) ?? "Tiled/Regions",
             LogIdentifier = mapDef.MapId.Value,
             WorldOffset = worldOffset ?? Vector2.Zero,
         };
@@ -352,46 +365,15 @@ public class MapLoader(
             tmxDoc,
             context,
             () =>
-                _tilesetLoader.LoadTilesets(
-                    tmxDoc,
-                    Path.Combine(_mapPathResolver.ResolveMapDirectoryBase(), $"{mapDef.MapId}.json")
-                ),
+                _tilesetLoader.LoadTilesets(tmxDoc, tiledFullPath),
             (w, doc, id, name, tilesets) =>
                 _mapMetadataFactory.CreateMapMetadataFromDefinition(w, doc, mapDef, id, tilesets)
         );
     }
 
     /// <summary>
-    ///     Internal implementation for loading map entities (file-based flow).
-    ///     Orchestrates tileset loading, layer processing, and entity creation.
-    /// </summary>
-    private Entity LoadMapEntitiesInternal(World world, string mapPath)
-    {
-        TmxDocument tmxDoc = TiledMapLoader.Load(mapPath);
-        MapRuntimeId mapId = MapIdService.GetMapId(mapPath);
-        string mapName = Path.GetFileNameWithoutExtension(mapPath);
-
-        var context = new MapLoadContext
-        {
-            MapId = mapId,
-            MapName = mapName,
-            ImageLayerPath = mapPath,
-            LogIdentifier = mapName,
-        };
-
-        return LoadMapEntitiesCore(
-            world,
-            tmxDoc,
-            context,
-            () => _tilesetLoader.LoadTilesets(tmxDoc, mapPath),
-            (w, doc, id, name, tilesets) =>
-                _mapMetadataFactory.CreateMapMetadata(w, doc, mapPath, id, name, tilesets)
-        );
-    }
-
-    /// <summary>
-    ///     Core map loading logic shared between definition-based and file-based loading.
-    ///     Consolidates duplicate code from LoadMapFromDocument and LoadMapEntitiesInternal.
+    ///     Core map loading logic for definition-based loading.
+    ///     Handles tileset loading, layer processing, and entity creation.
     /// </summary>
     private Entity LoadMapEntitiesCore(
         World world,
@@ -490,9 +472,9 @@ public class MapLoader(
 
         if (_logger != null && _logger.IsEnabled(LogLevel.Debug))
         {
-            foreach (SpriteId spriteId in _requiredSpriteIds.OrderBy(x => x))
+            foreach (GameSpriteId spriteId in _requiredSpriteIds.OrderBy(x => x.Value))
             {
-                _logger.LogDebug("  - {SpriteId}", spriteId);
+                _logger.LogDebug("  - {SpriteId}", spriteId.Value);
             }
         }
 
@@ -646,7 +628,7 @@ public class MapLoader(
     ///     Used for lazy sprite loading to reduce memory usage.
     /// </summary>
     /// <returns>Set of sprite IDs in format "category/spriteName"</returns>
-    public IReadOnlySet<SpriteId> GetRequiredSpriteIds()
+    public IReadOnlySet<GameSpriteId> GetRequiredSpriteIds()
     {
         return _requiredSpriteIds;
     }

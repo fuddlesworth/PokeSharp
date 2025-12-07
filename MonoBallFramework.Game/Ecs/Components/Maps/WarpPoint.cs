@@ -21,9 +21,9 @@ namespace MonoBallFramework.Game.Ecs.Components.Maps;
 public struct WarpPoint
 {
     /// <summary>
-    ///     Gets or sets the target map identifier (type-safe).
+    ///     Gets or sets the target map identifier.
     /// </summary>
-    public MapIdentifier TargetMap { get; set; }
+    public GameMapId TargetMap { get; set; }
 
     /// <summary>
     ///     Gets or sets the target X tile coordinate on the destination map.
@@ -47,23 +47,13 @@ public struct WarpPoint
     /// <param name="targetX">Target X tile coordinate.</param>
     /// <param name="targetY">Target Y tile coordinate.</param>
     /// <param name="targetElevation">Target elevation (default: 3).</param>
-    public WarpPoint(MapIdentifier targetMap, int targetX, int targetY, byte targetElevation = 3)
+    public WarpPoint(GameMapId targetMap, int targetX, int targetY, byte targetElevation = 3)
     {
         TargetMap = targetMap;
         TargetX = targetX;
         TargetY = targetY;
         TargetElevation = targetElevation;
     }
-
-    /// <summary>
-    ///     Creates a new WarpPoint from a string map name (convenience constructor).
-    /// </summary>
-    /// <param name="targetMapName">Target map name string.</param>
-    /// <param name="targetX">Target X tile coordinate.</param>
-    /// <param name="targetY">Target Y tile coordinate.</param>
-    /// <param name="targetElevation">Target elevation (default: 3).</param>
-    public WarpPoint(string targetMapName, int targetX, int targetY, byte targetElevation = 3)
-        : this(new MapIdentifier(targetMapName), targetX, targetY, targetElevation) { }
 
     /// <inheritdoc />
     public override readonly string ToString()

@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 from PIL import Image
 from .logging_config import get_logger
+from .id_transformer import IdTransformer
 
 logger = get_logger('popup_extractor')
 
@@ -177,9 +178,10 @@ class PopupExtractor:
             logger.error(f"Failed to copy background {style_name}: {e}")
             return False
         
-        # Create JSON definition for background bitmap
+        # Create JSON definition for background bitmap with unified ID
+        unified_id = IdTransformer.create_id("popup", "background", style_name)
         json_def = {
-            "Id": style_name,
+            "Id": unified_id,
             "DisplayName": style_name.replace("_", " ").title(),
             "Type": "Bitmap",
             "TexturePath": f"Graphics/Maps/Popups/Backgrounds/{style_name}.png",
@@ -266,8 +268,10 @@ class PopupExtractor:
                 "Height": 8
             })
         
+        # Create JSON definition with unified ID
+        unified_id = IdTransformer.create_id("popup", "outline", f"{style_name}_outline")
         json_def = {
-            "Id": f"{style_name}_outline",
+            "Id": unified_id,
             "DisplayName": f"{style_name.replace('_', ' ').title()} Outline",
             "Type": "TileSheet",
             "TexturePath": f"Graphics/Maps/Popups/Outlines/{style_name}_outline.png",

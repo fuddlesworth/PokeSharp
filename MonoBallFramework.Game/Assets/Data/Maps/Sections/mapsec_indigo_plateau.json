@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_INDIGO_PLATEAU",
+  "id": "base:mapsec:hoenn/indigo_plateau",
   "name": "INDIGO PLATEAU",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

@@ -32,13 +32,15 @@ public class MapIdService
     }
 
     /// <summary>
-    ///     Gets or creates a map runtime ID from a map identifier (definition-based).
+    ///     Gets or creates a map runtime ID from a GameMapId.
+    ///     Uses the MapName portion as the key for runtime lookup compatibility.
     /// </summary>
-    /// <param name="mapIdentifier">Map identifier (e.g., "littleroot_town").</param>
+    /// <param name="gameMapId">GameMapId (e.g., "base:map:hoenn/littleroot_town").</param>
     /// <returns>Unique map runtime ID for the map.</returns>
-    public MapRuntimeId GetMapIdFromIdentifier(MapIdentifier mapIdentifier)
+    public MapRuntimeId GetMapIdFromIdentifier(GameMapId gameMapId)
     {
-        string identifierString = mapIdentifier.Value;
+        // Use the MapName portion (e.g., "littleroot_town") as the lookup key
+        string identifierString = gameMapId.MapName;
 
         // Get or create unique map ID
         if (_mapNameToId.TryGetValue(identifierString, out MapRuntimeId existingId))

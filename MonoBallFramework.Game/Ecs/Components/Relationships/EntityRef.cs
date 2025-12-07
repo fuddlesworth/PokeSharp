@@ -3,13 +3,14 @@ using Arch.Core;
 namespace MonoBallFramework.Game.Ecs.Components.Relationships;
 
 /// <summary>
-///     Safe wrapper for entity references with validation support.
+///     Safe wrapper for entity references with validation and null-reference semantics.
 /// </summary>
 /// <remarks>
 ///     <para>
-///         EntityRef provides a safer way to store entity references by including
-///         generation tracking for validation. This helps detect stale references
-///         when entities are destroyed and their IDs are reused.
+///         EntityRef provides a convenient wrapper around Entity that adds null-reference
+///         semantics and validation helpers. Arch's Entity struct already includes generation
+///         tracking internally, so IsValid() leverages Arch's built-in IsAlive() check to
+///         detect stale references when entities are destroyed and recycled.
 ///     </para>
 ///     <para>
 ///         <b>Usage Example:</b>
@@ -24,29 +25,31 @@ namespace MonoBallFramework.Game.Ecs.Components.Relationships;
 /// } else {
 ///     // Entity was destroyed or recycled
 /// }
+///
+/// // Optional null-reference pattern
+/// var nullRef = EntityRef.Null;
+/// if (!nullRef.IsNull) { /* ... */ }
 /// </code>
 ///     </para>
 ///     <para>
-///         <b>Note:</b> This is optional and primarily useful for long-lived references
-///         or scenarios where you need extra validation beyond basic IsAlive checks.
+///         <b>Note:</b> This wrapper is primarily useful for optional entity references
+///         and scenarios where null semantics are clearer than Entity.Null checks.
 ///         For most cases, direct Entity references with IsAlive checks are sufficient.
 ///     </para>
 /// </remarks>
 public struct EntityRef
 {
     /// <summary>
-    ///     Creates a new entity reference with generation tracking.
+    ///     Creates a new entity reference.
     /// </summary>
     /// <param name="entity">The entity to reference.</param>
     /// <remarks>
-    ///     The generation is captured at creation time. If the entity is destroyed
-    ///     and its ID is reused, the generation will differ, allowing detection
-    ///     of stale references.
+    ///     Generation tracking is handled internally by Arch's Entity struct.
+    ///     Use <see cref="IsValid"/> to check if the entity is still alive.
     /// </remarks>
     public EntityRef(Entity entity)
     {
         Value = entity;
-        Generation = entity.Id; // Simplified generation tracking
     }
 
     /// <summary>
@@ -59,17 +62,12 @@ public struct EntityRef
     public Entity Value { get; private set; }
 
     /// <summary>
-    ///     Gets the generation captured when this reference was created.
-    /// </summary>
-    public int Generation { get; private set; }
-
-    /// <summary>
     ///     Validates that the referenced entity is still alive.
     /// </summary>
     /// <param name="world">The world containing the entity.</param>
     /// <returns>True if the entity is alive and the reference is valid.</returns>
     /// <remarks>
-    ///     This performs both an IsAlive check and generation validation.
+    ///     This delegates to Arch's IsAlive() which performs generation validation internally.
     ///     A false result indicates the entity was destroyed or the ID was recycled.
     /// </remarks>
     public readonly bool IsValid(World world)
@@ -98,7 +96,7 @@ public struct EntityRef
     /// <summary>
     ///     Creates an invalid/null entity reference.
     /// </summary>
-    public static EntityRef Null => new() { Value = Entity.Null, Generation = -1 };
+    public static EntityRef Null => new() { Value = Entity.Null };
 
     /// <summary>
     ///     Checks if this is a null reference.

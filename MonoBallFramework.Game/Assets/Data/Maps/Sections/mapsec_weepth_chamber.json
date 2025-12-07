@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_WEEPTH_CHAMBER",
+  "id": "base:mapsec:hoenn/weepth_chamber",
   "name": "WEEPTH CHAMBER",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

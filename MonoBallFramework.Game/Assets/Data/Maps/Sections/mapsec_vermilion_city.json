@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_VERMILION_CITY",
+  "id": "base:mapsec:hoenn/vermilion_city",
   "name": "VERMILION CITY",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

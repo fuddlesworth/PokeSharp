@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_CANYON_ENTRANCE",
+  "id": "base:mapsec:hoenn/canyon_entrance",
   "name": "CANYON ENTRANCE",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_DEWFORD_TOWN",
+  "id": "base:mapsec:hoenn/dewford_town",
   "name": "DEWFORD TOWN",
-  "theme": "wood",
+  "theme": "base:theme:popup/wood",
   "x": 2,
   "y": 14,
   "width": 1,

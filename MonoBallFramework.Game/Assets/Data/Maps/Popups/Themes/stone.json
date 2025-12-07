@@ -1,7 +1,7 @@
 {
-  "id": "stone",
+  "id": "base:theme:popup/stone",
   "name": "Stone",
   "description": "Stone frame - used for caves and dungeons",
-  "background": "stone",
-  "outline": "stone_outline"
+  "background": "base:popup:background/stone",
+  "outline": "base:popup:outline/stone_outline"
 }

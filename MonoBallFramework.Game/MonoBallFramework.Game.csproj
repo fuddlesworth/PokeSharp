@@ -66,4 +66,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\Tiled\" />
+  </ItemGroup>
 </Project>

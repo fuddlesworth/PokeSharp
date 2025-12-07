@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_TANOBY_CHAMBERS",
+  "id": "base:mapsec:hoenn/tanoby_chambers",
   "name": "TANOBY CHAMBERS",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

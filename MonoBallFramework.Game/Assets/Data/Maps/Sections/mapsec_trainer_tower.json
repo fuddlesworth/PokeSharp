@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_TRAINER_TOWER",
+  "id": "base:mapsec:hoenn/trainer_tower",
   "name": "TRAINER TOWER",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

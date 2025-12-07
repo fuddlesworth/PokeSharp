@@ -571,10 +571,18 @@ public class LayerProcessor : ILayerProcessor
                 return null;
             }
 
-            MapIdentifier? mapId = MapIdentifier.TryCreate(mapObj.ToString());
-            if (mapId == null)
+            string mapString = mapObj.ToString() ?? string.Empty;
+            if (string.IsNullOrEmpty(mapString))
             {
                 _logger?.LogWarning("Invalid connection map identifier: {Map}", mapObj);
+                return null;
+            }
+
+            // TryCreate handles both full format (base:map:hoenn/route_101) and legacy short names
+            GameMapId? mapId = GameMapId.TryCreate(mapString);
+            if (mapId == null)
+            {
+                _logger?.LogWarning("Invalid connection map ID format: {Map}", mapString);
                 return null;
             }
 
@@ -599,7 +607,7 @@ public class LayerProcessor : ILayerProcessor
                 }
             }
 
-            return new MapConnection(direction.Value, mapId.Value, offset);
+            return new MapConnection(direction.Value, mapId, offset);
         }
         catch (Exception ex)
         {

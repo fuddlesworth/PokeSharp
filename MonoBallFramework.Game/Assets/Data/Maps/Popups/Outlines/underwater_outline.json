@@ -1,5 +1,5 @@
 {
-  "Id": "underwater_outline",
+  "Id": "base:popup:outline/underwater_outline",
   "DisplayName": "Underwater Outline",
   "Type": "TileSheet",
   "TexturePath": "Graphics/Maps/Popups/Outlines/underwater_outline.png",

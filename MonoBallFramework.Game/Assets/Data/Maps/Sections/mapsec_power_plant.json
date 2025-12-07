@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_POWER_PLANT",
+  "id": "base:mapsec:hoenn/power_plant",
   "name": "POWER PLANT",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_THREE_ISLAND",
+  "id": "base:mapsec:hoenn/three_island",
   "name": "THREE ISLAND",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using MonoBallFramework.Game.Engine.Core.Types;
 
 namespace MonoBallFramework.Game.GameData.Entities;
 
@@ -11,11 +12,12 @@ namespace MonoBallFramework.Game.GameData.Entities;
 public class PopupTheme
 {
     /// <summary>
-    ///     Unique theme identifier (e.g., "wood", "marble", "stone").
+    ///     Unique theme identifier in unified format (e.g., "base:theme:popup/wood").
     /// </summary>
     [Key]
-    [MaxLength(50)]
-    public string Id { get; set; } = string.Empty;
+    [MaxLength(100)]
+    [Column(TypeName = "nvarchar(100)")]
+    public GameThemeId Id { get; set; } = null!;
 
     /// <summary>
     ///     Display name (e.g., "Wood", "Marble", "Stone").
@@ -67,5 +69,6 @@ public class PopupTheme
     /// </summary>
     public ICollection<MapSection> MapSections { get; set; } = new List<MapSection>();
 }
+
 
 

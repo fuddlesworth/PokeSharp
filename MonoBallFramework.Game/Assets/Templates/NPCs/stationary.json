@@ -1,9 +1,0 @@
-{
-  "templateId": "npc/stationary",
-  "name": "Stationary NPC",
-  "tag": "npc",
-  "baseTemplateId": "npc/base",
-  "version": "1.0.0",
-  "components": []
-}
-

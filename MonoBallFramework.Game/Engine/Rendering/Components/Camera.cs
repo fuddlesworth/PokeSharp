@@ -242,6 +242,13 @@ public struct Camera
     /// </summary>
     public readonly Matrix GetTransformMatrix()
     {
+        // Defensive check: If viewport is not initialized, return identity matrix
+        // This should never happen with proper initialization, but prevents crashes
+        if (Viewport.Width == 0 || Viewport.Height == 0)
+        {
+            return Matrix.Identity;
+        }
+
         // Round camera position to nearest pixel after zoom to prevent texture bleeding/seams
         // This ensures tiles always render at integer screen coordinates
         float roundedX = MathF.Round(Position.X * Zoom) / Zoom;
@@ -314,6 +321,15 @@ public struct Camera
         int viewportWidth = GbaNativeWidth * scale;
         int viewportHeight = GbaNativeHeight * scale;
 
+        // Skip if viewport dimensions haven't changed (optimization to avoid unnecessary work)
+        // This is safe to call multiple times - if already correct, it's a no-op
+        if (Viewport.Width == viewportWidth && Viewport.Height == viewportHeight &&
+            VirtualViewport.Width == viewportWidth && VirtualViewport.Height == viewportHeight &&
+            ReferenceWidth == windowWidth && ReferenceHeight == windowHeight)
+        {
+            return; // Viewport already matches, no need to recalculate
+        }
+
         // Set Viewport to the integer GBA multiple
         Viewport = new Rectangle(0, 0, viewportWidth, viewportHeight);
 
@@ -325,6 +341,10 @@ public struct Camera
             viewportWidth,
             viewportHeight
         );
+
+        // Mark camera as dirty so transform matrix is recalculated on next render
+        // This prevents the "slide in" effect on first frame
+        IsDirty = true;
 
         // On first resize (initialization), set zoom to match GBA native resolution
         // This ensures exactly 15x10 tiles (240/16 x 160/16) are visible

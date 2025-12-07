@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_ROUTE_119",
+  "id": "base:mapsec:hoenn/route_119",
   "name": "ROUTE 119",
-  "theme": "wood",
+  "theme": "base:theme:popup/wood",
   "x": 11,
   "y": 0,
   "width": 1,

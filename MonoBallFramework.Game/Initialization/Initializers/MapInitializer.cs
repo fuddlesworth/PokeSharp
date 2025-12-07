@@ -41,9 +41,9 @@ public class MapInitializer(
     ///     Loads a map from EF Core definition (NEW: Definition-based loading).
     ///     Creates individual entities for each tile with appropriate components.
     /// </summary>
-    /// <param name="mapId">The map identifier (e.g., "test-map", "littleroot_town").</param>
+    /// <param name="mapId">The unified map identifier.</param>
     /// <returns>The MapInfo entity containing map metadata.</returns>
-    public async Task<Entity?> LoadMap(MapIdentifier mapId)
+    public async Task<Entity?> LoadMap(GameMapId mapId)
     {
         try
         {
@@ -55,7 +55,7 @@ public class MapInitializer(
 
             // Get MapInfo to extract map ID and name for lifecycle tracking
             MapInfo mapInfo = mapInfoEntity.Get<MapInfo>();
-            string mapName = mapInfo.MapName ?? mapId.Value;
+            string mapName = mapInfo.MapName ?? mapId.MapName;
 
             // Complete post-loading steps (shared logic)
             await CompleteMapLoadingAsync(mapInfoEntity, mapInfo, mapName);
@@ -107,81 +107,6 @@ public class MapInitializer(
                 ex,
                 "Unexpected error loading map {MapId}. Game will continue without map",
                 mapId.Value
-            );
-            return null;
-        }
-    }
-
-    /// <summary>
-    ///     Loads a map from file path (LEGACY: Backward compatibility).
-    ///     Use LoadMap(mapId) for definition-based loading instead.
-    /// </summary>
-    /// <param name="mapPath">Path to the map file.</param>
-    /// <returns>The MapInfo entity containing map metadata.</returns>
-    public async Task<Entity?> LoadMapFromFile(string mapPath)
-    {
-        try
-        {
-            logger.LogWorkflowStatus("Loading map from file (LEGACY)", ("path", mapPath));
-
-            // Load map as tile entities (file-based approach for backward compatibility)
-            Entity mapInfoEntity = mapLoader.LoadMapEntities(world, mapPath);
-            logger.LogWorkflowStatus("Map entities created", ("entity", mapInfoEntity.Id));
-
-            // Get MapInfo to extract map ID and name for lifecycle tracking
-            MapInfo mapInfo = mapInfoEntity.Get<MapInfo>();
-            string mapName = mapInfo.MapName ?? mapPath;
-
-            // Complete post-loading steps (shared logic)
-            await CompleteMapLoadingAsync(mapInfoEntity, mapInfo, mapName);
-
-            logger.LogWorkflowStatus("Map load complete (LEGACY)", ("path", mapPath));
-            return mapInfoEntity;
-        }
-        catch (FileNotFoundException ex)
-        {
-            logger.LogWarning(
-                ex,
-                "Map file not found at {MapPath}. Game will continue without map",
-                mapPath
-            );
-            return null;
-        }
-        catch (MapValidationException ex)
-        {
-            logger.LogError(
-                ex,
-                "Map validation failed for {MapPath}: {Message}. Game will continue without map",
-                mapPath,
-                ex.Message
-            );
-            return null;
-        }
-        catch (InvalidOperationException ex)
-        {
-            logger.LogError(
-                ex,
-                "Invalid map data for {MapPath}: {Message}. Game will continue without map",
-                mapPath,
-                ex.Message
-            );
-            return null;
-        }
-        catch (IOException ex)
-        {
-            logger.LogError(
-                ex,
-                "I/O error loading map {MapPath}. Game will continue without map",
-                mapPath
-            );
-            return null;
-        }
-        catch (Exception ex)
-        {
-            logger.LogExceptionWithContext(
-                ex,
-                "Unexpected error loading map {MapPath}. Game will continue without map",
-                mapPath
             );
             return null;
         }
@@ -248,7 +173,7 @@ public class MapInitializer(
             return new HashSet<string>();
         }
 
-        IReadOnlySet<SpriteId> requiredSpriteIds = mapLoader.GetRequiredSpriteIds();
+        IReadOnlySet<GameSpriteId> requiredSpriteIds = mapLoader.GetRequiredSpriteIds();
         try
         {
             HashSet<string> spriteTextureKeys = await _spriteTextureLoader.LoadSpritesForMapAsync(

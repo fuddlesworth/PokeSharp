@@ -12,6 +12,7 @@ import re
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 from .logging_config import get_logger
+from .id_transformer import IdTransformer
 
 logger = get_logger('section_extractor')
 
@@ -109,24 +110,30 @@ class MapSectionExtractor:
     ) -> Dict[str, Dict[str, Any]]:
         """
         Merge section definitions with theme mappings.
-        
+
         Args:
             sections: Map section definitions from JSON
             theme_mapping: MAPSEC -> theme mappings from C file
-        
+
         Returns:
-            Complete section data with themes
+            Complete section data with themes (using unified ID format)
         """
         merged = {}
-        
+
         for section_id, section_data in sections.items():
-            # Build clean entity data
+            # Transform to unified ID format: base:mapsec:hoenn/name
+            unified_id = IdTransformer.mapsec_id(section_id)
+            # Transform theme to unified format: base:theme:popup/wood
+            theme_name = theme_mapping.get(section_id, "wood")
+            unified_theme = IdTransformer.theme_id(theme_name)
+
+            # Build clean entity data with unified IDs
             merged_section = {
-                "id": section_data.get("id"),
+                "id": unified_id,
                 "name": section_data.get("name"),
-                "theme": theme_mapping.get(section_id, "wood")  # Just the theme ID
+                "theme": unified_theme
             }
-            
+
             # Add region map coordinates if they exist
             if "x" in section_data:
                 merged_section["x"] = section_data["x"]
@@ -136,19 +143,21 @@ class MapSectionExtractor:
                 merged_section["width"] = section_data["width"]
             if "height" in section_data:
                 merged_section["height"] = section_data["height"]
-            
+
             merged[section_id] = merged_section
-        
+
         # Also add sections that only exist in theme mapping (edge case)
         for section_id, theme in theme_mapping.items():
             if section_id not in merged:
                 logger.warning(f"Section {section_id} has theme but no definition in JSON")
+                unified_id = IdTransformer.mapsec_id(section_id)
+                unified_theme = IdTransformer.theme_id(theme)
                 merged[section_id] = {
-                    "id": section_id,
+                    "id": unified_id,
                     "name": section_id.replace("MAPSEC_", "").replace("_", " "),
-                    "theme": theme
+                    "theme": unified_theme
                 }
-        
+
         return merged
     
     def save_sections(self, sections: Dict[str, Dict[str, Any]], output_dir: str) -> int:
@@ -184,73 +193,54 @@ class MapSectionExtractor:
     def save_themes(self, sections: Dict[str, Dict[str, Any]], output_dir: str) -> int:
         """
         Save popup theme definitions as individual JSON files.
-        
+
         Args:
             sections: Complete section data (unused, kept for signature compatibility)
             output_dir: Output directory (should be Assets folder)
-        
+
         Returns:
             Number of theme files created
         """
         output_path = Path(output_dir) / "Data" / "Maps" / "Popups" / "Themes"
         output_path.mkdir(parents=True, exist_ok=True)
-        
-        # Theme definitions - simple entity data
-        themes = {
-            "wood": {
-                "id": "wood",
-                "name": "Wood",
-                "description": "Default wooden frame - used for towns, land routes, woods",
-                "background": "wood",
-                "outline": "wood_outline"
-            },
-            "marble": {
-                "id": "marble",
-                "name": "Marble",
-                "description": "Marble frame - used for major cities",
-                "background": "marble",
-                "outline": "marble_outline"
-            },
-            "stone": {
-                "id": "stone",
-                "name": "Stone",
-                "description": "Stone frame - used for caves and dungeons",
-                "background": "stone",
-                "outline": "stone_outline"
-            },
-            "brick": {
-                "id": "brick",
-                "name": "Brick",
-                "description": "Brick frame - used for some cities",
-                "background": "brick",
-                "outline": "brick_outline"
-            },
-            "underwater": {
-                "id": "underwater",
-                "name": "Underwater",
-                "description": "Underwater frame - used for water routes",
-                "background": "underwater",
-                "outline": "underwater_outline"
-            },
-            "stone2": {
-                "id": "stone2",
-                "name": "Stone 2",
-                "description": "Stone variant 2 - used for underwater areas",
-                "background": "stone2",
-                "outline": "stone2_outline"
-            }
+
+        # Theme definitions with unified IDs
+        theme_names = ["wood", "marble", "stone", "brick", "underwater", "stone2"]
+        theme_display = {
+            "wood": ("Wood", "Default wooden frame - used for towns, land routes, woods"),
+            "marble": ("Marble", "Marble frame - used for major cities"),
+            "stone": ("Stone", "Stone frame - used for caves and dungeons"),
+            "brick": ("Brick", "Brick frame - used for some cities"),
+            "underwater": ("Underwater", "Underwater frame - used for water routes"),
+            "stone2": ("Stone 2", "Stone variant 2 - used for underwater areas")
         }
-        
+
         count = 0
-        for theme_id, theme_data in themes.items():
-            theme_file = output_path / f"{theme_id}.json"
+        for theme_name in theme_names:
+            # Use unified ID format: base:theme:popup/wood
+            unified_id = IdTransformer.theme_id(theme_name)
+            display_name, description = theme_display[theme_name]
+
+            # Use unified IDs for background and outline references
+            background_id = IdTransformer.popup_background_id(theme_name)
+            outline_id = IdTransformer.popup_outline_id(f"{theme_name}_outline")
+
+            theme_data = {
+                "id": unified_id,
+                "name": display_name,
+                "description": description,
+                "background": background_id,
+                "outline": outline_id
+            }
+
+            theme_file = output_path / f"{theme_name}.json"
             try:
                 with open(theme_file, 'w', encoding='utf-8') as f:
                     json.dump(theme_data, f, indent=2, ensure_ascii=False)
                 count += 1
             except Exception as e:
-                logger.error(f"Failed to save theme {theme_id}: {e}")
-        
+                logger.error(f"Failed to save theme {theme_name}: {e}")
+
         logger.info(f"Saved {count} theme files to {output_path}")
         return count
 

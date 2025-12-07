@@ -90,3 +90,4 @@ After running the script, your outline sprite sheets will:
 - Display crisp, pixel-perfect borders without stretching corners
 
 
+

@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using MonoBallFramework.Game.Engine.Core.Types;
 
 namespace MonoBallFramework.Game.Ecs.Components.Rendering;
 
@@ -9,31 +10,10 @@ namespace MonoBallFramework.Game.Ecs.Components.Rendering;
 public struct Sprite
 {
     /// <summary>
-    ///     Gets the cached texture key for AssetManager lookup.
-    ///     Format: "sprites/{category}/{spriteName}"
-    ///     Computed once during construction to avoid string allocations during rendering.
-    ///     Using init-only property ensures value is always set correctly even with struct copying.
+    ///     Gets the sprite identifier.
+    ///     Format: "base:sprite:{category}/{name}"
     /// </summary>
-    public string TextureKey { get; init; }
-
-    /// <summary>
-    ///     Gets the cached manifest key for SpriteAnimationSystem lookup.
-    ///     Format: "{category}/{spriteName}"
-    ///     Computed once during construction to eliminate per-frame string allocations (192-384 KB/sec).
-    ///     CRITICAL OPTIMIZATION: This single property reduces GC pressure by 50-60% (46.8 → 18-23 Gen0 collections/sec).
-    ///     Using init-only property ensures value is preserved during struct copying in ECS systems.
-    /// </summary>
-    public string ManifestKey { get; init; }
-
-    /// <summary>
-    ///     Gets or sets the sprite name (e.g., "walking", "nurse", "boy_1").
-    /// </summary>
-    public string SpriteName { get; set; }
-
-    /// <summary>
-    ///     Gets or sets the sprite category (e.g., "may", "brendan", "generic", "gym_leaders").
-    /// </summary>
-    public string Category { get; set; }
+    public GameSpriteId SpriteId { get; init; }
 
     /// <summary>
     ///     Gets or sets the current frame index in the sprite sheet.
@@ -71,22 +51,12 @@ public struct Sprite
     public float Scale { get; set; }
 
     /// <summary>
-    ///     Initializes a new instance of the Sprite struct with default values.
-    ///     PERFORMANCE: Caches both TextureKey and ManifestKey at construction time
-    ///     to eliminate per-frame string allocations during rendering and animation.
-    ///     FIX: Using init-only properties instead of readonly fields to ensure
-    ///     cached values are preserved during struct copying in ECS systems.
+    ///     Initializes a new instance of the Sprite struct.
     /// </summary>
-    /// <param name="spriteName">The sprite name (e.g., "walking", "nurse").</param>
-    /// <param name="category">The sprite category (e.g., "may", "generic").</param>
-    public Sprite(string spriteName, string category)
+    /// <param name="spriteId">The sprite identifier (e.g., "base:sprite:player/may").</param>
+    public Sprite(GameSpriteId spriteId)
     {
-        SpriteName = spriteName;
-        Category = category;
-        // CRITICAL: Cache keys once to eliminate per-frame allocations
-        // Using init-only properties ensures these values survive struct copying
-        TextureKey = $"sprites/{category}/{spriteName}";
-        ManifestKey = $"{category}/{spriteName}";
+        SpriteId = spriteId;
         CurrentFrame = 0;
         FlipHorizontal = false;
         SourceRect = Rectangle.Empty;
@@ -95,4 +65,5 @@ public struct Sprite
         Tint = Color.White;
         Scale = 1f;
     }
+
 }

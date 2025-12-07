@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_PALLET_TOWN",
+  "id": "base:mapsec:hoenn/pallet_town",
   "name": "PALLET TOWN",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

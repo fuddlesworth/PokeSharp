@@ -1489,31 +1489,12 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
                     && fields.Count > 0
                 )
                 {
-                    foreach ((string fieldName, string fieldValue) in fields)
+                    // Sort fields to ensure consistent ordering (especially for *Id properties)
+                    var sortedFields = fields.OrderBy(kvp => kvp.Key).ToList();
+                    
+                    foreach ((string fieldName, string fieldValue) in sortedFields)
                     {
-                        // Handle multiline values (arrays, dictionaries, etc.)
-                        if (fieldValue.Contains('\n'))
-                        {
-                            string[] lines = fieldValue.Split('\n');
-                            _entityListBuffer.AppendLine(
-                                $"            {fieldName}: {lines[0]}",
-                                ThemeManager.Current.TextDim
-                            );
-                            for (int i = 1; i < lines.Length; i++)
-                            {
-                                _entityListBuffer.AppendLine(
-                                    $"            {lines[i]}",
-                                    ThemeManager.Current.TextDim
-                                );
-                            }
-                        }
-                        else
-                        {
-                            _entityListBuffer.AppendLine(
-                                $"            {fieldName}: {fieldValue}",
-                                ThemeManager.Current.TextDim
-                            );
-                        }
+                        RenderPropertyValue(fieldName, fieldValue, "            ");
                     }
                 }
 
@@ -1884,41 +1865,13 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
                     && fields.Count > 0
                 )
                 {
-                    foreach (
-                        (string fieldName, string fieldValue) in fields.Take(MaxPropertiesToShow)
-                    )
+                    // Sort fields for consistent ordering
+                    var sortedFields = fields.OrderBy(kvp => kvp.Key).Take(MaxPropertiesToShow).ToList();
+                    
+                    foreach ((string fieldName, string fieldValue) in sortedFields)
                     {
-                        // Handle multiline values
-                        if (fieldValue.Contains('\n'))
-                        {
-                            string[] lines = fieldValue.Split('\n');
-                            _entityListBuffer.AppendLine(
-                                $"{indent}{childIndent}        {fieldName}: {lines[0]}",
-                                ThemeManager.Current.TextDim
-                            );
-                            for (int i = 1; i < Math.Min(lines.Length, 3); i++)
-                            {
-                                _entityListBuffer.AppendLine(
-                                    $"{indent}{childIndent}        {lines[i]}",
-                                    ThemeManager.Current.TextDim
-                                );
-                            }
-
-                            if (lines.Length > 3)
-                            {
-                                _entityListBuffer.AppendLine(
-                                    $"{indent}{childIndent}        ... ({lines.Length - 3} more lines)",
-                                    ThemeManager.Current.TextDim
-                                );
-                            }
-                        }
-                        else
-                        {
-                            _entityListBuffer.AppendLine(
-                                $"{indent}{childIndent}        {fieldName}: {fieldValue}",
-                                ThemeManager.Current.TextDim
-                            );
-                        }
+                        // Use same rendering logic as normal view for consistency
+                        RenderPropertyValue(fieldName, fieldValue, $"{indent}{childIndent}        ");
                     }
                 }
 
@@ -2149,6 +2102,60 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
         }
 
         _entityListBuffer.AppendLine("", ThemeManager.Current.TextDim);
+    }
+
+    /// <summary>
+    ///     Renders a property value with proper multiline formatting.
+    ///     Handles indentation correctly for values formatted by FormatValue.
+    /// </summary>
+    private void RenderPropertyValue(string fieldName, string fieldValue, string baseIndent)
+    {
+        // Handle multiline values (arrays, dictionaries, records, etc.)
+        if (fieldValue.Contains('\n'))
+        {
+            // Preserve empty lines - they're intentional for readability
+            string[] lines = fieldValue.Split('\n');
+            
+            if (lines.Length > 0)
+            {
+                // First line: property name and value header on same line
+                // Strip any leading whitespace from first line (FormatValue may add some)
+                string firstLine = lines[0].TrimStart();
+                _entityListBuffer.AppendLine(
+                    $"{baseIndent}{fieldName}: {firstLine}",
+                    ThemeManager.Current.TextDim
+                );
+                
+                // Subsequent lines: preserve structure but ensure consistent indentation
+                // FormatValue adds its own indentation, so we need to align it properly
+                for (int i = 1; i < lines.Length; i++)
+                {
+                    if (string.IsNullOrWhiteSpace(lines[i]))
+                    {
+                        // Preserve intentional blank lines
+                        _entityListBuffer.AppendLine("", ThemeManager.Current.TextDim);
+                    }
+                    else
+                    {
+                        // FormatValue lines have their own indentation (typically 2-4 spaces per level)
+                        // We want them indented relative to the property name, so add base indent
+                        // and preserve the relative indentation from FormatValue
+                        _entityListBuffer.AppendLine(
+                            $"{baseIndent}{lines[i]}",
+                            ThemeManager.Current.TextDim
+                        );
+                    }
+                }
+            }
+        }
+        else
+        {
+            // Single-line value
+            _entityListBuffer.AppendLine(
+                $"{baseIndent}{fieldName}: {fieldValue}",
+                ThemeManager.Current.TextDim
+            );
+        }
     }
 
     /// <summary>

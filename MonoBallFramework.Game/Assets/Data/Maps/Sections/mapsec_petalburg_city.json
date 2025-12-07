@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_PETALBURG_CITY",
+  "id": "base:mapsec:hoenn/petalburg_city",
   "name": "PETALBURG CITY",
-  "theme": "brick",
+  "theme": "base:theme:popup/brick",
   "x": 1,
   "y": 9,
   "width": 1,

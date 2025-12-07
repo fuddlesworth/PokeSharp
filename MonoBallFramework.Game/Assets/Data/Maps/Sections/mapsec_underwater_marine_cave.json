@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_UNDERWATER_MARINE_CAVE",
+  "id": "base:mapsec:hoenn/underwater_marine_cave",
   "name": "UNDERWATER",
-  "theme": "stone2"
+  "theme": "base:theme:popup/stone2"
 }

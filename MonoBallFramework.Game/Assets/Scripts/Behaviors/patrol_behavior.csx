@@ -30,6 +30,28 @@ public class PatrolBehavior : ScriptBase
             // Initialize state on first tick (when entity is available)
             if (!Context.HasState<PatrolState>())
             {
+                // PatrolBehavior REQUIRES MovementRoute component with waypoints
+                // If missing, the NPC map object doesn't have 'waypoints' property defined
+                if (!Context.World.Has<MovementRoute>(Context.Entity.Value))
+                {
+                    Context.Logger.LogWarning(
+                        "PatrolBehavior requires MovementRoute component. Add 'waypoints' property to map object. Deactivating behavior.");
+
+                    // Add empty state to prevent repeated initialization attempts
+                    Context.World.Add(
+                        Context.Entity.Value,
+                        new PatrolState
+                        {
+                            CurrentWaypoint = -1, // Mark as invalid
+                            WaitTimer = 0f,
+                            WaitDuration = 0f,
+                            Speed = 0f,
+                            IsWaiting = true, // Stay idle
+                        }
+                    );
+                    return;
+                }
+
                 ref var initPath = ref Context.World.Get<MovementRoute>(Context.Entity.Value);
 
                 // Log all waypoints for debugging
@@ -60,6 +82,13 @@ public class PatrolBehavior : ScriptBase
 
             // Get per-entity state (each NPC has its own)
             ref var state = ref Context.GetState<PatrolState>();
+
+            // Skip if behavior is in invalid state (missing MovementRoute)
+            if (state.CurrentWaypoint < 0)
+            {
+                return;
+            }
+
             ref var path = ref Context.World.Get<MovementRoute>(Context.Entity.Value);
             ref var position = ref Context.Position;
 
@@ -144,6 +173,9 @@ public class PatrolBehavior : ScriptBase
         }
 
         Context.Logger.LogDebug("Patrol behavior deactivated");
+
+        // CRITICAL: Dispose event subscriptions to prevent AccessViolationException on entity destruction
+        base.OnUnload();
     }
 }
 

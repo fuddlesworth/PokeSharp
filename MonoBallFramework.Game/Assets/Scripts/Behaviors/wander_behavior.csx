@@ -245,6 +245,9 @@ public class WanderBehavior : ScriptBase
         }
 
         Context.Logger.LogDebug("Wander behavior deactivated");
+
+        // CRITICAL: Dispose event subscriptions to prevent AccessViolationException on entity destruction
+        base.OnUnload();
     }
 }
 

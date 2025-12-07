@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_MONEAN_CHAMBER",
+  "id": "base:mapsec:hoenn/monean_chamber",
   "name": "MONEAN CHAMBER",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

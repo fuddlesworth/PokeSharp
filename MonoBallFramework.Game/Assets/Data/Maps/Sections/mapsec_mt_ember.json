@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_MT_EMBER",
+  "id": "base:mapsec:hoenn/mt_ember",
   "name": "MT. EMBER",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

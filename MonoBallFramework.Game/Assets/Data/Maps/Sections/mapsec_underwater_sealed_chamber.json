@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_UNDERWATER_SEALED_CHAMBER",
+  "id": "base:mapsec:hoenn/underwater_sealed_chamber",
   "name": "UNDERWATER",
-  "theme": "stone2",
+  "theme": "base:theme:popup/stone2",
   "x": 11,
   "y": 10,
   "width": 1,

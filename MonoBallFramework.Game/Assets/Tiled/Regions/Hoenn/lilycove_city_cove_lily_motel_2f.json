@@ -1,0 +1,805 @@
+{
+  "compressionlevel": -1,
+  "height": 9,
+  "infinite": false,
+  "layers": [
+    {
+      "data": [
+        1,
+        3,
+        0,
+        7,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        13,
+        15,
+        0,
+        0,
+        0,
+        15,
+        0,
+        0,
+        15,
+        15,
+        15,
+        15,
+        15,
+        26,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        26,
+        26,
+        26,
+        26,
+        0,
+        0,
+        32,
+        34,
+        32,
+        0,
+        0,
+        32,
+        32,
+        34,
+        32,
+        0,
+        0,
+        32,
+        38,
+        40,
+        32,
+        0,
+        0,
+        32,
+        38,
+        40,
+        32,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        32,
+        32,
+        34,
+        32,
+        0,
+        0,
+        0,
+        32,
+        34,
+        0,
+        0,
+        0,
+        32,
+        38,
+        40,
+        32,
+        0,
+        0,
+        32,
+        38,
+        40,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "height": 9,
+      "id": 1,
+      "name": "Ground",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 12,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "data": [
+        2,
+        4,
+        5,
+        4,
+        9,
+        4,
+        4,
+        9,
+        10,
+        11,
+        12,
+        14,
+        16,
+        17,
+        19,
+        20,
+        21,
+        15,
+        15,
+        21,
+        22,
+        23,
+        24,
+        25,
+        27,
+        26,
+        26,
+        26,
+        26,
+        26,
+        26,
+        26,
+        28,
+        29,
+        30,
+        31,
+        26,
+        32,
+        33,
+        35,
+        36,
+        32,
+        32,
+        36,
+        33,
+        37,
+        36,
+        32,
+        26,
+        36,
+        39,
+        41,
+        36,
+        32,
+        32,
+        36,
+        39,
+        41,
+        36,
+        32,
+        26,
+        32,
+        32,
+        32,
+        32,
+        32,
+        32,
+        32,
+        32,
+        32,
+        32,
+        32,
+        26,
+        36,
+        33,
+        37,
+        36,
+        32,
+        32,
+        32,
+        33,
+        35,
+        32,
+        32,
+        26,
+        36,
+        39,
+        41,
+        36,
+        32,
+        32,
+        36,
+        39,
+        41,
+        32,
+        32,
+        26,
+        32,
+        32,
+        32,
+        32,
+        32,
+        32,
+        32,
+        32,
+        32,
+        32,
+        32
+      ],
+      "height": 9,
+      "id": 2,
+      "name": "Objects",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 12,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "data": [
+        0,
+        0,
+        6,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        18,
+        18,
+        18,
+        0,
+        18,
+        18,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        0,
+        0,
+        0,
+        0,
+        18,
+        18,
+        0,
+        0,
+        0,
+        18,
+        18,
+        0,
+        0,
+        0,
+        0,
+        18,
+        18,
+        0,
+        0,
+        0,
+        0,
+        18,
+        18,
+        0,
+        0,
+        0,
+        0,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        0,
+        0,
+        0,
+        0,
+        18,
+        18,
+        18,
+        0,
+        0,
+        18,
+        18,
+        18,
+        0,
+        0,
+        0,
+        0,
+        18,
+        18,
+        0,
+        0,
+        0,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18
+      ],
+      "height": 9,
+      "id": 3,
+      "name": "Overhead",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 12,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "id": 4,
+      "name": "Warps",
+      "type": "objectgroup",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 1,
+          "name": "Warp to lilycove_city_cove_lily_motel_1f",
+          "type": "warp_event",
+          "x": 32,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "warp",
+              "propertytype": "Warp",
+              "type": "class",
+              "value": {
+                "map": "base:map:hoenn/lilycove_city_cove_lily_motel_1f",
+                "x": 2,
+                "y": 1
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "NPCs",
+      "type": "objectgroup",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 2,
+          "name": "NPC_2",
+          "type": "npc",
+          "x": 64,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_man_3"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "left"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_cove_lily_motel_2f_event_script_game_designer"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_HIDE_LILYCOVE_MOTEL_GAME_DESIGNERS"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "name": "NPC_3",
+          "type": "npc",
+          "x": 16,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_scientist_1"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "right"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_cove_lily_motel_2f_event_script_graphic_artist"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_HIDE_LILYCOVE_MOTEL_GAME_DESIGNERS"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "name": "NPC_4",
+          "type": "npc",
+          "x": 112,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_fat_man"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "right"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_cove_lily_motel_2f_event_script_fat_man"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_HIDE_LILYCOVE_MOTEL_GAME_DESIGNERS"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "name": "NPC_5",
+          "type": "npc",
+          "x": 160,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_man_4"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "left"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_cove_lily_motel_2f_event_script_programmer"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_HIDE_LILYCOVE_MOTEL_GAME_DESIGNERS"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "name": "NPC_6",
+          "type": "npc",
+          "x": 112,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_gameboy_kid"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "down"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_cove_lily_motel_2f_event_script_game_boy_kid"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_HIDE_LILYCOVE_MOTEL_GAME_DESIGNERS"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "name": "NPC_7",
+          "type": "npc",
+          "x": 64,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_woman_2"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "left"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_cove_lily_motel_2f_event_script_woman"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_HIDE_LILYCOVE_MOTEL_GAME_DESIGNERS"
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "name": "NPC_8",
+          "type": "npc",
+          "x": 16,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_scott"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "right"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/lilycove_city_cove_lily_motel_2f_event_script_scott"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_HIDE_LILYCOVE_MOTEL_SCOTT"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "nextlayerid": 1,
+  "nextobjectid": 9,
+  "orientation": "orthogonal",
+  "renderorder": "right-down",
+  "tiledversion": "1.11.2",
+  "tileheight": 16,
+  "tilewidth": 16,
+  "type": "map",
+  "version": "1.11",
+  "width": 12,
+  "properties": [
+    {
+      "name": "display_name",
+      "type": "string",
+      "value": "LilycoveCity_CoveLilyMotel_2F"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "Hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_LILYCOVE"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "base:mapsec:hoenn/lilycove_city"
+    },
+    {
+      "name": "border",
+      "propertytype": "Border",
+      "type": "class",
+      "value": {
+        "top_left": 42,
+        "top_right": 42,
+        "bottom_left": 42,
+        "bottom_right": 42,
+        "top_left_top": 18,
+        "top_right_top": 18,
+        "bottom_left_top": 18,
+        "bottom_right_top": 18
+      }
+    }
+  ],
+  "tilesets": [
+    {
+      "firstgid": 1,
+      "source": "../../../Tilesets/hoenn/lilycove_city_cove_lily_motel_2f/lilycove_city_cove_lily_motel_2f.json"
+    }
+  ]
+}

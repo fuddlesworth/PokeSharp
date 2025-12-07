@@ -1,0 +1,1200 @@
+{
+  "compressionlevel": -1,
+  "height": 11,
+  "infinite": false,
+  "layers": [
+    {
+      "data": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        2,
+        2,
+        7,
+        7,
+        9,
+        11,
+        11,
+        11,
+        11,
+        11,
+        11,
+        11,
+        13,
+        7,
+        7,
+        2,
+        2,
+        7,
+        7,
+        15,
+        17,
+        17,
+        17,
+        17,
+        17,
+        0,
+        17,
+        19,
+        7,
+        7,
+        2,
+        2,
+        7,
+        7,
+        15,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        19,
+        7,
+        7,
+        2,
+        2,
+        7,
+        7,
+        15,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        19,
+        7,
+        7,
+        2,
+        2,
+        7,
+        7,
+        15,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        19,
+        7,
+        7,
+        2,
+        2,
+        7,
+        7,
+        24,
+        26,
+        26,
+        0,
+        0,
+        0,
+        26,
+        26,
+        31,
+        7,
+        7,
+        2,
+        2,
+        34,
+        34,
+        34,
+        34,
+        34,
+        0,
+        0,
+        0,
+        34,
+        34,
+        34,
+        34,
+        34,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        41,
+        0,
+        0,
+        0,
+        41,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "height": 11,
+      "id": 1,
+      "name": "Ground",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 15,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "data": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        5,
+        6,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        8,
+        6,
+        7,
+        7,
+        10,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        14,
+        7,
+        7,
+        8,
+        6,
+        7,
+        7,
+        16,
+        2,
+        2,
+        2,
+        2,
+        2,
+        17,
+        2,
+        20,
+        7,
+        7,
+        8,
+        6,
+        7,
+        7,
+        16,
+        2,
+        2,
+        2,
+        21,
+        2,
+        22,
+        2,
+        20,
+        7,
+        7,
+        8,
+        6,
+        7,
+        7,
+        16,
+        2,
+        2,
+        2,
+        23,
+        2,
+        2,
+        2,
+        20,
+        7,
+        7,
+        8,
+        6,
+        7,
+        7,
+        16,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        20,
+        7,
+        7,
+        8,
+        6,
+        7,
+        7,
+        25,
+        27,
+        27,
+        28,
+        29,
+        30,
+        27,
+        27,
+        32,
+        7,
+        7,
+        8,
+        33,
+        34,
+        34,
+        34,
+        34,
+        34,
+        35,
+        36,
+        37,
+        34,
+        34,
+        34,
+        34,
+        34,
+        38,
+        39,
+        40,
+        40,
+        40,
+        40,
+        42,
+        35,
+        36,
+        37,
+        42,
+        40,
+        40,
+        40,
+        40,
+        43
+      ],
+      "height": 11,
+      "id": 2,
+      "name": "Objects",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 15,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "data": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        18,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "height": 11,
+      "id": 3,
+      "name": "Overhead",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 15,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "id": 4,
+      "name": "NPCs",
+      "type": "objectgroup",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 1,
+          "name": "LOCALID_CONTEST_MC",
+          "type": "npc",
+          "x": 96,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_woman_3"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "down"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/0x0"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "LOCALID_CONTEST_JUDGE",
+          "type": "npc",
+          "x": 112,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_contest_judge"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "down"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/0x0"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "name": "LOCALID_CONTESTANT_1",
+          "type": "npc",
+          "x": 64,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_var_0"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "up"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/0x0"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "name": "LOCALID_CONTESTANT_2",
+          "type": "npc",
+          "x": 96,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_var_1"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "up"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/0x0"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "name": "LOCALID_CONTESTANT_3",
+          "type": "npc",
+          "x": 128,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_var_2"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "up"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/0x0"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "name": "LOCALID_CONTEST_AUDIENCE_1",
+          "type": "npc",
+          "x": 32,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_var_4"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "right"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/0x0"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "name": "LOCALID_CONTEST_AUDIENCE_3",
+          "type": "npc",
+          "x": 64,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_var_6"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "down"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/0x0"
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "name": "LOCALID_CONTEST_AUDIENCE_4",
+          "type": "npc",
+          "x": 80,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_var_7"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "down"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/0x0"
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "name": "LOCALID_CONTEST_AUDIENCE_5",
+          "type": "npc",
+          "x": 144,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_var_8"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "down"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/0x0"
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "name": "LOCALID_CONTEST_AUDIENCE_6",
+          "type": "npc",
+          "x": 160,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_var_9"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "down"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/0x0"
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "name": "LOCALID_CONTEST_AUDIENCE_7",
+          "type": "npc",
+          "x": 192,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_var_a"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "left"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/0x0"
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "name": "LOCALID_CONTEST_AUDIENCE_2",
+          "type": "npc",
+          "x": 32,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_var_5"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "right"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/0x0"
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "name": "LOCALID_CONTEST_POKEBALL",
+          "type": "npc",
+          "x": 112,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_item_ball"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/look_around"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/0x0"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_HIDE_CONTEST_POKE_BALL"
+            }
+          ]
+        },
+        {
+          "id": 14,
+          "name": "LOCALID_CONTESTANT_4",
+          "type": "npc",
+          "x": 160,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_var_3"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "up"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/0x0"
+            }
+          ]
+        },
+        {
+          "id": 15,
+          "name": "LOCALID_CONTEST_ARTIST",
+          "type": "npc",
+          "x": 192,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_artist"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "left"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/0x0"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "nextlayerid": 1,
+  "nextobjectid": 16,
+  "orientation": "orthogonal",
+  "renderorder": "right-down",
+  "tiledversion": "1.11.2",
+  "tileheight": 16,
+  "tilewidth": 16,
+  "type": "map",
+  "version": "1.11",
+  "width": 15,
+  "properties": [
+    {
+      "name": "display_name",
+      "type": "string",
+      "value": "ContestHall"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "Hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_CONTEST"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "base:mapsec:hoenn/dynamic"
+    },
+    {
+      "name": "border",
+      "propertytype": "Border",
+      "type": "class",
+      "value": {
+        "top_left": 44,
+        "top_right": 44,
+        "bottom_left": 44,
+        "bottom_right": 44,
+        "top_left_top": 2,
+        "top_right_top": 2,
+        "bottom_left_top": 2,
+        "bottom_right_top": 2
+      }
+    }
+  ],
+  "tilesets": [
+    {
+      "firstgid": 1,
+      "source": "../../../Tilesets/hoenn/contest_hall/contest_hall.json"
+    }
+  ]
+}

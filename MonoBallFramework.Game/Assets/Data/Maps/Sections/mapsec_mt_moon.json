@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_MT_MOON",
+  "id": "base:mapsec:hoenn/mt_moon",
   "name": "MT. MOON",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

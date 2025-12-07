@@ -254,3 +254,4 @@ Tile sheet texture should be 80×24 pixels (10×3 tiles of 8×8 each).
 6. **Performant**: Minimal overhead for both modes
 
 
+

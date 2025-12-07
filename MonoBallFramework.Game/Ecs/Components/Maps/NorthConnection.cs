@@ -7,10 +7,10 @@ namespace MonoBallFramework.Game.Ecs.Components.Maps;
 /// </summary>
 public struct NorthConnection
 {
-    public MapIdentifier MapId { get; set; }
+    public GameMapId MapId { get; set; }
     public int Offset { get; set; }
 
-    public NorthConnection(MapIdentifier mapId, int offset = 0)
+    public NorthConnection(GameMapId mapId, int offset = 0)
     {
         MapId = mapId;
         Offset = offset;

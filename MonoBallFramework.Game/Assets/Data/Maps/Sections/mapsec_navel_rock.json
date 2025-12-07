@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_NAVEL_ROCK",
+  "id": "base:mapsec:hoenn/navel_rock",
   "name": "NAVEL ROCK",
-  "theme": "stone"
+  "theme": "base:theme:popup/stone"
 }

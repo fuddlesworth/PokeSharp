@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_LILYCOVE_CITY",
+  "id": "base:mapsec:hoenn/lilycove_city",
   "name": "LILYCOVE CITY",
-  "theme": "marble",
+  "theme": "base:theme:popup/marble",
   "x": 18,
   "y": 3,
   "width": 2,

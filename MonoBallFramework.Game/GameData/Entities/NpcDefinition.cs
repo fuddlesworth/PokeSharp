@@ -11,11 +11,12 @@ namespace MonoBallFramework.Game.GameData.Entities;
 public class NpcDefinition
 {
     /// <summary>
-    ///     Unique identifier (e.g., "npc/youngster_joey", "npc/prof_birch").
+    ///     Unique identifier in unified format (e.g., "base:npc:townfolk/prof_birch").
     /// </summary>
     [Key]
     [MaxLength(100)]
-    public string NpcId { get; set; } = string.Empty;
+    [Column(TypeName = "nvarchar(100)")]
+    public GameNpcId NpcId { get; set; } = null!;
 
     /// <summary>
     ///     Display name shown in-game (e.g., "YOUNGSTER JOEY", "PROF. BIRCH").
@@ -35,7 +36,7 @@ public class NpcDefinition
     /// </summary>
     [MaxLength(100)]
     [Column(TypeName = "nvarchar(100)")]
-    public SpriteId? SpriteId { get; set; }
+    public GameSpriteId? SpriteId { get; set; }
 
     /// <summary>
     ///     Default behavior script path (e.g., "Behaviors/wander_behavior.csx").
@@ -51,8 +52,9 @@ public class NpcDefinition
 
     /// <summary>
     ///     Default movement speed (tiles per second).
+    ///     Matches pokeemerald's MOVE_SPEED_NORMAL: 16 frames per tile at 60 FPS = 3.75 tiles/second.
     /// </summary>
-    public float MovementSpeed { get; set; } = 2.0f;
+    public float MovementSpeed { get; set; } = 3.75f;
 
     /// <summary>
     ///     Custom properties as JSON (extensible for modding).

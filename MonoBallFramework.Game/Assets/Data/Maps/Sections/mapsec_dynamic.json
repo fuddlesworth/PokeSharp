@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_DYNAMIC",
+  "id": "base:mapsec:hoenn/dynamic",
   "name": "",
-  "theme": "marble"
+  "theme": "base:theme:popup/marble"
 }

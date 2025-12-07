@@ -4,13 +4,13 @@ using MonoBallFramework.Game.Engine.Core.Types;
 namespace MonoBallFramework.Game.GameData.ValueConverters;
 
 /// <summary>
-///     EF Core value converter for SpriteId to string.
+///     EF Core value converter for GameSpriteId to string.
 /// </summary>
-public class SpriteIdValueConverter : ValueConverter<SpriteId?, string?>
+public class GameSpriteIdValueConverter : ValueConverter<GameSpriteId?, string?>
 {
-    public SpriteIdValueConverter()
+    public GameSpriteIdValueConverter()
         : base(
-            v => v.HasValue ? v.Value.Value : null!,
-            v => v != null ? new SpriteId(v) : default(SpriteId?)
+            v => v != null ? v.Value : null,
+            v => v != null ? GameSpriteId.TryCreate(v) : null
         ) { }
 }

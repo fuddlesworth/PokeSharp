@@ -75,6 +75,7 @@ public sealed class EntityFactoryService(
 
         // Create empty entity first (use pool if available)
         Entity entity;
+        bool acquiredFromPool = false;
         string poolName = GetPoolNameFromTemplateId(templateId);
         PoolAcquireResult poolResult = _poolManager.TryAcquireDetailed(poolName);
 
@@ -82,6 +83,7 @@ public sealed class EntityFactoryService(
         {
             // Successfully acquired entity from pool
             entity = poolResult.Entity;
+            acquiredFromPool = true;
             _logger.LogDebug(
                 "Acquired entity {EntityId} from pool '{PoolName}' for template '{TemplateId}'",
                 entity.Id,
@@ -105,18 +107,50 @@ public sealed class EntityFactoryService(
                     break;
 
                 case PoolAcquireFailureReason.PoolExhausted:
-                    _logger.LogError(
-                        "Pool '{PoolName}' exhausted ({PoolSize} entities) for template '{TemplateId}'. "
-                            + "Increase maxSize or release entities more aggressively.",
-                        poolName,
-                        poolResult.PoolSize,
-                        templateId
-                    );
-                    // Fail fast to reveal the problem - don't fall back to world.Create()
-                    throw new InvalidOperationException(
-                        $"Entity pool '{poolName}' exhausted (size: {poolResult.PoolSize}). "
-                            + $"Cannot spawn template '{templateId}'."
-                    );
+                    // Get pool configuration to determine exhaustion strategy
+                    PoolConfiguration? poolConfig = _poolManager.GetPoolConfiguration(poolName);
+                    PoolExhaustionStrategy strategy = poolConfig?.ExhaustionStrategy
+                        ?? PoolExhaustionStrategy.LogWarningAndCreate;
+
+                    switch (strategy)
+                    {
+                        case PoolExhaustionStrategy.ThrowException:
+                            _logger.LogError(
+                                "Pool '{PoolName}' exhausted ({PoolSize} entities) for template '{TemplateId}'. "
+                                    + "Increase maxSize or release entities more aggressively.",
+                                poolName,
+                                poolResult.PoolSize,
+                                templateId
+                            );
+                            throw new InvalidOperationException(
+                                $"Entity pool '{poolName}' exhausted (size: {poolResult.PoolSize}). "
+                                    + $"Cannot spawn template '{templateId}'."
+                            );
+
+                        case PoolExhaustionStrategy.FallbackToCreate:
+                            entity = world.Create();
+                            break;
+
+                        case PoolExhaustionStrategy.LogWarningAndCreate:
+                            _logger.LogWarning(
+                                "Pool '{PoolName}' exhausted ({PoolSize} entities) for template '{TemplateId}'. "
+                                    + "Creating entity directly. Consider increasing pool size.",
+                                poolName,
+                                poolResult.PoolSize,
+                                templateId
+                            );
+                            entity = world.Create();
+                            break;
+
+                        default:
+                            _logger.LogWarning(
+                                "Pool '{PoolName}' exhausted with unknown strategy. Creating entity directly.",
+                                poolName
+                            );
+                            entity = world.Create();
+                            break;
+                    }
+                    break;
 
                 default:
                     _logger.LogError(
@@ -130,27 +164,45 @@ public sealed class EntityFactoryService(
             }
         }
 
-        // Add each component using reflection (Arch requires compile-time types)
-        foreach (object component in components)
+        // Add components with proper cleanup on failure
+        try
         {
-            Type componentType = component.GetType();
+            // Add each component using reflection (Arch requires compile-time types)
+            foreach (object component in components)
+            {
+                Type componentType = component.GetType();
 
-            // Get cached Add<T> method for this component type
-            MethodInfo addMethod = GetCachedAddMethod(componentType);
+                // Get cached Add<T> method for this component type
+                MethodInfo addMethod = GetCachedAddMethod(componentType);
 
-            // Invoke Add<T>(entity, component)
-            addMethod.Invoke(world, [entity, component]);
-            _logger.LogDebug("  Added {Type} to entity", componentType.Name);
+                // Invoke Add<T>(entity, component)
+                addMethod.Invoke(world, [entity, component]);
+                _logger.LogDebug("  Added {Type} to entity", componentType.Name);
+            }
+
+            _logger.LogDebug(
+                "Spawned entity {EntityId} from template {TemplateId} with {ComponentCount} components",
+                entity.Id,
+                templateId,
+                components.Count
+            );
+
+            return entity;
         }
-
-        _logger.LogDebug(
-            "Spawned entity {EntityId} from template {TemplateId} with {ComponentCount} components",
-            entity.Id,
-            templateId,
-            components.Count
-        );
-
-        return entity;
+        catch
+        {
+            // If we acquired from pool and entity is still alive, release it back
+            if (acquiredFromPool && world.IsAlive(entity))
+            {
+                _logger.LogWarning(
+                    "Component addition failed for entity {EntityId} from pool '{PoolName}'. Releasing back to pool.",
+                    entity.Id,
+                    poolName
+                );
+                _poolManager.Release(entity);
+            }
+            throw;
+        }
     }
 
     /// <inheritdoc />
@@ -318,85 +370,165 @@ public sealed class EntityFactoryService(
         }
 
         var entities = new Entity[count];
+        var spawnedCount = 0;
 
-        for (int i = 0; i < count; i++)
+        try
         {
-            EntitySpawnContext? context = null;
-
-            // Apply per-entity configuration if provided
-            if (configureEach != null)
+            for (int i = 0; i < count; i++)
             {
-                var builder = new EntityBuilder();
-                configureEach(builder, i);
+                EntitySpawnContext? context = null;
 
-                // Convert builder to spawn context
-                context = new EntitySpawnContext
+                // Apply per-entity configuration if provided
+                if (configureEach != null)
                 {
-                    Tag = builder.Tag,
-                    Overrides = builder.ComponentOverrides.ToDictionary(
-                        kvp => kvp.Key.Name,
-                        kvp => kvp.Value
-                    ),
-                };
+                    var builder = new EntityBuilder();
+                    configureEach(builder, i);
 
-                if (builder.CustomProperties.Any())
+                    // Convert builder to spawn context
+                    context = new EntitySpawnContext
+                    {
+                        Tag = builder.Tag,
+                        Overrides = builder.ComponentOverrides.ToDictionary(
+                            kvp => kvp.Key.Name,
+                            kvp => kvp.Value
+                        ),
+                    };
+
+                    if (builder.CustomProperties.Any())
+                    {
+                        context.Metadata = builder.CustomProperties.ToDictionary(
+                            kvp => kvp.Key,
+                            kvp => kvp.Value
+                        );
+                    }
+                }
+
+                // Build component array from resolved template (resolved once above)
+                List<object> components = BuildComponentArray(resolvedTemplate, context);
+
+                // Create entity (use pool if available)
+                Entity entity;
+                bool acquiredFromPool = false;
+                string poolName = GetPoolNameFromTemplateId(templateId);
+
+                try
                 {
-                    context.Metadata = builder.CustomProperties.ToDictionary(
-                        kvp => kvp.Key,
-                        kvp => kvp.Value
+                    entity = _poolManager.Acquire(poolName);
+                    acquiredFromPool = true;
+                }
+                catch (KeyNotFoundException ex)
+                {
+                    // Pool doesn't exist - this indicates a configuration error
+                    _logger.LogError(
+                        "Pool not found for template '{TemplateId}' in batch spawn: {Error}. This may cause memory leaks.",
+                        templateId,
+                        ex.Message
                     );
+                    entity = world.Create();
+                }
+                catch (InvalidOperationException ex) when (ex.Message.Contains("exhausted"))
+                {
+                    // Pool exhausted during batch spawn - check strategy
+                    PoolConfiguration? poolConfig = _poolManager.GetPoolConfiguration(poolName);
+                    PoolExhaustionStrategy strategy = poolConfig?.ExhaustionStrategy
+                        ?? PoolExhaustionStrategy.LogWarningAndCreate;
+
+                    switch (strategy)
+                    {
+                        case PoolExhaustionStrategy.ThrowException:
+                            _logger.LogError(
+                                "Pool exhausted during batch spawn for template '{TemplateId}': {Error}",
+                                templateId,
+                                ex.Message
+                            );
+                            throw;
+
+                        case PoolExhaustionStrategy.FallbackToCreate:
+                            entity = world.Create();
+                            break;
+
+                        case PoolExhaustionStrategy.LogWarningAndCreate:
+                            _logger.LogWarning(
+                                "Pool '{PoolName}' exhausted during batch spawn for template '{TemplateId}' (entity {Index}/{Count}). "
+                                    + "Creating entity directly.",
+                                poolName,
+                                templateId,
+                                i + 1,
+                                count
+                            );
+                            entity = world.Create();
+                            break;
+
+                        default:
+                            _logger.LogWarning(
+                                "Pool exhausted with unknown strategy during batch spawn. Creating entity directly."
+                            );
+                            entity = world.Create();
+                            break;
+                    }
+                }
+
+                // Add components with proper cleanup on failure
+                try
+                {
+                    // Add each component using cached reflection
+                    foreach (object component in components)
+                    {
+                        Type componentType = component.GetType();
+                        MethodInfo addMethod = GetCachedAddMethod(componentType);
+                        addMethod.Invoke(world, [entity, component]);
+                    }
+
+                    entities[i] = entity;
+                    spawnedCount++;
+                }
+                catch
+                {
+                    // If we acquired from pool and entity is still alive, release it back
+                    if (acquiredFromPool && world.IsAlive(entity))
+                    {
+                        _logger.LogWarning(
+                            "Component addition failed for entity {EntityId} from pool '{PoolName}' during batch spawn (index {Index}). Releasing back to pool.",
+                            entity.Id,
+                            poolName,
+                            i
+                        );
+                        _poolManager.Release(entity);
+                    }
+                    throw;
                 }
             }
 
-            // Build component array from resolved template (resolved once above)
-            List<object> components = BuildComponentArray(resolvedTemplate, context);
+            _logger.LogInformation(
+                "Successfully spawned {Count} entities from template {TemplateId}",
+                count,
+                templateId
+            );
 
-            // Create entity (use pool if available)
-            Entity entity;
-            try
-            {
-                string poolName = GetPoolNameFromTemplateId(templateId);
-                entity = _poolManager.Acquire(poolName);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                // Pool doesn't exist - this indicates a configuration error
-                _logger.LogError(
-                    "Pool not found for template '{TemplateId}' in batch spawn: {Error}. This may cause memory leaks.",
-                    templateId,
-                    ex.Message
-                );
-                entity = world.Create();
-            }
-            catch (InvalidOperationException ex) when (ex.Message.Contains("exhausted"))
-            {
-                // Pool exhausted during batch spawn - fail fast
-                _logger.LogError(
-                    "Pool exhausted during batch spawn for template '{TemplateId}': {Error}",
-                    templateId,
-                    ex.Message
-                );
-                throw;
-            }
-
-            // Add each component using cached reflection
-            foreach (object component in components)
-            {
-                Type componentType = component.GetType();
-                MethodInfo addMethod = GetCachedAddMethod(componentType);
-                addMethod.Invoke(world, [entity, component]);
-            }
-
-            entities[i] = entity;
+            return entities;
         }
+        catch
+        {
+            // If batch spawn fails mid-way, release all successfully spawned entities
+            if (spawnedCount > 0)
+            {
+                _logger.LogError(
+                    "Batch spawn failed after {SpawnedCount}/{TotalCount} entities. Releasing spawned entities back to pool.",
+                    spawnedCount,
+                    count
+                );
 
-        _logger.LogInformation(
-            "Successfully spawned {Count} entities from template {TemplateId}",
-            count,
-            templateId
-        );
-
-        return entities;
+                for (int j = 0; j < spawnedCount; j++)
+                {
+                    Entity spawnedEntity = entities[j];
+                    if (world.IsAlive(spawnedEntity))
+                    {
+                        _poolManager.Release(spawnedEntity);
+                    }
+                }
+            }
+            throw;
+        }
     }
 
     /// <summary>

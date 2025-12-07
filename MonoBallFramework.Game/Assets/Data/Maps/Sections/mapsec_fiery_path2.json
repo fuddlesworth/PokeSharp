@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_FIERY_PATH2",
+  "id": "base:mapsec:hoenn/fiery_path2",
   "name": "FIERY PATH",
-  "theme": "stone",
+  "theme": "base:theme:popup/stone",
   "x": 7,
   "y": 3,
   "width": 1,

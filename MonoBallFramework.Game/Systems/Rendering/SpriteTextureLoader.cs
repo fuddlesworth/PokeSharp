@@ -3,39 +3,46 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoBallFramework.Game.Engine.Common.Logging;
 using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
+using MonoBallFramework.Game.GameData.Sprites;
 using MonoBallFramework.Game.Infrastructure.Services;
 
 namespace MonoBallFramework.Game.Systems.Rendering;
 
 /// <summary>
 ///     Service responsible for loading sprite sheet textures into the AssetManager.
-///     Scans available sprite manifests and loads their sprite sheets.
+///     Scans available sprite definitions and loads their sprite sheets.
 /// </summary>
 public class SpriteTextureLoader
 {
     private readonly AssetManager _assetManager;
     private readonly GraphicsDevice _graphicsDevice;
     private readonly ILogger<SpriteTextureLoader>? _logger;
+    private readonly IAssetPathResolver _pathResolver;
 
     // PHASE 2: Per-map sprite tracking for lazy loading
-    private readonly Dictionary<MapRuntimeId, HashSet<SpriteId>> _mapSpriteIds = new();
+    private readonly Dictionary<MapRuntimeId, HashSet<GameSpriteId>> _mapSpriteIds = new();
 
     // Persistent sprites that should never be unloaded (e.g., UI elements)
     // Player sprites load on-demand from entity templates
     private readonly HashSet<string> _persistentSprites = new();
-    private readonly SpriteLoader _spriteLoader;
+    private readonly SpriteRegistry _spriteRegistry;
     private readonly Dictionary<string, int> _spriteReferenceCount = new();
 
+    // Track missing sprites to avoid repeated log warnings (prevents log spam)
+    private readonly HashSet<string> _reportedMissingSprites = new();
+
     public SpriteTextureLoader(
-        SpriteLoader spriteLoader,
+        SpriteRegistry spriteRegistry,
         AssetManager assetManager,
         GraphicsDevice graphicsDevice,
+        IAssetPathResolver pathResolver,
         ILogger<SpriteTextureLoader>? logger = null
     )
     {
-        _spriteLoader = spriteLoader ?? throw new ArgumentNullException(nameof(spriteLoader));
+        _spriteRegistry = spriteRegistry ?? throw new ArgumentNullException(nameof(spriteRegistry));
         _assetManager = assetManager ?? throw new ArgumentNullException(nameof(assetManager));
         _graphicsDevice = graphicsDevice ?? throw new ArgumentNullException(nameof(graphicsDevice));
+        _pathResolver = pathResolver ?? throw new ArgumentNullException(nameof(pathResolver));
         _logger = logger;
     }
 
@@ -47,29 +54,45 @@ public class SpriteTextureLoader
     {
         _logger?.LogAssetLoadingStarted("sprite sheet textures", 0);
 
-        List<SpriteManifest> manifests = await _spriteLoader.LoadAllSpritesAsync();
-        _logger?.LogSpriteManifestsFound(manifests.Count);
+        // Ensure sprite definitions are loaded
+        if (!_spriteRegistry.IsLoaded)
+        {
+            await _spriteRegistry.LoadDefinitionsAsync();
+        }
+
+        var spriteIds = _spriteRegistry.GetAllSpriteIds().ToList();
+        _logger?.LogInformation("Found {Count} sprite definitions to load", spriteIds.Count);
 
         int loadedCount = 0;
         int failedCount = 0;
 
-        foreach (SpriteManifest manifest in manifests)
+        foreach (GameSpriteId spriteId in spriteIds)
         {
             try
             {
-                string textureKey = GetTextureKey(manifest.Category, manifest.Name);
-                string? spritesheetPath = _spriteLoader.GetSpriteSheetPath(manifest);
+                SpriteDefinition? definition = _spriteRegistry.GetSprite(spriteId);
+                if (definition == null)
+                {
+                    failedCount++;
+                    continue;
+                }
+
+                string category = definition.GetCategory();
+                string spriteName = definition.GetSpriteName();
+                string textureKey = GetTextureKey(category, spriteName);
 
                 _logger?.LogSpriteLoadingProgress(
                     loadedCount + 1,
-                    manifests.Count,
-                    manifest.Category,
-                    manifest.Name
+                    spriteIds.Count,
+                    category,
+                    spriteName
                 );
+
+                string spritesheetPath = _pathResolver.Resolve(definition.TexturePath);
 
                 if (string.IsNullOrEmpty(spritesheetPath) || !File.Exists(spritesheetPath))
                 {
-                    _logger?.LogSpriteSheetNotFound(manifest.Category, manifest.Name);
+                    _logger?.LogSpriteSheetNotFound(category, spriteName);
                     failedCount++;
                     continue;
                 }
@@ -79,8 +102,8 @@ public class SpriteTextureLoader
                 var texture = Texture2D.FromStream(_graphicsDevice, fileStream);
 
                 _logger?.LogSpriteTextureWithDimensions(
-                    manifest.Category,
-                    manifest.Name,
+                    category,
+                    spriteName,
                     texture.Format,
                     texture.Width,
                     texture.Height
@@ -94,12 +117,7 @@ public class SpriteTextureLoader
             }
             catch (Exception ex)
             {
-                _logger?.LogError(
-                    ex,
-                    "Failed to load sprite sheet for {Category}/{Name}",
-                    manifest.Category,
-                    manifest.Name
-                );
+                _logger?.LogError(ex, "Failed to load sprite sheet for {SpriteId}", spriteId);
                 failedCount++;
             }
         }
@@ -122,12 +140,35 @@ public class SpriteTextureLoader
             return;
         }
 
-        // Use NPCSpriteLoader to resolve the actual path
-        string? spritesheetPath = _spriteLoader.GetSpriteSheetPath(category, spriteName);
+        // Skip sprites we've already reported as missing
+        string lookupKey = $"{category}/{spriteName}";
+        if (_reportedMissingSprites.Contains(lookupKey))
+        {
+            return;
+        }
+
+        // Use SpriteRegistry to get the definition
+        SpriteDefinition? definition = _spriteRegistry.GetSpriteByPath(lookupKey);
+
+        if (definition == null)
+        {
+            // Only log once per missing sprite
+            if (_reportedMissingSprites.Add(lookupKey))
+            {
+                _logger?.LogSpriteSheetNotFound(category, spriteName);
+            }
+            return;
+        }
+
+        string spritesheetPath = _pathResolver.Resolve(definition.TexturePath);
 
         if (string.IsNullOrEmpty(spritesheetPath) || !File.Exists(spritesheetPath))
         {
-            _logger?.LogSpriteSheetNotFound(category, spriteName);
+            // Only log once per missing sprite
+            if (_reportedMissingSprites.Add(lookupKey))
+            {
+                _logger?.LogSpriteSheetNotFound(category, spriteName);
+            }
             return;
         }
 
@@ -171,21 +212,21 @@ public class SpriteTextureLoader
     /// <returns>HashSet of loaded texture keys</returns>
     public async Task<HashSet<string>> LoadSpritesForMapAsync(
         MapRuntimeId mapId,
-        IEnumerable<SpriteId> spriteIds
+        IEnumerable<GameSpriteId> spriteIds
     )
     {
         int loadedCount = 0;
         int skippedCount = 0;
-        var spriteIdSet = new HashSet<SpriteId>(spriteIds);
+        var spriteIdSet = new HashSet<GameSpriteId>(spriteIds);
 
         // Track which sprites belong to this map
         _mapSpriteIds[mapId] = spriteIdSet;
 
         _logger?.LogSpritesRequiredForMap(mapId.Value, spriteIdSet.Count);
 
-        foreach (SpriteId spriteId in spriteIdSet)
+        foreach (GameSpriteId spriteId in spriteIdSet)
         {
-            string category = spriteId.Category;
+            string category = spriteId.SpriteCategory;
             string spriteName = spriteId.SpriteName;
             string textureKey = $"sprites/{category}/{spriteName}";
 
@@ -217,7 +258,7 @@ public class SpriteTextureLoader
 
         _logger?.LogSpritesLoadedForMap(loadedCount, mapId.Value, skippedCount);
 
-        return spriteIdSet.Select(id => $"sprites/{id.Value}").ToHashSet();
+        return spriteIdSet.Select(id => id.TextureKey).ToHashSet();
     }
 
     /// <summary>
@@ -225,11 +266,19 @@ public class SpriteTextureLoader
     /// </summary>
     private async Task LoadSpriteTextureAsync(string category, string spriteName)
     {
-        SpriteManifest? manifest = await _spriteLoader.LoadSpriteAsync(spriteName);
-        if (manifest == null)
+        // Ensure definitions are loaded
+        if (!_spriteRegistry.IsLoaded)
+        {
+            await _spriteRegistry.LoadDefinitionsAsync();
+        }
+
+        string lookupKey = $"{category}/{spriteName}";
+        SpriteDefinition? definition = _spriteRegistry.GetSpriteByPath(lookupKey);
+
+        if (definition == null)
         {
             _logger?.LogWarning(
-                "Sprite manifest not found: {Category}/{SpriteName}",
+                "Sprite definition not found: {Category}/{SpriteName}",
                 category,
                 spriteName
             );
@@ -237,7 +286,7 @@ public class SpriteTextureLoader
         }
 
         string textureKey = $"sprites/{category}/{spriteName}";
-        string? spritesheetPath = _spriteLoader.GetSpriteSheetPath(manifest);
+        string spritesheetPath = _pathResolver.Resolve(definition.TexturePath);
 
         if (string.IsNullOrEmpty(spritesheetPath) || !File.Exists(spritesheetPath))
         {
@@ -298,7 +347,7 @@ public class SpriteTextureLoader
     /// <returns>Number of sprites unloaded</returns>
     public int UnloadSpritesForMap(MapRuntimeId mapId)
     {
-        if (!_mapSpriteIds.TryGetValue(mapId, out HashSet<SpriteId>? spriteIds))
+        if (!_mapSpriteIds.TryGetValue(mapId, out HashSet<GameSpriteId>? spriteIds))
         {
             _logger?.LogNoSpritesForMap(mapId.Value);
             return 0;
@@ -306,9 +355,9 @@ public class SpriteTextureLoader
 
         int unloadedCount = 0;
 
-        foreach (SpriteId spriteId in spriteIds)
+        foreach (GameSpriteId spriteId in spriteIds)
         {
-            string textureKey = $"sprites/{spriteId.Category}/{spriteId.SpriteName}";
+            string textureKey = spriteId.TextureKey;
 
             // Never unload persistent sprites (player sprites)
             if (_persistentSprites.Contains(textureKey))
@@ -348,11 +397,11 @@ public class SpriteTextureLoader
     }
 
     /// <summary>
-    ///     Clears the sprite loader's manifest cache.
-    ///     Delegates to the underlying SpriteLoader.
+    ///     Clears the reported missing sprites set.
+    ///     Call this if sprites have been added and you want to retry loading.
     /// </summary>
-    public void ClearCache()
+    public void ClearMissingSpritesCache()
     {
-        _spriteLoader?.ClearCache();
+        _reportedMissingSprites.Clear();
     }
 }

@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_LITTLEROOT_TOWN",
+  "id": "base:mapsec:hoenn/littleroot_town",
   "name": "LITTLEROOT TOWN",
-  "theme": "wood",
+  "theme": "base:theme:popup/wood",
   "x": 4,
   "y": 11,
   "width": 1,

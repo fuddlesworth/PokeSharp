@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_UNDERWATER_SOOTOPOLIS",
+  "id": "base:mapsec:hoenn/underwater_sootopolis",
   "name": "UNDERWATER",
-  "theme": "stone2",
+  "theme": "base:theme:popup/stone2",
   "x": 21,
   "y": 7,
   "width": 1,

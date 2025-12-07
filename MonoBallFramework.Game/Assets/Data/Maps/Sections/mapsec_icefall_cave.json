@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_ICEFALL_CAVE",
+  "id": "base:mapsec:hoenn/icefall_cave",
   "name": "ICEFALL CAVE",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

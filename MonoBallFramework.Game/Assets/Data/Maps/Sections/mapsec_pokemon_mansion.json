@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_POKEMON_MANSION",
+  "id": "base:mapsec:hoenn/pokemon_mansion",
   "name": "POKéMON MANSION",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

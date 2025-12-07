@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_BERRY_FOREST",
+  "id": "base:mapsec:hoenn/berry_forest",
   "name": "BERRY FOREST",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

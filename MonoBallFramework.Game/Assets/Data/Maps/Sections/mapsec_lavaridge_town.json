@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_LAVARIDGE_TOWN",
+  "id": "base:mapsec:hoenn/lavaridge_town",
   "name": "LAVARIDGE TOWN",
-  "theme": "wood",
+  "theme": "base:theme:popup/wood",
   "x": 5,
   "y": 3,
   "width": 1,

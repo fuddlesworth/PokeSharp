@@ -1,5 +1,5 @@
 {
-  "Id": "brick_outline",
+  "Id": "base:popup:outline/brick_outline",
   "DisplayName": "Brick Outline",
   "Type": "TileSheet",
   "TexturePath": "Graphics/Maps/Popups/Outlines/brick_outline.png",

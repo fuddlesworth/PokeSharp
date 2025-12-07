@@ -23,8 +23,8 @@ public class PopupRegistry
     private readonly ConcurrentDictionary<string, PopupBackgroundDefinition> _backgrounds = new();
     private readonly ConcurrentDictionary<string, PopupOutlineDefinition> _outlines = new();
     private readonly SemaphoreSlim _loadLock = new(1, 1);
-    private string _defaultBackgroundId = "wood";
-    private string _defaultOutlineId = "wood_outline";
+    private string _defaultBackgroundId = "base:popup:background/wood";
+    private string _defaultOutlineId = "base:popup:outline/wood_outline";
     private volatile bool _isLoaded = false;
 
     /// <summary>
@@ -122,10 +122,6 @@ public class PopupRegistry
         {
             LoadDefinitionsFromJson();
         }
-        else
-        {
-            LoadDefinitionsHardcoded();
-        }
         _isLoaded = true;
     }
 
@@ -155,7 +151,6 @@ public class PopupRegistry
 
             if (!Directory.Exists(dataPath))
             {
-                LoadDefinitionsHardcoded();
                 _isLoaded = true;
                 return;
             }
@@ -174,12 +169,6 @@ public class PopupRegistry
             Task outlinesTask = LoadOutlinesAsync(outlinesPath, options, cancellationToken);
 
             await Task.WhenAll(backgroundsTask, outlinesTask);
-
-            // Fallback if nothing loaded
-            if (_backgrounds.IsEmpty || _outlines.IsEmpty)
-            {
-                LoadDefinitionsHardcoded();
-            }
 
             _isLoaded = true;
         }
@@ -257,7 +246,6 @@ public class PopupRegistry
 
         if (!Directory.Exists(dataPath))
         {
-            LoadDefinitionsHardcoded();
             return;
         }
 
@@ -325,89 +313,5 @@ public class PopupRegistry
             }
         }
 
-        // Fallback to hardcoded if nothing was loaded
-        if (_backgrounds.Count == 0 || _outlines.Count == 0)
-        {
-            LoadDefinitionsHardcoded();
-        }
-    }
-
-    private void LoadDefinitionsHardcoded()
-    {
-        // Register backgrounds
-        RegisterBackground(new PopupBackgroundDefinition
-        {
-            Id = "stone",
-            DisplayName = "Stone",
-            TexturePath = "Graphics/Maps/Popups/Backgrounds/stone.png"
-        });
-        RegisterBackground(new PopupBackgroundDefinition
-        {
-            Id = "stone2",
-            DisplayName = "Stone 2",
-            TexturePath = "Graphics/Maps/Popups/Backgrounds/stone2.png"
-        });
-        RegisterBackground(new PopupBackgroundDefinition
-        {
-            Id = "wood",
-            DisplayName = "Wood",
-            TexturePath = "Graphics/Maps/Popups/Backgrounds/wood.png"
-        });
-        RegisterBackground(new PopupBackgroundDefinition
-        {
-            Id = "brick",
-            DisplayName = "Brick",
-            TexturePath = "Graphics/Maps/Popups/Backgrounds/brick.png"
-        });
-        RegisterBackground(new PopupBackgroundDefinition
-        {
-            Id = "marble",
-            DisplayName = "Marble",
-            TexturePath = "Graphics/Maps/Popups/Backgrounds/marble.png"
-        });
-        RegisterBackground(new PopupBackgroundDefinition
-        {
-            Id = "underwater",
-            DisplayName = "Underwater",
-            TexturePath = "Graphics/Maps/Popups/Backgrounds/underwater.png"
-        });
-
-        // Register outlines
-        RegisterOutline(new PopupOutlineDefinition
-        {
-            Id = "stone_outline",
-            DisplayName = "Stone Outline",
-            TexturePath = "Graphics/Maps/Popups/Outlines/stone_outline.png"
-        });
-        RegisterOutline(new PopupOutlineDefinition
-        {
-            Id = "stone2_outline",
-            DisplayName = "Stone 2 Outline",
-            TexturePath = "Graphics/Maps/Popups/Outlines/stone2_outline.png"
-        });
-        RegisterOutline(new PopupOutlineDefinition
-        {
-            Id = "wood_outline",
-            DisplayName = "Wood Outline",
-            TexturePath = "Graphics/Maps/Popups/Outlines/wood_outline.png"
-        });
-        RegisterOutline(new PopupOutlineDefinition
-        {
-            Id = "brick_outline",
-            DisplayName = "Brick Outline",
-            TexturePath = "Graphics/Maps/Popups/Outlines/brick_outline.png"
-        });
-        RegisterOutline(new PopupOutlineDefinition
-        {
-            Id = "marble_outline",
-            DisplayName = "Marble Outline",
-            TexturePath = "Graphics/Maps/Popups/Outlines/marble_outline.png"
-        });
-        RegisterOutline(new PopupOutlineDefinition
-        {
-            Id = "underwater_outline",
-            DisplayName = "Underwater Outline",
-            TexturePath = "Graphics/Maps/Popups/Outlines/underwater_outline.png"
-        });
     }
 }

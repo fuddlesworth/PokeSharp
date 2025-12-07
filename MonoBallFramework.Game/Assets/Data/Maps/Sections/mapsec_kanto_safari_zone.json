@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_KANTO_SAFARI_ZONE",
+  "id": "base:mapsec:hoenn/kanto_safari_zone",
   "name": "SAFARI ZONE",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

@@ -95,4 +95,4 @@ public readonly record struct MapLoadContext(
 /// <param name="MapId">The connected map's identifier.</param>
 /// <param name="Offset">Tile offset for alignment.</param>
 /// <param name="Direction">Direction of the connection.</param>
-public readonly record struct ConnectionInfo(MapIdentifier MapId, int Offset, Direction Direction);
+public readonly record struct ConnectionInfo(GameMapId MapId, int Offset, Direction Direction);

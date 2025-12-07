@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_RESORT_GORGEOUS",
+  "id": "base:mapsec:hoenn/resort_gorgeous",
   "name": "RESORT GORGEOUS",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

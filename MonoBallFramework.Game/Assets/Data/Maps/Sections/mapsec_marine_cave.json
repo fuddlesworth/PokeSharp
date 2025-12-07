@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_MARINE_CAVE",
+  "id": "base:mapsec:hoenn/marine_cave",
   "name": "MARINE CAVE",
-  "theme": "stone"
+  "theme": "base:theme:popup/stone"
 }

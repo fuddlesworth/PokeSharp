@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_TERRA_CAVE",
+  "id": "base:mapsec:hoenn/terra_cave",
   "name": "TERRA CAVE",
-  "theme": "stone"
+  "theme": "base:theme:popup/stone"
 }

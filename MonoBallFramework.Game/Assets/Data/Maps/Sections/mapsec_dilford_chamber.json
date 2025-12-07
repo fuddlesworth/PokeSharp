@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_DILFORD_CHAMBER",
+  "id": "base:mapsec:hoenn/dilford_chamber",
   "name": "DILFORD CHAMBER",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_INSIDE_OF_TRUCK",
+  "id": "base:mapsec:hoenn/inside_of_truck",
   "name": "INSIDE OF TRUCK",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

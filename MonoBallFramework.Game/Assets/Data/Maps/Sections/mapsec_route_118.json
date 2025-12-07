@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_ROUTE_118",
+  "id": "base:mapsec:hoenn/route_118",
   "name": "ROUTE 118",
-  "theme": "wood",
+  "theme": "base:theme:popup/wood",
   "x": 10,
   "y": 6,
   "width": 2,

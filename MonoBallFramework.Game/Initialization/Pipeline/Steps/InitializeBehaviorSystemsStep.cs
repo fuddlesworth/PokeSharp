@@ -49,7 +49,8 @@ public class InitializeBehaviorSystemsStep : InitializationStepBase
             context.BehaviorRegistry,
             context.ScriptService,
             context.ApiProvider,
-            eventBus
+            eventBus,
+            context.GameInitializer.MapLifecycleManager  // Pass MapLifecycleManager for behavior cleanup
         );
         await npcBehaviorInitializer.InitializeAsync();
 

@@ -1,0 +1,1144 @@
+{
+  "compressionlevel": -1,
+  "height": 13,
+  "infinite": false,
+  "layers": [
+    {
+      "data": [
+        1,
+        0,
+        0,
+        0,
+        9,
+        1,
+        9,
+        1,
+        9,
+        0,
+        0,
+        0,
+        1,
+        10,
+        0,
+        0,
+        0,
+        14,
+        10,
+        14,
+        10,
+        14,
+        0,
+        0,
+        0,
+        10,
+        0,
+        18,
+        0,
+        18,
+        0,
+        0,
+        18,
+        18,
+        0,
+        18,
+        0,
+        18,
+        18,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        23,
+        0,
+        0,
+        0,
+        0,
+        23,
+        18,
+        23,
+        0,
+        0,
+        0,
+        0,
+        23,
+        0,
+        23,
+        23,
+        0,
+        0,
+        0,
+        18,
+        23,
+        0,
+        0,
+        0,
+        0,
+        23,
+        0,
+        23,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        23,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        23,
+        23,
+        0,
+        0,
+        0,
+        23,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        23,
+        23,
+        0,
+        18,
+        23,
+        23,
+        23,
+        23,
+        23,
+        0,
+        0,
+        23,
+        23,
+        0,
+        0,
+        23,
+        18,
+        0,
+        0,
+        0,
+        23,
+        23,
+        0,
+        0,
+        23,
+        23,
+        0,
+        0,
+        23,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        18,
+        23,
+        0,
+        0,
+        23,
+        23,
+        0,
+        0,
+        23,
+        23,
+        0,
+        23,
+        23,
+        18,
+        23,
+        0,
+        0,
+        23,
+        23,
+        0,
+        0,
+        23,
+        23,
+        0,
+        23,
+        23
+      ],
+      "height": 13,
+      "id": 1,
+      "name": "Ground",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 13,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "data": [
+        2,
+        3,
+        5,
+        7,
+        2,
+        2,
+        2,
+        2,
+        2,
+        3,
+        5,
+        7,
+        2,
+        2,
+        11,
+        12,
+        13,
+        2,
+        2,
+        2,
+        2,
+        2,
+        15,
+        16,
+        17,
+        2,
+        18,
+        19,
+        18,
+        20,
+        18,
+        18,
+        21,
+        21,
+        18,
+        19,
+        18,
+        20,
+        21,
+        18,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        21,
+        22,
+        22,
+        22,
+        22,
+        21,
+        21,
+        21,
+        22,
+        22,
+        22,
+        22,
+        21,
+        22,
+        21,
+        21,
+        22,
+        22,
+        22,
+        21,
+        21,
+        22,
+        22,
+        22,
+        22,
+        21,
+        22,
+        21,
+        22,
+        22,
+        22,
+        22,
+        18,
+        22,
+        21,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        21,
+        21,
+        22,
+        18,
+        22,
+        21,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        21,
+        21,
+        22,
+        21,
+        21,
+        21,
+        21,
+        21,
+        21,
+        22,
+        22,
+        21,
+        21,
+        22,
+        22,
+        21,
+        21,
+        22,
+        22,
+        22,
+        21,
+        21,
+        22,
+        22,
+        21,
+        21,
+        22,
+        24,
+        21,
+        18,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        21,
+        21,
+        22,
+        22,
+        21,
+        21,
+        22,
+        22,
+        21,
+        21,
+        22,
+        21,
+        21,
+        21,
+        21,
+        22,
+        22,
+        21,
+        21,
+        22,
+        22,
+        21,
+        21,
+        22,
+        21,
+        21
+      ],
+      "height": 13,
+      "id": 2,
+      "name": "Objects",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 13,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "data": [
+        0,
+        4,
+        6,
+        8,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        6,
+        8,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        2,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        0,
+        2,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        2,
+        0,
+        2,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        2,
+        2,
+        2,
+        2,
+        0,
+        2,
+        0,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        0,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        2,
+        2,
+        0,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "height": 13,
+      "id": 3,
+      "name": "Overhead",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 13,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "id": 4,
+      "name": "Warps",
+      "type": "objectgroup",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 1,
+          "name": "Warp to mt_pyre_1f",
+          "type": "warp_event",
+          "x": 32,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "warp",
+              "propertytype": "Warp",
+              "type": "class",
+              "value": {
+                "map": "base:map:hoenn/mt_pyre_1f",
+                "x": 11,
+                "y": 1
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "Warp to mt_pyre_3f",
+          "type": "warp_event",
+          "x": 160,
+          "y": 16,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "warp",
+              "propertytype": "Warp",
+              "type": "class",
+              "value": {
+                "map": "base:map:hoenn/mt_pyre_3f",
+                "x": 10,
+                "y": 1
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "name": "Warp to mt_pyre_3f",
+          "type": "warp_event",
+          "x": 160,
+          "y": 192,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "warp",
+              "propertytype": "Warp",
+              "type": "class",
+              "value": {
+                "map": "base:map:hoenn/mt_pyre_3f",
+                "x": 10,
+                "y": 12
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "name": "Warp to mt_pyre_3f",
+          "type": "warp_event",
+          "x": 96,
+          "y": 192,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "warp",
+              "propertytype": "Warp",
+              "type": "class",
+              "value": {
+                "map": "base:map:hoenn/mt_pyre_3f",
+                "x": 6,
+                "y": 12
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "name": "Warp to mt_pyre_1f",
+          "type": "warp_event",
+          "x": 176,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "warp",
+              "propertytype": "Warp",
+              "type": "class",
+              "value": {
+                "map": "base:map:hoenn/mt_pyre_1f",
+                "x": 20,
+                "y": 9
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "NPCs",
+      "type": "objectgroup",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 6,
+          "name": "NPC_6",
+          "type": "npc",
+          "x": 48,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_maniac"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "right"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/mt_pyre_2f_event_script_mark"
+            },
+            {
+              "name": "trainerType",
+              "type": "string",
+              "value": "TRAINER_TYPE_NORMAL"
+            },
+            {
+              "name": "sightRange",
+              "type": "int",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "name": "NPC_7",
+          "type": "npc",
+          "x": 0,
+          "y": 160,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_item_ball"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/look_around"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/mt_pyre_2f_event_script_item_ultra_ball"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_ITEM_MT_PYRE_2F_ULTRA_BALL"
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "name": "NPC_8",
+          "type": "npc",
+          "x": 144,
+          "y": 48,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_woman_1"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "right"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/mt_pyre_2f_event_script_woman"
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "name": "NPC_9",
+          "type": "npc",
+          "x": 192,
+          "y": 160,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_pokefan_m"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "down"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/mt_pyre_2f_event_script_pokefan_m"
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "name": "NPC_10",
+          "type": "npc",
+          "x": 32,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_woman_4"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "down"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/mt_pyre_2f_event_script_dez"
+            },
+            {
+              "name": "trainerType",
+              "type": "string",
+              "value": "TRAINER_TYPE_NORMAL"
+            },
+            {
+              "name": "sightRange",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "name": "NPC_11",
+          "type": "npc",
+          "x": 48,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_man_4"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "down"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/mt_pyre_2f_event_script_luke"
+            },
+            {
+              "name": "trainerType",
+              "type": "string",
+              "value": "TRAINER_TYPE_NORMAL"
+            },
+            {
+              "name": "sightRange",
+              "type": "int",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "name": "NPC_12",
+          "type": "npc",
+          "x": 96,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_black_belt"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/stationary"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "value": "up"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/mt_pyre_2f_event_script_zander"
+            },
+            {
+              "name": "trainerType",
+              "type": "string",
+              "value": "TRAINER_TYPE_NORMAL"
+            },
+            {
+              "name": "sightRange",
+              "type": "int",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "name": "NPC_13",
+          "type": "npc",
+          "x": 96,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_hex_maniac"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/look_two_ways"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "lookDirections",
+              "type": "string",
+              "value": "down,left"
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/mt_pyre_2f_event_script_leah"
+            },
+            {
+              "name": "trainerType",
+              "type": "string",
+              "value": "TRAINER_TYPE_NORMAL"
+            },
+            {
+              "name": "sightRange",
+              "type": "int",
+              "value": 2
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "nextlayerid": 1,
+  "nextobjectid": 14,
+  "orientation": "orthogonal",
+  "renderorder": "right-down",
+  "tiledversion": "1.11.2",
+  "tileheight": 16,
+  "tilewidth": 16,
+  "type": "map",
+  "version": "1.11",
+  "width": 13,
+  "properties": [
+    {
+      "name": "display_name",
+      "type": "string",
+      "value": "MtPyre_2F"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "Hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_MT_PYRE"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_INDOOR"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "base:mapsec:hoenn/mt_pyre"
+    },
+    {
+      "name": "border",
+      "propertytype": "Border",
+      "type": "class",
+      "value": {
+        "top_left": 25,
+        "top_right": 25,
+        "bottom_left": 25,
+        "bottom_right": 25,
+        "top_left_top": 2,
+        "top_right_top": 2,
+        "bottom_left_top": 2,
+        "bottom_right_top": 2
+      }
+    }
+  ],
+  "tilesets": [
+    {
+      "firstgid": 1,
+      "source": "../../../Tilesets/hoenn/mt_pyre_2f/mt_pyre_2f.json"
+    }
+  ]
+}

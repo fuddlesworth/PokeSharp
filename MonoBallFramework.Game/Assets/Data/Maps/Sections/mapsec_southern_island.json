@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_SOUTHERN_ISLAND",
+  "id": "base:mapsec:hoenn/southern_island",
   "name": "SOUTHERN ISLAND",
-  "theme": "wood",
+  "theme": "base:theme:popup/wood",
   "x": 12,
   "y": 14,
   "width": 1,

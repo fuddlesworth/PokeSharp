@@ -1,5 +1,5 @@
 {
-  "Id": "stone2",
+  "Id": "base:popup:background/stone2",
   "DisplayName": "Stone2",
   "Type": "Bitmap",
   "TexturePath": "Graphics/Maps/Popups/Backgrounds/stone2.png",

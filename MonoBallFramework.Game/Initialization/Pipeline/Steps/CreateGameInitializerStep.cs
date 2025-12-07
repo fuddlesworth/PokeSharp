@@ -54,7 +54,7 @@ public class CreateGameInitializerStep : InitializationStepBase
             context.SystemManager,
             context.AssetManager,
             context.PoolManager,
-            context.SpriteLoader,
+            context.SpriteRegistry,
             context.MapLoader,
             context.MapDefinitionService,
             eventBus

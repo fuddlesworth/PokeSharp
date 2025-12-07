@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_ROUTE_129",
+  "id": "base:mapsec:hoenn/route_129",
   "name": "ROUTE 129",
-  "theme": "underwater",
+  "theme": "base:theme:popup/underwater",
   "x": 24,
   "y": 10,
   "width": 2,

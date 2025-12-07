@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_BIRTH_ISLAND",
+  "id": "base:mapsec:hoenn/birth_island",
   "name": "BIRTH ISLAND",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_LIPTOO_CHAMBER",
+  "id": "base:mapsec:hoenn/liptoo_chamber",
   "name": "LIPTOO CHAMBER",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

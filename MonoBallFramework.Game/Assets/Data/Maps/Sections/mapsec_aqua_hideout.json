@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_AQUA_HIDEOUT",
+  "id": "base:mapsec:hoenn/aqua_hideout",
   "name": "AQUA HIDEOUT",
-  "theme": "stone",
+  "theme": "base:theme:popup/stone",
   "x": 19,
   "y": 3,
   "width": 1,

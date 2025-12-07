@@ -1,5 +1,5 @@
 {
-  "Id": "stone_outline",
+  "Id": "base:popup:outline/stone_outline",
   "DisplayName": "Stone Outline",
   "Type": "TileSheet",
   "TexturePath": "Graphics/Maps/Popups/Outlines/stone_outline.png",

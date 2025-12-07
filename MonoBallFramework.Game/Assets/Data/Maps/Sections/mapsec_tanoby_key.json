@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_TANOBY_KEY",
+  "id": "base:mapsec:hoenn/tanoby_key",
   "name": "TANOBY KEY",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

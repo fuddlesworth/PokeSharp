@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_DESERT_RUINS",
+  "id": "base:mapsec:hoenn/desert_ruins",
   "name": "DESERT RUINS",
-  "theme": "stone",
+  "theme": "base:theme:popup/stone",
   "x": 8,
   "y": 3,
   "width": 1,

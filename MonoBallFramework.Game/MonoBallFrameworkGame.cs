@@ -10,6 +10,7 @@ using MonoBallFramework.Game.Engine.Systems.Management;
 using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game.GameData.Loading;
 using MonoBallFramework.Game.GameData.Services;
+using MonoBallFramework.Game.GameData.Sprites;
 using MonoBallFramework.Game.GameSystems.Services;
 using MonoBallFramework.Game.Infrastructure.Configuration;
 using MonoBallFramework.Game.Infrastructure.Diagnostics;
@@ -50,7 +51,7 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
     private readonly EntityPoolManager _poolManager;
     private readonly ScriptService _scriptService;
     private readonly IServiceProvider _services; // Required for SceneManager and scenes that need DI
-    private readonly SpriteLoader _spriteLoader;
+    private readonly SpriteRegistry _spriteRegistry;
 
     // Services that depend on GraphicsDevice (created in Initialize)
     private readonly SystemManager _systemManager;
@@ -193,11 +194,11 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
                 nameof(options),
                 $"{nameof(options.MapDefinitionService)} cannot be null"
             );
-        _spriteLoader =
-            options.SpriteLoader
+        _spriteRegistry =
+            options.SpriteRegistry
             ?? throw new ArgumentNullException(
                 nameof(options),
-                $"{nameof(options.SpriteLoader)} cannot be null"
+                $"{nameof(options.SpriteRegistry)} cannot be null"
             );
         _templateCacheInitializer =
             options.TemplateCacheInitializer
@@ -345,7 +346,7 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
                 _systemManager,
                 _entityFactory,
                 _poolManager,
-                _spriteLoader,
+                _spriteRegistry,
                 _behaviorRegistry,
                 _tileBehaviorRegistry,
                 _scriptService,
@@ -413,7 +414,7 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
         pipeline.AddStep(new CreateGameInitializerStep());
 
         // Phase 3: Load sprites and initialize systems
-        pipeline.AddStep(new LoadSpriteManifestsStep());
+        pipeline.AddStep(new LoadSpriteDefinitionsStep());
         pipeline.AddStep(new InitializeGameSystemsStep());
         pipeline.AddStep(new SetupApiProvidersStep());
 

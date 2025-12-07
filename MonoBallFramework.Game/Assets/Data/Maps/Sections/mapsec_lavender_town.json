@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_LAVENDER_TOWN",
+  "id": "base:mapsec:hoenn/lavender_town",
   "name": "LAVENDER TOWN",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

@@ -20,15 +20,7 @@ public interface IMapInitializer
     ///     Loads a map from EF Core definition (definition-based loading).
     ///     Creates individual entities for each tile with appropriate components.
     /// </summary>
-    /// <param name="mapId">The map identifier (e.g., "test-map", "littleroot_town").</param>
+    /// <param name="mapId">The unified map identifier.</param>
     /// <returns>The MapInfo entity containing map metadata, or null if loading failed.</returns>
-    Task<Entity?> LoadMap(MapIdentifier mapId);
-
-    /// <summary>
-    ///     Loads a map from file path (LEGACY: Backward compatibility).
-    ///     Use LoadMap(mapId) for definition-based loading instead.
-    /// </summary>
-    /// <param name="mapPath">Path to the map file.</param>
-    /// <returns>The MapInfo entity containing map metadata, or null if loading failed.</returns>
-    Task<Entity?> LoadMapFromFile(string mapPath);
+    Task<Entity?> LoadMap(GameMapId mapId);
 }

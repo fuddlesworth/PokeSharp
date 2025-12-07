@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_S_S_ANNE",
+  "id": "base:mapsec:hoenn/s_s_anne",
   "name": "S.S. ANNE",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

@@ -3,13 +3,16 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using MonoBallFramework.Game.Engine.Common.Logging;
 using MonoBallFramework.Game.Engine.Core.Types;
+using MonoBallFramework.Game.Engine.Input.Components;
 using MonoBallFramework.Game.Engine.Rendering.Components;
-using MonoBallFramework.Game.Engine.Systems.Factories;
+using MonoBallFramework.Game.Engine.Rendering.Constants;
 using MonoBallFramework.Game.Engine.Systems.Management;
-using MonoBallFramework.Game.Components;
 using MonoBallFramework.Game.Ecs.Components;
+using MonoBallFramework.Game.Ecs.Components.Common;
 using MonoBallFramework.Game.Ecs.Components.Maps;
 using MonoBallFramework.Game.Ecs.Components.Movement;
+using MonoBallFramework.Game.Ecs.Components.Player;
+using MonoBallFramework.Game.Ecs.Components.Rendering;
 using MonoBallFramework.Game.Ecs.Components.Warps;
 using MonoBallFramework.Game.Infrastructure.Configuration;
 
@@ -20,8 +23,7 @@ namespace MonoBallFramework.Game.Initialization.Factories;
 /// </summary>
 public class PlayerFactory(
     ILogger<PlayerFactory> logger,
-    World world,
-    IEntityFactoryService entityFactory
+    World world
 )
 {
     /// <summary>
@@ -37,50 +39,82 @@ public class PlayerFactory(
         // Capture tile size and current map info from MapInfo
         var gameplayConfig = GameplayConfig.CreateDefault();
         int tileSize = gameplayConfig.DefaultTileSize;
-        string? currentMapName = null;
+        GameMapId? currentGameMapId = null;
         QueryDescription mapInfoQuery = QueryCache.Get<MapInfo>();
         world.Query(
             in mapInfoQuery,
             (ref MapInfo mapInfo) =>
             {
                 tileSize = mapInfo.TileSize;
-                currentMapName = mapInfo.MapName;
+                currentGameMapId = mapInfo.GameMapId;
             }
         );
 
-        // Create camera component with viewport and initial settings
-        var viewport = new Rectangle(0, 0, viewportWidth, viewportHeight);
+        // Calculate GBA-scaled viewport to match what UpdateViewportForResize will set
+        // This prevents the "slide in" effect by ensuring viewport is correct from the start
+        int scaleX = Math.Max(1, viewportWidth / Camera.GbaNativeWidth);
+        int scaleY = Math.Max(1, viewportHeight / Camera.GbaNativeHeight);
+        int scale = Math.Min(scaleX, scaleY);
+        int gbaViewportWidth = Camera.GbaNativeWidth * scale;
+        int gbaViewportHeight = Camera.GbaNativeHeight * scale;
+        
+        // Create camera component with GBA-scaled viewport (matches UpdateViewportForResize)
+        var viewport = new Rectangle(0, 0, gbaViewportWidth, gbaViewportHeight);
+        
+        // Initialize camera position to tile center (matches what CameraFollowSystem will set)
+        // This ensures camera is correctly positioned from the start, preventing visual glitches
+        float initialPixelX = x * tileSize;
+        float initialPixelY = y * tileSize;
+        
         var camera = new Camera(viewport)
         {
-            Zoom = gameplayConfig.DefaultZoom,
-            TargetZoom = gameplayConfig.DefaultZoom,
+            // Set zoom to match GBA scale (same as UpdateViewportForResize does)
+            Zoom = scale,
+            TargetZoom = scale,
             ZoomTransitionSpeed = gameplayConfig.ZoomTransitionSpeed,
-            Position = new Vector2(x * tileSize, y * tileSize), // Start at player's position (grid to pixels)
+            Position = new Vector2(
+                initialPixelX + CameraConstants.HalfTilePixels,
+                initialPixelY + CameraConstants.HalfTilePixels
+            ),
+            // Set reference dimensions so UpdateViewportForResize knows it's already initialized
+            ReferenceWidth = viewportWidth,
+            ReferenceHeight = viewportHeight,
         };
-
-        // Map bounds removed - camera moves freely without restrictions (Pokemon Emerald style)
-        // camera.MapBounds remains Rectangle.Empty (default) to allow free camera movement
-
-        // Spawn player entity from template with position override
-        Entity playerEntity = entityFactory.SpawnFromTemplate(
-            "player",
-            world,
-            builder =>
-            {
-                builder.OverrideComponent(new Position(x, y, 0, tileSize));
-            }
+        
+        // Set VirtualViewport to match what UpdateViewportForResize will calculate
+        camera.VirtualViewport = new Rectangle(
+            (viewportWidth - gbaViewportWidth) / 2,
+            (viewportHeight - gbaViewportHeight) / 2,
+            gbaViewportWidth,
+            gbaViewportHeight
         );
 
-        // Add Camera component (not in template as it's created per-instance)
-        world.Add(playerEntity, camera);
+        // Create player entity directly with all required components
+        // GridMovement already has FacingDirection = Direction.South as default
+        // Direction component is required by InputSystem for tracking input direction
+        Entity playerEntity = world.Create(
+            new Player(),
+            new Name("PLAYER"),
+            new Wallet(3000),
+            new Position(x, y, 0, tileSize),
+            new Sprite(new GameSpriteId("base:sprite:players/may_normal")),
+            new Elevation(3),
+            new GridMovement(3.75f),
+            Direction.South,  // Direction component for InputSystem
+            new Animation("face_south"),
+            new InputState(),
+            new Collision(true),
+            new Visible(),
+            camera
+        );
 
         // Add MainCamera tag to mark this as the primary camera
         world.Add<MainCamera>(playerEntity);
 
         // Add MapStreaming component for seamless map transitions
-        if (currentMapName != null)
+        if (currentGameMapId != null)
         {
-            var mapStreaming = new MapStreaming(new MapIdentifier(currentMapName));
+            var mapStreaming = new MapStreaming(currentGameMapId);
             world.Add(playerEntity, mapStreaming);
             logger.LogInformation("MapStreaming component added to player");
         }
@@ -97,10 +131,10 @@ public class PlayerFactory(
             "Player",
             playerEntity.Id,
             ("Position", $"{x},{y}"),
-            ("Sprite", "player"),
-            ("GridMovement", "enabled"),
-            ("Direction", "down"),
-            ("Animation", "idle"),
+            ("Sprite", "may/normal"),
+            ("GridMovement", "3.75"),
+            ("Direction", "south"),
+            ("Animation", "face_south"),
             ("Camera", "attached")
         );
         logger.LogControlsHint("Use WASD or Arrow Keys to move!");

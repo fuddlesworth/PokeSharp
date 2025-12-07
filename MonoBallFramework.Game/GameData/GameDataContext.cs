@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.GameData.Entities;
 using MonoBallFramework.Game.GameData.ValueConverters;
 
@@ -54,8 +55,11 @@ public class GameDataContext : DbContext
             entity.HasIndex(n => n.NpcType);
             entity.HasIndex(n => n.DisplayName);
 
-            // Value converter for SpriteId
-            entity.Property(n => n.SpriteId).HasConversion(new SpriteIdValueConverter());
+            // Value converter for GameNpcId
+            entity.Property(n => n.NpcId).HasConversion(new GameNpcIdValueConverter());
+
+            // Value converter for GameSpriteId
+            entity.Property(n => n.SpriteId).HasConversion(new GameSpriteIdValueConverter());
         });
     }
 
@@ -72,8 +76,11 @@ public class GameDataContext : DbContext
             entity.HasIndex(t => t.TrainerClass);
             entity.HasIndex(t => t.DisplayName);
 
-            // Value converter for SpriteId
-            entity.Property(t => t.SpriteId).HasConversion(new SpriteIdValueConverter());
+            // Value converter for GameTrainerId
+            entity.Property(t => t.TrainerId).HasConversion(new GameTrainerIdValueConverter());
+
+            // Value converter for GameSpriteId
+            entity.Property(t => t.SpriteId).HasConversion(new GameSpriteIdValueConverter());
 
             // PartyJson will be deserialized on-demand
         });
@@ -93,13 +100,17 @@ public class GameDataContext : DbContext
             entity.HasIndex(m => m.MapType);
             entity.HasIndex(m => m.DisplayName);
 
-            // Value converters for MapIdentifier
-            var mapIdConverter = new MapIdentifierValueConverter();
+            // Value converters for GameMapId (unified format)
+            var mapIdConverter = new GameMapIdValueConverter();
+            var nullableMapIdConverter = new NullableGameMapIdValueConverter();
             entity.Property(m => m.MapId).HasConversion(mapIdConverter);
-            entity.Property(m => m.NorthMapId).HasConversion(mapIdConverter);
-            entity.Property(m => m.SouthMapId).HasConversion(mapIdConverter);
-            entity.Property(m => m.EastMapId).HasConversion(mapIdConverter);
-            entity.Property(m => m.WestMapId).HasConversion(mapIdConverter);
+            entity.Property(m => m.NorthMapId).HasConversion(nullableMapIdConverter);
+            entity.Property(m => m.SouthMapId).HasConversion(nullableMapIdConverter);
+            entity.Property(m => m.EastMapId).HasConversion(nullableMapIdConverter);
+            entity.Property(m => m.WestMapId).HasConversion(nullableMapIdConverter);
+
+            // Value converter for RegionMapSection (GameMapSectionId)
+            entity.Property(m => m.RegionMapSection).HasConversion(new NullableGameMapSectionIdValueConverter());
 
             // TiledDataJson stores complete Tiled map data
             // Will be deserialized on-demand by MapLoader
@@ -114,6 +125,9 @@ public class GameDataContext : DbContext
         modelBuilder.Entity<PopupTheme>(entity =>
         {
             entity.HasKey(t => t.Id);
+
+            // Value converter for GameThemeId
+            entity.Property(t => t.Id).HasConversion(new GameThemeIdValueConverter());
 
             // Indexes for common queries
             entity.HasIndex(t => t.Name);
@@ -137,6 +151,10 @@ public class GameDataContext : DbContext
         modelBuilder.Entity<MapSection>(entity =>
         {
             entity.HasKey(s => s.Id);
+
+            // Value converters for unified ID types
+            entity.Property(s => s.Id).HasConversion(new GameMapSectionIdValueConverter());
+            entity.Property(s => s.ThemeId).HasConversion(new GameThemeIdValueConverter());
 
             // Indexes for common queries
             entity.HasIndex(s => s.Name);

@@ -128,3 +128,4 @@ if __name__ == '__main__':
     print("The center regions are now transparent, and white backgrounds have been removed.")
 
 
+

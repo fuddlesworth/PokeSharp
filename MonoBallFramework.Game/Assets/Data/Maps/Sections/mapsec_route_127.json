@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_ROUTE_127",
+  "id": "base:mapsec:hoenn/route_127",
   "name": "ROUTE 127",
-  "theme": "underwater",
+  "theme": "base:theme:popup/underwater",
   "x": 23,
   "y": 6,
   "width": 3,

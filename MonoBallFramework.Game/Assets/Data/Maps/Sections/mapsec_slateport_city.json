@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_SLATEPORT_CITY",
+  "id": "base:mapsec:hoenn/slateport_city",
   "name": "SLATEPORT CITY",
-  "theme": "marble",
+  "theme": "base:theme:popup/marble",
   "x": 8,
   "y": 10,
   "width": 1,

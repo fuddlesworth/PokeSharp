@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_MAUVILLE_CITY",
+  "id": "base:mapsec:hoenn/mauville_city",
   "name": "MAUVILLE CITY",
-  "theme": "marble",
+  "theme": "base:theme:popup/marble",
   "x": 8,
   "y": 6,
   "width": 2,

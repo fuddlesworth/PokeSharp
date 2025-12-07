@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_ROUTE_115",
+  "id": "base:mapsec:hoenn/route_115",
   "name": "ROUTE 115",
-  "theme": "wood",
+  "theme": "base:theme:popup/wood",
   "x": 0,
   "y": 2,
   "width": 1,

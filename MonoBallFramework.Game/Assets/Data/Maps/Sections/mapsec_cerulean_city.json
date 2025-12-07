@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_CERULEAN_CITY",
+  "id": "base:mapsec:hoenn/cerulean_city",
   "name": "CERULEAN CITY",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_ROUTE_20",
+  "id": "base:mapsec:hoenn/route_20",
   "name": "ROUTE 20",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

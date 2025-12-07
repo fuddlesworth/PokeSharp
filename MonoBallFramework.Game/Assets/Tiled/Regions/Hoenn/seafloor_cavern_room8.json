@@ -1,0 +1,1119 @@
+{
+  "compressionlevel": -1,
+  "height": 14,
+  "infinite": false,
+  "layers": [
+    {
+      "data": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        21,
+        21,
+        1,
+        23,
+        24,
+        25,
+        1,
+        26,
+        26,
+        1
+      ],
+      "height": 14,
+      "id": 1,
+      "name": "Ground",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 11,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "data": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        3,
+        5,
+        5,
+        6,
+        7,
+        8,
+        5,
+        5,
+        9,
+        2,
+        2,
+        10,
+        2,
+        3,
+        11,
+        12,
+        13,
+        9,
+        2,
+        14,
+        2,
+        2,
+        10,
+        3,
+        15,
+        1,
+        1,
+        1,
+        16,
+        9,
+        14,
+        2,
+        2,
+        10,
+        10,
+        1,
+        1,
+        1,
+        1,
+        1,
+        14,
+        14,
+        2,
+        2,
+        10,
+        10,
+        1,
+        1,
+        1,
+        1,
+        1,
+        14,
+        14,
+        2,
+        2,
+        10,
+        10,
+        1,
+        1,
+        1,
+        1,
+        1,
+        14,
+        14,
+        2,
+        2,
+        10,
+        10,
+        1,
+        1,
+        1,
+        1,
+        1,
+        14,
+        14,
+        2,
+        2,
+        10,
+        10,
+        1,
+        1,
+        1,
+        1,
+        1,
+        14,
+        14,
+        2,
+        2,
+        10,
+        10,
+        1,
+        1,
+        1,
+        1,
+        1,
+        14,
+        14,
+        2,
+        2,
+        10,
+        10,
+        1,
+        17,
+        18,
+        19,
+        1,
+        14,
+        14,
+        2,
+        2,
+        10,
+        10,
+        1,
+        1,
+        1,
+        1,
+        1,
+        14,
+        14,
+        2,
+        2,
+        10,
+        10,
+        1,
+        1,
+        20,
+        1,
+        1,
+        14,
+        14,
+        2,
+        2,
+        22,
+        22,
+        22,
+        4,
+        4,
+        4,
+        22,
+        22,
+        22,
+        2
+      ],
+      "height": 14,
+      "id": 2,
+      "name": "Objects",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 11,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "data": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        4,
+        4,
+        4,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0,
+        4,
+        4,
+        4,
+        4,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        4,
+        4,
+        4,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        4,
+        4,
+        4,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        4,
+        4,
+        4,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        4,
+        4,
+        4,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        4,
+        4,
+        4,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        4,
+        4,
+        4,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        4,
+        4,
+        4,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        4,
+        4,
+        4,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        4,
+        4,
+        4,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        4,
+        4,
+        4,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "height": 14,
+      "id": 3,
+      "name": "Overhead",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 11,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "id": 4,
+      "name": "Warps",
+      "type": "objectgroup",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 1,
+          "name": "Warp to seafloor_cavern_room9",
+          "type": "warp_event",
+          "x": 80,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "warp",
+              "propertytype": "Warp",
+              "type": "class",
+              "value": {
+                "map": "base:map:hoenn/seafloor_cavern_room9",
+                "x": 5,
+                "y": 4
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "Warp to seafloor_cavern_room3",
+          "type": "warp_event",
+          "x": 80,
+          "y": 192,
+          "width": 16,
+          "height": 16,
+          "properties": [
+            {
+              "name": "warp",
+              "propertytype": "Warp",
+              "type": "class",
+              "value": {
+                "map": "base:map:hoenn/seafloor_cavern_room3",
+                "x": 8,
+                "y": 1
+              }
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "NPCs",
+      "type": "objectgroup",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 3,
+          "name": "NPC_3",
+          "type": "npc",
+          "x": 64,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_pushable_boulder"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/look_around"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/event_script_strength_boulder"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_TEMP_11"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "name": "NPC_4",
+          "type": "npc",
+          "x": 80,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_pushable_boulder"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/look_around"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/event_script_strength_boulder"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_TEMP_12"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "name": "NPC_5",
+          "type": "npc",
+          "x": 96,
+          "y": 112,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_pushable_boulder"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/look_around"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/event_script_strength_boulder"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_TEMP_13"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "name": "NPC_6",
+          "type": "npc",
+          "x": 48,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_pushable_boulder"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/look_around"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/event_script_strength_boulder"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_TEMP_14"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "name": "NPC_7",
+          "type": "npc",
+          "x": 112,
+          "y": 96,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_pushable_boulder"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/look_around"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/event_script_strength_boulder"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_TEMP_15"
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "name": "NPC_8",
+          "type": "npc",
+          "x": 64,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_pushable_boulder"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/look_around"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/event_script_strength_boulder"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_TEMP_16"
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "name": "NPC_9",
+          "type": "npc",
+          "x": 80,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_pushable_boulder"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/look_around"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/event_script_strength_boulder"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_TEMP_17"
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "name": "NPC_10",
+          "type": "npc",
+          "x": 96,
+          "y": 80,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_pushable_boulder"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/look_around"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/event_script_strength_boulder"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_TEMP_18"
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "name": "NPC_11",
+          "type": "npc",
+          "x": 48,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_pushable_boulder"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/look_around"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/event_script_strength_boulder"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_TEMP_19"
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "name": "NPC_12",
+          "type": "npc",
+          "x": 64,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_pushable_boulder"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/look_around"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/event_script_strength_boulder"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_TEMP_1A"
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "name": "NPC_13",
+          "type": "npc",
+          "x": 96,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_pushable_boulder"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/look_around"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/event_script_strength_boulder"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_TEMP_1B"
+            }
+          ]
+        },
+        {
+          "id": 14,
+          "name": "NPC_14",
+          "type": "npc",
+          "x": 112,
+          "y": 64,
+          "width": 16,
+          "height": 16,
+          "visible": true,
+          "properties": [
+            {
+              "name": "spriteId",
+              "type": "string",
+              "value": "base:sprite:npcs/generic_pushable_boulder"
+            },
+            {
+              "name": "behaviorId",
+              "type": "string",
+              "value": "base:behavior:movement/look_around"
+            },
+            {
+              "name": "elevation",
+              "type": "int",
+              "value": 3
+            },
+            {
+              "name": "scriptId",
+              "type": "string",
+              "value": "base:script:map/event_script_strength_boulder"
+            },
+            {
+              "name": "flag",
+              "type": "string",
+              "value": "FLAG_TEMP_1C"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "nextlayerid": 1,
+  "nextobjectid": 15,
+  "orientation": "orthogonal",
+  "renderorder": "right-down",
+  "tiledversion": "1.11.2",
+  "tileheight": 16,
+  "tilewidth": 16,
+  "type": "map",
+  "version": "1.11",
+  "width": 11,
+  "properties": [
+    {
+      "name": "display_name",
+      "type": "string",
+      "value": "SeafloorCavern_Room8"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "value": "Hoenn"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "MUS_MT_CHIMNEY"
+    },
+    {
+      "name": "weather",
+      "type": "string",
+      "value": "WEATHER_NONE"
+    },
+    {
+      "name": "mapType",
+      "type": "string",
+      "value": "MAP_TYPE_UNDERGROUND"
+    },
+    {
+      "name": "showMapName",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "requiresFlash",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "name": "allowCycling",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowEscaping",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "allowRunning",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "battleScene",
+      "type": "string",
+      "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "regionMapSection",
+      "type": "string",
+      "value": "base:mapsec:hoenn/seafloor_cavern"
+    },
+    {
+      "name": "border",
+      "propertytype": "Border",
+      "type": "class",
+      "value": {
+        "top_left": 1,
+        "top_right": 1,
+        "bottom_left": 1,
+        "bottom_right": 1,
+        "top_left_top": 2,
+        "top_right_top": 2,
+        "bottom_left_top": 2,
+        "bottom_right_top": 2
+      }
+    }
+  ],
+  "tilesets": [
+    {
+      "firstgid": 1,
+      "source": "../../../Tilesets/hoenn/seafloor_cavern_room8/seafloor_cavern_room8.json"
+    }
+  ]
+}

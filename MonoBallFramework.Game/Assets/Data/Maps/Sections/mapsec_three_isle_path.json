@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_THREE_ISLE_PATH",
+  "id": "base:mapsec:hoenn/three_isle_path",
   "name": "THREE ISLE PATH",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

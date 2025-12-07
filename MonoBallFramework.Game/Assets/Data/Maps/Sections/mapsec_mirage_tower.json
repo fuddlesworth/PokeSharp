@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_MIRAGE_TOWER",
+  "id": "base:mapsec:hoenn/mirage_tower",
   "name": "MIRAGE TOWER",
-  "theme": "stone",
+  "theme": "base:theme:popup/stone",
   "x": 8,
   "y": 2,
   "width": 1,

@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_DOTTED_HOLE",
+  "id": "base:mapsec:hoenn/dotted_hole",
   "name": "DOTTED HOLE",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_OUTCAST_ISLAND",
+  "id": "base:mapsec:hoenn/outcast_island",
   "name": "OUTCAST ISLAND",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

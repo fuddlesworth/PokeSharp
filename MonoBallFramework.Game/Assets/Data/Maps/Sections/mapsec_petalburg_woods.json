@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_PETALBURG_WOODS",
+  "id": "base:mapsec:hoenn/petalburg_woods",
   "name": "PETALBURG WOODS",
-  "theme": "wood",
+  "theme": "base:theme:popup/wood",
   "x": 0,
   "y": 8,
   "width": 1,

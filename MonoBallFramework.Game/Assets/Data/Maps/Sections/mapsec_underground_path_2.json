@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_UNDERGROUND_PATH_2",
+  "id": "base:mapsec:hoenn/underground_path_2",
   "name": "UNDERGROUND PATH",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

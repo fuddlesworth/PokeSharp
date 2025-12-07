@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_ARTISAN_CAVE",
+  "id": "base:mapsec:hoenn/artisan_cave",
   "name": "ARTISAN CAVE",
-  "theme": "stone",
+  "theme": "base:theme:popup/stone",
   "x": 22,
   "y": 12,
   "width": 1,

@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_TREASURE_BEACH",
+  "id": "base:mapsec:hoenn/treasure_beach",
   "name": "TREASURE BEACH",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

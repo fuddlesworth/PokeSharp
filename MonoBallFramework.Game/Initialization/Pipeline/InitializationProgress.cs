@@ -27,9 +27,9 @@ public static class InitializationProgress
     public const float AssetManagerCreated = 0.4f;
 
     /// <summary>
-    ///     Progress value after loading sprite manifests (75%).
+    ///     Progress value after loading sprite definitions (75%).
     /// </summary>
-    public const float SpriteManifestsLoaded = 0.75f;
+    public const float SpriteDefinitionsLoaded = 0.75f;
 
     /// <summary>
     ///     Progress value after initializing game systems (85%).

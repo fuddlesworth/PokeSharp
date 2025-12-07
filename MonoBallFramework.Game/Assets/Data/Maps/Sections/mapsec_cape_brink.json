@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_CAPE_BRINK",
+  "id": "base:mapsec:hoenn/cape_brink",
   "name": "CAPE BRINK",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

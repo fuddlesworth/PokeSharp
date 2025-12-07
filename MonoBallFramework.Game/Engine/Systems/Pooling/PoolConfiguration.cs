@@ -1,6 +1,30 @@
 namespace MonoBallFramework.Game.Engine.Systems.Pooling;
 
 /// <summary>
+///     Defines how the system should behave when an entity pool is exhausted.
+/// </summary>
+public enum PoolExhaustionStrategy
+{
+    /// <summary>
+    ///     Throw an exception immediately when pool is exhausted (fail-fast).
+    ///     Best for development to reveal pool sizing issues early.
+    /// </summary>
+    ThrowException,
+
+    /// <summary>
+    ///     Fall back to creating entities directly when pool is exhausted.
+    ///     May cause GC pressure but keeps the game running.
+    /// </summary>
+    FallbackToCreate,
+
+    /// <summary>
+    ///     Log a warning and create entities directly when pool is exhausted.
+    ///     Recommended for production to prevent crashes while monitoring pool usage.
+    /// </summary>
+    LogWarningAndCreate
+}
+
+/// <summary>
 ///     Configuration for entity pools, defining size limits and behavior.
 ///     Used to initialize pools with specific characteristics for different entity types.
 /// </summary>
@@ -34,6 +58,12 @@ public class PoolConfiguration
     ///     Disable for maximum performance in production.
     /// </summary>
     public bool TrackStatistics { get; set; } = true;
+
+    /// <summary>
+    ///     Strategy to use when pool is exhausted.
+    ///     Defaults to LogWarningAndCreate for safer production behavior.
+    /// </summary>
+    public PoolExhaustionStrategy ExhaustionStrategy { get; set; } = PoolExhaustionStrategy.LogWarningAndCreate;
 
     // Common pool configurations for typical game entities
 

@@ -13,6 +13,7 @@ using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game;
 using MonoBallFramework.Game.GameData.Loading;
 using MonoBallFramework.Game.GameData.Services;
+using MonoBallFramework.Game.GameData.Sprites;
 using MonoBallFramework.Game.GameSystems.Services;
 using MonoBallFramework.Game.Infrastructure.Configuration;
 using MonoBallFramework.Game.Infrastructure.Diagnostics;
@@ -94,7 +95,7 @@ try
             DataLoader = sp.GetRequiredService<GameDataLoader>(),
             NpcDefinitionService = sp.GetRequiredService<NpcDefinitionService>(),
             MapDefinitionService = sp.GetRequiredService<MapDefinitionService>(),
-            SpriteLoader = sp.GetRequiredService<SpriteLoader>(),
+            SpriteRegistry = sp.GetRequiredService<SpriteRegistry>(),
             TemplateCacheInitializer = sp.GetRequiredService<TemplateCacheInitializer>(),
         };
         return new MonoBallFrameworkGame(loggerFactory, options, sp, gameConfig);

@@ -48,11 +48,10 @@ class SpriteSheetInfo:
 @dataclass
 class SpriteManifest:
     """Manifest for a sprite."""
-    Name: str
-    Category: str
-    OriginalPath: str
-    OutputDirectory: str
-    SpriteSheet: str
+    Id: str
+    DisplayName: str
+    Type: str
+    TexturePath: str
     FrameWidth: int
     FrameHeight: int
     FrameCount: int
@@ -89,10 +88,12 @@ class SpriteExtractor:
         
         self.sprites_path = self.pokeemerald_path / "graphics" / "object_events" / "pics" / "people"
         self.palettes_path = self.pokeemerald_path / "graphics" / "object_events" / "palettes"
-        
-        # Output directly to Sprites directory
-        self.sprites_output_path = self.output_path / "Sprites"
-        self.sprites_output_path.mkdir(parents=True, exist_ok=True)
+
+        # Split output paths for data and graphics
+        self.data_output_path = self.output_path / "Data" / "Sprites"
+        self.graphics_output_path = self.output_path / "Graphics" / "Sprites"
+        self.data_output_path.mkdir(parents=True, exist_ok=True)
+        self.graphics_output_path.mkdir(parents=True, exist_ok=True)
     
     def extract_all_sprites(self) -> None:
         """Extract all sprites from pokeemerald."""
@@ -136,7 +137,7 @@ class SpriteExtractor:
                         logger.error(f"Error processing {png_file.name}: {ex}")
         
         logger.info(f"\nExtracted {success_count} sprites")
-        logger.info("Each sprite has its own manifest.json in its directory")
+        logger.info("Sprite data in Assets/Data/Sprites/, graphics in Assets/Graphics/Sprites/")
     
     def _extract_sprite_from_pic_table(
         self,
@@ -268,20 +269,26 @@ class SpriteExtractor:
                     f"image {img_idx+1} {src_frame_info.frame_width}x{src_frame_info.frame_height}"
                 )
         
-        # Create output directory
-        base_folder = "Players" if is_player_sprite else "NPCs"
+        # Create output directories
+        base_folder = "players" if is_player_sprite else "npcs"
+        sprite_type = base_folder
+
         if is_player_sprite:
-            sprite_output_dir = self.sprites_output_path / base_folder / category / sprite_name
+            sprite_category = category
         else:
-            sprite_output_dir = self.sprites_output_path / base_folder / (
-                directory if directory else "generic"
-            ) / sprite_name
-        
-        sprite_output_dir.mkdir(parents=True, exist_ok=True)
-        
-        # Save combined spritesheet
-        output_path = sprite_output_dir / "spritesheet.png"
-        combined.save(output_path, "PNG")
+            sprite_category = directory if directory else "generic"
+
+        # Graphics directory
+        graphics_dir = self.graphics_output_path / sprite_type / sprite_category
+        graphics_dir.mkdir(parents=True, exist_ok=True)
+
+        # Data directory
+        data_dir = self.data_output_path / sprite_type / sprite_category
+        data_dir.mkdir(parents=True, exist_ok=True)
+
+        # Save combined spritesheet to Graphics directory
+        graphics_path = graphics_dir / f"{sprite_name}.png"
+        combined.save(graphics_path, "PNG")
         
         # Get physical frame mapping from pokeemerald (maps logical -> physical frame indices)
         physical_frame_mapping = self._get_physical_frame_mapping(pic_table_name)
@@ -329,26 +336,36 @@ class SpriteExtractor:
             directory,
             frame_info
         )
-        
+
+        # Generate ID and DisplayName
+        # EntityId format: base:sprite:category/name (only ONE slash allowed)
+        # Use sprite_type as category (npcs or players)
+        # Combine sprite_category and sprite_name to ensure uniqueness (e.g., brendan_normal, may_normal)
+        unique_name = f"{sprite_category}_{sprite_name}"
+        sprite_id = f"base:sprite:{sprite_type}/{unique_name}"
+        display_name = sprite_name.replace("_", " ").title()
+
+        # Generate TexturePath (keeps the original directory structure)
+        texture_path = f"Graphics/Sprites/{sprite_type}/{sprite_category}/{sprite_name}.png"
+
         # Create manifest
         manifest = SpriteManifest(
-            Name=sprite_name,
-            Category=category,
-            OriginalPath=", ".join(s.file_path for s in valid_sources),
-            OutputDirectory=str(sprite_output_dir.relative_to(self.sprites_output_path)),
-            SpriteSheet="spritesheet.png",
+            Id=sprite_id,
+            DisplayName=display_name,
+            Type="Sprite",
+            TexturePath=texture_path,
             FrameWidth=frame_info.frame_width,
             FrameHeight=frame_info.frame_height,
             FrameCount=logical_frame_count,
             Frames=frames,
             Animations=animations
         )
-        
-        # Save manifest
-        manifest_path = sprite_output_dir / "manifest.json"
+
+        # Save manifest to Data directory
+        manifest_path = data_dir / f"{sprite_name}.json"
         manifest_dict = asdict(manifest)
         save_json(manifest_dict, str(manifest_path))
-        
+
         logger.info(
             f"  ✓ Extracted {sprite_name}: {len(frames)} frames, "
             f"{len(animations)} animations"
@@ -366,31 +383,37 @@ class SpriteExtractor:
         relative_path = sprite_file_path.relative_to(self.sprites_path)
         sprite_name = sprite_file_path.stem
         directory = str(relative_path.parent).replace("\\", "/") if relative_path.parent != Path(".") else ""
-        
+
         # Determine sprite type and category
         is_player_sprite = (
             directory.lower().startswith("may") or
             directory.lower().startswith("brendan")
         )
         category = directory.split("/")[0] if directory else "generic"
-        
+
         logger.info(f"Processing: {sprite_name} ({category}) [Player: {is_player_sprite}]")
-        
+
         image = Image.open(sprite_file_path)
-        
+
         # Analyze sprite sheet
         frame_info = self._analyze_sprite_sheet(image, sprite_name)
-        
-        # Create output directory
-        base_folder = "Players" if is_player_sprite else "NPCs"
-        sprite_output_dir = self.sprites_output_path / base_folder / (
-            directory if directory else "generic"
-        ) / sprite_name
-        sprite_output_dir.mkdir(parents=True, exist_ok=True)
-        
+
+        # Create output directories
+        base_folder = "players" if is_player_sprite else "npcs"
+        sprite_type = base_folder
+        sprite_category = directory if directory else "generic"
+
+        # Graphics directory
+        graphics_dir = self.graphics_output_path / sprite_type / sprite_category
+        graphics_dir.mkdir(parents=True, exist_ok=True)
+
+        # Data directory
+        data_dir = self.data_output_path / sprite_type / sprite_category
+        data_dir.mkdir(parents=True, exist_ok=True)
+
         # Get physical frame mapping
         physical_frame_mapping = self._get_physical_frame_mapping(sprite_name)
-        
+
         # Create frame info
         frames: List[FrameInfo] = []
         if physical_frame_mapping:
@@ -411,54 +434,64 @@ class SpriteExtractor:
                     Width=frame_info.frame_width,
                     Height=frame_info.frame_height
                 ))
-        
-        # Save sprite sheet with transparency
-        output_path = sprite_output_dir / "spritesheet.png"
-        
+
+        # Save sprite sheet with transparency to Graphics directory
+        graphics_path = graphics_dir / f"{sprite_name}.png"
+
         # Detect mask color
         mask_color = self._detect_mask_color(image)
-        
+
         # Convert to RGBA
         if image.mode != "RGBA":
             rgba_image = image.convert("RGBA")
         else:
             rgba_image = image.copy()
-        
+
         # Apply transparency
         if mask_color:
             logger.info(f"  Applying mask color {mask_color} for transparency")
             self._apply_transparency(rgba_image, mask_color)
-        
+
         # Save as RGBA PNG
-        rgba_image.save(output_path, "PNG")
-        
+        rgba_image.save(graphics_path, "PNG")
+
         # Get animation data
         animations = self._generate_animations(sprite_name, directory, frame_info)
-        
+
         logical_frame_count = len(frames)
-        
+
+        # Generate ID and DisplayName
+        # EntityId format: base:sprite:category/name (only ONE slash allowed)
+        # Use sprite_type as category (npcs or players)
+        # Combine sprite_category and sprite_name to ensure uniqueness (e.g., brendan_normal, may_normal)
+        unique_name = f"{sprite_category}_{sprite_name}"
+        sprite_id = f"base:sprite:{sprite_type}/{unique_name}"
+        display_name = sprite_name.replace("_", " ").title()
+
+        # Generate TexturePath (keeps the original directory structure)
+        texture_path = f"Graphics/Sprites/{sprite_type}/{sprite_category}/{sprite_name}.png"
+
         # Create manifest
         manifest = SpriteManifest(
-            Name=sprite_name,
-            Category=category,
-            OriginalPath=str(relative_path),
-            OutputDirectory=str(sprite_output_dir.relative_to(self.sprites_output_path)),
-            SpriteSheet="spritesheet.png",
+            Id=sprite_id,
+            DisplayName=display_name,
+            Type="Sprite",
+            TexturePath=texture_path,
             FrameWidth=frame_info.frame_width,
             FrameHeight=frame_info.frame_height,
             FrameCount=logical_frame_count,
             Frames=frames,
             Animations=animations
         )
-        
-        # Save manifest
-        manifest_path = sprite_output_dir / "manifest.json"
+
+        # Save manifest to Data directory
+        manifest_path = data_dir / f"{sprite_name}.json"
         manifest_dict = asdict(manifest)
         save_json(manifest_dict, str(manifest_path))
-        
+
         image.close()
         rgba_image.close()
-        
+
         return manifest
     
     def _analyze_sprite_sheet(self, image: Image.Image, sprite_name: str) -> SpriteSheetInfo:

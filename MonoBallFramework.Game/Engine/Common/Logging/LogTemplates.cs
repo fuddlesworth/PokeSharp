@@ -688,11 +688,11 @@ public static partial class LogTemplates
     }
 
     /// <summary>
-    ///     Logs sprite manifest loaded.
+    ///     Logs sprite definitions found.
     /// </summary>
-    public static void LogSpriteManifestsFound(this ILogger logger, int count)
+    public static void LogSpriteDefinitionsFound(this ILogger logger, int count)
     {
-        string body = $"Found [yellow]{count}[/] sprite manifests to load";
+        string body = $"Found [yellow]{count}[/] sprite definitions to load";
         logger.LogInformation(LogFormatting.FormatTemplate(WithAccent(LogAccent.Asset, body)));
     }
 
@@ -888,19 +888,19 @@ public static partial class LogTemplates
     }
 
     /// <summary>
-    ///     Logs sprite manifest not found warning.
+    ///     Logs sprite definition not found warning.
     /// </summary>
-    public static void LogSpriteManifestNotFound(this ILogger logger, string spriteName)
+    public static void LogSpriteDefinitionNotFound(this ILogger logger, string spriteName)
     {
         string body =
-            $"[orange3]⚠[/] Sprite manifest not found for [red]{EscapeMarkup(spriteName)}[/]";
+            $"[orange3]⚠[/] Sprite definition not found for [red]{EscapeMarkup(spriteName)}[/]";
         logger.LogWarning(LogFormatting.FormatTemplate(WithAccent(LogAccent.Asset, body)));
     }
 
     /// <summary>
-    ///     Logs failed to load sprite manifest warning.
+    ///     Logs failed to load sprite definition warning.
     /// </summary>
-    public static void LogSpriteManifestLoadFailedForAnimation(
+    public static void LogSpriteDefinitionLoadFailedForAnimation(
         this ILogger logger,
         Exception ex,
         string category,
@@ -908,7 +908,7 @@ public static partial class LogTemplates
     )
     {
         string body =
-            $"[orange3]⚠[/] Failed to load sprite manifest for [cyan]{EscapeMarkup(category)}[/][grey]/[/][cyan]{EscapeMarkup(spriteName)}[/]";
+            $"[orange3]⚠[/] Failed to load sprite definition for [cyan]{EscapeMarkup(category)}[/][grey]/[/][cyan]{EscapeMarkup(spriteName)}[/]";
         logger.LogWarning(ex, LogFormatting.FormatTemplate(WithAccent(LogAccent.Asset, body)));
     }
 
@@ -1260,6 +1260,22 @@ public static partial class LogTemplates
     }
 
     /// <summary>
+    ///     Logs map definition load failed.
+    /// </summary>
+    public static void LogMapDefinitionLoadFailed(this ILogger logger, string file, Exception? ex = null)
+    {
+        string body = $"[red]✗ Error loading map definition from[/] [cyan]{EscapeMarkup(file)}[/]";
+        if (ex != null)
+        {
+            logger.LogError(ex, LogFormatting.FormatTemplate(WithAccent(LogAccent.Map, body)));
+        }
+        else
+        {
+            logger.LogWarning(LogFormatting.FormatTemplate(WithAccent(LogAccent.Map, body)));
+        }
+    }
+
+    /// <summary>
     ///     Logs sprite manifests scanning started.
     /// </summary>
     public static void LogSpriteScanningStarted(this ILogger logger, string path)
@@ -1289,15 +1305,15 @@ public static partial class LogTemplates
     }
 
     /// <summary>
-    ///     Logs sprite manifest load failed.
+    ///     Logs sprite definition load failed.
     /// </summary>
-    public static void LogSpriteManifestLoadFailed(
+    public static void LogSpriteDefinitionLoadFailed(
         this ILogger logger,
         string path,
         Exception? ex = null
     )
     {
-        string body = $"[orange3]⚠[/] Failed to load manifest from [cyan]{EscapeMarkup(path)}[/]";
+        string body = $"[orange3]⚠[/] Failed to load definition from [cyan]{EscapeMarkup(path)}[/]";
         if (ex != null)
         {
             logger.LogWarning(ex, LogFormatting.FormatTemplate(WithAccent(LogAccent.Asset, body)));

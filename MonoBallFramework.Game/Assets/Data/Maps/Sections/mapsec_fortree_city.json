@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_FORTREE_CITY",
+  "id": "base:mapsec:hoenn/fortree_city",
   "name": "FORTREE CITY",
-  "theme": "brick",
+  "theme": "base:theme:popup/brick",
   "x": 12,
   "y": 0,
   "width": 1,

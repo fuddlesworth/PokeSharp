@@ -6,6 +6,7 @@ using MonoBallFramework.Game.Engine.Systems.Management;
 using MonoBallFramework.Game.Scripting.Api;
 using MonoBallFramework.Game.Scripting.Services;
 using MonoBallFramework.Game.Scripting.Systems;
+using MonoBallFramework.Game.Systems;
 
 namespace MonoBallFramework.Game.Initialization.Behaviors;
 
@@ -19,7 +20,8 @@ public class NPCBehaviorInitializer(
     TypeRegistry<BehaviorDefinition> behaviorRegistry,
     ScriptService scriptService,
     IScriptingApiProvider apiProvider,
-    IEventBus eventBus
+    IEventBus eventBus,
+    MapLifecycleManager? mapLifecycleManager = null
 )
 {
     /// <summary>
@@ -87,6 +89,19 @@ public class NPCBehaviorInitializer(
             );
             npcBehaviorSystem.SetBehaviorRegistry(behaviorRegistry);
             systemManager.RegisterUpdateSystem(npcBehaviorSystem);
+
+            // Wire up NPCBehaviorSystem to MapLifecycleManager for behavior cleanup during entity destruction
+            if (mapLifecycleManager != null)
+            {
+                mapLifecycleManager.SetNPCBehaviorSystem(npcBehaviorSystem);
+                logger.LogInformation("NPCBehaviorSystem wired to MapLifecycleManager for behavior cleanup");
+            }
+            else
+            {
+                logger.LogWarning(
+                    "MapLifecycleManager not available - behavior cleanup on map unload may cause AccessViolationException"
+                );
+            }
 
             logger.LogSystemInitialized("NPCBehaviorSystem", ("behaviors", loadedCount));
         }

@@ -15,8 +15,10 @@ using MonoBallFramework.Game.Ecs.Components.Maps;
 using MonoBallFramework.Game.Ecs.Components.Movement;
 using MonoBallFramework.Game.Ecs.Components.Relationships;
 using MonoBallFramework.Game.Ecs.Components.Rendering;
+using MonoBallFramework.Game.Ecs.Components.NPCs;
 using MonoBallFramework.Game.Ecs.Components.Tiles;
 using MonoBallFramework.Game.GameSystems.Spatial;
+using MonoBallFramework.Game.Scripting.Systems;
 using MonoBallFramework.Game.Systems.Rendering;
 
 namespace MonoBallFramework.Game.Systems;
@@ -39,6 +41,17 @@ public class MapLifecycleManager(
     private readonly Dictionary<MapRuntimeId, MapMetadata> _loadedMaps = new();
     private MapRuntimeId? _currentMapId;
     private MapRuntimeId? _previousMapId;
+    private NPCBehaviorSystem? _npcBehaviorSystem;
+
+    /// <summary>
+    ///     Sets the NPCBehaviorSystem for behavior cleanup during entity destruction.
+    ///     Called after NPCBehaviorInitializer creates the system.
+    /// </summary>
+    public void SetNPCBehaviorSystem(NPCBehaviorSystem npcBehaviorSystem)
+    {
+        _npcBehaviorSystem = npcBehaviorSystem;
+        logger?.LogDebug("NPCBehaviorSystem linked to MapLifecycleManager for cleanup");
+    }
 
     /// <summary>
     ///     Gets the current active map ID
@@ -304,21 +317,31 @@ public class MapLifecycleManager(
         }
 
         // Destroy non-pooled entities
+        int behaviorsCleanedUp = 0;
         foreach (Entity entity in entitiesToDestroy)
         {
             if (world.IsAlive(entity))
             {
+                // CRITICAL: Clean up behavior scripts BEFORE destroying entity
+                // This ensures event subscriptions are disposed to prevent AccessViolationException
+                if (_npcBehaviorSystem != null && entity.Has<Behavior>())
+                {
+                    _npcBehaviorSystem.CleanupEntityBehavior(entity);
+                    behaviorsCleanedUp++;
+                }
+
                 world.Destroy(entity);
             }
         }
 
         int totalProcessed = releasedCount + entitiesToDestroy.Count;
         logger?.LogInformation(
-            "Processed {Count} entities for map {MapId} (released: {Released}, destroyed: {Destroyed})",
+            "Processed {Count} entities for map {MapId} (released: {Released}, destroyed: {Destroyed}, behaviors: {Behaviors})",
             totalProcessed,
             mapId.Value,
             releasedCount,
-            entitiesToDestroy.Count
+            entitiesToDestroy.Count,
+            behaviorsCleanedUp
         );
 
         return totalProcessed;
@@ -443,8 +466,8 @@ public class MapLifecycleManager(
             UnloadMap(mapId);
         }
 
-        // PHASE 2: Clear sprite manifest cache to free memory
-        spriteTextureLoader.ClearCache();
+        // PHASE 2: Clear sprite missing cache to free memory
+        spriteTextureLoader.ClearMissingSpritesCache();
 
         GC.Collect();
         GC.WaitForPendingFinalizers();
@@ -474,8 +497,8 @@ public class MapLifecycleManager(
         // Without this, old map tiles remain in the spatial index
         spatialHashSystem.InvalidateStaticTiles();
 
-        // Clear sprite cache
-        spriteTextureLoader.ClearCache();
+        // Clear sprite missing cache
+        spriteTextureLoader.ClearMissingSpritesCache();
 
         logger?.LogInformation(
             "All map entities destroyed ({Count} entities), spatial hash invalidated",
@@ -567,20 +590,30 @@ public class MapLifecycleManager(
         }
 
         // Destroy non-pooled entities
+        int behaviorsCleanedUp = 0;
         foreach (Entity entity in entitiesToDestroy)
         {
             if (world.IsAlive(entity))
             {
+                // CRITICAL: Clean up behavior scripts BEFORE destroying entity
+                // This ensures event subscriptions are disposed to prevent AccessViolationException
+                if (_npcBehaviorSystem != null && entity.Has<Behavior>())
+                {
+                    _npcBehaviorSystem.CleanupEntityBehavior(entity);
+                    behaviorsCleanedUp++;
+                }
+
                 world.Destroy(entity);
             }
         }
 
         int totalProcessed = releasedCount + entitiesToDestroy.Count;
         logger?.LogInformation(
-            "Destroyed {Count} map entities during full cleanup (released: {Released}, destroyed: {Destroyed})",
+            "Destroyed {Count} map entities during full cleanup (released: {Released}, destroyed: {Destroyed}, behaviors: {Behaviors})",
             totalProcessed,
             releasedCount,
-            entitiesToDestroy.Count
+            entitiesToDestroy.Count,
+            behaviorsCleanedUp
         );
         return totalProcessed;
     }

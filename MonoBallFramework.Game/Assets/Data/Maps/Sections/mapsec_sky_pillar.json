@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_SKY_PILLAR",
+  "id": "base:mapsec:hoenn/sky_pillar",
   "name": "SKY PILLAR",
-  "theme": "stone",
+  "theme": "base:theme:popup/stone",
   "x": 19,
   "y": 10,
   "width": 1,

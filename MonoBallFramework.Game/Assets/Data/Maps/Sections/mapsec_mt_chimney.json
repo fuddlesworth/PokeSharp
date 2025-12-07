@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_MT_CHIMNEY",
+  "id": "base:mapsec:hoenn/mt_chimney",
   "name": "MT. CHIMNEY",
-  "theme": "stone",
+  "theme": "base:theme:popup/stone",
   "x": 6,
   "y": 2,
   "width": 1,

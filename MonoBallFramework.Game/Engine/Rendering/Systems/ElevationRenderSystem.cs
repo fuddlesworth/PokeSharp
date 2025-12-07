@@ -81,12 +81,13 @@ public class ElevationRenderSystem(
         MapWorldPosition
     >();
 
-    // Sprite queries (moving and static)
+    // Sprite queries (moving and static) - require Visible component for rendering
     private readonly QueryDescription _movingSpriteQuery = QueryCache.Get<
         Position,
         Sprite,
         GridMovement,
-        Elevation
+        Elevation,
+        Visible
     >();
 
     // Query for player position (to determine current map for borders)
@@ -97,7 +98,8 @@ public class ElevationRenderSystem(
     private readonly QueryDescription _staticSpriteQuery = QueryCache.Get<
         Position,
         Sprite,
-        Elevation
+        Elevation,
+        Visible
     >();
 
     // Tile queries (with and without LayerOffset for parallax)
@@ -132,6 +134,9 @@ public class ElevationRenderSystem(
 
     // Track whether we've logged the border texture warning (avoid spam)
     private bool _loggedBorderTextureWarning;
+
+    // Track missing sprite textures to avoid repeated log warnings (prevents log spam)
+    private readonly HashSet<string> _reportedMissingSpriteTextures = new();
 
     // Reusable Vector2/Rectangle instances to avoid allocations (400-600 per frame eliminated)
     private Vector2 _reusablePosition = Vector2.Zero;
@@ -207,6 +212,14 @@ public class ElevationRenderSystem(
 
             // Fast path - no profiling overhead
             UpdateCameraCache(world, context.Camera);
+            
+            // Defensive check: Skip rendering if viewport is not initialized
+            // This should never happen with proper initialization, but prevents crashes
+            if (context.Camera.Viewport.Width == 0 || context.Camera.Viewport.Height == 0)
+            {
+                return;
+            }
+            
             UpdateMapWorldOriginsCache(world);
             UpdateMapBordersCache(world);
 
@@ -451,7 +464,7 @@ public class ElevationRenderSystem(
             in _movingSpriteQuery,
             (ref Sprite sprite) =>
             {
-                texturesNeeded.Add(sprite.TextureKey);
+                texturesNeeded.Add(sprite.SpriteId.TextureKey);
             }
         );
 
@@ -459,7 +472,7 @@ public class ElevationRenderSystem(
             in _staticSpriteQuery,
             (ref Sprite sprite) =>
             {
-                texturesNeeded.Add(sprite.TextureKey);
+                texturesNeeded.Add(sprite.SpriteId.TextureKey);
             }
         );
 
@@ -507,6 +520,14 @@ public class ElevationRenderSystem(
     /// </remarks>
     private void UpdateCameraCache(World world, Camera camera)
     {
+        // Defensive check: If viewport is not initialized, use identity matrix
+        // This should never happen with proper initialization, but prevents crashes
+        if (camera.Viewport.Width == 0 || camera.Viewport.Height == 0)
+        {
+            _cachedCameraTransform = Matrix.Identity;
+            return;
+        }
+
         // Only recalculate if camera changed (dirty flag optimization)
         if (!camera.IsDirty && _cachedCameraTransform != Matrix.Identity)
         {
@@ -855,8 +876,8 @@ public class ElevationRenderSystem(
             _logger?.LogError(
                 ex,
                 "    ERROR rendering moving sprite '{Category}/{SpriteName}' at position ({X}, {Y})",
-                sprite.Category,
-                sprite.SpriteName,
+                sprite.SpriteId.Category,
+                sprite.SpriteId.SpriteName,
                 position.PixelX,
                 position.PixelY
             );
@@ -934,8 +955,8 @@ public class ElevationRenderSystem(
             _logger?.LogError(
                 ex,
                 "    ERROR rendering sprite '{Category}/{SpriteName}' at position ({X}, {Y})",
-                sprite.Category,
-                sprite.SpriteName,
+                sprite.SpriteId.Category,
+                sprite.SpriteId.SpriteName,
                 position.PixelX,
                 position.PixelY
             );
@@ -950,7 +971,7 @@ public class ElevationRenderSystem(
     /// <returns>The texture if available, null otherwise.</returns>
     private Texture2D? TryGetSpriteTexture(ref Sprite sprite)
     {
-        string textureKey = sprite.TextureKey;
+        string textureKey = sprite.SpriteId.TextureKey;
 
         // Check if texture already loaded
         if (AssetManager.HasTexture(textureKey))
@@ -958,8 +979,14 @@ public class ElevationRenderSystem(
             return AssetManager.GetTexture(textureKey);
         }
 
+        // Skip sprites we've already reported as missing (prevents log spam)
+        if (_reportedMissingSpriteTextures.Contains(textureKey))
+        {
+            return null;
+        }
+
         // Try lazy load
-        TryLazyLoadSprite(sprite.Category, sprite.SpriteName, textureKey);
+        TryLazyLoadSprite(sprite.SpriteId.Category, sprite.SpriteId.SpriteName, textureKey);
 
         // Check again after lazy load
         if (AssetManager.HasTexture(textureKey))
@@ -967,13 +994,16 @@ public class ElevationRenderSystem(
             return AssetManager.GetTexture(textureKey);
         }
 
-        // Texture unavailable
-        _logger?.LogWarning(
-            "    WARNING: Texture '{TextureKey}' NOT FOUND - skipping sprite ({Category}/{SpriteName})",
-            textureKey,
-            sprite.Category,
-            sprite.SpriteName
-        );
+        // Texture unavailable - log once and track as missing
+        if (_reportedMissingSpriteTextures.Add(textureKey))
+        {
+            _logger?.LogWarning(
+                "    WARNING: Texture '{TextureKey}' NOT FOUND - skipping sprite ({Category}/{SpriteName})",
+                textureKey,
+                sprite.SpriteId.Category,
+                sprite.SpriteId.SpriteName
+            );
+        }
         return null;
     }
 

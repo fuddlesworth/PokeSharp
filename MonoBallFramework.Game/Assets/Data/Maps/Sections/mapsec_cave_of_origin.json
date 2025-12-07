@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_CAVE_OF_ORIGIN",
+  "id": "base:mapsec:hoenn/cave_of_origin",
   "name": "CAVE OF ORIGIN",
-  "theme": "stone",
+  "theme": "base:theme:popup/stone",
   "x": 21,
   "y": 7,
   "width": 1,

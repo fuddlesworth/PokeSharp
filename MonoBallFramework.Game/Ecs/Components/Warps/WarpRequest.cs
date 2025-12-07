@@ -8,14 +8,13 @@ namespace MonoBallFramework.Game.Ecs.Components.Warps;
 /// </summary>
 /// <remarks>
 ///     This struct captures all the information needed to execute a warp transition.
-///     Using MapIdentifier instead of raw strings provides type safety and validation.
 /// </remarks>
 public readonly struct WarpRequest
 {
     /// <summary>
-    ///     The target map identifier (type-safe).
+    ///     The target map identifier.
     /// </summary>
-    public MapIdentifier TargetMap { get; init; }
+    public GameMapId TargetMap { get; init; }
 
     /// <summary>
     ///     Target X tile coordinate on the destination map.
@@ -39,7 +38,7 @@ public readonly struct WarpRequest
     /// <param name="targetX">Target X tile coordinate.</param>
     /// <param name="targetY">Target Y tile coordinate.</param>
     /// <param name="targetElevation">Target elevation (default: 3).</param>
-    public WarpRequest(MapIdentifier targetMap, int targetX, int targetY, byte targetElevation = 3)
+    public WarpRequest(GameMapId targetMap, int targetX, int targetY, byte targetElevation = 3)
     {
         TargetMap = targetMap;
         TargetX = targetX;

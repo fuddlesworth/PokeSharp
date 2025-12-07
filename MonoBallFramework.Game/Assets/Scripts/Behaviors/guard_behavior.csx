@@ -103,6 +103,9 @@ public class GuardBehavior : ScriptBase
         {
             Context.World.Remove<GuardState>(Context.Entity.Value);
         }
+
+        // CRITICAL: Dispose event subscriptions to prevent AccessViolationException on entity destruction
+        base.OnUnload();
     }
 
     private static Direction RotateDirection(Direction current)

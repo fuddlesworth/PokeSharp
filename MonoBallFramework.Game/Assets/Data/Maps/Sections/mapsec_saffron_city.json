@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_SAFFRON_CITY",
+  "id": "base:mapsec:hoenn/saffron_city",
   "name": "SAFFRON CITY",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

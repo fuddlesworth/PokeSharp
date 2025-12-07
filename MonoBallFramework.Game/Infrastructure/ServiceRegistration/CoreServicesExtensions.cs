@@ -9,6 +9,7 @@ using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game.GameData;
 using MonoBallFramework.Game.GameData.Loading;
 using MonoBallFramework.Game.GameData.Services;
+using MonoBallFramework.Game.GameData.Sprites;
 using MonoBallFramework.Game.Infrastructure.Configuration;
 using MonoBallFramework.Game.Infrastructure.Services;
 using static MonoBallFramework.Game.Engine.Systems.Pooling.PoolNames;
@@ -136,8 +137,8 @@ public static class CoreServicesExtensions
         services.AddSingleton<MapDefinitionService>();
         services.AddSingleton<IMapPopupDataService, MapPopupDataService>();
 
-        // NPC Sprite Loader - for loading sprites extracted from Pokemon Emerald
-        services.AddSingleton<SpriteLoader>();
+        // Sprite Registry - for loading sprite definitions following the registry pattern
+        services.AddSingleton<SpriteRegistry>();
 
         return services;
     }

@@ -12,12 +12,12 @@ namespace MonoBallFramework.Game.GameData.Entities;
 public class MapDefinition
 {
     /// <summary>
-    ///     Unique map identifier (e.g., "littleroot_town", "route_101").
+    ///     Unique map identifier in unified format (e.g., "base:map:hoenn/littleroot_town").
     /// </summary>
     [Key]
     [MaxLength(100)]
     [Column(TypeName = "nvarchar(100)")]
-    public MapIdentifier MapId { get; set; }
+    public GameMapId MapId { get; set; } = null!;
 
     /// <summary>
     ///     Display name shown in-game (e.g., "Littleroot Town", "Route 101").
@@ -95,17 +95,18 @@ public class MapDefinition
     public string BattleScene { get; set; } = "MAP_BATTLE_SCENE_NORMAL";
 
     /// <summary>
-    ///     Region map section for Town Map highlighting (e.g., "MAPSEC_LITTLEROOT_TOWN").
-    /// </summary>
-    [MaxLength(100)]
-    public string? RegionMapSection { get; set; }
-
-    /// <summary>
-    ///     Map connected to the north.
+    ///     Region map section for Town Map highlighting (e.g., "base:mapsec:hoenn/littleroot_town").
     /// </summary>
     [MaxLength(100)]
     [Column(TypeName = "nvarchar(100)")]
-    public MapIdentifier? NorthMapId { get; set; }
+    public GameMapSectionId? RegionMapSection { get; set; }
+
+    /// <summary>
+    ///     Map connected to the north (e.g., "base:map:hoenn/route_101").
+    /// </summary>
+    [MaxLength(100)]
+    [Column(TypeName = "nvarchar(100)")]
+    public GameMapId? NorthMapId { get; set; }
 
     /// <summary>
     ///     Connection offset for north map in tiles.
@@ -114,11 +115,11 @@ public class MapDefinition
     public int NorthConnectionOffset { get; set; } = 0;
 
     /// <summary>
-    ///     Map connected to the south.
+    ///     Map connected to the south (e.g., "base:map:hoenn/route_102").
     /// </summary>
     [MaxLength(100)]
     [Column(TypeName = "nvarchar(100)")]
-    public MapIdentifier? SouthMapId { get; set; }
+    public GameMapId? SouthMapId { get; set; }
 
     /// <summary>
     ///     Connection offset for south map in tiles.
@@ -127,11 +128,11 @@ public class MapDefinition
     public int SouthConnectionOffset { get; set; } = 0;
 
     /// <summary>
-    ///     Map connected to the east.
+    ///     Map connected to the east (e.g., "base:map:hoenn/oldale_town").
     /// </summary>
     [MaxLength(100)]
     [Column(TypeName = "nvarchar(100)")]
-    public MapIdentifier? EastMapId { get; set; }
+    public GameMapId? EastMapId { get; set; }
 
     /// <summary>
     ///     Connection offset for east map in tiles.
@@ -140,11 +141,11 @@ public class MapDefinition
     public int EastConnectionOffset { get; set; } = 0;
 
     /// <summary>
-    ///     Map connected to the west.
+    ///     Map connected to the west (e.g., "base:map:hoenn/petalburg_city").
     /// </summary>
     [MaxLength(100)]
     [Column(TypeName = "nvarchar(100)")]
-    public MapIdentifier? WestMapId { get; set; }
+    public GameMapId? WestMapId { get; set; }
 
     /// <summary>
     ///     Connection offset for west map in tiles.

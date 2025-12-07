@@ -1,0 +1,67 @@
+{
+  "Id": "base:sprite:players/brendan_fieldmove",
+  "DisplayName": "Fieldmove",
+  "Type": "Sprite",
+  "TexturePath": "Graphics/Sprites/players/brendan/fieldmove.png",
+  "FrameWidth": 16,
+  "FrameHeight": 32,
+  "FrameCount": 5,
+  "Frames": [
+    {
+      "Index": 0,
+      "X": 0,
+      "Y": 0,
+      "Width": 16,
+      "Height": 32
+    },
+    {
+      "Index": 1,
+      "X": 16,
+      "Y": 0,
+      "Width": 16,
+      "Height": 32
+    },
+    {
+      "Index": 2,
+      "X": 32,
+      "Y": 0,
+      "Width": 16,
+      "Height": 32
+    },
+    {
+      "Index": 3,
+      "X": 48,
+      "Y": 0,
+      "Width": 16,
+      "Height": 32
+    },
+    {
+      "Index": 4,
+      "X": 64,
+      "Y": 0,
+      "Width": 16,
+      "Height": 32
+    }
+  ],
+  "Animations": [
+    {
+      "Name": "field_move",
+      "Loop": true,
+      "FrameIndices": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "FrameDurations": [
+        0.06666666666666667,
+        0.06666666666666667,
+        0.06666666666666667,
+        0.06666666666666667,
+        0.13333333333333333
+      ],
+      "FlipHorizontal": false
+    }
+  ]
+}

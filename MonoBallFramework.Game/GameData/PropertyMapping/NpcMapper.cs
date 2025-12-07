@@ -1,5 +1,6 @@
 using Arch.Core;
 using MonoBallFramework.Game.Ecs.Components.NPCs;
+using MonoBallFramework.Game.Engine.Core.Types;
 
 namespace MonoBallFramework.Game.GameData.PropertyMapping;
 
@@ -30,7 +31,7 @@ public class NpcMapper : IEntityPropertyMapper<Npc>
             ? idValue?.ToString() ?? "unknown"
             : "unknown";
 
-        var npc = new Npc(npcId);
+        var npc = new Npc(GameNpcId.Create(npcId));
 
         // Check if this NPC is a trainer
         if (properties.TryGetValue("trainer", out object? trainerValue))

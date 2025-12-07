@@ -1,6 +1,7 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MonoBallFramework.Game.Engine.Scenes;
-using MonoBallFramework.Game.Systems;
+using MonoBallFramework.Game.Infrastructure.Services;
 using MonoBallFramework.Game.Systems.Rendering;
 
 namespace MonoBallFramework.Game.Initialization.Pipeline.Steps;
@@ -40,10 +41,12 @@ public class LoadSpriteTexturesStep : InitializationStepBase
         // Create sprite texture loader for lazy loading
         ILogger<SpriteTextureLoader> spriteTextureLogger =
             context.LoggerFactory.CreateLogger<SpriteTextureLoader>();
+        IAssetPathResolver pathResolver = context.Services.GetRequiredService<IAssetPathResolver>();
         var spriteTextureLoader = new SpriteTextureLoader(
-            context.SpriteLoader,
+            context.SpriteRegistry,
             context.GameInitializer.RenderSystem.AssetManager,
             context.GraphicsDevice,
+            pathResolver,
             spriteTextureLogger
         );
         context.SpriteTextureLoader = spriteTextureLoader;

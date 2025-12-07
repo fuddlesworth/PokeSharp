@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_SHOAL_CAVE",
+  "id": "base:mapsec:hoenn/shoal_cave",
   "name": "SHOAL CAVE",
-  "theme": "stone",
+  "theme": "base:theme:popup/stone",
   "x": 24,
   "y": 4,
   "width": 1,

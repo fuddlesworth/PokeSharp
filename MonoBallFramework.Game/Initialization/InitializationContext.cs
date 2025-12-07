@@ -13,6 +13,7 @@ using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game.GameData.Loading;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Core;
 using MonoBallFramework.Game.GameData.Services;
+using MonoBallFramework.Game.GameData.Sprites;
 using MonoBallFramework.Game.GameSystems.Services;
 using MonoBallFramework.Game.Infrastructure.Configuration;
 using MonoBallFramework.Game.Infrastructure.Diagnostics;
@@ -46,7 +47,7 @@ public class InitializationContext
         SystemManager systemManager,
         IEntityFactoryService entityFactory,
         EntityPoolManager poolManager,
-        SpriteLoader spriteLoader,
+        SpriteRegistry spriteRegistry,
         TypeRegistry<BehaviorDefinition> behaviorRegistry,
         TypeRegistry<TileBehaviorDefinition> tileBehaviorRegistry,
         ScriptService scriptService,
@@ -72,7 +73,7 @@ public class InitializationContext
         SystemManager = systemManager ?? throw new ArgumentNullException(nameof(systemManager));
         EntityFactory = entityFactory ?? throw new ArgumentNullException(nameof(entityFactory));
         PoolManager = poolManager ?? throw new ArgumentNullException(nameof(poolManager));
-        SpriteLoader = spriteLoader ?? throw new ArgumentNullException(nameof(spriteLoader));
+        SpriteRegistry = spriteRegistry ?? throw new ArgumentNullException(nameof(spriteRegistry));
         BehaviorRegistry =
             behaviorRegistry ?? throw new ArgumentNullException(nameof(behaviorRegistry));
         TileBehaviorRegistry =
@@ -160,7 +161,7 @@ public class InitializationContext
     public SystemManager SystemManager { get; }
     public IEntityFactoryService EntityFactory { get; }
     public EntityPoolManager PoolManager { get; }
-    public SpriteLoader SpriteLoader { get; }
+    public SpriteRegistry SpriteRegistry { get; }
     public TypeRegistry<BehaviorDefinition> BehaviorRegistry { get; }
     public TypeRegistry<TileBehaviorDefinition> TileBehaviorRegistry { get; }
     public ScriptService ScriptService { get; }

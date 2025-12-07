@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_VIRIDIAN_FOREST",
+  "id": "base:mapsec:hoenn/viridian_forest",
   "name": "VIRIDIAN FOREST",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

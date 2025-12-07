@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_ROUTE_110",
+  "id": "base:mapsec:hoenn/route_110",
   "name": "ROUTE 110",
-  "theme": "wood",
+  "theme": "base:theme:popup/wood",
   "x": 8,
   "y": 7,
   "width": 1,

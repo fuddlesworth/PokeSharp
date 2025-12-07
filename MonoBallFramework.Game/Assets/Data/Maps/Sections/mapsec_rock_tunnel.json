@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_ROCK_TUNNEL",
+  "id": "base:mapsec:hoenn/rock_tunnel",
   "name": "ROCK TUNNEL",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

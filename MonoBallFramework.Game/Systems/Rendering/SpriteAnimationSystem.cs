@@ -5,35 +5,39 @@ using MonoBallFramework.Game.Ecs.Components.Movement;
 using MonoBallFramework.Game.Ecs.Components.Rendering;
 using MonoBallFramework.Game.Engine.Core.Systems;
 using MonoBallFramework.Game.Engine.Core.Systems.Base;
-using MonoBallFramework.Game.Infrastructure.Services;
+using MonoBallFramework.Game.GameData.Sprites;
 using EcsQueries = MonoBallFramework.Game.Engine.Systems.Queries.Queries;
 
 namespace MonoBallFramework.Game.Systems.Rendering;
 
 /// <summary>
 ///     System that updates sprite frames based on animation data.
-///     Reads animation sequences from NPCSpriteLoader manifests and updates
+///     Reads animation sequences from SpriteRegistry definitions and updates
 ///     the Sprite component's CurrentFrame and SourceRect properties.
 ///     Priority: 875 (after Movement:700 and TileAnimation:850, before Render:1000).
 /// </summary>
 public class SpriteAnimationSystem : SystemBase, IUpdateSystem
 {
-    // Cache animation lookups by manifest to avoid repeated LINQ queries
-    private readonly Dictionary<string, Dictionary<string, SpriteAnimationInfo>> _animationCache =
+    // Cache animation lookups by definition to avoid repeated LINQ queries
+    private readonly Dictionary<string, Dictionary<string, SpriteAnimationDefinition>> _animationCache =
         new();
 
     private readonly ILogger<SpriteAnimationSystem>? _logger;
 
-    // Cache manifests for performance (avoid repeated async loads)
-    private readonly Dictionary<string, SpriteManifest> _manifestCache = new();
-    private readonly SpriteLoader _spriteLoader;
+    // Cache definitions for performance (avoid repeated registry lookups)
+    private readonly Dictionary<string, SpriteDefinition> _definitionCache = new();
+
+    // Track missing sprites to avoid repeated lookup attempts and log spam
+    private readonly HashSet<string> _missingSprites = new();
+
+    private readonly SpriteRegistry _spriteRegistry;
 
     public SpriteAnimationSystem(
-        SpriteLoader spriteLoader,
+        SpriteRegistry spriteRegistry,
         ILogger<SpriteAnimationSystem>? logger = null
     )
     {
-        _spriteLoader = spriteLoader ?? throw new ArgumentNullException(nameof(spriteLoader));
+        _spriteRegistry = spriteRegistry ?? throw new ArgumentNullException(nameof(spriteRegistry));
         _logger = logger;
     }
 
@@ -78,33 +82,41 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
             return;
         }
 
-        // PERFORMANCE: Use cached ManifestKey instead of string interpolation
+        // PERFORMANCE: Use SpriteId's cached Category/SpriteName properties
         // OLD: var manifestKey = $"{sprite.Category}/{sprite.SpriteName}"; (192-384 KB/sec allocations)
-        // NEW: Zero allocations - key was cached during sprite creation
-        string manifestKey = sprite.ManifestKey;
+        // NEW: SpriteId parses and caches these values during construction
+        string definitionKey = $"{sprite.SpriteId.Category}/{sprite.SpriteId.SpriteName}";
 
-        if (!_manifestCache.TryGetValue(manifestKey, out SpriteManifest? manifest))
+        // Skip sprites we've already determined are missing (prevents per-frame lookup attempts)
+        if (_missingSprites.Contains(definitionKey))
         {
-            // Load manifest from cache synchronously (cache populated during initialization)
-            // CRITICAL FIX: Use category + name to avoid loading wrong sprite
-            manifest = _spriteLoader.GetSprite(sprite.Category, sprite.SpriteName);
+            return;
+        }
 
-            if (manifest == null)
+        if (!_definitionCache.TryGetValue(definitionKey, out SpriteDefinition? definition))
+        {
+            // Load definition from registry
+            // CRITICAL FIX: Use category + name to avoid loading wrong sprite
+            definition = _spriteRegistry.GetSpriteByPath(definitionKey);
+
+            if (definition == null)
             {
+                // Cache the missing sprite to avoid repeated lookups and log spam
+                _missingSprites.Add(definitionKey);
                 _logger?.LogWarning(
-                    "Sprite manifest not found for {Category}/{SpriteName}",
-                    sprite.Category,
-                    sprite.SpriteName
+                    "Sprite definition not found for {Category}/{SpriteName} (will not retry)",
+                    sprite.SpriteId.Category,
+                    sprite.SpriteId.SpriteName
                 );
                 return;
             }
 
-            _manifestCache[manifestKey] = manifest;
+            _definitionCache[definitionKey] = definition;
         }
 
-        // Find the current animation in the manifest
+        // Find the current animation in the definition
         string currentAnimName = animation.CurrentAnimation;
-        SpriteAnimationInfo? animData = GetCachedAnimation(manifest, currentAnimName, manifestKey);
+        SpriteAnimationDefinition? animData = GetCachedAnimation(definition, currentAnimName, definitionKey);
 
         if (animData == null)
         {
@@ -135,7 +147,7 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
             // Handle looping
             if (animation.CurrentFrame >= animData.FrameIndices.Length)
             {
-                // PlayOnce overrides manifest Loop setting - treat as non-looping
+                // PlayOnce overrides Loop setting - treat as non-looping
                 if (animData.Loop && !animation.PlayOnce)
                 {
                     animation.CurrentFrame = 0;
@@ -160,9 +172,9 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
         sprite.CurrentFrame = frameIndexInSpriteSheet;
 
         // Update source rectangle from frame data
-        if (frameIndexInSpriteSheet >= 0 && frameIndexInSpriteSheet < manifest.Frames.Count)
+        if (frameIndexInSpriteSheet >= 0 && frameIndexInSpriteSheet < definition.Frames.Count)
         {
-            SpriteFrameInfo frame = manifest.Frames[frameIndexInSpriteSheet];
+            SpriteFrameDefinition frame = definition.Frames[frameIndexInSpriteSheet];
             sprite.SourceRect = new Rectangle(frame.X, frame.Y, frame.Width, frame.Height);
 
             // Set origin to bottom-left for grid alignment
@@ -175,38 +187,38 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
     ///     Gets an animation from the cache, building the cache if necessary.
     ///     Avoids repeated LINQ queries for animation lookup.
     /// </summary>
-    private SpriteAnimationInfo? GetCachedAnimation(
-        SpriteManifest manifest,
+    private SpriteAnimationDefinition? GetCachedAnimation(
+        SpriteDefinition definition,
         string animName,
-        string manifestKey
+        string definitionKey
     )
     {
         if (
             !_animationCache.TryGetValue(
-                manifestKey,
-                out Dictionary<string, SpriteAnimationInfo>? animDict
+                definitionKey,
+                out Dictionary<string, SpriteAnimationDefinition>? animDict
             )
         )
         {
-            // Build lookup dictionary once per manifest
-            animDict = new Dictionary<string, SpriteAnimationInfo>();
-            foreach (SpriteAnimationInfo anim in manifest.Animations)
+            // Build lookup dictionary once per definition
+            animDict = new Dictionary<string, SpriteAnimationDefinition>();
+            foreach (SpriteAnimationDefinition anim in definition.Animations)
             {
                 animDict[anim.Name] = anim;
             }
 
-            _animationCache[manifestKey] = animDict;
+            _animationCache[definitionKey] = animDict;
         }
 
-        animDict.TryGetValue(animName, out SpriteAnimationInfo? result);
+        animDict.TryGetValue(animName, out SpriteAnimationDefinition? result);
         return result;
     }
 
     /// <summary>
     ///     Gets the duration for a specific frame in an animation.
-    ///     Uses per-frame durations if available, otherwise falls back to uniform FrameDuration.
+    ///     Uses per-frame durations if available.
     /// </summary>
-    private static float GetFrameDuration(SpriteAnimationInfo animData, int frameIndex)
+    private static float GetFrameDuration(SpriteAnimationDefinition animData, int frameIndex)
     {
         // Use per-frame durations if available and valid
         if (
@@ -219,7 +231,7 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
             return animData.FrameDurations[frameIndex];
         }
 
-        // Fall back to uniform duration (backward compatibility)
-        return animData.FrameDuration;
+        // Fall back to default duration (1/8 second)
+        return 0.125f;
     }
 }

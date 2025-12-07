@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_RIXY_CHAMBER",
+  "id": "base:mapsec:hoenn/rixy_chamber",
   "name": "RIXY CHAMBER",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_EVER_GRANDE_CITY",
+  "id": "base:mapsec:hoenn/ever_grande_city",
   "name": "EVER GRANDE CITY",
-  "theme": "brick",
+  "theme": "base:theme:popup/brick",
   "x": 27,
   "y": 8,
   "width": 1,

@@ -1,7 +1,7 @@
 {
-  "id": "brick",
+  "id": "base:theme:popup/brick",
   "name": "Brick",
   "description": "Brick frame - used for some cities",
-  "background": "brick",
-  "outline": "brick_outline"
+  "background": "base:popup:background/brick",
+  "outline": "base:popup:outline/brick_outline"
 }

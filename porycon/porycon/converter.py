@@ -18,7 +18,9 @@ from .constants import (
     TILE_SIZE,
     METATILE_SIZE,
     FLIP_HORIZONTAL,
-    FLIP_VERTICAL
+    FLIP_VERTICAL,
+    MOVEMENT_TYPE_TO_BEHAVIOR,
+    DEFAULT_BEHAVIOR
 )
 from .logging_config import get_logger
 from .tileset_builder import TilesetBuilder
@@ -26,6 +28,7 @@ from .metatile_renderer import MetatileRenderer
 from .animation_scanner import AnimationScanner
 from .map_reader import MapReader
 from .metatile_processor import MetatileProcessor
+from .id_transformer import IdTransformer
 
 logger = get_logger('converter')
 
@@ -304,12 +307,22 @@ class MapConverter:
         ]
         return ("primary", self.input_dir / "data" / "tilesets" / "primary" / name_variants[0])
     
-    def save_map(self, map_id: str, tiled_map: Dict[str, Any], region: str):
-        """Save converted map to output directory."""
+    def save_map(self, map_id: str, tiled_map: Dict[str, Any], region: str, map_data: Optional[Dict[str, Any]] = None):
+        """Save converted map to output directory and generate map definition DTO."""
+        from .utils import create_map_definition_dto, save_map_definition_dto
+
         map_name = sanitize_filename(map_id.replace("MAP_", "").lower())
-        output_path = self.output_dir / "Data" / "Maps" / "Regions" / region / f"{map_name}.json"
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        save_json(tiled_map, str(output_path))
+
+        # Save Tiled map to Tiled/Regions directory
+        region_capitalized = region.capitalize()
+        tiled_output_path = self.output_dir / "Tiled" / "Regions" / region_capitalized / f"{map_name}.json"
+        tiled_output_path.parent.mkdir(parents=True, exist_ok=True)
+        save_json(tiled_map, str(tiled_output_path))
+
+        # Generate and save map definition DTO
+        if map_data is not None:
+            dto = create_map_definition_dto(map_id, map_name, region, map_data)
+            save_map_definition_dto(dto, self.output_dir, region, map_name)
     
     def _validate_layout(self, map_data: Dict[str, Any], layout_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         """Validate and retrieve layout data from map_data."""
@@ -715,7 +728,7 @@ class MapConverter:
         - map_name: Sanitized map name
         """
         map_name = sanitize_filename(map_id.replace("MAP_", "").lower())
-        tileset_dir = self.output_dir / "Tilesets" / region / map_name
+        tileset_dir = self.output_dir / "Tilesets" / region.lower() / map_name
         tileset_dir.mkdir(parents=True, exist_ok=True)
         
         # Build unique set of images by GID (deduplication already done above)
@@ -891,10 +904,9 @@ class MapConverter:
             "allow_cycling": "allowCycling",
             "allow_escaping": "allowEscaping",
             "allow_running": "allowRunning",
-            "battle_scene": "battleScene",
-            "region_map_section": "regionMapSection"
+            "battle_scene": "battleScene"
         }
-        
+
         for pokeemerald_key, tiled_key in property_mapping.items():
             if pokeemerald_key in map_data:
                 value = map_data[pokeemerald_key]
@@ -904,6 +916,16 @@ class MapConverter:
                     "type": prop_type,
                     "value": value
                 })
+
+        # Transform region_map_section to unified ID format
+        if "region_map_section" in map_data:
+            mapsec_value = map_data["region_map_section"]
+            # Transform MAPSEC_NAME to base:mapsec:hoenn/name format
+            tiled_map["properties"].append({
+                "name": "regionMapSection",
+                "type": "string",
+                "value": IdTransformer.mapsec_id(mapsec_value, region)
+            })
         
         # Add border tiles as property if available (using translated GIDs and Border class type)
         # Now includes both bottom layer (ground) and top layer (overhead) tiles
@@ -941,36 +963,24 @@ class MapConverter:
                 else:
                     # Return as-is if already cardinal or unknown
                     return direction
-            
-            # Helper function to convert map ID to map name
-            def map_id_to_name(map_id: str) -> str:
-                # Remove MAP_ prefix and convert to lowercase with underscores
-                if map_id.startswith("MAP_"):
-                    name = map_id[4:].lower()
-                    # Convert CamelCase to snake_case if needed
-                    import re
-                    name = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-                    name = re.sub('([a-z0-9])([A-Z])', r'\1_\2', name)
-                    return name.lower()
-                return map_id.lower()
-            
+
             # Add each connection as a property using Connection class type
             # Use direction in name: connection_North, connection_South, etc.
             for conn in connections:
                 connected_map_id = conn.get("map", "")
                 if not connected_map_id:
                     continue
-                
-                # Convert map ID to map name
-                connected_map_name = map_id_to_name(connected_map_id)
-                
+
+                # Convert map ID to unified format (base:map:hoenn/name)
+                connected_map_unified_id = IdTransformer.map_id(connected_map_id, region)
+
                 # Convert direction to cardinal
                 direction = conn.get("direction", "")
                 cardinal_direction = direction_to_cardinal(direction)
-                
+
                 # Get offset (default to 0)
                 offset = conn.get("offset", 0)
-                
+
                 # Add connection as a class property with direction-based name (lowercase for consistency)
                 tiled_map["properties"].append({
                     "name": f"connection_{cardinal_direction.lower()}",
@@ -978,7 +988,7 @@ class MapConverter:
                     "type": "class",
                     "value": {
                         "direction": cardinal_direction,
-                        "map": connected_map_name,
+                        "map": connected_map_unified_id,
                         "offset": offset
                     }
                 })
@@ -1005,10 +1015,11 @@ class MapConverter:
             })
         
         # Add tileset reference
-        # Map is at: output/Data/Maps/Regions/{region}/{map_name}.json
-        # Tileset is at: output/Tilesets/{region}/{map_name}/{map_name}.json
-        # From Data/Maps/Regions/{region}/, we need to go up four levels (../../../../) to reach output/, then into Tilesets/
-        tileset_path = f"../../../../Tilesets/{region}/{map_name}/{map_name}.json"
+        # Tiled map is at: output/Tiled/Regions/{Region}/{map_name}.json
+        # Tileset is at: output/Tilesets/{region}/{map_name}/{map_name}.json (lowercase region)
+        # From Tiled/Regions/{Region}/, go up 3 levels to output/, then into Tilesets/
+        # (.. -> Tiled/Regions/, ../.. -> Tiled/, ../../.. -> output/)
+        tileset_path = f"../../../Tilesets/{region.lower()}/{map_name}/{map_name}.json"
         tiled_map["tilesets"] = [{
             "firstgid": 1,
             "source": tileset_path
@@ -1020,34 +1031,22 @@ class MapConverter:
             if warp_events:
                 warp_objects = []
                 object_id = 1
-                
-                # Helper function to convert map ID to map name
-                def map_id_to_name(map_id: str) -> str:
-                    # Remove MAP_ prefix and convert to lowercase with underscores
-                    if map_id.startswith("MAP_"):
-                        name = map_id[4:].lower()
-                        # Convert CamelCase to snake_case if needed
-                        import re
-                        name = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-                        name = re.sub('([a-z0-9])([A-Z])', r'\1_\2', name)
-                        return name.lower()
-                    return map_id.lower()
-                
+
                 for warp in warp_events:
                     source_x = warp.get("x", 0)
                     source_y = warp.get("y", 0)
                     source_elevation = warp.get("elevation", 0)
                     dest_map_id = warp.get("dest_map", "")
                     dest_warp_id_str = warp.get("dest_warp_id", "")
-                    
+
                     if not dest_map_id:
                         continue
-                    
+
                     # Resolve destination coordinates from warp_lookup
                     dest_x = 0
                     dest_y = 0
                     dest_elevation = 0
-                    
+
                     try:
                         dest_warp_id = int(dest_warp_id_str)
                         dest_key = (dest_map_id, dest_warp_id)
@@ -1060,14 +1059,16 @@ class MapConverter:
                         # Invalid dest_warp_id, skip this warp
                         logger.warning(f"Invalid dest_warp_id '{dest_warp_id_str}' for warp at ({source_x}, {source_y})")
                         continue
-                    
-                    # Convert destination map ID to map name
-                    dest_map_name = map_id_to_name(dest_map_id)
-                    
+
+                    # Convert destination map ID to unified format (base:map:hoenn/name)
+                    dest_map_unified_id = IdTransformer.map_id(dest_map_id, region)
+                    # Extract just the name for display
+                    dest_map_display_name = IdTransformer.map_name_from_id(dest_map_unified_id)
+
                     # Create warp object (convert tile coordinates to pixel coordinates)
                     warp_obj = {
                         "id": object_id,
-                        "name": f"Warp to {dest_map_name}",
+                        "name": f"Warp to {dest_map_display_name}",
                         "type": "warp_event",
                         "x": source_x * METATILE_SIZE,  # Convert tiles to pixels
                         "y": source_y * METATILE_SIZE,
@@ -1079,7 +1080,7 @@ class MapConverter:
                                 "propertytype": "Warp",
                                 "type": "class",
                                 "value": {
-                                    "map": dest_map_name,
+                                    "map": dest_map_unified_id,
                                     "x": dest_x,
                                     "y": dest_y
                                 }
@@ -1124,7 +1125,7 @@ class MapConverter:
                 if event_type != "trigger":
                     continue
                 
-                if not var or not script:
+                if not var or not script or script == "0x0":
                     continue
                 
                 # Convert var_value to integer
@@ -1214,7 +1215,7 @@ class MapConverter:
                     script = bg_event.get("script", "")
                     player_facing_dir = bg_event.get("player_facing_dir", "")
                     
-                    if not script:
+                    if not script or script == "0x0":
                         continue
                     
                     # Format script path: prefix with "Interactions/" and add ".csx" extension
@@ -1324,7 +1325,37 @@ class MapConverter:
                 }
                 tiled_map["layers"].append(bg_events_layer)
                 tiled_map["nextobjectid"] = bg_object_id
-        
+
+        # =====================================================================
+        # NPC Object Events - Converts pokeemerald object_events to Tiled NPCs
+        # =====================================================================
+        object_events = map_data.get("object_events", [])
+        if object_events:
+            npc_objects = []
+            npc_object_id = tiled_map.get("nextobjectid", 1)
+
+            for obj_event in object_events:
+                npc_obj = self._convert_object_event(obj_event, npc_object_id, map_name)
+                if npc_obj:
+                    npc_objects.append(npc_obj)
+                    npc_object_id += 1
+
+            if npc_objects:
+                # Add NPCs object layer
+                npc_layer = {
+                    "id": len(tiled_map["layers"]) + 1,
+                    "name": "NPCs",
+                    "type": "objectgroup",
+                    "visible": True,
+                    "opacity": 1,
+                    "x": 0,
+                    "y": 0,
+                    "objects": npc_objects
+                }
+                tiled_map["layers"].append(npc_layer)
+                tiled_map["nextobjectid"] = npc_object_id
+                logger.info(f"Added {len(npc_objects)} NPCs to map")
+
         return tiled_map
     
     def convert_map_with_metatiles(
@@ -1818,5 +1849,155 @@ class MapConverter:
                 deduplicated_animations.append(anim)
 
         return deduplicated_animations, animation_frames_gids, tileset_image
-    
+
+    def _convert_object_event(
+        self, obj_event: Dict[str, Any], object_id: int, map_name: str
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Convert a pokeemerald object_event to a Tiled NPC object.
+
+        Args:
+            obj_event: Object event dict from pokeemerald map.json
+            object_id: Unique object ID for Tiled
+            map_name: The map name for context
+
+        Returns:
+            Tiled object dict, or None if conversion fails
+        """
+        graphics_id = obj_event.get("graphics_id", "")
+        movement_type = obj_event.get("movement_type", "MOVEMENT_TYPE_FACE_DOWN")
+        local_id = obj_event.get("local_id", f"NPC_{object_id}")
+
+        # Get behavior and default params from movement type mapping
+        behavior_name, behavior_params = MOVEMENT_TYPE_TO_BEHAVIOR.get(
+            movement_type, DEFAULT_BEHAVIOR
+        )
+
+        # Convert graphics_id to full sprite ID (base:sprite:category/name)
+        sprite_id = IdTransformer.sprite_id_simple(graphics_id)
+
+        # Convert behavior name to full behavior ID (base:behavior:movement/name)
+        behavior_id = IdTransformer.behavior_id_from_movement_type(behavior_name)
+
+        # Get position (pokeemerald uses tile coordinates)
+        x = obj_event.get("x", 0)
+        y = obj_event.get("y", 0)
+        elevation = obj_event.get("elevation", 0)
+
+        # Build properties list
+        properties: List[Dict[str, Any]] = [
+            {"name": "spriteId", "type": "string", "value": sprite_id},
+            {"name": "behaviorId", "type": "string", "value": behavior_id},
+            {"name": "elevation", "type": "int", "value": elevation},
+        ]
+
+        # Add direction for stationary behaviors
+        if behavior_name == "stationary" and "direction" in behavior_params:
+            properties.append({
+                "name": "direction",
+                "type": "string",
+                "value": behavior_params["direction"]
+            })
+
+        # Add movement range for wander behaviors
+        if "wander" in behavior_name:
+            range_x = obj_event.get("movement_range_x", 1)
+            range_y = obj_event.get("movement_range_y", 1)
+            properties.extend([
+                {"name": "rangeX", "type": "int", "value": range_x},
+                {"name": "rangeY", "type": "int", "value": range_y},
+            ])
+
+        # Add directions for look_two_ways behaviors
+        if behavior_name == "look_two_ways" and "directions" in behavior_params:
+            # Store as comma-separated string for Tiled compatibility
+            directions = ",".join(behavior_params["directions"])
+            properties.append({
+                "name": "lookDirections",
+                "type": "string",
+                "value": directions
+            })
+
+        # Add other behavior parameters as properties
+        for param_key, param_value in behavior_params.items():
+            if param_key not in ("direction", "directions"):
+                if isinstance(param_value, bool):
+                    properties.append({
+                        "name": param_key,
+                        "type": "bool",
+                        "value": param_value
+                    })
+                elif isinstance(param_value, (int, float)):
+                    properties.append({
+                        "name": param_key,
+                        "type": "int" if isinstance(param_value, int) else "float",
+                        "value": param_value
+                    })
+                else:
+                    properties.append({
+                        "name": param_key,
+                        "type": "string",
+                        "value": str(param_value)
+                    })
+
+        # Add script reference if present (as full scriptId)
+        script = obj_event.get("script", "")
+        if script and script != "NULL" and script != "0x0":
+            script_id = IdTransformer.script_id_from_pokeemerald(script, map_name)
+            if script_id:
+                properties.append({
+                    "name": "scriptId",
+                    "type": "string",
+                    "value": script_id
+                })
+
+        # Add flag if present and not 0
+        flag = obj_event.get("flag", "0")
+        if flag and flag != "0":
+            properties.append({
+                "name": "flag",
+                "type": "string",
+                "value": flag
+            })
+
+        # Add trainer data if applicable
+        trainer_type = obj_event.get("trainer_type", "TRAINER_TYPE_NONE")
+        if trainer_type and trainer_type != "TRAINER_TYPE_NONE":
+            properties.append({
+                "name": "trainerType",
+                "type": "string",
+                "value": trainer_type
+            })
+
+            # trainer_sight_or_berry_tree_id is the sight range for trainers
+            sight_range = obj_event.get("trainer_sight_or_berry_tree_id", "0")
+            if sight_range and sight_range != "0":
+                try:
+                    properties.append({
+                        "name": "sightRange",
+                        "type": "int",
+                        "value": int(sight_range)
+                    })
+                except ValueError:
+                    # Not a number, store as string
+                    properties.append({
+                        "name": "sightRange",
+                        "type": "string",
+                        "value": sight_range
+                    })
+
+        # Create Tiled object
+        npc_obj = {
+            "id": object_id,
+            "name": str(local_id),
+            "type": "npc",
+            "x": x * METATILE_SIZE,
+            "y": y * METATILE_SIZE,
+            "width": METATILE_SIZE,
+            "height": METATILE_SIZE,
+            "visible": True,
+            "properties": properties
+        }
+
+        return npc_obj
 

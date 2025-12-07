@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_WATER_PATH",
+  "id": "base:mapsec:hoenn/water_path",
   "name": "WATER PATH",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

@@ -17,6 +17,7 @@ public class EntityPoolManager
 {
     private readonly object _lock = new();
     private readonly Dictionary<string, EntityPool> _pools;
+    private readonly Dictionary<string, PoolConfiguration> _configurations;
     private readonly World _world;
 
     /// <summary>
@@ -29,10 +30,12 @@ public class EntityPoolManager
 
         _world = world;
         _pools = new Dictionary<string, EntityPool>();
+        _configurations = new Dictionary<string, PoolConfiguration>();
 
-        // Create default pool
+        // Create default pool with default configuration
         DefaultPool = new EntityPool(_world);
         _pools[PoolNames.Default] = DefaultPool;
+        _configurations[PoolNames.Default] = PoolConfiguration.Default;
     }
 
     /// <summary>
@@ -92,7 +95,23 @@ public class EntityPoolManager
     {
         ArgumentNullException.ThrowIfNull(config);
 
-        RegisterPool(config.Name, config.InitialSize, config.MaxSize, config.Warmup);
+        lock (_lock)
+        {
+            if (_pools.ContainsKey(config.Name))
+            {
+                throw new ArgumentException($"Pool '{config.Name}' already registered");
+            }
+
+            var pool = new EntityPool(_world, config.Name, config.InitialSize, config.MaxSize);
+
+            if (config.Warmup)
+            {
+                pool.Warmup(config.InitialSize);
+            }
+
+            _pools[config.Name] = pool;
+            _configurations[config.Name] = config;
+        }
     }
 
     /// <summary>
@@ -325,6 +344,23 @@ public class EntityPoolManager
         lock (_lock)
         {
             return _pools.ContainsKey(poolName);
+        }
+    }
+
+    /// <summary>
+    ///     Get the configuration for a specific pool.
+    /// </summary>
+    /// <param name="poolName">Name of the pool</param>
+    /// <returns>Pool configuration if found, otherwise null</returns>
+    public PoolConfiguration? GetPoolConfiguration(string poolName)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(poolName);
+
+        lock (_lock)
+        {
+            return _configurations.TryGetValue(poolName, out PoolConfiguration? config)
+                ? config
+                : null;
         }
     }
 }

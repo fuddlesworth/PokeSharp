@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using MonoBallFramework.Game.Engine.Core.Types;
 
 namespace MonoBallFramework.Game.GameData.Entities;
 
@@ -11,11 +12,12 @@ namespace MonoBallFramework.Game.GameData.Entities;
 public class MapSection
 {
     /// <summary>
-    ///     Unique MAPSEC identifier (e.g., "MAPSEC_LITTLEROOT_TOWN").
+    ///     Unique MAPSEC identifier in unified format (e.g., "base:mapsec:hoenn/littleroot_town").
     /// </summary>
     [Key]
     [MaxLength(100)]
-    public string Id { get; set; } = string.Empty;
+    [Column(TypeName = "nvarchar(100)")]
+    public GameMapSectionId Id { get; set; } = null!;
 
     /// <summary>
     ///     Display name for region map (e.g., "LITTLEROOT TOWN").
@@ -25,11 +27,12 @@ public class MapSection
     public string Name { get; set; } = string.Empty;
 
     /// <summary>
-    ///     Popup theme ID reference (e.g., "wood", "marble", "stone").
+    ///     Popup theme ID reference in unified format (e.g., "base:theme:popup/wood").
     /// </summary>
     [Required]
-    [MaxLength(50)]
-    public string ThemeId { get; set; } = string.Empty;
+    [MaxLength(100)]
+    [Column(TypeName = "nvarchar(100)")]
+    public GameThemeId ThemeId { get; set; } = null!;
 
     /// <summary>
     ///     X position on region map grid (8x8 pixel tiles).
@@ -70,5 +73,6 @@ public class MapSection
     [ForeignKey(nameof(ThemeId))]
     public PopupTheme? Theme { get; set; }
 }
+
 
 

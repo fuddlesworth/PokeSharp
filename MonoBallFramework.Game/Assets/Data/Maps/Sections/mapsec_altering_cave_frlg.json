@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_ALTERING_CAVE_FRLG",
+  "id": "base:mapsec:hoenn/altering_cave_frlg",
   "name": "ALTERING CAVE",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_TANOBY_RUINS",
+  "id": "base:mapsec:hoenn/tanoby_ruins",
   "name": "TANOBY RUINS",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

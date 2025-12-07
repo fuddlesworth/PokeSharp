@@ -17,7 +17,7 @@ public class MapDefinitionService
     private readonly ILogger<MapDefinitionService> _logger;
 
     // Cache for O(1) lookups (hot paths like map loading)
-    private readonly ConcurrentDictionary<string, MapDefinition> _mapCache = new(); // Key is MapIdentifier.Value
+    private readonly ConcurrentDictionary<string, MapDefinition> _mapCache = new(); // Key is GameMapId.Value
 
     public MapDefinitionService(GameDataContext context, ILogger<MapDefinitionService> logger)
     {
@@ -61,7 +61,7 @@ public class MapDefinitionService
     ///     Get map definition by ID (O(1) cached).
     ///     Uses AsNoTracking for read-only access to prevent memory tracking.
     /// </summary>
-    public MapDefinition? GetMap(MapIdentifier mapId)
+    public MapDefinition? GetMap(GameMapId mapId)
     {
         // Check cache first
         if (_mapCache.TryGetValue(mapId.Value, out MapDefinition? cached))
@@ -120,7 +120,7 @@ public class MapDefinitionService
     /// <summary>
     ///     Get connected map in a specific direction.
     /// </summary>
-    public MapDefinition? GetConnectedMap(MapIdentifier mapId, MapDirection direction)
+    public MapDefinition? GetConnectedMap(GameMapId mapId, MapDirection direction)
     {
         MapDefinition? map = GetMap(mapId);
         if (map == null)
@@ -128,7 +128,7 @@ public class MapDefinitionService
             return null;
         }
 
-        MapIdentifier? connectedMapId = direction switch
+        GameMapId? connectedMapId = direction switch
         {
             MapDirection.North => map.NorthMapId,
             MapDirection.South => map.SouthMapId,
@@ -137,7 +137,7 @@ public class MapDefinitionService
             _ => null,
         };
 
-        return connectedMapId.HasValue ? GetMap(connectedMapId.Value) : null;
+        return connectedMapId != null ? GetMap(connectedMapId) : null;
     }
 
     /// <summary>
@@ -152,7 +152,7 @@ public class MapDefinitionService
     /// <summary>
     ///     Check if map definition exists.
     /// </summary>
-    public bool HasMap(MapIdentifier mapId)
+    public bool HasMap(GameMapId mapId)
     {
         return GetMap(mapId) != null;
     }
@@ -161,7 +161,7 @@ public class MapDefinitionService
     ///     Get all map IDs (useful for debugging/tools).
     ///     Uses AsNoTracking for read-only query performance.
     /// </summary>
-    public async Task<List<MapIdentifier>> GetAllMapIdsAsync()
+    public async Task<List<GameMapId>> GetAllMapIdsAsync()
     {
         return await _context
             .Maps.AsNoTracking()

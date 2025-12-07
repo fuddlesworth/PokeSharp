@@ -219,13 +219,49 @@ def camel_to_snake(name: str) -> str:
     return s2.lower()
 
 
+def create_map_definition_dto(
+    map_id: str,
+    map_name: str,
+    region: str,
+    map_data: Dict[str, Any]
+) -> Dict[str, Any]:
+    """Create a map definition DTO for MonoBallFramework."""
+    display_name = map_data.get("name", "")
+    if not display_name:
+        display_name = map_name.replace("_", " ").title()
+
+    region_capitalized = region.capitalize()
+
+    return {
+        "Id": f"base:map:{region.lower()}/{map_name}",
+        "DisplayName": display_name,
+        "Type": "map",
+        "Region": region.lower(),
+        "Description": "",
+        "TiledPath": f"Tiled/Regions/{region_capitalized}/{map_name}.json"
+    }
+
+
+def save_map_definition_dto(
+    dto: Dict[str, Any],
+    output_dir: Path,
+    region: str,
+    map_name: str
+) -> None:
+    """Save map definition DTO to Data/Maps/Regions directory."""
+    region_capitalized = region.capitalize()
+    dto_path = output_dir / "Data" / "Maps" / "Regions" / region_capitalized / f"{map_name}.json"
+    dto_path.parent.mkdir(parents=True, exist_ok=True)
+    save_json(dto, str(dto_path))
+
+
 class TilesetPathResolver:
     """Centralized tileset path resolution."""
-    
+
     def __init__(self, input_dir: Path):
         """
         Initialize tileset path resolver.
-        
+
         Args:
             input_dir: Path to pokeemerald root directory
         """

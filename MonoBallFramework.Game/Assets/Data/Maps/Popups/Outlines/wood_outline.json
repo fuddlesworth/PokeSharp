@@ -1,5 +1,5 @@
 {
-  "Id": "wood_outline",
+  "Id": "base:popup:outline/wood_outline",
   "DisplayName": "Wood Outline",
   "Type": "TileSheet",
   "TexturePath": "Graphics/Maps/Popups/Outlines/wood_outline.png",

@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_LOST_CAVE",
+  "id": "base:mapsec:hoenn/lost_cave",
   "name": "LOST CAVE",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_ROCKET_HIDEOUT",
+  "id": "base:mapsec:hoenn/rocket_hideout",
   "name": "ROCKET HIDEOUT",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

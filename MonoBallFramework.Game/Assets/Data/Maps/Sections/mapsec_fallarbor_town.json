@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_FALLARBOR_TOWN",
+  "id": "base:mapsec:hoenn/fallarbor_town",
   "name": "FALLARBOR TOWN",
-  "theme": "wood",
+  "theme": "base:theme:popup/wood",
   "x": 3,
   "y": 0,
   "width": 1,

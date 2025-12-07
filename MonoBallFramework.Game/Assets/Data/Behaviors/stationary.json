@@ -1,8 +1,8 @@
 {
-  "typeId": "stationary",
+  "typeId": "base:behavior:movement/stationary",
   "displayName": "Stationary Behavior",
   "description": "NPC stays in one place, does not move",
-  "behaviorScript": null,
+  "behaviorScript": "Behaviors/stationary_behavior.csx",
   "defaultSpeed": 0.0,
   "pauseAtWaypoint": 0.0,
   "allowInteractionWhileMoving": false

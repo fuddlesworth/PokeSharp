@@ -56,7 +56,7 @@ def convert_single_map(args_tuple):
         
         if tiled_map:
             map_name = map_id.replace("MAP_", "").lower()
-            local_converter.save_map(map_id, tiled_map, region)
+            local_converter.save_map(map_id, tiled_map, region, map_data)
             
             # With per-map tilesets, we don't need to collect used_tiles anymore
             # Each map has its own tileset

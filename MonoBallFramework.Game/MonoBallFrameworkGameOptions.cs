@@ -5,6 +5,7 @@ using MonoBallFramework.Game.Engine.Systems.Management;
 using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game.GameData.Loading;
 using MonoBallFramework.Game.GameData.Services;
+using MonoBallFramework.Game.GameData.Sprites;
 using MonoBallFramework.Game.GameSystems.Services;
 using MonoBallFramework.Game.Infrastructure.Diagnostics;
 using MonoBallFramework.Game.Infrastructure.Services;
@@ -98,9 +99,9 @@ public sealed class MonoBallFrameworkGameOptions
     public MapDefinitionService MapDefinitionService { get; init; } = null!;
 
     /// <summary>
-    ///     Gets or sets the sprite loader.
+    ///     Gets or sets the sprite registry.
     /// </summary>
-    public SpriteLoader SpriteLoader { get; init; } = null!;
+    public SpriteRegistry SpriteRegistry { get; init; } = null!;
 
     /// <summary>
     ///     Gets or sets the template cache initializer.

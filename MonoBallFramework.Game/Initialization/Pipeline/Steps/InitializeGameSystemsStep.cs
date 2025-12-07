@@ -14,7 +14,7 @@ public class InitializeGameSystemsStep : InitializationStepBase
     public InitializeGameSystemsStep()
         : base(
             "Initializing game systems...",
-            InitializationProgress.SpriteManifestsLoaded,
+            InitializationProgress.SpriteDefinitionsLoaded,
             InitializationProgress.GameSystemsInitialized
         ) { }
 

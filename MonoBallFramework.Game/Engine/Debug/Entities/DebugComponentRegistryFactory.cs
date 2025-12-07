@@ -39,7 +39,7 @@ public static class DebugComponentRegistryFactory
             {
                 // Skip non-MonoBall Framework assemblies for performance
                 string? assemblyName = assembly.GetName().Name;
-                if (assemblyName == null || !assemblyName.StartsWith("MonoBall Framework"))
+                if (assemblyName == null || !assemblyName.StartsWith("MonoBallFramework"))
                 {
                     continue;
                 }
@@ -89,6 +89,7 @@ public static class DebugComponentRegistryFactory
     private static bool IsComponentNamespace(string ns)
     {
         return ns.StartsWith("MonoBallFramework.Game.Components")
+            || ns.StartsWith("MonoBallFramework.Game.Ecs.Components")
             || ns.StartsWith("MonoBallFramework.Engine.Core.Types");
     }
 

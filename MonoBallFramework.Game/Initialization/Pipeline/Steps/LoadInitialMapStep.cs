@@ -1,5 +1,6 @@
 using Arch.Core;
 using Microsoft.Extensions.Logging;
+using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.Engine.Scenes;
 
 namespace MonoBallFramework.Game.Initialization.Pipeline.Steps;
@@ -36,7 +37,17 @@ public class LoadInitialMapStep : InitializationStepBase
         ILogger<LoadInitialMapStep> logger =
             context.LoggerFactory.CreateLogger<LoadInitialMapStep>();
 
-        string mapId = context.Configuration.Initialization.InitialMap;
+        string mapIdString = context.Configuration.Initialization.InitialMap;
+
+        // TryCreate handles both full format (base:map:hoenn/littleroot_town)
+        // and legacy format (littleroot_town)
+        GameMapId? mapId = GameMapId.TryCreate(mapIdString);
+        if (mapId == null)
+        {
+            logger.LogError("Invalid map ID format: {MapId}", mapIdString);
+            return;
+        }
+
         Entity? mapEntity = await context.MapInitializer.LoadMap(mapId);
 
         // Log appropriately based on whether the map was actually loaded

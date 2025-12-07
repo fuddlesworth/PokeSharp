@@ -40,12 +40,12 @@ public static partial class LogTemplates
         int width,
         int height);
 
-    /// <summary>Sprite manifest loaded with animation count</summary>
+    /// <summary>Sprite definition loaded with animation count</summary>
     [LoggerMessage(
         EventId = 1002,
         Level = LogLevel.Debug,
-        Message = "[mediumorchid1]R[/] Manifest loaded | [cyan]{SpriteName}[/] | animations: [yellow]{AnimationCount}[/] | frames: {FrameCount}")]
-    public static partial void LogSpriteManifestLoaded(
+        Message = "[mediumorchid1]R[/] Definition loaded | [cyan]{SpriteName}[/] | animations: [yellow]{AnimationCount}[/] | frames: {FrameCount}")]
+    public static partial void LogSpriteDefinitionLoaded(
         this ILogger logger,
         string spriteName,
         int animationCount,

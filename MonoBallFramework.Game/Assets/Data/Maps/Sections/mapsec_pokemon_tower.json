@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_POKEMON_TOWER",
+  "id": "base:mapsec:hoenn/pokemon_tower",
   "name": "POKéMON TOWER",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

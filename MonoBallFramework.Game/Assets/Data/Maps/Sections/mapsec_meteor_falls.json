@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_METEOR_FALLS",
+  "id": "base:mapsec:hoenn/meteor_falls",
   "name": "METEOR FALLS",
-  "theme": "stone",
+  "theme": "base:theme:popup/stone",
   "x": 0,
   "y": 3,
   "width": 1,

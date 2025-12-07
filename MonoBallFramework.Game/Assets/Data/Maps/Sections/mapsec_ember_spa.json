@@ -1,5 +1,5 @@
 {
-  "id": "MAPSEC_EMBER_SPA",
+  "id": "base:mapsec:hoenn/ember_spa",
   "name": "EMBER SPA",
-  "theme": "wood"
+  "theme": "base:theme:popup/wood"
 }

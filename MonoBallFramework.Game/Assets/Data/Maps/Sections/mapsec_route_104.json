@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_ROUTE_104",
+  "id": "base:mapsec:hoenn/route_104",
   "name": "ROUTE 104",
-  "theme": "wood",
+  "theme": "base:theme:popup/wood",
   "x": 0,
   "y": 7,
   "width": 1,

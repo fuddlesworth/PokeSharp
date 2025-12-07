@@ -1,7 +1,7 @@
 {
-  "id": "MAPSEC_SEAFLOOR_CAVERN",
+  "id": "base:mapsec:hoenn/seafloor_cavern",
   "name": "SEAFLOOR CAVERN",
-  "theme": "stone",
+  "theme": "base:theme:popup/stone",
   "x": 24,
   "y": 9,
   "width": 1,
