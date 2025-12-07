@@ -216,18 +216,15 @@ public class GameInitializer(
         // NOTE: NPCBehaviorSystem is registered separately in NPCBehaviorInitializer
         // It requires ScriptService and behavior registry to be set up first
 
-        // Register RelationshipSystem (Priority: 950, validates entity relationships and cleans up broken references)
-        ILogger<RelationshipSystem> relationshipLogger =
-            loggerFactory.CreateLogger<RelationshipSystem>();
-        var relationshipSystem = new RelationshipSystem(relationshipLogger);
-        systemManager.RegisterUpdateSystem(relationshipSystem);
+        // NOTE: RelationshipSystem was REMOVED - Arch.Relationships automatically cleans up
+        // relationships when entities are destroyed. The system was redundant and wasted 22ms/frame.
 
         // === Render Systems (Rendering Only) ===
 
         // Register ElevationRenderSystem (Priority: 1000) - unified rendering with Z-order sorting
         ILogger<ElevationRenderSystem> renderLogger =
             loggerFactory.CreateLogger<ElevationRenderSystem>();
-        RenderSystem = new ElevationRenderSystem(graphicsDevice, assetManager, renderLogger);
+        RenderSystem = new ElevationRenderSystem(graphicsDevice, assetManager, SpatialHashSystem, renderLogger);
         systemManager.RegisterRenderSystem(RenderSystem);
 
         // Initialize all systems

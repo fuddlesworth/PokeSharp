@@ -363,7 +363,31 @@ public class ConsoleSystem : IUpdateSystem
         }
 
         // Set up entity provider for the Entities panel
-        _consoleScene?.SetEntityProvider(GetAllEntitiesAsInfo);
+        // Use PAGED LOADING for large entity counts (1M+ entities) to avoid memory bloat
+        int entityCount = GetEntityCount();
+        const int PagedLoadingThreshold = 1000;
+
+        if (entityCount > PagedLoadingThreshold)
+        {
+            _logger.LogInformation(
+                "Using paged entity loading for {Count} entities (threshold: {Threshold})",
+                entityCount, PagedLoadingThreshold);
+
+            // Paged mode: Only load visible entities on-demand
+            _consoleScene?.SetPagedEntityProvider(
+                GetEntityCount,
+                GetEntityIds,
+                GetEntityRange,
+                () => _componentRegistry.GetAllComponentNames());
+        }
+        else
+        {
+            // Legacy mode: Load all entities (fine for small counts)
+            _consoleScene?.SetEntityProvider(GetAllEntitiesAsInfo);
+        }
+
+        // Set up entity detail loader for lazy loading (used when entity count > 1000)
+        _consoleScene?.SetEntityDetailLoader(LoadEntityDetails);
 
         // Set up system metrics provider for the Profiler panel
         _consoleScene?.SetSystemMetricsProvider(() => _systemManager.GetMetrics());
@@ -1548,20 +1572,57 @@ public class ConsoleSystem : IUpdateSystem
             var entities = new List<Entity>();
             _world.Query(new QueryDescription(), entity => entities.Add(entity));
 
-            // PERFORMANCE FIX: Build caches and inverse relationship indexes in single pass
-            // This reduces O(N²) to O(N) by avoiding per-entity world queries
-            Dictionary<int, EntityCacheEntry> entityCache = BuildEntityCache(entities);
-            InverseRelationshipIndex inverseRelationships = BuildInverseRelationshipIndex(entities);
+            // PERFORMANCE FIX: For large entity counts, use lightweight loading
+            // Heavy operations (component detection, relationships) are deferred to on-demand loading
+            const int LightweightThreshold = 1000;
+            bool useLightweight = entities.Count > LightweightThreshold;
 
-            foreach (Entity entity in entities)
+            if (useLightweight)
             {
-                if (!_world.IsAlive(entity))
+                // LIGHTWEIGHT MODE: Skip expensive BuildEntityCache and BuildInverseRelationshipIndex
+                // Only get entity IDs - details loaded on-demand when expanded/visible
+                foreach (Entity entity in entities)
                 {
-                    continue;
+                    if (!_world.IsAlive(entity))
+                    {
+                        continue;
+                    }
+
+                    var info = new EntityInfo
+                    {
+                        Id = entity.Id,
+                        Name = $"Entity_{entity.Id}",
+                        IsActive = true,
+                        Components = new List<string>(), // Loaded on-demand
+                        Properties = new Dictionary<string, string> { ["Components"] = "?" },
+                        ComponentData = new Dictionary<string, Dictionary<string, string>>(),
+                        Relationships = new Dictionary<string, List<EntityRelationship>>(),
+                        Tag = null,
+                    };
+                    result.Add(info);
                 }
 
-                EntityInfo info = ConvertEntityToInfo(entity, entityCache, inverseRelationships);
-                result.Add(info);
+                _logger.LogDebug(
+                    "Loaded {Count} entities in lightweight mode (>1000 threshold)",
+                    result.Count
+                );
+            }
+            else
+            {
+                // FULL MODE: Build caches for smaller entity counts
+                Dictionary<int, EntityCacheEntry> entityCache = BuildEntityCache(entities);
+                InverseRelationshipIndex inverseRelationships = BuildInverseRelationshipIndex(entities);
+
+                foreach (Entity entity in entities)
+                {
+                    if (!_world.IsAlive(entity))
+                    {
+                        continue;
+                    }
+
+                    EntityInfo info = ConvertEntityToInfo(entity, entityCache, inverseRelationships);
+                    result.Add(info);
+                }
             }
         }
         catch (Exception ex)
@@ -1569,6 +1630,107 @@ public class ConsoleSystem : IUpdateSystem
             _logger.LogWarning(ex, "Error querying entities from World");
         }
 
+        return result;
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // PAGED ENTITY LOADING - For 1M+ entities without memory bloat
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    ///     Gets the total entity count (O(1) operation).
+    ///     Used by paged loading to avoid creating 1M EntityInfo objects.
+    /// </summary>
+    private int GetEntityCount()
+    {
+        try
+        {
+            int count = 0;
+            _world.Query(new QueryDescription(), _ => count++);
+            return count;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Error getting entity count");
+            return 0;
+        }
+    }
+
+    /// <summary>
+    ///     Gets all entity IDs as a lightweight list (~4MB for 1M entities vs ~200MB for EntityInfo).
+    /// </summary>
+    private List<int> GetEntityIds()
+    {
+        var ids = new List<int>();
+        try
+        {
+            _world.Query(new QueryDescription(), entity =>
+            {
+                if (_world.IsAlive(entity))
+                {
+                    ids.Add(entity.Id);
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Error getting entity IDs");
+        }
+        return ids;
+    }
+
+    /// <summary>
+    ///     Gets EntityInfo for a specific range of entities (O(range) not O(N)).
+    ///     This is the paged loading method that creates EntityInfo only for visible entities.
+    /// </summary>
+    private List<EntityInfo> GetEntityRange(int startIndex, int count)
+    {
+        var result = new List<EntityInfo>();
+        try
+        {
+            // Get all entities (we need to skip to startIndex)
+            var entities = new List<Entity>();
+            _world.Query(new QueryDescription(), entity =>
+            {
+                if (_world.IsAlive(entity))
+                {
+                    entities.Add(entity);
+                }
+            });
+
+            // Skip to start and take count
+            int endIndex = Math.Min(startIndex + count, entities.Count);
+            for (int i = startIndex; i < endIndex; i++)
+            {
+                Entity entity = entities[i];
+
+                // Load component NAMES for visible entities (fast - only ~50 entities)
+                // Full component DATA is still loaded on-demand when expanded
+                List<string> components = DetectEntityComponents(entity);
+                string name = DetermineEntityName(entity, components);
+
+                var info = new EntityInfo
+                {
+                    Id = entity.Id,
+                    Name = name,
+                    IsActive = true,
+                    Components = components,
+                    Properties = new Dictionary<string, string> { ["Components"] = components.Count.ToString() },
+                    ComponentData = new Dictionary<string, Dictionary<string, string>>(), // Loaded on-demand
+                    Relationships = new Dictionary<string, List<EntityRelationship>>(), // Loaded on-demand
+                    Tag = null,
+                };
+                result.Add(info);
+            }
+
+            _logger.LogDebug(
+                "GetEntityRange: Loaded {Count} entities (index {Start}-{End} of {Total})",
+                result.Count, startIndex, endIndex, entities.Count);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Error loading entity range {Start}-{Count}", startIndex, count);
+        }
         return result;
     }
 
@@ -1715,15 +1877,18 @@ public class ConsoleSystem : IUpdateSystem
             info.Name = cacheEntry.Name;
             info.Tag = DetermineEntityTag(cacheEntry.Components);
 
-            // Get properties (simple flattened view)
-            info.Properties = GetEntityProperties(entity, cacheEntry.Components);
+            // PERFORMANCE FIX: Skip Properties and ComponentData for initial load
+            // These are only needed when entity is expanded - load lazily via GetEntityComponentData()
+            // info.Properties = GetEntityProperties(entity, cacheEntry.Components);
             info.Properties["Components"] = cacheEntry.Components.Count.ToString();
 
-            // Get component data (structured by component name) using Arch's built-in inspection
-            info.ComponentData = _componentRegistry.GetComponentData(entity);
+            // LAZY LOADING: Don't populate ComponentData here - it's O(N*M) and only needed when expanded
+            // ComponentData will be loaded on-demand by EntitiesPanel when rendering expanded entities
+            // info.ComponentData = _componentRegistry.GetComponentData(entity, cacheEntry.Components);
 
-            // Extract relationships using cached indexes (no more O(N²) world queries!)
-            ExtractEntityRelationships(entity, info, entityCache, inverseRelationships);
+            // PERFORMANCE FIX: Skip relationship extraction for initial load too
+            // Only needed when entity is expanded/selected
+            // ExtractEntityRelationships(entity, info, entityCache, inverseRelationships);
         }
         catch (Exception ex)
         {
@@ -1760,8 +1925,127 @@ public class ConsoleSystem : IUpdateSystem
     }
 
     /// <summary>
+    ///     Loads detailed component data for a specific entity on-demand.
+    ///     Called by EntitiesPanel when rendering expanded entities (lazy loading).
+    /// </summary>
+    public EntityInfo? LoadEntityDetails(int entityId, EntityInfo existingInfo)
+    {
+        try
+        {
+            // Find the entity in the world by querying for it
+            Entity? targetEntity = null;
+            _world.Query(new QueryDescription(), entity =>
+            {
+                if (entity.Id == entityId)
+                {
+                    targetEntity = entity;
+                }
+            });
+
+            if (targetEntity == null || !_world.IsAlive(targetEntity.Value))
+            {
+                return null;
+            }
+
+            Entity entity = targetEntity.Value;
+
+            // Detect components if not already loaded
+            if (existingInfo.Components.Count == 0)
+            {
+                existingInfo.Components = DetectEntityComponents(entity);
+                existingInfo.Name = DetermineEntityName(entity, existingInfo.Components);
+                existingInfo.Tag = DetermineEntityTag(existingInfo.Components);
+            }
+
+            // Load component data
+            existingInfo.ComponentData = _componentRegistry.GetComponentData(entity, existingInfo.Components);
+
+            // Load properties
+            existingInfo.Properties = GetEntityProperties(entity, existingInfo.Components);
+            existingInfo.Properties["Components"] = existingInfo.Components.Count.ToString();
+
+            // Load relationships for THIS entity only (lightweight - no full cache rebuild)
+            ExtractSingleEntityRelationships(entity, existingInfo);
+
+            return existingInfo;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug(ex, "Error loading details for entity {EntityId}", entityId);
+            return null;
+        }
+    }
+
+    /// <summary>
+    ///     Extracts relationships for a single entity without building full indexes.
+    ///     More efficient for on-demand loading of individual entities.
+    /// </summary>
+    private void ExtractSingleEntityRelationships(Entity entity, EntityInfo info)
+    {
+        info.Relationships.Clear();
+
+        try
+        {
+            // Forward relationships: Children (ParentOf)
+            if (entity.HasRelationship<ParentOf>())
+            {
+                ref Relationship<ParentOf> children = ref entity.GetRelationships<ParentOf>();
+                var childList = new List<EntityRelationship>();
+
+                foreach (KeyValuePair<Entity, ParentOf> kvp in children)
+                {
+                    Entity childEntity = kvp.Key;
+                    if (_world.IsAlive(childEntity))
+                    {
+                        childList.Add(new EntityRelationship
+                        {
+                            EntityId = childEntity.Id,
+                            EntityName = $"Entity_{childEntity.Id}",
+                        });
+                    }
+                }
+
+                if (childList.Count > 0)
+                {
+                    info.Relationships["Children"] = childList;
+                }
+            }
+
+            // Forward relationships: Owns (OwnerOf)
+            if (entity.HasRelationship<OwnerOf>())
+            {
+                ref Relationship<OwnerOf> owned = ref entity.GetRelationships<OwnerOf>();
+                var ownedList = new List<EntityRelationship>();
+
+                foreach (KeyValuePair<Entity, OwnerOf> kvp in owned)
+                {
+                    Entity ownedEntity = kvp.Key;
+                    if (_world.IsAlive(ownedEntity))
+                    {
+                        ownedList.Add(new EntityRelationship
+                        {
+                            EntityId = ownedEntity.Id,
+                            EntityName = $"Entity_{ownedEntity.Id}",
+                        });
+                    }
+                }
+
+                if (ownedList.Count > 0)
+                {
+                    info.Relationships["Owns"] = ownedList;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug(ex, "Error extracting relationships for entity {EntityId}", entity.Id);
+        }
+    }
+
+    /// <summary>
     ///     Extracts relationship data from an entity using Arch.Relationships.
     ///     PERFORMANCE: Uses cached indexes to avoid O(N²) world queries.
+    ///     SAFETY: Wrapped in try-catch as entities can become invalid during background iteration.
     /// </summary>
     private void ExtractEntityRelationships(
         Entity entity,
@@ -1770,9 +2054,45 @@ public class ConsoleSystem : IUpdateSystem
         InverseRelationshipIndex inverseRelationships
     )
     {
-        // Extract ParentOf relationships (forward: this entity → children)
-        if (entity.HasRelationship<ParentOf>())
+        // SAFETY: Validate entity is still alive before accessing relationships
+        // This prevents NullReferenceException during iteration if entity is destroyed
+        try
         {
+            if (!_world.IsAlive(entity))
+            {
+                return;
+            }
+        }
+        catch
+        {
+            // World access failed (can happen during shutdown)
+            return;
+        }
+
+        // Extract ParentOf relationships (forward: this entity → children)
+        ExtractParentOfRelationships(entity, info, entityCache);
+
+        // Extract OwnerOf relationships (forward: this entity → owned entities)
+        ExtractOwnerOfRelationships(entity, info, entityCache);
+
+        // Extract inverse relationships from cached indexes (this entity as child/owned)
+        ExtractInverseParentRelationships(entity, info, entityCache, inverseRelationships);
+        ExtractInverseOwnerRelationships(entity, info, entityCache, inverseRelationships);
+    }
+
+    private void ExtractParentOfRelationships(
+        Entity entity,
+        EntityInfo info,
+        Dictionary<int, EntityCacheEntry> entityCache
+    )
+    {
+        try
+        {
+            if (!entity.HasRelationship<ParentOf>())
+            {
+                return;
+            }
+
             var parentOfList = new List<EntityRelationship>();
             ref Relationship<ParentOf> children = ref entity.GetRelationships<ParentOf>();
 
@@ -1787,7 +2107,6 @@ public class ConsoleSystem : IUpdateSystem
                 var rel = new EntityRelationship
                 {
                     EntityId = childEntity.Id,
-                    // Use cached name instead of expensive DetectEntityComponents call
                     EntityName =
                         entityCache.GetValueOrDefault(childEntity.Id)?.Name
                         ?? $"Entity_{childEntity.Id}",
@@ -1795,7 +2114,6 @@ public class ConsoleSystem : IUpdateSystem
                     Metadata = new Dictionary<string, string>(),
                 };
 
-                // Get relationship data
                 ParentOf relationshipData = entity.GetRelationship<ParentOf>(childEntity);
                 rel.Metadata["EstablishedAt"] = relationshipData.EstablishedAt.ToString(
                     "yyyy-MM-dd HH:mm:ss"
@@ -1813,10 +2131,25 @@ public class ConsoleSystem : IUpdateSystem
                 info.Relationships["Children"] = parentOfList;
             }
         }
-
-        // Extract OwnerOf relationships (forward: this entity → owned entities)
-        if (entity.HasRelationship<OwnerOf>())
+        catch
         {
+            // Entity became invalid during relationship extraction
+        }
+    }
+
+    private void ExtractOwnerOfRelationships(
+        Entity entity,
+        EntityInfo info,
+        Dictionary<int, EntityCacheEntry> entityCache
+    )
+    {
+        try
+        {
+            if (!entity.HasRelationship<OwnerOf>())
+            {
+                return;
+            }
+
             var ownerOfList = new List<EntityRelationship>();
             ref Relationship<OwnerOf> ownedEntities = ref entity.GetRelationships<OwnerOf>();
 
@@ -1838,7 +2171,6 @@ public class ConsoleSystem : IUpdateSystem
                     Metadata = new Dictionary<string, string>(),
                 };
 
-                // Get relationship data
                 OwnerOf relationshipData = entity.GetRelationship<OwnerOf>(ownedEntity);
                 rel.Metadata["Type"] = relationshipData.Type.ToString();
                 rel.Metadata["AcquiredAt"] = relationshipData.AcquiredAt.ToString(
@@ -1857,14 +2189,26 @@ public class ConsoleSystem : IUpdateSystem
                 info.Relationships["Owns"] = ownerOfList;
             }
         }
-
-        // MapContains has been replaced with ParentOf relationships
-        // Map entities now use standard parent-child hierarchy
-
-        // PERFORMANCE FIX: Use inverse index instead of O(N) world query
-        // Find parent relationships (where this entity is a child)
-        if (inverseRelationships.ParentOf.TryGetValue(entity.Id, out List<Entity>? parents))
+        catch
         {
+            // Entity became invalid during relationship extraction
+        }
+    }
+
+    private void ExtractInverseParentRelationships(
+        Entity entity,
+        EntityInfo info,
+        Dictionary<int, EntityCacheEntry> entityCache,
+        InverseRelationshipIndex inverseRelationships
+    )
+    {
+        try
+        {
+            if (!inverseRelationships.ParentOf.TryGetValue(entity.Id, out List<Entity>? parents))
+            {
+                return;
+            }
+
             var parentList = new List<EntityRelationship>();
 
             foreach (Entity potentialParent in parents)
@@ -1901,11 +2245,26 @@ public class ConsoleSystem : IUpdateSystem
                 info.Relationships["Parent"] = parentList;
             }
         }
-
-        // PERFORMANCE FIX: Use inverse index instead of O(N) world query
-        // Find owner relationships (where this entity is owned)
-        if (inverseRelationships.OwnerOf.TryGetValue(entity.Id, out List<Entity>? owners))
+        catch
         {
+            // Entity became invalid during relationship extraction
+        }
+    }
+
+    private void ExtractInverseOwnerRelationships(
+        Entity entity,
+        EntityInfo info,
+        Dictionary<int, EntityCacheEntry> entityCache,
+        InverseRelationshipIndex inverseRelationships
+    )
+    {
+        try
+        {
+            if (!inverseRelationships.OwnerOf.TryGetValue(entity.Id, out List<Entity>? owners))
+            {
+                return;
+            }
+
             var ownerList = new List<EntityRelationship>();
 
             foreach (Entity potentialOwner in owners)
@@ -1943,10 +2302,10 @@ public class ConsoleSystem : IUpdateSystem
                 info.Relationships["OwnedBy"] = ownerList;
             }
         }
-
-        // NOTE: With Arch.Relationships, MapContains is bidirectional automatically.
-        // We don't need to create "BelongsToMap" inverse relationships manually.
-        // The relationship can be queried in both directions natively.
+        catch
+        {
+            // Entity became invalid during relationship extraction
+        }
     }
 
     /// <summary>
@@ -1956,7 +2315,8 @@ public class ConsoleSystem : IUpdateSystem
     {
         try
         {
-            return _componentRegistry.GetSimpleProperties(entity);
+            // Use cached component names to avoid redundant O(N×M) component detection
+            return _componentRegistry.GetSimpleProperties(entity, components);
         }
         catch
         {

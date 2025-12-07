@@ -23,6 +23,18 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     // Display settings
     private const int MaxComponentsToShow = 50;
     private const int MaxPropertiesToShow = 20;
+
+    /// <summary>Minimum update interval in seconds</summary>
+    private const double MinUpdateInterval = 0.1;
+
+    /// <summary>Minimum highlight duration in seconds</summary>
+    private const float MinHighlightDuration = 0.5f;
+
+    /// <summary>Number of lines to jump on Page Up/Down</summary>
+    private const int PageJumpLines = 20;
+
+    /// <summary>Maximum depth for relationship tree traversal</summary>
+    private const int MaxRelationshipTreeDepth = 5;
     private readonly List<EntityInfo> _entities = new();
     private readonly TextBuffer _entityListBuffer;
     private readonly HashSet<int> _expandedEntities = new();
@@ -44,6 +56,19 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
 
     // Callback for refreshing entity data
     private Func<IEnumerable<EntityInfo>>? _entityProvider;
+
+    // LAZY LOADING: Callback for loading entity details on-demand (for large entity lists)
+    private Func<int, EntityInfo, EntityInfo?>? _entityDetailLoader;
+    private readonly Dictionary<int, EntityInfo> _loadedEntityCache = new(); // Cache loaded entity details
+
+    // PAGED LOADING: Only load entity IDs initially, create EntityInfo on-demand for visible range
+    private Func<int>? _entityCountProvider;                     // Returns total entity count (O(1))
+    private Func<int, int, List<EntityInfo>>? _entityRangeProvider; // Returns EntityInfo for range (startIndex, count)
+    private Func<IEnumerable<string>>? _componentNamesProvider;  // Returns all registered component names
+    private List<int>? _entityIds;                               // All entity IDs (lightweight - just ints)
+    private int _totalEntityCount;                               // Cached total count
+    private bool _usePagedLoading;                               // True when using paged providers
+
     private float _highlightDuration = 3.0f; // How long to highlight new entities
     private int _lastClickedEntityId = -1;
 
@@ -53,7 +78,7 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     private double _lastUpdateTime;
 
     // PERFORMANCE: Increased default from 1.0s to 2.0s to reduce refresh overhead with relationships
-    private float _refreshInterval = 2.0f;
+    private double _updateInterval = 2.0;
     private int _removedThisSession;
     private string _searchFilter = "";
 
@@ -66,11 +91,20 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
 
     // Filters
     private string _tagFilter = "";
-    private float _timeSinceLastChange;
+    private double _timeSinceLastChange;
     private float _timeSinceRefresh;
 
     // View mode
     private EntityViewMode _viewMode = EntityViewMode.Normal;
+
+    // Virtual scrolling infrastructure - PERFORMANCE FIX for 1M+ entities
+    private readonly List<int> _entityHeights = new();      // Height (lines) per entity in _filteredEntities
+    private readonly List<int> _cumulativeHeights = new();  // Cumulative heights for binary search
+    private int _totalVirtualHeight;                        // Total lines if all entities were rendered
+    private int _lastScrollOffset = -1;                     // Track scroll changes for re-render
+    private int _visibleStartIndex;                         // First visible entity index (cached)
+    private int _visibleEndIndex;                           // Last visible entity index (cached)
+    private bool _heightsNeedRecalculation = true;          // Flag to recalculate heights
 
     /// <summary>
     ///     Creates an EntitiesPanel with the specified components.
@@ -100,21 +134,21 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     public int? SelectedEntityId => _selectedEntityId;
 
     // ═══════════════════════════════════════════════════════════════════════════
-    // Auto-Refresh
+    // Auto-Update
     // ═══════════════════════════════════════════════════════════════════════════
 
     /// <summary>
-    ///     Gets or sets whether auto-refresh is enabled.
+    ///     Gets or sets whether auto-update is enabled.
     /// </summary>
-    public bool AutoRefresh { get; set; } = true;
+    public bool AutoUpdate { get; set; } = true;
 
     /// <summary>
-    ///     Gets or sets the auto-refresh interval in seconds.
+    ///     Gets or sets the update interval in seconds.
     /// </summary>
-    public float RefreshInterval
+    public double UpdateInterval
     {
-        get => _refreshInterval;
-        set => _refreshInterval = Math.Max(0.1f, value);
+        get => _updateInterval;
+        set => _updateInterval = Math.Max(MinUpdateInterval, value);
     }
 
     /// <summary>
@@ -123,7 +157,7 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     public float HighlightDuration
     {
         get => _highlightDuration;
-        set => _highlightDuration = Math.Max(0.5f, value);
+        set => _highlightDuration = Math.Max(MinHighlightDuration, value);
     }
 
     /// <summary>
@@ -252,14 +286,14 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
 
     bool IEntityOperations.AutoRefresh
     {
-        get => AutoRefresh;
-        set => AutoRefresh = value;
+        get => AutoUpdate;
+        set => AutoUpdate = value;
     }
 
     float IEntityOperations.RefreshInterval
     {
-        get => RefreshInterval;
-        set => RefreshInterval = value;
+        get => (float)UpdateInterval;
+        set => UpdateInterval = value;
     }
 
     float IEntityOperations.HighlightDuration
@@ -303,21 +337,60 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
 
     /// <summary>
     ///     Sets the entity provider function that returns all entities.
-    ///     This will be called during refresh.
+    ///     This will be called during refresh (deferred until panel is visible).
     /// </summary>
     public void SetEntityProvider(Func<IEnumerable<EntityInfo>>? provider)
     {
         _entityProvider = provider;
-        if (_entityProvider != null)
-        {
-            RefreshEntities();
-            // Select first entity if none selected
-            if (!_selectedEntityId.HasValue && _navigableEntityIds.Count > 0)
-            {
-                _selectedEntityId = _navigableEntityIds[0];
-                _selectedIndex = 0;
-            }
-        }
+        // NOTE: Do NOT call RefreshEntities() here!
+        // With 1M+ entities, this would freeze the game when the console opens.
+        // Instead, let the auto-refresh handle it when the Entities tab is actually viewed.
+        // The first refresh will happen on the next refresh interval or when manually triggered.
+    }
+
+    /// <summary>
+    ///     Sets the entity detail loader for on-demand loading of component data.
+    ///     Used for lazy loading when entity counts exceed the lightweight threshold.
+    /// </summary>
+    public void SetEntityDetailLoader(Func<int, EntityInfo, EntityInfo?>? loader)
+    {
+        _entityDetailLoader = loader;
+    }
+
+    /// <summary>
+    ///     Sets paged entity providers for true lazy loading with 1M+ entities.
+    ///     This avoids creating 1M EntityInfo objects by only loading visible entities on-demand.
+    /// </summary>
+    /// <param name="countProvider">Returns total entity count (O(1) operation)</param>
+    /// <param name="idsProvider">Returns all entity IDs (lightweight - just int list)</param>
+    /// <param name="rangeProvider">Returns EntityInfo for a specific range (startIndex, count)</param>
+    /// <param name="componentNamesProvider">Optional: Returns all registered component names from registry</param>
+    public void SetPagedEntityProvider(
+        Func<int> countProvider,
+        Func<List<int>> idsProvider,
+        Func<int, int, List<EntityInfo>> rangeProvider,
+        Func<IEnumerable<string>>? componentNamesProvider = null)
+    {
+        _entityCountProvider = countProvider;
+        _entityRangeProvider = rangeProvider;
+        _componentNamesProvider = componentNamesProvider;
+        _usePagedLoading = true;
+
+        // Load entity IDs upfront (just ints - ~4MB for 1M entities vs ~200MB for EntityInfo)
+        _entityIds = idsProvider();
+        _totalEntityCount = _entityIds.Count;
+
+        System.Diagnostics.Debug.WriteLine($"[EntitiesPanel] SetPagedEntityProvider: Loaded {_totalEntityCount} entity IDs");
+
+        // Clear old provider to prevent accidental full-load
+        _entityProvider = null;
+
+        // Reset scroll to top and trigger initial display
+        _entityListBuffer.SetScrollOffset(0);
+        _heightsNeedRecalculation = true;
+
+        // Force immediate display update (safe for paged mode - only loads visible entities)
+        UpdateDisplay();
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -325,67 +398,107 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     // ═══════════════════════════════════════════════════════════════════════════
 
     /// <summary>
-    ///     Refreshes the entity list using the entity provider.
+    ///     Refreshes the entity list from the provider.
     /// </summary>
     public void RefreshEntities()
     {
-        // Store previous entity IDs for change detection
-        var currentIds = new HashSet<int>(_entities.Select(e => e.Id));
+        _timeSinceRefresh = 0f;
 
-        _entities.Clear();
-
-        if (_entityProvider != null)
+        // PAGED LOADING: Only refresh entity count and IDs (no EntityInfo creation)
+        if (_usePagedLoading && _entityCountProvider != null)
         {
             try
             {
-                IEnumerable<EntityInfo> entities = _entityProvider();
-                _entities.AddRange(entities);
+                int newCount = _entityCountProvider();
+
+                // Only refresh IDs if count changed significantly (>10% change or first load)
+                bool needsIdRefresh = _entityIds == null
+                    || Math.Abs(newCount - _totalEntityCount) > _totalEntityCount / 10
+                    || _totalEntityCount == 0;
+
+                _totalEntityCount = newCount;
+
+                // Clear loaded details cache
+                _loadedEntityCache.Clear();
+
+                // Mark heights for recalculation
+                _heightsNeedRecalculation = true;
+
+                UpdateDisplay();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Entity provider may throw if world is disposed
+                System.Diagnostics.Debug.WriteLine($"Error refreshing paged entities: {ex.Message}");
             }
+
+            return;
         }
 
-        // Detect new and removed entities
-        var newIds = new HashSet<int>(_entities.Select(e => e.Id));
-
-        // Only track changes if we had previous data
-        if (_previousEntityIds.Count > 0)
+        // LEGACY MODE: Full entity loading (for small entity counts)
+        if (_entityProvider == null)
         {
-            // Find newly spawned entities
+            return;
+        }
+
+        try
+        {
+            // Load entities directly (synchronous)
+            List<EntityInfo> loadedEntities = _entityProvider().ToList();
+
+            _entities.Clear();
+            _entities.AddRange(loadedEntities);
+
+            // Clear loaded details cache (entities may have changed)
+            _loadedEntityCache.Clear();
+
+            // Detect new and removed entities
+            var newIds = new HashSet<int>(_entities.Select(e => e.Id));
+
+            // Only track changes if we had previous data
+            if (_previousEntityIds.Count > 0)
+            {
+                // Find newly spawned entities
+                foreach (int id in newIds)
+                {
+                    if (!_previousEntityIds.Contains(id))
+                    {
+                        _newEntityIds.Add(id);
+                        _spawnedThisSession++;
+                        _timeSinceLastChange = 0.0;
+                    }
+                }
+
+                // Find removed entities
+                foreach (int id in _previousEntityIds)
+                {
+                    if (!newIds.Contains(id))
+                    {
+                        _removedEntityIds.Add(id);
+                        _removedThisSession++;
+                        _timeSinceLastChange = 0.0;
+                    }
+                }
+            }
+
+            // Update previous IDs for next comparison
+            _previousEntityIds.Clear();
             foreach (int id in newIds)
             {
-                if (!_previousEntityIds.Contains(id))
-                {
-                    _newEntityIds.Add(id);
-                    _spawnedThisSession++;
-                    _timeSinceLastChange = 0f;
-                }
+                _previousEntityIds.Add(id);
             }
 
-            // Find removed entities
-            foreach (int id in _previousEntityIds)
-            {
-                if (!newIds.Contains(id))
-                {
-                    _removedEntityIds.Add(id);
-                    _removedThisSession++;
-                    _timeSinceLastChange = 0f;
-                }
-            }
+            ApplyFilters();
+            UpdateDisplay();
         }
-
-        // Update previous IDs for next comparison
-        _previousEntityIds.Clear();
-        foreach (int id in newIds)
+        catch (Exception ex)
         {
-            _previousEntityIds.Add(id);
+            // Show error in display
+            _entities.Clear();
+            ApplyFilters();
+            UpdateDisplay();
+            // Error will be visible via empty state
+            System.Diagnostics.Debug.WriteLine($"Error loading entities: {ex.Message}");
         }
-
-        ApplyFilters();
-        UpdateDisplay();
-        _timeSinceRefresh = 0f;
     }
 
     /// <summary>
@@ -524,6 +637,9 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
                 return a.Id.CompareTo(b.Id);
             }
         );
+
+        // VIRTUALIZATION: Heights must be recalculated when filtered set changes
+        _heightsNeedRecalculation = true;
     }
 
     /// <summary>
@@ -603,6 +719,7 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     public void ExpandEntity(int entityId)
     {
         _expandedEntities.Add(entityId);
+        _heightsNeedRecalculation = true; // Virtualization: expansion changes height
         UpdateDisplay();
     }
 
@@ -612,6 +729,7 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     public void CollapseEntity(int entityId)
     {
         _expandedEntities.Remove(entityId);
+        _heightsNeedRecalculation = true; // Virtualization: collapse changes height
         UpdateDisplay();
     }
 
@@ -620,6 +738,7 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     /// </summary>
     public bool ToggleEntity(int entityId)
     {
+        _heightsNeedRecalculation = true; // Virtualization: toggle changes height
         if (_expandedEntities.Contains(entityId))
         {
             _expandedEntities.Remove(entityId);
@@ -642,6 +761,7 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
             _expandedEntities.Add(entity.Id);
         }
 
+        _heightsNeedRecalculation = true; // Virtualization: mass expansion
         UpdateDisplay();
     }
 
@@ -651,6 +771,7 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     public void CollapseAll()
     {
         _expandedEntities.Clear();
+        _heightsNeedRecalculation = true; // Virtualization: mass collapse
         UpdateDisplay();
     }
 
@@ -754,14 +875,14 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
             }
         }
 
-        // Auto-refresh
-        if (!AutoRefresh || _entityProvider == null)
+        // Auto-update
+        if (!AutoUpdate || _entityProvider == null)
         {
             return;
         }
 
         _timeSinceRefresh += deltaTime;
-        if (_timeSinceRefresh >= _refreshInterval)
+        if (_timeSinceRefresh >= _updateInterval)
         {
             RefreshEntities();
         }
@@ -772,6 +893,16 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     /// </summary>
     protected override void OnRenderContainer(UIContext context)
     {
+        // VIRTUALIZATION: Detect scroll position changes and re-render visible window
+        int currentScrollOffset = _entityListBuffer.ScrollOffset;
+        bool hasEntities = _filteredEntities.Count > 0 || (_usePagedLoading && _totalEntityCount > 0);
+        if (_lastScrollOffset != currentScrollOffset && hasEntities)
+        {
+            _lastScrollOffset = currentScrollOffset;
+            // Only update display (re-render visible entities), don't refresh data
+            UpdateDisplay();
+        }
+
         // Handle V key BEFORE base.OnRenderContainer to prevent TextBuffer from consuming it
         if (KeyboardNavEnabled && context.Input != null && context.Input.IsKeyPressed(Keys.V))
         {
@@ -781,16 +912,22 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
 
         base.OnRenderContainer(context);
 
-        // Auto-refresh if enabled (similar to WatchPanel pattern)
-        if (AutoRefresh && _entityProvider != null && context.Input?.GameTime != null)
+        // Trigger initial load if we have a provider but no data yet
+        if (_entityProvider != null && _entities.Count == 0)
+        {
+            RefreshEntities();
+        }
+
+        // Auto-update if enabled
+        if (AutoUpdate && _entityProvider != null && context.Input?.GameTime != null)
         {
             double currentTime = context.Input.GameTime.TotalGameTime.TotalSeconds;
-            if (currentTime - _lastUpdateTime >= _refreshInterval)
+            if (currentTime - _lastUpdateTime >= _updateInterval)
             {
                 _lastUpdateTime = currentTime;
 
                 // Update highlight timings
-                _timeSinceLastChange += _refreshInterval;
+                _timeSinceLastChange += _updateInterval;
 
                 // Clear highlights after duration expires
                 if (_timeSinceLastChange >= _highlightDuration)
@@ -852,9 +989,9 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
         // Page Up - move cursor up by page
         else if (input.IsKeyPressedWithRepeat(Keys.PageUp))
         {
-            int newCursor = Math.Max(0, _entityListBuffer.CursorLine - 20);
+            int newCursor = Math.Max(0, _entityListBuffer.CursorLine - PageJumpLines);
             _entityListBuffer.CursorLine = newCursor;
-            _entityListBuffer.ScrollUp(20);
+            _entityListBuffer.ScrollUp(PageJumpLines);
             UpdateSelectionFromCursor();
             input.ConsumeKey(Keys.PageUp);
         }
@@ -862,9 +999,9 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
         else if (input.IsKeyPressedWithRepeat(Keys.PageDown))
         {
             int maxLine = _entityListBuffer.TotalLines - 1;
-            int newCursor = Math.Min(maxLine, _entityListBuffer.CursorLine + 20);
+            int newCursor = Math.Min(maxLine, _entityListBuffer.CursorLine + PageJumpLines);
             _entityListBuffer.CursorLine = newCursor;
-            _entityListBuffer.ScrollDown(20);
+            _entityListBuffer.ScrollDown(PageJumpLines);
             UpdateSelectionFromCursor();
             input.ConsumeKey(Keys.PageDown);
         }
@@ -1091,9 +1228,12 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
         // Calculate relative position within content area
         float relativeY = mousePos.Y - contentBounds.Y - _entityListBuffer.LinePadding;
         int lineIndex = (int)(relativeY / _entityListBuffer.LineHeight);
-        int actualLine = _entityListBuffer.ScrollOffset + lineIndex;
 
-        // Clamp to valid range
+        // In virtual/paged mode, _lineToEntityId uses buffer-local line numbers (0 to TotalLines)
+        // NOT virtual scroll positions. So don't add ScrollOffset when using paged loading.
+        int actualLine = _usePagedLoading ? lineIndex : (_entityListBuffer.ScrollOffset + lineIndex);
+
+        // Clamp to valid range (use actual buffer TotalLines, not virtual)
         return actualLine >= 0 && actualLine < _entityListBuffer.TotalLines ? actualLine : -1;
     }
 
@@ -1208,13 +1348,24 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     /// </summary>
     private void UpdateDisplay()
     {
-        // Preserve scroll position only if we had content before
-        int previousLineCount = _entityListBuffer.TotalLines;
+        // Preserve scroll position
         int previousScrollOffset = _entityListBuffer.ScrollOffset;
         bool previousAutoScroll = _entityListBuffer.AutoScroll;
 
         _entityListBuffer.Clear();
 
+        // ═══════════════════════════════════════════════════════════════════════════
+        // PAGED LOADING MODE: Load only visible entities on-demand (for 1M+ entities)
+        // ═══════════════════════════════════════════════════════════════════════════
+        if (_usePagedLoading && _entityRangeProvider != null && _entityIds != null)
+        {
+            UpdateDisplayPaged(previousScrollOffset);
+            return;
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════════
+        // LEGACY MODE: All entities loaded in memory
+        // ═══════════════════════════════════════════════════════════════════════════
         if (_entityProvider == null && _entities.Count == 0)
         {
             _entityListBuffer.AppendLine(
@@ -1246,6 +1397,12 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
             }
 
             return;
+        }
+
+        // Recalculate heights if needed (O(N) only when dirty)
+        if (_heightsNeedRecalculation)
+        {
+            RecalculateEntityHeights();
         }
 
         // Build navigation list (pinned first, then regular)
@@ -1288,37 +1445,64 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
         _lineToEntityId.Clear();
 
         // In Relationships view mode, display entities as a hierarchical tree
+        // (Relationships tree view is complex - skip virtualization for now, only affects when expanded)
         if (_viewMode == EntityViewMode.Relationships)
         {
             RenderRelationshipTreeView(pinnedEntities, regularEntities);
         }
         else
         {
-            // Normal view: Display pinned entities first
-            if (pinnedEntities.Count > 0)
-            {
-                _entityListBuffer.AppendLine(
-                    $"  {NerdFontIcons.Pinned} PINNED",
-                    ThemeManager.Current.Warning
-                );
-                foreach (EntityInfo entity in pinnedEntities)
-                {
-                    // Track which line this entity header starts on
-                    int lineNum = _entityListBuffer.TotalLines;
-                    RenderEntity(entity);
-                    _lineToEntityId[lineNum] = entity.Id;
-                }
+            // VIRTUALIZED RENDERING: Only render visible entities
+            int scrollOffset = previousScrollOffset;
+            int visibleLines = Math.Max(_entityListBuffer.VisibleLineCount, 30);
 
-                _entityListBuffer.AppendLine("", ThemeManager.Current.TextDim);
+            // Calculate which entities are visible
+            (int startIndex, int endIndex) = CalculateVisibleRange(scrollOffset, visibleLines);
+            _visibleStartIndex = startIndex;
+            _visibleEndIndex = endIndex;
+
+            // Show "entities above" indicator if not at top
+            if (startIndex > 0)
+            {
+                int pinnedAbove = pinnedEntities.Count(e =>
+                    _filteredEntities.IndexOf(e) < startIndex
+                );
+                string pinnedInfo = pinnedAbove > 0 ? $" ({pinnedAbove} pinned)" : "";
+                _entityListBuffer.AppendLine(
+                    $"  {NerdFontIcons.ArrowUp} {startIndex} entities above{pinnedInfo} (scroll up)",
+                    ThemeManager.Current.TextDim
+                );
             }
 
-            // Display other entities
-            foreach (EntityInfo entity in regularEntities)
+            // Render ONLY visible entities
+            for (int i = startIndex; i < endIndex && i < _filteredEntities.Count; i++)
             {
+                EntityInfo entity = _filteredEntities[i];
+                bool isPinned = _pinnedEntities.Contains(entity.Id);
+
+                // Show pinned header for first pinned entity in visible range
+                if (isPinned && (i == startIndex || !_pinnedEntities.Contains(_filteredEntities[i - 1].Id)))
+                {
+                    _entityListBuffer.AppendLine(
+                        $"  {NerdFontIcons.Pinned} PINNED",
+                        ThemeManager.Current.Warning
+                    );
+                }
+
                 // Track which line this entity header starts on
                 int lineNum = _entityListBuffer.TotalLines;
                 RenderEntity(entity);
                 _lineToEntityId[lineNum] = entity.Id;
+            }
+
+            // Show "entities below" indicator if not at bottom
+            int entitiesBelow = _filteredEntities.Count - endIndex;
+            if (entitiesBelow > 0)
+            {
+                _entityListBuffer.AppendLine(
+                    $"  {NerdFontIcons.ArrowDown} {entitiesBelow} entities below (scroll down)",
+                    ThemeManager.Current.TextDim
+                );
             }
         }
 
@@ -1331,23 +1515,126 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
             _entityListBuffer.CursorLine = 0;
         }
 
-        // Restore scroll position only if content length is similar (within 20%)
-        // This prevents scroll position from making entities "disappear" after refresh
-        int newLineCount = _entityListBuffer.TotalLines;
-        if (previousLineCount > 0 && newLineCount > 0)
+        // Restore scroll position (clamped to valid range based on virtual height)
+        if (_totalVirtualHeight > 0)
         {
-            float ratio = (float)newLineCount / previousLineCount;
-            if (ratio > 0.8f && ratio < 1.2f)
-            {
-                // Content length similar - restore scroll position
-                _entityListBuffer.SetScrollOffset(
-                    Math.Min(previousScrollOffset, Math.Max(0, newLineCount - 1))
-                );
-            }
-            // else: content changed significantly, start at top (scroll offset 0)
+            int maxScroll = Math.Max(0, _totalVirtualHeight - 1);
+            _entityListBuffer.SetScrollOffset(Math.Min(previousScrollOffset, maxScroll));
         }
 
         _entityListBuffer.AutoScroll = previousAutoScroll;
+    }
+
+    /// <summary>
+    ///     Updates display using paged loading - only loads visible entities on-demand.
+    ///     This is the O(visible) path for 1M+ entity counts.
+    /// </summary>
+    private void UpdateDisplayPaged(int scrollOffset)
+    {
+        // Clear line-to-entity mapping
+        _lineToEntityId.Clear();
+        _navigableEntityIds.Clear();
+
+        System.Diagnostics.Debug.WriteLine($"[EntitiesPanel] UpdateDisplayPaged: totalCount={_totalEntityCount}, entityIds={_entityIds?.Count ?? -1}, rangeProvider={_entityRangeProvider != null}");
+
+        if (_totalEntityCount == 0 || _entityIds == null || _entityRangeProvider == null)
+        {
+            System.Diagnostics.Debug.WriteLine($"[EntitiesPanel] UpdateDisplayPaged: BAILING - no entities or null provider");
+            _entityListBuffer.AppendLine(
+                "  No entities in world.",
+                ThemeManager.Current.TextDim
+            );
+            UpdateStatusBar();
+            return;
+        }
+
+        // Clamp scroll offset to valid range BEFORE calculating visible range
+        int maxScroll = Math.Max(0, _totalEntityCount - 1);
+        scrollOffset = Math.Clamp(scrollOffset, 0, maxScroll);
+
+        // Calculate visible range (all entities have height=1 when collapsed in paged mode)
+        int visibleLines = Math.Max(_entityListBuffer.VisibleLineCount, 30);
+        int startIndex = Math.Max(0, scrollOffset);
+        int endIndex = Math.Min(startIndex + visibleLines + 20, _totalEntityCount); // +20 buffer
+
+        _visibleStartIndex = startIndex;
+        _visibleEndIndex = endIndex;
+
+        // Load ONLY the visible entities from the provider
+        int rangeCount = endIndex - startIndex;
+        System.Diagnostics.Debug.WriteLine($"[EntitiesPanel] UpdateDisplayPaged: Loading range [{startIndex}, {endIndex}) count={rangeCount}");
+
+        List<EntityInfo> visibleEntities;
+        try
+        {
+            visibleEntities = _entityRangeProvider(startIndex, rangeCount);
+            System.Diagnostics.Debug.WriteLine($"[EntitiesPanel] UpdateDisplayPaged: Got {visibleEntities.Count} entities from provider");
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[EntitiesPanel] UpdateDisplayPaged: ERROR - {ex.Message}");
+            _entityListBuffer.AppendLine(
+                $"  Error loading entities: {ex.Message}",
+                ThemeManager.Current.Error
+            );
+            UpdateStatusBar();
+            return;
+        }
+
+        // Show "entities above" indicator
+        if (startIndex > 0)
+        {
+            _entityListBuffer.AppendLine(
+                $"  {NerdFontIcons.ArrowUp} {startIndex:N0} entities above (scroll up)",
+                ThemeManager.Current.TextDim
+            );
+        }
+
+        // Render ONLY the visible entities (O(visible) not O(N))
+        foreach (EntityInfo entity in visibleEntities)
+        {
+            _navigableEntityIds.Add(entity.Id);
+            int lineNum = _entityListBuffer.TotalLines;
+            RenderEntity(entity);
+            _lineToEntityId[lineNum] = entity.Id;
+        }
+
+        // Show "entities below" indicator
+        int entitiesBelow = _totalEntityCount - endIndex;
+        if (entitiesBelow > 0)
+        {
+            _entityListBuffer.AppendLine(
+                $"  {NerdFontIcons.ArrowDown} {entitiesBelow:N0} entities below (scroll down)",
+                ThemeManager.Current.TextDim
+            );
+        }
+
+        // Set virtual height for scrollbar (total entities = total lines when collapsed)
+        _totalVirtualHeight = _totalEntityCount;
+        _entityListBuffer.SetVirtualTotalLines(_totalEntityCount);
+
+        // CRITICAL: Restore scroll offset after Clear() reset it to 0
+        _entityListBuffer.SetScrollOffset(scrollOffset);
+
+        // Update selection
+        if (_navigableEntityIds.Count > 0)
+        {
+            _selectedIndex = Math.Clamp(_selectedIndex, 0, _navigableEntityIds.Count - 1);
+            if (!_selectedEntityId.HasValue || !_navigableEntityIds.Contains(_selectedEntityId.Value))
+            {
+                _selectedEntityId = _navigableEntityIds[_selectedIndex];
+            }
+        }
+
+        UpdateStatusBar();
+
+        // Initialize cursor line if not set
+        if (_entityListBuffer.CursorLine < 0 && _entityListBuffer.TotalLines > 0)
+        {
+            _entityListBuffer.CursorLine = 0;
+        }
+
+        // Scroll was already clamped at the start of this method
     }
 
     /// <summary>
@@ -1355,11 +1642,14 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     /// </summary>
     protected override void UpdateStatusBar()
     {
-        // Build stats text
-        string stats = $"Entities: {_entities.Count}";
-        if (_filteredEntities.Count != _entities.Count)
+        // Build stats text - handle paged vs legacy mode
+        int totalCount = _usePagedLoading ? _totalEntityCount : _entities.Count;
+        int filteredCount = _usePagedLoading ? _totalEntityCount : _filteredEntities.Count;
+
+        string stats = $"Entities: {totalCount:N0}";
+        if (filteredCount != totalCount)
         {
-            stats += $" | Showing: {_filteredEntities.Count}";
+            stats += $" | Showing: {filteredCount:N0}";
         }
 
         if (_pinnedEntities.Count > 0)
@@ -1367,9 +1657,16 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
             stats += $" | Pinned: {_pinnedEntities.Count}";
         }
 
-        if (AutoRefresh)
+        // Show virtual scroll position when virtualized
+        int visibleCount = _visibleEndIndex - _visibleStartIndex;
+        if (filteredCount > visibleCount && visibleCount > 0)
         {
-            stats += $" | Auto: {_refreshInterval:F1}s";
+            stats += $" | View: {_visibleStartIndex + 1:N0}-{_visibleEndIndex:N0}/{filteredCount:N0}";
+        }
+
+        if (AutoUpdate)
+        {
+            stats += $" | Auto: {_updateInterval:F1}s";
         }
 
         // Build hints text (concise to avoid running together)
@@ -1398,7 +1695,10 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
         }
 
         SetStatusBar(stats, hints);
-        // StatsColor uses theme fallback (Success) - don't set explicitly for dynamic theme support
+
+        // Add health color indicator
+        bool isHealthy = _entities.Count > 0;
+        SetStatusBarHealthColor(isHealthy, isWarning: false);
     }
 
     /// <summary>
@@ -1409,6 +1709,28 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
         bool isExpanded = _expandedEntities.Contains(entity.Id);
         bool isSelected = _selectedEntityId == entity.Id;
         bool isNew = _newEntityIds.Contains(entity.Id);
+
+        // LAZY LOADING: Load entity details on-demand when expanded
+        // This avoids loading component data for all 1M entities upfront
+        if (isExpanded && _entityDetailLoader != null)
+        {
+            // First check if we have a cached version from a previous load
+            if (_loadedEntityCache.TryGetValue(entity.Id, out EntityInfo? cachedEntity))
+            {
+                entity = cachedEntity;
+            }
+            // If not cached and needs details loaded (empty components = lightweight mode)
+            else if (entity.Components.Count == 0 || entity.ComponentData.Count == 0)
+            {
+                EntityInfo? loaded = _entityDetailLoader(entity.Id, entity);
+                if (loaded != null)
+                {
+                    // CRITICAL: Cache and use the loaded entity with full component data
+                    entity = loaded;
+                    _loadedEntityCache[entity.Id] = loaded;
+                }
+            }
+        }
 
         // Entity header line
         string expandIndicator = isExpanded
@@ -1662,26 +1984,6 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
                         ThemeManager.Current.Success
                     );
                     _lineToEntityId[lineNum] = ownerEntity.Id;
-
-                    // Show owned entities if expanded
-                    if (_expandedEntities.Contains(ownerEntity.Id))
-                    {
-                        foreach (EntityRelationship ownsRel in ownsRels.Take(10))
-                        {
-                            _entityListBuffer.AppendLine(
-                                $"      └── [{ownsRel.EntityId}] {ownsRel.EntityName ?? "Unknown"}",
-                                ThemeManager.Current.TextDim
-                            );
-                        }
-
-                        if (ownsRels.Count > 10)
-                        {
-                            _entityListBuffer.AppendLine(
-                                $"      ... ({ownsRels.Count - 10} more)",
-                                ThemeManager.Current.TextDim
-                            );
-                        }
-                    }
                 }
             }
             else
@@ -1705,9 +2007,7 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
         int depth
     )
     {
-        const int MaxDepth = 5;
-
-        if (depth >= MaxDepth)
+        if (depth >= MaxRelationshipTreeDepth)
         {
             _entityListBuffer.AppendLine(
                 $"{indent}... (max depth reached)",
@@ -1784,7 +2084,7 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
         // Show full details if expanded (SAME as normal view)
         if (isExpanded)
         {
-            // Show relationships first (excluding hierarchical ones shown in tree structure)
+            // Show relationships as counts only (excluding hierarchical ones shown in tree structure)
             if (entity.Relationships.Count > 0)
             {
                 bool hasNonHierarchical = entity.Relationships.Any(kvp =>
@@ -1808,34 +2108,11 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
                             continue;
                         }
 
+                        // Just show count, not individual relationships
                         _entityListBuffer.AppendLine(
-                            $"{indent}{childIndent}    {relType} ({rels.Count}):",
+                            $"{indent}{childIndent}    {relType}: {rels.Count}",
                             ThemeManager.Current.Info
                         );
-
-                        foreach (EntityRelationship rel in rels.Take(5))
-                        {
-                            Color relColor = rel.IsValid
-                                ? ThemeManager.Current.Success
-                                : ThemeManager.Current.TextDim;
-                            string entityDisplay =
-                                rel.EntityName != null
-                                    ? $"[{rel.EntityId}] {rel.EntityName}"
-                                    : $"[{rel.EntityId}]";
-
-                            _entityListBuffer.AppendLine(
-                                $"{indent}{childIndent}      → {entityDisplay}",
-                                relColor
-                            );
-                        }
-
-                        if (rels.Count > 5)
-                        {
-                            _entityListBuffer.AppendLine(
-                                $"{indent}{childIndent}      ... ({rels.Count - 5} more)",
-                                ThemeManager.Current.TextDim
-                            );
-                        }
                     }
 
                     _entityListBuffer.AppendLine("", ThemeManager.Current.TextDim);
@@ -1914,9 +2191,7 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     /// </summary>
     private void RenderEntityTree(EntityInfo entity, string indent, int depth)
     {
-        const int MaxDepth = 5; // Prevent too deep recursion
-
-        if (depth >= MaxDepth)
+        if (depth >= MaxRelationshipTreeDepth)
         {
             _entityListBuffer.AppendLine(
                 $"{indent}... (max depth reached)",
@@ -1967,68 +2242,11 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
 
             isFirstType = false;
 
-            // Relationship type header
+            // Relationship type header with count only (no individual entities listed)
             _entityListBuffer.AppendLine(
-                $"{indent}{relationshipType} ({relationships.Count}):",
-                ThemeManager.Current.Warning
+                $"{indent}{relationshipType}: {relationships.Count}",
+                ThemeManager.Current.Info
             );
-
-            // Render each related entity as a tree node
-            for (int i = 0; i < relationships.Count; i++)
-            {
-                EntityRelationship rel = relationships[i];
-                bool isLast = i == relationships.Count - 1;
-                string branch = isLast ? "└── " : "├── ";
-                string childIndent = isLast ? "    " : "│   ";
-
-                Color relationshipColor = rel.IsValid
-                    ? ThemeManager.Current.Success
-                    : ThemeManager.Current.TextDim;
-
-                string entityDisplay =
-                    rel.EntityName != null
-                        ? $"[{rel.EntityId}] {rel.EntityName}"
-                        : $"[{rel.EntityId}]";
-
-                if (!rel.IsValid)
-                {
-                    entityDisplay += " (invalid)";
-                }
-
-                bool isExpanded = _expandedEntities.Contains(rel.EntityId);
-                string expandMarker = isExpanded ? "▼ " : "► ";
-
-                _entityListBuffer.AppendLine(
-                    $"{indent}{branch}{expandMarker}{entityDisplay}",
-                    relationshipColor
-                );
-
-                // Track line number for click handling
-                int lineNum = _entityListBuffer.TotalLines - 1;
-                _lineToEntityId[lineNum] = rel.EntityId;
-
-                // Show metadata
-                if (rel.Metadata.Count > 0 && depth < 2) // Only show metadata at shallow depths
-                {
-                    foreach ((string key, string value) in rel.Metadata.Take(2))
-                    {
-                        _entityListBuffer.AppendLine(
-                            $"{indent}{childIndent}  {key}: {value}",
-                            ThemeManager.Current.TextDim
-                        );
-                    }
-                }
-
-                // If expanded, recursively render this entity's relationships
-                if (isExpanded)
-                {
-                    EntityInfo? relatedEntity = _entities.FirstOrDefault(e => e.Id == rel.EntityId);
-                    if (relatedEntity != null)
-                    {
-                        RenderEntityTree(relatedEntity, $"{indent}{childIndent}", depth + 1);
-                    }
-                }
-            }
         }
 
         _processedInTree.Remove(entity.Id);
@@ -2036,20 +2254,19 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
 
     /// <summary>
     ///     Renders the relationships section for an entity.
+    ///     Shows only counts to avoid overwhelming display with 1M+ entities.
     /// </summary>
     private void RenderRelationships(EntityInfo entity)
     {
-        _entityListBuffer.AppendLine("      Relationships:", ThemeManager.Current.Warning);
-
         int totalRelationships = entity.Relationships.Values.Sum(list => list.Count);
         if (totalRelationships == 0)
         {
-            _entityListBuffer.AppendLine("        (none)", ThemeManager.Current.TextDim);
-            _entityListBuffer.AppendLine("", ThemeManager.Current.TextDim);
-            return;
+            return; // Don't show relationships section if empty
         }
 
-        // Render each relationship type
+        _entityListBuffer.AppendLine("      Relationships:", ThemeManager.Current.Warning);
+
+        // Render each relationship type with count only (no individual items)
         foreach (
             (
                 string relationshipType,
@@ -2062,43 +2279,11 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
                 continue;
             }
 
-            // Relationship type header
+            // Just show count, not individual relationships
             _entityListBuffer.AppendLine(
-                $"        {relationshipType} ({relationships.Count}):",
+                $"        {relationshipType}: {relationships.Count}",
                 ThemeManager.Current.Info
             );
-
-            // Render each relationship
-            foreach (EntityRelationship relationship in relationships)
-            {
-                Color relationshipColor = relationship.IsValid
-                    ? ThemeManager.Current.Success
-                    : ThemeManager.Current.TextDim;
-
-                string entityDisplay =
-                    relationship.EntityName != null
-                        ? $"[{relationship.EntityId}] {relationship.EntityName}"
-                        : $"[{relationship.EntityId}]";
-
-                if (!relationship.IsValid)
-                {
-                    entityDisplay += " (invalid)";
-                }
-
-                _entityListBuffer.AppendLine($"          → {entityDisplay}", relationshipColor);
-
-                // Render metadata if any
-                if (relationship.Metadata.Count > 0)
-                {
-                    foreach ((string key, string value) in relationship.Metadata)
-                    {
-                        _entityListBuffer.AppendLine(
-                            $"              {key}: {value}",
-                            ThemeManager.Current.TextDim
-                        );
-                    }
-                }
-            }
         }
 
         _entityListBuffer.AppendLine("", ThemeManager.Current.TextDim);
@@ -2314,7 +2499,8 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     /// </summary>
     public int GetTotalCount()
     {
-        return _entities.Count;
+        // In paged mode, _entities is empty - use _totalEntityCount
+        return _usePagedLoading ? _totalEntityCount : _entities.Count;
     }
 
     /// <summary>
@@ -2322,7 +2508,8 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     /// </summary>
     public int GetFilteredCount()
     {
-        return _filteredEntities.Count;
+        // In paged mode, _filteredEntities is empty - use _totalEntityCount
+        return _usePagedLoading ? _totalEntityCount : _filteredEntities.Count;
     }
 
     /// <summary>
@@ -2330,9 +2517,13 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     /// </summary>
     public (int Total, int Filtered, int Pinned, int Expanded) GetStatistics()
     {
+        // In paged mode, _entities is empty - use _totalEntityCount instead
+        int totalCount = _usePagedLoading ? _totalEntityCount : _entities.Count;
+        int filteredCount = _usePagedLoading ? _totalEntityCount : _filteredEntities.Count;
+
         return (
-            _entities.Count,
-            _filteredEntities.Count,
+            totalCount,
+            filteredCount,
             _pinnedEntities.Count,
             _expandedEntities.Count
         );
@@ -2343,7 +2534,9 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     /// </summary>
     public Dictionary<string, int> GetTagCounts()
     {
-        return _entities
+        // In paged mode, use cached entities (from expanded entities)
+        IEnumerable<EntityInfo> entities = _usePagedLoading ? _loadedEntityCache.Values : _entities;
+        return entities
             .Where(e => e.Tag != null)
             .GroupBy(e => e.Tag!)
             .ToDictionary(g => g.Key, g => g.Count());
@@ -2354,7 +2547,15 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     /// </summary>
     public IEnumerable<string> GetAllComponentNames()
     {
-        return _entities.SelectMany(e => e.Components).Distinct().OrderBy(c => c);
+        // In paged mode, prefer the registry provider (has all component types)
+        if (_usePagedLoading && _componentNamesProvider != null)
+        {
+            return _componentNamesProvider().OrderBy(c => c);
+        }
+
+        // Fallback: use cached entities or full entity list
+        IEnumerable<EntityInfo> entities = _usePagedLoading ? _loadedEntityCache.Values : _entities;
+        return entities.SelectMany(e => e.Components).Distinct().OrderBy(c => c);
     }
 
     /// <summary>
@@ -2362,7 +2563,9 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     /// </summary>
     public IEnumerable<string> GetAllTags()
     {
-        return _entities.Where(e => e.Tag != null).Select(e => e.Tag!).Distinct().OrderBy(t => t);
+        // In paged mode, use cached entities (from expanded entities)
+        IEnumerable<EntityInfo> entities = _usePagedLoading ? _loadedEntityCache.Values : _entities;
+        return entities.Where(e => e.Tag != null).Select(e => e.Tag!).Distinct().OrderBy(t => t);
     }
 
     /// <summary>
@@ -2370,6 +2573,39 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     /// </summary>
     public EntityInfo? FindEntity(int entityId)
     {
+        // In paged mode, try cache first, then load via range provider
+        if (_usePagedLoading)
+        {
+            if (_loadedEntityCache.TryGetValue(entityId, out var cached))
+                return cached;
+
+            // Try to load the entity via the range provider
+            if (_entityRangeProvider != null && _entityIds != null)
+            {
+                int index = _entityIds.IndexOf(entityId);
+                if (index >= 0)
+                {
+                    var entities = _entityRangeProvider(index, 1);
+                    if (entities.Count > 0)
+                    {
+                        // Load full details if detail loader is available
+                        var entity = entities[0];
+                        if (_entityDetailLoader != null)
+                        {
+                            var loaded = _entityDetailLoader(entity.Id, entity);
+                            if (loaded != null)
+                            {
+                                _loadedEntityCache[entity.Id] = loaded;
+                                return loaded;
+                            }
+                        }
+                        return entity;
+                    }
+                }
+            }
+            return null;
+        }
+
         return _entities.FirstOrDefault(e => e.Id == entityId);
     }
 
@@ -2378,7 +2614,9 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
     /// </summary>
     public IEnumerable<EntityInfo> FindEntitiesByName(string name)
     {
-        return _entities.Where(e => e.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
+        // In paged mode, only search cached entities (can't search all 1M efficiently)
+        IEnumerable<EntityInfo> entities = _usePagedLoading ? _loadedEntityCache.Values : _entities;
+        return entities.Where(e => e.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -2564,9 +2802,172 @@ public class EntitiesPanel : DebugPanelBase, IEntityOperations
                 : EntityViewMode.Normal;
 
         // Refresh display to show new view (expansion state is preserved)
+        _heightsNeedRecalculation = true;
         UpdateDisplay();
         UpdateStatusBar();
     }
+
+    #region Virtual Scrolling Infrastructure
+
+    /// <summary>
+    ///     Calculates the display height (in lines) for a single entity.
+    ///     Collapsed entities = 1 line, expanded entities = header + components + relationships.
+    /// </summary>
+    private int CalculateEntityHeight(EntityInfo entity)
+    {
+        // Collapsed: just the header line
+        if (!_expandedEntities.Contains(entity.Id))
+        {
+            return 1;
+        }
+
+        // Expanded: count all rendered lines
+        int height = 1; // Header line
+
+        // In Relationships view mode, use simpler estimate (tree view is complex)
+        if (_viewMode == EntityViewMode.Relationships)
+        {
+            // Rough estimate: header + relationships tree (variable, ~10-20 lines per entity)
+            int relCount = entity.Relationships.Values.Sum(list => list.Count);
+            height += Math.Min(relCount * 2, 30) + 2;
+            return height;
+        }
+
+        // Normal view mode
+        // Relationships section (if any have items)
+        int totalRelationships = entity.Relationships.Values.Sum(list => list.Count);
+        if (totalRelationships > 0)
+        {
+            height += 1; // "Relationships:" header
+            // Count non-empty relationship types
+            foreach (var relType in entity.Relationships)
+            {
+                if (relType.Value.Count > 0)
+                {
+                    height += 1; // Relationship type line (e.g., "Children: 5")
+                }
+            }
+
+            height += 1; // Blank line after relationships
+        }
+
+        // Components section
+        height += 1; // "Components:" header
+        int componentCount = Math.Min(entity.Components.Count, MaxComponentsToShow);
+
+        foreach (string componentName in entity.Components.Take(componentCount))
+        {
+            height += 1; // Component name line
+
+            // Component field values - estimate based on actual data
+            if (entity.ComponentData.TryGetValue(componentName, out var fields) && fields.Count > 0)
+            {
+                // Each field is at least 1 line, multiline values add more
+                foreach (var field in fields)
+                {
+                    // Count newlines in the value + 1 for the line itself
+                    int lineCount = field.Value.Split('\n').Length;
+                    height += lineCount;
+                }
+            }
+        }
+
+        // "More components..." line if truncated
+        if (entity.Components.Count > MaxComponentsToShow)
+        {
+            height += 1;
+        }
+
+        height += 1; // Blank line after entity
+
+        return height;
+    }
+
+    /// <summary>
+    ///     Rebuilds the height cache for all filtered entities.
+    ///     Called when filters change, entities expand/collapse, or data refreshes.
+    /// </summary>
+    private void RecalculateEntityHeights()
+    {
+        _entityHeights.Clear();
+        _cumulativeHeights.Clear();
+        _totalVirtualHeight = 0;
+
+        foreach (EntityInfo entity in _filteredEntities)
+        {
+            int entityHeight = CalculateEntityHeight(entity);
+            _entityHeights.Add(entityHeight);
+            _cumulativeHeights.Add(_totalVirtualHeight);
+            _totalVirtualHeight += entityHeight;
+        }
+
+        _heightsNeedRecalculation = false;
+    }
+
+    /// <summary>
+    ///     Finds the entity index at a given line offset using binary search.
+    ///     Returns the index of the entity that contains the given line.
+    /// </summary>
+    private int FindEntityIndexAtLine(int lineOffset)
+    {
+        if (_cumulativeHeights.Count == 0)
+        {
+            return 0;
+        }
+
+        // Clamp to valid range
+        if (lineOffset <= 0)
+        {
+            return 0;
+        }
+
+        if (lineOffset >= _totalVirtualHeight)
+        {
+            return Math.Max(0, _cumulativeHeights.Count - 1);
+        }
+
+        // Binary search for the entity containing this line
+        int left = 0;
+        int right = _cumulativeHeights.Count - 1;
+
+        while (left < right)
+        {
+            int mid = (left + right + 1) / 2;
+            if (_cumulativeHeights[mid] <= lineOffset)
+            {
+                left = mid;
+            }
+            else
+            {
+                right = mid - 1;
+            }
+        }
+
+        return left;
+    }
+
+    /// <summary>
+    ///     Calculates the visible entity range based on scroll position.
+    /// </summary>
+    private (int startIndex, int endIndex) CalculateVisibleRange(int scrollOffset, int visibleLines)
+    {
+        if (_filteredEntities.Count == 0)
+        {
+            return (0, 0);
+        }
+
+        // Find first visible entity
+        int startIndex = FindEntityIndexAtLine(scrollOffset);
+
+        // Find last visible entity (with buffer for smooth scrolling)
+        int targetEndLine = scrollOffset + visibleLines + 20; // 20 line buffer
+        int endIndex = FindEntityIndexAtLine(targetEndLine);
+        endIndex = Math.Min(endIndex + 1, _filteredEntities.Count);
+
+        return (startIndex, endIndex);
+    }
+
+    #endregion
 }
 
 /// <summary>

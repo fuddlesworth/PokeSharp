@@ -23,6 +23,7 @@ public class DebugComponentRegistry
     private static readonly Type _entityExtensionsType = typeof(EntityExtensions);
     private readonly List<ComponentDescriptor> _descriptors = new();
     private readonly Dictionary<Type, ComponentDescriptor> _typeToDescriptor = new();
+    private readonly Dictionary<string, ComponentDescriptor> _nameToDescriptor = new();
 
     /// <summary>
     ///     Registers a component type with the given display name.
@@ -45,6 +46,7 @@ public class DebugComponentRegistry
 
         _descriptors.Add(descriptor);
         _typeToDescriptor[typeof(T)] = descriptor;
+        _nameToDescriptor[displayName] = descriptor;
         return this;
     }
 
@@ -80,6 +82,7 @@ public class DebugComponentRegistry
 
         _descriptors.Add(descriptor);
         _typeToDescriptor[typeof(T)] = descriptor;
+        _nameToDescriptor[displayName] = descriptor;
         return this;
     }
 
@@ -112,6 +115,7 @@ public class DebugComponentRegistry
 
         _descriptors.Add(descriptor);
         _typeToDescriptor[componentType] = descriptor;
+        _nameToDescriptor[displayName] = descriptor;
         return this;
     }
 
@@ -698,15 +702,48 @@ public class DebugComponentRegistry
 
     /// <summary>
     ///     Detects all registered components on an entity.
+    ///     Uses Arch's native GetComponentTypes() for O(1) performance instead of O(M) reflection.
     /// </summary>
     public List<string> DetectComponents(Entity entity)
     {
-        return _descriptors
-            .Where(d => d.HasComponent(entity))
-            .OrderByDescending(d => d.Priority)
-            .ThenBy(d => d.DisplayName)
-            .Select(d => d.DisplayName)
-            .ToList();
+        try
+        {
+            // Use Arch's native GetComponentTypes() - O(1) instead of O(M) reflection calls
+            ComponentType[] componentTypes = entity.GetComponentTypes();
+
+            var detectedDescriptors = new List<ComponentDescriptor>(componentTypes.Length);
+            var unregisteredNames = new List<string>();
+
+            foreach (ComponentType ct in componentTypes)
+            {
+                if (_typeToDescriptor.TryGetValue(ct.Type, out ComponentDescriptor? descriptor))
+                {
+                    detectedDescriptors.Add(descriptor);
+                }
+                else
+                {
+                    // Component type not in registry - use type name directly
+                    unregisteredNames.Add(ct.Type.Name);
+                }
+            }
+
+            // Sort registered components by priority, then name
+            var result = detectedDescriptors
+                .OrderByDescending(d => d.Priority)
+                .ThenBy(d => d.DisplayName)
+                .Select(d => d.DisplayName)
+                .ToList();
+
+            // Append unregistered components at end (sorted alphabetically)
+            result.AddRange(unregisteredNames.OrderBy(n => n));
+
+            return result;
+        }
+        catch
+        {
+            // Entity may be dead/invalid - fall back to empty list
+            return new List<string>();
+        }
     }
 
     /// <summary>
@@ -716,18 +753,32 @@ public class DebugComponentRegistry
     {
         var properties = new Dictionary<string, string>();
 
-        foreach (
-            ComponentDescriptor descriptor in _descriptors.Where(d =>
-                d.HasComponent(entity) && d.GetProperties != null
-            )
-        )
+        try
         {
-            Dictionary<string, string> componentProps = descriptor.GetProperties!(entity);
-            foreach ((string key, string value) in componentProps)
+            foreach (
+                ComponentDescriptor descriptor in _descriptors.Where(d =>
+                    d.HasComponent(entity) && d.GetProperties != null
+                )
+            )
             {
-                // Prefix with component name to avoid collisions
-                properties[$"{descriptor.DisplayName}.{key}"] = value;
+                try
+                {
+                    Dictionary<string, string> componentProps = descriptor.GetProperties!(entity);
+                    foreach ((string key, string value) in componentProps)
+                    {
+                        // Prefix with component name to avoid collisions
+                        properties[$"{descriptor.DisplayName}.{key}"] = value;
+                    }
+                }
+                catch
+                {
+                    // Skip components that fail to read
+                }
             }
+        }
+        catch
+        {
+            // Entity may be dead/invalid - return partial results
         }
 
         return properties;
@@ -740,18 +791,66 @@ public class DebugComponentRegistry
     {
         var properties = new Dictionary<string, string>();
 
-        foreach (
-            ComponentDescriptor descriptor in _descriptors.Where(d =>
-                d.HasComponent(entity) && d.GetProperties != null
-            )
-        )
+        try
         {
-            Dictionary<string, string> componentProps = descriptor.GetProperties!(entity);
-            foreach ((string key, string value) in componentProps)
+            foreach (
+                ComponentDescriptor descriptor in _descriptors.Where(d =>
+                    d.HasComponent(entity) && d.GetProperties != null
+                )
+            )
             {
-                // Use simple key, last one wins in case of collision
-                properties[key] = value;
+                Dictionary<string, string> componentProps = descriptor.GetProperties!(entity);
+                foreach ((string key, string value) in componentProps)
+                {
+                    // Use simple key, last one wins in case of collision
+                    properties[key] = value;
+                }
             }
+        }
+        catch
+        {
+            // Entity may be dead/invalid - return partial results
+        }
+
+        return properties;
+    }
+
+    /// <summary>
+    ///     Gets a simple properties dictionary using pre-detected component names (avoids duplicate detection).
+    /// </summary>
+    public Dictionary<string, string> GetSimpleProperties(Entity entity, IReadOnlyList<string> detectedComponentNames)
+    {
+        var properties = new Dictionary<string, string>();
+
+        try
+        {
+            foreach (string componentName in detectedComponentNames)
+            {
+                // O(1) lookup by display name instead of O(N) iteration
+                if (_nameToDescriptor.TryGetValue(componentName, out ComponentDescriptor? descriptor))
+                {
+                    if (descriptor.GetProperties != null)
+                    {
+                        try
+                        {
+                            Dictionary<string, string> componentProps = descriptor.GetProperties(entity);
+                            foreach ((string key, string value) in componentProps)
+                            {
+                                // Use simple key, last one wins in case of collision
+                                properties[key] = value;
+                            }
+                        }
+                        catch
+                        {
+                            // Skip components that fail to read
+                        }
+                    }
+                }
+            }
+        }
+        catch
+        {
+            // Entity may be dead/invalid - return partial results
         }
 
         return properties;
@@ -791,6 +890,69 @@ public class DebugComponentRegistry
 
                 // Always add to componentData (even if empty) so we know it's there
                 componentData[descriptor.DisplayName] = fields;
+            }
+        }
+        catch (Exception ex)
+        {
+            // Add error to help debug
+            componentData["_GetComponentData_Error"] = new Dictionary<string, string>
+            {
+                ["error"] = ex.Message,
+            };
+        }
+
+        return componentData;
+    }
+
+    /// <summary>
+    ///     Gets component data using pre-detected component names (avoids duplicate detection).
+    ///     This is a performance optimization that bypasses the expensive HasComponent check
+    ///     when the caller already knows which components are present.
+    /// </summary>
+    /// <param name="entity">The entity to get component data from.</param>
+    /// <param name="detectedComponentNames">Pre-detected list of component names (from cache).</param>
+    /// <returns>Dictionary mapping component names to their field dictionaries.</returns>
+    public Dictionary<string, Dictionary<string, string>> GetComponentData(
+        Entity entity,
+        IReadOnlyList<string> detectedComponentNames
+    )
+    {
+        var componentData = new Dictionary<string, Dictionary<string, string>>();
+
+        try
+        {
+            // Use pre-detected components instead of re-checking all descriptors
+            foreach (string componentName in detectedComponentNames)
+            {
+                var fields = new Dictionary<string, string>();
+
+                // O(1) lookup by display name instead of O(N) iteration
+                if (_nameToDescriptor.TryGetValue(componentName, out ComponentDescriptor? descriptor))
+                {
+                    // If descriptor has GetProperties, use it (already has the component data)
+                    if (descriptor.GetProperties != null)
+                    {
+                        try
+                        {
+                            Dictionary<string, string> props = descriptor.GetProperties(entity);
+                            fields = props;
+                        }
+                        catch (Exception ex)
+                        {
+                            // Add error for debugging
+                            fields["_error"] = $"Failed: {ex.Message}";
+                        }
+                    }
+                }
+                else
+                {
+                    // Unregistered component - add empty entry
+                    // This can happen if component detection found a component
+                    // that wasn't explicitly registered with a GetProperties function
+                }
+
+                // Always add to componentData (even if empty) so we know it's there
+                componentData[componentName] = fields;
             }
         }
         catch (Exception ex)

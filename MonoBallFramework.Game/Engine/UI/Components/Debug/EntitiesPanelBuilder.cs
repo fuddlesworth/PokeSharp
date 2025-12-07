@@ -9,11 +9,11 @@ namespace MonoBallFramework.Game.Engine.UI.Components.Debug;
 /// </summary>
 public class EntitiesPanelBuilder
 {
-    private bool _autoRefresh = true;
+    private bool _autoUpdate = true;
     private TextBuffer? _entityListBuffer;
     private Func<IEnumerable<EntityInfo>>? _entityProvider;
     private int _maxLines = 50000;
-    private float _refreshInterval = 1.0f;
+    private double _updateInterval = 1.0;
 
     public static EntitiesPanelBuilder Create()
     {
@@ -48,20 +48,20 @@ public class EntitiesPanelBuilder
     }
 
     /// <summary>
-    ///     Enables or disables auto-refresh.
+    ///     Enables or disables auto-update.
     /// </summary>
-    public EntitiesPanelBuilder WithAutoRefresh(bool enabled)
+    public EntitiesPanelBuilder WithAutoUpdate(bool enabled)
     {
-        _autoRefresh = enabled;
+        _autoUpdate = enabled;
         return this;
     }
 
     /// <summary>
-    ///     Sets the auto-refresh interval in seconds.
+    ///     Sets the update interval in seconds.
     /// </summary>
-    public EntitiesPanelBuilder WithRefreshInterval(float intervalSeconds)
+    public EntitiesPanelBuilder WithUpdateInterval(double intervalSeconds)
     {
-        _refreshInterval = intervalSeconds;
+        _updateInterval = intervalSeconds;
         return this;
     }
 
@@ -75,8 +75,8 @@ public class EntitiesPanelBuilder
             CreateDefaultStatusBar()
         );
 
-        panel.AutoRefresh = _autoRefresh;
-        panel.RefreshInterval = _refreshInterval;
+        panel.AutoUpdate = _autoUpdate;
+        panel.UpdateInterval = _updateInterval;
 
         if (_entityProvider != null)
         {

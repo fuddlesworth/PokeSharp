@@ -233,6 +233,28 @@ public class ConsoleScene : SceneBase
     }
 
     /// <summary>
+    ///     Sets the entity detail loader for on-demand loading of component data.
+    ///     Used for lazy loading in large entity lists.
+    /// </summary>
+    public void SetEntityDetailLoader(Func<int, EntityInfo, EntityInfo?>? loader)
+    {
+        _entitiesPanel?.SetEntityDetailLoader(loader);
+    }
+
+    /// <summary>
+    ///     Sets paged entity providers for true lazy loading with 1M+ entities.
+    ///     This avoids creating 1M EntityInfo objects by only loading visible entities on-demand.
+    /// </summary>
+    public void SetPagedEntityProvider(
+        Func<int> countProvider,
+        Func<List<int>> idsProvider,
+        Func<int, int, List<EntityInfo>> rangeProvider,
+        Func<IEnumerable<string>>? componentNamesProvider = null)
+    {
+        _entitiesPanel?.SetPagedEntityProvider(countProvider, idsProvider, rangeProvider, componentNamesProvider);
+    }
+
+    /// <summary>
     ///     Sets entities directly (alternative to using a provider).
     /// </summary>
     public void SetEntities(IEnumerable<EntityInfo> entities)
@@ -437,8 +459,8 @@ public class ConsoleScene : SceneBase
             // Create entities panel
             _entitiesPanel = EntitiesPanelBuilder
                 .Create()
-                .WithAutoRefresh(true)
-                .WithRefreshInterval(1.0f)
+                .WithAutoUpdate(true)
+                .WithUpdateInterval(1.0)
                 .Build();
             _entitiesPanel.BackgroundColor = Color.Transparent;
             _entitiesPanel.BorderColor = Color.Transparent;

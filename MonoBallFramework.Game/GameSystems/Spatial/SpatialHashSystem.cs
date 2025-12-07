@@ -24,6 +24,7 @@ public class SpatialHashSystem(ILogger<SpatialHashSystem>? logger = null)
     private readonly SpatialHash _dynamicHash = new(); // For entities with Position (cleared each frame)
     private readonly ILogger<SpatialHashSystem>? _logger = logger;
     private readonly List<Entity> _queryResultBuffer = new(128); // Pooled buffer for query results
+    private readonly List<Entity> _staticQueryBuffer = new(512); // Separate buffer for static-only queries (tile rendering)
     private readonly SpatialHash _staticHash = new(); // For tiles (indexed once)
     private bool _staticTilesIndexed;
 
@@ -69,19 +70,29 @@ public class SpatialHashSystem(ILogger<SpatialHashSystem>? logger = null)
     {
         _queryResultBuffer.Clear();
 
-        // Add static entities
-        foreach (Entity entity in _staticHash.GetInBounds(mapId, bounds))
-        {
-            _queryResultBuffer.Add(entity);
-        }
-
-        // Add dynamic entities
-        foreach (Entity entity in _dynamicHash.GetInBounds(mapId, bounds))
-        {
-            _queryResultBuffer.Add(entity);
-        }
+        // PERFORMANCE: Use non-allocating overload that fills our buffer directly
+        _staticHash.GetInBounds(mapId, bounds, _queryResultBuffer);
+        _dynamicHash.GetInBounds(mapId, bounds, _queryResultBuffer);
 
         return _queryResultBuffer;
+    }
+
+    /// <summary>
+    ///     Gets only static tile entities within the specified bounds.
+    ///     Does NOT include dynamic entities (NPCs, player, etc.).
+    ///     Optimized for tile rendering - uses separate buffer to avoid conflicts.
+    /// </summary>
+    /// <param name="mapId">The map identifier (GameMapId.Value string).</param>
+    /// <param name="bounds">The bounding rectangle in local tile coordinates.</param>
+    /// <returns>Collection of static tile entities within the bounds.</returns>
+    public IReadOnlyList<Entity> GetStaticEntitiesInBounds(string mapId, Rectangle bounds)
+    {
+        _staticQueryBuffer.Clear();
+
+        // PERFORMANCE: Use non-allocating overload - eliminates iterator state machine allocation
+        _staticHash.GetInBounds(mapId, bounds, _staticQueryBuffer);
+
+        return _staticQueryBuffer;
     }
 
     /// <inheritdoc />

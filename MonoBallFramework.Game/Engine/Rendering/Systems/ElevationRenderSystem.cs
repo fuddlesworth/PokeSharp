@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using Arch.Core;
+using Arch.Core.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -44,9 +45,12 @@ namespace MonoBallFramework.Game.Engine.Rendering.Systems;
 public class ElevationRenderSystem(
     GraphicsDevice graphicsDevice,
     AssetManager assetManager,
+    ISpatialQuery spatialQuery,
     ILogger<ElevationRenderSystem>? logger = null
 ) : SystemBase, IRenderSystem
 {
+    // Spatial query for efficient tile lookups (only visible tiles)
+    private readonly ISpatialQuery _spatialQuery = spatialQuery ?? throw new ArgumentNullException(nameof(spatialQuery));
     private const float MapHeight = RenderingConstants.MaxRenderDistance;
 
     // Cache border data for the current frame (avoids repeated queries)
@@ -74,6 +78,9 @@ public class ElevationRenderSystem(
 
     // Cache map world origins for multi-map rendering (updated per frame)
     private readonly Dictionary<string, Vector2> _mapWorldOrigins = new(10);
+
+    // PERFORMANCE: Cache map render order for O(1) lookups instead of O(maps) linear search
+    private readonly Dictionary<string, int> _mapRenderOrderCache = new(10);
 
     // Map world position query for multi-map streaming
     private readonly QueryDescription _mapWorldPosQuery = QueryCache.Get<
@@ -586,13 +593,22 @@ public class ElevationRenderSystem(
     {
         _mapWorldOrigins.Clear();
         _cachedMapBounds.Clear();
+        _mapRenderOrderCache.Clear(); // PERFORMANCE: Clear render order cache
 
+        int orderIndex = 0;
         world.Query(
             in _mapWorldPosQuery,
             (ref MapInfo mapInfo, ref MapWorldPosition worldPos) =>
             {
                 string mapIdValue = mapInfo.MapId.Value;
                 _mapWorldOrigins[mapIdValue] = worldPos.WorldOrigin;
+
+                // PERFORMANCE: Cache render order for O(1) lookups during sprite/tile rendering
+                _mapRenderOrderCache[mapIdValue] = orderIndex++;
+
+                // PERFORMANCE: Pre-compute tile coordinates to avoid divisions in IsTileInsideAnyMap
+                int tileX = (int)(worldPos.WorldOrigin.X / mapInfo.TileSize);
+                int tileY = (int)(worldPos.WorldOrigin.Y / mapInfo.TileSize);
 
                 // Cache map bounds for border exclusion
                 _cachedMapBounds.Add(
@@ -603,6 +619,10 @@ public class ElevationRenderSystem(
                         MapWidth = mapInfo.Width,
                         MapHeight = mapInfo.Height,
                         TileSize = mapInfo.TileSize,
+                        TileX = tileX,
+                        TileY = tileY,
+                        TileRight = tileX + mapInfo.Width,
+                        TileBottom = tileY + mapInfo.Height,
                     }
                 );
             }
@@ -611,140 +631,149 @@ public class ElevationRenderSystem(
 
     /// <summary>
     ///     Renders all tiles with elevation-based depth sorting.
-    ///     OPTIMIZED: Single unified query eliminates duplicate iteration and expensive Has() checks.
+    ///     OPTIMIZED: Uses spatial query to only iterate visible tiles (~300) instead of ALL tiles (1M+).
     /// </summary>
     private int RenderAllTiles(World world)
     {
         int tilesRendered = 0;
-        int tilesCulled = 0;
 
         try
         {
             Rectangle? cameraBounds = _cachedCameraBounds;
 
-            // CRITICAL OPTIMIZATION: Use single query with optional LayerOffset
-            // OLD: Two separate queries + expensive world.Has<LayerOffset>(entity) check per tile
-            // NEW: Single query handles both cases, checking component in-place
-            //
-            // Performance improvement:
-            // - Eliminates 200+ expensive Has() checks (was causing 11ms spikes)
-            // - Single query iteration instead of two (better cache locality)
-            // - Optional component pattern: query includes LayerOffset but we check if it exists
-            world.Query(
-                in _tileQuery,
-                (
-                    Entity entity,
-                    ref TilePosition pos,
-                    ref TileSprite sprite,
-                    ref Elevation elevation
-                ) =>
-                {
-                    // Get map world origin for multi-map rendering (needed for culling)
-                    string? mapIdValue = pos.MapId?.Value;
-                    Vector2 worldOrigin = mapIdValue != null && _mapWorldOrigins.TryGetValue(
-                        mapIdValue,
-                        out Vector2 origin
-                    )
-                        ? origin
-                        : Vector2.Zero;
-
-                    // Convert tile position to world tile coordinates for proper culling
-                    int worldTileX = pos.X + (int)(worldOrigin.X / TileSize);
-                    int worldTileY = pos.Y + (int)(worldOrigin.Y / TileSize);
-
-                    // Viewport culling: skip tiles outside camera bounds (in world space)
-                    if (cameraBounds.HasValue)
-                    {
-                        if (
-                            worldTileX < cameraBounds.Value.Left
-                            || worldTileX >= cameraBounds.Value.Right
-                            || worldTileY < cameraBounds.Value.Top
-                            || worldTileY >= cameraBounds.Value.Bottom
-                        )
-                        {
-                            tilesCulled++;
-                            return;
-                        }
-                    }
-
-                    // Get tileset texture (cached in AssetManager)
-                    if (!AssetManager.HasTexture(sprite.TilesetId))
-                    {
-                        if (tilesRendered == 0) // Only warn once
-                        {
-                            _logger?.LogWarning(
-                                "  WARNING: Tileset '{TilesetId}' NOT FOUND - skipping tiles",
-                                sprite.TilesetId
-                            );
-                        }
-
-                        return;
-                    }
-
-                    Texture2D texture = AssetManager.GetTexture(sprite.TilesetId);
-
-                    // OPTIMIZATION: Check for LayerOffset inline (faster than separate query)
-                    // TryGet is faster than Has() + Get() because it's a single lookup
-                    // Reuse static Vector2 to avoid allocation (400-600 per frame eliminated)
-                    if (world.TryGet(entity, out LayerOffset offset))
-                    {
-                        // Apply layer offset for parallax effect + map world offset
-                        // +1 to Y for bottom-left origin alignment
-                        _reusablePosition.X = (pos.X * TileSize) + offset.X + worldOrigin.X;
-                        _reusablePosition.Y = ((pos.Y + 1) * TileSize) + offset.Y + worldOrigin.Y;
-                    }
-                    else
-                    {
-                        // Standard positioning + map world offset (+1 to Y for bottom-left origin alignment)
-                        _reusablePosition.X = (pos.X * TileSize) + worldOrigin.X;
-                        _reusablePosition.Y = ((pos.Y + 1) * TileSize) + worldOrigin.Y;
-                    }
-
-                    // Calculate elevation-based layer depth with MapId-aware sorting
-                    // Use index in cached bounds as render order (string maps don't have numeric IDs)
-                    int mapRenderOrder = GetMapRenderOrder(mapIdValue);
-                    float layerDepth = CalculateElevationDepth(
-                        elevation.Value,
-                        _reusablePosition.Y,
-                        mapRenderOrder
-                    );
-
-                    // Apply flip flags from Tiled
-                    SpriteEffects effects = SpriteEffects.None;
-                    if (sprite.FlipHorizontally)
-                    {
-                        effects |= SpriteEffects.FlipHorizontally;
-                    }
-
-                    if (sprite.FlipVertically)
-                    {
-                        effects |= SpriteEffects.FlipVertically;
-                    }
-
-                    // Render tile
-                    // Reuse static Vector2 for tile origin (bottom-left for grid alignment)
-                    _reusableTileOrigin.X = 0;
-                    _reusableTileOrigin.Y = sprite.SourceRect.Height;
-
-                    _spriteBatch.Draw(
-                        texture,
-                        _reusablePosition,
-                        sprite.SourceRect,
-                        Color.White,
-                        0f,
-                        _reusableTileOrigin,
-                        1f,
-                        effects,
-                        layerDepth
-                    );
-
-                    tilesRendered++;
-                }
-            );
+            // CRITICAL OPTIMIZATION: Use spatial query for O(visible tiles) instead of O(all tiles)
+            // For a 1000x1000 map: queries ~300 tiles instead of iterating 1,000,000
+            if (cameraBounds.HasValue && _cachedMapBounds.Count > 0)
+            {
+                tilesRendered = RenderTilesUsingSpatialQuery(world, cameraBounds.Value);
+            }
         }
         catch (Exception ex)
         {
             _logger?.LogError(ex, "  ERROR rendering tiles");
+        }
+
+        return tilesRendered;
+    }
+
+    /// <summary>
+    ///     Renders tiles using spatial query - only iterates visible tiles.
+    ///     O(visible tiles) instead of O(all tiles) - ~300 vs 1,000,000 for large maps.
+    /// </summary>
+    private int RenderTilesUsingSpatialQuery(World world, Rectangle cameraBounds)
+    {
+        int tilesRendered = 0;
+
+        // For each loaded map, calculate visible local bounds and query tiles
+        foreach (MapBoundsInfo mapInfo in _cachedMapBounds)
+        {
+            // Calculate the map's tile origin in world coordinates
+            int mapOriginTileX = (int)(mapInfo.WorldOrigin.X / TileSize);
+            int mapOriginTileY = (int)(mapInfo.WorldOrigin.Y / TileSize);
+
+            // Calculate the intersection of camera bounds with this map's world bounds
+            int mapRightTile = mapOriginTileX + mapInfo.MapWidth;
+            int mapBottomTile = mapOriginTileY + mapInfo.MapHeight;
+
+            // Calculate visible region in world tile coordinates, clamped to map bounds
+            int visibleLeft = Math.Max(cameraBounds.Left, mapOriginTileX);
+            int visibleTop = Math.Max(cameraBounds.Top, mapOriginTileY);
+            int visibleRight = Math.Min(cameraBounds.Right, mapRightTile);
+            int visibleBottom = Math.Min(cameraBounds.Bottom, mapBottomTile);
+
+            // Skip if no intersection with camera
+            if (visibleLeft >= visibleRight || visibleTop >= visibleBottom)
+            {
+                continue;
+            }
+
+            // Convert to local map coordinates (spatial hash uses local coords)
+            int localLeft = visibleLeft - mapOriginTileX;
+            int localTop = visibleTop - mapOriginTileY;
+            int localWidth = visibleRight - visibleLeft;
+            int localHeight = visibleBottom - visibleTop;
+
+            var localBounds = new Rectangle(localLeft, localTop, localWidth, localHeight);
+
+            // Get world origin for position calculation
+            Vector2 worldOrigin = mapInfo.WorldOrigin;
+            int mapRenderOrder = GetMapRenderOrder(mapInfo.MapIdValue);
+
+            // Query only visible tiles for this map
+            IReadOnlyList<Entity> visibleTiles = _spatialQuery!.GetStaticEntitiesInBounds(
+                mapInfo.MapIdValue,
+                localBounds
+            );
+
+            // Render each visible tile - use index-based loop to avoid enumerator allocation
+            int tileCount = visibleTiles.Count;
+            for (int i = 0; i < tileCount; i++)
+            {
+                Entity entity = visibleTiles[i];
+
+                // PERFORMANCE: Use TryGet pattern to combine Has + Get into single operation
+                // Reduces ECS access from 6 operations to 3 per tile
+                if (!entity.TryGet(out TilePosition pos) ||
+                    !entity.TryGet(out TileSprite sprite) ||
+                    !entity.TryGet(out Elevation elevation))
+                {
+                    continue;
+                }
+
+                // PERFORMANCE: Single dictionary lookup instead of HasTexture + GetTexture
+                if (!AssetManager.TryGetTexture(sprite.TilesetId, out Texture2D? texture) || texture == null)
+                {
+                    continue;
+                }
+
+                // Calculate render position with world offset
+                // PERFORMANCE: Base calculation first, then add offset if present (better branch prediction)
+                _reusablePosition.X = (pos.X * TileSize) + worldOrigin.X;
+                _reusablePosition.Y = ((pos.Y + 1) * TileSize) + worldOrigin.Y;
+
+                // PERFORMANCE: Use entity.TryGet (faster than world.TryGet for single entity)
+                if (entity.TryGet(out LayerOffset offset))
+                {
+                    _reusablePosition.X += offset.X;
+                    _reusablePosition.Y += offset.Y;
+                }
+
+                // Calculate depth
+                float layerDepth = CalculateElevationDepth(
+                    elevation.Value,
+                    _reusablePosition.Y,
+                    mapRenderOrder
+                );
+
+                // Apply flip flags
+                SpriteEffects effects = SpriteEffects.None;
+                if (sprite.FlipHorizontally)
+                {
+                    effects |= SpriteEffects.FlipHorizontally;
+                }
+                if (sprite.FlipVertically)
+                {
+                    effects |= SpriteEffects.FlipVertically;
+                }
+
+                // Render tile
+                _reusableTileOrigin.X = 0;
+                _reusableTileOrigin.Y = sprite.SourceRect.Height;
+
+                _spriteBatch.Draw(
+                    texture,
+                    _reusablePosition,
+                    sprite.SourceRect,
+                    Color.White,
+                    0f,
+                    _reusableTileOrigin,
+                    1f,
+                    effects,
+                    layerDepth
+                );
+
+                tilesRendered++;
+            }
         }
 
         return tilesRendered;
@@ -1232,8 +1261,8 @@ public class ElevationRenderSystem(
         int renderTop = cameraBounds.Top - CameraConstants.BorderRenderMarginTiles;
         int renderBottom = cameraBounds.Bottom + CameraConstants.BorderRenderMarginTiles;
 
-        // Get texture for border tiles
-        if (!AssetManager.HasTexture(border.TilesetId))
+        // PERFORMANCE: Single dictionary lookup instead of HasTexture + GetTexture
+        if (!AssetManager.TryGetTexture(border.TilesetId, out Texture2D? texture) || texture == null)
         {
             if (!_loggedBorderTextureWarning)
             {
@@ -1251,15 +1280,14 @@ public class ElevationRenderSystem(
         // Get render order for depth calculation
         int borderMapRenderOrder = GetMapRenderOrder(primaryBorder.MapIdValue);
 
-        Texture2D texture = AssetManager.GetTexture(border.TilesetId);
-
         // Render border tiles (only tiles OUTSIDE ALL map bounds)
         for (int y = renderTop; y < renderBottom; y++)
         {
             for (int x = renderLeft; x < renderRight; x++)
             {
-                // Skip tiles that are INSIDE ANY loaded map's bounds
-                if (IsTileInsideAnyMap(x, y, tileSize))
+                // PERFORMANCE: Skip tiles that are INSIDE ANY loaded map's bounds
+                // Uses pre-computed tile bounds (no divisions per call)
+                if (IsTileInsideAnyMap(x, y))
                 {
                     continue;
                 }
@@ -1344,27 +1372,25 @@ public class ElevationRenderSystem(
 
     /// <summary>
     ///     Checks if a tile position is inside any loaded map's bounds.
+    ///     PERFORMANCE: Uses pre-computed tile coordinates to avoid divisions per call.
     /// </summary>
     /// <param name="tileX">World tile X coordinate.</param>
     /// <param name="tileY">World tile Y coordinate.</param>
-    /// <param name="tileSize">Tile size in pixels.</param>
     /// <returns>True if the tile is inside any map; otherwise, false.</returns>
-    private bool IsTileInsideAnyMap(int tileX, int tileY, int tileSize)
+    private bool IsTileInsideAnyMap(int tileX, int tileY)
     {
-        // Check against ALL loaded maps (not just those with borders)
-        foreach (MapBoundsInfo mapInfo in _cachedMapBounds)
+        // PERFORMANCE: Use pre-computed tile bounds instead of divisions
+        // Use index-based loop to avoid foreach enumerator allocation
+        int count = _cachedMapBounds.Count;
+        for (int i = 0; i < count; i++)
         {
-            int mapOriginTileX = (int)(mapInfo.WorldOrigin.X / tileSize);
-            int mapOriginTileY = (int)(mapInfo.WorldOrigin.Y / tileSize);
-            int mapRightTile = mapOriginTileX + mapInfo.MapWidth;
-            int mapBottomTile = mapOriginTileY + mapInfo.MapHeight;
+            MapBoundsInfo mapInfo = _cachedMapBounds[i];
 
-            if (
-                tileX >= mapOriginTileX
-                && tileX < mapRightTile
-                && tileY >= mapOriginTileY
-                && tileY < mapBottomTile
-            )
+            // Simple integer comparisons using pre-computed bounds
+            if (tileX >= mapInfo.TileX &&
+                tileX < mapInfo.TileRight &&
+                tileY >= mapInfo.TileY &&
+                tileY < mapInfo.TileBottom)
             {
                 return true;
             }
@@ -1376,6 +1402,7 @@ public class ElevationRenderSystem(
     /// <summary>
     ///     Gets a numeric render order for a map ID string.
     ///     Used for depth sorting to prevent z-fighting between overlapping maps.
+    ///     PERFORMANCE: Uses O(1) dictionary lookup instead of O(maps) linear search.
     /// </summary>
     private int GetMapRenderOrder(string? mapIdValue)
     {
@@ -1384,16 +1411,8 @@ public class ElevationRenderSystem(
             return 0;
         }
 
-        // Find the index of this map in the cached bounds list
-        for (int i = 0; i < _cachedMapBounds.Count; i++)
-        {
-            if (_cachedMapBounds[i].MapIdValue == mapIdValue)
-            {
-                return i;
-            }
-        }
-
-        return 0;
+        // PERFORMANCE: O(1) dictionary lookup instead of O(maps) linear search
+        return _mapRenderOrderCache.TryGetValue(mapIdValue, out int order) ? order : 0;
     }
 
     /// <summary>
@@ -1422,5 +1441,11 @@ public class ElevationRenderSystem(
         public int MapWidth;
         public int MapHeight;
         public int TileSize;
+
+        // PERFORMANCE: Pre-computed tile coordinates to avoid divisions per IsTileInsideAnyMap call
+        public int TileX;
+        public int TileY;
+        public int TileRight;
+        public int TileBottom;
     }
 }

@@ -91,4 +91,18 @@ public interface ISpatialQuery
     /// </code>
     /// </example>
     IReadOnlyList<Entity> GetEntitiesInBounds(string mapId, Rectangle bounds);
+
+    /// <summary>
+    ///     Gets only static tile entities within the specified rectangular bounds.
+    ///     Does NOT include dynamic entities (NPCs, player, etc.).
+    ///     Optimized for tile rendering - avoids iterating dynamic entity hash.
+    /// </summary>
+    /// <param name="mapId">The map identifier (GameMapId.Value string).</param>
+    /// <param name="bounds">The bounding rectangle in local tile coordinates.</param>
+    /// <returns>Collection of static tile entities within the bounds. May be empty but never null.</returns>
+    /// <remarks>
+    ///     Use this method for tile rendering to query only tiles in the visible viewport
+    ///     instead of iterating all tile entities in the world.
+    /// </remarks>
+    IReadOnlyList<Entity> GetStaticEntitiesInBounds(string mapId, Rectangle bounds);
 }

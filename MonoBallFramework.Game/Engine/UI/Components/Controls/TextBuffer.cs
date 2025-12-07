@@ -73,6 +73,16 @@ public class TextBuffer : UIComponent, ITextDisplay
     private int _selectionStartColumn;
     private int _selectionStartLine;
 
+    // Virtual scrolling support (for virtualized lists with millions of items)
+    private int _virtualTotalLines = -1; // -1 means use actual line count
+
+    /// <summary>
+    /// When true, the buffer is in virtual mode where content is re-rendered for each scroll position.
+    /// In this mode, hover/cursor calculations use buffer-local indices (0 to TotalLines)
+    /// instead of virtual positions (ScrollOffset + lineIndex).
+    /// </summary>
+    private bool _isVirtualMode;
+
     public TextBuffer(string id)
     {
         Id = id;
@@ -142,6 +152,13 @@ public class TextBuffer : UIComponent, ITextDisplay
     }
 
     public int FilteredLineCount => _isDirty ? _lines.Count : _filteredLines.Count;
+
+    /// <summary>
+    ///     Gets the effective line count for scrolling. Returns virtual total if set, otherwise actual line count.
+    ///     Used for virtual scrolling with large datasets where only visible items are rendered.
+    /// </summary>
+    public int EffectiveLineCount => _virtualTotalLines > 0 ? _virtualTotalLines : FilteredLineCount;
+
     public bool HasSelection { get; private set; }
 
     public string SelectedText => GetSelectedText();
@@ -244,7 +261,8 @@ public class TextBuffer : UIComponent, ITextDisplay
         // Otherwise, just set to max possible - will be clamped during render
         try
         {
-            ScrollOffset = Math.Max(0, FilteredLineCount - GetVisibleLineCount());
+            // Use EffectiveLineCount to support virtual scrolling
+            ScrollOffset = Math.Max(0, EffectiveLineCount - GetVisibleLineCount());
         }
         catch
         {
@@ -272,6 +290,28 @@ public class TextBuffer : UIComponent, ITextDisplay
     }
 
     /// <summary>
+    ///     Sets the virtual total lines for scroll calculation.
+    ///     Used when only a subset of items are rendered (virtualization).
+    ///     Set to -1 or 0 to use actual line count.
+    ///     Enables virtual mode where hover/cursor use buffer-local indices.
+    /// </summary>
+    public void SetVirtualTotalLines(int totalLines)
+    {
+        _virtualTotalLines = totalLines;
+        _isVirtualMode = totalLines > 0;
+    }
+
+    /// <summary>
+    ///     Clears virtual total lines, reverting to actual line count for scrolling.
+    ///     Disables virtual mode.
+    /// </summary>
+    public void ClearVirtualTotalLines()
+    {
+        _virtualTotalLines = -1;
+        _isVirtualMode = false;
+    }
+
+    /// <summary>
     ///     Scrolls up by the specified number of lines.
     /// </summary>
     public void ScrollUp(int lines = 1)
@@ -285,7 +325,8 @@ public class TextBuffer : UIComponent, ITextDisplay
     /// </summary>
     public void ScrollDown(int lines = 1)
     {
-        int maxScroll = Math.Max(0, FilteredLineCount - GetVisibleLineCount());
+        // Use EffectiveLineCount to support virtual scrolling with large datasets
+        int maxScroll = Math.Max(0, EffectiveLineCount - GetVisibleLineCount());
         ScrollOffset = Math.Min(maxScroll, ScrollOffset + lines);
 
         // Re-enable auto-scroll if at bottom
@@ -663,8 +704,8 @@ public class TextBuffer : UIComponent, ITextDisplay
         List<TextBufferLine> lines = GetFilteredLines();
         int visibleCount = GetVisibleLineCount();
 
-        // Check if scrollbar is needed
-        bool hasScrollbar = lines.Count > visibleCount;
+        // Check if scrollbar is needed (use EffectiveLineCount for virtual scrolling)
+        bool hasScrollbar = EffectiveLineCount > visibleCount;
 
         // Calculate content area (excluding scrollbar and padding if scrollbar is visible)
         float contentWidth = hasScrollbar
@@ -694,13 +735,16 @@ public class TextBuffer : UIComponent, ITextDisplay
         }
 
         // Clamp scroll offset now that we have proper context
-        int maxScroll = Math.Max(0, lines.Count - visibleCount);
+        // Use EffectiveLineCount to support virtual scrolling (when only a window of data is rendered)
+        int maxScroll = Math.Max(0, EffectiveLineCount - visibleCount);
         if (ScrollOffset > maxScroll)
         {
             ScrollOffset = maxScroll;
         }
 
-        int startIndex = Math.Max(0, Math.Min(ScrollOffset, lines.Count - visibleCount));
+        // In virtual mode, buffer is re-populated for each scroll position starting at line 0.
+        // In normal mode, buffer contains all lines and we scroll through them.
+        int startIndex = _isVirtualMode ? 0 : Math.Max(0, Math.Min(ScrollOffset, lines.Count - visibleCount));
         int endIndex = Math.Min(lines.Count, startIndex + visibleCount);
 
         // Track mouse position for scrollbar hover detection
@@ -762,11 +806,12 @@ public class TextBuffer : UIComponent, ITextDisplay
                 scrollbarHeight
             );
             // Use line-based scrolling for TextBuffer
-            _scrollbar.HandleInput(context, input, scrollbarRect, lines.Count, visibleCount, Id);
+            // Use EffectiveLineCount for virtual scrolling support
+            _scrollbar.HandleInput(context, input, scrollbarRect, EffectiveLineCount, visibleCount, Id);
             // Also handle mouse wheel separately
             if (resolvedRect.Contains(input.MousePosition))
             {
-                _scrollbar.HandleMouseWheelLines(input, lines.Count, visibleCount);
+                _scrollbar.HandleMouseWheelLines(input, EffectiveLineCount, visibleCount);
             }
         }
 
@@ -968,11 +1013,12 @@ public class TextBuffer : UIComponent, ITextDisplay
                 scrollbarHeight
             );
             // Note: Using theme colors - custom colors would require ScrollbarComponent enhancement
+            // Use EffectiveLineCount for virtual scrolling support
             _scrollbar.Draw(
                 renderer,
                 ThemeManager.Current,
                 scrollbarRect,
-                lines.Count,
+                EffectiveLineCount,
                 visibleCount
             );
         }
@@ -1158,7 +1204,11 @@ public class TextBuffer : UIComponent, ITextDisplay
 
         float relativeY = mousePos.Y - rect.Y - LinePadding;
         int lineIndex = (int)(relativeY / LineHeight);
-        int actualLine = ScrollOffset + lineIndex;
+
+        // In virtual mode, the buffer only contains visible lines (re-rendered each scroll).
+        // Use buffer-local indices (0 to TotalLines) instead of virtual positions.
+        // In normal mode, add ScrollOffset to get the actual line in the full buffer.
+        int actualLine = _isVirtualMode ? lineIndex : (ScrollOffset + lineIndex);
 
         List<TextBufferLine> lines = GetFilteredLines();
         return actualLine >= 0 && actualLine < lines.Count ? actualLine : -1;

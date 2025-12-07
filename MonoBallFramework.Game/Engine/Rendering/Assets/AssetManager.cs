@@ -117,6 +117,23 @@ public class AssetManager(
     }
 
     /// <summary>
+    ///     Tries to get a texture from cache in a single lookup.
+    ///     PERFORMANCE: Combines HasTexture + GetTexture into single dictionary lookup.
+    /// </summary>
+    /// <param name="id">The texture identifier.</param>
+    /// <param name="texture">The texture if found, null otherwise.</param>
+    /// <returns>True if texture was found.</returns>
+    public bool TryGetTexture(string id, out Texture2D? texture)
+    {
+        if (string.IsNullOrEmpty(id))
+        {
+            texture = null;
+            return false;
+        }
+        return _textures.TryGetValue(id, out texture);
+    }
+
+    /// <summary>
     ///     Loads a font from file and caches it.
     /// </summary>
     public void LoadFont(string id, string relativePath)
