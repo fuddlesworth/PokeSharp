@@ -46,8 +46,9 @@ public sealed record GameFlagId : EntityId
     /// <param name="category">The flag category (e.g., "hide", "story", "event")</param>
     /// <param name="name">The flag name (e.g., "rival_oak_lab", "defeated_brock")</param>
     /// <param name="ns">Optional namespace (defaults to "base")</param>
-    public GameFlagId(string category, string name, string? ns = null)
-        : base(TypeName, category, name, ns)
+    /// <param name="subcategory">Optional subcategory</param>
+    public GameFlagId(string category, string name, string? ns = null, string? subcategory = null)
+        : base(TypeName, category, name, ns, subcategory)
     {
     }
 

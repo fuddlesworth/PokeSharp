@@ -4436,7 +4436,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/gym_leaders_norman"
+              "value": "base:sprite:npcs/gym_leaders/norman"
             },
             {
               "name": "behaviorId",
@@ -4478,7 +4478,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_5"
+              "value": "base:sprite:npcs/generic/woman_5"
             },
             {
               "name": "behaviorId",
@@ -4520,7 +4520,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_man_3"
+              "value": "base:sprite:npcs/generic/man_3"
             },
             {
               "name": "behaviorId",
@@ -4562,7 +4562,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_man_3"
+              "value": "base:sprite:npcs/generic/man_3"
             },
             {
               "name": "behaviorId",
@@ -4604,7 +4604,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_5"
+              "value": "base:sprite:npcs/generic/woman_5"
             },
             {
               "name": "behaviorId",
@@ -4646,7 +4646,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_man_3"
+              "value": "base:sprite:npcs/generic/man_3"
             },
             {
               "name": "behaviorId",
@@ -4688,7 +4688,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_5"
+              "value": "base:sprite:npcs/generic/woman_5"
             },
             {
               "name": "behaviorId",
@@ -4730,7 +4730,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_man_3"
+              "value": "base:sprite:npcs/generic/man_3"
             },
             {
               "name": "behaviorId",
@@ -4772,7 +4772,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_man_2"
+              "value": "base:sprite:npcs/generic/man_2"
             },
             {
               "name": "behaviorId",
@@ -4814,7 +4814,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_wally"
+              "value": "base:sprite:npcs/generic/wally"
             },
             {
               "name": "behaviorId",
@@ -4851,7 +4851,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pokefan_m"
+              "value": "base:sprite:npcs/generic/pokefan_m"
             },
             {
               "name": "behaviorId",
@@ -4897,7 +4897,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

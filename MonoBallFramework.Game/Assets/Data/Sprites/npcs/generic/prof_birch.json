@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_prof_birch",
+  "Id": "base:sprite:npcs/generic/prof_birch",
   "DisplayName": "Prof Birch",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/prof_birch.png",

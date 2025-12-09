@@ -1919,7 +1919,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_registeel"
+              "value": "base:sprite:npcs/generic/registeel"
             },
             {
               "name": "behaviorId",
@@ -1970,7 +1970,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

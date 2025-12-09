@@ -391,7 +391,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_fisherman"
+              "value": "base:sprite:npcs/generic/fisherman"
             },
             {
               "name": "behaviorId",
@@ -437,7 +437,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_scientist_1",
+  "Id": "base:sprite:npcs/generic/scientist_1",
   "DisplayName": "Scientist 1",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/scientist_1.png",

@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/frontier_brains_tucker",
+  "Id": "base:sprite:npcs/frontier_brains/tucker",
   "DisplayName": "Tucker",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/frontier_brains/tucker.png",

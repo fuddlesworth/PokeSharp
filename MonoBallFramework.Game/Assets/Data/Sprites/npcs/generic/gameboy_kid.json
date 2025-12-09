@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_gameboy_kid",
+  "Id": "base:sprite:npcs/generic/gameboy_kid",
   "DisplayName": "Gameboy Kid",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/gameboy_kid.png",

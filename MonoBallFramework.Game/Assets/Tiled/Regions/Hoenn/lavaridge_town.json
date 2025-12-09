@@ -1671,7 +1671,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_expert_f"
+              "value": "base:sprite:npcs/generic/expert_f"
             },
             {
               "name": "behaviorId",
@@ -1708,7 +1708,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_expert_m"
+              "value": "base:sprite:npcs/generic/expert_m"
             },
             {
               "name": "behaviorId",
@@ -1745,7 +1745,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_old_man"
+              "value": "base:sprite:npcs/generic/old_man"
             },
             {
               "name": "behaviorId",
@@ -1782,7 +1782,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_twin"
+              "value": "base:sprite:npcs/generic/twin"
             },
             {
               "name": "behaviorId",
@@ -1824,7 +1824,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_hot_springs_old_woman"
+              "value": "base:sprite:npcs/generic/hot_springs_old_woman"
             },
             {
               "name": "behaviorId",
@@ -1861,7 +1861,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_hot_springs_old_woman"
+              "value": "base:sprite:npcs/generic/hot_springs_old_woman"
             },
             {
               "name": "behaviorId",
@@ -1898,7 +1898,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_var_3"
+              "value": "base:sprite:npcs/generic/var_3"
             },
             {
               "name": "behaviorId",
@@ -1935,7 +1935,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_var_0"
+              "value": "base:sprite:npcs/generic/var_0"
             },
             {
               "name": "behaviorId",
@@ -1972,7 +1972,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_expert_f"
+              "value": "base:sprite:npcs/generic/expert_f"
             },
             {
               "name": "behaviorId",
@@ -2018,7 +2018,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

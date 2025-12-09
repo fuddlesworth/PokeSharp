@@ -26,8 +26,8 @@ from .logging_config import get_logger
 logger = get_logger('id_transformer')
 
 
-# Valid ID pattern: namespace:type:category/name
-ID_PATTERN = re.compile(r'^[a-z0-9_]+:[a-z]+:[a-z0-9_]+/[a-z0-9_]+$')
+# Valid ID pattern: namespace:type:category/name OR namespace:type:category/subcategory/name
+ID_PATTERN = re.compile(r'^[a-z0-9_]+:[a-z]+:[a-z0-9_]+/[a-z0-9_]+(/[a-z0-9_]+)?$')
 
 # Entity types
 class EntityType:
@@ -66,27 +66,42 @@ class IdTransformer:
         Parse an ID into its components.
 
         Returns:
-            Dict with keys: namespace, type, category, name
+            Dict with keys: namespace, type, category, name, subcategory (optional)
             None if invalid format
         """
         if not cls.validate_id(entity_id):
             return None
 
-        # Split namespace:type:category/name
+        # Split namespace:type:category/[subcategory/]name
         namespace, rest = entity_id.split(':', 1)
         entity_type, path = rest.split(':', 1)
-        category, name = path.split('/', 1)
+        parts = path.split('/')
 
-        return {
-            "namespace": namespace,
-            "type": entity_type,
-            "category": category,
-            "name": name
-        }
+        if len(parts) == 3:
+            # Has subcategory: category/subcategory/name
+            category, subcategory, name = parts
+            return {
+                "namespace": namespace,
+                "type": entity_type,
+                "category": category,
+                "subcategory": subcategory,
+                "name": name
+            }
+        else:
+            # No subcategory: category/name
+            category, name = parts
+            return {
+                "namespace": namespace,
+                "type": entity_type,
+                "category": category,
+                "subcategory": None,
+                "name": name
+            }
 
     @classmethod
     def create_id(cls, entity_type: str, category: str, name: str,
-                  namespace: Optional[str] = None) -> str:
+                  namespace: Optional[str] = None,
+                  subcategory: Optional[str] = None) -> str:
         """
         Create a properly formatted ID.
 
@@ -95,9 +110,10 @@ class IdTransformer:
             category: The category within the type (hoenn, townfolk, etc.)
             name: The specific name (littleroot_town, prof_birch, etc.)
             namespace: Optional namespace override (defaults to "base")
+            subcategory: Optional subcategory (e.g., "generic" for generic NPCs)
 
         Returns:
-            Formatted ID string
+            Formatted ID string: namespace:type:category/[subcategory/]name
         """
         ns = namespace or cls.NAMESPACE
 
@@ -105,6 +121,10 @@ class IdTransformer:
         entity_type = cls._normalize(entity_type)
         category = cls._normalize(category)
         name = cls._normalize(name)
+
+        if subcategory:
+            subcategory = cls._normalize(subcategory)
+            return f"{ns}:{entity_type}:{category}/{subcategory}/{name}"
 
         return f"{ns}:{entity_type}:{category}/{name}"
 
@@ -395,20 +415,20 @@ class IdTransformer:
             graphics_id: e.g., "OBJ_EVENT_GFX_BOY_1", "OBJ_EVENT_GFX_BIRCH"
 
         Returns:
-            e.g., "base:sprite:npcs/generic_boy_1", "base:sprite:npcs/generic_birch"
+            e.g., "base:sprite:npcs/generic/boy_1", "base:sprite:npcs/generic/birch"
 
-        The sprite ID format matches the folder structure:
-            - base:sprite:npcs/generic_{name} - Generic NPCs
-            - base:sprite:npcs/gym_leaders_{name} - Gym leaders
-            - base:sprite:npcs/elite_four_{name} - Elite Four
-            - base:sprite:npcs/team_aqua_{name} - Team Aqua
-            - base:sprite:npcs/team_magma_{name} - Team Magma
-            - base:sprite:npcs/frontier_brains_{name} - Frontier Brains
-            - base:sprite:players/brendan_{variant} - Brendan
-            - base:sprite:players/may_{variant} - May
+        The sprite ID format uses subcategory to match the folder structure:
+            - base:sprite:npcs/generic/{name} - Generic NPCs
+            - base:sprite:npcs/gym_leaders/{name} - Gym leaders
+            - base:sprite:npcs/elite_four/{name} - Elite Four
+            - base:sprite:npcs/team_aqua/{name} - Team Aqua
+            - base:sprite:npcs/team_magma/{name} - Team Magma
+            - base:sprite:npcs/frontier_brains/{name} - Frontier Brains
+            - base:sprite:players/brendan/{variant} - Brendan
+            - base:sprite:players/may/{variant} - May
         """
         if not graphics_id:
-            return cls.create_id(EntityType.SPRITE, "npcs", "generic_unknown")
+            return cls.create_id(EntityType.SPRITE, "npcs", "unknown", subcategory="generic")
 
         name = graphics_id
         if name.startswith("OBJ_EVENT_GFX_"):
@@ -419,16 +439,19 @@ class IdTransformer:
         # Determine the top-level category and sub-category
         sub_category = cls._infer_sprite_category(name)
 
-        # Player characters go under "players" top-level
+        # Player characters go under "players" top-level with character name as subcategory
         if sub_category in ("brendan", "may"):
-            # For players, extract variant: brendan_normal -> (brendan, normal)
+            # For players, extract variant: brendan_normal -> subcategory=brendan, name=normal
             # The name already starts with brendan_ or may_
-            return cls.create_id(EntityType.SPRITE, "players", name)
+            prefix = f"{sub_category}_"
+            if name.startswith(prefix):
+                variant = name[len(prefix):]
+                return cls.create_id(EntityType.SPRITE, "players", variant, subcategory=sub_category)
+            return cls.create_id(EntityType.SPRITE, "players", name, subcategory=sub_category)
 
-        # All NPCs go under "npcs" top-level with sub_category prefix
-        # e.g., "twin" with sub_category "generic" -> "npcs/generic_twin"
-        combined_name = f"{sub_category}_{name}"
-        return cls.create_id(EntityType.SPRITE, "npcs", combined_name)
+        # All NPCs go under "npcs" top-level with sub_category as subcategory
+        # e.g., "twin" with sub_category "generic" -> "npcs/generic/twin"
+        return cls.create_id(EntityType.SPRITE, "npcs", name, subcategory=sub_category)
 
     @classmethod
     def _infer_sprite_category(cls, sprite_name: str) -> str:

@@ -2821,7 +2821,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_teala"
+              "value": "base:sprite:npcs/generic/teala"
             },
             {
               "name": "behaviorId",
@@ -2858,7 +2858,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_ninja_boy"
+              "value": "base:sprite:npcs/generic/ninja_boy"
             },
             {
               "name": "behaviorId",
@@ -2900,7 +2900,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_boy_3"
+              "value": "base:sprite:npcs/generic/boy_3"
             },
             {
               "name": "behaviorId",
@@ -2951,7 +2951,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

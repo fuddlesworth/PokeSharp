@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_twin",
+  "Id": "base:sprite:npcs/generic/twin",
   "DisplayName": "Twin",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/twin.png",

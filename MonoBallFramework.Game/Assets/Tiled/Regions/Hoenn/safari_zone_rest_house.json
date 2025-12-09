@@ -397,7 +397,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_youngster"
+              "value": "base:sprite:npcs/generic/youngster"
             },
             {
               "name": "behaviorId",
@@ -434,7 +434,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_psychic_m"
+              "value": "base:sprite:npcs/generic/psychic_m"
             },
             {
               "name": "behaviorId",
@@ -471,7 +471,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_fat_man"
+              "value": "base:sprite:npcs/generic/fat_man"
             },
             {
               "name": "behaviorId",
@@ -517,7 +517,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

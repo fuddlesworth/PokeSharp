@@ -592,7 +592,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_black_belt"
+              "value": "base:sprite:npcs/generic/black_belt"
             },
             {
               "name": "behaviorId",
@@ -624,7 +624,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_black_belt"
+              "value": "base:sprite:npcs/generic/black_belt"
             },
             {
               "name": "behaviorId",
@@ -656,7 +656,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_black_belt"
+              "value": "base:sprite:npcs/generic/black_belt"
             },
             {
               "name": "behaviorId",
@@ -688,7 +688,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_black_belt"
+              "value": "base:sprite:npcs/generic/black_belt"
             },
             {
               "name": "behaviorId",
@@ -720,7 +720,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_black_belt"
+              "value": "base:sprite:npcs/generic/black_belt"
             },
             {
               "name": "behaviorId",
@@ -752,7 +752,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_black_belt"
+              "value": "base:sprite:npcs/generic/black_belt"
             },
             {
               "name": "behaviorId",
@@ -784,7 +784,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_var_0"
+              "value": "base:sprite:npcs/generic/var_0"
             },
             {
               "name": "behaviorId",
@@ -816,7 +816,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_var_1"
+              "value": "base:sprite:npcs/generic/var_1"
             },
             {
               "name": "behaviorId",
@@ -848,7 +848,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_black_belt"
+              "value": "base:sprite:npcs/generic/black_belt"
             },
             {
               "name": "behaviorId",
@@ -889,7 +889,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

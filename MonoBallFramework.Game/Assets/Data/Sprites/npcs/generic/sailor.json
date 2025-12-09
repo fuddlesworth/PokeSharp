@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_sailor",
+  "Id": "base:sprite:npcs/generic/sailor",
   "DisplayName": "Sailor",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/sailor.png",

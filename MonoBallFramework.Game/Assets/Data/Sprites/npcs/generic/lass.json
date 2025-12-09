@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_lass",
+  "Id": "base:sprite:npcs/generic/lass",
   "DisplayName": "Lass",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/lass.png",

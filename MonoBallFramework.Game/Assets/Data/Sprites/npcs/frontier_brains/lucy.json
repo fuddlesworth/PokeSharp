@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/frontier_brains_lucy",
+  "Id": "base:sprite:npcs/frontier_brains/lucy",
   "DisplayName": "Lucy",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/frontier_brains/lucy.png",

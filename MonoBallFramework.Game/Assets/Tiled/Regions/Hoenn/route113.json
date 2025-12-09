@@ -6339,7 +6339,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_ninja_boy"
+              "value": "base:sprite:npcs/generic/ninja_boy"
             },
             {
               "name": "behaviorId",
@@ -6381,7 +6381,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_gentleman"
+              "value": "base:sprite:npcs/generic/gentleman"
             },
             {
               "name": "behaviorId",
@@ -6423,7 +6423,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_youngster"
+              "value": "base:sprite:npcs/generic/youngster"
             },
             {
               "name": "behaviorId",
@@ -6470,7 +6470,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_youngster"
+              "value": "base:sprite:npcs/generic/youngster"
             },
             {
               "name": "behaviorId",
@@ -6517,7 +6517,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_5"
+              "value": "base:sprite:npcs/generic/woman_5"
             },
             {
               "name": "behaviorId",
@@ -6559,7 +6559,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_item_ball"
+              "value": "base:sprite:npcs/generic/item_ball"
             },
             {
               "name": "behaviorId",
@@ -6596,7 +6596,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_item_ball"
+              "value": "base:sprite:npcs/generic/item_ball"
             },
             {
               "name": "behaviorId",
@@ -6633,7 +6633,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_ninja_boy"
+              "value": "base:sprite:npcs/generic/ninja_boy"
             },
             {
               "name": "behaviorId",
@@ -6680,7 +6680,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_ninja_boy"
+              "value": "base:sprite:npcs/generic/ninja_boy"
             },
             {
               "name": "behaviorId",
@@ -6727,7 +6727,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_twin"
+              "value": "base:sprite:npcs/generic/twin"
             },
             {
               "name": "behaviorId",
@@ -6774,7 +6774,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_twin"
+              "value": "base:sprite:npcs/generic/twin"
             },
             {
               "name": "behaviorId",
@@ -6821,7 +6821,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_item_ball"
+              "value": "base:sprite:npcs/generic/item_ball"
             },
             {
               "name": "behaviorId",
@@ -6858,7 +6858,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_maniac"
+              "value": "base:sprite:npcs/generic/maniac"
             },
             {
               "name": "behaviorId",
@@ -6905,7 +6905,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_camper"
+              "value": "base:sprite:npcs/generic/camper"
             },
             {
               "name": "behaviorId",
@@ -6952,7 +6952,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_picnicker"
+              "value": "base:sprite:npcs/generic/picnicker"
             },
             {
               "name": "behaviorId",
@@ -6999,7 +6999,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_man_5"
+              "value": "base:sprite:npcs/generic/man_5"
             },
             {
               "name": "behaviorId",
@@ -7055,7 +7055,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

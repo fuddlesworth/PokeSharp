@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_rooftop_sale_woman",
+  "Id": "base:sprite:npcs/generic/rooftop_sale_woman",
   "DisplayName": "Rooftop Sale Woman",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/rooftop_sale_woman.png",

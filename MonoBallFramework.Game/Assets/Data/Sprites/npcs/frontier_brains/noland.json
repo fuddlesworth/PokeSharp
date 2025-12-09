@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/frontier_brains_noland",
+  "Id": "base:sprite:npcs/frontier_brains/noland",
   "DisplayName": "Noland",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/frontier_brains/noland.png",

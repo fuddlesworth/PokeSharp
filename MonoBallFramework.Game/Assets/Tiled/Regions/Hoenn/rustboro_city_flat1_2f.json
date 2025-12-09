@@ -437,7 +437,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pokefan_f"
+              "value": "base:sprite:npcs/generic/pokefan_f"
             },
             {
               "name": "behaviorId",
@@ -479,7 +479,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_twin"
+              "value": "base:sprite:npcs/generic/twin"
             },
             {
               "name": "behaviorId",
@@ -511,7 +511,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_skitty_doll"
+              "value": "base:sprite:npcs/generic/skitty_doll"
             },
             {
               "name": "behaviorId",
@@ -543,7 +543,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_treecko_doll"
+              "value": "base:sprite:npcs/generic/treecko_doll"
             },
             {
               "name": "behaviorId",
@@ -575,7 +575,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_torchic_doll"
+              "value": "base:sprite:npcs/generic/torchic_doll"
             },
             {
               "name": "behaviorId",
@@ -607,7 +607,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_man_1"
+              "value": "base:sprite:npcs/generic/man_1"
             },
             {
               "name": "behaviorId",
@@ -644,7 +644,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_mudkip_doll"
+              "value": "base:sprite:npcs/generic/mudkip_doll"
             },
             {
               "name": "behaviorId",
@@ -676,7 +676,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pikachu_doll"
+              "value": "base:sprite:npcs/generic/pikachu_doll"
             },
             {
               "name": "behaviorId",
@@ -717,7 +717,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

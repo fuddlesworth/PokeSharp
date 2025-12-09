@@ -531,7 +531,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_skitty"
+              "value": "base:sprite:npcs/generic/skitty"
             },
             {
               "name": "behaviorId",
@@ -568,7 +568,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_old_woman"
+              "value": "base:sprite:npcs/generic/old_woman"
             },
             {
               "name": "behaviorId",
@@ -614,7 +614,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

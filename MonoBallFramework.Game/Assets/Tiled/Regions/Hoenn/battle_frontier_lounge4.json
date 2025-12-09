@@ -371,7 +371,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_3"
+              "value": "base:sprite:npcs/generic/woman_3"
             },
             {
               "name": "behaviorId",
@@ -408,7 +408,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_cook"
+              "value": "base:sprite:npcs/generic/cook"
             },
             {
               "name": "behaviorId",
@@ -450,7 +450,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_man_3"
+              "value": "base:sprite:npcs/generic/man_3"
             },
             {
               "name": "behaviorId",
@@ -496,7 +496,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

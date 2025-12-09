@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:players/may_watering",
+  "Id": "base:sprite:players/may/watering",
   "DisplayName": "Watering",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/players/may/watering.png",

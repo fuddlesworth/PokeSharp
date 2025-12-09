@@ -168,8 +168,23 @@ public class RegistryApiService(
         _logger.LogDebug("Getting sprite IDs by category: {Category}", category);
 
         // Filter sprites by category from the ID path
-        // GameSpriteId format: "base:sprite:category/name"
+        // GameSpriteId format: "base:sprite:category/[subcategory/]name"
         return GetAllSpriteIds().Where(s => s.SpriteCategory == category);
+    }
+
+    /// <inheritdoc />
+    public IEnumerable<GameSpriteId> GetSpriteIdsBySubcategory(string category, string subcategory)
+    {
+        if (string.IsNullOrWhiteSpace(category) || string.IsNullOrWhiteSpace(subcategory))
+            return [];
+
+        _logger.LogDebug("Getting sprite IDs by category/subcategory: {Category}/{Subcategory}", category, subcategory);
+
+        // Filter sprites by both category and subcategory
+        // GameSpriteId format: "base:sprite:category/subcategory/name"
+        return GetAllSpriteIds().Where(s =>
+            s.SpriteCategory == category &&
+            s.SpriteSubcategory == subcategory);
     }
 
     /// <inheritdoc />

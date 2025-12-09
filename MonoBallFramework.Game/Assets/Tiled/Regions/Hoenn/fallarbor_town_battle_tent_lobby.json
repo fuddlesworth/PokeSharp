@@ -552,7 +552,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_black_belt"
+              "value": "base:sprite:npcs/generic/black_belt"
             },
             {
               "name": "behaviorId",
@@ -589,7 +589,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_hiker"
+              "value": "base:sprite:npcs/generic/hiker"
             },
             {
               "name": "behaviorId",
@@ -631,7 +631,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_little_boy"
+              "value": "base:sprite:npcs/generic/little_boy"
             },
             {
               "name": "behaviorId",
@@ -673,7 +673,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_lass"
+              "value": "base:sprite:npcs/generic/lass"
             },
             {
               "name": "behaviorId",
@@ -710,7 +710,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_scott"
+              "value": "base:sprite:npcs/generic/scott"
             },
             {
               "name": "behaviorId",
@@ -761,7 +761,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

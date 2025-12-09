@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_running_triathlete_m",
+  "Id": "base:sprite:npcs/generic/running_triathlete_m",
   "DisplayName": "Running Triathlete M",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/running_triathlete_m.png",

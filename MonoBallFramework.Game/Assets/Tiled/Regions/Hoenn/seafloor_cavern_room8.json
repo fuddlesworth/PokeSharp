@@ -589,7 +589,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pushable_boulder"
+              "value": "base:sprite:npcs/generic/pushable_boulder"
             },
             {
               "name": "behaviorId",
@@ -626,7 +626,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pushable_boulder"
+              "value": "base:sprite:npcs/generic/pushable_boulder"
             },
             {
               "name": "behaviorId",
@@ -663,7 +663,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pushable_boulder"
+              "value": "base:sprite:npcs/generic/pushable_boulder"
             },
             {
               "name": "behaviorId",
@@ -700,7 +700,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pushable_boulder"
+              "value": "base:sprite:npcs/generic/pushable_boulder"
             },
             {
               "name": "behaviorId",
@@ -737,7 +737,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pushable_boulder"
+              "value": "base:sprite:npcs/generic/pushable_boulder"
             },
             {
               "name": "behaviorId",
@@ -774,7 +774,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pushable_boulder"
+              "value": "base:sprite:npcs/generic/pushable_boulder"
             },
             {
               "name": "behaviorId",
@@ -811,7 +811,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pushable_boulder"
+              "value": "base:sprite:npcs/generic/pushable_boulder"
             },
             {
               "name": "behaviorId",
@@ -848,7 +848,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pushable_boulder"
+              "value": "base:sprite:npcs/generic/pushable_boulder"
             },
             {
               "name": "behaviorId",
@@ -885,7 +885,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pushable_boulder"
+              "value": "base:sprite:npcs/generic/pushable_boulder"
             },
             {
               "name": "behaviorId",
@@ -922,7 +922,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pushable_boulder"
+              "value": "base:sprite:npcs/generic/pushable_boulder"
             },
             {
               "name": "behaviorId",
@@ -959,7 +959,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pushable_boulder"
+              "value": "base:sprite:npcs/generic/pushable_boulder"
             },
             {
               "name": "behaviorId",
@@ -996,7 +996,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pushable_boulder"
+              "value": "base:sprite:npcs/generic/pushable_boulder"
             },
             {
               "name": "behaviorId",
@@ -1042,7 +1042,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

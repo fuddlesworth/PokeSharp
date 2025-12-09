@@ -589,7 +589,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_man_1"
+              "value": "base:sprite:npcs/generic/man_1"
             },
             {
               "name": "behaviorId",
@@ -626,7 +626,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_twin"
+              "value": "base:sprite:npcs/generic/twin"
             },
             {
               "name": "behaviorId",
@@ -668,7 +668,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_reporter_f"
+              "value": "base:sprite:npcs/generic/reporter_f"
             },
             {
               "name": "behaviorId",
@@ -705,7 +705,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_4"
+              "value": "base:sprite:npcs/generic/woman_4"
             },
             {
               "name": "behaviorId",
@@ -737,7 +737,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_gentleman"
+              "value": "base:sprite:npcs/generic/gentleman"
             },
             {
               "name": "behaviorId",
@@ -774,7 +774,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_zigzagoon_2"
+              "value": "base:sprite:npcs/generic/zigzagoon_2"
             },
             {
               "name": "behaviorId",
@@ -806,7 +806,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_skitty"
+              "value": "base:sprite:npcs/generic/skitty"
             },
             {
               "name": "behaviorId",
@@ -838,7 +838,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_azumarill"
+              "value": "base:sprite:npcs/generic/azumarill"
             },
             {
               "name": "behaviorId",
@@ -870,7 +870,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_man_4"
+              "value": "base:sprite:npcs/generic/man_4"
             },
             {
               "name": "behaviorId",
@@ -916,7 +916,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

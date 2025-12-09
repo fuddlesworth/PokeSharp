@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:players/brendan_watering",
+  "Id": "base:sprite:players/brendan/watering",
   "DisplayName": "Watering",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/players/brendan/watering.png",

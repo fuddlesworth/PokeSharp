@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_hex_maniac",
+  "Id": "base:sprite:npcs/generic/hex_maniac",
   "DisplayName": "Hex Maniac",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/hex_maniac.png",

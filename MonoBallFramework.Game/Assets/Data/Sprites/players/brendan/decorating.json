@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:players/brendan_decorating",
+  "Id": "base:sprite:players/brendan/decorating",
   "DisplayName": "Decorating",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/players/brendan/decorating.png",

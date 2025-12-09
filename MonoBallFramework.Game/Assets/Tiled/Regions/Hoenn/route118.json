@@ -5210,7 +5210,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_berry_tree"
+              "value": "base:sprite:npcs/generic/berry_tree"
             },
             {
               "name": "behaviorId",
@@ -5247,7 +5247,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_berry_tree"
+              "value": "base:sprite:npcs/generic/berry_tree"
             },
             {
               "name": "behaviorId",
@@ -5284,7 +5284,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_berry_tree"
+              "value": "base:sprite:npcs/generic/berry_tree"
             },
             {
               "name": "behaviorId",
@@ -5321,7 +5321,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_man_5"
+              "value": "base:sprite:npcs/generic/man_5"
             },
             {
               "name": "behaviorId",
@@ -5368,7 +5368,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_reporter_f"
+              "value": "base:sprite:npcs/generic/reporter_f"
             },
             {
               "name": "behaviorId",
@@ -5410,7 +5410,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_cameraman"
+              "value": "base:sprite:npcs/generic/cameraman"
             },
             {
               "name": "behaviorId",
@@ -5452,7 +5452,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_girl_2"
+              "value": "base:sprite:npcs/generic/girl_2"
             },
             {
               "name": "behaviorId",
@@ -5494,7 +5494,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_reporter_f"
+              "value": "base:sprite:npcs/generic/reporter_f"
             },
             {
               "name": "behaviorId",
@@ -5536,7 +5536,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_cameraman"
+              "value": "base:sprite:npcs/generic/cameraman"
             },
             {
               "name": "behaviorId",
@@ -5578,7 +5578,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_reporter_f"
+              "value": "base:sprite:npcs/generic/reporter_f"
             },
             {
               "name": "behaviorId",
@@ -5620,7 +5620,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_cameraman"
+              "value": "base:sprite:npcs/generic/cameraman"
             },
             {
               "name": "behaviorId",
@@ -5662,7 +5662,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_cuttable_tree"
+              "value": "base:sprite:npcs/generic/cuttable_tree"
             },
             {
               "name": "behaviorId",
@@ -5699,7 +5699,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_fisherman"
+              "value": "base:sprite:npcs/generic/fisherman"
             },
             {
               "name": "behaviorId",
@@ -5736,7 +5736,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_2"
+              "value": "base:sprite:npcs/generic/woman_2"
             },
             {
               "name": "behaviorId",
@@ -5783,7 +5783,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_fisherman"
+              "value": "base:sprite:npcs/generic/fisherman"
             },
             {
               "name": "behaviorId",
@@ -5825,7 +5825,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_man_5"
+              "value": "base:sprite:npcs/generic/man_5"
             },
             {
               "name": "behaviorId",
@@ -5872,7 +5872,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_fisherman"
+              "value": "base:sprite:npcs/generic/fisherman"
             },
             {
               "name": "behaviorId",
@@ -5914,7 +5914,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_man_5"
+              "value": "base:sprite:npcs/generic/man_5"
             },
             {
               "name": "behaviorId",
@@ -5961,7 +5961,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_steven"
+              "value": "base:sprite:npcs/generic/steven"
             },
             {
               "name": "behaviorId",
@@ -5998,7 +5998,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_item_ball"
+              "value": "base:sprite:npcs/generic/item_ball"
             },
             {
               "name": "behaviorId",
@@ -6035,7 +6035,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_youngster"
+              "value": "base:sprite:npcs/generic/youngster"
             },
             {
               "name": "behaviorId",
@@ -6091,7 +6091,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

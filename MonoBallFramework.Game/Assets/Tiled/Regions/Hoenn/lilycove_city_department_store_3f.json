@@ -585,7 +585,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_running_triathlete_m"
+              "value": "base:sprite:npcs/generic/running_triathlete_m"
             },
             {
               "name": "behaviorId",
@@ -627,7 +627,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pokefan_m"
+              "value": "base:sprite:npcs/generic/pokefan_m"
             },
             {
               "name": "behaviorId",
@@ -669,7 +669,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_5"
+              "value": "base:sprite:npcs/generic/woman_5"
             },
             {
               "name": "behaviorId",
@@ -711,7 +711,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_3"
+              "value": "base:sprite:npcs/generic/woman_3"
             },
             {
               "name": "behaviorId",
@@ -748,7 +748,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_3"
+              "value": "base:sprite:npcs/generic/woman_3"
             },
             {
               "name": "behaviorId",
@@ -794,7 +794,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

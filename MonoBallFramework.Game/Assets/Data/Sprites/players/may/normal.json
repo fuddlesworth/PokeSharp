@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:players/may_normal",
+  "Id": "base:sprite:players/may/normal",
   "DisplayName": "Normal",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/players/may/normal.png",

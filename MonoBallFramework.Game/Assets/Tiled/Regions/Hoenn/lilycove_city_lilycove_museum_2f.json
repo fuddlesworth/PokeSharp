@@ -1258,7 +1258,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_gentleman"
+              "value": "base:sprite:npcs/generic/gentleman"
             },
             {
               "name": "behaviorId",
@@ -1295,7 +1295,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_girl_2"
+              "value": "base:sprite:npcs/generic/girl_2"
             },
             {
               "name": "behaviorId",
@@ -1342,7 +1342,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_expert_m"
+              "value": "base:sprite:npcs/generic/expert_m"
             },
             {
               "name": "behaviorId",
@@ -1389,7 +1389,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_rich_boy"
+              "value": "base:sprite:npcs/generic/rich_boy"
             },
             {
               "name": "behaviorId",
@@ -1445,7 +1445,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

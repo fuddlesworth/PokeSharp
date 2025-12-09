@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/gym_leaders_winona",
+  "Id": "base:sprite:npcs/gym_leaders/winona",
   "DisplayName": "Winona",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/gym_leaders/winona.png",

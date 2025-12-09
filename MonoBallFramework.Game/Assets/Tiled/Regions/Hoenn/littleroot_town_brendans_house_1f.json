@@ -565,7 +565,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_mom"
+              "value": "base:sprite:npcs/generic/mom"
             },
             {
               "name": "behaviorId",
@@ -607,7 +607,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_vigoroth_carrying_box"
+              "value": "base:sprite:npcs/generic/vigoroth_carrying_box"
             },
             {
               "name": "behaviorId",
@@ -649,7 +649,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_vigoroth_facing_away"
+              "value": "base:sprite:npcs/generic/vigoroth_facing_away"
             },
             {
               "name": "behaviorId",
@@ -686,7 +686,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_4"
+              "value": "base:sprite:npcs/generic/woman_4"
             },
             {
               "name": "behaviorId",
@@ -728,7 +728,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/gym_leaders_norman"
+              "value": "base:sprite:npcs/gym_leaders/norman"
             },
             {
               "name": "behaviorId",
@@ -765,7 +765,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_ninja_boy"
+              "value": "base:sprite:npcs/generic/ninja_boy"
             },
             {
               "name": "behaviorId",
@@ -812,7 +812,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_rival_brendan_normal"
+              "value": "base:sprite:npcs/generic/rival_brendan_normal"
             },
             {
               "name": "behaviorId",
@@ -858,7 +858,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_teala",
+  "Id": "base:sprite:npcs/generic/teala",
   "DisplayName": "Teala",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/teala.png",

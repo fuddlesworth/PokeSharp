@@ -271,7 +271,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pokefan_m"
+              "value": "base:sprite:npcs/generic/pokefan_m"
             },
             {
               "name": "behaviorId",
@@ -303,7 +303,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_girl_3"
+              "value": "base:sprite:npcs/generic/girl_3"
             },
             {
               "name": "behaviorId",
@@ -340,7 +340,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_mart_employee"
+              "value": "base:sprite:npcs/generic/mart_employee"
             },
             {
               "name": "behaviorId",
@@ -377,7 +377,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_mart_employee"
+              "value": "base:sprite:npcs/generic/mart_employee"
             },
             {
               "name": "behaviorId",
@@ -423,7 +423,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

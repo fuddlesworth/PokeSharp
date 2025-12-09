@@ -391,7 +391,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pokefan_f"
+              "value": "base:sprite:npcs/generic/pokefan_f"
             },
             {
               "name": "behaviorId",
@@ -428,7 +428,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_school_kid_m"
+              "value": "base:sprite:npcs/generic/school_kid_m"
             },
             {
               "name": "behaviorId",
@@ -474,7 +474,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

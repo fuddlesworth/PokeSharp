@@ -1538,7 +1538,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_2"
+              "value": "base:sprite:npcs/generic/woman_2"
             },
             {
               "name": "behaviorId",
@@ -1580,7 +1580,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_expert_m"
+              "value": "base:sprite:npcs/generic/expert_m"
             },
             {
               "name": "behaviorId",
@@ -1622,7 +1622,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_fisherman"
+              "value": "base:sprite:npcs/generic/fisherman"
             },
             {
               "name": "behaviorId",
@@ -1664,7 +1664,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_mr_brineys_boat"
+              "value": "base:sprite:npcs/generic/mr_brineys_boat"
             },
             {
               "name": "behaviorId",
@@ -1701,7 +1701,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_boy_1"
+              "value": "base:sprite:npcs/generic/boy_1"
             },
             {
               "name": "behaviorId",
@@ -1742,7 +1742,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

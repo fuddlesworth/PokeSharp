@@ -7,24 +7,24 @@ namespace MonoBallFramework.Game.Engine.Core.Types;
 ///     Base class for all strongly-typed entity identifiers.
 ///
 ///     Format: {namespace}:{type}:{category}/{name}
+///     Or with subcategory: {namespace}:{type}:{category}/{subcategory}/{name}
 ///
 ///     Examples:
 ///     - base:map:hoenn/littleroot_town
 ///     - base:npc:townfolk/prof_birch
 ///     - base:trainer:youngster/joey
-///     - base:mapsec:hoenn/littleroot_town
-///     - base:theme:popup/wood
-///     - base:sprite:player/may
+///     - base:sprite:npcs/generic/boy_1 (with subcategory)
+///     - base:sprite:players/may
 /// </summary>
 [DebuggerDisplay("{Value}")]
 public abstract record EntityId
 {
     /// <summary>
     ///     Regex pattern for validating entity IDs.
-    ///     Format: namespace:type:category/name
+    ///     Format: namespace:type:category/name OR namespace:type:category/subcategory/name
     /// </summary>
     private static readonly Regex IdPattern = new(
-        @"^[a-z0-9_]+:[a-z]+:[a-z0-9_]+/[a-z0-9_]+$",
+        @"^[a-z0-9_]+:[a-z]+:[a-z0-9_]+/[a-z0-9_]+(/[a-z0-9_]+)?$",
         RegexOptions.Compiled);
 
     /// <summary>
@@ -54,19 +54,21 @@ public abstract record EntityId
     /// <summary>
     ///     Initializes a new entity ID from components.
     ///     Validates that all components are non-empty after normalization and that the
-    ///     constructed ID matches the expected format (namespace:type:category/name).
+    ///     constructed ID matches the expected format.
     /// </summary>
     /// <param name="entityType">The entity type (e.g., "map", "npc", "trainer")</param>
     /// <param name="category">The category within the type (e.g., "hoenn", "townfolk")</param>
     /// <param name="name">The specific name (e.g., "littleroot_town", "prof_birch")</param>
     /// <param name="ns">Optional namespace (defaults to "base")</param>
+    /// <param name="subcategory">Optional subcategory (e.g., "generic" for sprites)</param>
     /// <exception cref="ArgumentException">Thrown when any component is empty after normalization or the constructed ID is invalid.</exception>
-    protected EntityId(string entityType, string category, string name, string? ns = null)
+    protected EntityId(string entityType, string category, string name, string? ns = null, string? subcategory = null)
     {
         Namespace = ns ?? BaseNamespace;
         EntityType = entityType.ToLowerInvariant();
         Category = NormalizeComponent(category);
         Name = NormalizeComponent(name);
+        Subcategory = subcategory != null ? NormalizeComponent(subcategory) : null;
 
         // Validate components are not empty after normalization
         if (string.IsNullOrEmpty(Category))
@@ -75,13 +77,18 @@ public abstract record EntityId
             throw new ArgumentException("Name cannot be empty after normalization.", nameof(name));
         if (string.IsNullOrEmpty(EntityType))
             throw new ArgumentException("Entity type cannot be empty.", nameof(entityType));
+        if (subcategory != null && string.IsNullOrEmpty(Subcategory))
+            throw new ArgumentException("Subcategory cannot be empty after normalization when provided.", nameof(subcategory));
 
-        Value = $"{Namespace}:{EntityType}:{Category}/{Name}";
+        // Build value with or without subcategory
+        Value = Subcategory != null
+            ? $"{Namespace}:{EntityType}:{Category}/{Subcategory}/{Name}"
+            : $"{Namespace}:{EntityType}:{Category}/{Name}";
 
         // Final validation against regex pattern
         if (!IdPattern.IsMatch(Value))
             throw new ArgumentException(
-                $"Constructed entity ID '{Value}' does not match expected format: namespace:type:category/name",
+                $"Constructed entity ID '{Value}' does not match expected format: namespace:type:category/[subcategory/]name",
                 nameof(name));
     }
 
@@ -101,19 +108,32 @@ public abstract record EntityId
     public string EntityType { get; private set; } = string.Empty;
 
     /// <summary>
-    ///     The category within the type (e.g., "hoenn", "townfolk").
+    ///     The category within the type (e.g., "hoenn", "townfolk", "npcs").
     /// </summary>
     public string Category { get; private set; } = string.Empty;
 
     /// <summary>
-    ///     The specific name (e.g., "littleroot_town", "prof_birch").
+    ///     The optional subcategory (e.g., "generic" for generic NPCs/sprites).
+    ///     Null if no subcategory is present.
+    /// </summary>
+    public string? Subcategory { get; private set; }
+
+    /// <summary>
+    ///     The specific name (e.g., "littleroot_town", "prof_birch", "boy_1").
     /// </summary>
     public string Name { get; private set; } = string.Empty;
 
     /// <summary>
-    ///     Returns just the local part (category/name) without namespace and type.
+    ///     Returns just the local part (category/[subcategory/]name) without namespace and type.
     /// </summary>
-    public string LocalId => $"{Category}/{Name}";
+    public string LocalId => Subcategory != null
+        ? $"{Category}/{Subcategory}/{Name}"
+        : $"{Category}/{Name}";
+
+    /// <summary>
+    ///     Whether this ID has a subcategory.
+    /// </summary>
+    public bool HasSubcategory => Subcategory != null;
 
     /// <summary>
     ///     Returns the path part (type:category/name) without namespace.
@@ -130,15 +150,28 @@ public abstract record EntityId
     /// </summary>
     private void ParseComponents()
     {
-        // Format: namespace:type:category/name
+        // Format: namespace:type:category/name OR namespace:type:category/subcategory/name
         int firstColon = Value.IndexOf(':');
         int secondColon = Value.IndexOf(':', firstColon + 1);
-        int slash = Value.IndexOf('/');
+        int firstSlash = Value.IndexOf('/');
+        int secondSlash = Value.IndexOf('/', firstSlash + 1);
 
         Namespace = Value[..firstColon];
         EntityType = Value[(firstColon + 1)..secondColon];
-        Category = Value[(secondColon + 1)..slash];
-        Name = Value[(slash + 1)..];
+        Category = Value[(secondColon + 1)..firstSlash];
+
+        if (secondSlash > 0)
+        {
+            // Has subcategory: category/subcategory/name
+            Subcategory = Value[(firstSlash + 1)..secondSlash];
+            Name = Value[(secondSlash + 1)..];
+        }
+        else
+        {
+            // No subcategory: category/name
+            Subcategory = null;
+            Name = Value[(firstSlash + 1)..];
+        }
     }
 
     /// <summary>

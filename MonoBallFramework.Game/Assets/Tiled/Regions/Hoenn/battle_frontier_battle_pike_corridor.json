@@ -400,7 +400,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_link_receptionist"
+              "value": "base:sprite:npcs/generic/link_receptionist"
             },
             {
               "name": "behaviorId",
@@ -441,7 +441,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_camper",
+  "Id": "base:sprite:npcs/generic/camper",
   "DisplayName": "Camper",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/camper.png",

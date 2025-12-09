@@ -439,7 +439,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_camper"
+              "value": "base:sprite:npcs/generic/camper"
             },
             {
               "name": "behaviorId",
@@ -476,7 +476,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_hiker"
+              "value": "base:sprite:npcs/generic/hiker"
             },
             {
               "name": "behaviorId",
@@ -522,7 +522,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

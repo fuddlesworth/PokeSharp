@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/frontier_brains_greta",
+  "Id": "base:sprite:npcs/frontier_brains/greta",
   "DisplayName": "Greta",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/frontier_brains/greta.png",

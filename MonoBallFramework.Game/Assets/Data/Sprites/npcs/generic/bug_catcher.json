@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_bug_catcher",
+  "Id": "base:sprite:npcs/generic/bug_catcher",
   "DisplayName": "Bug Catcher",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/bug_catcher.png",

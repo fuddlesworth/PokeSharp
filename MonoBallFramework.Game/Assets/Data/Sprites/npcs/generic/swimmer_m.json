@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_swimmer_m",
+  "Id": "base:sprite:npcs/generic/swimmer_m",
   "DisplayName": "Swimmer M",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/swimmer_m.png",

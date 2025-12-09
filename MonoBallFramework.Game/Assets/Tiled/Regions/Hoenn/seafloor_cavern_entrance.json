@@ -1327,7 +1327,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/team_aqua_aqua_member_m"
+              "value": "base:sprite:npcs/team_aqua/aqua_member_m"
             },
             {
               "name": "behaviorId",
@@ -1378,7 +1378,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

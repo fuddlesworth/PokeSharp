@@ -184,7 +184,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_scientist_1"
+              "value": "base:sprite:npcs/generic/scientist_1"
             },
             {
               "name": "behaviorId",
@@ -225,7 +225,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

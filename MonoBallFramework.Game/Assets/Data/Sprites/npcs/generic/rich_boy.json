@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_rich_boy",
+  "Id": "base:sprite:npcs/generic/rich_boy",
   "DisplayName": "Rich Boy",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/rich_boy.png",

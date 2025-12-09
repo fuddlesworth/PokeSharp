@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_expert_f",
+  "Id": "base:sprite:npcs/generic/expert_f",
   "DisplayName": "Expert F",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/expert_f.png",

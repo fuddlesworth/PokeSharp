@@ -848,7 +848,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/gym_leaders_roxanne"
+              "value": "base:sprite:npcs/gym_leaders/roxanne"
             },
             {
               "name": "behaviorId",
@@ -885,7 +885,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_youngster"
+              "value": "base:sprite:npcs/generic/youngster"
             },
             {
               "name": "behaviorId",
@@ -932,7 +932,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_youngster"
+              "value": "base:sprite:npcs/generic/youngster"
             },
             {
               "name": "behaviorId",
@@ -979,7 +979,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_man_2"
+              "value": "base:sprite:npcs/generic/man_2"
             },
             {
               "name": "behaviorId",
@@ -1016,7 +1016,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_hiker"
+              "value": "base:sprite:npcs/generic/hiker"
             },
             {
               "name": "behaviorId",
@@ -1072,7 +1072,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

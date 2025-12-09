@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_union_room_attendant",
+  "Id": "base:sprite:npcs/generic/union_room_attendant",
   "DisplayName": "Union Room Attendant",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/union_room_attendant.png",

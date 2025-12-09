@@ -1427,7 +1427,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_lass"
+              "value": "base:sprite:npcs/generic/lass"
             },
             {
               "name": "behaviorId",
@@ -1474,7 +1474,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_beauty"
+              "value": "base:sprite:npcs/generic/beauty"
             },
             {
               "name": "behaviorId",
@@ -1521,7 +1521,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_2"
+              "value": "base:sprite:npcs/generic/woman_2"
             },
             {
               "name": "behaviorId",
@@ -1568,7 +1568,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_beauty"
+              "value": "base:sprite:npcs/generic/beauty"
             },
             {
               "name": "behaviorId",
@@ -1615,7 +1615,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_beauty"
+              "value": "base:sprite:npcs/generic/beauty"
             },
             {
               "name": "behaviorId",
@@ -1662,7 +1662,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pokefan_f"
+              "value": "base:sprite:npcs/generic/pokefan_f"
             },
             {
               "name": "behaviorId",
@@ -1709,7 +1709,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_lass"
+              "value": "base:sprite:npcs/generic/lass"
             },
             {
               "name": "behaviorId",
@@ -1756,7 +1756,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_beauty"
+              "value": "base:sprite:npcs/generic/beauty"
             },
             {
               "name": "behaviorId",
@@ -1803,7 +1803,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_2"
+              "value": "base:sprite:npcs/generic/woman_2"
             },
             {
               "name": "behaviorId",
@@ -1850,7 +1850,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pokefan_f"
+              "value": "base:sprite:npcs/generic/pokefan_f"
             },
             {
               "name": "behaviorId",
@@ -1906,7 +1906,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

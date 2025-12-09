@@ -2568,7 +2568,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_kyogre_front"
+              "value": "base:sprite:npcs/generic/kyogre_front"
             },
             {
               "name": "behaviorId",
@@ -2614,7 +2614,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

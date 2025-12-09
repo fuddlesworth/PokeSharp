@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:players/may_fishing",
+  "Id": "base:sprite:players/may/fishing",
   "DisplayName": "Fishing",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/players/may/fishing.png",

@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/gym_leaders_brawly",
+  "Id": "base:sprite:npcs/gym_leaders/brawly",
   "DisplayName": "Brawly",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/gym_leaders/brawly.png",

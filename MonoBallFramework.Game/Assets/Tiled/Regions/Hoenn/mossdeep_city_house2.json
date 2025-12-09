@@ -397,7 +397,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_man_4"
+              "value": "base:sprite:npcs/generic/man_4"
             },
             {
               "name": "behaviorId",
@@ -434,7 +434,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_twin"
+              "value": "base:sprite:npcs/generic/twin"
             },
             {
               "name": "behaviorId",
@@ -471,7 +471,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_wingull"
+              "value": "base:sprite:npcs/generic/wingull"
             },
             {
               "name": "behaviorId",
@@ -522,7 +522,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

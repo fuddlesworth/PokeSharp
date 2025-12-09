@@ -581,7 +581,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_rich_boy"
+              "value": "base:sprite:npcs/generic/rich_boy"
             },
             {
               "name": "behaviorId",
@@ -618,7 +618,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_gentleman"
+              "value": "base:sprite:npcs/generic/gentleman"
             },
             {
               "name": "behaviorId",
@@ -655,7 +655,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_scientist_1"
+              "value": "base:sprite:npcs/generic/scientist_1"
             },
             {
               "name": "behaviorId",
@@ -697,7 +697,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_steven"
+              "value": "base:sprite:npcs/generic/steven"
             },
             {
               "name": "behaviorId",
@@ -739,7 +739,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/team_magma_magma_member_m"
+              "value": "base:sprite:npcs/team_magma/magma_member_m"
             },
             {
               "name": "behaviorId",
@@ -781,7 +781,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/team_magma_magma_member_m"
+              "value": "base:sprite:npcs/team_magma/magma_member_m"
             },
             {
               "name": "behaviorId",
@@ -823,7 +823,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/team_magma_magma_member_m"
+              "value": "base:sprite:npcs/team_magma/magma_member_m"
             },
             {
               "name": "behaviorId",
@@ -865,7 +865,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/team_magma_magma_member_m"
+              "value": "base:sprite:npcs/team_magma/magma_member_m"
             },
             {
               "name": "behaviorId",
@@ -907,7 +907,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/team_magma_maxie"
+              "value": "base:sprite:npcs/team_magma/maxie"
             },
             {
               "name": "behaviorId",
@@ -958,7 +958,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

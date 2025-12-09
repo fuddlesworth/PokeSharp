@@ -3804,7 +3804,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_1"
+              "value": "base:sprite:npcs/generic/woman_1"
             },
             {
               "name": "behaviorId",
@@ -3841,7 +3841,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_little_boy"
+              "value": "base:sprite:npcs/generic/little_boy"
             },
             {
               "name": "behaviorId",
@@ -3878,7 +3878,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_old_man"
+              "value": "base:sprite:npcs/generic/old_man"
             },
             {
               "name": "behaviorId",
@@ -3915,7 +3915,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_zigzagoon_2"
+              "value": "base:sprite:npcs/generic/zigzagoon_2"
             },
             {
               "name": "behaviorId",
@@ -3942,7 +3942,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_kecleon"
+              "value": "base:sprite:npcs/generic/kecleon"
             },
             {
               "name": "behaviorId",
@@ -3969,7 +3969,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_azumarill"
+              "value": "base:sprite:npcs/generic/azumarill"
             },
             {
               "name": "behaviorId",
@@ -3996,7 +3996,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pikachu"
+              "value": "base:sprite:npcs/generic/pikachu"
             },
             {
               "name": "behaviorId",
@@ -4023,7 +4023,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_running_triathlete_m"
+              "value": "base:sprite:npcs/generic/running_triathlete_m"
             },
             {
               "name": "behaviorId",
@@ -4070,7 +4070,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_2"
+              "value": "base:sprite:npcs/generic/woman_2"
             },
             {
               "name": "behaviorId",
@@ -4112,7 +4112,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_man_4"
+              "value": "base:sprite:npcs/generic/man_4"
             },
             {
               "name": "behaviorId",
@@ -4159,7 +4159,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_berry_tree"
+              "value": "base:sprite:npcs/generic/berry_tree"
             },
             {
               "name": "behaviorId",
@@ -4196,7 +4196,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_berry_tree"
+              "value": "base:sprite:npcs/generic/berry_tree"
             },
             {
               "name": "behaviorId",
@@ -4233,7 +4233,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_berry_tree"
+              "value": "base:sprite:npcs/generic/berry_tree"
             },
             {
               "name": "behaviorId",
@@ -4270,7 +4270,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_item_ball"
+              "value": "base:sprite:npcs/generic/item_ball"
             },
             {
               "name": "behaviorId",
@@ -4307,7 +4307,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_cuttable_tree"
+              "value": "base:sprite:npcs/generic/cuttable_tree"
             },
             {
               "name": "behaviorId",
@@ -4344,7 +4344,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_item_ball"
+              "value": "base:sprite:npcs/generic/item_ball"
             },
             {
               "name": "behaviorId",
@@ -4381,7 +4381,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_running_triathlete_f"
+              "value": "base:sprite:npcs/generic/running_triathlete_f"
             },
             {
               "name": "behaviorId",
@@ -4428,7 +4428,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_maniac"
+              "value": "base:sprite:npcs/generic/maniac"
             },
             {
               "name": "behaviorId",
@@ -4475,7 +4475,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_lass"
+              "value": "base:sprite:npcs/generic/lass"
             },
             {
               "name": "behaviorId",
@@ -4522,7 +4522,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_lass"
+              "value": "base:sprite:npcs/generic/lass"
             },
             {
               "name": "behaviorId",
@@ -4569,7 +4569,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_girl_2"
+              "value": "base:sprite:npcs/generic/girl_2"
             },
             {
               "name": "behaviorId",
@@ -4611,7 +4611,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_lass"
+              "value": "base:sprite:npcs/generic/lass"
             },
             {
               "name": "behaviorId",
@@ -4658,7 +4658,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_girl_3"
+              "value": "base:sprite:npcs/generic/girl_3"
             },
             {
               "name": "behaviorId",
@@ -4705,7 +4705,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_running_triathlete_f"
+              "value": "base:sprite:npcs/generic/running_triathlete_f"
             },
             {
               "name": "behaviorId",
@@ -4761,7 +4761,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

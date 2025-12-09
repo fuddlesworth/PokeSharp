@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:players/brendan_underwater",
+  "Id": "base:sprite:players/brendan/underwater",
   "DisplayName": "Underwater",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/players/brendan/underwater.png",

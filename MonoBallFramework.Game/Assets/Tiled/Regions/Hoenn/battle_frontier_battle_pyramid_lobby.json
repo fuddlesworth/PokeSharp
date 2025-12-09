@@ -971,7 +971,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_hiker"
+              "value": "base:sprite:npcs/generic/hiker"
             },
             {
               "name": "behaviorId",
@@ -1008,7 +1008,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_hex_maniac"
+              "value": "base:sprite:npcs/generic/hex_maniac"
             },
             {
               "name": "behaviorId",
@@ -1045,7 +1045,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_3"
+              "value": "base:sprite:npcs/generic/woman_3"
             },
             {
               "name": "behaviorId",
@@ -1087,7 +1087,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_fat_man"
+              "value": "base:sprite:npcs/generic/fat_man"
             },
             {
               "name": "behaviorId",
@@ -1138,7 +1138,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

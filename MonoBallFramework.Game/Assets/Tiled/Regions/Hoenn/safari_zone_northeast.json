@@ -4915,7 +4915,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_boy_3"
+              "value": "base:sprite:npcs/generic/boy_3"
             },
             {
               "name": "behaviorId",
@@ -4947,7 +4947,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_girl_3"
+              "value": "base:sprite:npcs/generic/girl_3"
             },
             {
               "name": "behaviorId",
@@ -4979,7 +4979,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_breakable_rock"
+              "value": "base:sprite:npcs/generic/breakable_rock"
             },
             {
               "name": "behaviorId",
@@ -5016,7 +5016,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_1"
+              "value": "base:sprite:npcs/generic/woman_1"
             },
             {
               "name": "behaviorId",
@@ -5048,7 +5048,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_breakable_rock"
+              "value": "base:sprite:npcs/generic/breakable_rock"
             },
             {
               "name": "behaviorId",
@@ -5085,7 +5085,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_breakable_rock"
+              "value": "base:sprite:npcs/generic/breakable_rock"
             },
             {
               "name": "behaviorId",
@@ -5122,7 +5122,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_breakable_rock"
+              "value": "base:sprite:npcs/generic/breakable_rock"
             },
             {
               "name": "behaviorId",
@@ -5159,7 +5159,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_breakable_rock"
+              "value": "base:sprite:npcs/generic/breakable_rock"
             },
             {
               "name": "behaviorId",
@@ -5196,7 +5196,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_item_ball"
+              "value": "base:sprite:npcs/generic/item_ball"
             },
             {
               "name": "behaviorId",
@@ -5242,7 +5242,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

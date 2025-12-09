@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_tuber_f",
+  "Id": "base:sprite:npcs/generic/tuber_f",
   "DisplayName": "Tuber F",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/tuber_f.png",

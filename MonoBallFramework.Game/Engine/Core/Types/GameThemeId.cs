@@ -35,8 +35,9 @@ public sealed record GameThemeId : EntityId
     /// <param name="category">The theme category (e.g., "popup")</param>
     /// <param name="name">The theme name (e.g., "wood", "marble")</param>
     /// <param name="ns">Optional namespace (defaults to "base")</param>
-    public GameThemeId(string category, string name, string? ns = null)
-        : base(TypeName, category, name, ns)
+    /// <param name="subcategory">Optional subcategory</param>
+    public GameThemeId(string category, string name, string? ns = null, string? subcategory = null)
+        : base(TypeName, category, name, ns, subcategory)
     {
     }
 

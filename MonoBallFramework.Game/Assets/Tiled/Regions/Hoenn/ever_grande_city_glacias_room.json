@@ -673,7 +673,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/elite_four_glacia"
+              "value": "base:sprite:npcs/elite_four/glacia"
             },
             {
               "name": "behaviorId",
@@ -719,7 +719,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_little_boy",
+  "Id": "base:sprite:npcs/generic/little_boy",
   "DisplayName": "Little Boy",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/little_boy.png",

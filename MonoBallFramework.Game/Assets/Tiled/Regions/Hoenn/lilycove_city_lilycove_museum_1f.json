@@ -1430,7 +1430,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_beauty"
+              "value": "base:sprite:npcs/generic/beauty"
             },
             {
               "name": "behaviorId",
@@ -1467,7 +1467,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_gentleman"
+              "value": "base:sprite:npcs/generic/gentleman"
             },
             {
               "name": "behaviorId",
@@ -1509,7 +1509,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_school_kid_m"
+              "value": "base:sprite:npcs/generic/school_kid_m"
             },
             {
               "name": "behaviorId",
@@ -1546,7 +1546,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_artist"
+              "value": "base:sprite:npcs/generic/artist"
             },
             {
               "name": "behaviorId",
@@ -1588,7 +1588,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_ninja_boy"
+              "value": "base:sprite:npcs/generic/ninja_boy"
             },
             {
               "name": "behaviorId",
@@ -1625,7 +1625,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_4"
+              "value": "base:sprite:npcs/generic/woman_4"
             },
             {
               "name": "behaviorId",
@@ -1662,7 +1662,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_2"
+              "value": "base:sprite:npcs/generic/woman_2"
             },
             {
               "name": "behaviorId",
@@ -1709,7 +1709,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_artist"
+              "value": "base:sprite:npcs/generic/artist"
             },
             {
               "name": "behaviorId",
@@ -1751,7 +1751,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_fat_man"
+              "value": "base:sprite:npcs/generic/fat_man"
             },
             {
               "name": "behaviorId",
@@ -1798,7 +1798,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_psychic_m"
+              "value": "base:sprite:npcs/generic/psychic_m"
             },
             {
               "name": "behaviorId",
@@ -1854,7 +1854,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

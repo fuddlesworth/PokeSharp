@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_mystery_event_deliveryman",
+  "Id": "base:sprite:npcs/generic/mystery_event_deliveryman",
   "DisplayName": "Mystery Event Deliveryman",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/mystery_event_deliveryman.png",

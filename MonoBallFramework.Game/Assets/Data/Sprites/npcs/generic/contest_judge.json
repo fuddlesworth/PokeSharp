@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_contest_judge",
+  "Id": "base:sprite:npcs/generic/contest_judge",
   "DisplayName": "Contest Judge",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/contest_judge.png",

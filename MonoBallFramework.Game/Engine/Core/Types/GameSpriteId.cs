@@ -6,10 +6,13 @@ namespace MonoBallFramework.Game.Engine.Core.Types;
 ///     Strongly-typed identifier for sprite definitions.
 ///
 ///     Format: base:sprite:{category}/{name}
+///     Or with subcategory: base:sprite:{category}/{subcategory}/{name}
+///
 ///     Examples:
 ///     - base:sprite:players/may
-///     - base:sprite:generic/prof_birch
-///     - base:sprite:gym_leaders/brawly
+///     - base:sprite:npcs/prof_birch
+///     - base:sprite:npcs/generic/boy_1 (with subcategory)
+///     - base:sprite:npcs/gym_leaders/roxanne (with subcategory)
 /// </summary>
 [DebuggerDisplay("{Value}")]
 public sealed record GameSpriteId : EntityId
@@ -32,11 +35,12 @@ public sealed record GameSpriteId : EntityId
     /// <summary>
     ///     Initializes a new GameSpriteId from components.
     /// </summary>
-    /// <param name="category">The sprite category (e.g., "player", "npc", "generic")</param>
-    /// <param name="name">The sprite name (e.g., "may", "twin", "boy_1")</param>
+    /// <param name="category">The sprite category (e.g., "players", "npcs")</param>
+    /// <param name="name">The sprite name (e.g., "may", "boy_1")</param>
     /// <param name="ns">Optional namespace (defaults to "base")</param>
-    public GameSpriteId(string category, string name, string? ns = null)
-        : base(TypeName, category, name, ns)
+    /// <param name="subcategory">Optional subcategory (e.g., "generic", "trainers")</param>
+    public GameSpriteId(string category, string name, string? ns = null, string? subcategory = null)
+        : base(TypeName, category, name, ns, subcategory)
     {
     }
 
@@ -46,25 +50,33 @@ public sealed record GameSpriteId : EntityId
     public string SpriteCategory => Category;
 
     /// <summary>
+    ///     The sprite subcategory (shortcut for Subcategory).
+    /// </summary>
+    public string? SpriteSubcategory => Subcategory;
+
+    /// <summary>
     ///     The sprite name (shortcut for Name).
     /// </summary>
     public string SpriteName => Name;
 
     /// <summary>
     ///     Gets the texture key for AssetManager lookup.
-    ///     Format: "sprites/{category}/{name}"
+    ///     Format: "sprites/{category}/{name}" or "sprites/{category}/{subcategory}/{name}"
     /// </summary>
-    public string TextureKey => $"sprites/{Category}/{Name}";
+    public string TextureKey => Subcategory != null
+        ? $"sprites/{Category}/{Subcategory}/{Name}"
+        : $"sprites/{Category}/{Name}";
 
     /// <summary>
     ///     Creates a GameSpriteId from just a name, using defaults.
     /// </summary>
     /// <param name="spriteName">The sprite name</param>
     /// <param name="category">Optional category (defaults to "generic")</param>
+    /// <param name="subcategory">Optional subcategory</param>
     /// <returns>A new GameSpriteId</returns>
-    public static GameSpriteId Create(string spriteName, string? category = null)
+    public static GameSpriteId Create(string spriteName, string? category = null, string? subcategory = null)
     {
-        return new GameSpriteId(category ?? DefaultCategory, spriteName);
+        return new GameSpriteId(category ?? DefaultCategory, spriteName, subcategory: subcategory);
     }
 
     /// <summary>
@@ -78,23 +90,41 @@ public sealed record GameSpriteId : EntityId
     }
 
     /// <summary>
-    ///     Creates an NPC sprite ID.
+    ///     Creates an NPC sprite ID with optional subcategory.
     /// </summary>
     /// <param name="name">The sprite name (e.g., "boy_1", "girl_2")</param>
+    /// <param name="subcategory">Optional subcategory (e.g., "generic", "townfolk")</param>
     /// <returns>A new GameSpriteId with "npcs" category</returns>
-    public static GameSpriteId CreateNpc(string name)
+    /// <example>
+    ///     GameSpriteId.CreateNpc("boy_1", "generic") → base:sprite:npcs/generic/boy_1
+    ///     GameSpriteId.CreateNpc("prof_birch") → base:sprite:npcs/prof_birch
+    /// </example>
+    public static GameSpriteId CreateNpc(string name, string? subcategory = null)
     {
-        return new GameSpriteId("npcs", name);
+        return new GameSpriteId("npcs", name, subcategory: subcategory);
     }
 
     /// <summary>
     ///     Creates a gym leader sprite ID.
     /// </summary>
     /// <param name="name">The sprite name (e.g., "roxanne", "brawly")</param>
-    /// <returns>A new GameSpriteId with "gym_leaders" category</returns>
+    /// <returns>A new GameSpriteId with "npcs" category and "gym_leaders" subcategory</returns>
     public static GameSpriteId CreateGymLeader(string name)
     {
-        return new GameSpriteId("gym_leaders", name);
+        return new GameSpriteId("npcs", name, subcategory: "gym_leaders");
+    }
+
+    /// <summary>
+    ///     Creates a generic NPC sprite ID.
+    /// </summary>
+    /// <param name="name">The sprite name (e.g., "boy_1", "girl_2", "tuber_f")</param>
+    /// <returns>A new GameSpriteId with "npcs" category and "generic" subcategory</returns>
+    /// <example>
+    ///     GameSpriteId.CreateGenericNpc("boy_1") → base:sprite:npcs/generic/boy_1
+    /// </example>
+    public static GameSpriteId CreateGenericNpc(string name)
+    {
+        return new GameSpriteId("npcs", name, subcategory: "generic");
     }
 
     /// <summary>

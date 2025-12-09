@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:players/may_surfing",
+  "Id": "base:sprite:players/may/surfing",
   "DisplayName": "Surfing",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/players/may/surfing.png",

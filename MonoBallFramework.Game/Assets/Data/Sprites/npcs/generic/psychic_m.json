@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_psychic_m",
+  "Id": "base:sprite:npcs/generic/psychic_m",
   "DisplayName": "Psychic M",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/psychic_m.png",

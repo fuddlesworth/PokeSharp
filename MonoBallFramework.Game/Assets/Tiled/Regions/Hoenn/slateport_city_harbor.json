@@ -1374,7 +1374,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_beauty"
+              "value": "base:sprite:npcs/generic/beauty"
             },
             {
               "name": "behaviorId",
@@ -1416,7 +1416,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_sailor"
+              "value": "base:sprite:npcs/generic/sailor"
             },
             {
               "name": "behaviorId",
@@ -1458,7 +1458,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_fat_man"
+              "value": "base:sprite:npcs/generic/fat_man"
             },
             {
               "name": "behaviorId",
@@ -1500,7 +1500,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_scientist_1"
+              "value": "base:sprite:npcs/generic/scientist_1"
             },
             {
               "name": "behaviorId",
@@ -1537,7 +1537,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_ss_tidal"
+              "value": "base:sprite:npcs/generic/ss_tidal"
             },
             {
               "name": "behaviorId",
@@ -1574,7 +1574,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/team_aqua_aqua_member_m"
+              "value": "base:sprite:npcs/team_aqua/aqua_member_m"
             },
             {
               "name": "behaviorId",
@@ -1611,7 +1611,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/team_aqua_archie"
+              "value": "base:sprite:npcs/team_aqua/archie"
             },
             {
               "name": "behaviorId",
@@ -1648,7 +1648,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_submarine_shadow"
+              "value": "base:sprite:npcs/generic/submarine_shadow"
             },
             {
               "name": "behaviorId",
@@ -1694,7 +1694,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

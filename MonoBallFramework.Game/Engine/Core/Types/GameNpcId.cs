@@ -6,10 +6,12 @@ namespace MonoBallFramework.Game.Engine.Core.Types;
 ///     Strongly-typed identifier for NPC definitions.
 ///
 ///     Format: base:npc:{category}/{name}
+///     Or with subcategory: base:npc:{category}/{subcategory}/{name}
+///
 ///     Examples:
 ///     - base:npc:townfolk/prof_birch
 ///     - base:npc:shopkeeper/pokemart_clerk
-///     - base:npc:story/rival_may
+///     - base:npc:generic/townfolk/boy_1 (with subcategory)
 /// </summary>
 [DebuggerDisplay("{Value}")]
 public sealed record GameNpcId : EntityId
@@ -35,8 +37,9 @@ public sealed record GameNpcId : EntityId
     /// <param name="category">The NPC category (e.g., "townfolk", "shopkeeper")</param>
     /// <param name="name">The NPC name (e.g., "prof_birch")</param>
     /// <param name="ns">Optional namespace (defaults to "base")</param>
-    public GameNpcId(string category, string name, string? ns = null)
-        : base(TypeName, category, name, ns)
+    /// <param name="subcategory">Optional subcategory</param>
+    public GameNpcId(string category, string name, string? ns = null, string? subcategory = null)
+        : base(TypeName, category, name, ns, subcategory)
     {
     }
 
@@ -55,10 +58,11 @@ public sealed record GameNpcId : EntityId
     /// </summary>
     /// <param name="npcName">The NPC name</param>
     /// <param name="category">Optional category (defaults to "generic")</param>
+    /// <param name="subcategory">Optional subcategory</param>
     /// <returns>A new GameNpcId</returns>
-    public static GameNpcId Create(string npcName, string? category = null)
+    public static GameNpcId Create(string npcName, string? category = null, string? subcategory = null)
     {
-        return new GameNpcId(category ?? DefaultCategory, npcName);
+        return new GameNpcId(category ?? DefaultCategory, npcName, subcategory: subcategory);
     }
 
     /// <summary>

@@ -4048,7 +4048,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_item_ball"
+              "value": "base:sprite:npcs/generic/item_ball"
             },
             {
               "name": "behaviorId",
@@ -4085,7 +4085,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_item_ball"
+              "value": "base:sprite:npcs/generic/item_ball"
             },
             {
               "name": "behaviorId",
@@ -4122,7 +4122,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_item_ball"
+              "value": "base:sprite:npcs/generic/item_ball"
             },
             {
               "name": "behaviorId",
@@ -4159,7 +4159,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_item_ball"
+              "value": "base:sprite:npcs/generic/item_ball"
             },
             {
               "name": "behaviorId",
@@ -4196,7 +4196,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/team_magma_magma_member_m"
+              "value": "base:sprite:npcs/team_magma/magma_member_m"
             },
             {
               "name": "behaviorId",
@@ -4233,7 +4233,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/team_magma_magma_member_m"
+              "value": "base:sprite:npcs/team_magma/magma_member_m"
             },
             {
               "name": "behaviorId",
@@ -4270,7 +4270,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/team_aqua_archie"
+              "value": "base:sprite:npcs/team_aqua/archie"
             },
             {
               "name": "behaviorId",
@@ -4307,7 +4307,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/team_aqua_aqua_member_m"
+              "value": "base:sprite:npcs/team_aqua/aqua_member_m"
             },
             {
               "name": "behaviorId",
@@ -4344,7 +4344,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/team_aqua_aqua_member_m"
+              "value": "base:sprite:npcs/team_aqua/aqua_member_m"
             },
             {
               "name": "behaviorId",
@@ -4376,7 +4376,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_scientist_1"
+              "value": "base:sprite:npcs/generic/scientist_1"
             },
             {
               "name": "behaviorId",
@@ -4427,7 +4427,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

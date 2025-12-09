@@ -595,7 +595,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_beauty"
+              "value": "base:sprite:npcs/generic/beauty"
             },
             {
               "name": "behaviorId",
@@ -632,7 +632,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_cable_car"
+              "value": "base:sprite:npcs/generic/cable_car"
             },
             {
               "name": "behaviorId",
@@ -668,7 +668,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

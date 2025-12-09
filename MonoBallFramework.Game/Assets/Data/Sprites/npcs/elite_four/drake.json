@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/elite_four_drake",
+  "Id": "base:sprite:npcs/elite_four/drake",
   "DisplayName": "Drake",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/elite_four/drake.png",

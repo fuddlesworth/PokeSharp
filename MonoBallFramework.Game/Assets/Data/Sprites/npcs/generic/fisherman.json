@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_fisherman",
+  "Id": "base:sprite:npcs/generic/fisherman",
   "DisplayName": "Fisherman",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/fisherman.png",

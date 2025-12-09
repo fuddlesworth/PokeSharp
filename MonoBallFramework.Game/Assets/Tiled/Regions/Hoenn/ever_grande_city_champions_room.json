@@ -634,7 +634,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_wallace"
+              "value": "base:sprite:npcs/generic/wallace"
             },
             {
               "name": "behaviorId",
@@ -666,7 +666,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_var_0"
+              "value": "base:sprite:npcs/generic/var_0"
             },
             {
               "name": "behaviorId",
@@ -703,7 +703,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_prof_birch"
+              "value": "base:sprite:npcs/generic/prof_birch"
             },
             {
               "name": "behaviorId",
@@ -749,7 +749,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

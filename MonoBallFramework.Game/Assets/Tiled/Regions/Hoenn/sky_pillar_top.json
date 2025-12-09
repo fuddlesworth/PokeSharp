@@ -2082,7 +2082,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_rayquaza"
+              "value": "base:sprite:npcs/generic/rayquaza"
             },
             {
               "name": "behaviorId",
@@ -2119,7 +2119,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_rayquaza_still"
+              "value": "base:sprite:npcs/generic/rayquaza_still"
             },
             {
               "name": "behaviorId",
@@ -2170,7 +2170,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

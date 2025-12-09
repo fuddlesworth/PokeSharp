@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_tuber_m_swimming",
+  "Id": "base:sprite:npcs/generic/tuber_m_swimming",
   "DisplayName": "Tuber M Swimming",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/tuber_m_swimming.png",

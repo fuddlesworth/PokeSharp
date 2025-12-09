@@ -505,7 +505,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_old_man"
+              "value": "base:sprite:npcs/generic/old_man"
             },
             {
               "name": "behaviorId",
@@ -542,7 +542,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_ninja_boy"
+              "value": "base:sprite:npcs/generic/ninja_boy"
             },
             {
               "name": "behaviorId",
@@ -593,7 +593,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

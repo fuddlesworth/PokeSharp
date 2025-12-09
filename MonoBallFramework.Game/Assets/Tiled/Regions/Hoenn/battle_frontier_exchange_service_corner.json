@@ -648,7 +648,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_teala"
+              "value": "base:sprite:npcs/generic/teala"
             },
             {
               "name": "behaviorId",
@@ -685,7 +685,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_rich_boy"
+              "value": "base:sprite:npcs/generic/rich_boy"
             },
             {
               "name": "behaviorId",
@@ -722,7 +722,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pokefan_f"
+              "value": "base:sprite:npcs/generic/pokefan_f"
             },
             {
               "name": "behaviorId",
@@ -759,7 +759,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_sailor"
+              "value": "base:sprite:npcs/generic/sailor"
             },
             {
               "name": "behaviorId",
@@ -801,7 +801,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_man_5"
+              "value": "base:sprite:npcs/generic/man_5"
             },
             {
               "name": "behaviorId",
@@ -843,7 +843,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_teala"
+              "value": "base:sprite:npcs/generic/teala"
             },
             {
               "name": "behaviorId",
@@ -880,7 +880,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_teala"
+              "value": "base:sprite:npcs/generic/teala"
             },
             {
               "name": "behaviorId",
@@ -917,7 +917,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_teala"
+              "value": "base:sprite:npcs/generic/teala"
             },
             {
               "name": "behaviorId",
@@ -954,7 +954,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_girl_1"
+              "value": "base:sprite:npcs/generic/girl_1"
             },
             {
               "name": "behaviorId",
@@ -1005,7 +1005,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

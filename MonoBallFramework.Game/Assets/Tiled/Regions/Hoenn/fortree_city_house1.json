@@ -271,7 +271,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_ninja_boy"
+              "value": "base:sprite:npcs/generic/ninja_boy"
             },
             {
               "name": "behaviorId",
@@ -308,7 +308,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_zigzagoon_2"
+              "value": "base:sprite:npcs/generic/zigzagoon_2"
             },
             {
               "name": "behaviorId",
@@ -345,7 +345,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_expert_f"
+              "value": "base:sprite:npcs/generic/expert_f"
             },
             {
               "name": "behaviorId",
@@ -386,7 +386,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

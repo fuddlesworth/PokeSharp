@@ -37,9 +37,8 @@ Print($"Map: {currentMapId}");
 Print($"Size: {mapWidth}x{mapHeight}");
 Print("");
 
-// Get available NPC sprites from registry - filter for sprites with proper NPC animations
-var availableSprites = Registry.GetSpriteIdsByCategory("npcs")
-    .Where(s => s.SpriteName.StartsWith("generic_"))
+// Get available NPC sprites from registry - filter for generic subcategory with proper NPC animations
+var availableSprites = Registry.GetSpriteIdsBySubcategory("npcs", "generic")
     .Where(s => Registry.HasNpcAnimations(s)) // Only sprites with go_* and face_* animations
     .ToList();
 
@@ -49,15 +48,13 @@ if (availableSprites.Count == 0)
     Print("Trying all generic sprites without animation filter...");
 
     // Fallback: try without animation filter
-    availableSprites = Registry.GetSpriteIdsByCategory("npcs")
-        .Where(s => s.SpriteName.StartsWith("generic_"))
-        .ToList();
+    availableSprites = Registry.GetSpriteIdsBySubcategory("npcs", "generic").ToList();
 
     if (availableSprites.Count == 0)
     {
         Print("Error: No generic NPC sprites in registry!");
         Print("Using hardcoded fallback sprite ID...");
-        availableSprites.Add(GameSpriteId.CreateNpc("boy"));
+        availableSprites.Add(GameSpriteId.CreateGenericNpc("boy"));
     }
 }
 

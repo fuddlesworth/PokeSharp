@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/elite_four_phoebe",
+  "Id": "base:sprite:npcs/elite_four/phoebe",
   "DisplayName": "Phoebe",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/elite_four/phoebe.png",

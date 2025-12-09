@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_hiker",
+  "Id": "base:sprite:npcs/generic/hiker",
   "DisplayName": "Hiker",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/hiker.png",

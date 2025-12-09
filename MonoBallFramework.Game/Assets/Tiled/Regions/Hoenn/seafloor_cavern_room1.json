@@ -1413,7 +1413,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pushable_boulder"
+              "value": "base:sprite:npcs/generic/pushable_boulder"
             },
             {
               "name": "behaviorId",
@@ -1450,7 +1450,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pushable_boulder"
+              "value": "base:sprite:npcs/generic/pushable_boulder"
             },
             {
               "name": "behaviorId",
@@ -1487,7 +1487,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_breakable_rock"
+              "value": "base:sprite:npcs/generic/breakable_rock"
             },
             {
               "name": "behaviorId",
@@ -1524,7 +1524,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/team_aqua_aqua_member_m"
+              "value": "base:sprite:npcs/team_aqua/aqua_member_m"
             },
             {
               "name": "behaviorId",
@@ -1571,7 +1571,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/team_aqua_aqua_member_m"
+              "value": "base:sprite:npcs/team_aqua/aqua_member_m"
             },
             {
               "name": "behaviorId",
@@ -1632,7 +1632,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

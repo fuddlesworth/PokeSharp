@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:players/brendan_normal",
+  "Id": "base:sprite:players/brendan/normal",
   "DisplayName": "Normal",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/players/brendan/normal.png",

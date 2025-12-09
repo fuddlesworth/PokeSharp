@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_mauville_old_man_1",
+  "Id": "base:sprite:npcs/generic/mauville_old_man_1",
   "DisplayName": "Mauville Old Man 1",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/mauville_old_man_1.png",

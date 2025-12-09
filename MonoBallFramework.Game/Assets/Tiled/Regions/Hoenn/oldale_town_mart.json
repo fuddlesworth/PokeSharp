@@ -391,7 +391,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_mart_employee"
+              "value": "base:sprite:npcs/generic/mart_employee"
             },
             {
               "name": "behaviorId",
@@ -428,7 +428,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_5"
+              "value": "base:sprite:npcs/generic/woman_5"
             },
             {
               "name": "behaviorId",
@@ -465,7 +465,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_boy_1"
+              "value": "base:sprite:npcs/generic/boy_1"
             },
             {
               "name": "behaviorId",
@@ -516,7 +516,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

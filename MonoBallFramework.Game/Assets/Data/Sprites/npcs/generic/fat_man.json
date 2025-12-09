@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_fat_man",
+  "Id": "base:sprite:npcs/generic/fat_man",
   "DisplayName": "Fat Man",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/fat_man.png",

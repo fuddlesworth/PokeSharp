@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/frontier_brains_anabel",
+  "Id": "base:sprite:npcs/frontier_brains/anabel",
   "DisplayName": "Anabel",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/frontier_brains/anabel.png",

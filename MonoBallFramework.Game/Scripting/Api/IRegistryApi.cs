@@ -93,9 +93,24 @@ public interface IRegistryApi
     /// <summary>
     ///     Gets all sprite IDs in a specific category.
     /// </summary>
-    /// <param name="category">The category to filter by (e.g., "players", "trainers").</param>
+    /// <param name="category">The category to filter by (e.g., "players", "npcs").</param>
     /// <returns>Collection of matching sprite identifiers.</returns>
     IEnumerable<GameSpriteId> GetSpriteIdsByCategory(string category);
+
+    /// <summary>
+    ///     Gets all sprite IDs in a specific category and subcategory.
+    /// </summary>
+    /// <param name="category">The category to filter by (e.g., "players", "npcs").</param>
+    /// <param name="subcategory">The subcategory to filter by (e.g., "generic", "gym_leaders", "brendan").</param>
+    /// <returns>Collection of matching sprite identifiers.</returns>
+    /// <example>
+    ///     // Get all generic NPC sprites
+    ///     var genericNpcs = Registry.GetSpriteIdsBySubcategory("npcs", "generic");
+    ///
+    ///     // Get all Brendan player sprites
+    ///     var brendanSprites = Registry.GetSpriteIdsBySubcategory("players", "brendan");
+    /// </example>
+    IEnumerable<GameSpriteId> GetSpriteIdsBySubcategory(string category, string subcategory);
 
     /// <summary>
     ///     Checks if a sprite exists.

@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_link_receptionist",
+  "Id": "base:sprite:npcs/generic/link_receptionist",
   "DisplayName": "Link Receptionist",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/link_receptionist.png",

@@ -896,7 +896,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_scientist_1"
+              "value": "base:sprite:npcs/generic/scientist_1"
             },
             {
               "name": "behaviorId",
@@ -933,7 +933,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_1"
+              "value": "base:sprite:npcs/generic/woman_1"
             },
             {
               "name": "behaviorId",
@@ -975,7 +975,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_camper"
+              "value": "base:sprite:npcs/generic/camper"
             },
             {
               "name": "behaviorId",
@@ -1012,7 +1012,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_picnicker"
+              "value": "base:sprite:npcs/generic/picnicker"
             },
             {
               "name": "behaviorId",
@@ -1049,7 +1049,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_fat_man"
+              "value": "base:sprite:npcs/generic/fat_man"
             },
             {
               "name": "behaviorId",
@@ -1081,7 +1081,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_scientist_1"
+              "value": "base:sprite:npcs/generic/scientist_1"
             },
             {
               "name": "behaviorId",
@@ -1127,7 +1127,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

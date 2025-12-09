@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_ninja_boy",
+  "Id": "base:sprite:npcs/generic/ninja_boy",
   "DisplayName": "Ninja Boy",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/ninja_boy.png",

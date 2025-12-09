@@ -35,8 +35,9 @@ public sealed record GameTrainerId : EntityId
     /// <param name="trainerClass">The trainer class (e.g., "youngster", "gym_leader")</param>
     /// <param name="name">The trainer name (e.g., "joey", "roxanne")</param>
     /// <param name="ns">Optional namespace (defaults to "base")</param>
-    public GameTrainerId(string trainerClass, string name, string? ns = null)
-        : base(TypeName, trainerClass, name, ns)
+    /// <param name="subcategory">Optional subcategory</param>
+    public GameTrainerId(string trainerClass, string name, string? ns = null, string? subcategory = null)
+        : base(TypeName, trainerClass, name, ns, subcategory)
     {
     }
 

@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_school_kid_m",
+  "Id": "base:sprite:npcs/generic/school_kid_m",
   "DisplayName": "School Kid M",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/school_kid_m.png",

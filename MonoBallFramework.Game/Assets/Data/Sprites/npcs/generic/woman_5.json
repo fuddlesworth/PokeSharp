@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_woman_5",
+  "Id": "base:sprite:npcs/generic/woman_5",
   "DisplayName": "Woman 5",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/woman_5.png",

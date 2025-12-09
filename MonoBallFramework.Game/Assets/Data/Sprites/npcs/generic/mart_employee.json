@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_mart_employee",
+  "Id": "base:sprite:npcs/generic/mart_employee",
   "DisplayName": "Mart Employee",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/mart_employee.png",

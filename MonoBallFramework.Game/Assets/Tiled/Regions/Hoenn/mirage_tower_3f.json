@@ -1198,7 +1198,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_breakable_rock"
+              "value": "base:sprite:npcs/generic/breakable_rock"
             },
             {
               "name": "behaviorId",
@@ -1235,7 +1235,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_breakable_rock"
+              "value": "base:sprite:npcs/generic/breakable_rock"
             },
             {
               "name": "behaviorId",
@@ -1281,7 +1281,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

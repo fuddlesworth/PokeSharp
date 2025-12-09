@@ -893,7 +893,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_expert_m"
+              "value": "base:sprite:npcs/generic/expert_m"
             },
             {
               "name": "behaviorId",
@@ -925,7 +925,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_azurill"
+              "value": "base:sprite:npcs/generic/azurill"
             },
             {
               "name": "behaviorId",
@@ -962,7 +962,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_kirlia"
+              "value": "base:sprite:npcs/generic/kirlia"
             },
             {
               "name": "behaviorId",
@@ -994,7 +994,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pikachu"
+              "value": "base:sprite:npcs/generic/pikachu"
             },
             {
               "name": "behaviorId",
@@ -1021,7 +1021,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_zigzagoon_2"
+              "value": "base:sprite:npcs/generic/zigzagoon_2"
             },
             {
               "name": "behaviorId",
@@ -1053,7 +1053,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_azumarill"
+              "value": "base:sprite:npcs/generic/azumarill"
             },
             {
               "name": "behaviorId",
@@ -1080,7 +1080,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_wingull"
+              "value": "base:sprite:npcs/generic/wingull"
             },
             {
               "name": "behaviorId",
@@ -1126,7 +1126,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

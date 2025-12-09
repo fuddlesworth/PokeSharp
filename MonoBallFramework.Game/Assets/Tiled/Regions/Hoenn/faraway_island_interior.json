@@ -2389,7 +2389,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_mew"
+              "value": "base:sprite:npcs/generic/mew"
             },
             {
               "name": "behaviorId",
@@ -2445,7 +2445,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_hot_springs_old_woman",
+  "Id": "base:sprite:npcs/generic/hot_springs_old_woman",
   "DisplayName": "Hot Springs Old Woman",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/hot_springs_old_woman.png",

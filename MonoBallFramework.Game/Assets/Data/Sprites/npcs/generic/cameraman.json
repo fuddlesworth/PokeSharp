@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_cameraman",
+  "Id": "base:sprite:npcs/generic/cameraman",
   "DisplayName": "Cameraman",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/cameraman.png",

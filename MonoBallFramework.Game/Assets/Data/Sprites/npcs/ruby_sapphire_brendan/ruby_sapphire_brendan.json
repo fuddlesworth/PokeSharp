@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/ruby_sapphire_brendan_ruby_sapphire_brendan",
+  "Id": "base:sprite:npcs/ruby_sapphire_brendan/ruby_sapphire_brendan",
   "DisplayName": "Ruby Sapphire Brendan",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/ruby_sapphire_brendan/ruby_sapphire_brendan.png",

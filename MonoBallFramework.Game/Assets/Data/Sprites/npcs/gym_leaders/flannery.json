@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/gym_leaders_flannery",
+  "Id": "base:sprite:npcs/gym_leaders/flannery",
   "DisplayName": "Flannery",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/gym_leaders/flannery.png",

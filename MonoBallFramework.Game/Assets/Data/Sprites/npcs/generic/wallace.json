@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_wallace",
+  "Id": "base:sprite:npcs/generic/wallace",
   "DisplayName": "Wallace",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/wallace.png",

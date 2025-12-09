@@ -5083,7 +5083,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_groudon_front"
+              "value": "base:sprite:npcs/generic/groudon_front"
             },
             {
               "name": "behaviorId",
@@ -5120,7 +5120,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/team_magma_magma_member_m"
+              "value": "base:sprite:npcs/team_magma/magma_member_m"
             },
             {
               "name": "behaviorId",
@@ -5172,7 +5172,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/team_magma_magma_member_m"
+              "value": "base:sprite:npcs/team_magma/magma_member_m"
             },
             {
               "name": "behaviorId",
@@ -5224,7 +5224,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/team_magma_magma_member_m"
+              "value": "base:sprite:npcs/team_magma/magma_member_m"
             },
             {
               "name": "behaviorId",
@@ -5276,7 +5276,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/team_magma_magma_member_m"
+              "value": "base:sprite:npcs/team_magma/magma_member_m"
             },
             {
               "name": "behaviorId",
@@ -5328,7 +5328,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/team_magma_maxie"
+              "value": "base:sprite:npcs/team_magma/maxie"
             },
             {
               "name": "behaviorId",
@@ -5370,7 +5370,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_groudon_asleep"
+              "value": "base:sprite:npcs/generic/groudon_asleep"
             },
             {
               "name": "behaviorId",
@@ -5407,7 +5407,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_item_ball"
+              "value": "base:sprite:npcs/generic/item_ball"
             },
             {
               "name": "behaviorId",
@@ -5453,7 +5453,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

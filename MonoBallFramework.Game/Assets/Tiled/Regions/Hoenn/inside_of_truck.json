@@ -359,7 +359,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_moving_box"
+              "value": "base:sprite:npcs/generic/moving_box"
             },
             {
               "name": "behaviorId",
@@ -396,7 +396,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_moving_box"
+              "value": "base:sprite:npcs/generic/moving_box"
             },
             {
               "name": "behaviorId",
@@ -433,7 +433,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_moving_box"
+              "value": "base:sprite:npcs/generic/moving_box"
             },
             {
               "name": "behaviorId",
@@ -479,7 +479,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

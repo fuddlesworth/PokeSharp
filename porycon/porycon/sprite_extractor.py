@@ -338,11 +338,10 @@ class SpriteExtractor:
         )
 
         # Generate ID and DisplayName
-        # EntityId format: base:sprite:category/name (only ONE slash allowed)
+        # EntityId format: base:sprite:category/subcategory/name (subcategory is optional)
         # Use sprite_type as category (npcs or players)
-        # Combine sprite_category and sprite_name to ensure uniqueness (e.g., brendan_normal, may_normal)
-        unique_name = f"{sprite_category}_{sprite_name}"
-        sprite_id = f"base:sprite:{sprite_type}/{unique_name}"
+        # Use sprite_category as subcategory (generic, gym_leaders, brendan, may, etc.)
+        sprite_id = f"base:sprite:{sprite_type}/{sprite_category}/{sprite_name}"
         display_name = sprite_name.replace("_", " ").title()
 
         # Generate TexturePath (keeps the original directory structure)
@@ -461,11 +460,10 @@ class SpriteExtractor:
         logical_frame_count = len(frames)
 
         # Generate ID and DisplayName
-        # EntityId format: base:sprite:category/name (only ONE slash allowed)
+        # EntityId format: base:sprite:category/subcategory/name (subcategory is optional)
         # Use sprite_type as category (npcs or players)
-        # Combine sprite_category and sprite_name to ensure uniqueness (e.g., brendan_normal, may_normal)
-        unique_name = f"{sprite_category}_{sprite_name}"
-        sprite_id = f"base:sprite:{sprite_type}/{unique_name}"
+        # Use sprite_category as subcategory (generic, gym_leaders, brendan, may, etc.)
+        sprite_id = f"base:sprite:{sprite_type}/{sprite_category}/{sprite_name}"
         display_name = sprite_name.replace("_", " ").title()
 
         # Generate TexturePath (keeps the original directory structure)

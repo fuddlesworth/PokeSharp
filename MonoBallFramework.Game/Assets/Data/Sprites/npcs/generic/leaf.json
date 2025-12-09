@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_leaf",
+  "Id": "base:sprite:npcs/generic/leaf",
   "DisplayName": "Leaf",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/leaf.png",

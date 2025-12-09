@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:players/may_underwater",
+  "Id": "base:sprite:players/may/underwater",
   "DisplayName": "Underwater",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/players/may/underwater.png",

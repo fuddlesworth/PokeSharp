@@ -7840,7 +7840,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_mr_brineys_boat"
+              "value": "base:sprite:npcs/generic/mr_brineys_boat"
             },
             {
               "name": "behaviorId",
@@ -7877,7 +7877,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_expert_m"
+              "value": "base:sprite:npcs/generic/expert_m"
             },
             {
               "name": "behaviorId",
@@ -7919,7 +7919,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_swimmer_m"
+              "value": "base:sprite:npcs/generic/swimmer_m"
             },
             {
               "name": "behaviorId",
@@ -7966,7 +7966,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_swimmer_f"
+              "value": "base:sprite:npcs/generic/swimmer_f"
             },
             {
               "name": "behaviorId",
@@ -8013,7 +8013,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_sailor"
+              "value": "base:sprite:npcs/generic/sailor"
             },
             {
               "name": "behaviorId",
@@ -8060,7 +8060,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_sailor"
+              "value": "base:sprite:npcs/generic/sailor"
             },
             {
               "name": "behaviorId",
@@ -8107,7 +8107,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_tuber_m"
+              "value": "base:sprite:npcs/generic/tuber_m"
             },
             {
               "name": "behaviorId",
@@ -8154,7 +8154,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_tuber_f"
+              "value": "base:sprite:npcs/generic/tuber_f"
             },
             {
               "name": "behaviorId",
@@ -8201,7 +8201,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_little_girl"
+              "value": "base:sprite:npcs/generic/little_girl"
             },
             {
               "name": "behaviorId",
@@ -8238,7 +8238,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_item_ball"
+              "value": "base:sprite:npcs/generic/item_ball"
             },
             {
               "name": "behaviorId",
@@ -8275,7 +8275,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_tuber_f"
+              "value": "base:sprite:npcs/generic/tuber_f"
             },
             {
               "name": "behaviorId",
@@ -8322,7 +8322,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_tuber_f"
+              "value": "base:sprite:npcs/generic/tuber_f"
             },
             {
               "name": "behaviorId",
@@ -8369,7 +8369,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_fisherman"
+              "value": "base:sprite:npcs/generic/fisherman"
             },
             {
               "name": "behaviorId",
@@ -8416,7 +8416,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_tuber_m"
+              "value": "base:sprite:npcs/generic/tuber_m"
             },
             {
               "name": "behaviorId",
@@ -8453,7 +8453,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_tuber_f"
+              "value": "base:sprite:npcs/generic/tuber_f"
             },
             {
               "name": "behaviorId",
@@ -8490,7 +8490,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pokefan_f"
+              "value": "base:sprite:npcs/generic/pokefan_f"
             },
             {
               "name": "behaviorId",
@@ -8527,7 +8527,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_4"
+              "value": "base:sprite:npcs/generic/woman_4"
             },
             {
               "name": "behaviorId",
@@ -8574,7 +8574,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_man_4"
+              "value": "base:sprite:npcs/generic/man_4"
             },
             {
               "name": "behaviorId",
@@ -8621,7 +8621,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_old_man"
+              "value": "base:sprite:npcs/generic/old_man"
             },
             {
               "name": "behaviorId",
@@ -8653,7 +8653,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_zigzagoon_2"
+              "value": "base:sprite:npcs/generic/zigzagoon_2"
             },
             {
               "name": "behaviorId",
@@ -8685,7 +8685,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_tuber_f"
+              "value": "base:sprite:npcs/generic/tuber_f"
             },
             {
               "name": "behaviorId",
@@ -8732,7 +8732,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_tuber_m"
+              "value": "base:sprite:npcs/generic/tuber_m"
             },
             {
               "name": "behaviorId",
@@ -8779,7 +8779,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_item_ball"
+              "value": "base:sprite:npcs/generic/item_ball"
             },
             {
               "name": "behaviorId",
@@ -8816,7 +8816,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_man_5"
+              "value": "base:sprite:npcs/generic/man_5"
             },
             {
               "name": "behaviorId",
@@ -8872,7 +8872,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

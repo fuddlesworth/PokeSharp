@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/elite_four_sidney",
+  "Id": "base:sprite:npcs/elite_four/sidney",
   "DisplayName": "Sidney",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/elite_four/sidney.png",

@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/team_magma_magma_member_f",
+  "Id": "base:sprite:npcs/team_magma/magma_member_f",
   "DisplayName": "Magma Member F",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/team_magma/magma_member_f.png",

@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/team_magma_maxie",
+  "Id": "base:sprite:npcs/team_magma/maxie",
   "DisplayName": "Maxie",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/team_magma/maxie.png",

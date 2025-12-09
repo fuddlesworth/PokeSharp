@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_devon_employee",
+  "Id": "base:sprite:npcs/generic/devon_employee",
   "DisplayName": "Devon Employee",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/devon_employee.png",

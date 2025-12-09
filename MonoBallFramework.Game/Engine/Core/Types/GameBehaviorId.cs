@@ -51,8 +51,9 @@ public sealed record GameBehaviorId : EntityId
     /// <param name="category">The behavior category (e.g., "npc", "tile", "trainer")</param>
     /// <param name="name">The behavior name (e.g., "patrol", "ice_slide")</param>
     /// <param name="ns">Optional namespace (defaults to "base")</param>
-    public GameBehaviorId(string category, string name, string? ns = null)
-        : base(TypeName, category, name, ns)
+    /// <param name="subcategory">Optional subcategory</param>
+    public GameBehaviorId(string category, string name, string? ns = null, string? subcategory = null)
+        : base(TypeName, category, name, ns, subcategory)
     {
     }
 

@@ -256,7 +256,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_ninja_boy"
+              "value": "base:sprite:npcs/generic/ninja_boy"
             },
             {
               "name": "behaviorId",
@@ -288,7 +288,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_rival_brendan_normal"
+              "value": "base:sprite:npcs/generic/rival_brendan_normal"
             },
             {
               "name": "behaviorId",
@@ -315,7 +315,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_rival_brendan_normal"
+              "value": "base:sprite:npcs/generic/rival_brendan_normal"
             },
             {
               "name": "behaviorId",
@@ -342,7 +342,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_rival_brendan_normal"
+              "value": "base:sprite:npcs/generic/rival_brendan_normal"
             },
             {
               "name": "behaviorId",
@@ -369,7 +369,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_rival_brendan_normal"
+              "value": "base:sprite:npcs/generic/rival_brendan_normal"
             },
             {
               "name": "behaviorId",
@@ -396,7 +396,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_rival_brendan_normal"
+              "value": "base:sprite:npcs/generic/rival_brendan_normal"
             },
             {
               "name": "behaviorId",
@@ -423,7 +423,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_rival_brendan_normal"
+              "value": "base:sprite:npcs/generic/rival_brendan_normal"
             },
             {
               "name": "behaviorId",
@@ -450,7 +450,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_rival_brendan_normal"
+              "value": "base:sprite:npcs/generic/rival_brendan_normal"
             },
             {
               "name": "behaviorId",
@@ -477,7 +477,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_rival_brendan_normal"
+              "value": "base:sprite:npcs/generic/rival_brendan_normal"
             },
             {
               "name": "behaviorId",
@@ -504,7 +504,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_rival_brendan_normal"
+              "value": "base:sprite:npcs/generic/rival_brendan_normal"
             },
             {
               "name": "behaviorId",
@@ -531,7 +531,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_rival_brendan_normal"
+              "value": "base:sprite:npcs/generic/rival_brendan_normal"
             },
             {
               "name": "behaviorId",
@@ -558,7 +558,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_rival_brendan_normal"
+              "value": "base:sprite:npcs/generic/rival_brendan_normal"
             },
             {
               "name": "behaviorId",
@@ -585,7 +585,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_rival_brendan_normal"
+              "value": "base:sprite:npcs/generic/rival_brendan_normal"
             },
             {
               "name": "behaviorId",
@@ -612,7 +612,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_rival_brendan_normal"
+              "value": "base:sprite:npcs/generic/rival_brendan_normal"
             },
             {
               "name": "behaviorId",
@@ -639,7 +639,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_rival_brendan_normal"
+              "value": "base:sprite:npcs/generic/rival_brendan_normal"
             },
             {
               "name": "behaviorId",
@@ -666,7 +666,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_rival_brendan_normal"
+              "value": "base:sprite:npcs/generic/rival_brendan_normal"
             },
             {
               "name": "behaviorId",
@@ -702,7 +702,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

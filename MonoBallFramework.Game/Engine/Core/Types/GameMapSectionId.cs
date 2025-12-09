@@ -36,8 +36,9 @@ public sealed record GameMapSectionId : EntityId
     /// <param name="region">The region (e.g., "hoenn")</param>
     /// <param name="name">The section name (e.g., "littleroot_town")</param>
     /// <param name="ns">Optional namespace (defaults to "base")</param>
-    public GameMapSectionId(string region, string name, string? ns = null)
-        : base(TypeName, region, name, ns)
+    /// <param name="subcategory">Optional subcategory</param>
+    public GameMapSectionId(string region, string name, string? ns = null, string? subcategory = null)
+        : base(TypeName, region, name, ns, subcategory)
     {
     }
 

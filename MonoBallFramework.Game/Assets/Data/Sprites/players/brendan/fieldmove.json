@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:players/brendan_fieldmove",
+  "Id": "base:sprite:players/brendan/fieldmove",
   "DisplayName": "Fieldmove",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/players/brendan/fieldmove.png",

@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/ruby_sapphire_may_running",
+  "Id": "base:sprite:npcs/ruby_sapphire_may/running",
   "DisplayName": "Running",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/ruby_sapphire_may/running.png",

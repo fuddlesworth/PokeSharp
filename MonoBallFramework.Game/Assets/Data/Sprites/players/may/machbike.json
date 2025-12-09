@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:players/may_machbike",
+  "Id": "base:sprite:players/may/machbike",
   "DisplayName": "Machbike",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/players/may/machbike.png",

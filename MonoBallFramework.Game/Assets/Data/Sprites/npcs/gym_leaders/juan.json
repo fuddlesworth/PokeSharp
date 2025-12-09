@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/gym_leaders_juan",
+  "Id": "base:sprite:npcs/gym_leaders/juan",
   "DisplayName": "Juan",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/gym_leaders/juan.png",

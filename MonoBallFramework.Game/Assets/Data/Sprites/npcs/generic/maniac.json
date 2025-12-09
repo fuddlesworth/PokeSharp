@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_maniac",
+  "Id": "base:sprite:npcs/generic/maniac",
   "DisplayName": "Maniac",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/maniac.png",

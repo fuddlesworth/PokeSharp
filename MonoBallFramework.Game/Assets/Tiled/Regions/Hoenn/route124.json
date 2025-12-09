@@ -19336,7 +19336,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_swimmer_m"
+              "value": "base:sprite:npcs/generic/swimmer_m"
             },
             {
               "name": "behaviorId",
@@ -19378,7 +19378,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_swimmer_m"
+              "value": "base:sprite:npcs/generic/swimmer_m"
             },
             {
               "name": "behaviorId",
@@ -19420,7 +19420,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_swimmer_f"
+              "value": "base:sprite:npcs/generic/swimmer_f"
             },
             {
               "name": "behaviorId",
@@ -19462,7 +19462,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_swimmer_f"
+              "value": "base:sprite:npcs/generic/swimmer_f"
             },
             {
               "name": "behaviorId",
@@ -19509,7 +19509,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_swimmer_m"
+              "value": "base:sprite:npcs/generic/swimmer_m"
             },
             {
               "name": "behaviorId",
@@ -19556,7 +19556,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_item_ball"
+              "value": "base:sprite:npcs/generic/item_ball"
             },
             {
               "name": "behaviorId",
@@ -19593,7 +19593,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_item_ball"
+              "value": "base:sprite:npcs/generic/item_ball"
             },
             {
               "name": "behaviorId",
@@ -19630,7 +19630,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_item_ball"
+              "value": "base:sprite:npcs/generic/item_ball"
             },
             {
               "name": "behaviorId",
@@ -19667,7 +19667,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_swimmer_f"
+              "value": "base:sprite:npcs/generic/swimmer_f"
             },
             {
               "name": "behaviorId",
@@ -19714,7 +19714,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_tuber_m_swimming"
+              "value": "base:sprite:npcs/generic/tuber_m_swimming"
             },
             {
               "name": "behaviorId",
@@ -19761,7 +19761,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_swimmer_m"
+              "value": "base:sprite:npcs/generic/swimmer_m"
             },
             {
               "name": "behaviorId",
@@ -19808,7 +19808,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_swimmer_f"
+              "value": "base:sprite:npcs/generic/swimmer_f"
             },
             {
               "name": "behaviorId",
@@ -19859,7 +19859,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

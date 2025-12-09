@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_quinty_plump",
+  "Id": "base:sprite:npcs/generic/quinty_plump",
   "DisplayName": "Quinty Plump",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/quinty_plump.png",

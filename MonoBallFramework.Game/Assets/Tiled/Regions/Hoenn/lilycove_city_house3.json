@@ -391,7 +391,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_gameboy_kid"
+              "value": "base:sprite:npcs/generic/gameboy_kid"
             },
             {
               "name": "behaviorId",
@@ -428,7 +428,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_pokefan_f"
+              "value": "base:sprite:npcs/generic/pokefan_f"
             },
             {
               "name": "behaviorId",
@@ -465,7 +465,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_gameboy_kid"
+              "value": "base:sprite:npcs/generic/gameboy_kid"
             },
             {
               "name": "behaviorId",
@@ -502,7 +502,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_gameboy_kid"
+              "value": "base:sprite:npcs/generic/gameboy_kid"
             },
             {
               "name": "behaviorId",
@@ -539,7 +539,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_gameboy_kid"
+              "value": "base:sprite:npcs/generic/gameboy_kid"
             },
             {
               "name": "behaviorId",
@@ -576,7 +576,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_man_1"
+              "value": "base:sprite:npcs/generic/man_1"
             },
             {
               "name": "behaviorId",
@@ -622,7 +622,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

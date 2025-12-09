@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/gym_leaders_tate",
+  "Id": "base:sprite:npcs/gym_leaders/tate",
   "DisplayName": "Tate",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/gym_leaders/tate.png",

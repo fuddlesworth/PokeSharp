@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_black_belt",
+  "Id": "base:sprite:npcs/generic/black_belt",
   "DisplayName": "Black Belt",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/black_belt.png",

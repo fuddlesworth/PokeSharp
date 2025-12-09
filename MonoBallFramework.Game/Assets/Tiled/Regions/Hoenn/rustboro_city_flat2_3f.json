@@ -479,7 +479,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_devon_employee"
+              "value": "base:sprite:npcs/generic/devon_employee"
             },
             {
               "name": "behaviorId",
@@ -521,7 +521,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_woman_1"
+              "value": "base:sprite:npcs/generic/woman_1"
             },
             {
               "name": "behaviorId",
@@ -567,7 +567,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

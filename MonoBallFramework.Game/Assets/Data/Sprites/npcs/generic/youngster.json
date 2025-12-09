@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_youngster",
+  "Id": "base:sprite:npcs/generic/youngster",
   "DisplayName": "Youngster",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/youngster.png",

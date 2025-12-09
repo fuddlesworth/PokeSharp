@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:players/may_acrobike",
+  "Id": "base:sprite:players/may/acrobike",
   "DisplayName": "Acrobike",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/players/may/acrobike.png",

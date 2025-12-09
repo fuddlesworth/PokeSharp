@@ -2801,7 +2801,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_deoxys_triangle"
+              "value": "base:sprite:npcs/generic/deoxys_triangle"
             },
             {
               "name": "behaviorId",
@@ -2843,7 +2843,7 @@
             {
               "name": "spriteId",
               "type": "string",
-              "value": "base:sprite:npcs/generic_deoxys"
+              "value": "base:sprite:npcs/generic/deoxys"
             },
             {
               "name": "behaviorId",
@@ -2889,7 +2889,7 @@
     {
       "name": "region",
       "type": "string",
-      "value": "hoenn"
+      "value": "Hoenn"
     },
     {
       "name": "music",

@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_pokefan_f",
+  "Id": "base:sprite:npcs/generic/pokefan_f",
   "DisplayName": "Pokefan F",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/pokefan_f.png",

@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:players/brendan_fishing",
+  "Id": "base:sprite:players/brendan/fishing",
   "DisplayName": "Fishing",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/players/brendan/fishing.png",

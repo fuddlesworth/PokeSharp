@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/team_aqua_aqua_member_m",
+  "Id": "base:sprite:npcs/team_aqua/aqua_member_m",
   "DisplayName": "Aqua Member M",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/team_aqua/aqua_member_m.png",

@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_scott",
+  "Id": "base:sprite:npcs/generic/scott",
   "DisplayName": "Scott",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/scott.png",

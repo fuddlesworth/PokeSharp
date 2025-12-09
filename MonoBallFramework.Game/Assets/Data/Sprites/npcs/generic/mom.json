@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_mom",
+  "Id": "base:sprite:npcs/generic/mom",
   "DisplayName": "Mom",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/mom.png",

@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/elite_four_glacia",
+  "Id": "base:sprite:npcs/elite_four/glacia",
   "DisplayName": "Glacia",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/elite_four/glacia.png",

@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_reporter_f",
+  "Id": "base:sprite:npcs/generic/reporter_f",
   "DisplayName": "Reporter F",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/reporter_f.png",

@@ -1,5 +1,5 @@
 {
-  "Id": "base:sprite:npcs/generic_ruby_sapphire_little_boy",
+  "Id": "base:sprite:npcs/generic/ruby_sapphire_little_boy",
   "DisplayName": "Ruby Sapphire Little Boy",
   "Type": "Sprite",
   "TexturePath": "Graphics/Sprites/npcs/generic/ruby_sapphire_little_boy.png",
