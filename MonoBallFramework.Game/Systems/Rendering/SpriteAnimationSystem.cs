@@ -82,10 +82,10 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
             return;
         }
 
-        // PERFORMANCE: Use SpriteId's cached Category/SpriteName properties
+        // PERFORMANCE: Use SpriteId's LocalId property which includes subcategory if present
         // OLD: var manifestKey = $"{sprite.Category}/{sprite.SpriteName}"; (192-384 KB/sec allocations)
-        // NEW: SpriteId parses and caches these values during construction
-        string definitionKey = $"{sprite.SpriteId.Category}/{sprite.SpriteId.SpriteName}";
+        // NEW: SpriteId.LocalId returns the full path including subcategory (e.g., "npcs/generic/boy_1")
+        string definitionKey = sprite.SpriteId.LocalId;
 
         // Skip sprites we've already determined are missing (prevents per-frame lookup attempts)
         if (_missingSprites.Contains(definitionKey))
@@ -104,9 +104,8 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
                 // Cache the missing sprite to avoid repeated lookups and log spam
                 _missingSprites.Add(definitionKey);
                 _logger?.LogWarning(
-                    "Sprite definition not found for {Category}/{SpriteName} (will not retry)",
-                    sprite.SpriteId.Category,
-                    sprite.SpriteId.SpriteName
+                    "Sprite definition not found for {SpritePath} (will not retry)",
+                    definitionKey
                 );
                 return;
             }

@@ -97,7 +97,7 @@ public class PlayerFactory(
             new Name("PLAYER"),
             new Wallet(3000),
             new Position(x, y, currentGameMapId, tileSize),
-            new Sprite(new GameSpriteId("base:sprite:players/may_normal")),
+            new Sprite(new GameSpriteId("base:sprite:players/may/normal")),
             new Elevation(3),
             new GridMovement(3.75f),
             Direction.South,  // Direction component for InputSystem

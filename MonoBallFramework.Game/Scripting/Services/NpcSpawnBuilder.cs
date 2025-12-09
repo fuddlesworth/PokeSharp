@@ -301,7 +301,7 @@ internal sealed class NpcSpawnBuilder : INpcSpawnBuilder
         // Add behavior if specified
         if (_behaviorId != null)
         {
-            _world.Add(entity, new Behavior(_behaviorId.Value));
+            _world.Add(entity, new Behavior(_behaviorId));
         }
 
         // Add name if specified

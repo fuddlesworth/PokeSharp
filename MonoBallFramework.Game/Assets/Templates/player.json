@@ -30,8 +30,7 @@
     {
       "type": "Sprite",
       "data": {
-        "spriteId": "normal",
-        "category": "may"
+        "spriteId": "base:sprite:players/may/normal"
       }
     },
     {

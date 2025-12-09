@@ -162,7 +162,7 @@ public class ElevationRenderSystem(
     ///     Created once during SetSpriteTextureLoader to eliminate GetType() and GetMethod() calls on every texture miss.
     ///     Reduces lazy load time from ~2.0ms to ~0.5-1.0ms (60% improvement).
     /// </summary>
-    private Action<string, string>? _spriteLoadDelegate;
+    private Action<string>? _spriteLoadDelegate;
 
     // Lazy sprite texture loader (set after initialization)
     private object? _spriteTextureLoader;
@@ -332,7 +332,7 @@ public class ElevationRenderSystem(
     ///     Sets the sprite texture loader for lazy loading.
     ///     Creates a strongly-typed delegate to avoid reflection overhead on every texture miss.
     /// </summary>
-    /// <param name="loader">The sprite texture loader instance (expected to have LoadSpriteTexture(string, string) method)</param>
+    /// <param name="loader">The sprite texture loader instance (expected to have LoadSpriteTexture(string) method)</param>
     public void SetSpriteTextureLoader(object? loader)
     {
         _spriteTextureLoader = loader;
@@ -340,23 +340,24 @@ public class ElevationRenderSystem(
         if (loader != null)
         {
             // Create delegate once during initialization to eliminate reflection overhead
+            // Use the single-parameter overload that accepts full sprite path (handles subcategories)
             Type loaderType = loader.GetType();
             MethodInfo? method = loaderType.GetMethod(
                 "LoadSpriteTexture",
-                new[] { typeof(string), typeof(string) }
+                new[] { typeof(string) }
             );
 
             if (method != null)
             {
                 _spriteLoadDelegate =
-                    (Action<string, string>)
-                        Delegate.CreateDelegate(typeof(Action<string, string>), loader, method);
+                    (Action<string>)
+                        Delegate.CreateDelegate(typeof(Action<string>), loader, method);
                 _logger?.LogSpriteLoaderRegistered();
             }
             else
             {
                 _spriteLoadDelegate = null;
-                _logger?.LogWarning("LoadSpriteTexture method not found on sprite loader");
+                _logger?.LogWarning("LoadSpriteTexture(string) method not found on sprite loader");
             }
         }
         else
@@ -504,14 +505,10 @@ public class ElevationRenderSystem(
             {
                 if (!AssetManager.HasTexture(textureId) && textureId.StartsWith("sprites/"))
                 {
-                    // Parse sprite category/name from texture key
-                    string[] parts = textureId.Split('/');
-                    if (parts.Length >= 3)
-                    {
-                        string category = parts[1];
-                        string spriteName = parts[2];
-                        TryLazyLoadSprite(category, spriteName, textureId);
-                    }
+                    // Extract full sprite path from texture key (handles subcategories)
+                    // Format: sprites/{category}/{name} OR sprites/{category}/{subcategory}/{name}
+                    string spritePath = textureId.Substring("sprites/".Length);
+                    TryLazyLoadSprite(spritePath, textureId);
                 }
             }
         }
@@ -1022,8 +1019,9 @@ public class ElevationRenderSystem(
             return null;
         }
 
-        // Try lazy load
-        TryLazyLoadSprite(sprite.SpriteId.Category, sprite.SpriteId.SpriteName, textureKey);
+        // Try lazy load using LocalId which includes subcategory if present
+        // Format: {category}/{name} OR {category}/{subcategory}/{name}
+        TryLazyLoadSprite(sprite.SpriteId.LocalId, textureKey);
 
         // Check again after lazy load
         if (AssetManager.HasTexture(textureKey))
@@ -1048,10 +1046,9 @@ public class ElevationRenderSystem(
     ///     Attempts to lazy-load a sprite texture if a loader is registered.
     ///     Uses cached delegate for zero-reflection performance (60% faster than reflection-based approach).
     /// </summary>
-    /// <param name="category">Sprite category (e.g., "NPCs", "Objects")</param>
-    /// <param name="spriteName">Sprite name identifier</param>
+    /// <param name="spritePath">Full sprite path including subcategory if present (e.g., "npcs/generic/boy_1")</param>
     /// <param name="textureKey">Texture key for logging purposes</param>
-    private void TryLazyLoadSprite(string category, string spriteName, string textureKey)
+    private void TryLazyLoadSprite(string spritePath, string textureKey)
     {
         if (_spriteLoadDelegate == null)
         {
@@ -1062,7 +1059,7 @@ public class ElevationRenderSystem(
         {
             // Direct delegate invocation - zero reflection overhead!
             // Eliminates: GetType(), GetMethod(), and object[] allocation
-            _spriteLoadDelegate(category, spriteName);
+            _spriteLoadDelegate(spritePath);
 
             // Verify the texture was actually loaded
             if (AssetManager.HasTexture(textureKey))

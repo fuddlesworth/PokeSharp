@@ -85,7 +85,8 @@ public class SpriteRegistry
 
     /// <summary>
     ///     Gets a sprite definition by its path.
-    ///     Format: {type}/{name} (e.g., "npcs/generic_twin", "players/may_normal")
+    ///     Format: {category}/{name} or {category}/{subcategory}/{name}
+    ///     Examples: "npcs/prof_birch", "npcs/generic/boy_1", "players/may/normal"
     /// </summary>
     /// <param name="path">The sprite path (e.g., "npcs/generic_prof_birch").</param>
     /// <returns>The sprite definition if found; otherwise, null.</returns>

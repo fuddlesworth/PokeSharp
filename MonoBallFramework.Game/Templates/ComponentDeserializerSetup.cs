@@ -309,7 +309,7 @@ public static class ComponentDeserializerSetup
                 isActive = isActiveElement.GetBoolean();
             }
 
-            return new Behavior { BehaviorTypeId = behaviorTypeId, IsActive = isActive };
+            return new Behavior(behaviorTypeId) { IsActive = isActive };
         });
     }
 }

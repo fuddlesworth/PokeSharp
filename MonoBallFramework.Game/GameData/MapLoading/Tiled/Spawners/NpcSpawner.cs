@@ -117,13 +117,17 @@ public sealed class NpcSpawner : IEntitySpawner
         }
 
         // Add behavior if specified
-        string? behaviorId = TiledPropertyParser.GetOptionalString(props, "behaviorId");
-        if (!string.IsNullOrWhiteSpace(behaviorId))
+        // Supports both full ID format (base:behavior:movement/wander) and short format (wander)
+        string? behaviorIdStr = TiledPropertyParser.GetOptionalString(props, "behaviorId");
+        if (!string.IsNullOrWhiteSpace(behaviorIdStr))
         {
-            builder.WithBehavior(GameBehaviorId.Create(behaviorId));
+            GameBehaviorId behaviorId = behaviorIdStr.Contains(':')
+                ? new GameBehaviorId(behaviorIdStr)
+                : GameBehaviorId.Create(behaviorIdStr);
+            builder.WithBehavior(behaviorId);
 
             // Get patrol waypoints from Tiled properties (explicit or axis-generated)
-            Point[]? waypoints = TiledPropertyParser.GetPatrolWaypoints(props, behaviorId, tileX, tileY, errorContext);
+            Point[]? waypoints = TiledPropertyParser.GetPatrolWaypoints(props, behaviorIdStr, tileX, tileY, errorContext);
             if (waypoints != null)
             {
                 builder.WithPath(waypoints, loop: true);

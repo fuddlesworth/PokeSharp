@@ -1,3 +1,5 @@
+using MonoBallFramework.Game.Engine.Core.Types;
+
 namespace MonoBallFramework.Game.Ecs.Components.NPCs;
 
 /// <summary>
@@ -8,10 +10,16 @@ namespace MonoBallFramework.Game.Ecs.Components.NPCs;
 public struct Behavior
 {
     /// <summary>
-    ///     Type identifier for the behavior (e.g., "patrol", "stationary", "trainer").
+    ///     Type identifier for the behavior.
+    ///     Full format: "base:behavior:movement/patrol", "base:behavior:movement/wander", etc.
     ///     References a type in the BehaviorDefinition TypeRegistry.
     /// </summary>
-    public string BehaviorTypeId { get; set; }
+    public GameBehaviorId BehaviorId { get; set; }
+
+    /// <summary>
+    ///     Gets the behavior type ID string for registry lookup.
+    /// </summary>
+    public string BehaviorTypeId => BehaviorId.Value;
 
     /// <summary>
     ///     Whether this behavior is currently active and should execute its OnTick method.
@@ -25,11 +33,22 @@ public struct Behavior
     public bool IsInitialized { get; set; }
 
     /// <summary>
-    ///     Initializes a new behavior component with a type ID.
+    ///     Initializes a new behavior component with a behavior ID.
+    /// </summary>
+    public Behavior(GameBehaviorId behaviorId)
+    {
+        BehaviorId = behaviorId;
+        IsActive = true;
+        IsInitialized = false;
+    }
+
+    /// <summary>
+    ///     Initializes a new behavior component with a type ID string.
+    ///     The string should be the full ID format (e.g., "base:behavior:movement/patrol").
     /// </summary>
     public Behavior(string behaviorTypeId)
     {
-        BehaviorTypeId = behaviorTypeId;
+        BehaviorId = new GameBehaviorId(behaviorTypeId);
         IsActive = true;
         IsInitialized = false;
     }

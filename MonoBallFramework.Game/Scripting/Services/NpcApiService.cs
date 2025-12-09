@@ -343,13 +343,13 @@ public class NpcApiService(World world, ILogger<NpcApiService> logger) : INpcApi
         if (_world.Has<Behavior>(npc))
         {
             ref Behavior behavior = ref _world.Get<Behavior>(npc);
-            behavior.BehaviorTypeId = behaviorId.Value;
+            behavior.BehaviorId = behaviorId;
             behavior.IsInitialized = false; // Force re-initialization
             behavior.IsActive = true;
         }
         else
         {
-            _world.Add(npc, new Behavior(behaviorId.Value));
+            _world.Add(npc, new Behavior(behaviorId));
         }
 
         _logger.LogDebug("Set behavior {BehaviorId} on entity {EntityId}", behaviorId, npc.Id);

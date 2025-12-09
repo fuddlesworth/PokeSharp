@@ -77,22 +77,22 @@ public class SpriteTextureLoader
                     continue;
                 }
 
-                string category = definition.GetCategory();
-                string spriteName = definition.GetSpriteName();
-                string textureKey = GetTextureKey(category, spriteName);
+                // Use GameSpriteId's TextureKey property which correctly handles subcategories
+                // Format: sprites/{category}/{name} OR sprites/{category}/{subcategory}/{name}
+                string textureKey = spriteId.TextureKey;
 
                 _logger?.LogSpriteLoadingProgress(
                     loadedCount + 1,
                     spriteIds.Count,
-                    category,
-                    spriteName
+                    spriteId.SpriteCategory,
+                    spriteId.SpriteName
                 );
 
                 string spritesheetPath = _pathResolver.Resolve(definition.TexturePath);
 
                 if (string.IsNullOrEmpty(spritesheetPath) || !File.Exists(spritesheetPath))
                 {
-                    _logger?.LogSpriteSheetNotFound(category, spriteName);
+                    _logger?.LogSpriteSheetNotFound(spriteId.SpriteCategory, spriteId.SpriteName);
                     failedCount++;
                     continue;
                 }
@@ -102,8 +102,8 @@ public class SpriteTextureLoader
                 var texture = Texture2D.FromStream(_graphicsDevice, fileStream);
 
                 _logger?.LogSpriteTextureWithDimensions(
-                    category,
-                    spriteName,
+                    spriteId.SpriteCategory,
+                    spriteId.SpriteName,
                     texture.Format,
                     texture.Width,
                     texture.Height
@@ -128,11 +128,14 @@ public class SpriteTextureLoader
     }
 
     /// <summary>
-    ///     Loads a specific sprite sheet texture.
+    ///     Loads a specific sprite sheet texture using the full sprite path.
+    ///     Supports both 2-segment (category/name) and 3-segment (category/subcategory/name) paths.
     /// </summary>
-    public void LoadSpriteTexture(string category, string spriteName)
+    /// <param name="spritePath">Full sprite path (e.g., "npcs/boy_1" or "npcs/generic/boy_1")</param>
+    public void LoadSpriteTexture(string spritePath)
     {
-        string textureKey = GetTextureKey(category, spriteName);
+        // Build texture key from the full path
+        string textureKey = $"sprites/{spritePath}";
 
         // Check if already loaded
         if (_assetManager.HasTexture(textureKey))
@@ -141,21 +144,20 @@ public class SpriteTextureLoader
         }
 
         // Skip sprites we've already reported as missing
-        string lookupKey = $"{category}/{spriteName}";
-        if (_reportedMissingSprites.Contains(lookupKey))
+        if (_reportedMissingSprites.Contains(spritePath))
         {
             return;
         }
 
-        // Use SpriteRegistry to get the definition
-        SpriteDefinition? definition = _spriteRegistry.GetSpriteByPath(lookupKey);
+        // Use SpriteRegistry to get the definition using full path
+        SpriteDefinition? definition = _spriteRegistry.GetSpriteByPath(spritePath);
 
         if (definition == null)
         {
             // Only log once per missing sprite
-            if (_reportedMissingSprites.Add(lookupKey))
+            if (_reportedMissingSprites.Add(spritePath))
             {
-                _logger?.LogSpriteSheetNotFound(category, spriteName);
+                _logger?.LogSpriteSheetNotFound("sprite", spritePath);
             }
             return;
         }
@@ -165,9 +167,9 @@ public class SpriteTextureLoader
         if (string.IsNullOrEmpty(spritesheetPath) || !File.Exists(spritesheetPath))
         {
             // Only log once per missing sprite
-            if (_reportedMissingSprites.Add(lookupKey))
+            if (_reportedMissingSprites.Add(spritePath))
             {
-                _logger?.LogSpriteSheetNotFound(category, spriteName);
+                _logger?.LogSpriteSheetNotFound("sprite", spritePath);
             }
             return;
         }
@@ -185,6 +187,19 @@ public class SpriteTextureLoader
         RegisterTexture(textureKey, texture);
 
         _logger?.LogSpriteLoadedOnDemand(textureKey);
+    }
+
+    /// <summary>
+    ///     Loads a specific sprite sheet texture (legacy overload for backwards compatibility).
+    ///     Callers should prefer the single-parameter overload with the full sprite path.
+    /// </summary>
+    /// <param name="category">Sprite category</param>
+    /// <param name="spriteName">Sprite name (may include subcategory as "subcategory/name")</param>
+    public void LoadSpriteTexture(string category, string spriteName)
+    {
+        // Build full path - the spriteName might already include a subcategory
+        string spritePath = $"{category}/{spriteName}";
+        LoadSpriteTexture(spritePath);
     }
 
     /// <summary>
@@ -226,9 +241,8 @@ public class SpriteTextureLoader
 
         foreach (GameSpriteId spriteId in spriteIdSet)
         {
-            string category = spriteId.SpriteCategory;
-            string spriteName = spriteId.SpriteName;
-            string textureKey = $"sprites/{category}/{spriteName}";
+            // Use TextureKey which correctly includes subcategory if present
+            string textureKey = spriteId.TextureKey;
 
             // Skip if already loaded
             if (_assetManager.HasTexture(textureKey))
@@ -238,10 +252,10 @@ public class SpriteTextureLoader
                 continue;
             }
 
-            // Load the sprite texture
+            // Load the sprite texture using full LocalId path
             try
             {
-                await LoadSpriteTextureAsync(category, spriteName);
+                await LoadSpriteTextureAsync(spriteId.LocalId);
                 IncrementReferenceCount(textureKey);
                 loadedCount++;
             }
@@ -249,9 +263,8 @@ public class SpriteTextureLoader
             {
                 _logger?.LogWarning(
                     ex,
-                    "Failed to load sprite texture: {Category}/{SpriteName}",
-                    category,
-                    spriteName
+                    "Failed to load sprite texture: {SpritePath}",
+                    spriteId.LocalId
                 );
             }
         }
@@ -263,8 +276,10 @@ public class SpriteTextureLoader
 
     /// <summary>
     ///     Loads a single sprite texture asynchronously.
+    ///     Supports full sprite paths including subcategory (e.g., "npcs/generic/boy_1").
     /// </summary>
-    private async Task LoadSpriteTextureAsync(string category, string spriteName)
+    /// <param name="spritePath">Full sprite path (e.g., "npcs/boy_1" or "npcs/generic/boy_1")</param>
+    private async Task LoadSpriteTextureAsync(string spritePath)
     {
         // Ensure definitions are loaded
         if (!_spriteRegistry.IsLoaded)
@@ -272,25 +287,23 @@ public class SpriteTextureLoader
             await _spriteRegistry.LoadDefinitionsAsync();
         }
 
-        string lookupKey = $"{category}/{spriteName}";
-        SpriteDefinition? definition = _spriteRegistry.GetSpriteByPath(lookupKey);
+        SpriteDefinition? definition = _spriteRegistry.GetSpriteByPath(spritePath);
 
         if (definition == null)
         {
             _logger?.LogWarning(
-                "Sprite definition not found: {Category}/{SpriteName}",
-                category,
-                spriteName
+                "Sprite definition not found: {SpritePath}",
+                spritePath
             );
             return;
         }
 
-        string textureKey = $"sprites/{category}/{spriteName}";
+        string textureKey = $"sprites/{spritePath}";
         string spritesheetPath = _pathResolver.Resolve(definition.TexturePath);
 
         if (string.IsNullOrEmpty(spritesheetPath) || !File.Exists(spritesheetPath))
         {
-            _logger?.LogSpriteTextureFileNotFound(category, spriteName);
+            _logger?.LogSpriteTextureFileNotFound("sprite", spritePath);
             return;
         }
 
