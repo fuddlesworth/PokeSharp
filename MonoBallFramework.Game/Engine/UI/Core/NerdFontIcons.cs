@@ -264,6 +264,9 @@ public static class NerdFontIcons
     /// <summary>Component/puzzle piece: nf-fa-puzzle_piece</summary>
     public const string Component = "\uF12E";
 
+    /// <summary>Relationship/link: nf-fa-link</summary>
+    public const string Relationship = "\uF0C1";
+
     /// <summary>Player/user: nf-fa-user</summary>
     public const string Player = "\uF007";
 

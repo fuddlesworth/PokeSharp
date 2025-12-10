@@ -385,7 +385,8 @@ public class ConsoleSystem : IUpdateSystem
                 GetEntityCount,
                 GetEntityIds,
                 GetEntityRange,
-                () => _componentRegistry.GetAllComponentNames());
+                () => _componentRegistry.GetAllComponentNames(),
+                GetUniqueEntityTags);
         }
         else
         {
@@ -1787,7 +1788,7 @@ public class ConsoleSystem : IUpdateSystem
                     Properties = new Dictionary<string, string> { ["Components"] = components.Count.ToString() },
                     ComponentData = new Dictionary<string, Dictionary<string, string>>(), // Loaded on-demand
                     Relationships = new Dictionary<string, List<EntityRelationship>>(), // Loaded on-demand
-                    Tag = null,
+                    Tag = DetermineEntityTag(components),
                 };
                 result.Add(info);
             }
@@ -1801,6 +1802,35 @@ public class ConsoleSystem : IUpdateSystem
             _logger.LogWarning(ex, "Error loading entity range {Start}-{Count}", startIndex, count);
         }
         return result;
+    }
+
+    /// <summary>
+    ///     Gets all unique entity tags currently in use.
+    ///     Iterates through all entities to determine their tags.
+    /// </summary>
+    private IEnumerable<string> GetUniqueEntityTags()
+    {
+        var tags = new HashSet<string>();
+        try
+        {
+            _world.Query(new QueryDescription(), entity =>
+            {
+                if (_world.IsAlive(entity))
+                {
+                    List<string> components = DetectEntityComponents(entity);
+                    string? tag = DetermineEntityTag(components);
+                    if (tag != null)
+                    {
+                        tags.Add(tag);
+                    }
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Error getting unique entity tags");
+        }
+        return tags;
     }
 
     /// <summary>

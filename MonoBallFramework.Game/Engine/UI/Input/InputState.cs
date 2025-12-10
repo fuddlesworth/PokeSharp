@@ -22,6 +22,7 @@ public class InputState
     // Input consumption tracking - prevents child components from processing already-handled input
     private readonly HashSet<Keys> _consumedKeys = new();
     private readonly HashSet<MouseButton> _consumedMouseButtons = new();
+    private bool _scrollWheelConsumed;
 
     // Key repeat tracking - provides smooth key repeat for held keys
     private readonly Dictionary<Keys, KeyRepeatState> _keyRepeatStates = new();
@@ -62,9 +63,19 @@ public class InputState
     public MouseState CurrentMouseState => _currentMouse;
 
     /// <summary>
-    ///     Mouse scroll wheel delta this frame.
+    ///     Mouse scroll wheel delta this frame (returns 0 if consumed).
     /// </summary>
-    public int ScrollWheelDelta => _currentMouse.ScrollWheelValue - _previousMouse.ScrollWheelValue;
+    public int ScrollWheelDelta => _scrollWheelConsumed ? 0 : _currentMouse.ScrollWheelValue - _previousMouse.ScrollWheelValue;
+
+    /// <summary>
+    ///     Returns true if scroll wheel input has been consumed this frame.
+    /// </summary>
+    public bool IsScrollWheelConsumed() => _scrollWheelConsumed;
+
+    /// <summary>
+    ///     Marks scroll wheel input as consumed, preventing other components from using it.
+    /// </summary>
+    public void ConsumeScrollWheel() => _scrollWheelConsumed = true;
 
     /// <summary>
     ///     Game time for this frame (used for animations like cursor blinking).
@@ -84,6 +95,7 @@ public class InputState
         // Clear consumed input from previous frame
         _consumedKeys.Clear();
         _consumedMouseButtons.Clear();
+        _scrollWheelConsumed = false;
 
         // Update key repeat states
         float deltaTime = (float)GameTime.ElapsedGameTime.TotalSeconds;

@@ -27,7 +27,7 @@ public class ConsoleScene : SceneBase
     // Configuration
     private float _consoleHeightPercent = 0.5f; // 50% of screen height by default
     private ConsolePanel? _consolePanel;
-    private EntitiesPanel? _entitiesPanel;
+    private EntitiesPanelDualPane? _entitiesPanel;
     private LogsPanel? _logsPanel;
     private ProfilerPanel? _profilerPanel;
     private StatsPanel? _statsPanel;
@@ -249,9 +249,10 @@ public class ConsoleScene : SceneBase
         Func<int> countProvider,
         Func<List<int>> idsProvider,
         Func<int, int, List<EntityInfo>> rangeProvider,
-        Func<IEnumerable<string>>? componentNamesProvider = null)
+        Func<IEnumerable<string>>? componentNamesProvider = null,
+        Func<IEnumerable<string>>? tagNamesProvider = null)
     {
-        _entitiesPanel?.SetPagedEntityProvider(countProvider, idsProvider, rangeProvider, componentNamesProvider);
+        _entitiesPanel?.SetPagedEntityProvider(countProvider, idsProvider, rangeProvider, componentNamesProvider, tagNamesProvider);
     }
 
     /// <summary>
@@ -456,8 +457,8 @@ public class ConsoleScene : SceneBase
                 }
             );
 
-            // Create entities panel
-            _entitiesPanel = EntitiesPanelBuilder
+            // Create entities panel (dual-pane layout with independent scrollbars)
+            _entitiesPanel = EntitiesPanelDualPaneBuilder
                 .Create()
                 .WithAutoUpdate(true)
                 .WithUpdateInterval(1.0)
@@ -543,8 +544,17 @@ public class ConsoleScene : SceneBase
             {
                 if (_tabContainer?.ActiveTabIndex != 0)
                 {
-                    // Not on Console tab - close immediately
-                    OnCloseRequested?.Invoke();
+                    // Check if entities panel has exclusive focus (dropdown/search open)
+                    // If so, let it handle escape first
+                    if (_entitiesPanel?.HasExclusiveInputFocus == true)
+                    {
+                        // Don't close - filter bar will handle escape during render
+                    }
+                    else
+                    {
+                        // Not on Console tab and no exclusive focus - close immediately
+                        OnCloseRequested?.Invoke();
+                    }
                 }
                 // Console tab escape is handled by ConsolePanel
             }

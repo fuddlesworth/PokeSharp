@@ -62,6 +62,12 @@ public abstract class UIContainer : UIComponent
         float relativeOffsetX = Rect.X - parentContentRect.X + paddingLeft;
         float relativeOffsetY = Rect.Y - parentContentRect.Y + paddingTop;
 
+        // DEBUG: Log container setup for content panels (entities panel is _content_4)
+        if (Id.Contains("_content_"))
+        {
+            System.Diagnostics.Debug.WriteLine($"[UIContainer] {Id} BeginContainer: Rect=({Rect.X:F0},{Rect.Y:F0},{Rect.Width:F0},{Rect.Height:F0}) padding=({paddingLeft},{paddingTop},{paddingRight},{paddingBottom}) contentSize=({Rect.Width - paddingLeft - paddingRight:F0},{Rect.Height - paddingTop - paddingBottom:F0})");
+        }
+
         LayoutRect contentRect = context.BeginContainer(
             Id + "_content",
             new LayoutConstraint

@@ -25,6 +25,17 @@ public record TextBufferLine(
 /// </summary>
 public class TextBuffer : UIComponent, ITextDisplay
 {
+    // Constants
+    private const int DefaultMaxLines = 10000;
+    private const int MinMaxLines = 100;
+    private const int DefaultScrollbarWidth = 10;
+    private const int DefaultScrollbarPadding = 4;
+    private const int DefaultLineHeight = 20;
+    private const int DefaultLinePadding = 5;
+    private const double CursorBlinkCycleDuration = 1.0;
+    private const int DefaultComponentHeightFallback = 400;
+    private const double DoubleClickThresholdSeconds = 0.5;
+
     // Filtering
     private readonly HashSet<string> _enabledCategories = new();
     private readonly List<TextBufferLine> _filteredLines = new();
@@ -59,7 +70,7 @@ public class TextBuffer : UIComponent, ITextDisplay
     // Click tracking for double/triple click
     private DateTime _lastClickTime = DateTime.MinValue;
     private Point _lastMousePosition = Point.Zero;
-    private int _maxLines = 10000;
+    private int _maxLines = DefaultMaxLines;
     private Color? _scrollbarThumbColor;
     private Color? _scrollbarThumbHoverColor;
     private Color? _scrollbarTrackColor;
@@ -137,10 +148,10 @@ public class TextBuffer : UIComponent, ITextDisplay
     }
 
     // Sizing properties - defaults match theme values (ScrollbarWidth=10, ScrollbarPadding=4, LineHeight=20)
-    public int ScrollbarWidth { get; set; } = 10;
-    public int ScrollbarPadding { get; set; } = 4;
-    public int LineHeight { get; set; } = 20;
-    public int LinePadding { get; set; } = 5;
+    public int ScrollbarWidth { get; set; } = DefaultScrollbarWidth;
+    public int ScrollbarPadding { get; set; } = DefaultScrollbarPadding;
+    public int LineHeight { get; set; } = DefaultLineHeight;
+    public int LinePadding { get; set; } = DefaultLinePadding;
 
     // Properties
     public bool AutoScroll { get; set; } = true;
@@ -148,7 +159,7 @@ public class TextBuffer : UIComponent, ITextDisplay
     public int MaxLines
     {
         get => _maxLines;
-        set => _maxLines = Math.Max(100, value);
+        set => _maxLines = Math.Max(MinMaxLines, value);
     }
 
     public int FilteredLineCount => _isDirty ? _lines.Count : _filteredLines.Count;
@@ -168,6 +179,13 @@ public class TextBuffer : UIComponent, ITextDisplay
     ///     Set to -1 to disable cursor highlighting.
     /// </summary>
     public int CursorLine { get; set; } = -1;
+
+    /// <summary>
+    ///     Gets or sets whether hover highlighting is suppressed.
+    ///     When true, mouse hover will not highlight lines. Useful when another component
+    ///     has exclusive input focus (e.g., an open dropdown).
+    /// </summary>
+    public bool SuppressHover { get; set; }
 
     /// <summary>
     ///     Gets the current scroll offset (number of lines scrolled from top).
@@ -240,13 +258,24 @@ public class TextBuffer : UIComponent, ITextDisplay
     }
 
     /// <summary>
-    ///     Clears all lines from the buffer.
+    ///     Clears all lines from the buffer and resets scroll to top.
     /// </summary>
     public void Clear()
     {
         _lines.Clear();
         _filteredLines.Clear();
         ScrollOffset = 0;
+        _isDirty = true;
+        ClearSelection();
+    }
+
+    /// <summary>
+    ///     Clears all lines from the buffer while preserving scroll position.
+    /// </summary>
+    public void ClearPreservingScroll()
+    {
+        _lines.Clear();
+        _filteredLines.Clear();
         _isDirty = true;
         ClearSelection();
     }
@@ -630,7 +659,7 @@ public class TextBuffer : UIComponent, ITextDisplay
     private int GetVisibleLineCount()
     {
         // Use Rect.Height (resolved layout) not Constraint.Height (input constraint)
-        float height = Rect.Height > 0 ? Rect.Height : 400; // Fallback to 400 if not resolved yet
+        float height = Rect.Height > 0 ? Rect.Height : DefaultComponentHeightFallback; // Fallback if not resolved yet
 
         // Try to use the font's actual line height, but don't throw if no context
         int fontLineHeight = LineHeight;
@@ -1042,8 +1071,12 @@ public class TextBuffer : UIComponent, ITextDisplay
     {
         bool isOverContent = contentRect.Contains(input.MousePosition);
 
-        // Update hover state
-        if (isOverContent)
+        // Update hover state (only if hover is not suppressed)
+        if (SuppressHover)
+        {
+            _hoveredLine = -1;
+        }
+        else if (isOverContent)
         {
             _hoveredLine = GetLineAtPosition(input.MousePosition, contentRect);
         }
@@ -1071,7 +1104,7 @@ public class TextBuffer : UIComponent, ITextDisplay
                     double timeSinceLastClick = (now - _lastClickTime).TotalSeconds;
 
                     if (
-                        timeSinceLastClick < ThemeManager.Current.DoubleClickThreshold
+                        timeSinceLastClick < DoubleClickThresholdSeconds
                         && clickedLine == _lastClickLine
                     )
                     {
