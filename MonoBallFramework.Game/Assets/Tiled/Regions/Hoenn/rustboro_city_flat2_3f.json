@@ -502,9 +502,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_flat2_3f_event_script_devon_employee"
+              "value": "base:behavior:interaction/rustboro_city_flat2_3f_event_script_devon_employee"
             }
           ]
         },
@@ -539,9 +539,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_flat2_3f_event_script_woman"
+              "value": "base:behavior:interaction/rustboro_city_flat2_3f_event_script_woman"
             }
           ]
         }

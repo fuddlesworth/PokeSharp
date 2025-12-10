@@ -356,9 +356,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_room_b1f_event_script_item_tm_ice_beam"
+              "value": "base:behavior:interaction/abandoned_ship_room_b1f_event_script_item_tm_ice_beam"
             },
             {
               "name": "visibilityFlag",

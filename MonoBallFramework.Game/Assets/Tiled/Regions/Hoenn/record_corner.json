@@ -797,9 +797,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/record_corner_event_script_attendant"
+              "value": "base:behavior:interaction/record_corner_event_script_attendant"
             }
           ]
         }

@@ -610,9 +610,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_entrance_event_script_trick_master"
+              "value": "base:behavior:interaction/route110_trick_house_entrance_event_script_trick_master"
             },
             {
               "name": "visibilityFlag",

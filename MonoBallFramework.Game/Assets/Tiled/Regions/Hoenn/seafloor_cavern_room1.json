@@ -1426,9 +1426,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -1463,9 +1463,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -1500,9 +1500,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_rock_smash"
+              "value": "base:behavior:interaction/event_script_rock_smash"
             },
             {
               "name": "visibilityFlag",
@@ -1537,9 +1537,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/seafloor_cavern_room1_event_script_grunt1"
+              "value": "base:behavior:interaction/seafloor_cavern_room1_event_script_grunt1"
             },
             {
               "name": "visibilityFlag",
@@ -1589,9 +1589,9 @@
               "value": "up,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/seafloor_cavern_room1_event_script_grunt2"
+              "value": "base:behavior:interaction/seafloor_cavern_room1_event_script_grunt2"
             },
             {
               "name": "visibilityFlag",

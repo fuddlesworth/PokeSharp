@@ -1223,9 +1223,9 @@
               "value": "down,left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/seafloor_cavern_room4_event_script_grunt3"
+              "value": "base:behavior:interaction/seafloor_cavern_room4_event_script_grunt3"
             },
             {
               "name": "visibilityFlag",
@@ -1275,9 +1275,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/seafloor_cavern_room4_event_script_grunt4"
+              "value": "base:behavior:interaction/seafloor_cavern_room4_event_script_grunt4"
             },
             {
               "name": "visibilityFlag",

@@ -989,9 +989,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_pyramid_lobby_event_script_attendant"
+              "value": "base:behavior:interaction/battle_frontier_battle_pyramid_lobby_event_script_attendant"
             }
           ]
         },
@@ -1026,9 +1026,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_pyramid_lobby_event_script_hint_giver"
+              "value": "base:behavior:interaction/battle_frontier_battle_pyramid_lobby_event_script_hint_giver"
             }
           ]
         },
@@ -1068,9 +1068,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_pyramid_lobby_event_script_woman"
+              "value": "base:behavior:interaction/battle_frontier_battle_pyramid_lobby_event_script_woman"
             }
           ]
         },
@@ -1110,9 +1110,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_pyramid_lobby_event_script_fat_man"
+              "value": "base:behavior:interaction/battle_frontier_battle_pyramid_lobby_event_script_fat_man"
             }
           ]
         }

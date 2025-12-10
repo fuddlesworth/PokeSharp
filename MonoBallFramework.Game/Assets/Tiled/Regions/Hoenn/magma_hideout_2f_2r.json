@@ -4261,9 +4261,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_2f_2r_event_script_grunt8"
+              "value": "base:behavior:interaction/magma_hideout_2f_2r_event_script_grunt8"
             },
             {
               "name": "visibilityFlag",
@@ -4313,9 +4313,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_2f_2r_event_script_grunt7"
+              "value": "base:behavior:interaction/magma_hideout_2f_2r_event_script_grunt7"
             },
             {
               "name": "visibilityFlag",
@@ -4360,9 +4360,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_2f_2r_event_script_item_max_elixir"
+              "value": "base:behavior:interaction/magma_hideout_2f_2r_event_script_item_max_elixir"
             },
             {
               "name": "visibilityFlag",
@@ -4402,9 +4402,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_2f_2r_event_script_grunt6"
+              "value": "base:behavior:interaction/magma_hideout_2f_2r_event_script_grunt6"
             },
             {
               "name": "visibilityFlag",
@@ -4454,9 +4454,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_2f_2r_event_script_grunt15"
+              "value": "base:behavior:interaction/magma_hideout_2f_2r_event_script_grunt15"
             },
             {
               "name": "visibilityFlag",
@@ -4501,9 +4501,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_2f_2r_event_script_item_full_restore"
+              "value": "base:behavior:interaction/magma_hideout_2f_2r_event_script_item_full_restore"
             },
             {
               "name": "visibilityFlag",

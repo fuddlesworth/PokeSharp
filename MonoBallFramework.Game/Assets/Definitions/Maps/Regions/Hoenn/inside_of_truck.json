@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/inside_of_truck",
+  "DisplayName": "InsideOfTruck",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/inside_of_truck.json"
+}

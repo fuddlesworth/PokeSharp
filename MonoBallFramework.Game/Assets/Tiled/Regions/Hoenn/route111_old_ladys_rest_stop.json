@@ -385,9 +385,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route111_old_ladys_rest_stop_event_script_old_lady"
+              "value": "base:behavior:interaction/route111_old_ladys_rest_stop_event_script_old_lady"
             }
           ]
         }

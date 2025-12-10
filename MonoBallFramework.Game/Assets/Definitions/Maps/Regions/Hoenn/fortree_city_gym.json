@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/fortree_city_gym",
+  "DisplayName": "FortreeCity_Gym",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/fortree_city_gym.json"
+}

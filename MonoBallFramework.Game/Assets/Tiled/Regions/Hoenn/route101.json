@@ -1557,9 +1557,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route101_event_script_youngster"
+              "value": "base:behavior:interaction/route101_event_script_youngster"
             }
           ]
         },
@@ -1626,9 +1626,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route101_event_script_birchs_bag"
+              "value": "base:behavior:interaction/route101_event_script_birchs_bag"
             },
             {
               "name": "visibilityFlag",
@@ -1700,9 +1700,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/prof_birch_event_script_rate_pokedex_or_register"
+              "value": "base:behavior:interaction/prof_birch_event_script_rate_pokedex_or_register"
             },
             {
               "name": "visibilityFlag",
@@ -1747,9 +1747,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route101_event_script_boy"
+              "value": "base:behavior:interaction/route101_event_script_boy"
             },
             {
               "name": "visibilityFlag",

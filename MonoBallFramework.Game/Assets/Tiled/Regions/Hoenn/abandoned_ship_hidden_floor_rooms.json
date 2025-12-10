@@ -2537,9 +2537,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_hidden_floor_rooms_event_script_item_luxury_ball"
+              "value": "base:behavior:interaction/abandoned_ship_hidden_floor_rooms_event_script_item_luxury_ball"
             },
             {
               "name": "visibilityFlag",
@@ -2574,9 +2574,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_hidden_floor_rooms_event_script_item_scanner"
+              "value": "base:behavior:interaction/abandoned_ship_hidden_floor_rooms_event_script_item_scanner"
             },
             {
               "name": "visibilityFlag",
@@ -2611,9 +2611,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_hidden_floor_rooms_event_script_item_tm_rain_dance"
+              "value": "base:behavior:interaction/abandoned_ship_hidden_floor_rooms_event_script_item_tm_rain_dance"
             },
             {
               "name": "visibilityFlag",
@@ -2648,9 +2648,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_hidden_floor_rooms_event_script_item_water_stone"
+              "value": "base:behavior:interaction/abandoned_ship_hidden_floor_rooms_event_script_item_water_stone"
             },
             {
               "name": "visibilityFlag",

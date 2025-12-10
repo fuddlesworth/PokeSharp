@@ -4548,9 +4548,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -4585,9 +4585,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -4622,9 +4622,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -4659,9 +4659,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -4696,9 +4696,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -4733,9 +4733,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -4770,9 +4770,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -4807,9 +4807,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_rock_smash"
+              "value": "base:behavior:interaction/event_script_rock_smash"
             },
             {
               "name": "visibilityFlag",
@@ -4844,9 +4844,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_rock_smash"
+              "value": "base:behavior:interaction/event_script_rock_smash"
             },
             {
               "name": "visibilityFlag",
@@ -4881,9 +4881,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_rock_smash"
+              "value": "base:behavior:interaction/event_script_rock_smash"
             },
             {
               "name": "visibilityFlag",
@@ -4918,9 +4918,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_rock_smash"
+              "value": "base:behavior:interaction/event_script_rock_smash"
             },
             {
               "name": "visibilityFlag",
@@ -4955,9 +4955,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_rock_smash"
+              "value": "base:behavior:interaction/event_script_rock_smash"
             },
             {
               "name": "visibilityFlag",
@@ -4992,9 +4992,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -5034,9 +5034,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_b1f_event_script_samuel"
+              "value": "base:behavior:interaction/victory_road_b1f_event_script_samuel"
             },
             {
               "name": "trainerType",
@@ -5081,9 +5081,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_b1f_event_script_shannon"
+              "value": "base:behavior:interaction/victory_road_b1f_event_script_shannon"
             },
             {
               "name": "trainerType",
@@ -5128,9 +5128,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_b1f_event_script_michelle"
+              "value": "base:behavior:interaction/victory_road_b1f_event_script_michelle"
             },
             {
               "name": "trainerType",
@@ -5170,9 +5170,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_rock_smash"
+              "value": "base:behavior:interaction/event_script_rock_smash"
             },
             {
               "name": "visibilityFlag",
@@ -5207,9 +5207,9 @@
               "value": 4
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_b1f_event_script_item_tm_psychic"
+              "value": "base:behavior:interaction/victory_road_b1f_event_script_item_tm_psychic"
             },
             {
               "name": "visibilityFlag",
@@ -5244,9 +5244,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_b1f_event_script_item_full_restore"
+              "value": "base:behavior:interaction/victory_road_b1f_event_script_item_full_restore"
             },
             {
               "name": "visibilityFlag",
@@ -5286,9 +5286,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_b1f_event_script_mitchell"
+              "value": "base:behavior:interaction/victory_road_b1f_event_script_mitchell"
             },
             {
               "name": "trainerType",
@@ -5333,9 +5333,9 @@
               "value": "up,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_b1f_event_script_halle"
+              "value": "base:behavior:interaction/victory_road_b1f_event_script_halle"
             },
             {
               "name": "trainerType",

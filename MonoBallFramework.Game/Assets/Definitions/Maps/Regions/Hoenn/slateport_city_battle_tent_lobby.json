@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/slateport_city_battle_tent_lobby",
+  "DisplayName": "SlateportCity_BattleTentLobby",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/slateport_city_battle_tent_lobby.json"
+}

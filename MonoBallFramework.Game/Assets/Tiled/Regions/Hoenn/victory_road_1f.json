@@ -6527,9 +6527,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_1f_event_script_edgar"
+              "value": "base:behavior:interaction/victory_road_1f_event_script_edgar"
             },
             {
               "name": "trainerType",
@@ -6574,9 +6574,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_1f_event_script_hope"
+              "value": "base:behavior:interaction/victory_road_1f_event_script_hope"
             },
             {
               "name": "trainerType",
@@ -6621,9 +6621,9 @@
               "value": "down,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_1f_event_script_albert"
+              "value": "base:behavior:interaction/victory_road_1f_event_script_albert"
             },
             {
               "name": "trainerType",
@@ -6668,9 +6668,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_1f_event_script_entrance_wally"
+              "value": "base:behavior:interaction/victory_road_1f_event_script_entrance_wally"
             },
             {
               "name": "visibilityFlag",
@@ -6705,9 +6705,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_1f_event_script_item_max_elixir"
+              "value": "base:behavior:interaction/victory_road_1f_event_script_item_max_elixir"
             },
             {
               "name": "visibilityFlag",
@@ -6742,9 +6742,9 @@
               "value": 4
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_1f_event_script_item_pp_up"
+              "value": "base:behavior:interaction/victory_road_1f_event_script_item_pp_up"
             },
             {
               "name": "visibilityFlag",
@@ -6779,9 +6779,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_1f_event_script_exit_wally"
+              "value": "base:behavior:interaction/victory_road_1f_event_script_exit_wally"
             },
             {
               "name": "visibilityFlag",
@@ -6821,9 +6821,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_1f_event_script_katelynn"
+              "value": "base:behavior:interaction/victory_road_1f_event_script_katelynn"
             },
             {
               "name": "trainerType",
@@ -6868,9 +6868,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_1f_event_script_quincy"
+              "value": "base:behavior:interaction/victory_road_1f_event_script_quincy"
             },
             {
               "name": "trainerType",

@@ -4962,9 +4962,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/faraway_island_entrance_event_script_sailor"
+              "value": "base:behavior:interaction/faraway_island_entrance_event_script_sailor"
             }
           ]
         },

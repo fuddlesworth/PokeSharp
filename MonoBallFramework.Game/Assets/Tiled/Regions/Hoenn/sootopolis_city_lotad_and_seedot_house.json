@@ -372,9 +372,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_lotad_and_seedot_house_event_script_lotad_brother"
+              "value": "base:behavior:interaction/sootopolis_city_lotad_and_seedot_house_event_script_lotad_brother"
             }
           ]
         },
@@ -409,9 +409,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_lotad_and_seedot_house_event_script_seedot_brother"
+              "value": "base:behavior:interaction/sootopolis_city_lotad_and_seedot_house_event_script_seedot_brother"
             }
           ]
         }

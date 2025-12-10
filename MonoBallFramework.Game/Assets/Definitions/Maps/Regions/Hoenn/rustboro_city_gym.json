@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/rustboro_city_gym",
+  "DisplayName": "RustboroCity_Gym",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/rustboro_city_gym.json"
+}

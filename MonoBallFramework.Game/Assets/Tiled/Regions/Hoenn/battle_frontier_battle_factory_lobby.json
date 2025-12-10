@@ -914,9 +914,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_factory_lobby_event_script_singles_attendant"
+              "value": "base:behavior:interaction/battle_frontier_battle_factory_lobby_event_script_singles_attendant"
             }
           ]
         },
@@ -956,9 +956,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_factory_lobby_event_script_woman"
+              "value": "base:behavior:interaction/battle_frontier_battle_factory_lobby_event_script_woman"
             }
           ]
         },
@@ -993,9 +993,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_factory_lobby_event_script_camper"
+              "value": "base:behavior:interaction/battle_frontier_battle_factory_lobby_event_script_camper"
             }
           ]
         },
@@ -1030,9 +1030,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_factory_lobby_event_script_picnicker"
+              "value": "base:behavior:interaction/battle_frontier_battle_factory_lobby_event_script_picnicker"
             }
           ]
         },
@@ -1062,9 +1062,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_factory_lobby_event_script_fat_man"
+              "value": "base:behavior:interaction/battle_frontier_battle_factory_lobby_event_script_fat_man"
             }
           ]
         },
@@ -1099,9 +1099,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_factory_lobby_event_script_doubles_attendant"
+              "value": "base:behavior:interaction/battle_frontier_battle_factory_lobby_event_script_doubles_attendant"
             }
           ]
         }

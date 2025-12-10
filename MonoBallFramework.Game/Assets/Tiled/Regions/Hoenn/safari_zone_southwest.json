@@ -4954,9 +4954,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/safari_zone_southwest_event_script_woman"
+              "value": "base:behavior:interaction/safari_zone_southwest_event_script_woman"
             }
           ]
         },
@@ -4986,9 +4986,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/safari_zone_southwest_event_script_item_max_revive"
+              "value": "base:behavior:interaction/safari_zone_southwest_event_script_item_max_revive"
             },
             {
               "name": "visibilityFlag",

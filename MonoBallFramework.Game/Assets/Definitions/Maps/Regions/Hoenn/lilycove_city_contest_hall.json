@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/lilycove_city_contest_hall",
+  "DisplayName": "LilycoveCity_ContestHall",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/lilycove_city_contest_hall.json"
+}

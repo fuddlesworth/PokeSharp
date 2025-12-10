@@ -4919,9 +4919,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/safari_zone_south_event_script_exit_attendant"
+              "value": "base:behavior:interaction/safari_zone_south_event_script_exit_attendant"
             }
           ]
         },
@@ -4961,9 +4961,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/safari_zone_south_event_script_boy"
+              "value": "base:behavior:interaction/safari_zone_south_event_script_boy"
             }
           ]
         },
@@ -4998,9 +4998,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/safari_zone_south_event_script_man"
+              "value": "base:behavior:interaction/safari_zone_south_event_script_man"
             }
           ]
         },
@@ -5040,9 +5040,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/safari_zone_south_event_script_youngster"
+              "value": "base:behavior:interaction/safari_zone_south_event_script_youngster"
             }
           ]
         },
@@ -5077,9 +5077,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/safari_zone_south_event_script_construction_worker1"
+              "value": "base:behavior:interaction/safari_zone_south_event_script_construction_worker1"
             },
             {
               "name": "visibilityFlag",
@@ -5119,9 +5119,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/safari_zone_south_event_script_construction_worker2"
+              "value": "base:behavior:interaction/safari_zone_south_event_script_construction_worker2"
             },
             {
               "name": "visibilityFlag",

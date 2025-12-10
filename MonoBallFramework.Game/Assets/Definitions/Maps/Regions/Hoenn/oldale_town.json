@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/oldale_town",
+  "DisplayName": "OldaleTown",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/oldale_town.json"
+}

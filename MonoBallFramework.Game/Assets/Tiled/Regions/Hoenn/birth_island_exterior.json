@@ -2819,9 +2819,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/birth_island_exterior_event_script_triangle"
+              "value": "base:behavior:interaction/birth_island_exterior_event_script_triangle"
             },
             {
               "name": "visibilityFlag",

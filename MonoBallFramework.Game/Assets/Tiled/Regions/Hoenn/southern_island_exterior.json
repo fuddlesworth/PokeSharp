@@ -3150,9 +3150,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/southern_island_exterior_event_script_sailor"
+              "value": "base:behavior:interaction/southern_island_exterior_event_script_sailor"
             }
           ]
         },

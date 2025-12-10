@@ -1445,9 +1445,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_gym_b1f_event_script_andrea"
+              "value": "base:behavior:interaction/sootopolis_city_gym_b1f_event_script_andrea"
             },
             {
               "name": "trainerType",
@@ -1492,9 +1492,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_gym_b1f_event_script_connie"
+              "value": "base:behavior:interaction/sootopolis_city_gym_b1f_event_script_connie"
             },
             {
               "name": "trainerType",
@@ -1539,9 +1539,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_gym_b1f_event_script_brianna"
+              "value": "base:behavior:interaction/sootopolis_city_gym_b1f_event_script_brianna"
             },
             {
               "name": "trainerType",
@@ -1586,9 +1586,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_gym_b1f_event_script_bridget"
+              "value": "base:behavior:interaction/sootopolis_city_gym_b1f_event_script_bridget"
             },
             {
               "name": "trainerType",
@@ -1633,9 +1633,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_gym_b1f_event_script_tiffany"
+              "value": "base:behavior:interaction/sootopolis_city_gym_b1f_event_script_tiffany"
             },
             {
               "name": "trainerType",
@@ -1680,9 +1680,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_gym_b1f_event_script_bethany"
+              "value": "base:behavior:interaction/sootopolis_city_gym_b1f_event_script_bethany"
             },
             {
               "name": "trainerType",
@@ -1727,9 +1727,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_gym_b1f_event_script_crissy"
+              "value": "base:behavior:interaction/sootopolis_city_gym_b1f_event_script_crissy"
             },
             {
               "name": "trainerType",
@@ -1774,9 +1774,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_gym_b1f_event_script_olivia"
+              "value": "base:behavior:interaction/sootopolis_city_gym_b1f_event_script_olivia"
             },
             {
               "name": "trainerType",
@@ -1821,9 +1821,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_gym_b1f_event_script_daphne"
+              "value": "base:behavior:interaction/sootopolis_city_gym_b1f_event_script_daphne"
             },
             {
               "name": "trainerType",
@@ -1868,9 +1868,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_gym_b1f_event_script_annika"
+              "value": "base:behavior:interaction/sootopolis_city_gym_b1f_event_script_annika"
             },
             {
               "name": "trainerType",

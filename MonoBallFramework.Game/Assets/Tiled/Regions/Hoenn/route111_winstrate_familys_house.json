@@ -409,9 +409,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route111_winstrate_familys_house_event_script_vivi"
+              "value": "base:behavior:interaction/route111_winstrate_familys_house_event_script_vivi"
             }
           ]
         },
@@ -446,9 +446,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route111_winstrate_familys_house_event_script_victor"
+              "value": "base:behavior:interaction/route111_winstrate_familys_house_event_script_victor"
             }
           ]
         },
@@ -483,9 +483,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route111_winstrate_familys_house_event_script_victoria"
+              "value": "base:behavior:interaction/route111_winstrate_familys_house_event_script_victoria"
             }
           ]
         },
@@ -520,9 +520,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route111_winstrate_familys_house_event_script_vicky"
+              "value": "base:behavior:interaction/route111_winstrate_familys_house_event_script_vicky"
             }
           ]
         }

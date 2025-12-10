@@ -2904,9 +2904,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rusturf_tunnel_event_script_wandas_boyfriend"
+              "value": "base:behavior:interaction/rusturf_tunnel_event_script_wandas_boyfriend"
             },
             {
               "name": "visibilityFlag",
@@ -2941,9 +2941,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_rock_smash"
+              "value": "base:behavior:interaction/event_script_rock_smash"
             },
             {
               "name": "visibilityFlag",
@@ -2978,9 +2978,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rusturf_tunnel_event_script_item_poke_ball"
+              "value": "base:behavior:interaction/rusturf_tunnel_event_script_item_poke_ball"
             },
             {
               "name": "visibilityFlag",
@@ -3015,9 +3015,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rusturf_tunnel_event_script_item_max_ether"
+              "value": "base:behavior:interaction/rusturf_tunnel_event_script_item_max_ether"
             },
             {
               "name": "visibilityFlag",
@@ -3094,9 +3094,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rusturf_tunnel_event_script_grunt"
+              "value": "base:behavior:interaction/rusturf_tunnel_event_script_grunt"
             },
             {
               "name": "visibilityFlag",
@@ -3136,9 +3136,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rusturf_tunnel_event_script_peeko"
+              "value": "base:behavior:interaction/rusturf_tunnel_event_script_peeko"
             },
             {
               "name": "visibilityFlag",
@@ -3178,9 +3178,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_rock_smash"
+              "value": "base:behavior:interaction/event_script_rock_smash"
             },
             {
               "name": "visibilityFlag",
@@ -3220,9 +3220,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rusturf_tunnel_event_script_mike"
+              "value": "base:behavior:interaction/rusturf_tunnel_event_script_mike"
             },
             {
               "name": "trainerType",
@@ -3267,9 +3267,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rusturf_tunnel_event_script_wanda"
+              "value": "base:behavior:interaction/rusturf_tunnel_event_script_wanda"
             },
             {
               "name": "visibilityFlag",

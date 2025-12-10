@@ -6507,9 +6507,9 @@
               "value": true
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/berry_tree_script"
+              "value": "base:behavior:interaction/berry_tree_script"
             }
           ]
         },
@@ -6544,9 +6544,9 @@
               "value": true
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/berry_tree_script"
+              "value": "base:behavior:interaction/berry_tree_script"
             }
           ]
         },
@@ -6581,9 +6581,9 @@
               "value": "up,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_event_script_joey"
+              "value": "base:behavior:interaction/route116_event_script_joey"
             },
             {
               "name": "trainerType",
@@ -6623,9 +6623,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_cut_tree"
+              "value": "base:behavior:interaction/event_script_cut_tree"
             },
             {
               "name": "visibilityFlag",
@@ -6660,9 +6660,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_cut_tree"
+              "value": "base:behavior:interaction/event_script_cut_tree"
             },
             {
               "name": "visibilityFlag",
@@ -6697,9 +6697,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_event_script_jose"
+              "value": "base:behavior:interaction/route116_event_script_jose"
             },
             {
               "name": "trainerType",
@@ -6739,9 +6739,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_event_script_item_ether"
+              "value": "base:behavior:interaction/route116_event_script_item_ether"
             },
             {
               "name": "visibilityFlag",
@@ -6776,9 +6776,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_event_script_item_repel"
+              "value": "base:behavior:interaction/route116_event_script_item_repel"
             },
             {
               "name": "visibilityFlag",
@@ -6818,9 +6818,9 @@
               "value": true
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/berry_tree_script"
+              "value": "base:behavior:interaction/berry_tree_script"
             }
           ]
         },
@@ -6855,9 +6855,9 @@
               "value": true
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/berry_tree_script"
+              "value": "base:behavior:interaction/berry_tree_script"
             }
           ]
         },
@@ -6887,9 +6887,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_event_script_briney"
+              "value": "base:behavior:interaction/route116_event_script_briney"
             },
             {
               "name": "visibilityFlag",
@@ -6924,9 +6924,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_cut_tree"
+              "value": "base:behavior:interaction/event_script_cut_tree"
             },
             {
               "name": "visibilityFlag",
@@ -6966,9 +6966,9 @@
               "value": "up,left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_event_script_clark"
+              "value": "base:behavior:interaction/route116_event_script_clark"
             },
             {
               "name": "trainerType",
@@ -7008,9 +7008,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_cut_tree"
+              "value": "base:behavior:interaction/event_script_cut_tree"
             },
             {
               "name": "visibilityFlag",
@@ -7045,9 +7045,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_event_script_item_hp_up"
+              "value": "base:behavior:interaction/route116_event_script_item_hp_up"
             },
             {
               "name": "visibilityFlag",
@@ -7087,9 +7087,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_event_script_janice"
+              "value": "base:behavior:interaction/route116_event_script_janice"
             },
             {
               "name": "trainerType",
@@ -7134,9 +7134,9 @@
               "value": "down,up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_event_script_karen"
+              "value": "base:behavior:interaction/route116_event_script_karen"
             },
             {
               "name": "trainerType",
@@ -7181,9 +7181,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_event_script_jerry"
+              "value": "base:behavior:interaction/route116_event_script_jerry"
             },
             {
               "name": "trainerType",
@@ -7223,9 +7223,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_event_script_devon_employee"
+              "value": "base:behavior:interaction/route116_event_script_devon_employee"
             },
             {
               "name": "visibilityFlag",
@@ -7260,9 +7260,9 @@
               "value": 4
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_event_script_item_x_special"
+              "value": "base:behavior:interaction/route116_event_script_item_x_special"
             },
             {
               "name": "visibilityFlag",
@@ -7302,9 +7302,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_event_script_wandas_boyfriend"
+              "value": "base:behavior:interaction/route116_event_script_wandas_boyfriend"
             },
             {
               "name": "visibilityFlag",
@@ -7339,9 +7339,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_event_script_glasses_man"
+              "value": "base:behavior:interaction/route116_event_script_glasses_man"
             },
             {
               "name": "visibilityFlag",
@@ -7381,9 +7381,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_event_script_sarah"
+              "value": "base:behavior:interaction/route116_event_script_sarah"
             },
             {
               "name": "trainerType",
@@ -7428,9 +7428,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_event_script_dawson"
+              "value": "base:behavior:interaction/route116_event_script_dawson"
             },
             {
               "name": "trainerType",
@@ -7470,9 +7470,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_event_script_item_potion"
+              "value": "base:behavior:interaction/route116_event_script_item_potion"
             },
             {
               "name": "visibilityFlag",
@@ -7507,9 +7507,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_cut_tree"
+              "value": "base:behavior:interaction/event_script_cut_tree"
             },
             {
               "name": "visibilityFlag",
@@ -7549,9 +7549,9 @@
               "value": "down,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_event_script_johnson"
+              "value": "base:behavior:interaction/route116_event_script_johnson"
             },
             {
               "name": "trainerType",
@@ -7596,9 +7596,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_event_script_devan"
+              "value": "base:behavior:interaction/route116_event_script_devan"
             },
             {
               "name": "trainerType",

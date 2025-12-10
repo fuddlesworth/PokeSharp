@@ -1571,9 +1571,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/navel_rock_bottom_event_script_lugia"
+              "value": "base:behavior:interaction/navel_rock_bottom_event_script_lugia"
             },
             {
               "name": "visibilityFlag",

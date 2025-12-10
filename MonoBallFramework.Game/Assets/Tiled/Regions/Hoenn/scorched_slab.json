@@ -1014,9 +1014,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/scorched_slab_event_script_item_tm_sunny_day"
+              "value": "base:behavior:interaction/scorched_slab_event_script_item_tm_sunny_day"
             },
             {
               "name": "visibilityFlag",

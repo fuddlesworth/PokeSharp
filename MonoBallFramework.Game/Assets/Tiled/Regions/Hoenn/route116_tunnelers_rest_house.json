@@ -415,9 +415,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_tunnelers_rest_house_event_script_tunneler1"
+              "value": "base:behavior:interaction/route116_tunnelers_rest_house_event_script_tunneler1"
             }
           ]
         },
@@ -447,9 +447,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_tunnelers_rest_house_event_script_tunneler3"
+              "value": "base:behavior:interaction/route116_tunnelers_rest_house_event_script_tunneler3"
             }
           ]
         },
@@ -484,9 +484,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route116_tunnelers_rest_house_event_script_tunneler2"
+              "value": "base:behavior:interaction/route116_tunnelers_rest_house_event_script_tunneler2"
             }
           ]
         }

@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/fortree_city_mart",
+  "DisplayName": "FortreeCity_Mart",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/fortree_city_mart.json"
+}

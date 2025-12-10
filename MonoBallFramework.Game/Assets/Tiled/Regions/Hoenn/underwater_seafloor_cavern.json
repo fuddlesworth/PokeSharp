@@ -492,9 +492,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/underwater_seafloor_cavern_event_script_check_stolen_sub"
+              "value": "base:behavior:interaction/underwater_seafloor_cavern_event_script_check_stolen_sub"
             },
             {
               "name": "visibilityFlag",
@@ -529,9 +529,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/underwater_seafloor_cavern_event_script_check_stolen_sub"
+              "value": "base:behavior:interaction/underwater_seafloor_cavern_event_script_check_stolen_sub"
             },
             {
               "name": "visibilityFlag",
@@ -566,9 +566,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/underwater_seafloor_cavern_event_script_check_stolen_sub"
+              "value": "base:behavior:interaction/underwater_seafloor_cavern_event_script_check_stolen_sub"
             },
             {
               "name": "visibilityFlag",
@@ -603,9 +603,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/underwater_seafloor_cavern_event_script_check_stolen_sub"
+              "value": "base:behavior:interaction/underwater_seafloor_cavern_event_script_check_stolen_sub"
             },
             {
               "name": "visibilityFlag",

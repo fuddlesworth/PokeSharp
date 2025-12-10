@@ -1213,9 +1213,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/trainer_hill_entrance_event_script_attendant"
+              "value": "base:behavior:interaction/trainer_hill_entrance_event_script_attendant"
             }
           ]
         },
@@ -1250,9 +1250,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/trainer_hill_entrance_event_script_nurse"
+              "value": "base:behavior:interaction/trainer_hill_entrance_event_script_nurse"
             }
           ]
         },
@@ -1287,9 +1287,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/trainer_hill_entrance_event_script_clerk"
+              "value": "base:behavior:interaction/trainer_hill_entrance_event_script_clerk"
             }
           ]
         },
@@ -1329,9 +1329,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/trainer_hill_entrance_event_script_girl"
+              "value": "base:behavior:interaction/trainer_hill_entrance_event_script_girl"
             }
           ]
         },
@@ -1371,9 +1371,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/trainer_hill_entrance_event_script_man"
+              "value": "base:behavior:interaction/trainer_hill_entrance_event_script_man"
             }
           ]
         }

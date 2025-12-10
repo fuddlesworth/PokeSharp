@@ -549,9 +549,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/oldale_town_pokemon_center_1f_event_script_nurse"
+              "value": "base:behavior:interaction/oldale_town_pokemon_center_1f_event_script_nurse"
             }
           ]
         },
@@ -586,9 +586,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/oldale_town_pokemon_center_1f_event_script_gentleman"
+              "value": "base:behavior:interaction/oldale_town_pokemon_center_1f_event_script_gentleman"
             }
           ]
         },
@@ -623,9 +623,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/oldale_town_pokemon_center_1f_event_script_boy"
+              "value": "base:behavior:interaction/oldale_town_pokemon_center_1f_event_script_boy"
             }
           ]
         },
@@ -660,9 +660,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/oldale_town_pokemon_center_1f_event_script_girl"
+              "value": "base:behavior:interaction/oldale_town_pokemon_center_1f_event_script_girl"
             }
           ]
         }

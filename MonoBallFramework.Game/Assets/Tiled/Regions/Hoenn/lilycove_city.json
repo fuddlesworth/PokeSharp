@@ -10375,9 +10375,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_sailor2"
+              "value": "base:behavior:interaction/lilycove_city_event_script_sailor2"
             }
           ]
         },
@@ -10417,9 +10417,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_girl"
+              "value": "base:behavior:interaction/lilycove_city_event_script_girl"
             }
           ]
         },
@@ -10449,9 +10449,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_man3"
+              "value": "base:behavior:interaction/lilycove_city_event_script_man3"
             }
           ]
         },
@@ -10491,9 +10491,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_rich_boy"
+              "value": "base:behavior:interaction/lilycove_city_event_script_rich_boy"
             }
           ]
         },
@@ -10533,9 +10533,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_man2"
+              "value": "base:behavior:interaction/lilycove_city_event_script_man2"
             }
           ]
         },
@@ -10575,9 +10575,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_woman2"
+              "value": "base:behavior:interaction/lilycove_city_event_script_woman2"
             }
           ]
         },
@@ -10612,9 +10612,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_expert_m1"
+              "value": "base:behavior:interaction/lilycove_city_event_script_expert_m1"
             }
           ]
         },
@@ -10649,9 +10649,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_expert_f"
+              "value": "base:behavior:interaction/lilycove_city_event_script_expert_f"
             }
           ]
         },
@@ -10681,9 +10681,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_expert_m2"
+              "value": "base:behavior:interaction/lilycove_city_event_script_expert_m2"
             }
           ]
         },
@@ -10718,9 +10718,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_wailmer_trainer_grunt"
+              "value": "base:behavior:interaction/lilycove_city_event_script_wailmer_trainer_grunt"
             },
             {
               "name": "visibilityFlag",
@@ -10755,9 +10755,9 @@
               "value": 5
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_item_max_repel"
+              "value": "base:behavior:interaction/lilycove_city_event_script_item_max_repel"
             },
             {
               "name": "visibilityFlag",
@@ -10802,9 +10802,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_aqua_grunt4"
+              "value": "base:behavior:interaction/lilycove_city_event_script_aqua_grunt4"
             },
             {
               "name": "visibilityFlag",
@@ -10844,9 +10844,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_aqua_grunt1"
+              "value": "base:behavior:interaction/lilycove_city_event_script_aqua_grunt1"
             },
             {
               "name": "visibilityFlag",
@@ -10886,9 +10886,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_aqua_grunt2"
+              "value": "base:behavior:interaction/lilycove_city_event_script_aqua_grunt2"
             },
             {
               "name": "visibilityFlag",
@@ -10928,9 +10928,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_aqua_grunt3"
+              "value": "base:behavior:interaction/lilycove_city_event_script_aqua_grunt3"
             },
             {
               "name": "visibilityFlag",
@@ -10975,9 +10975,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_berry_gentleman"
+              "value": "base:behavior:interaction/lilycove_city_event_script_berry_gentleman"
             }
           ]
         },
@@ -11012,9 +11012,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_rival"
+              "value": "base:behavior:interaction/lilycove_city_event_script_rival"
             },
             {
               "name": "visibilityFlag",
@@ -11054,9 +11054,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_school_kid_m"
+              "value": "base:behavior:interaction/lilycove_city_event_script_school_kid_m"
             }
           ]
         },
@@ -11091,9 +11091,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_woman1"
+              "value": "base:behavior:interaction/lilycove_city_event_script_woman1"
             }
           ]
         },
@@ -11128,9 +11128,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_man1"
+              "value": "base:behavior:interaction/lilycove_city_event_script_man1"
             }
           ]
         },
@@ -11165,9 +11165,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_sailor1"
+              "value": "base:behavior:interaction/lilycove_city_event_script_sailor1"
             }
           ]
         },
@@ -11202,9 +11202,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_event_script_fat_man"
+              "value": "base:behavior:interaction/lilycove_city_event_script_fat_man"
             }
           ]
         }

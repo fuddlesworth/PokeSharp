@@ -1768,9 +1768,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_gym_event_script_brawly"
+              "value": "base:behavior:interaction/dewford_town_gym_event_script_brawly"
             }
           ]
         },
@@ -1805,9 +1805,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_gym_event_script_takao"
+              "value": "base:behavior:interaction/dewford_town_gym_event_script_takao"
             },
             {
               "name": "trainerType",
@@ -1852,9 +1852,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_gym_event_script_jocelyn"
+              "value": "base:behavior:interaction/dewford_town_gym_event_script_jocelyn"
             },
             {
               "name": "trainerType",
@@ -1899,9 +1899,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_gym_event_script_laura"
+              "value": "base:behavior:interaction/dewford_town_gym_event_script_laura"
             },
             {
               "name": "trainerType",
@@ -1946,9 +1946,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_gym_event_script_gym_guide"
+              "value": "base:behavior:interaction/dewford_town_gym_event_script_gym_guide"
             }
           ]
         },
@@ -1983,9 +1983,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_gym_event_script_cristian"
+              "value": "base:behavior:interaction/dewford_town_gym_event_script_cristian"
             },
             {
               "name": "trainerType",
@@ -2030,9 +2030,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_gym_event_script_lilith"
+              "value": "base:behavior:interaction/dewford_town_gym_event_script_lilith"
             },
             {
               "name": "trainerType",
@@ -2077,9 +2077,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_gym_event_script_brenden"
+              "value": "base:behavior:interaction/dewford_town_gym_event_script_brenden"
             },
             {
               "name": "trainerType",

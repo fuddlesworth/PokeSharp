@@ -9682,9 +9682,9 @@
               "value": "vertical"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route133_event_script_franklin"
+              "value": "base:behavior:interaction/route133_event_script_franklin"
             },
             {
               "name": "trainerType",
@@ -9729,9 +9729,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route133_event_script_linda"
+              "value": "base:behavior:interaction/route133_event_script_linda"
             },
             {
               "name": "trainerType",
@@ -9776,9 +9776,9 @@
               "value": "vertical"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route133_event_script_debra"
+              "value": "base:behavior:interaction/route133_event_script_debra"
             },
             {
               "name": "trainerType",
@@ -9818,9 +9818,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route133_event_script_item_big_pearl"
+              "value": "base:behavior:interaction/route133_event_script_item_big_pearl"
             },
             {
               "name": "visibilityFlag",
@@ -9855,9 +9855,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route133_event_script_item_star_piece"
+              "value": "base:behavior:interaction/route133_event_script_item_star_piece"
             },
             {
               "name": "visibilityFlag",
@@ -9897,9 +9897,9 @@
               "value": "down,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route133_event_script_beck"
+              "value": "base:behavior:interaction/route133_event_script_beck"
             },
             {
               "name": "trainerType",
@@ -9944,9 +9944,9 @@
               "value": "down,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route133_event_script_warren"
+              "value": "base:behavior:interaction/route133_event_script_warren"
             },
             {
               "name": "trainerType",
@@ -9991,9 +9991,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route133_event_script_mollie"
+              "value": "base:behavior:interaction/route133_event_script_mollie"
             },
             {
               "name": "trainerType",
@@ -10038,9 +10038,9 @@
               "value": "up,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route133_event_script_conor"
+              "value": "base:behavior:interaction/route133_event_script_conor"
             },
             {
               "name": "trainerType",
@@ -10080,9 +10080,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route133_event_script_item_max_revive"
+              "value": "base:behavior:interaction/route133_event_script_item_max_revive"
             },
             {
               "name": "visibilityFlag",

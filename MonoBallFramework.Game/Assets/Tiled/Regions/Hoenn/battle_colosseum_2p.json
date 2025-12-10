@@ -523,9 +523,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_colosseum_2_p_event_script_attendant"
+              "value": "base:behavior:interaction/battle_colosseum_2_p_event_script_attendant"
             }
           ]
         }

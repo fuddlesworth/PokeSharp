@@ -1425,9 +1425,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_dome_lobby_event_script_singles_attendant"
+              "value": "base:behavior:interaction/battle_frontier_battle_dome_lobby_event_script_singles_attendant"
             }
           ]
         },
@@ -1467,9 +1467,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_dome_lobby_event_script_man"
+              "value": "base:behavior:interaction/battle_frontier_battle_dome_lobby_event_script_man"
             }
           ]
         },
@@ -1509,9 +1509,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_dome_lobby_event_script_lass"
+              "value": "base:behavior:interaction/battle_frontier_battle_dome_lobby_event_script_lass"
             }
           ]
         },
@@ -1551,9 +1551,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_dome_lobby_event_script_fat_man"
+              "value": "base:behavior:interaction/battle_frontier_battle_dome_lobby_event_script_fat_man"
             }
           ]
         },
@@ -1593,9 +1593,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_dome_lobby_event_script_maniac"
+              "value": "base:behavior:interaction/battle_frontier_battle_dome_lobby_event_script_maniac"
             }
           ]
         },
@@ -1630,9 +1630,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_dome_lobby_event_script_doubles_attendant"
+              "value": "base:behavior:interaction/battle_frontier_battle_dome_lobby_event_script_doubles_attendant"
             }
           ]
         }

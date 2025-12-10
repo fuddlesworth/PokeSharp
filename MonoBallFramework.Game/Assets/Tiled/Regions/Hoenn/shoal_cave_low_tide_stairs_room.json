@@ -1120,9 +1120,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/shoal_cave_low_tide_stairs_room_event_script_item_ice_heal"
+              "value": "base:behavior:interaction/shoal_cave_low_tide_stairs_room_event_script_item_ice_heal"
             },
             {
               "name": "visibilityFlag",

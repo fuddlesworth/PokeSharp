@@ -691,9 +691,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/ever_grande_city_phoebes_room_event_script_phoebe"
+              "value": "base:behavior:interaction/ever_grande_city_phoebes_room_event_script_phoebe"
             }
           ]
         }

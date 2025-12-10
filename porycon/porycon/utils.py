@@ -248,7 +248,7 @@ def save_map_definition_dto(
     region: str,
     map_name: str
 ) -> None:
-    """Save map definition DTO to Data/Maps/Regions directory."""
+    """Save map definition DTO to Definitions/Maps/Regions directory."""
     region_capitalized = region.capitalize()
     dto_path = output_dir / "Data" / "Maps" / "Regions" / region_capitalized / f"{map_name}.json"
     dto_path.parent.mkdir(parents=True, exist_ok=True)

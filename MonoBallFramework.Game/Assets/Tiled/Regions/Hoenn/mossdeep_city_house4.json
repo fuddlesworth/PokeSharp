@@ -385,9 +385,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_house4_event_script_woman"
+              "value": "base:behavior:interaction/mossdeep_city_house4_event_script_woman"
             }
           ]
         },
@@ -427,9 +427,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_house4_event_script_ninja_boy"
+              "value": "base:behavior:interaction/mossdeep_city_house4_event_script_ninja_boy"
             }
           ]
         },
@@ -459,9 +459,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_house4_event_script_skitty"
+              "value": "base:behavior:interaction/mossdeep_city_house4_event_script_skitty"
             }
           ]
         }

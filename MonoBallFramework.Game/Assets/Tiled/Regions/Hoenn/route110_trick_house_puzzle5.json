@@ -1779,9 +1779,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle5_event_script_mechadoll1"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle5_event_script_mechadoll1"
             }
           ]
         },
@@ -1816,9 +1816,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle5_event_script_mechadoll2"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle5_event_script_mechadoll2"
             }
           ]
         },
@@ -1853,9 +1853,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle5_event_script_mechadoll3"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle5_event_script_mechadoll3"
             }
           ]
         },
@@ -1890,9 +1890,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle5_event_script_mechadoll4"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle5_event_script_mechadoll4"
             }
           ]
         },
@@ -1927,9 +1927,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle5_event_script_mechadoll5"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle5_event_script_mechadoll5"
             }
           ]
         }

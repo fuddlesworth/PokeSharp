@@ -1689,9 +1689,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_event_script_expert_f"
+              "value": "base:behavior:interaction/lavaridge_town_event_script_expert_f"
             }
           ]
         },
@@ -1726,9 +1726,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_event_script_expert_m"
+              "value": "base:behavior:interaction/lavaridge_town_event_script_expert_m"
             }
           ]
         },
@@ -1763,9 +1763,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_event_script_old_man"
+              "value": "base:behavior:interaction/lavaridge_town_event_script_old_man"
             }
           ]
         },
@@ -1805,9 +1805,9 @@
               "value": 2
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_event_script_twin"
+              "value": "base:behavior:interaction/lavaridge_town_event_script_twin"
             }
           ]
         },
@@ -1842,9 +1842,9 @@
               "value": "down,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_event_script_hot_springs_old_woman1"
+              "value": "base:behavior:interaction/lavaridge_town_event_script_hot_springs_old_woman1"
             }
           ]
         },
@@ -1879,9 +1879,9 @@
               "value": "down,left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_event_script_hot_springs_old_woman2"
+              "value": "base:behavior:interaction/lavaridge_town_event_script_hot_springs_old_woman2"
             }
           ]
         },
@@ -1990,9 +1990,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_event_script_egg_woman"
+              "value": "base:behavior:interaction/lavaridge_town_event_script_egg_woman"
             }
           ]
         }

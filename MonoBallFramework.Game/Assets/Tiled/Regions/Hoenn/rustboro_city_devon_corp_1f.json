@@ -748,9 +748,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_devon_corp_1f_event_script_employee"
+              "value": "base:behavior:interaction/rustboro_city_devon_corp_1f_event_script_employee"
             }
           ]
         },
@@ -790,9 +790,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_devon_corp_1f_event_script_stair_guard"
+              "value": "base:behavior:interaction/rustboro_city_devon_corp_1f_event_script_stair_guard"
             }
           ]
         },
@@ -827,9 +827,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_devon_corp_1f_event_script_greeter"
+              "value": "base:behavior:interaction/rustboro_city_devon_corp_1f_event_script_greeter"
             }
           ]
         }

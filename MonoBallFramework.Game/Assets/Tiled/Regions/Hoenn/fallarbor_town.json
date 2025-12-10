@@ -1626,9 +1626,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fallarbor_town_event_script_girl"
+              "value": "base:behavior:interaction/fallarbor_town_event_script_girl"
             }
           ]
         },
@@ -1668,9 +1668,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fallarbor_town_event_script_expert_m"
+              "value": "base:behavior:interaction/fallarbor_town_event_script_expert_m"
             }
           ]
         },
@@ -1710,9 +1710,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fallarbor_town_event_script_gentleman"
+              "value": "base:behavior:interaction/fallarbor_town_event_script_gentleman"
             }
           ]
         },
@@ -1742,9 +1742,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fallarbor_town_event_script_azurill"
+              "value": "base:behavior:interaction/fallarbor_town_event_script_azurill"
             },
             {
               "name": "visibilityFlag",

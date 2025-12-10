@@ -331,7 +331,7 @@ public class GameDataLoader
             current = current.Parent;
         }
 
-        // Fallback: assume Assets is 2 levels up from Maps (Assets/Data/Maps)
+        // Fallback: assume Assets is 2 levels up from Maps (Assets/Definitions/Maps)
         return Path.GetFullPath(Path.Combine(mapsPath, "..", ".."));
     }
 

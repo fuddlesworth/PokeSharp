@@ -137,7 +137,7 @@ class SpriteExtractor:
                         logger.error(f"Error processing {png_file.name}: {ex}")
         
         logger.info(f"\nExtracted {success_count} sprites")
-        logger.info("Sprite data in Assets/Data/Sprites/, graphics in Assets/Graphics/Sprites/")
+        logger.info("Sprite data in Assets/Definitions/Sprites/, graphics in Assets/Graphics/Sprites/")
     
     def _extract_sprite_from_pic_table(
         self,

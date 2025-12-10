@@ -5631,9 +5631,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/new_mauville_inside_event_script_item_ultra_ball"
+              "value": "base:behavior:interaction/new_mauville_inside_event_script_item_ultra_ball"
             },
             {
               "name": "visibilityFlag",
@@ -5668,9 +5668,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/new_mauville_inside_event_script_item_escape_rope"
+              "value": "base:behavior:interaction/new_mauville_inside_event_script_item_escape_rope"
             },
             {
               "name": "visibilityFlag",
@@ -5705,9 +5705,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/new_mauville_inside_event_script_item_thunder_stone"
+              "value": "base:behavior:interaction/new_mauville_inside_event_script_item_thunder_stone"
             },
             {
               "name": "visibilityFlag",
@@ -5742,9 +5742,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/new_mauville_inside_event_script_item_full_heal"
+              "value": "base:behavior:interaction/new_mauville_inside_event_script_item_full_heal"
             },
             {
               "name": "visibilityFlag",
@@ -5779,9 +5779,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/new_mauville_inside_event_script_item_paralyze_heal"
+              "value": "base:behavior:interaction/new_mauville_inside_event_script_item_paralyze_heal"
             },
             {
               "name": "visibilityFlag",
@@ -5816,9 +5816,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/new_mauville_inside_event_script_voltorb1"
+              "value": "base:behavior:interaction/new_mauville_inside_event_script_voltorb1"
             },
             {
               "name": "visibilityFlag",
@@ -5853,9 +5853,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/new_mauville_inside_event_script_voltorb2"
+              "value": "base:behavior:interaction/new_mauville_inside_event_script_voltorb2"
             },
             {
               "name": "visibilityFlag",
@@ -5890,9 +5890,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/new_mauville_inside_event_script_voltorb3"
+              "value": "base:behavior:interaction/new_mauville_inside_event_script_voltorb3"
             },
             {
               "name": "visibilityFlag",

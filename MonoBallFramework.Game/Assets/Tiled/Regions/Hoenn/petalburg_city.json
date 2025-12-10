@@ -3376,9 +3376,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_event_script_wallys_mom"
+              "value": "base:behavior:interaction/petalburg_city_event_script_wallys_mom"
             },
             {
               "name": "visibilityFlag",
@@ -3455,9 +3455,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_event_script_boy"
+              "value": "base:behavior:interaction/petalburg_city_event_script_boy"
             }
           ]
         },
@@ -3497,9 +3497,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_event_script_gentleman"
+              "value": "base:behavior:interaction/petalburg_city_event_script_gentleman"
             }
           ]
         },
@@ -3566,9 +3566,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_event_script_item_max_revive"
+              "value": "base:behavior:interaction/petalburg_city_event_script_item_max_revive"
             },
             {
               "name": "visibilityFlag",
@@ -3603,9 +3603,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_event_script_item_ether"
+              "value": "base:behavior:interaction/petalburg_city_event_script_item_ether"
             },
             {
               "name": "visibilityFlag",
@@ -3640,9 +3640,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_event_script_gym_boy"
+              "value": "base:behavior:interaction/petalburg_city_event_script_gym_boy"
             }
           ]
         },

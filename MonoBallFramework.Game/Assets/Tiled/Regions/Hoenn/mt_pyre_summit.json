@@ -5939,9 +5939,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_summit_event_script_old_man"
+              "value": "base:behavior:interaction/mt_pyre_summit_event_script_old_man"
             }
           ]
         },
@@ -6013,9 +6013,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_summit_event_script_old_lady"
+              "value": "base:behavior:interaction/mt_pyre_summit_event_script_old_lady"
             }
           ]
         },
@@ -6050,9 +6050,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_summit_event_script_grunt1"
+              "value": "base:behavior:interaction/mt_pyre_summit_event_script_grunt1"
             },
             {
               "name": "visibilityFlag",
@@ -6102,9 +6102,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_summit_event_script_grunt2"
+              "value": "base:behavior:interaction/mt_pyre_summit_event_script_grunt2"
             },
             {
               "name": "visibilityFlag",
@@ -6154,9 +6154,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_summit_event_script_grunt3"
+              "value": "base:behavior:interaction/mt_pyre_summit_event_script_grunt3"
             },
             {
               "name": "visibilityFlag",
@@ -6206,9 +6206,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_summit_event_script_grunt4"
+              "value": "base:behavior:interaction/mt_pyre_summit_event_script_grunt4"
             },
             {
               "name": "visibilityFlag",

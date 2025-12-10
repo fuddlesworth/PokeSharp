@@ -982,9 +982,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -1019,9 +1019,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -1056,9 +1056,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -1093,9 +1093,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -1130,9 +1130,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -1167,9 +1167,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -1204,9 +1204,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -1246,9 +1246,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/seafloor_cavern_room3_event_script_shelly"
+              "value": "base:behavior:interaction/seafloor_cavern_room3_event_script_shelly"
             },
             {
               "name": "visibilityFlag",
@@ -1298,9 +1298,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/seafloor_cavern_room3_event_script_grunt5"
+              "value": "base:behavior:interaction/seafloor_cavern_room3_event_script_grunt5"
             },
             {
               "name": "visibilityFlag",

@@ -415,9 +415,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_house2_event_script_woman"
+              "value": "base:behavior:interaction/mauville_city_house2_event_script_woman"
             }
           ]
         }

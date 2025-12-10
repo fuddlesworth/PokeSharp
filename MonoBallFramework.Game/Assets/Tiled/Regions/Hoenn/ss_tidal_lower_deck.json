@@ -813,9 +813,9 @@
               "value": "square_ccw"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/ss_tidal_lower_deck_event_script_phillip"
+              "value": "base:behavior:interaction/ss_tidal_lower_deck_event_script_phillip"
             },
             {
               "name": "trainerType",
@@ -860,9 +860,9 @@
               "value": "square_cw"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/ss_tidal_lower_deck_event_script_leonard"
+              "value": "base:behavior:interaction/ss_tidal_lower_deck_event_script_leonard"
             },
             {
               "name": "trainerType",

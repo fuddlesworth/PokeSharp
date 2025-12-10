@@ -409,9 +409,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_move_deleters_house_event_script_move_deleter"
+              "value": "base:behavior:interaction/lilycove_city_move_deleters_house_event_script_move_deleter"
             }
           ]
         }

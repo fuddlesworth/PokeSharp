@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/pacifidlog_town_pokemon_center_1f",
+  "DisplayName": "PacifidlogTown_PokemonCenter_1F",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/pacifidlog_town_pokemon_center_1f.json"
+}

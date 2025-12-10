@@ -826,9 +826,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_rooftop_event_script_man"
+              "value": "base:behavior:interaction/lilycove_city_department_store_rooftop_event_script_man"
             }
           ]
         },
@@ -868,9 +868,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_rooftop_event_script_thirsty_man"
+              "value": "base:behavior:interaction/lilycove_city_department_store_rooftop_event_script_thirsty_man"
             }
           ]
         },
@@ -905,9 +905,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_rooftop_event_script_sale_woman"
+              "value": "base:behavior:interaction/lilycove_city_department_store_rooftop_event_script_sale_woman"
             },
             {
               "name": "visibilityFlag",
@@ -947,9 +947,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_rooftop_event_script_substitute_tutor"
+              "value": "base:behavior:interaction/lilycove_city_department_store_rooftop_event_script_substitute_tutor"
             }
           ]
         }

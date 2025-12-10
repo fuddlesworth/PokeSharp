@@ -782,9 +782,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/navel_rock_harbor_event_script_sailor"
+              "value": "base:behavior:interaction/navel_rock_harbor_event_script_sailor"
             }
           ]
         },

@@ -522,9 +522,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route114_fossil_maniacs_house_event_script_fossil_maniacs_brother"
+              "value": "base:behavior:interaction/route114_fossil_maniacs_house_event_script_fossil_maniacs_brother"
             }
           ]
         }

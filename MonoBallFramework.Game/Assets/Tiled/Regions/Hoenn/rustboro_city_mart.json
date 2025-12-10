@@ -409,9 +409,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_mart_event_script_clerk"
+              "value": "base:behavior:interaction/rustboro_city_mart_event_script_clerk"
             }
           ]
         },
@@ -446,9 +446,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_mart_event_script_boy"
+              "value": "base:behavior:interaction/rustboro_city_mart_event_script_boy"
             }
           ]
         },
@@ -488,9 +488,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_mart_event_script_pokefan_f"
+              "value": "base:behavior:interaction/rustboro_city_mart_event_script_pokefan_f"
             }
           ]
         },
@@ -525,9 +525,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_mart_event_script_bug_catcher"
+              "value": "base:behavior:interaction/rustboro_city_mart_event_script_bug_catcher"
             }
           ]
         }

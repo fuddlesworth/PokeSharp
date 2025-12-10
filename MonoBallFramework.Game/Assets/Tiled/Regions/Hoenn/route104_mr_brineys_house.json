@@ -469,9 +469,9 @@
               "value": "square_cw"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route104_mr_brineys_house_event_script_briney"
+              "value": "base:behavior:interaction/route104_mr_brineys_house_event_script_briney"
             },
             {
               "name": "visibilityFlag",
@@ -511,9 +511,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route104_mr_brineys_house_event_script_peeko"
+              "value": "base:behavior:interaction/route104_mr_brineys_house_event_script_peeko"
             },
             {
               "name": "visibilityFlag",

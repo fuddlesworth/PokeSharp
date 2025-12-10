@@ -2077,9 +2077,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sky_pillar_outside_event_script_wallace"
+              "value": "base:behavior:interaction/sky_pillar_outside_event_script_wallace"
             },
             {
               "name": "visibilityFlag",

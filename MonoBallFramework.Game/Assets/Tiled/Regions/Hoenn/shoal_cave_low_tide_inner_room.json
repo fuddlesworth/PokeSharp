@@ -5695,9 +5695,9 @@
               "value": 5
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/shoal_cave_low_tide_inner_room_event_script_item_rare_candy"
+              "value": "base:behavior:interaction/shoal_cave_low_tide_inner_room_event_script_item_rare_candy"
             },
             {
               "name": "visibilityFlag",

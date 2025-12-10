@@ -1172,9 +1172,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_rooms_1f_event_script_gentleman"
+              "value": "base:behavior:interaction/abandoned_ship_rooms_1f_event_script_gentleman"
             }
           ]
         },
@@ -1204,9 +1204,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_rooms_1f_event_script_item_harbor_mail"
+              "value": "base:behavior:interaction/abandoned_ship_rooms_1f_event_script_item_harbor_mail"
             },
             {
               "name": "visibilityFlag",
@@ -1246,9 +1246,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_rooms_1f_event_script_thalia"
+              "value": "base:behavior:interaction/abandoned_ship_rooms_1f_event_script_thalia"
             },
             {
               "name": "trainerType",
@@ -1293,9 +1293,9 @@
               "value": "up,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_rooms_1f_event_script_demetrius"
+              "value": "base:behavior:interaction/abandoned_ship_rooms_1f_event_script_demetrius"
             },
             {
               "name": "trainerType",

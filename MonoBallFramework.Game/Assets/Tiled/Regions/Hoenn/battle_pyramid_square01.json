@@ -274,9 +274,9 @@
               "value": "down,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_pyramid_trainer_battle"
+              "value": "base:behavior:interaction/battle_pyramid_trainer_battle"
             },
             {
               "name": "trainerType",
@@ -321,9 +321,9 @@
               "value": "down,left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_pyramid_trainer_battle"
+              "value": "base:behavior:interaction/battle_pyramid_trainer_battle"
             },
             {
               "name": "trainerType",
@@ -368,9 +368,9 @@
               "value": "up,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_pyramid_trainer_battle"
+              "value": "base:behavior:interaction/battle_pyramid_trainer_battle"
             },
             {
               "name": "trainerType",
@@ -415,9 +415,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_pyramid_trainer_battle"
+              "value": "base:behavior:interaction/battle_pyramid_trainer_battle"
             },
             {
               "name": "trainerType",
@@ -457,9 +457,9 @@
               "value": 4
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_pyramid_find_item_ball"
+              "value": "base:behavior:interaction/battle_pyramid_find_item_ball"
             }
           ]
         },
@@ -489,9 +489,9 @@
               "value": 4
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_pyramid_find_item_ball"
+              "value": "base:behavior:interaction/battle_pyramid_find_item_ball"
             }
           ]
         },
@@ -521,9 +521,9 @@
               "value": 4
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_pyramid_find_item_ball"
+              "value": "base:behavior:interaction/battle_pyramid_find_item_ball"
             }
           ]
         }

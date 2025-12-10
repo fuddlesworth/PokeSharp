@@ -1706,9 +1706,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_gym_event_script_winona"
+              "value": "base:behavior:interaction/fortree_city_gym_event_script_winona"
             }
           ]
         },
@@ -1743,9 +1743,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_gym_event_script_jared"
+              "value": "base:behavior:interaction/fortree_city_gym_event_script_jared"
             },
             {
               "name": "trainerType",
@@ -1790,9 +1790,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_gym_event_script_flint"
+              "value": "base:behavior:interaction/fortree_city_gym_event_script_flint"
             },
             {
               "name": "trainerType",
@@ -1837,9 +1837,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_gym_event_script_ashley"
+              "value": "base:behavior:interaction/fortree_city_gym_event_script_ashley"
             },
             {
               "name": "trainerType",
@@ -1884,9 +1884,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_gym_event_script_edwardo"
+              "value": "base:behavior:interaction/fortree_city_gym_event_script_edwardo"
             },
             {
               "name": "trainerType",
@@ -1931,9 +1931,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_gym_event_script_gym_guide"
+              "value": "base:behavior:interaction/fortree_city_gym_event_script_gym_guide"
             }
           ]
         },
@@ -1968,9 +1968,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_gym_event_script_humberto"
+              "value": "base:behavior:interaction/fortree_city_gym_event_script_humberto"
             },
             {
               "name": "trainerType",
@@ -2015,9 +2015,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_gym_event_script_darius"
+              "value": "base:behavior:interaction/fortree_city_gym_event_script_darius"
             },
             {
               "name": "trainerType",

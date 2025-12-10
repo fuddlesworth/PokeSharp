@@ -713,6 +713,25 @@ class IdTransformer:
 
         return cls.create_id(EntityType.SCRIPT, "map", script_name)
 
+    @classmethod
+    def interaction_id_from_pokeemerald(cls, pokeemerald_script: str, map_name: str) -> str:
+        """
+        Transform pokeemerald script reference to interaction ID.
+
+        Args:
+            pokeemerald_script: e.g., "LittlerootTown_EventScript_Twin"
+            map_name: The map name for categorization (unused, kept for compatibility)
+
+        Returns:
+            e.g., "base:behavior:interaction/littleroot_town_event_script_twin"
+        """
+        if not pokeemerald_script or pokeemerald_script == "NULL":
+            return ""
+
+        script_name = cls._normalize(pokeemerald_script)
+
+        return cls.create_id(EntityType.BEHAVIOR, "interaction", script_name)
+
 
 # Convenience functions for direct import
 def map_id(pokeemerald_id: str, region: Optional[str] = None) -> str:

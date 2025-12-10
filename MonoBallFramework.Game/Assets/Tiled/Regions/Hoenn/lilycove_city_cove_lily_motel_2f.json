@@ -443,9 +443,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_cove_lily_motel_2f_event_script_game_designer"
+              "value": "base:behavior:interaction/lilycove_city_cove_lily_motel_2f_event_script_game_designer"
             },
             {
               "name": "visibilityFlag",
@@ -485,9 +485,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_cove_lily_motel_2f_event_script_graphic_artist"
+              "value": "base:behavior:interaction/lilycove_city_cove_lily_motel_2f_event_script_graphic_artist"
             },
             {
               "name": "visibilityFlag",
@@ -527,9 +527,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_cove_lily_motel_2f_event_script_fat_man"
+              "value": "base:behavior:interaction/lilycove_city_cove_lily_motel_2f_event_script_fat_man"
             },
             {
               "name": "visibilityFlag",
@@ -569,9 +569,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_cove_lily_motel_2f_event_script_programmer"
+              "value": "base:behavior:interaction/lilycove_city_cove_lily_motel_2f_event_script_programmer"
             },
             {
               "name": "visibilityFlag",
@@ -611,9 +611,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_cove_lily_motel_2f_event_script_game_boy_kid"
+              "value": "base:behavior:interaction/lilycove_city_cove_lily_motel_2f_event_script_game_boy_kid"
             },
             {
               "name": "visibilityFlag",
@@ -653,9 +653,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_cove_lily_motel_2f_event_script_woman"
+              "value": "base:behavior:interaction/lilycove_city_cove_lily_motel_2f_event_script_woman"
             },
             {
               "name": "visibilityFlag",
@@ -695,9 +695,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_cove_lily_motel_2f_event_script_scott"
+              "value": "base:behavior:interaction/lilycove_city_cove_lily_motel_2f_event_script_scott"
             },
             {
               "name": "visibilityFlag",

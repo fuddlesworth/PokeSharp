@@ -9682,9 +9682,9 @@
               "value": "square_cw"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route129_event_script_chase"
+              "value": "base:behavior:interaction/route129_event_script_chase"
             },
             {
               "name": "trainerType",
@@ -9729,9 +9729,9 @@
               "value": "square_cw"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route129_event_script_allison"
+              "value": "base:behavior:interaction/route129_event_script_allison"
             },
             {
               "name": "trainerType",
@@ -9771,9 +9771,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route129_event_script_tisha"
+              "value": "base:behavior:interaction/route129_event_script_tisha"
             },
             {
               "name": "trainerType",
@@ -9813,9 +9813,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route129_event_script_reed"
+              "value": "base:behavior:interaction/route129_event_script_reed"
             },
             {
               "name": "trainerType",
@@ -9855,9 +9855,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route129_event_script_clarence"
+              "value": "base:behavior:interaction/route129_event_script_clarence"
             },
             {
               "name": "trainerType",

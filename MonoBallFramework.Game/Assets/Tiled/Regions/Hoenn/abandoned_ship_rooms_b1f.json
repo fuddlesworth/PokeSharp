@@ -819,9 +819,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_rooms_b1f_event_script_fat_man"
+              "value": "base:behavior:interaction/abandoned_ship_rooms_b1f_event_script_fat_man"
             }
           ]
         },
@@ -851,9 +851,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_rooms_b1f_event_script_item_escape_rope"
+              "value": "base:behavior:interaction/abandoned_ship_rooms_b1f_event_script_item_escape_rope"
             },
             {
               "name": "visibilityFlag",

@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 namespace MonoBallFramework.Game.GameData.Sprites;
 
 /// <summary>
-///     Definition for a sprite asset. Data file lives in Assets/Data/Sprites/.
+///     Definition for a sprite asset. Data file lives in Assets/Definitions/Sprites/.
 ///     Follows the same pattern as popup outline definitions.
 ///
 ///     ID Format: base:sprite:{type}/{category}/{name}

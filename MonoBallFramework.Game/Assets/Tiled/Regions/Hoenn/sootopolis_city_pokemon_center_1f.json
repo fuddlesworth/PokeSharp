@@ -549,9 +549,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_pokemon_center_1f_event_script_nurse"
+              "value": "base:behavior:interaction/sootopolis_city_pokemon_center_1f_event_script_nurse"
             }
           ]
         },
@@ -591,9 +591,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_pokemon_center_1f_event_script_gentleman"
+              "value": "base:behavior:interaction/sootopolis_city_pokemon_center_1f_event_script_gentleman"
             }
           ]
         },
@@ -633,9 +633,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_pokemon_center_1f_event_script_woman"
+              "value": "base:behavior:interaction/sootopolis_city_pokemon_center_1f_event_script_woman"
             }
           ]
         },
@@ -675,9 +675,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_pokemon_center_1f_event_script_double_edge_tutor"
+              "value": "base:behavior:interaction/sootopolis_city_pokemon_center_1f_event_script_double_edge_tutor"
             }
           ]
         }

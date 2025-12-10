@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/slateport_city_sterns_shipyard_2f",
+  "DisplayName": "SlateportCity_SternsShipyard_2F",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/slateport_city_sterns_shipyard_2f.json"
+}

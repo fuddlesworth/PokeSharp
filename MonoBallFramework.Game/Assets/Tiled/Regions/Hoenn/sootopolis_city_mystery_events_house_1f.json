@@ -435,9 +435,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_mystery_events_house_1f_event_script_old_man"
+              "value": "base:behavior:interaction/sootopolis_city_mystery_events_house_1f_event_script_old_man"
             }
           ]
         }

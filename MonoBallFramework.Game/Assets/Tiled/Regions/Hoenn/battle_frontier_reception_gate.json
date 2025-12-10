@@ -523,9 +523,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_reception_gate_event_script_greeter"
+              "value": "base:behavior:interaction/battle_frontier_reception_gate_event_script_greeter"
             }
           ]
         },
@@ -560,9 +560,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_reception_gate_event_script_facility_guide"
+              "value": "base:behavior:interaction/battle_frontier_reception_gate_event_script_facility_guide"
             }
           ]
         },
@@ -597,9 +597,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_reception_gate_event_script_rules_guide"
+              "value": "base:behavior:interaction/battle_frontier_reception_gate_event_script_rules_guide"
             }
           ]
         },
@@ -671,9 +671,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_reception_gate_event_script_frontier_pass_guide"
+              "value": "base:behavior:interaction/battle_frontier_reception_gate_event_script_frontier_pass_guide"
             }
           ]
         }

@@ -11390,9 +11390,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_event_script_cave_of_origin_expert"
+              "value": "base:behavior:interaction/sootopolis_city_event_script_cave_of_origin_expert"
             }
           ]
         },
@@ -11427,9 +11427,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_event_script_woman2"
+              "value": "base:behavior:interaction/sootopolis_city_event_script_woman2"
             },
             {
               "name": "visibilityFlag",
@@ -11474,9 +11474,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_event_script_kiri"
+              "value": "base:behavior:interaction/sootopolis_city_event_script_kiri"
             }
           ]
         },
@@ -11511,9 +11511,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_event_script_ninja_boy"
+              "value": "base:behavior:interaction/sootopolis_city_event_script_ninja_boy"
             }
           ]
         },
@@ -11543,9 +11543,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_event_script_boy1"
+              "value": "base:behavior:interaction/sootopolis_city_event_script_boy1"
             }
           ]
         },
@@ -11585,9 +11585,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_event_script_man"
+              "value": "base:behavior:interaction/sootopolis_city_event_script_man"
             },
             {
               "name": "visibilityFlag",
@@ -11627,9 +11627,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_event_script_steven"
+              "value": "base:behavior:interaction/sootopolis_city_event_script_steven"
             },
             {
               "name": "visibilityFlag",
@@ -11674,9 +11674,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_event_script_woman1"
+              "value": "base:behavior:interaction/sootopolis_city_event_script_woman1"
             }
           ]
         },
@@ -11822,9 +11822,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_event_script_maniac"
+              "value": "base:behavior:interaction/sootopolis_city_event_script_maniac"
             },
             {
               "name": "visibilityFlag",
@@ -11864,9 +11864,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_event_script_girl"
+              "value": "base:behavior:interaction/sootopolis_city_event_script_girl"
             },
             {
               "name": "visibilityFlag",
@@ -11906,9 +11906,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_event_script_black_belt"
+              "value": "base:behavior:interaction/sootopolis_city_event_script_black_belt"
             },
             {
               "name": "visibilityFlag",
@@ -11948,9 +11948,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_event_script_boy2"
+              "value": "base:behavior:interaction/sootopolis_city_event_script_boy2"
             },
             {
               "name": "visibilityFlag",
@@ -11990,9 +11990,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_event_script_maxie"
+              "value": "base:behavior:interaction/sootopolis_city_event_script_maxie"
             },
             {
               "name": "visibilityFlag",
@@ -12032,9 +12032,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_event_script_archie"
+              "value": "base:behavior:interaction/sootopolis_city_event_script_archie"
             },
             {
               "name": "visibilityFlag",
@@ -12074,9 +12074,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_event_script_wallace"
+              "value": "base:behavior:interaction/sootopolis_city_event_script_wallace"
             },
             {
               "name": "visibilityFlag",

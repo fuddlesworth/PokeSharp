@@ -549,9 +549,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/pacifidlog_town_pokemon_center_1f_event_script_nurse"
+              "value": "base:behavior:interaction/pacifidlog_town_pokemon_center_1f_event_script_nurse"
             }
           ]
         },
@@ -586,9 +586,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/pacifidlog_town_pokemon_center_1f_event_script_old_man"
+              "value": "base:behavior:interaction/pacifidlog_town_pokemon_center_1f_event_script_old_man"
             }
           ]
         },
@@ -623,9 +623,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/pacifidlog_town_pokemon_center_1f_event_script_girl"
+              "value": "base:behavior:interaction/pacifidlog_town_pokemon_center_1f_event_script_girl"
             }
           ]
         },
@@ -655,9 +655,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/pacifidlog_town_pokemon_center_1f_event_script_woman"
+              "value": "base:behavior:interaction/pacifidlog_town_pokemon_center_1f_event_script_woman"
             }
           ]
         },
@@ -692,9 +692,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/pacifidlog_town_pokemon_center_1f_event_script_explosion_tutor"
+              "value": "base:behavior:interaction/pacifidlog_town_pokemon_center_1f_event_script_explosion_tutor"
             }
           ]
         }

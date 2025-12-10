@@ -4415,9 +4415,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_1f_event_script_grunt1"
+              "value": "base:behavior:interaction/magma_hideout_1f_event_script_grunt1"
             },
             {
               "name": "visibilityFlag",
@@ -4462,9 +4462,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_1f_event_script_item_rare_candy"
+              "value": "base:behavior:interaction/magma_hideout_1f_event_script_item_rare_candy"
             },
             {
               "name": "visibilityFlag",
@@ -4504,9 +4504,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_1f_event_script_grunt2"
+              "value": "base:behavior:interaction/magma_hideout_1f_event_script_grunt2"
             },
             {
               "name": "visibilityFlag",
@@ -4551,9 +4551,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -4588,9 +4588,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -4625,9 +4625,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",

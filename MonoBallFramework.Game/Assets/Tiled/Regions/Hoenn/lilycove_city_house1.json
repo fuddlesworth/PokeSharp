@@ -415,9 +415,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_house1_event_script_expert_m"
+              "value": "base:behavior:interaction/lilycove_city_house1_event_script_expert_m"
             }
           ]
         },
@@ -452,9 +452,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_house1_event_script_kecleon"
+              "value": "base:behavior:interaction/lilycove_city_house1_event_script_kecleon"
             }
           ]
         }

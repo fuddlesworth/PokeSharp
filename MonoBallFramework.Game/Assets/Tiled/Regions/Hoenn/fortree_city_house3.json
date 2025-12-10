@@ -289,9 +289,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_house3_event_script_maniac"
+              "value": "base:behavior:interaction/fortree_city_house3_event_script_maniac"
             }
           ]
         },
@@ -331,9 +331,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_house3_event_script_school_kid_m"
+              "value": "base:behavior:interaction/fortree_city_house3_event_script_school_kid_m"
             }
           ]
         }

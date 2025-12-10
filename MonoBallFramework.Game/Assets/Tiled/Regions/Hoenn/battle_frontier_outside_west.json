@@ -12611,9 +12611,9 @@
               "value": 2
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_boy1"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_boy1"
             }
           ]
         },
@@ -12680,9 +12680,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_ferry_attendant"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_ferry_attendant"
             }
           ]
         },
@@ -12722,9 +12722,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_expert_m"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_expert_m"
             }
           ]
         },
@@ -12764,9 +12764,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_man1"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_man1"
             }
           ]
         },
@@ -12806,9 +12806,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_woman1"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_woman1"
             }
           ]
         },
@@ -12848,9 +12848,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_fat_man1"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_fat_man1"
             }
           ]
         },
@@ -12890,9 +12890,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_gentleman"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_gentleman"
             }
           ]
         },
@@ -12927,9 +12927,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_maniac1"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_maniac1"
             }
           ]
         },
@@ -12964,9 +12964,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_maniac2"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_maniac2"
             }
           ]
         },
@@ -13001,9 +13001,9 @@
               "value": "up,left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_man2"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_man2"
             }
           ]
         },
@@ -13043,9 +13043,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_girl"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_girl"
             }
           ]
         },
@@ -13085,9 +13085,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_woman2"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_woman2"
             }
           ]
         },
@@ -13122,9 +13122,9 @@
               "value": "up,left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_camper"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_camper"
             }
           ]
         },
@@ -13164,9 +13164,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_lass"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_lass"
             }
           ]
         },
@@ -13201,9 +13201,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_man3"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_man3"
             }
           ]
         },
@@ -13238,9 +13238,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_fisherman1"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_fisherman1"
             }
           ]
         },
@@ -13275,9 +13275,9 @@
               "value": "down,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_fisherman2"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_fisherman2"
             }
           ]
         },
@@ -13317,9 +13317,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_fat_man2"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_fat_man2"
             }
           ]
         },
@@ -13354,9 +13354,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_woman3"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_woman3"
             }
           ]
         },
@@ -13391,9 +13391,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_boy2"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_boy2"
             }
           ]
         },
@@ -13423,9 +13423,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_old_man"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_old_man"
             }
           ]
         },
@@ -13460,9 +13460,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_man4"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_man4"
             }
           ]
         },
@@ -13492,9 +13492,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_outside_west_event_script_pokefan_f"
+              "value": "base:behavior:interaction/battle_frontier_outside_west_event_script_pokefan_f"
             }
           ]
         }

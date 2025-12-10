@@ -558,9 +558,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/verdanturf_town_wandas_house_event_script_wally"
+              "value": "base:behavior:interaction/verdanturf_town_wandas_house_event_script_wally"
             },
             {
               "name": "visibilityFlag",
@@ -600,9 +600,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/verdanturf_town_wandas_house_event_script_wandas_boyfriend"
+              "value": "base:behavior:interaction/verdanturf_town_wandas_house_event_script_wandas_boyfriend"
             },
             {
               "name": "visibilityFlag",
@@ -642,9 +642,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/verdanturf_town_wandas_house_event_script_wallys_uncle"
+              "value": "base:behavior:interaction/verdanturf_town_wandas_house_event_script_wallys_uncle"
             },
             {
               "name": "visibilityFlag",
@@ -684,9 +684,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/verdanturf_town_wandas_house_event_script_wallys_aunt"
+              "value": "base:behavior:interaction/verdanturf_town_wandas_house_event_script_wallys_aunt"
             }
           ]
         },
@@ -721,9 +721,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/verdanturf_town_wandas_house_event_script_wanda"
+              "value": "base:behavior:interaction/verdanturf_town_wandas_house_event_script_wanda"
             },
             {
               "name": "visibilityFlag",

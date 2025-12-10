@@ -457,9 +457,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge5_event_script_nature_girl"
+              "value": "base:behavior:interaction/battle_frontier_lounge5_event_script_nature_girl"
             }
           ]
         },
@@ -494,9 +494,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge5_event_script_gentleman"
+              "value": "base:behavior:interaction/battle_frontier_lounge5_event_script_gentleman"
             }
           ]
         },
@@ -536,9 +536,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge5_event_script_black_belt"
+              "value": "base:behavior:interaction/battle_frontier_lounge5_event_script_black_belt"
             }
           ]
         },
@@ -568,9 +568,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge5_event_script_little_boy"
+              "value": "base:behavior:interaction/battle_frontier_lounge5_event_script_little_boy"
             }
           ]
         }

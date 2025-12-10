@@ -595,9 +595,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route109_seashore_house_event_script_owner"
+              "value": "base:behavior:interaction/route109_seashore_house_event_script_owner"
             }
           ]
         },
@@ -632,9 +632,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route109_seashore_house_event_script_dwayne"
+              "value": "base:behavior:interaction/route109_seashore_house_event_script_dwayne"
             },
             {
               "name": "trainerType",
@@ -679,9 +679,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route109_seashore_house_event_script_simon"
+              "value": "base:behavior:interaction/route109_seashore_house_event_script_simon"
             },
             {
               "name": "trainerType",
@@ -726,9 +726,9 @@
               "value": "left,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route109_seashore_house_event_script_johanna"
+              "value": "base:behavior:interaction/route109_seashore_house_event_script_johanna"
             },
             {
               "name": "trainerType",

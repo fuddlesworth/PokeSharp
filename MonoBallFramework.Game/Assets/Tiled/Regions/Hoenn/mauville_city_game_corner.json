@@ -1470,9 +1470,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_game_corner_event_script_woman2"
+              "value": "base:behavior:interaction/mauville_city_game_corner_event_script_woman2"
             }
           ]
         },
@@ -1507,9 +1507,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_game_corner_event_script_gentleman"
+              "value": "base:behavior:interaction/mauville_city_game_corner_event_script_gentleman"
             }
           ]
         },
@@ -1544,9 +1544,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_game_corner_event_script_coins_clerk"
+              "value": "base:behavior:interaction/mauville_city_game_corner_event_script_coins_clerk"
             }
           ]
         },
@@ -1581,9 +1581,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_game_corner_event_script_prize_corner_dolls"
+              "value": "base:behavior:interaction/mauville_city_game_corner_event_script_prize_corner_dolls"
             }
           ]
         },
@@ -1618,9 +1618,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_game_corner_event_script_girl"
+              "value": "base:behavior:interaction/mauville_city_game_corner_event_script_girl"
             }
           ]
         },
@@ -1655,9 +1655,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_game_corner_event_script_pokefan_m"
+              "value": "base:behavior:interaction/mauville_city_game_corner_event_script_pokefan_m"
             }
           ]
         },
@@ -1692,9 +1692,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_game_corner_event_script_old_man"
+              "value": "base:behavior:interaction/mauville_city_game_corner_event_script_old_man"
             }
           ]
         },
@@ -1729,9 +1729,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_game_corner_event_script_cook"
+              "value": "base:behavior:interaction/mauville_city_game_corner_event_script_cook"
             }
           ]
         },
@@ -1766,9 +1766,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_game_corner_event_script_prize_corner_t_ms"
+              "value": "base:behavior:interaction/mauville_city_game_corner_event_script_prize_corner_t_ms"
             }
           ]
         },
@@ -1803,9 +1803,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_game_corner_event_script_man"
+              "value": "base:behavior:interaction/mauville_city_game_corner_event_script_man"
             }
           ]
         },
@@ -1840,9 +1840,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_game_corner_event_script_maniac"
+              "value": "base:behavior:interaction/mauville_city_game_corner_event_script_maniac"
             }
           ]
         },
@@ -1877,9 +1877,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_game_corner_event_script_woman"
+              "value": "base:behavior:interaction/mauville_city_game_corner_event_script_woman"
             }
           ]
         }

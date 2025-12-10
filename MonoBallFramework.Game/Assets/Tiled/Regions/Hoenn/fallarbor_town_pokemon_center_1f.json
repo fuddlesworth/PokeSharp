@@ -549,9 +549,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fallarbor_town_pokemon_center_1f_event_script_nurse"
+              "value": "base:behavior:interaction/fallarbor_town_pokemon_center_1f_event_script_nurse"
             }
           ]
         },
@@ -586,9 +586,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fallarbor_town_pokemon_center_1f_event_script_girl"
+              "value": "base:behavior:interaction/fallarbor_town_pokemon_center_1f_event_script_girl"
             }
           ]
         },
@@ -623,9 +623,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fallarbor_town_pokemon_center_1f_event_script_expert_m"
+              "value": "base:behavior:interaction/fallarbor_town_pokemon_center_1f_event_script_expert_m"
             }
           ]
         },
@@ -660,9 +660,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fallarbor_town_pokemon_center_1f_event_script_lanette"
+              "value": "base:behavior:interaction/fallarbor_town_pokemon_center_1f_event_script_lanette"
             },
             {
               "name": "visibilityFlag",

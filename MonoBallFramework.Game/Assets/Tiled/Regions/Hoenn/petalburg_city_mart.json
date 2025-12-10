@@ -409,9 +409,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_mart_event_script_clerk"
+              "value": "base:behavior:interaction/petalburg_city_mart_event_script_clerk"
             }
           ]
         },
@@ -446,9 +446,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_mart_event_script_man"
+              "value": "base:behavior:interaction/petalburg_city_mart_event_script_man"
             }
           ]
         },
@@ -483,9 +483,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_mart_event_script_boy"
+              "value": "base:behavior:interaction/petalburg_city_mart_event_script_boy"
             }
           ]
         },
@@ -520,9 +520,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_mart_event_script_woman"
+              "value": "base:behavior:interaction/petalburg_city_mart_event_script_woman"
             }
           ]
         }

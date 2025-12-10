@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/mossdeep_city_gym",
+  "DisplayName": "MossdeepCity_Gym",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/mossdeep_city_gym.json"
+}

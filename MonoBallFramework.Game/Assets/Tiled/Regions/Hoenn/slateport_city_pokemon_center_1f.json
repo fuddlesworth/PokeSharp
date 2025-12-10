@@ -549,9 +549,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_pokemon_center_1f_event_script_nurse"
+              "value": "base:behavior:interaction/slateport_city_pokemon_center_1f_event_script_nurse"
             }
           ]
         },
@@ -586,9 +586,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_pokemon_center_1f_event_script_sailor"
+              "value": "base:behavior:interaction/slateport_city_pokemon_center_1f_event_script_sailor"
             }
           ]
         },
@@ -623,9 +623,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_pokemon_center_1f_event_script_woman"
+              "value": "base:behavior:interaction/slateport_city_pokemon_center_1f_event_script_woman"
             }
           ]
         }

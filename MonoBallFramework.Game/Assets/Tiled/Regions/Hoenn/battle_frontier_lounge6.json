@@ -389,9 +389,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge6_event_script_trader"
+              "value": "base:behavior:interaction/battle_frontier_lounge6_event_script_trader"
             }
           ]
         }

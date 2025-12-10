@@ -622,9 +622,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/union_room_event_script_attendant"
+              "value": "base:behavior:interaction/union_room_event_script_attendant"
             }
           ]
         },
@@ -664,9 +664,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/union_room_event_script_player4"
+              "value": "base:behavior:interaction/union_room_event_script_player4"
             },
             {
               "name": "visibilityFlag",
@@ -711,9 +711,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/union_room_event_script_player8"
+              "value": "base:behavior:interaction/union_room_event_script_player8"
             },
             {
               "name": "visibilityFlag",
@@ -758,9 +758,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/union_room_event_script_player7"
+              "value": "base:behavior:interaction/union_room_event_script_player7"
             },
             {
               "name": "visibilityFlag",
@@ -805,9 +805,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/union_room_event_script_player6"
+              "value": "base:behavior:interaction/union_room_event_script_player6"
             },
             {
               "name": "visibilityFlag",
@@ -852,9 +852,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/union_room_event_script_player5"
+              "value": "base:behavior:interaction/union_room_event_script_player5"
             },
             {
               "name": "visibilityFlag",
@@ -899,9 +899,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/union_room_event_script_player3"
+              "value": "base:behavior:interaction/union_room_event_script_player3"
             },
             {
               "name": "visibilityFlag",
@@ -946,9 +946,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/union_room_event_script_player2"
+              "value": "base:behavior:interaction/union_room_event_script_player2"
             },
             {
               "name": "visibilityFlag",
@@ -993,9 +993,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/union_room_event_script_player1"
+              "value": "base:behavior:interaction/union_room_event_script_player1"
             },
             {
               "name": "visibilityFlag",

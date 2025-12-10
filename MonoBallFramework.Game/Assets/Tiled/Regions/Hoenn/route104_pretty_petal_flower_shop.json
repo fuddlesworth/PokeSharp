@@ -550,9 +550,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route104_pretty_petal_flower_shop_event_script_shop_owner"
+              "value": "base:behavior:interaction/route104_pretty_petal_flower_shop_event_script_shop_owner"
             }
           ]
         },
@@ -592,9 +592,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route104_pretty_petal_flower_shop_event_script_wailmer_pail_girl"
+              "value": "base:behavior:interaction/route104_pretty_petal_flower_shop_event_script_wailmer_pail_girl"
             }
           ]
         },
@@ -634,9 +634,9 @@
               "value": 2
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route104_pretty_petal_flower_shop_event_script_random_berry_girl"
+              "value": "base:behavior:interaction/route104_pretty_petal_flower_shop_event_script_random_berry_girl"
             }
           ]
         }

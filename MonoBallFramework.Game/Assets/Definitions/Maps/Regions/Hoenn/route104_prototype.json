@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/route104_prototype",
+  "DisplayName": "Route104_Prototype",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/route104_prototype.json"
+}

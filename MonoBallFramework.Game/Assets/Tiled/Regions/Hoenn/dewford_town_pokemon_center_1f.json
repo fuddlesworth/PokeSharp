@@ -549,9 +549,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_pokemon_center_1f_event_script_nurse"
+              "value": "base:behavior:interaction/dewford_town_pokemon_center_1f_event_script_nurse"
             }
           ]
         },
@@ -586,9 +586,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_pokemon_center_1f_event_script_pokefan_f"
+              "value": "base:behavior:interaction/dewford_town_pokemon_center_1f_event_script_pokefan_f"
             }
           ]
         },
@@ -628,9 +628,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_pokemon_center_1f_event_script_man"
+              "value": "base:behavior:interaction/dewford_town_pokemon_center_1f_event_script_man"
             }
           ]
         }

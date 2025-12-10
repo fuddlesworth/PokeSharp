@@ -3571,9 +3571,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_gym_event_script_tate_and_liza"
+              "value": "base:behavior:interaction/mossdeep_city_gym_event_script_tate_and_liza"
             }
           ]
         },
@@ -3608,9 +3608,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_gym_event_script_preston"
+              "value": "base:behavior:interaction/mossdeep_city_gym_event_script_preston"
             },
             {
               "name": "trainerType",
@@ -3655,9 +3655,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_gym_event_script_blake"
+              "value": "base:behavior:interaction/mossdeep_city_gym_event_script_blake"
             },
             {
               "name": "trainerType",
@@ -3702,9 +3702,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_gym_event_script_maura"
+              "value": "base:behavior:interaction/mossdeep_city_gym_event_script_maura"
             },
             {
               "name": "trainerType",
@@ -3749,9 +3749,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_gym_event_script_samantha"
+              "value": "base:behavior:interaction/mossdeep_city_gym_event_script_samantha"
             },
             {
               "name": "trainerType",
@@ -3796,9 +3796,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_gym_event_script_virgil"
+              "value": "base:behavior:interaction/mossdeep_city_gym_event_script_virgil"
             },
             {
               "name": "trainerType",
@@ -3843,9 +3843,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_gym_event_script_hannah"
+              "value": "base:behavior:interaction/mossdeep_city_gym_event_script_hannah"
             },
             {
               "name": "trainerType",
@@ -3890,9 +3890,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_gym_event_script_gym_guide"
+              "value": "base:behavior:interaction/mossdeep_city_gym_event_script_gym_guide"
             }
           ]
         },
@@ -3927,9 +3927,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_gym_event_script_tate_and_liza"
+              "value": "base:behavior:interaction/mossdeep_city_gym_event_script_tate_and_liza"
             }
           ]
         },
@@ -4153,9 +4153,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_gym_event_script_nate"
+              "value": "base:behavior:interaction/mossdeep_city_gym_event_script_nate"
             },
             {
               "name": "trainerType",
@@ -4200,9 +4200,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_gym_event_script_sylvia"
+              "value": "base:behavior:interaction/mossdeep_city_gym_event_script_sylvia"
             },
             {
               "name": "trainerType",
@@ -4409,9 +4409,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_gym_event_script_clifford"
+              "value": "base:behavior:interaction/mossdeep_city_gym_event_script_clifford"
             },
             {
               "name": "trainerType",
@@ -4483,9 +4483,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_gym_event_script_macey"
+              "value": "base:behavior:interaction/mossdeep_city_gym_event_script_macey"
             },
             {
               "name": "trainerType",
@@ -4530,9 +4530,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_gym_event_script_kathleen"
+              "value": "base:behavior:interaction/mossdeep_city_gym_event_script_kathleen"
             },
             {
               "name": "trainerType",
@@ -4658,9 +4658,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_gym_event_script_nicholas"
+              "value": "base:behavior:interaction/mossdeep_city_gym_event_script_nicholas"
             },
             {
               "name": "trainerType",

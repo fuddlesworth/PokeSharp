@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/petalburg_city_house1",
+  "DisplayName": "PetalburgCity_House1",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/petalburg_city_house1.json"
+}

@@ -1211,9 +1211,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_rock_smash"
+              "value": "base:behavior:interaction/event_script_rock_smash"
             },
             {
               "name": "visibilityFlag",
@@ -1248,9 +1248,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_rock_smash"
+              "value": "base:behavior:interaction/event_script_rock_smash"
             },
             {
               "name": "visibilityFlag",

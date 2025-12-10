@@ -1097,9 +1097,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_oceanic_museum_1f_event_script_entrance_attendant"
+              "value": "base:behavior:interaction/slateport_city_oceanic_museum_1f_event_script_entrance_attendant"
             }
           ]
         },
@@ -1134,9 +1134,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_oceanic_museum_1f_event_script_museum_grunt3"
+              "value": "base:behavior:interaction/slateport_city_oceanic_museum_1f_event_script_museum_grunt3"
             },
             {
               "name": "visibilityFlag",
@@ -1176,9 +1176,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_oceanic_museum_1f_event_script_museum_grunt4"
+              "value": "base:behavior:interaction/slateport_city_oceanic_museum_1f_event_script_museum_grunt4"
             },
             {
               "name": "visibilityFlag",
@@ -1218,9 +1218,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_oceanic_museum_1f_event_script_museum_grunt2"
+              "value": "base:behavior:interaction/slateport_city_oceanic_museum_1f_event_script_museum_grunt2"
             },
             {
               "name": "visibilityFlag",
@@ -1260,9 +1260,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_oceanic_museum_1f_event_script_museum_grunt1"
+              "value": "base:behavior:interaction/slateport_city_oceanic_museum_1f_event_script_museum_grunt1"
             },
             {
               "name": "visibilityFlag",
@@ -1302,9 +1302,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_oceanic_museum_1f_event_script_museum_grunt5"
+              "value": "base:behavior:interaction/slateport_city_oceanic_museum_1f_event_script_museum_grunt5"
             },
             {
               "name": "visibilityFlag",
@@ -1344,9 +1344,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_oceanic_museum_1f_event_script_entrance_attendant"
+              "value": "base:behavior:interaction/slateport_city_oceanic_museum_1f_event_script_entrance_attendant"
             }
           ]
         },
@@ -1381,9 +1381,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_oceanic_museum_1f_event_script_museum_grunt6"
+              "value": "base:behavior:interaction/slateport_city_oceanic_museum_1f_event_script_museum_grunt6"
             },
             {
               "name": "visibilityFlag",
@@ -1418,9 +1418,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_oceanic_museum_1f_event_script_museum_patron1"
+              "value": "base:behavior:interaction/slateport_city_oceanic_museum_1f_event_script_museum_patron1"
             },
             {
               "name": "visibilityFlag",
@@ -1460,9 +1460,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_oceanic_museum_1f_event_script_museum_patron2"
+              "value": "base:behavior:interaction/slateport_city_oceanic_museum_1f_event_script_museum_patron2"
             },
             {
               "name": "visibilityFlag",
@@ -1502,9 +1502,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_oceanic_museum_1f_event_script_museum_patron3"
+              "value": "base:behavior:interaction/slateport_city_oceanic_museum_1f_event_script_museum_patron3"
             },
             {
               "name": "visibilityFlag",
@@ -1544,9 +1544,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_oceanic_museum_1f_event_script_museum_patron4"
+              "value": "base:behavior:interaction/slateport_city_oceanic_museum_1f_event_script_museum_patron4"
             },
             {
               "name": "visibilityFlag",
@@ -1586,9 +1586,9 @@
               "value": "up,left,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_oceanic_museum_1f_event_script_familiar_grunt"
+              "value": "base:behavior:interaction/slateport_city_oceanic_museum_1f_event_script_familiar_grunt"
             },
             {
               "name": "visibilityFlag",
@@ -1623,9 +1623,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_oceanic_museum_1f_event_script_reporter"
+              "value": "base:behavior:interaction/slateport_city_oceanic_museum_1f_event_script_reporter"
             },
             {
               "name": "visibilityFlag",

@@ -731,9 +731,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_corridors_b1f_event_script_tuber_m"
+              "value": "base:behavior:interaction/abandoned_ship_corridors_b1f_event_script_tuber_m"
             }
           ]
         },
@@ -768,9 +768,9 @@
               "value": "left,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_corridors_b1f_event_script_duncan"
+              "value": "base:behavior:interaction/abandoned_ship_corridors_b1f_event_script_duncan"
             },
             {
               "name": "trainerType",

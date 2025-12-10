@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/lilycove_city_lilycove_museum_1f",
+  "DisplayName": "LilycoveCity_LilycoveMuseum_1F",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/lilycove_city_lilycove_museum_1f.json"
+}

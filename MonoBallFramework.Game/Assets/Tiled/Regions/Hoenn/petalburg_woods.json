@@ -6782,9 +6782,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_cut_tree"
+              "value": "base:behavior:interaction/event_script_cut_tree"
             },
             {
               "name": "visibilityFlag",
@@ -6819,9 +6819,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_cut_tree"
+              "value": "base:behavior:interaction/event_script_cut_tree"
             },
             {
               "name": "visibilityFlag",
@@ -6930,9 +6930,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_woods_event_script_item_great_ball"
+              "value": "base:behavior:interaction/petalburg_woods_event_script_item_great_ball"
             },
             {
               "name": "visibilityFlag",
@@ -6972,9 +6972,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_woods_event_script_item_x_attack"
+              "value": "base:behavior:interaction/petalburg_woods_event_script_item_x_attack"
             },
             {
               "name": "visibilityFlag",
@@ -7009,9 +7009,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_woods_event_script_item_ether"
+              "value": "base:behavior:interaction/petalburg_woods_event_script_item_ether"
             },
             {
               "name": "visibilityFlag",
@@ -7056,9 +7056,9 @@
               "value": 2
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_woods_event_script_boy1"
+              "value": "base:behavior:interaction/petalburg_woods_event_script_boy1"
             }
           ]
         },
@@ -7093,9 +7093,9 @@
               "value": "down,left,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_woods_event_script_lyle"
+              "value": "base:behavior:interaction/petalburg_woods_event_script_lyle"
             },
             {
               "name": "trainerType",
@@ -7140,9 +7140,9 @@
               "value": "down,up,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_woods_event_script_james"
+              "value": "base:behavior:interaction/petalburg_woods_event_script_james"
             },
             {
               "name": "trainerType",
@@ -7192,9 +7192,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_woods_event_script_boy2"
+              "value": "base:behavior:interaction/petalburg_woods_event_script_boy2"
             }
           ]
         },
@@ -7224,9 +7224,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_woods_event_script_item_paralyze_heal"
+              "value": "base:behavior:interaction/petalburg_woods_event_script_item_paralyze_heal"
             },
             {
               "name": "visibilityFlag",
@@ -7261,9 +7261,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_woods_event_script_girl"
+              "value": "base:behavior:interaction/petalburg_woods_event_script_girl"
             }
           ]
         }

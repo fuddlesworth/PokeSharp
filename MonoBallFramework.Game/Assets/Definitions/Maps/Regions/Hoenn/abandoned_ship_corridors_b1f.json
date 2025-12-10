@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/abandoned_ship_corridors_b1f",
+  "DisplayName": "AbandonedShip_Corridors_B1F",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/abandoned_ship_corridors_b1f.json"
+}

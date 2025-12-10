@@ -591,9 +591,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/common_event_script_union_room_attendant"
+              "value": "base:behavior:interaction/common_event_script_union_room_attendant"
             }
           ]
         },
@@ -628,9 +628,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/common_event_script_wireless_club_attendant"
+              "value": "base:behavior:interaction/common_event_script_wireless_club_attendant"
             }
           ]
         },
@@ -665,9 +665,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/common_event_script_direct_corner_attendant"
+              "value": "base:behavior:interaction/common_event_script_direct_corner_attendant"
             }
           ]
         },
@@ -702,9 +702,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/cable_club_event_script_mystery_gift_man"
+              "value": "base:behavior:interaction/cable_club_event_script_mystery_gift_man"
             },
             {
               "name": "visibilityFlag",
@@ -744,9 +744,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_pokemon_center_2f_event_script_youngster"
+              "value": "base:behavior:interaction/mauville_city_pokemon_center_2f_event_script_youngster"
             }
           ]
         }

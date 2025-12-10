@@ -2187,9 +2187,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_3f_1r_event_script_grunt9"
+              "value": "base:behavior:interaction/magma_hideout_3f_1r_event_script_grunt9"
             },
             {
               "name": "visibilityFlag",
@@ -2239,9 +2239,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_3f_1r_event_script_grunt16"
+              "value": "base:behavior:interaction/magma_hideout_3f_1r_event_script_grunt16"
             },
             {
               "name": "visibilityFlag",
@@ -2286,9 +2286,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_3f_1r_event_script_item_nugget"
+              "value": "base:behavior:interaction/magma_hideout_3f_1r_event_script_item_nugget"
             },
             {
               "name": "visibilityFlag",

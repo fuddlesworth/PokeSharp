@@ -409,9 +409,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_wallys_house_event_script_wallys_dad"
+              "value": "base:behavior:interaction/petalburg_city_wallys_house_event_script_wallys_dad"
             }
           ]
         },
@@ -446,9 +446,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_wallys_house_event_script_wallys_mom"
+              "value": "base:behavior:interaction/petalburg_city_wallys_house_event_script_wallys_mom"
             }
           ]
         }

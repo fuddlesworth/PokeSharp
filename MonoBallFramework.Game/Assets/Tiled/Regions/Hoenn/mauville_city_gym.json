@@ -951,9 +951,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_gym_event_script_wattson"
+              "value": "base:behavior:interaction/mauville_city_gym_event_script_wattson"
             },
             {
               "name": "visibilityFlag",
@@ -993,9 +993,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_gym_event_script_shawn"
+              "value": "base:behavior:interaction/mauville_city_gym_event_script_shawn"
             },
             {
               "name": "trainerType",
@@ -1040,9 +1040,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_gym_event_script_vivian"
+              "value": "base:behavior:interaction/mauville_city_gym_event_script_vivian"
             },
             {
               "name": "trainerType",
@@ -1087,9 +1087,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_gym_event_script_ben"
+              "value": "base:behavior:interaction/mauville_city_gym_event_script_ben"
             },
             {
               "name": "trainerType",
@@ -1134,9 +1134,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_gym_event_script_kirk"
+              "value": "base:behavior:interaction/mauville_city_gym_event_script_kirk"
             },
             {
               "name": "trainerType",
@@ -1181,9 +1181,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_gym_event_script_gym_guide"
+              "value": "base:behavior:interaction/mauville_city_gym_event_script_gym_guide"
             }
           ]
         },
@@ -1218,9 +1218,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_gym_event_script_angelo"
+              "value": "base:behavior:interaction/mauville_city_gym_event_script_angelo"
             },
             {
               "name": "trainerType",

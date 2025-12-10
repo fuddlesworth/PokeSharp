@@ -19349,9 +19349,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route124_event_script_spencer"
+              "value": "base:behavior:interaction/route124_event_script_spencer"
             },
             {
               "name": "trainerType",
@@ -19391,9 +19391,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route124_event_script_roland"
+              "value": "base:behavior:interaction/route124_event_script_roland"
             },
             {
               "name": "trainerType",
@@ -19433,9 +19433,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route124_event_script_jenny"
+              "value": "base:behavior:interaction/route124_event_script_jenny"
             },
             {
               "name": "trainerType",
@@ -19480,9 +19480,9 @@
               "value": "down,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route124_event_script_grace"
+              "value": "base:behavior:interaction/route124_event_script_grace"
             },
             {
               "name": "trainerType",
@@ -19527,9 +19527,9 @@
               "value": "horizontal"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route124_event_script_chad"
+              "value": "base:behavior:interaction/route124_event_script_chad"
             },
             {
               "name": "trainerType",
@@ -19569,9 +19569,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route124_event_script_item_red_shard"
+              "value": "base:behavior:interaction/route124_event_script_item_red_shard"
             },
             {
               "name": "visibilityFlag",
@@ -19606,9 +19606,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route124_event_script_item_blue_shard"
+              "value": "base:behavior:interaction/route124_event_script_item_blue_shard"
             },
             {
               "name": "visibilityFlag",
@@ -19643,9 +19643,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route124_event_script_item_yellow_shard"
+              "value": "base:behavior:interaction/route124_event_script_item_yellow_shard"
             },
             {
               "name": "visibilityFlag",
@@ -19685,9 +19685,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route124_event_script_lila"
+              "value": "base:behavior:interaction/route124_event_script_lila"
             },
             {
               "name": "trainerType",
@@ -19732,9 +19732,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route124_event_script_roy"
+              "value": "base:behavior:interaction/route124_event_script_roy"
             },
             {
               "name": "trainerType",
@@ -19779,9 +19779,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route124_event_script_declan"
+              "value": "base:behavior:interaction/route124_event_script_declan"
             },
             {
               "name": "trainerType",
@@ -19821,9 +19821,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route124_event_script_isabella"
+              "value": "base:behavior:interaction/route124_event_script_isabella"
             },
             {
               "name": "trainerType",

@@ -730,9 +730,9 @@
               "value": "down,left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_5f_event_script_atsushi"
+              "value": "base:behavior:interaction/mt_pyre_5f_event_script_atsushi"
             },
             {
               "name": "trainerType",
@@ -772,9 +772,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_5f_event_script_item_lax_incense"
+              "value": "base:behavior:interaction/mt_pyre_5f_event_script_item_lax_incense"
             },
             {
               "name": "visibilityFlag",

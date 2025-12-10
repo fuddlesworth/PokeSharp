@@ -409,9 +409,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_mart_event_script_clerk"
+              "value": "base:behavior:interaction/battle_frontier_mart_event_script_clerk"
             }
           ]
         },
@@ -446,9 +446,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_mart_event_script_old_woman"
+              "value": "base:behavior:interaction/battle_frontier_mart_event_script_old_woman"
             }
           ]
         },
@@ -483,9 +483,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_mart_event_script_old_man"
+              "value": "base:behavior:interaction/battle_frontier_mart_event_script_old_man"
             }
           ]
         },
@@ -520,9 +520,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_mart_event_script_boy"
+              "value": "base:behavior:interaction/battle_frontier_mart_event_script_boy"
             }
           ]
         }

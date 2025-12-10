@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/rustboro_city_pokemon_center_1f",
+  "DisplayName": "RustboroCity_PokemonCenter_1F",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/rustboro_city_pokemon_center_1f.json"
+}

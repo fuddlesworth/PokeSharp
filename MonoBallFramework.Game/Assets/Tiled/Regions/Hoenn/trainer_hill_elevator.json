@@ -250,9 +250,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/trainer_hill_elevator_event_script_attendant"
+              "value": "base:behavior:interaction/trainer_hill_elevator_event_script_attendant"
             }
           ]
         }

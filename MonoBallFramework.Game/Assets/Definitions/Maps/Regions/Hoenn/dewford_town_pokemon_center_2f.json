@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/dewford_town_pokemon_center_2f",
+  "DisplayName": "DewfordTown_PokemonCenter_2F",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/dewford_town_pokemon_center_2f.json"
+}

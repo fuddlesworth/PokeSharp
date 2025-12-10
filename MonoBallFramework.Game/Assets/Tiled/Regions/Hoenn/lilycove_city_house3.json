@@ -409,9 +409,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_house3_event_script_game_boy_kid4"
+              "value": "base:behavior:interaction/lilycove_city_house3_event_script_game_boy_kid4"
             }
           ]
         },
@@ -446,9 +446,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_house3_event_script_pokefan_f"
+              "value": "base:behavior:interaction/lilycove_city_house3_event_script_pokefan_f"
             }
           ]
         },
@@ -483,9 +483,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_house3_event_script_game_boy_kid2"
+              "value": "base:behavior:interaction/lilycove_city_house3_event_script_game_boy_kid2"
             }
           ]
         },
@@ -520,9 +520,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_house3_event_script_game_boy_kid3"
+              "value": "base:behavior:interaction/lilycove_city_house3_event_script_game_boy_kid3"
             }
           ]
         },
@@ -557,9 +557,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_house3_event_script_game_boy_kid1"
+              "value": "base:behavior:interaction/lilycove_city_house3_event_script_game_boy_kid1"
             }
           ]
         },
@@ -594,9 +594,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_house3_event_script_man"
+              "value": "base:behavior:interaction/lilycove_city_house3_event_script_man"
             }
           ]
         }

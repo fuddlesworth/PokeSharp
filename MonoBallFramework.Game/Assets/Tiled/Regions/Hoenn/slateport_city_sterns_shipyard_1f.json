@@ -1116,9 +1116,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_sterns_shipyard_1f_event_script_dock"
+              "value": "base:behavior:interaction/slateport_city_sterns_shipyard_1f_event_script_dock"
             }
           ]
         },
@@ -1153,9 +1153,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_sterns_shipyard_1f_event_script_scientist1"
+              "value": "base:behavior:interaction/slateport_city_sterns_shipyard_1f_event_script_scientist1"
             }
           ]
         },
@@ -1195,9 +1195,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_sterns_shipyard_1f_event_script_scientist2"
+              "value": "base:behavior:interaction/slateport_city_sterns_shipyard_1f_event_script_scientist2"
             }
           ]
         },
@@ -1237,9 +1237,9 @@
               "value": 2
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_sterns_shipyard_1f_event_script_briney"
+              "value": "base:behavior:interaction/slateport_city_sterns_shipyard_1f_event_script_briney"
             },
             {
               "name": "visibilityFlag",

@@ -4882,9 +4882,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/safari_zone_northwest_event_script_man"
+              "value": "base:behavior:interaction/safari_zone_northwest_event_script_man"
             }
           ]
         },
@@ -4914,9 +4914,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/safari_zone_northwest_event_script_item_tm_solar_beam"
+              "value": "base:behavior:interaction/safari_zone_northwest_event_script_item_tm_solar_beam"
             },
             {
               "name": "visibilityFlag",

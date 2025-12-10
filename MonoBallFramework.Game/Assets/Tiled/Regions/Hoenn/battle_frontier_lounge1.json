@@ -389,9 +389,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge1_event_script_breeder"
+              "value": "base:behavior:interaction/battle_frontier_lounge1_event_script_breeder"
             }
           ]
         },
@@ -431,9 +431,9 @@
               "value": 2
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge1_event_script_boy1"
+              "value": "base:behavior:interaction/battle_frontier_lounge1_event_script_boy1"
             }
           ]
         },
@@ -473,9 +473,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge1_event_script_boy2"
+              "value": "base:behavior:interaction/battle_frontier_lounge1_event_script_boy2"
             }
           ]
         }

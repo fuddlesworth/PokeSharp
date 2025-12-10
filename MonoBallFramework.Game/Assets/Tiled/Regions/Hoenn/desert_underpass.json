@@ -9710,9 +9710,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/desert_underpass_event_script_fossil"
+              "value": "base:behavior:interaction/desert_underpass_event_script_fossil"
             },
             {
               "name": "visibilityFlag",

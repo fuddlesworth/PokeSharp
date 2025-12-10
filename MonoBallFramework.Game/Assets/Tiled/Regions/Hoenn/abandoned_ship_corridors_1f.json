@@ -1058,9 +1058,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_corridors_1f_event_script_youngster"
+              "value": "base:behavior:interaction/abandoned_ship_corridors_1f_event_script_youngster"
             }
           ]
         },
@@ -1095,9 +1095,9 @@
               "value": "square_ccw"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_corridors_1f_event_script_charlie"
+              "value": "base:behavior:interaction/abandoned_ship_corridors_1f_event_script_charlie"
             },
             {
               "name": "trainerType",

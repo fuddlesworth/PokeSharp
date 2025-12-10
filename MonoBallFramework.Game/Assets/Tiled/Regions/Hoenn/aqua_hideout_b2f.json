@@ -2864,9 +2864,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/aqua_hideout_b2f_event_script_matt"
+              "value": "base:behavior:interaction/aqua_hideout_b2f_event_script_matt"
             },
             {
               "name": "visibilityFlag",
@@ -2906,9 +2906,9 @@
               "value": "square_ccw"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/aqua_hideout_b2f_event_script_grunt4"
+              "value": "base:behavior:interaction/aqua_hideout_b2f_event_script_grunt4"
             },
             {
               "name": "visibilityFlag",
@@ -2953,9 +2953,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/aqua_hideout_b2f_event_script_item_nest_ball"
+              "value": "base:behavior:interaction/aqua_hideout_b2f_event_script_item_nest_ball"
             },
             {
               "name": "visibilityFlag",
@@ -3032,9 +3032,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/aqua_hideout_b2f_event_script_grunt6"
+              "value": "base:behavior:interaction/aqua_hideout_b2f_event_script_grunt6"
             },
             {
               "name": "visibilityFlag",
@@ -3084,9 +3084,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/aqua_hideout_b2f_event_script_grunt8"
+              "value": "base:behavior:interaction/aqua_hideout_b2f_event_script_grunt8"
             },
             {
               "name": "visibilityFlag",

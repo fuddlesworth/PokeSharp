@@ -4130,9 +4130,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fiery_path_event_script_item_tm_toxic"
+              "value": "base:behavior:interaction/fiery_path_event_script_item_tm_toxic"
             },
             {
               "name": "visibilityFlag",
@@ -4167,9 +4167,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -4204,9 +4204,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -4241,9 +4241,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -4278,9 +4278,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -4315,9 +4315,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -4352,9 +4352,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_strength_boulder"
+              "value": "base:behavior:interaction/event_script_strength_boulder"
             },
             {
               "name": "visibilityFlag",
@@ -4389,9 +4389,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fiery_path_event_script_item_fire_stone"
+              "value": "base:behavior:interaction/fiery_path_event_script_item_fire_stone"
             },
             {
               "name": "visibilityFlag",

@@ -549,9 +549,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_pokemon_center_1f_event_script_nurse"
+              "value": "base:behavior:interaction/mauville_city_pokemon_center_1f_event_script_nurse"
             }
           ]
         },
@@ -586,9 +586,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_pokemon_center_1f_event_script_mauville_old_man"
+              "value": "base:behavior:interaction/mauville_city_pokemon_center_1f_event_script_mauville_old_man"
             }
           ]
         },
@@ -618,9 +618,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_pokemon_center_1f_event_script_woman1"
+              "value": "base:behavior:interaction/mauville_city_pokemon_center_1f_event_script_woman1"
             }
           ]
         },
@@ -660,9 +660,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_pokemon_center_1f_event_script_woman2"
+              "value": "base:behavior:interaction/mauville_city_pokemon_center_1f_event_script_woman2"
             }
           ]
         },
@@ -692,9 +692,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_pokemon_center_1f_event_script_youngster"
+              "value": "base:behavior:interaction/mauville_city_pokemon_center_1f_event_script_youngster"
             }
           ]
         }

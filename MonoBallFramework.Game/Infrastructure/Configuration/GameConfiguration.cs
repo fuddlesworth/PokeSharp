@@ -62,7 +62,7 @@ public class GameInitializationConfig
     /// <summary>
     ///     Path to game data directory (relative to asset root).
     /// </summary>
-    public string DataPath { get; set; } = "Assets/Data";
+    public string DataPath { get; set; } = "Assets/Definitions";
 
     /// <summary>
     ///     Content root directory for MonoGame content pipeline.

@@ -409,9 +409,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_herb_shop_event_script_clerk"
+              "value": "base:behavior:interaction/lavaridge_town_herb_shop_event_script_clerk"
             }
           ]
         },
@@ -441,9 +441,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_herb_shop_event_script_old_man"
+              "value": "base:behavior:interaction/lavaridge_town_herb_shop_event_script_old_man"
             }
           ]
         },
@@ -483,9 +483,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_herb_shop_event_script_expert_m"
+              "value": "base:behavior:interaction/lavaridge_town_herb_shop_event_script_expert_m"
             }
           ]
         }

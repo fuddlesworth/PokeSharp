@@ -5014,9 +5014,9 @@
               "value": "horizontal"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route106_event_script_douglas"
+              "value": "base:behavior:interaction/route106_event_script_douglas"
             },
             {
               "name": "trainerType",
@@ -5056,9 +5056,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route106_event_script_kyla"
+              "value": "base:behavior:interaction/route106_event_script_kyla"
             },
             {
               "name": "trainerType",
@@ -5103,9 +5103,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route106_event_script_elliot"
+              "value": "base:behavior:interaction/route106_event_script_elliot"
             },
             {
               "name": "trainerType",
@@ -5145,9 +5145,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route106_event_script_ned"
+              "value": "base:behavior:interaction/route106_event_script_ned"
             },
             {
               "name": "trainerType",
@@ -5187,9 +5187,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route106_event_script_item_protein"
+              "value": "base:behavior:interaction/route106_event_script_item_protein"
             },
             {
               "name": "visibilityFlag",

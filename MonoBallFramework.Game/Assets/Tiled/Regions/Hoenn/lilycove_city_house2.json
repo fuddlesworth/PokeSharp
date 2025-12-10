@@ -337,9 +337,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_house2_event_script_fat_man"
+              "value": "base:behavior:interaction/lilycove_city_house2_event_script_fat_man"
             }
           ]
         }

@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/ss_tidal_lower_deck",
+  "DisplayName": "SSTidalLowerDeck",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/ss_tidal_lower_deck.json"
+}

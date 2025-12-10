@@ -415,9 +415,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/safari_zone_rest_house_event_script_youngster"
+              "value": "base:behavior:interaction/safari_zone_rest_house_event_script_youngster"
             }
           ]
         },
@@ -452,9 +452,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/safari_zone_rest_house_event_script_psychic_m"
+              "value": "base:behavior:interaction/safari_zone_rest_house_event_script_psychic_m"
             }
           ]
         },
@@ -489,9 +489,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/safari_zone_rest_house_event_script_fat_man"
+              "value": "base:behavior:interaction/safari_zone_rest_house_event_script_fat_man"
             }
           ]
         }

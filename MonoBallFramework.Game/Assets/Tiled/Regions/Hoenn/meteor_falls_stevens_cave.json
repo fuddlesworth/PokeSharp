@@ -2999,9 +2999,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/meteor_falls_stevens_cave_event_script_steven"
+              "value": "base:behavior:interaction/meteor_falls_stevens_cave_event_script_steven"
             }
           ]
         }

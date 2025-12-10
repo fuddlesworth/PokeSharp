@@ -469,9 +469,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_house3_event_script_old_man"
+              "value": "base:behavior:interaction/rustboro_city_house3_event_script_old_man"
             }
           ]
         },
@@ -506,9 +506,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_house3_event_script_old_woman"
+              "value": "base:behavior:interaction/rustboro_city_house3_event_script_old_woman"
             }
           ]
         },
@@ -543,9 +543,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_house3_event_script_pekachu"
+              "value": "base:behavior:interaction/rustboro_city_house3_event_script_pekachu"
             }
           ]
         }

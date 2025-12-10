@@ -907,9 +907,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/ever_grande_city_pokemon_league_1f_event_script_nurse"
+              "value": "base:behavior:interaction/ever_grande_city_pokemon_league_1f_event_script_nurse"
             }
           ]
         },
@@ -944,9 +944,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/ever_grande_city_pokemon_league_1f_event_script_clerk"
+              "value": "base:behavior:interaction/ever_grande_city_pokemon_league_1f_event_script_clerk"
             }
           ]
         },
@@ -981,9 +981,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/ever_grande_city_pokemon_league_1f_event_script_door_guard"
+              "value": "base:behavior:interaction/ever_grande_city_pokemon_league_1f_event_script_door_guard"
             }
           ]
         },
@@ -1018,9 +1018,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/ever_grande_city_pokemon_league_1f_event_script_door_guard"
+              "value": "base:behavior:interaction/ever_grande_city_pokemon_league_1f_event_script_door_guard"
             }
           ]
         }

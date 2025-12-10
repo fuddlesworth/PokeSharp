@@ -1686,9 +1686,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_gym_b1f_event_script_jace"
+              "value": "base:behavior:interaction/lavaridge_town_gym_b1f_event_script_jace"
             },
             {
               "name": "trainerType",
@@ -1733,9 +1733,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_gym_b1f_event_script_keegan"
+              "value": "base:behavior:interaction/lavaridge_town_gym_b1f_event_script_keegan"
             },
             {
               "name": "trainerType",
@@ -1780,9 +1780,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_gym_b1f_event_script_jeff"
+              "value": "base:behavior:interaction/lavaridge_town_gym_b1f_event_script_jeff"
             },
             {
               "name": "trainerType",
@@ -1827,9 +1827,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_gym_b1f_event_script_eli"
+              "value": "base:behavior:interaction/lavaridge_town_gym_b1f_event_script_eli"
             },
             {
               "name": "trainerType",

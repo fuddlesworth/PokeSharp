@@ -549,9 +549,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_flat2_1f_event_script_skitty"
+              "value": "base:behavior:interaction/rustboro_city_flat2_1f_event_script_skitty"
             }
           ]
         },
@@ -586,9 +586,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_flat2_1f_event_script_old_woman"
+              "value": "base:behavior:interaction/rustboro_city_flat2_1f_event_script_old_woman"
             }
           ]
         }

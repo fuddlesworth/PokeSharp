@@ -549,9 +549,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_pokemon_center_1f_event_script_nurse"
+              "value": "base:behavior:interaction/lilycove_city_pokemon_center_1f_event_script_nurse"
             }
           ]
         },
@@ -586,9 +586,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_pokemon_center_1f_event_script_boy"
+              "value": "base:behavior:interaction/lilycove_city_pokemon_center_1f_event_script_boy"
             }
           ]
         },
@@ -623,9 +623,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_pokemon_center_1f_event_script_maniac"
+              "value": "base:behavior:interaction/lilycove_city_pokemon_center_1f_event_script_maniac"
             }
           ]
         },
@@ -660,9 +660,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_pokemon_center_1f_event_script_lilycove_lady"
+              "value": "base:behavior:interaction/lilycove_city_pokemon_center_1f_event_script_lilycove_lady"
             }
           ]
         },
@@ -697,9 +697,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_pokemon_center_1f_event_script_contest_lady_mon"
+              "value": "base:behavior:interaction/lilycove_city_pokemon_center_1f_event_script_contest_lady_mon"
             },
             {
               "name": "visibilityFlag",

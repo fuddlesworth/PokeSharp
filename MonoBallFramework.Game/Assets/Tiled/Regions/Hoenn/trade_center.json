@@ -469,9 +469,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/trade_center_event_script_attendant"
+              "value": "base:behavior:interaction/trade_center_event_script_attendant"
             }
           ]
         }

@@ -1571,9 +1571,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle7_event_script_joshua"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle7_event_script_joshua"
             },
             {
               "name": "trainerType",
@@ -1618,9 +1618,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle7_event_script_alexis"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle7_event_script_alexis"
             },
             {
               "name": "trainerType",
@@ -1665,9 +1665,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle7_event_script_patricia"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle7_event_script_patricia"
             },
             {
               "name": "trainerType",
@@ -1707,9 +1707,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle7_event_script_item_tropic_mail"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle7_event_script_item_tropic_mail"
             },
             {
               "name": "visibilityFlag",
@@ -1749,9 +1749,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle7_event_script_alvaro"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle7_event_script_alvaro"
             },
             {
               "name": "trainerType",
@@ -1796,9 +1796,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle7_event_script_mariela"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle7_event_script_mariela"
             },
             {
               "name": "trainerType",
@@ -1843,9 +1843,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle7_event_script_everett"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle7_event_script_everett"
             },
             {
               "name": "trainerType",

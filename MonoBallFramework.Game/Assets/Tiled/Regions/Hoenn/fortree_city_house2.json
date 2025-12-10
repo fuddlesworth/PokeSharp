@@ -294,9 +294,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_house2_event_script_hidden_power_giver"
+              "value": "base:behavior:interaction/fortree_city_house2_event_script_hidden_power_giver"
             }
           ]
         },
@@ -331,9 +331,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_house2_event_script_sleep_talk_tutor"
+              "value": "base:behavior:interaction/fortree_city_house2_event_script_sleep_talk_tutor"
             }
           ]
         }

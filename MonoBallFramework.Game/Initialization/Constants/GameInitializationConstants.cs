@@ -14,7 +14,7 @@ public static class GameInitializationConstants
     /// <summary>
     ///     Default game data directory path (relative to asset root).
     /// </summary>
-    public const string DefaultDataPath = "Assets/Data";
+    public const string DefaultDataPath = "Assets/Definitions";
 
     /// <summary>
     ///     Default initial map to load when the game starts.

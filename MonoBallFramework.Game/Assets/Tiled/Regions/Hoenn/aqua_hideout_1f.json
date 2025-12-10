@@ -2691,9 +2691,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/aqua_hideout_1f_event_script_hideout_entrance_grunt1"
+              "value": "base:behavior:interaction/aqua_hideout_1f_event_script_hideout_entrance_grunt1"
             },
             {
               "name": "visibilityFlag",
@@ -2733,9 +2733,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/aqua_hideout_1f_event_script_hideout_entrance_grunt2"
+              "value": "base:behavior:interaction/aqua_hideout_1f_event_script_hideout_entrance_grunt2"
             },
             {
               "name": "visibilityFlag",
@@ -2775,9 +2775,9 @@
               "value": "square_cw"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/aqua_hideout_1f_event_script_grunt1"
+              "value": "base:behavior:interaction/aqua_hideout_1f_event_script_grunt1"
             },
             {
               "name": "visibilityFlag",

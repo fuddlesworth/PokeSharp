@@ -570,9 +570,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fallarbor_town_battle_tent_lobby_event_script_attendant"
+              "value": "base:behavior:interaction/fallarbor_town_battle_tent_lobby_event_script_attendant"
             }
           ]
         },
@@ -612,9 +612,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fallarbor_town_battle_tent_lobby_event_script_hiker"
+              "value": "base:behavior:interaction/fallarbor_town_battle_tent_lobby_event_script_hiker"
             }
           ]
         },
@@ -654,9 +654,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fallarbor_town_battle_tent_lobby_event_script_little_boy"
+              "value": "base:behavior:interaction/fallarbor_town_battle_tent_lobby_event_script_little_boy"
             }
           ]
         },
@@ -691,9 +691,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fallarbor_town_battle_tent_lobby_event_script_lass"
+              "value": "base:behavior:interaction/fallarbor_town_battle_tent_lobby_event_script_lass"
             }
           ]
         },
@@ -728,9 +728,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fallarbor_town_battle_tent_lobby_event_script_scott"
+              "value": "base:behavior:interaction/fallarbor_town_battle_tent_lobby_event_script_scott"
             },
             {
               "name": "visibilityFlag",

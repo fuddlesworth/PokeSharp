@@ -9682,9 +9682,9 @@
               "value": "square_cw"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route134_event_script_jack"
+              "value": "base:behavior:interaction/route134_event_script_jack"
             },
             {
               "name": "trainerType",
@@ -9724,9 +9724,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route134_event_script_laurel"
+              "value": "base:behavior:interaction/route134_event_script_laurel"
             },
             {
               "name": "trainerType",
@@ -9771,9 +9771,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route134_event_script_aaron"
+              "value": "base:behavior:interaction/route134_event_script_aaron"
             },
             {
               "name": "trainerType",
@@ -9818,9 +9818,9 @@
               "value": "vertical"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route134_event_script_alex"
+              "value": "base:behavior:interaction/route134_event_script_alex"
             },
             {
               "name": "trainerType",
@@ -9865,9 +9865,9 @@
               "value": "horizontal"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route134_event_script_hitoshi"
+              "value": "base:behavior:interaction/route134_event_script_hitoshi"
             },
             {
               "name": "trainerType",
@@ -9912,9 +9912,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route134_event_script_marley"
+              "value": "base:behavior:interaction/route134_event_script_marley"
             },
             {
               "name": "trainerType",
@@ -9959,9 +9959,9 @@
               "value": "vertical"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route134_event_script_kelvin"
+              "value": "base:behavior:interaction/route134_event_script_kelvin"
             },
             {
               "name": "trainerType",
@@ -10006,9 +10006,9 @@
               "value": "horizontal"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route134_event_script_reyna"
+              "value": "base:behavior:interaction/route134_event_script_reyna"
             },
             {
               "name": "trainerType",
@@ -10053,9 +10053,9 @@
               "value": "down,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route134_event_script_hudson"
+              "value": "base:behavior:interaction/route134_event_script_hudson"
             },
             {
               "name": "trainerType",
@@ -10095,9 +10095,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route134_event_script_item_carbos"
+              "value": "base:behavior:interaction/route134_event_script_item_carbos"
             },
             {
               "name": "visibilityFlag",
@@ -10132,9 +10132,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route134_event_script_item_star_piece"
+              "value": "base:behavior:interaction/route134_event_script_item_star_piece"
             },
             {
               "name": "visibilityFlag",

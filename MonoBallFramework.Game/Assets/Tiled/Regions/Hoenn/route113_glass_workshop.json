@@ -415,9 +415,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route113_glass_workshop_event_script_glass_worker"
+              "value": "base:behavior:interaction/route113_glass_workshop_event_script_glass_worker"
             }
           ]
         },
@@ -457,9 +457,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route113_glass_workshop_event_script_ninja_boy"
+              "value": "base:behavior:interaction/route113_glass_workshop_event_script_ninja_boy"
             }
           ]
         }

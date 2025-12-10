@@ -289,9 +289,9 @@
               "value": "down,up,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_house5_event_script_pokefan_f"
+              "value": "base:behavior:interaction/fortree_city_house5_event_script_pokefan_f"
             }
           ]
         },
@@ -326,9 +326,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_house5_event_script_zigzagoon"
+              "value": "base:behavior:interaction/fortree_city_house5_event_script_zigzagoon"
             }
           ]
         },
@@ -363,9 +363,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_house5_event_script_man"
+              "value": "base:behavior:interaction/fortree_city_house5_event_script_man"
             }
           ]
         }

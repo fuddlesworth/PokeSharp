@@ -2765,9 +2765,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/granite_cave_b2f_event_script_item_repel"
+              "value": "base:behavior:interaction/granite_cave_b2f_event_script_item_repel"
             },
             {
               "name": "visibilityFlag",
@@ -2802,9 +2802,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/granite_cave_b2f_event_script_item_rare_candy"
+              "value": "base:behavior:interaction/granite_cave_b2f_event_script_item_rare_candy"
             },
             {
               "name": "visibilityFlag",
@@ -2839,9 +2839,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_rock_smash"
+              "value": "base:behavior:interaction/event_script_rock_smash"
             },
             {
               "name": "visibilityFlag",
@@ -2876,9 +2876,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_rock_smash"
+              "value": "base:behavior:interaction/event_script_rock_smash"
             },
             {
               "name": "visibilityFlag",
@@ -2913,9 +2913,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_rock_smash"
+              "value": "base:behavior:interaction/event_script_rock_smash"
             },
             {
               "name": "visibilityFlag",
@@ -2950,9 +2950,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_rock_smash"
+              "value": "base:behavior:interaction/event_script_rock_smash"
             },
             {
               "name": "visibilityFlag",
@@ -2987,9 +2987,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_rock_smash"
+              "value": "base:behavior:interaction/event_script_rock_smash"
             },
             {
               "name": "visibilityFlag",
@@ -3024,9 +3024,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_rock_smash"
+              "value": "base:behavior:interaction/event_script_rock_smash"
             },
             {
               "name": "visibilityFlag",
@@ -3061,9 +3061,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_rock_smash"
+              "value": "base:behavior:interaction/event_script_rock_smash"
             },
             {
               "name": "visibilityFlag",

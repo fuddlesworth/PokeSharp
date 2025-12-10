@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/contest_hall",
+  "DisplayName": "ContestHall",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/contest_hall.json"
+}

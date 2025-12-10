@@ -415,9 +415,9 @@
               "value": "down,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/pacifidlog_town_house3_event_script_girl"
+              "value": "base:behavior:interaction/pacifidlog_town_house3_event_script_girl"
             }
           ]
         },
@@ -452,9 +452,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/pacifidlog_town_house3_event_script_trader"
+              "value": "base:behavior:interaction/pacifidlog_town_house3_event_script_trader"
             }
           ]
         }

@@ -6362,9 +6362,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route113_event_script_ninja_boy"
+              "value": "base:behavior:interaction/route113_event_script_ninja_boy"
             }
           ]
         },
@@ -6404,9 +6404,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route113_event_script_gentleman"
+              "value": "base:behavior:interaction/route113_event_script_gentleman"
             }
           ]
         },
@@ -6441,9 +6441,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route113_event_script_jaylen"
+              "value": "base:behavior:interaction/route113_event_script_jaylen"
             },
             {
               "name": "trainerType",
@@ -6488,9 +6488,9 @@
               "value": "down,left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route113_event_script_dillon"
+              "value": "base:behavior:interaction/route113_event_script_dillon"
             },
             {
               "name": "trainerType",
@@ -6530,9 +6530,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route113_event_script_madeline"
+              "value": "base:behavior:interaction/route113_event_script_madeline"
             },
             {
               "name": "trainerType",
@@ -6572,9 +6572,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route113_event_script_item_max_ether"
+              "value": "base:behavior:interaction/route113_event_script_item_max_ether"
             },
             {
               "name": "visibilityFlag",
@@ -6609,9 +6609,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route113_event_script_item_super_repel"
+              "value": "base:behavior:interaction/route113_event_script_item_super_repel"
             },
             {
               "name": "visibilityFlag",
@@ -6651,9 +6651,9 @@
               "value": true
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route113_event_script_lao"
+              "value": "base:behavior:interaction/route113_event_script_lao"
             },
             {
               "name": "trainerType",
@@ -6698,9 +6698,9 @@
               "value": true
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route113_event_script_lung"
+              "value": "base:behavior:interaction/route113_event_script_lung"
             },
             {
               "name": "trainerType",
@@ -6745,9 +6745,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route113_event_script_tori"
+              "value": "base:behavior:interaction/route113_event_script_tori"
             },
             {
               "name": "trainerType",
@@ -6792,9 +6792,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route113_event_script_tia"
+              "value": "base:behavior:interaction/route113_event_script_tia"
             },
             {
               "name": "trainerType",
@@ -6834,9 +6834,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route113_event_script_item_hyper_potion"
+              "value": "base:behavior:interaction/route113_event_script_item_hyper_potion"
             },
             {
               "name": "visibilityFlag",
@@ -6876,9 +6876,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route113_event_script_wyatt"
+              "value": "base:behavior:interaction/route113_event_script_wyatt"
             },
             {
               "name": "trainerType",
@@ -6923,9 +6923,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route113_event_script_lawrence"
+              "value": "base:behavior:interaction/route113_event_script_lawrence"
             },
             {
               "name": "trainerType",
@@ -6970,9 +6970,9 @@
               "value": "vertical"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route113_event_script_sophie"
+              "value": "base:behavior:interaction/route113_event_script_sophie"
             },
             {
               "name": "trainerType",
@@ -7017,9 +7017,9 @@
               "value": "vertical"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route113_event_script_coby"
+              "value": "base:behavior:interaction/route113_event_script_coby"
             },
             {
               "name": "trainerType",

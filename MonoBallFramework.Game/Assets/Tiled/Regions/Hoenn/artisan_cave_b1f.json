@@ -7683,9 +7683,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/artisan_cave_b1f_event_script_item_hp_up"
+              "value": "base:behavior:interaction/artisan_cave_b1f_event_script_item_hp_up"
             },
             {
               "name": "visibilityFlag",

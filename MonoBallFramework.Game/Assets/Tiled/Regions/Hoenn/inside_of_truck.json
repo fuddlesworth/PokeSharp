@@ -377,9 +377,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/inside_of_truck_event_script_moving_box"
+              "value": "base:behavior:interaction/inside_of_truck_event_script_moving_box"
             }
           ]
         },
@@ -414,9 +414,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/inside_of_truck_event_script_moving_box"
+              "value": "base:behavior:interaction/inside_of_truck_event_script_moving_box"
             }
           ]
         },
@@ -451,9 +451,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/inside_of_truck_event_script_moving_box"
+              "value": "base:behavior:interaction/inside_of_truck_event_script_moving_box"
             }
           ]
         }

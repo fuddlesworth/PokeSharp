@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/ss_tidal_rooms",
+  "DisplayName": "SSTidalRooms",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/ss_tidal_rooms.json"
+}

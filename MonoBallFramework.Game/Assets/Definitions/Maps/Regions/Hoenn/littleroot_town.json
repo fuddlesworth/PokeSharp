@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/littleroot_town",
+  "DisplayName": "LittlerootTown",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/littleroot_town.json"
+}

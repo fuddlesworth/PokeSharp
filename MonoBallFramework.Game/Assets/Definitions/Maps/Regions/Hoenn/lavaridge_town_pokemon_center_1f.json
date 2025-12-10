@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/lavaridge_town_pokemon_center_1f",
+  "DisplayName": "LavaridgeTown_PokemonCenter_1F",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/lavaridge_town_pokemon_center_1f.json"
+}

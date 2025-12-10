@@ -1503,9 +1503,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_1f_event_script_cleanse_tag_woman"
+              "value": "base:behavior:interaction/mt_pyre_1f_event_script_cleanse_tag_woman"
             }
           ]
         },
@@ -1540,9 +1540,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_1f_event_script_pokefan_f"
+              "value": "base:behavior:interaction/mt_pyre_1f_event_script_pokefan_f"
             }
           ]
         },
@@ -1577,9 +1577,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_1f_event_script_man"
+              "value": "base:behavior:interaction/mt_pyre_1f_event_script_man"
             }
           ]
         }

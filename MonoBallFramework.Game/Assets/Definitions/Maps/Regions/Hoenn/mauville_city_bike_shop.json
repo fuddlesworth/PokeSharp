@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/mauville_city_bike_shop",
+  "DisplayName": "MauvilleCity_BikeShop",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/mauville_city_bike_shop.json"
+}

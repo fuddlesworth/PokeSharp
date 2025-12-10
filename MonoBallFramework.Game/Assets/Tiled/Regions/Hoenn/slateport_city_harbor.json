@@ -1392,9 +1392,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_harbor_event_script_ferry_attendant"
+              "value": "base:behavior:interaction/slateport_city_harbor_event_script_ferry_attendant"
             },
             {
               "name": "visibilityFlag",
@@ -1434,9 +1434,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_harbor_event_script_sailor"
+              "value": "base:behavior:interaction/slateport_city_harbor_event_script_sailor"
             },
             {
               "name": "visibilityFlag",
@@ -1476,9 +1476,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_harbor_event_script_fat_man"
+              "value": "base:behavior:interaction/slateport_city_harbor_event_script_fat_man"
             },
             {
               "name": "visibilityFlag",
@@ -1513,9 +1513,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_harbor_event_script_capt_stern"
+              "value": "base:behavior:interaction/slateport_city_harbor_event_script_capt_stern"
             },
             {
               "name": "visibilityFlag",

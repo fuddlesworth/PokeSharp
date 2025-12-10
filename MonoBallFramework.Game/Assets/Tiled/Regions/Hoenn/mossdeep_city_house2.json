@@ -415,9 +415,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_house2_event_script_man"
+              "value": "base:behavior:interaction/mossdeep_city_house2_event_script_man"
             }
           ]
         },
@@ -452,9 +452,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_house2_event_script_twin"
+              "value": "base:behavior:interaction/mossdeep_city_house2_event_script_twin"
             }
           ]
         },
@@ -489,9 +489,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_house2_event_script_wingull"
+              "value": "base:behavior:interaction/mossdeep_city_house2_event_script_wingull"
             },
             {
               "name": "visibilityFlag",

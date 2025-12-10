@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/ss_tidal_corridor",
+  "DisplayName": "SSTidalCorridor",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/ss_tidal_corridor.json"
+}

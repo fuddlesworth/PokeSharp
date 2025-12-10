@@ -751,9 +751,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_4f_event_script_tasha"
+              "value": "base:behavior:interaction/mt_pyre_4f_event_script_tasha"
             },
             {
               "name": "trainerType",
@@ -793,9 +793,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_4f_event_script_item_sea_incense"
+              "value": "base:behavior:interaction/mt_pyre_4f_event_script_item_sea_incense"
             },
             {
               "name": "visibilityFlag",

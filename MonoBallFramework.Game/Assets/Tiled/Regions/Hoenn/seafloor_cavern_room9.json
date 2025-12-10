@@ -4062,9 +4062,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/seafloor_cavern_room9_event_script_item_tm_earthquake"
+              "value": "base:behavior:interaction/seafloor_cavern_room9_event_script_item_tm_earthquake"
             },
             {
               "name": "visibilityFlag",

@@ -1276,9 +1276,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_lilycove_museum_2f_event_script_curator"
+              "value": "base:behavior:interaction/lilycove_city_lilycove_museum_2f_event_script_curator"
             }
           ]
         },
@@ -1318,9 +1318,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_lilycove_museum_2f_event_script_girl"
+              "value": "base:behavior:interaction/lilycove_city_lilycove_museum_2f_event_script_girl"
             },
             {
               "name": "visibilityFlag",
@@ -1365,9 +1365,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_lilycove_museum_2f_event_script_expert_m"
+              "value": "base:behavior:interaction/lilycove_city_lilycove_museum_2f_event_script_expert_m"
             },
             {
               "name": "visibilityFlag",
@@ -1412,9 +1412,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_lilycove_museum_2f_event_script_rich_boy"
+              "value": "base:behavior:interaction/lilycove_city_lilycove_museum_2f_event_script_rich_boy"
             },
             {
               "name": "visibilityFlag",

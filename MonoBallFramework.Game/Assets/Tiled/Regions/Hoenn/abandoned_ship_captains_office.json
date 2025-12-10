@@ -334,9 +334,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_captains_office_event_script_capt_stern_aide"
+              "value": "base:behavior:interaction/abandoned_ship_captains_office_event_script_capt_stern_aide"
             }
           ]
         },
@@ -366,9 +366,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_captains_office_event_script_item_storage_key"
+              "value": "base:behavior:interaction/abandoned_ship_captains_office_event_script_item_storage_key"
             },
             {
               "name": "visibilityFlag",

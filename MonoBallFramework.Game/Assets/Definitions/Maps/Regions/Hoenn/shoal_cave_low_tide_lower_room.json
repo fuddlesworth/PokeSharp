@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/shoal_cave_low_tide_lower_room",
+  "DisplayName": "ShoalCave_LowTideLowerRoom",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/shoal_cave_low_tide_lower_room.json"
+}

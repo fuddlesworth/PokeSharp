@@ -2082,9 +2082,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/granite_cave_1f_event_script_hiker"
+              "value": "base:behavior:interaction/granite_cave_1f_event_script_hiker"
             }
           ]
         },
@@ -2119,9 +2119,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/granite_cave_1f_event_script_item_escape_rope"
+              "value": "base:behavior:interaction/granite_cave_1f_event_script_item_escape_rope"
             },
             {
               "name": "visibilityFlag",

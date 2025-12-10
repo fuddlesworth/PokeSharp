@@ -284,9 +284,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_scotts_house_event_script_scott"
+              "value": "base:behavior:interaction/battle_frontier_scotts_house_event_script_scott"
             }
           ]
         }

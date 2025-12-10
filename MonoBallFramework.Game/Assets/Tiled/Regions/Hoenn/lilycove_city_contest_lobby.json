@@ -1612,9 +1612,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_lobby_event_script_contest_receptionist"
+              "value": "base:behavior:interaction/lilycove_city_contest_lobby_event_script_contest_receptionist"
             }
           ]
         },
@@ -1649,9 +1649,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_lobby_event_script_link_contest_receptionist"
+              "value": "base:behavior:interaction/lilycove_city_contest_lobby_event_script_link_contest_receptionist"
             }
           ]
         },
@@ -1686,9 +1686,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/berry_blender_event_script_blender2_man"
+              "value": "base:behavior:interaction/berry_blender_event_script_blender2_man"
             }
           ]
         },
@@ -1760,9 +1760,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_lobby_event_script_black_belt"
+              "value": "base:behavior:interaction/lilycove_city_contest_lobby_event_script_black_belt"
             }
           ]
         },
@@ -1802,9 +1802,9 @@
               "value": 2
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_lobby_event_script_girl"
+              "value": "base:behavior:interaction/lilycove_city_contest_lobby_event_script_girl"
             }
           ]
         },
@@ -1844,9 +1844,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_lobby_event_script_artist"
+              "value": "base:behavior:interaction/lilycove_city_contest_lobby_event_script_artist"
             }
           ]
         },
@@ -1881,9 +1881,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_lobby_event_script_reporter"
+              "value": "base:behavior:interaction/lilycove_city_contest_lobby_event_script_reporter"
             },
             {
               "name": "visibilityFlag",
@@ -1923,9 +1923,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_lobby_event_script_blender3_boy"
+              "value": "base:behavior:interaction/lilycove_city_contest_lobby_event_script_blender3_boy"
             }
           ]
         },
@@ -1960,9 +1960,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/berry_blender_event_script_blender2_twin"
+              "value": "base:behavior:interaction/berry_blender_event_script_blender2_twin"
             }
           ]
         },
@@ -2039,9 +2039,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_lobby_event_script_fisherman"
+              "value": "base:behavior:interaction/lilycove_city_contest_lobby_event_script_fisherman"
             }
           ]
         },
@@ -2076,9 +2076,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_lobby_event_script_fat_man"
+              "value": "base:behavior:interaction/lilycove_city_contest_lobby_event_script_fat_man"
             }
           ]
         },
@@ -2118,9 +2118,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_lobby_event_script_ninja_boy"
+              "value": "base:behavior:interaction/lilycove_city_contest_lobby_event_script_ninja_boy"
             }
           ]
         },
@@ -2155,9 +2155,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/berry_blender_event_script_blender3_pokefan_f"
+              "value": "base:behavior:interaction/berry_blender_event_script_blender3_pokefan_f"
             }
           ]
         },
@@ -2192,9 +2192,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/berry_blender_event_script_blender1_expert_m"
+              "value": "base:behavior:interaction/berry_blender_event_script_blender1_expert_m"
             },
             {
               "name": "visibilityFlag",
@@ -2234,9 +2234,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_lobby_event_script_blender3_girl"
+              "value": "base:behavior:interaction/lilycove_city_contest_lobby_event_script_blender3_girl"
             }
           ]
         },
@@ -2271,9 +2271,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_lobby_event_script_blend_master_onlooker2"
+              "value": "base:behavior:interaction/lilycove_city_contest_lobby_event_script_blend_master_onlooker2"
             },
             {
               "name": "visibilityFlag",
@@ -2313,9 +2313,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_lobby_event_script_blend_master_onlooker3"
+              "value": "base:behavior:interaction/lilycove_city_contest_lobby_event_script_blend_master_onlooker3"
             },
             {
               "name": "visibilityFlag",
@@ -2355,9 +2355,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_lobby_event_script_blend_master_onlooker4"
+              "value": "base:behavior:interaction/lilycove_city_contest_lobby_event_script_blend_master_onlooker4"
             },
             {
               "name": "visibilityFlag",
@@ -2397,9 +2397,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_lobby_event_script_blend_master_onlooker5"
+              "value": "base:behavior:interaction/lilycove_city_contest_lobby_event_script_blend_master_onlooker5"
             },
             {
               "name": "visibilityFlag",
@@ -2439,9 +2439,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_lobby_event_script_blend_master_onlooker6"
+              "value": "base:behavior:interaction/lilycove_city_contest_lobby_event_script_blend_master_onlooker6"
             },
             {
               "name": "visibilityFlag",
@@ -2481,9 +2481,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_lobby_event_script_blend_master_onlooker1"
+              "value": "base:behavior:interaction/lilycove_city_contest_lobby_event_script_blend_master_onlooker1"
             },
             {
               "name": "visibilityFlag",
@@ -2523,9 +2523,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_lobby_event_script_blend_master"
+              "value": "base:behavior:interaction/lilycove_city_contest_lobby_event_script_blend_master"
             },
             {
               "name": "visibilityFlag",
@@ -2565,9 +2565,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_lobby_event_script_little_girl"
+              "value": "base:behavior:interaction/lilycove_city_contest_lobby_event_script_little_girl"
             }
           ]
         }

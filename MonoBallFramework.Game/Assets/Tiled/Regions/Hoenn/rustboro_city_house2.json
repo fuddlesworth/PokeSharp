@@ -469,9 +469,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_house2_event_script_pokefan_f"
+              "value": "base:behavior:interaction/rustboro_city_house2_event_script_pokefan_f"
             }
           ]
         },
@@ -506,9 +506,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_house2_event_script_little_girl"
+              "value": "base:behavior:interaction/rustboro_city_house2_event_script_little_girl"
             }
           ]
         }

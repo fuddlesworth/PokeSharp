@@ -1030,9 +1030,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/littleroot_town_professor_birchs_lab_event_script_aide"
+              "value": "base:behavior:interaction/littleroot_town_professor_birchs_lab_event_script_aide"
             }
           ]
         },
@@ -1067,9 +1067,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/littleroot_town_professor_birchs_lab_event_script_birch"
+              "value": "base:behavior:interaction/littleroot_town_professor_birchs_lab_event_script_birch"
             },
             {
               "name": "visibilityFlag",
@@ -1109,9 +1109,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/littleroot_town_professor_birchs_lab_event_script_rival"
+              "value": "base:behavior:interaction/littleroot_town_professor_birchs_lab_event_script_rival"
             },
             {
               "name": "visibilityFlag",
@@ -1151,9 +1151,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/littleroot_town_professor_birchs_lab_event_script_cyndaquil"
+              "value": "base:behavior:interaction/littleroot_town_professor_birchs_lab_event_script_cyndaquil"
             },
             {
               "name": "visibilityFlag",
@@ -1193,9 +1193,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/littleroot_town_professor_birchs_lab_event_script_totodile"
+              "value": "base:behavior:interaction/littleroot_town_professor_birchs_lab_event_script_totodile"
             },
             {
               "name": "visibilityFlag",
@@ -1235,9 +1235,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/littleroot_town_professor_birchs_lab_event_script_chikorita"
+              "value": "base:behavior:interaction/littleroot_town_professor_birchs_lab_event_script_chikorita"
             },
             {
               "name": "visibilityFlag",

@@ -1025,9 +1025,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route121_safari_zone_entrance_event_script_welcome_attendant"
+              "value": "base:behavior:interaction/route121_safari_zone_entrance_event_script_welcome_attendant"
             }
           ]
         },
@@ -1062,9 +1062,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route121_safari_zone_entrance_event_script_info_attendant"
+              "value": "base:behavior:interaction/route121_safari_zone_entrance_event_script_info_attendant"
             }
           ]
         },

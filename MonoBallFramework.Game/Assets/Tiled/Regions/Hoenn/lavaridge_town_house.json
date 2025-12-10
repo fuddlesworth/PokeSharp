@@ -380,9 +380,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_house_event_script_old_man"
+              "value": "base:behavior:interaction/lavaridge_town_house_event_script_old_man"
             }
           ]
         },
@@ -412,9 +412,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_house_event_script_zigzagoon"
+              "value": "base:behavior:interaction/lavaridge_town_house_event_script_zigzagoon"
             }
           ]
         },
@@ -454,9 +454,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_house_event_script_mimic_tutor"
+              "value": "base:behavior:interaction/lavaridge_town_house_event_script_mimic_tutor"
             }
           ]
         }

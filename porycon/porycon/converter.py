@@ -1943,15 +1943,15 @@ class MapConverter:
                         "value": str(param_value)
                     })
 
-        # Add script reference if present (as full scriptId)
+        # Add script reference if present (as full interactionId)
         script = obj_event.get("script", "")
         if script and script != "NULL" and script != "0x0":
-            script_id = IdTransformer.script_id_from_pokeemerald(script, map_name)
-            if script_id:
+            interaction_id = IdTransformer.interaction_id_from_pokeemerald(script, map_name)
+            if interaction_id:
                 properties.append({
-                    "name": "scriptId",
+                    "name": "interactionId",
                     "type": "string",
-                    "value": script_id
+                    "value": interaction_id
                 })
 
         # Add visibility flag if present and not 0 (transform to unified format)

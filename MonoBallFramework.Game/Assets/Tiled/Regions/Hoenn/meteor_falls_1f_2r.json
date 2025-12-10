@@ -3077,9 +3077,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/meteor_falls_1f_2r_event_script_nicolas"
+              "value": "base:behavior:interaction/meteor_falls_1f_2r_event_script_nicolas"
             },
             {
               "name": "trainerType",
@@ -3124,9 +3124,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/meteor_falls_1f_2r_event_script_john"
+              "value": "base:behavior:interaction/meteor_falls_1f_2r_event_script_john"
             },
             {
               "name": "trainerType",
@@ -3171,9 +3171,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/meteor_falls_1f_2r_event_script_jay"
+              "value": "base:behavior:interaction/meteor_falls_1f_2r_event_script_jay"
             },
             {
               "name": "trainerType",

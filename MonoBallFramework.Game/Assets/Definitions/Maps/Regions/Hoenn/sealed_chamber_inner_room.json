@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/sealed_chamber_inner_room",
+  "DisplayName": "SealedChamber_InnerRoom",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/sealed_chamber_inner_room.json"
+}

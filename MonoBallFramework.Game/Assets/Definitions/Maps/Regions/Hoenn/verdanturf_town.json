@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/verdanturf_town",
+  "DisplayName": "VerdanturfTown",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/verdanturf_town.json"
+}

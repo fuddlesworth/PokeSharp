@@ -608,9 +608,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_4f_event_script_gentleman"
+              "value": "base:behavior:interaction/lilycove_city_department_store_4f_event_script_gentleman"
             }
           ]
         },
@@ -650,9 +650,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_4f_event_script_woman"
+              "value": "base:behavior:interaction/lilycove_city_department_store_4f_event_script_woman"
             }
           ]
         },
@@ -692,9 +692,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_4f_event_script_youngster"
+              "value": "base:behavior:interaction/lilycove_city_department_store_4f_event_script_youngster"
             }
           ]
         },
@@ -729,9 +729,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_4f_event_script_clerk_left"
+              "value": "base:behavior:interaction/lilycove_city_department_store_4f_event_script_clerk_left"
             }
           ]
         },
@@ -766,9 +766,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_4f_event_script_clerk_right"
+              "value": "base:behavior:interaction/lilycove_city_department_store_4f_event_script_clerk_right"
             }
           ]
         }

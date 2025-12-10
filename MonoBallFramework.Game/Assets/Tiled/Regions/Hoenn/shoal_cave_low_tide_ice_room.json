@@ -1914,9 +1914,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/shoal_cave_low_tide_ice_room_event_script_item_tm_hail"
+              "value": "base:behavior:interaction/shoal_cave_low_tide_ice_room_event_script_item_tm_hail"
             },
             {
               "name": "visibilityFlag",
@@ -1951,9 +1951,9 @@
               "value": 4
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/shoal_cave_low_tide_ice_room_event_script_item_never_melt_ice"
+              "value": "base:behavior:interaction/shoal_cave_low_tide_ice_room_event_script_item_never_melt_ice"
             },
             {
               "name": "visibilityFlag",

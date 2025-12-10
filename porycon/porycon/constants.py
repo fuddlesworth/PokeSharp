@@ -41,7 +41,7 @@ TILES_PER_ROW_DEFAULT = 16  # Default tiles per row in tileset images
 # NPC/Object Event Movement Types
 # =============================================================================
 # Maps pokeemerald MOVEMENT_TYPE_* constants to (behaviorId, default_params)
-# The behaviorId references a behavior definition in Assets/Data/Behaviors/
+# The behaviorId references a behavior definition in Assets/Definitions/Behaviors/
 # The default_params dict provides defaults that can be overridden by map properties
 
 MOVEMENT_TYPE_TO_BEHAVIOR: dict[str, tuple[str, dict]] = {

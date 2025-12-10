@@ -5228,9 +5228,9 @@
               "value": true
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/berry_tree_script"
+              "value": "base:behavior:interaction/berry_tree_script"
             }
           ]
         },
@@ -5265,9 +5265,9 @@
               "value": true
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/berry_tree_script"
+              "value": "base:behavior:interaction/berry_tree_script"
             }
           ]
         },
@@ -5302,9 +5302,9 @@
               "value": true
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/berry_tree_script"
+              "value": "base:behavior:interaction/berry_tree_script"
             }
           ]
         },
@@ -5339,9 +5339,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route118_event_script_perry"
+              "value": "base:behavior:interaction/route118_event_script_perry"
             },
             {
               "name": "trainerType",
@@ -5386,9 +5386,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/gabby_and_ty_event_script_gabby_battle2"
+              "value": "base:behavior:interaction/gabby_and_ty_event_script_gabby_battle2"
             },
             {
               "name": "visibilityFlag",
@@ -5428,9 +5428,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/gabby_and_ty_event_script_ty_battle2"
+              "value": "base:behavior:interaction/gabby_and_ty_event_script_ty_battle2"
             },
             {
               "name": "visibilityFlag",
@@ -5475,9 +5475,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route118_event_script_girl"
+              "value": "base:behavior:interaction/route118_event_script_girl"
             }
           ]
         },
@@ -5512,9 +5512,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/gabby_and_ty_event_script_gabby_battle5"
+              "value": "base:behavior:interaction/gabby_and_ty_event_script_gabby_battle5"
             },
             {
               "name": "visibilityFlag",
@@ -5554,9 +5554,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/gabby_and_ty_event_script_ty_battle5"
+              "value": "base:behavior:interaction/gabby_and_ty_event_script_ty_battle5"
             },
             {
               "name": "visibilityFlag",
@@ -5596,9 +5596,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/gabby_and_ty_event_script_gabby_battle6"
+              "value": "base:behavior:interaction/gabby_and_ty_event_script_gabby_battle6"
             },
             {
               "name": "visibilityFlag",
@@ -5638,9 +5638,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/gabby_and_ty_event_script_ty_battle6"
+              "value": "base:behavior:interaction/gabby_and_ty_event_script_ty_battle6"
             },
             {
               "name": "visibilityFlag",
@@ -5675,9 +5675,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_cut_tree"
+              "value": "base:behavior:interaction/event_script_cut_tree"
             },
             {
               "name": "visibilityFlag",
@@ -5717,9 +5717,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route118_event_script_good_rod_fisherman"
+              "value": "base:behavior:interaction/route118_event_script_good_rod_fisherman"
             }
           ]
         },
@@ -5754,9 +5754,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route118_event_script_rose"
+              "value": "base:behavior:interaction/route118_event_script_rose"
             },
             {
               "name": "trainerType",
@@ -5801,9 +5801,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route118_event_script_wade"
+              "value": "base:behavior:interaction/route118_event_script_wade"
             },
             {
               "name": "trainerType",
@@ -5843,9 +5843,9 @@
               "value": "up,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route118_event_script_chester"
+              "value": "base:behavior:interaction/route118_event_script_chester"
             },
             {
               "name": "trainerType",
@@ -5885,9 +5885,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route118_event_script_barny"
+              "value": "base:behavior:interaction/route118_event_script_barny"
             },
             {
               "name": "trainerType",
@@ -5932,9 +5932,9 @@
               "value": "up,left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route118_event_script_dalton"
+              "value": "base:behavior:interaction/route118_event_script_dalton"
             },
             {
               "name": "trainerType",
@@ -6011,9 +6011,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route118_event_script_item_hyper_potion"
+              "value": "base:behavior:interaction/route118_event_script_item_hyper_potion"
             },
             {
               "name": "visibilityFlag",
@@ -6053,9 +6053,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route118_event_script_deandre"
+              "value": "base:behavior:interaction/route118_event_script_deandre"
             },
             {
               "name": "trainerType",

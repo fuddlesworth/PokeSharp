@@ -6172,9 +6172,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_exterior_event_script_item_max_potion"
+              "value": "base:behavior:interaction/mt_pyre_exterior_event_script_item_max_potion"
             },
             {
               "name": "visibilityFlag",
@@ -6209,9 +6209,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_exterior_event_script_item_tm_skill_swap"
+              "value": "base:behavior:interaction/mt_pyre_exterior_event_script_item_tm_skill_swap"
             },
             {
               "name": "visibilityFlag",

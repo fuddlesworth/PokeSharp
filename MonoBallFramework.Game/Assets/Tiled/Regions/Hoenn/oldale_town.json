@@ -1647,9 +1647,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/oldale_town_event_script_girl"
+              "value": "base:behavior:interaction/oldale_town_event_script_girl"
             }
           ]
         },
@@ -1684,9 +1684,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/oldale_town_event_script_mart_employee"
+              "value": "base:behavior:interaction/oldale_town_event_script_mart_employee"
             }
           ]
         },
@@ -1721,9 +1721,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/oldale_town_event_script_footprints_man"
+              "value": "base:behavior:interaction/oldale_town_event_script_footprints_man"
             }
           ]
         },
@@ -1758,9 +1758,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/oldale_town_event_script_rival"
+              "value": "base:behavior:interaction/oldale_town_event_script_rival"
             },
             {
               "name": "visibilityFlag",

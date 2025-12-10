@@ -1311,9 +1311,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle3_event_script_justin"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle3_event_script_justin"
             },
             {
               "name": "trainerType",
@@ -1358,9 +1358,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle3_event_script_martha"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle3_event_script_martha"
             },
             {
               "name": "trainerType",
@@ -1405,9 +1405,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle3_event_script_alan"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle3_event_script_alan"
             },
             {
               "name": "trainerType",
@@ -1447,9 +1447,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle3_event_script_item_wood_mail"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle3_event_script_item_wood_mail"
             },
             {
               "name": "visibilityFlag",
@@ -1484,9 +1484,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle3_event_script_item_shadow_mail"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle3_event_script_item_shadow_mail"
             },
             {
               "name": "visibilityFlag",
@@ -1521,9 +1521,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_rock_smash"
+              "value": "base:behavior:interaction/event_script_rock_smash"
             },
             {
               "name": "visibilityFlag",
@@ -1558,9 +1558,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_rock_smash"
+              "value": "base:behavior:interaction/event_script_rock_smash"
             },
             {
               "name": "visibilityFlag",

@@ -2408,9 +2408,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/ss_tidal_rooms_event_script_colton"
+              "value": "base:behavior:interaction/ss_tidal_rooms_event_script_colton"
             },
             {
               "name": "trainerType",
@@ -2450,9 +2450,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/ss_tidal_rooms_event_script_micah"
+              "value": "base:behavior:interaction/ss_tidal_rooms_event_script_micah"
             },
             {
               "name": "trainerType",
@@ -2497,9 +2497,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/ss_tidal_rooms_event_script_thomas"
+              "value": "base:behavior:interaction/ss_tidal_rooms_event_script_thomas"
             },
             {
               "name": "trainerType",
@@ -2539,9 +2539,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/ss_tidal_rooms_event_script_jed"
+              "value": "base:behavior:interaction/ss_tidal_rooms_event_script_jed"
             },
             {
               "name": "trainerType",
@@ -2586,9 +2586,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/ss_tidal_rooms_event_script_lea"
+              "value": "base:behavior:interaction/ss_tidal_rooms_event_script_lea"
             },
             {
               "name": "trainerType",
@@ -2633,9 +2633,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/ss_tidal_rooms_event_script_garret"
+              "value": "base:behavior:interaction/ss_tidal_rooms_event_script_garret"
             },
             {
               "name": "trainerType",
@@ -2680,9 +2680,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/ss_tidal_rooms_event_script_naomi"
+              "value": "base:behavior:interaction/ss_tidal_rooms_event_script_naomi"
             },
             {
               "name": "trainerType",
@@ -2722,9 +2722,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/ss_tidal_rooms_event_script_snatch_giver"
+              "value": "base:behavior:interaction/ss_tidal_rooms_event_script_snatch_giver"
             },
             {
               "name": "visibilityFlag",

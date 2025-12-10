@@ -756,9 +756,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_pike_three_path_room_event_script_attendant"
+              "value": "base:behavior:interaction/battle_frontier_battle_pike_three_path_room_event_script_attendant"
             }
           ]
         },
@@ -793,9 +793,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_pike_three_path_room_event_script_hint_giver"
+              "value": "base:behavior:interaction/battle_frontier_battle_pike_three_path_room_event_script_hint_giver"
             }
           ]
         }

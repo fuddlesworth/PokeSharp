@@ -9682,9 +9682,9 @@
               "value": "square_ccw"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route132_event_script_gilbert"
+              "value": "base:behavior:interaction/route132_event_script_gilbert"
             },
             {
               "name": "trainerType",
@@ -9729,9 +9729,9 @@
               "value": "square_ccw"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route132_event_script_dana"
+              "value": "base:behavior:interaction/route132_event_script_dana"
             },
             {
               "name": "trainerType",
@@ -9771,9 +9771,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route132_event_script_item_rare_candy"
+              "value": "base:behavior:interaction/route132_event_script_item_rare_candy"
             },
             {
               "name": "visibilityFlag",
@@ -9813,9 +9813,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route132_event_script_kiyo"
+              "value": "base:behavior:interaction/route132_event_script_kiyo"
             },
             {
               "name": "trainerType",
@@ -9860,9 +9860,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route132_event_script_ronald"
+              "value": "base:behavior:interaction/route132_event_script_ronald"
             },
             {
               "name": "trainerType",
@@ -9907,9 +9907,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route132_event_script_paxton"
+              "value": "base:behavior:interaction/route132_event_script_paxton"
             },
             {
               "name": "trainerType",
@@ -9954,9 +9954,9 @@
               "value": "vertical"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route132_event_script_darcy"
+              "value": "base:behavior:interaction/route132_event_script_darcy"
             },
             {
               "name": "trainerType",
@@ -10001,9 +10001,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route132_event_script_makayla"
+              "value": "base:behavior:interaction/route132_event_script_makayla"
             },
             {
               "name": "trainerType",
@@ -10048,9 +10048,9 @@
               "value": "vertical"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route132_event_script_jonathan"
+              "value": "base:behavior:interaction/route132_event_script_jonathan"
             },
             {
               "name": "trainerType",
@@ -10090,9 +10090,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route132_event_script_item_protein"
+              "value": "base:behavior:interaction/route132_event_script_item_protein"
             },
             {
               "name": "visibilityFlag",

@@ -460,9 +460,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_flat1_2f_event_script_waldas_mom"
+              "value": "base:behavior:interaction/rustboro_city_flat1_2f_event_script_waldas_mom"
             }
           ]
         },
@@ -524,9 +524,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_flat1_2f_event_script_poke_doll"
+              "value": "base:behavior:interaction/rustboro_city_flat1_2f_event_script_poke_doll"
             }
           ]
         },
@@ -556,9 +556,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_flat1_2f_event_script_poke_doll"
+              "value": "base:behavior:interaction/rustboro_city_flat1_2f_event_script_poke_doll"
             }
           ]
         },
@@ -588,9 +588,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_flat1_2f_event_script_poke_doll"
+              "value": "base:behavior:interaction/rustboro_city_flat1_2f_event_script_poke_doll"
             }
           ]
         },
@@ -625,9 +625,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_flat1_2f_event_script_waldas_dad"
+              "value": "base:behavior:interaction/rustboro_city_flat1_2f_event_script_waldas_dad"
             }
           ]
         },
@@ -657,9 +657,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_flat1_2f_event_script_poke_doll"
+              "value": "base:behavior:interaction/rustboro_city_flat1_2f_event_script_poke_doll"
             }
           ]
         },
@@ -689,9 +689,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_flat1_2f_event_script_poke_doll"
+              "value": "base:behavior:interaction/rustboro_city_flat1_2f_event_script_poke_doll"
             }
           ]
         }

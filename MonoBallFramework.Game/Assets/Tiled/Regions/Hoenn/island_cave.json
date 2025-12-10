@@ -1937,9 +1937,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/island_cave_event_script_regice"
+              "value": "base:behavior:interaction/island_cave_event_script_regice"
             },
             {
               "name": "visibilityFlag",

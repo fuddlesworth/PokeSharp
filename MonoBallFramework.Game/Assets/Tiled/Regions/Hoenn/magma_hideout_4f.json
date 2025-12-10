@@ -5138,9 +5138,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_4f_event_script_grunt11"
+              "value": "base:behavior:interaction/magma_hideout_4f_event_script_grunt11"
             },
             {
               "name": "visibilityFlag",
@@ -5190,9 +5190,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_4f_event_script_grunt12"
+              "value": "base:behavior:interaction/magma_hideout_4f_event_script_grunt12"
             },
             {
               "name": "visibilityFlag",
@@ -5242,9 +5242,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_4f_event_script_grunt13"
+              "value": "base:behavior:interaction/magma_hideout_4f_event_script_grunt13"
             },
             {
               "name": "visibilityFlag",
@@ -5294,9 +5294,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_4f_event_script_tabitha"
+              "value": "base:behavior:interaction/magma_hideout_4f_event_script_tabitha"
             },
             {
               "name": "visibilityFlag",
@@ -5346,9 +5346,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_4f_event_script_maxie"
+              "value": "base:behavior:interaction/magma_hideout_4f_event_script_maxie"
             },
             {
               "name": "visibilityFlag",
@@ -5420,9 +5420,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_4f_event_script_item_max_revive"
+              "value": "base:behavior:interaction/magma_hideout_4f_event_script_item_max_revive"
             },
             {
               "name": "visibilityFlag",

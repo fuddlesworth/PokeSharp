@@ -1557,9 +1557,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_gym_1f_event_script_juan"
+              "value": "base:behavior:interaction/sootopolis_city_gym_1f_event_script_juan"
             }
           ]
         },
@@ -1594,9 +1594,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_gym_1f_event_script_gym_guide"
+              "value": "base:behavior:interaction/sootopolis_city_gym_1f_event_script_gym_guide"
             }
           ]
         }

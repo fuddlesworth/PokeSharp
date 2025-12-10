@@ -583,9 +583,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/players_house_1f_event_script_mom"
+              "value": "base:behavior:interaction/players_house_1f_event_script_mom"
             },
             {
               "name": "visibilityFlag",
@@ -625,9 +625,9 @@
               "value": "horizontal"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/players_house_1f_event_script_vigoroth2"
+              "value": "base:behavior:interaction/players_house_1f_event_script_vigoroth2"
             },
             {
               "name": "visibilityFlag",
@@ -662,9 +662,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/players_house_1f_event_script_vigoroth1"
+              "value": "base:behavior:interaction/players_house_1f_event_script_vigoroth1"
             },
             {
               "name": "visibilityFlag",
@@ -704,9 +704,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rivals_house_1f_event_script_rival_mom"
+              "value": "base:behavior:interaction/rivals_house_1f_event_script_rival_mom"
             },
             {
               "name": "visibilityFlag",
@@ -788,9 +788,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rivals_house_1f_event_script_rival_sibling"
+              "value": "base:behavior:interaction/rivals_house_1f_event_script_rival_sibling"
             },
             {
               "name": "visibilityFlag",

@@ -530,9 +530,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_seaside_cycling_road_south_entrance_event_script_clerk"
+              "value": "base:behavior:interaction/route110_seaside_cycling_road_south_entrance_event_script_clerk"
             }
           ]
         }

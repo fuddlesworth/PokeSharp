@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/lilycove_city_department_store_elevator",
+  "DisplayName": "LilycoveCity_DepartmentStoreElevator",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/lilycove_city_department_store_elevator.json"
+}

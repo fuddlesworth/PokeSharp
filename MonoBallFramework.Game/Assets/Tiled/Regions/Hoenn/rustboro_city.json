@@ -8422,9 +8422,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_event_script_woman"
+              "value": "base:behavior:interaction/rustboro_city_event_script_woman"
             }
           ]
         },
@@ -8454,9 +8454,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_event_script_fat_man"
+              "value": "base:behavior:interaction/rustboro_city_event_script_fat_man"
             }
           ]
         },
@@ -8491,9 +8491,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_event_script_ninja_boy"
+              "value": "base:behavior:interaction/rustboro_city_event_script_ninja_boy"
             }
           ]
         },
@@ -8533,9 +8533,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_event_script_twin"
+              "value": "base:behavior:interaction/rustboro_city_event_script_twin"
             }
           ]
         },
@@ -8565,9 +8565,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_event_script_boy2"
+              "value": "base:behavior:interaction/rustboro_city_event_script_boy2"
             }
           ]
         },
@@ -8597,9 +8597,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_event_script_man1"
+              "value": "base:behavior:interaction/rustboro_city_event_script_man1"
             }
           ]
         },
@@ -8634,9 +8634,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_event_script_little_boy"
+              "value": "base:behavior:interaction/rustboro_city_event_script_little_boy"
             }
           ]
         },
@@ -8671,9 +8671,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_event_script_little_girl"
+              "value": "base:behavior:interaction/rustboro_city_event_script_little_girl"
             }
           ]
         },
@@ -8708,9 +8708,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_event_script_devon_employee1"
+              "value": "base:behavior:interaction/rustboro_city_event_script_devon_employee1"
             },
             {
               "name": "visibilityFlag",
@@ -8792,9 +8792,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_event_script_devon_employee2"
+              "value": "base:behavior:interaction/rustboro_city_event_script_devon_employee2"
             }
           ]
         },
@@ -8824,9 +8824,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_event_script_item_x_defend"
+              "value": "base:behavior:interaction/rustboro_city_event_script_item_x_defend"
             },
             {
               "name": "visibilityFlag",
@@ -8866,9 +8866,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_event_script_man2"
+              "value": "base:behavior:interaction/rustboro_city_event_script_man2"
             }
           ]
         },
@@ -8898,9 +8898,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_event_script_rival"
+              "value": "base:behavior:interaction/rustboro_city_event_script_rival"
             },
             {
               "name": "visibilityFlag",
@@ -8967,9 +8967,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_event_script_boy1"
+              "value": "base:behavior:interaction/rustboro_city_event_script_boy1"
             }
           ]
         }

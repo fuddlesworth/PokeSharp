@@ -389,9 +389,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge4_event_script_woman"
+              "value": "base:behavior:interaction/battle_frontier_lounge4_event_script_woman"
             }
           ]
         },
@@ -431,9 +431,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge4_event_script_cook"
+              "value": "base:behavior:interaction/battle_frontier_lounge4_event_script_cook"
             }
           ]
         },
@@ -468,9 +468,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge4_event_script_man"
+              "value": "base:behavior:interaction/battle_frontier_lounge4_event_script_man"
             }
           ]
         }

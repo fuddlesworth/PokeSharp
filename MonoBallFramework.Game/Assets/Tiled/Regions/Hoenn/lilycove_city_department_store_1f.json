@@ -665,9 +665,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_1f_event_script_greeter"
+              "value": "base:behavior:interaction/lilycove_city_department_store_1f_event_script_greeter"
             }
           ]
         },
@@ -702,9 +702,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_1f_event_script_lottery_clerk"
+              "value": "base:behavior:interaction/lilycove_city_department_store_1f_event_script_lottery_clerk"
             }
           ]
         },
@@ -744,9 +744,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_1f_event_script_pokefan_f"
+              "value": "base:behavior:interaction/lilycove_city_department_store_1f_event_script_pokefan_f"
             }
           ]
         },
@@ -786,9 +786,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_1f_event_script_little_girl"
+              "value": "base:behavior:interaction/lilycove_city_department_store_1f_event_script_little_girl"
             }
           ]
         },
@@ -818,9 +818,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_1f_event_script_pokefan_m"
+              "value": "base:behavior:interaction/lilycove_city_department_store_1f_event_script_pokefan_m"
             }
           ]
         },
@@ -850,9 +850,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_1f_event_script_azumarill"
+              "value": "base:behavior:interaction/lilycove_city_department_store_1f_event_script_azumarill"
             }
           ]
         }

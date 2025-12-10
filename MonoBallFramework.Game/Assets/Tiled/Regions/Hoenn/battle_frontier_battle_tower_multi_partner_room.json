@@ -1027,9 +1027,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_tower_multi_partner_room_event_script_attendant"
+              "value": "base:behavior:interaction/battle_frontier_battle_tower_multi_partner_room_event_script_attendant"
             }
           ]
         },
@@ -1059,9 +1059,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_tower_multi_partner_room_event_script_partner1"
+              "value": "base:behavior:interaction/battle_frontier_battle_tower_multi_partner_room_event_script_partner1"
             },
             {
               "name": "visibilityFlag",
@@ -1101,9 +1101,9 @@
               "value": "left,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_tower_multi_partner_room_event_script_partner2"
+              "value": "base:behavior:interaction/battle_frontier_battle_tower_multi_partner_room_event_script_partner2"
             },
             {
               "name": "visibilityFlag",
@@ -1138,9 +1138,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_tower_multi_partner_room_event_script_partner3"
+              "value": "base:behavior:interaction/battle_frontier_battle_tower_multi_partner_room_event_script_partner3"
             },
             {
               "name": "visibilityFlag",
@@ -1175,9 +1175,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_tower_multi_partner_room_event_script_partner4"
+              "value": "base:behavior:interaction/battle_frontier_battle_tower_multi_partner_room_event_script_partner4"
             },
             {
               "name": "visibilityFlag",
@@ -1217,9 +1217,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_tower_multi_partner_room_event_script_partner5"
+              "value": "base:behavior:interaction/battle_frontier_battle_tower_multi_partner_room_event_script_partner5"
             },
             {
               "name": "visibilityFlag",
@@ -1259,9 +1259,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_tower_multi_partner_room_event_script_partner6"
+              "value": "base:behavior:interaction/battle_frontier_battle_tower_multi_partner_room_event_script_partner6"
             },
             {
               "name": "visibilityFlag",
@@ -1301,9 +1301,9 @@
               "value": "up,left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_tower_multi_partner_room_event_script_partner7"
+              "value": "base:behavior:interaction/battle_frontier_battle_tower_multi_partner_room_event_script_partner7"
             },
             {
               "name": "visibilityFlag",
@@ -1343,9 +1343,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_tower_multi_partner_room_event_script_partner8"
+              "value": "base:behavior:interaction/battle_frontier_battle_tower_multi_partner_room_event_script_partner8"
             },
             {
               "name": "visibilityFlag",

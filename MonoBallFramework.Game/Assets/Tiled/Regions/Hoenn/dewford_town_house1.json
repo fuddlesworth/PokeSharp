@@ -385,9 +385,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_house1_event_script_woman"
+              "value": "base:behavior:interaction/dewford_town_house1_event_script_woman"
             }
           ]
         },
@@ -422,9 +422,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_house1_event_script_man"
+              "value": "base:behavior:interaction/dewford_town_house1_event_script_man"
             }
           ]
         },
@@ -459,9 +459,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_house1_event_script_zigzagoon"
+              "value": "base:behavior:interaction/dewford_town_house1_event_script_zigzagoon"
             }
           ]
         }

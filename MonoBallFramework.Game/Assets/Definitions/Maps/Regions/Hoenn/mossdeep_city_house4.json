@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/mossdeep_city_house4",
+  "DisplayName": "MossdeepCity_House4",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/mossdeep_city_house4.json"
+}

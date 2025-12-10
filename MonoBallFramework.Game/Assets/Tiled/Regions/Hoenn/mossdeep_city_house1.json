@@ -414,9 +414,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_house1_event_script_black_belt"
+              "value": "base:behavior:interaction/mossdeep_city_house1_event_script_black_belt"
             }
           ]
         },
@@ -451,9 +451,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_house1_event_script_woman"
+              "value": "base:behavior:interaction/mossdeep_city_house1_event_script_woman"
             }
           ]
         }

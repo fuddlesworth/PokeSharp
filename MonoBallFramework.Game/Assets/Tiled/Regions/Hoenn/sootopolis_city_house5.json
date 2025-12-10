@@ -313,9 +313,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_house5_event_script_maniac"
+              "value": "base:behavior:interaction/sootopolis_city_house5_event_script_maniac"
             }
           ]
         },
@@ -350,9 +350,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_house5_event_script_girl"
+              "value": "base:behavior:interaction/sootopolis_city_house5_event_script_girl"
             }
           ]
         }

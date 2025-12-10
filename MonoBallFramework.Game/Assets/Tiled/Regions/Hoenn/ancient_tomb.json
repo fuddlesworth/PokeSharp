@@ -1937,9 +1937,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/ancient_tomb_event_script_registeel"
+              "value": "base:behavior:interaction/ancient_tomb_event_script_registeel"
             },
             {
               "name": "visibilityFlag",

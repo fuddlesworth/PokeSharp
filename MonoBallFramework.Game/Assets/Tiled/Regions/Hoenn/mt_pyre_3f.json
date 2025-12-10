@@ -756,9 +756,9 @@
               "value": "down,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_3f_event_script_william"
+              "value": "base:behavior:interaction/mt_pyre_3f_event_script_william"
             },
             {
               "name": "trainerType",
@@ -803,9 +803,9 @@
               "value": "down,left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_3f_event_script_kayla"
+              "value": "base:behavior:interaction/mt_pyre_3f_event_script_kayla"
             },
             {
               "name": "trainerType",
@@ -845,9 +845,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_3f_event_script_item_super_repel"
+              "value": "base:behavior:interaction/mt_pyre_3f_event_script_item_super_repel"
             },
             {
               "name": "visibilityFlag",
@@ -887,9 +887,9 @@
               "value": "left,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_3f_event_script_gabrielle"
+              "value": "base:behavior:interaction/mt_pyre_3f_event_script_gabrielle"
             },
             {
               "name": "trainerType",

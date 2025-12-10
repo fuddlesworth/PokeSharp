@@ -532,9 +532,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_cove_lily_motel_1f_event_script_motel_owner"
+              "value": "base:behavior:interaction/lilycove_city_cove_lily_motel_1f_event_script_motel_owner"
             }
           ]
         }

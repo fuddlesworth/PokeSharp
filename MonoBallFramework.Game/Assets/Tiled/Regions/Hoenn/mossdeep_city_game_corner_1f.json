@@ -614,9 +614,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_game_corner_1f_event_script_old_man"
+              "value": "base:behavior:interaction/mossdeep_city_game_corner_1f_event_script_old_man"
             }
           ]
         },
@@ -651,9 +651,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_game_corner_1f_event_script_info_man"
+              "value": "base:behavior:interaction/mossdeep_city_game_corner_1f_event_script_info_man"
             }
           ]
         }

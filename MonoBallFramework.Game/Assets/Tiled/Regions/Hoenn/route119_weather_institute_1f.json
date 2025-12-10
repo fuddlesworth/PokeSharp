@@ -1058,9 +1058,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route119_weather_institute_1f_event_script_grunt1"
+              "value": "base:behavior:interaction/route119_weather_institute_1f_event_script_grunt1"
             },
             {
               "name": "visibilityFlag",
@@ -1110,9 +1110,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route119_weather_institute_1f_event_script_grunt4"
+              "value": "base:behavior:interaction/route119_weather_institute_1f_event_script_grunt4"
             },
             {
               "name": "visibilityFlag",
@@ -1162,9 +1162,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route119_weather_institute_1f_event_script_institute_worker2"
+              "value": "base:behavior:interaction/route119_weather_institute_1f_event_script_institute_worker2"
             },
             {
               "name": "visibilityFlag",
@@ -1199,9 +1199,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route119_weather_institute_1f_event_script_institute_worker1"
+              "value": "base:behavior:interaction/route119_weather_institute_1f_event_script_institute_worker1"
             },
             {
               "name": "visibilityFlag",
@@ -1246,9 +1246,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route119_weather_institute_1f_event_script_little_boy"
+              "value": "base:behavior:interaction/route119_weather_institute_1f_event_script_little_boy"
             }
           ]
         }

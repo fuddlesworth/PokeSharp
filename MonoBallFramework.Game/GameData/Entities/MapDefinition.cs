@@ -39,7 +39,7 @@ public class MapDefinition
     public string? MapType { get; set; }
 
     /// <summary>
-    ///     Relative path to Tiled JSON file (e.g., "Data/Maps/littleroot_town.json").
+    ///     Relative path to Tiled JSON file (e.g., "Definitions/Maps/littleroot_town.json").
     ///     MapLoader will read the file at runtime to parse TmxDocument.
     /// </summary>
     [Required]

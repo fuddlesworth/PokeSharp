@@ -457,9 +457,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge2_event_script_frontier_maniac"
+              "value": "base:behavior:interaction/battle_frontier_lounge2_event_script_frontier_maniac"
             }
           ]
         },
@@ -494,9 +494,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge2_event_script_maniac1"
+              "value": "base:behavior:interaction/battle_frontier_lounge2_event_script_maniac1"
             }
           ]
         },
@@ -531,9 +531,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge2_event_script_maniac2"
+              "value": "base:behavior:interaction/battle_frontier_lounge2_event_script_maniac2"
             }
           ]
         },
@@ -573,9 +573,9 @@
               "value": 2
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge2_event_script_triathlete_f"
+              "value": "base:behavior:interaction/battle_frontier_lounge2_event_script_triathlete_f"
             }
           ]
         },
@@ -610,9 +610,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge2_event_script_maniac3"
+              "value": "base:behavior:interaction/battle_frontier_lounge2_event_script_maniac3"
             }
           ]
         }

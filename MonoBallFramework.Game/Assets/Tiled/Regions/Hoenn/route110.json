@@ -12887,9 +12887,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_boy2"
+              "value": "base:behavior:interaction/route110_event_script_boy2"
             }
           ]
         },
@@ -12924,9 +12924,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_cycling_guy2"
+              "value": "base:behavior:interaction/route110_event_script_cycling_guy2"
             }
           ]
         },
@@ -12966,9 +12966,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_old_woman"
+              "value": "base:behavior:interaction/route110_event_script_old_woman"
             }
           ]
         },
@@ -13008,9 +13008,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_cycling_guy1"
+              "value": "base:behavior:interaction/route110_event_script_cycling_guy1"
             }
           ]
         },
@@ -13050,9 +13050,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_old_man"
+              "value": "base:behavior:interaction/route110_event_script_old_man"
             }
           ]
         },
@@ -13092,9 +13092,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_cycling_girl1"
+              "value": "base:behavior:interaction/route110_event_script_cycling_girl1"
             }
           ]
         },
@@ -13134,9 +13134,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_boy1"
+              "value": "base:behavior:interaction/route110_event_script_boy1"
             }
           ]
         },
@@ -13171,9 +13171,9 @@
               "value": "square_cw"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_jasmine"
+              "value": "base:behavior:interaction/route110_event_script_jasmine"
             },
             {
               "name": "trainerType",
@@ -13218,9 +13218,9 @@
               "value": "square_cw"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_anthony"
+              "value": "base:behavior:interaction/route110_event_script_anthony"
             },
             {
               "name": "trainerType",
@@ -13265,9 +13265,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_abigail"
+              "value": "base:behavior:interaction/route110_event_script_abigail"
             },
             {
               "name": "trainerType",
@@ -13312,9 +13312,9 @@
               "value": "square_ccw"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_benjamin"
+              "value": "base:behavior:interaction/route110_event_script_benjamin"
             },
             {
               "name": "trainerType",
@@ -13359,9 +13359,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_edward"
+              "value": "base:behavior:interaction/route110_event_script_edward"
             },
             {
               "name": "trainerType",
@@ -13406,9 +13406,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_jaclyn"
+              "value": "base:behavior:interaction/route110_event_script_jaclyn"
             },
             {
               "name": "trainerType",
@@ -13448,9 +13448,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_edwin"
+              "value": "base:behavior:interaction/route110_event_script_edwin"
             },
             {
               "name": "trainerType",
@@ -13495,9 +13495,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_dale"
+              "value": "base:behavior:interaction/route110_event_script_dale"
             },
             {
               "name": "trainerType",
@@ -13542,9 +13542,9 @@
               "value": true
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/berry_tree_script"
+              "value": "base:behavior:interaction/berry_tree_script"
             }
           ]
         },
@@ -13579,9 +13579,9 @@
               "value": true
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/berry_tree_script"
+              "value": "base:behavior:interaction/berry_tree_script"
             }
           ]
         },
@@ -13616,9 +13616,9 @@
               "value": true
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/berry_tree_script"
+              "value": "base:behavior:interaction/berry_tree_script"
             }
           ]
         },
@@ -13648,9 +13648,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_item_dire_hit"
+              "value": "base:behavior:interaction/route110_event_script_item_dire_hit"
             },
             {
               "name": "visibilityFlag",
@@ -13685,9 +13685,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_item_rare_candy"
+              "value": "base:behavior:interaction/route110_event_script_item_rare_candy"
             },
             {
               "name": "visibilityFlag",
@@ -13727,9 +13727,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_challenge_guy"
+              "value": "base:behavior:interaction/route110_event_script_challenge_guy"
             }
           ]
         },
@@ -13764,9 +13764,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_aqua_grunt1"
+              "value": "base:behavior:interaction/route110_event_script_aqua_grunt1"
             },
             {
               "name": "visibilityFlag",
@@ -13806,9 +13806,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_aqua_grunt2"
+              "value": "base:behavior:interaction/route110_event_script_aqua_grunt2"
             },
             {
               "name": "visibilityFlag",
@@ -13848,9 +13848,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_aqua_grunt3"
+              "value": "base:behavior:interaction/route110_event_script_aqua_grunt3"
             },
             {
               "name": "visibilityFlag",
@@ -13890,9 +13890,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_aqua_grunt4"
+              "value": "base:behavior:interaction/route110_event_script_aqua_grunt4"
             },
             {
               "name": "visibilityFlag",
@@ -13969,9 +13969,9 @@
               "value": "square_cw"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_jacob"
+              "value": "base:behavior:interaction/route110_event_script_jacob"
             },
             {
               "name": "trainerType",
@@ -14090,9 +14090,9 @@
               "value": "left,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_timmy"
+              "value": "base:behavior:interaction/route110_event_script_timmy"
             },
             {
               "name": "trainerType",
@@ -14137,9 +14137,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_isabel"
+              "value": "base:behavior:interaction/route110_event_script_isabel"
             },
             {
               "name": "trainerType",
@@ -14184,9 +14184,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_kaleb"
+              "value": "base:behavior:interaction/route110_event_script_kaleb"
             },
             {
               "name": "trainerType",
@@ -14231,9 +14231,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_alyssa"
+              "value": "base:behavior:interaction/route110_event_script_alyssa"
             },
             {
               "name": "trainerType",
@@ -14273,9 +14273,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_joseph"
+              "value": "base:behavior:interaction/route110_event_script_joseph"
             },
             {
               "name": "trainerType",
@@ -14315,9 +14315,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_event_script_item_elixir"
+              "value": "base:behavior:interaction/route110_event_script_item_elixir"
             },
             {
               "name": "visibilityFlag",

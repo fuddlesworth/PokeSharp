@@ -647,9 +647,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_6f_event_script_valerie"
+              "value": "base:behavior:interaction/mt_pyre_6f_event_script_valerie"
             },
             {
               "name": "trainerType",
@@ -689,9 +689,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_6f_event_script_item_tm_shadow_ball"
+              "value": "base:behavior:interaction/mt_pyre_6f_event_script_item_tm_shadow_ball"
             },
             {
               "name": "visibilityFlag",
@@ -726,9 +726,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_pyre_6f_event_script_cedric"
+              "value": "base:behavior:interaction/mt_pyre_6f_event_script_cedric"
             },
             {
               "name": "trainerType",

@@ -1343,9 +1343,9 @@
               "value": "down,left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_3f_2r_event_script_grunt10"
+              "value": "base:behavior:interaction/magma_hideout_3f_2r_event_script_grunt10"
             },
             {
               "name": "visibilityFlag",
@@ -1390,9 +1390,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_3f_2r_event_script_item_pp_max"
+              "value": "base:behavior:interaction/magma_hideout_3f_2r_event_script_item_pp_max"
             },
             {
               "name": "visibilityFlag",

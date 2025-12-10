@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/rustboro_city_house3",
+  "DisplayName": "RustboroCity_House3",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/rustboro_city_house3.json"
+}

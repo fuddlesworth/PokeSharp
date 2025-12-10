@@ -409,9 +409,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fallarbor_town_move_relearners_house_event_script_move_relearner"
+              "value": "base:behavior:interaction/fallarbor_town_move_relearners_house_event_script_move_relearner"
             }
           ]
         }

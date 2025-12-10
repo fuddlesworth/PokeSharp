@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/sky_pillar_entrance",
+  "DisplayName": "SkyPillar_Entrance",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/sky_pillar_entrance.json"
+}

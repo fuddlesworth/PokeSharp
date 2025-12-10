@@ -549,9 +549,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_pokemon_center_1f_event_script_nurse"
+              "value": "base:behavior:interaction/mossdeep_city_pokemon_center_1f_event_script_nurse"
             }
           ]
         },
@@ -586,9 +586,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_pokemon_center_1f_event_script_woman"
+              "value": "base:behavior:interaction/mossdeep_city_pokemon_center_1f_event_script_woman"
             }
           ]
         },
@@ -618,9 +618,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_pokemon_center_1f_event_script_girl"
+              "value": "base:behavior:interaction/mossdeep_city_pokemon_center_1f_event_script_girl"
             }
           ]
         }

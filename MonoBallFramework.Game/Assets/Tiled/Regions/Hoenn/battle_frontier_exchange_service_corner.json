@@ -666,9 +666,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_exchange_service_corner_event_script_decor_clerk1"
+              "value": "base:behavior:interaction/battle_frontier_exchange_service_corner_event_script_decor_clerk1"
             }
           ]
         },
@@ -703,9 +703,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_exchange_service_corner_event_script_rich_boy"
+              "value": "base:behavior:interaction/battle_frontier_exchange_service_corner_event_script_rich_boy"
             }
           ]
         },
@@ -740,9 +740,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_exchange_service_corner_event_script_pokefan_f"
+              "value": "base:behavior:interaction/battle_frontier_exchange_service_corner_event_script_pokefan_f"
             }
           ]
         },
@@ -782,9 +782,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_exchange_service_corner_event_script_sailor"
+              "value": "base:behavior:interaction/battle_frontier_exchange_service_corner_event_script_sailor"
             }
           ]
         },
@@ -824,9 +824,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_exchange_service_corner_event_script_man"
+              "value": "base:behavior:interaction/battle_frontier_exchange_service_corner_event_script_man"
             }
           ]
         },
@@ -861,9 +861,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_exchange_service_corner_event_script_decor_clerk2"
+              "value": "base:behavior:interaction/battle_frontier_exchange_service_corner_event_script_decor_clerk2"
             }
           ]
         },
@@ -898,9 +898,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_exchange_service_corner_event_script_vitamin_clerk"
+              "value": "base:behavior:interaction/battle_frontier_exchange_service_corner_event_script_vitamin_clerk"
             }
           ]
         },
@@ -935,9 +935,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_exchange_service_corner_event_script_hold_item_clerk"
+              "value": "base:behavior:interaction/battle_frontier_exchange_service_corner_event_script_hold_item_clerk"
             }
           ]
         },
@@ -977,9 +977,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_exchange_service_corner_event_script_girl"
+              "value": "base:behavior:interaction/battle_frontier_exchange_service_corner_event_script_girl"
             }
           ]
         }

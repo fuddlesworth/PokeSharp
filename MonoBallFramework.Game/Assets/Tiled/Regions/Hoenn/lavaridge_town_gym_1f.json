@@ -1799,9 +1799,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_gym_1f_event_script_flannery"
+              "value": "base:behavior:interaction/lavaridge_town_gym_1f_event_script_flannery"
             }
           ]
         },
@@ -1836,9 +1836,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_gym_1f_event_script_cole"
+              "value": "base:behavior:interaction/lavaridge_town_gym_1f_event_script_cole"
             },
             {
               "name": "trainerType",
@@ -1883,9 +1883,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_gym_1f_event_script_gerald"
+              "value": "base:behavior:interaction/lavaridge_town_gym_1f_event_script_gerald"
             },
             {
               "name": "trainerType",
@@ -1930,9 +1930,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_gym_1f_event_script_axle"
+              "value": "base:behavior:interaction/lavaridge_town_gym_1f_event_script_axle"
             },
             {
               "name": "trainerType",
@@ -1977,9 +1977,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_gym_1f_event_script_danielle"
+              "value": "base:behavior:interaction/lavaridge_town_gym_1f_event_script_danielle"
             },
             {
               "name": "trainerType",
@@ -2024,9 +2024,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_gym_1f_event_script_gym_guide"
+              "value": "base:behavior:interaction/lavaridge_town_gym_1f_event_script_gym_guide"
             }
           ]
         }

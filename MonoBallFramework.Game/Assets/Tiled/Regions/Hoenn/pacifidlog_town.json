@@ -2734,9 +2734,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/pacifidlog_town_event_script_girl"
+              "value": "base:behavior:interaction/pacifidlog_town_event_script_girl"
             }
           ]
         },
@@ -2771,9 +2771,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/pacifidlog_town_event_script_fisherman"
+              "value": "base:behavior:interaction/pacifidlog_town_event_script_fisherman"
             }
           ]
         },
@@ -2808,9 +2808,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/pacifidlog_town_event_script_ninja_boy"
+              "value": "base:behavior:interaction/pacifidlog_town_event_script_ninja_boy"
             }
           ]
         }

@@ -14553,9 +14553,9 @@
               "value": "square_ccw"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route128_event_script_isaiah"
+              "value": "base:behavior:interaction/route128_event_script_isaiah"
             },
             {
               "name": "trainerType",
@@ -14600,9 +14600,9 @@
               "value": "horizontal"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route128_event_script_katelyn"
+              "value": "base:behavior:interaction/route128_event_script_katelyn"
             },
             {
               "name": "trainerType",
@@ -14758,9 +14758,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route128_event_script_wayne"
+              "value": "base:behavior:interaction/route128_event_script_wayne"
             },
             {
               "name": "trainerType",
@@ -14800,9 +14800,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route128_event_script_ruben"
+              "value": "base:behavior:interaction/route128_event_script_ruben"
             },
             {
               "name": "trainerType",
@@ -14847,9 +14847,9 @@
               "value": "down,left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route128_event_script_alexa"
+              "value": "base:behavior:interaction/route128_event_script_alexa"
             },
             {
               "name": "trainerType",
@@ -14894,9 +14894,9 @@
               "value": "vertical"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route128_event_script_carlee"
+              "value": "base:behavior:interaction/route128_event_script_carlee"
             },
             {
               "name": "trainerType",
@@ -14941,9 +14941,9 @@
               "value": "vertical"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route128_event_script_harrison"
+              "value": "base:behavior:interaction/route128_event_script_harrison"
             },
             {
               "name": "trainerType",

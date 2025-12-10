@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/lavaridge_town_herb_shop",
+  "DisplayName": "LavaridgeTown_HerbShop",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/lavaridge_town_herb_shop.json"
+}

@@ -1332,9 +1332,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/ss_tidal_corridor_event_script_exit_sailor"
+              "value": "base:behavior:interaction/ss_tidal_corridor_event_script_exit_sailor"
             }
           ]
         },
@@ -1374,9 +1374,9 @@
               "value": 2
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/ss_tidal_corridor_event_script_sailor"
+              "value": "base:behavior:interaction/ss_tidal_corridor_event_script_sailor"
             }
           ]
         },
@@ -1411,9 +1411,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/ss_tidal_corridor_event_script_briney"
+              "value": "base:behavior:interaction/ss_tidal_corridor_event_script_briney"
             },
             {
               "name": "visibilityFlag",
@@ -1448,9 +1448,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/ss_tidal_corridor_event_script_peeko"
+              "value": "base:behavior:interaction/ss_tidal_corridor_event_script_peeko"
             },
             {
               "name": "visibilityFlag",

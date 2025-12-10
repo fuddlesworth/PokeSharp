@@ -409,9 +409,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_mart_event_script_clerk"
+              "value": "base:behavior:interaction/mauville_city_mart_event_script_clerk"
             }
           ]
         },
@@ -446,9 +446,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_mart_event_script_expert_m"
+              "value": "base:behavior:interaction/mauville_city_mart_event_script_expert_m"
             }
           ]
         },
@@ -483,9 +483,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_mart_event_script_man"
+              "value": "base:behavior:interaction/mauville_city_mart_event_script_man"
             }
           ]
         }

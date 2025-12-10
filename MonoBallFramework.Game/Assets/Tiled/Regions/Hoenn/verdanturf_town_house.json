@@ -415,9 +415,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/verdanturf_town_house_event_script_woman1"
+              "value": "base:behavior:interaction/verdanturf_town_house_event_script_woman1"
             }
           ]
         },
@@ -452,9 +452,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/verdanturf_town_house_event_script_woman2"
+              "value": "base:behavior:interaction/verdanturf_town_house_event_script_woman2"
             }
           ]
         }

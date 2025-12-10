@@ -415,9 +415,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_house2_event_script_man"
+              "value": "base:behavior:interaction/dewford_town_house2_event_script_man"
             }
           ]
         },
@@ -447,9 +447,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_house2_event_script_boy"
+              "value": "base:behavior:interaction/dewford_town_house2_event_script_boy"
             }
           ]
         }

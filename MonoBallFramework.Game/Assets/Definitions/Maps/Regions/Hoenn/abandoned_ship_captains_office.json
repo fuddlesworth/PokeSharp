@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/abandoned_ship_captains_office",
+  "DisplayName": "AbandonedShip_CaptainsOffice",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/abandoned_ship_captains_office.json"
+}

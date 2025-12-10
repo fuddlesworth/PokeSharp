@@ -2137,9 +2137,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sky_pillar_top_event_script_rayquaza"
+              "value": "base:behavior:interaction/sky_pillar_top_event_script_rayquaza"
             },
             {
               "name": "visibilityFlag",

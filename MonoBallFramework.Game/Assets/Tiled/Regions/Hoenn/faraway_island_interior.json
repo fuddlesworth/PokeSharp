@@ -2412,9 +2412,9 @@
               "value": true
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/faraway_island_interior_event_script_mew"
+              "value": "base:behavior:interaction/faraway_island_interior_event_script_mew"
             },
             {
               "name": "visibilityFlag",

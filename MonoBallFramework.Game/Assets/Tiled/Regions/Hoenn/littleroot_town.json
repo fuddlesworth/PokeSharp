@@ -1728,9 +1728,9 @@
               "value": 2
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/littleroot_town_event_script_twin"
+              "value": "base:behavior:interaction/littleroot_town_event_script_twin"
             }
           ]
         },
@@ -1770,9 +1770,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/littleroot_town_event_script_fat_man"
+              "value": "base:behavior:interaction/littleroot_town_event_script_fat_man"
             },
             {
               "name": "visibilityFlag",
@@ -1817,9 +1817,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/littleroot_town_event_script_boy"
+              "value": "base:behavior:interaction/littleroot_town_event_script_boy"
             }
           ]
         },
@@ -1854,9 +1854,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/littleroot_town_event_script_mom"
+              "value": "base:behavior:interaction/littleroot_town_event_script_mom"
             },
             {
               "name": "visibilityFlag",

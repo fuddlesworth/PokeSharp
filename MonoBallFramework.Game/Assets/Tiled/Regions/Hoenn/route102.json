@@ -3136,9 +3136,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route102_event_script_little_boy"
+              "value": "base:behavior:interaction/route102_event_script_little_boy"
             }
           ]
         },
@@ -3173,9 +3173,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route102_event_script_calvin"
+              "value": "base:behavior:interaction/route102_event_script_calvin"
             },
             {
               "name": "trainerType",
@@ -3220,9 +3220,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route102_event_script_rick"
+              "value": "base:behavior:interaction/route102_event_script_rick"
             },
             {
               "name": "trainerType",
@@ -3267,9 +3267,9 @@
               "value": "down,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route102_event_script_tiana"
+              "value": "base:behavior:interaction/route102_event_script_tiana"
             },
             {
               "name": "trainerType",
@@ -3319,9 +3319,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route102_event_script_boy"
+              "value": "base:behavior:interaction/route102_event_script_boy"
             }
           ]
         },
@@ -3356,9 +3356,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route102_event_script_item_potion"
+              "value": "base:behavior:interaction/route102_event_script_item_potion"
             },
             {
               "name": "visibilityFlag",
@@ -3398,9 +3398,9 @@
               "value": true
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/berry_tree_script"
+              "value": "base:behavior:interaction/berry_tree_script"
             }
           ]
         },
@@ -3435,9 +3435,9 @@
               "value": true
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/berry_tree_script"
+              "value": "base:behavior:interaction/berry_tree_script"
             }
           ]
         },
@@ -3472,9 +3472,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route102_event_script_allen"
+              "value": "base:behavior:interaction/route102_event_script_allen"
             },
             {
               "name": "trainerType",

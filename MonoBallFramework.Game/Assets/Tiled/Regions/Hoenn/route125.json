@@ -9806,9 +9806,9 @@
               "value": "horizontal"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route125_event_script_nolen"
+              "value": "base:behavior:interaction/route125_event_script_nolen"
             },
             {
               "name": "trainerType",
@@ -9853,9 +9853,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route125_event_script_stan"
+              "value": "base:behavior:interaction/route125_event_script_stan"
             },
             {
               "name": "trainerType",
@@ -9900,9 +9900,9 @@
               "value": "horizontal"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route125_event_script_tanya"
+              "value": "base:behavior:interaction/route125_event_script_tanya"
             },
             {
               "name": "trainerType",
@@ -9947,9 +9947,9 @@
               "value": "square_cw"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route125_event_script_sharon"
+              "value": "base:behavior:interaction/route125_event_script_sharon"
             },
             {
               "name": "trainerType",
@@ -9994,9 +9994,9 @@
               "value": "down,up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route125_event_script_ernest"
+              "value": "base:behavior:interaction/route125_event_script_ernest"
             },
             {
               "name": "trainerType",
@@ -10041,9 +10041,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route125_event_script_kim"
+              "value": "base:behavior:interaction/route125_event_script_kim"
             },
             {
               "name": "trainerType",
@@ -10088,9 +10088,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route125_event_script_iris"
+              "value": "base:behavior:interaction/route125_event_script_iris"
             },
             {
               "name": "trainerType",
@@ -10135,9 +10135,9 @@
               "value": "horizontal"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route125_event_script_presley"
+              "value": "base:behavior:interaction/route125_event_script_presley"
             },
             {
               "name": "trainerType",
@@ -10182,9 +10182,9 @@
               "value": "horizontal"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route125_event_script_auron"
+              "value": "base:behavior:interaction/route125_event_script_auron"
             },
             {
               "name": "trainerType",
@@ -10224,9 +10224,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route125_event_script_item_big_pearl"
+              "value": "base:behavior:interaction/route125_event_script_item_big_pearl"
             },
             {
               "name": "visibilityFlag",

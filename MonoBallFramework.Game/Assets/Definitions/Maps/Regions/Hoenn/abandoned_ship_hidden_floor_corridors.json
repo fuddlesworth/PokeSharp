@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/abandoned_ship_hidden_floor_corridors",
+  "DisplayName": "AbandonedShip_HiddenFloorCorridors",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/abandoned_ship_hidden_floor_corridors.json"
+}

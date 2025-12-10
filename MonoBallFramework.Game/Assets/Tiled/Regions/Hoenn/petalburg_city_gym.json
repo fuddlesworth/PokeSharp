@@ -4454,9 +4454,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_gym_event_script_norman"
+              "value": "base:behavior:interaction/petalburg_city_gym_event_script_norman"
             },
             {
               "name": "visibilityFlag",
@@ -4496,9 +4496,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_gym_event_script_mary"
+              "value": "base:behavior:interaction/petalburg_city_gym_event_script_mary"
             },
             {
               "name": "trainerType",
@@ -4538,9 +4538,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_gym_event_script_randall"
+              "value": "base:behavior:interaction/petalburg_city_gym_event_script_randall"
             },
             {
               "name": "trainerType",
@@ -4580,9 +4580,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_gym_event_script_parker"
+              "value": "base:behavior:interaction/petalburg_city_gym_event_script_parker"
             },
             {
               "name": "trainerType",
@@ -4622,9 +4622,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_gym_event_script_alexia"
+              "value": "base:behavior:interaction/petalburg_city_gym_event_script_alexia"
             },
             {
               "name": "trainerType",
@@ -4664,9 +4664,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_gym_event_script_george"
+              "value": "base:behavior:interaction/petalburg_city_gym_event_script_george"
             },
             {
               "name": "trainerType",
@@ -4706,9 +4706,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_gym_event_script_jody"
+              "value": "base:behavior:interaction/petalburg_city_gym_event_script_jody"
             },
             {
               "name": "trainerType",
@@ -4748,9 +4748,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_gym_event_script_berke"
+              "value": "base:behavior:interaction/petalburg_city_gym_event_script_berke"
             },
             {
               "name": "trainerType",
@@ -4790,9 +4790,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_gym_event_script_gym_guide"
+              "value": "base:behavior:interaction/petalburg_city_gym_event_script_gym_guide"
             },
             {
               "name": "visibilityFlag",

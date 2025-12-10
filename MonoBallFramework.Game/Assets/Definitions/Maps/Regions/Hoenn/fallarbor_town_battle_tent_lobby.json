@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/fallarbor_town_battle_tent_lobby",
+  "DisplayName": "FallarborTown_BattleTentLobby",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/fallarbor_town_battle_tent_lobby.json"
+}

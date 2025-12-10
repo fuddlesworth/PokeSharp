@@ -1448,9 +1448,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_lilycove_museum_1f_event_script_greeter"
+              "value": "base:behavior:interaction/lilycove_city_lilycove_museum_1f_event_script_greeter"
             }
           ]
         },
@@ -1485,9 +1485,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_lilycove_museum_1f_event_script_curator"
+              "value": "base:behavior:interaction/lilycove_city_lilycove_museum_1f_event_script_curator"
             },
             {
               "name": "visibilityFlag",
@@ -1527,9 +1527,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_lilycove_museum_1f_event_script_school_kid_m"
+              "value": "base:behavior:interaction/lilycove_city_lilycove_museum_1f_event_script_school_kid_m"
             }
           ]
         },
@@ -1569,9 +1569,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_lilycove_museum_1f_event_script_artist1"
+              "value": "base:behavior:interaction/lilycove_city_lilycove_museum_1f_event_script_artist1"
             }
           ]
         },
@@ -1606,9 +1606,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_lilycove_museum_1f_event_script_ninja_boy"
+              "value": "base:behavior:interaction/lilycove_city_lilycove_museum_1f_event_script_ninja_boy"
             }
           ]
         },
@@ -1643,9 +1643,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_lilycove_museum_1f_event_script_woman1"
+              "value": "base:behavior:interaction/lilycove_city_lilycove_museum_1f_event_script_woman1"
             }
           ]
         },
@@ -1685,9 +1685,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_lilycove_museum_1f_event_script_woman2"
+              "value": "base:behavior:interaction/lilycove_city_lilycove_museum_1f_event_script_woman2"
             },
             {
               "name": "visibilityFlag",
@@ -1727,9 +1727,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_lilycove_museum_1f_event_script_artist2"
+              "value": "base:behavior:interaction/lilycove_city_lilycove_museum_1f_event_script_artist2"
             },
             {
               "name": "visibilityFlag",
@@ -1774,9 +1774,9 @@
               "value": 2
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_lilycove_museum_1f_event_script_fat_man"
+              "value": "base:behavior:interaction/lilycove_city_lilycove_museum_1f_event_script_fat_man"
             },
             {
               "name": "visibilityFlag",
@@ -1821,9 +1821,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_lilycove_museum_1f_event_script_psychic_m"
+              "value": "base:behavior:interaction/lilycove_city_lilycove_museum_1f_event_script_psychic_m"
             },
             {
               "name": "visibilityFlag",

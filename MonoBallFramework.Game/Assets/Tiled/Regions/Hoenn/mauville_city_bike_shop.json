@@ -528,9 +528,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_bike_shop_event_script_rydel"
+              "value": "base:behavior:interaction/mauville_city_bike_shop_event_script_rydel"
             }
           ]
         },
@@ -570,9 +570,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_bike_shop_event_script_assistant"
+              "value": "base:behavior:interaction/mauville_city_bike_shop_event_script_assistant"
             }
           ]
         }

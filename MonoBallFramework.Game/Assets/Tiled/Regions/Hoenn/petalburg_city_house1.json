@@ -420,9 +420,9 @@
               "value": 2
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_house1_event_script_woman"
+              "value": "base:behavior:interaction/petalburg_city_house1_event_script_woman"
             }
           ]
         },
@@ -457,9 +457,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/petalburg_city_house1_event_script_man"
+              "value": "base:behavior:interaction/petalburg_city_house1_event_script_man"
             }
           ]
         }

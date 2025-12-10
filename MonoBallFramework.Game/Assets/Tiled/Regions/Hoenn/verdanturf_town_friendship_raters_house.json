@@ -409,9 +409,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/verdanturf_town_friendship_raters_house_event_script_friendship_rater"
+              "value": "base:behavior:interaction/verdanturf_town_friendship_raters_house_event_script_friendship_rater"
             }
           ]
         },
@@ -446,9 +446,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/verdanturf_town_friendship_raters_house_event_script_pikachu"
+              "value": "base:behavior:interaction/verdanturf_town_friendship_raters_house_event_script_pikachu"
             }
           ]
         }

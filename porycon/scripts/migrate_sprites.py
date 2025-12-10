@@ -4,7 +4,7 @@ Sprite Migration Script
 
 Migrates sprites from the old manifest.json format to the new SpriteDefinition format:
 - Old: Assets/Sprites/{Players|NPCs}/{category}/{name}/manifest.json + spritesheet.png
-- New: Assets/Data/Sprites/{players|npcs}/{category}/{name}.json + Assets/Graphics/Sprites/.../name.png
+- New: Assets/Definitions/Sprites/{players|npcs}/{category}/{name}.json + Assets/Graphics/Sprites/.../name.png
 
 Usage:
     python migrate_sprites.py <assets_path>
@@ -80,7 +80,7 @@ def migrate_manifest(manifest_path: Path, assets_root: Path, stats: MigrationSta
         }
 
         # Create output directories (flat structure - no sprite name subdirectory)
-        data_dir = assets_root / "Data" / "Sprites" / sprite_type / category
+        data_dir = assets_root / "Definitions" / "Sprites" / sprite_type / category
         graphics_dir = assets_root / "Graphics" / "Sprites" / sprite_type / category
 
         data_dir.mkdir(parents=True, exist_ok=True)

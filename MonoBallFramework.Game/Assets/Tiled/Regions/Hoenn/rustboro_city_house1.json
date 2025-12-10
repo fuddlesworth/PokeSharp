@@ -457,9 +457,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_house1_event_script_trader"
+              "value": "base:behavior:interaction/rustboro_city_house1_event_script_trader"
             }
           ]
         },
@@ -494,9 +494,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_house1_event_script_hiker"
+              "value": "base:behavior:interaction/rustboro_city_house1_event_script_hiker"
             }
           ]
         }

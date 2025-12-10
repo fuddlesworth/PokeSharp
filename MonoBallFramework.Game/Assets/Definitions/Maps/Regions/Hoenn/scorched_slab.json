@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/scorched_slab",
+  "DisplayName": "ScorchedSlab",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/scorched_slab.json"
+}

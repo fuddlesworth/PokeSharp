@@ -78,12 +78,12 @@ python -m porycon --input /path/to/pokeemerald --output /path/to/PokeSharp/MonoB
 This will:
 - Parse `pokeemerald/src/data/region_map/region_map_sections.json` for section definitions
 - Parse `pokeemerald/src/map_name_popup.c` for popup theme mappings
-- Generate individual section JSON files in `MonoBallFramework.Game/Assets/Data/Maps/Sections/`
+- Generate individual section JSON files in `MonoBallFramework.Game/Assets/Definitions/Maps/Sections/`
 - Create `section_registry.json` (master list of all sections)
 - Create `theme_summary.json` (theme usage statistics)
 - Copy and process outlines to `MonoBallFramework.Game/Assets/Graphics/Maps/Popups/Outlines/`
 - **Apply transparency** to outline sprite sheets for 9-slice rendering
-- Create JSON definition files in `Assets/Data/Maps/Popups/`
+- Create JSON definition files in `Assets/Definitions/Maps/Popups/`
 
 **Example:**
 ```bash
@@ -120,7 +120,7 @@ output/
         │   └── Outlines/
         │       ├── wood_outline.png  (transparency applied)
         │       └── ...
-        └── Data/Maps/Popups/
+        └── Definitions/Maps/Popups/
             ├── Backgrounds/
             │   ├── wood.json
             │   └── ...

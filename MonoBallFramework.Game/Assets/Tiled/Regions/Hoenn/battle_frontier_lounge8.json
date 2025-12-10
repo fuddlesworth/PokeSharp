@@ -394,9 +394,9 @@
               "value": 2
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge8_event_script_ninja_boy"
+              "value": "base:behavior:interaction/battle_frontier_lounge8_event_script_ninja_boy"
             }
           ]
         },
@@ -431,9 +431,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge8_event_script_man"
+              "value": "base:behavior:interaction/battle_frontier_lounge8_event_script_man"
             }
           ]
         },
@@ -468,9 +468,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge8_event_script_woman"
+              "value": "base:behavior:interaction/battle_frontier_lounge8_event_script_woman"
             }
           ]
         }

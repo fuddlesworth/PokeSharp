@@ -3867,9 +3867,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/shoal_cave_low_tide_entrance_room_event_script_item_big_pearl"
+              "value": "base:behavior:interaction/shoal_cave_low_tide_entrance_room_event_script_item_big_pearl"
             },
             {
               "name": "visibilityFlag",
@@ -3909,9 +3909,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/shoal_cave_low_tide_entrance_room_event_script_shell_bell_expert"
+              "value": "base:behavior:interaction/shoal_cave_low_tide_entrance_room_event_script_shell_bell_expert"
             }
           ]
         }

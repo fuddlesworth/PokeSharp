@@ -2465,9 +2465,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_pyramid_top_event_script_attendant"
+              "value": "base:behavior:interaction/battle_frontier_battle_pyramid_top_event_script_attendant"
             }
           ]
         },

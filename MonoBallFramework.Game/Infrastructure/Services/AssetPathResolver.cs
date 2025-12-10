@@ -15,7 +15,7 @@ public interface IAssetPathResolver
     string AssetRoot { get; }
 
     /// <summary>
-    ///     Gets the resolved path for game data (e.g., "/path/to/bin/Debug/Assets/Data").
+    ///     Gets the resolved path for game data (e.g., "/path/to/bin/Debug/Assets/Definitions").
     /// </summary>
     string DataPath { get; }
 

@@ -385,9 +385,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_name_raters_house_event_script_name_rater"
+              "value": "base:behavior:interaction/slateport_city_name_raters_house_event_script_name_rater"
             }
           ]
         }

@@ -608,9 +608,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_5f_event_script_little_girl"
+              "value": "base:behavior:interaction/lilycove_city_department_store_5f_event_script_little_girl"
             }
           ]
         },
@@ -645,9 +645,9 @@
               "value": "down,left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_5f_event_script_pokefan_f"
+              "value": "base:behavior:interaction/lilycove_city_department_store_5f_event_script_pokefan_f"
             }
           ]
         },
@@ -682,9 +682,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_5f_event_script_clerk_far_left"
+              "value": "base:behavior:interaction/lilycove_city_department_store_5f_event_script_clerk_far_left"
             }
           ]
         },
@@ -719,9 +719,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_5f_event_script_clerk_mid_left"
+              "value": "base:behavior:interaction/lilycove_city_department_store_5f_event_script_clerk_mid_left"
             }
           ]
         },
@@ -756,9 +756,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_5f_event_script_clerk_mid_right"
+              "value": "base:behavior:interaction/lilycove_city_department_store_5f_event_script_clerk_mid_right"
             }
           ]
         },
@@ -793,9 +793,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_5f_event_script_clerk_far_right"
+              "value": "base:behavior:interaction/lilycove_city_department_store_5f_event_script_clerk_far_right"
             }
           ]
         },
@@ -830,9 +830,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_department_store_5f_event_script_woman"
+              "value": "base:behavior:interaction/lilycove_city_department_store_5f_event_script_woman"
             }
           ]
         }

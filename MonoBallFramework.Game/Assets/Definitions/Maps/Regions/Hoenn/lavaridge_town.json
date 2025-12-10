@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/lavaridge_town",
+  "DisplayName": "LavaridgeTown",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/lavaridge_town.json"
+}

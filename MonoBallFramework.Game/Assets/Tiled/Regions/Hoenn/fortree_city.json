@@ -2881,9 +2881,9 @@
               "value": 4
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_event_script_man"
+              "value": "base:behavior:interaction/fortree_city_event_script_man"
             }
           ]
         },
@@ -2923,9 +2923,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_event_script_girl"
+              "value": "base:behavior:interaction/fortree_city_event_script_girl"
             }
           ]
         },
@@ -2965,9 +2965,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_event_script_woman"
+              "value": "base:behavior:interaction/fortree_city_event_script_woman"
             }
           ]
         },
@@ -2997,9 +2997,9 @@
               "value": 4
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_event_script_boy"
+              "value": "base:behavior:interaction/fortree_city_event_script_boy"
             }
           ]
         },
@@ -3029,9 +3029,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_event_script_old_man"
+              "value": "base:behavior:interaction/fortree_city_event_script_old_man"
             }
           ]
         },
@@ -3066,9 +3066,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_event_script_gameboy_kid"
+              "value": "base:behavior:interaction/fortree_city_event_script_gameboy_kid"
             }
           ]
         },
@@ -3098,9 +3098,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_event_script_kecleon"
+              "value": "base:behavior:interaction/fortree_city_event_script_kecleon"
             },
             {
               "name": "visibilityFlag",

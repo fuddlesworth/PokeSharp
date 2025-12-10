@@ -289,9 +289,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_house1_event_script_trader"
+              "value": "base:behavior:interaction/fortree_city_house1_event_script_trader"
             }
           ]
         },
@@ -326,9 +326,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_house1_event_script_zigzagoon"
+              "value": "base:behavior:interaction/fortree_city_house1_event_script_zigzagoon"
             }
           ]
         },
@@ -358,9 +358,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_house1_event_script_expert_f"
+              "value": "base:behavior:interaction/fortree_city_house1_event_script_expert_f"
             }
           ]
         }

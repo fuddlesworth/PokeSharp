@@ -4415,9 +4415,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/aqua_hideout_b1f_event_script_grunt2"
+              "value": "base:behavior:interaction/aqua_hideout_b1f_event_script_grunt2"
             },
             {
               "name": "visibilityFlag",
@@ -4467,9 +4467,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/aqua_hideout_b1f_event_script_grunt3"
+              "value": "base:behavior:interaction/aqua_hideout_b1f_event_script_grunt3"
             },
             {
               "name": "visibilityFlag",
@@ -4514,9 +4514,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/aqua_hideout_b1f_event_script_item_max_elixir"
+              "value": "base:behavior:interaction/aqua_hideout_b1f_event_script_item_max_elixir"
             },
             {
               "name": "visibilityFlag",
@@ -4551,9 +4551,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/aqua_hideout_b1f_event_script_grunt5"
+              "value": "base:behavior:interaction/aqua_hideout_b1f_event_script_grunt5"
             },
             {
               "name": "visibilityFlag",
@@ -4598,9 +4598,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/aqua_hideout_b1f_event_script_item_master_ball"
+              "value": "base:behavior:interaction/aqua_hideout_b1f_event_script_item_master_ball"
             },
             {
               "name": "visibilityFlag",
@@ -4635,9 +4635,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/aqua_hideout_b1f_event_script_electrode1"
+              "value": "base:behavior:interaction/aqua_hideout_b1f_event_script_electrode1"
             },
             {
               "name": "visibilityFlag",
@@ -4672,9 +4672,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/aqua_hideout_b1f_event_script_item_nugget"
+              "value": "base:behavior:interaction/aqua_hideout_b1f_event_script_item_nugget"
             },
             {
               "name": "visibilityFlag",
@@ -4709,9 +4709,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/aqua_hideout_b1f_event_script_electrode2"
+              "value": "base:behavior:interaction/aqua_hideout_b1f_event_script_electrode2"
             },
             {
               "name": "visibilityFlag",
@@ -4751,9 +4751,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/aqua_hideout_b1f_event_script_grunt7"
+              "value": "base:behavior:interaction/aqua_hideout_b1f_event_script_grunt7"
             },
             {
               "name": "visibilityFlag",

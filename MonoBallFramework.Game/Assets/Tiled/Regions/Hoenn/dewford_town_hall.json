@@ -663,9 +663,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_hall_event_script_girl"
+              "value": "base:behavior:interaction/dewford_town_hall_event_script_girl"
             }
           ]
         },
@@ -700,9 +700,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_hall_event_script_woman"
+              "value": "base:behavior:interaction/dewford_town_hall_event_script_woman"
             }
           ]
         },
@@ -737,9 +737,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_hall_event_script_man"
+              "value": "base:behavior:interaction/dewford_town_hall_event_script_man"
             }
           ]
         },
@@ -774,9 +774,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_hall_event_script_expert_m"
+              "value": "base:behavior:interaction/dewford_town_hall_event_script_expert_m"
             }
           ]
         },
@@ -811,9 +811,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_hall_event_script_twin"
+              "value": "base:behavior:interaction/dewford_town_hall_event_script_twin"
             }
           ]
         },
@@ -853,9 +853,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_hall_event_script_little_boy"
+              "value": "base:behavior:interaction/dewford_town_hall_event_script_little_boy"
             }
           ]
         },
@@ -890,9 +890,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_hall_event_script_school_kid_m"
+              "value": "base:behavior:interaction/dewford_town_hall_event_script_school_kid_m"
             }
           ]
         },
@@ -927,9 +927,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_hall_event_script_psychic_m"
+              "value": "base:behavior:interaction/dewford_town_hall_event_script_psychic_m"
             }
           ]
         },
@@ -969,9 +969,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/dewford_town_hall_event_script_sludge_bomb_man"
+              "value": "base:behavior:interaction/dewford_town_hall_event_script_sludge_bomb_man"
             },
             {
               "name": "visibilityFlag",

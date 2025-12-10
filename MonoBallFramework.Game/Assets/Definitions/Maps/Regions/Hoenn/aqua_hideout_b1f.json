@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/aqua_hideout_b1f",
+  "DisplayName": "AquaHideout_B1F",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/aqua_hideout_b1f.json"
+}

@@ -658,9 +658,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_devon_corp_2f_event_script_talk_to_pokemon_scientist"
+              "value": "base:behavior:interaction/rustboro_city_devon_corp_2f_event_script_talk_to_pokemon_scientist"
             }
           ]
         },
@@ -695,9 +695,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_devon_corp_2f_event_script_ball_scientist"
+              "value": "base:behavior:interaction/rustboro_city_devon_corp_2f_event_script_ball_scientist"
             }
           ]
         },
@@ -732,9 +732,9 @@
               "value": "up,left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_devon_corp_2f_event_script_pokenav_scientist"
+              "value": "base:behavior:interaction/rustboro_city_devon_corp_2f_event_script_pokenav_scientist"
             }
           ]
         },
@@ -769,9 +769,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_devon_corp_2f_event_script_pokemon_dreams_scientist"
+              "value": "base:behavior:interaction/rustboro_city_devon_corp_2f_event_script_pokemon_dreams_scientist"
             }
           ]
         },
@@ -806,9 +806,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_devon_corp_2f_event_script_fossil_scientist"
+              "value": "base:behavior:interaction/rustboro_city_devon_corp_2f_event_script_fossil_scientist"
             }
           ]
         },
@@ -843,9 +843,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_devon_corp_2f_event_script_match_call_scientist"
+              "value": "base:behavior:interaction/rustboro_city_devon_corp_2f_event_script_match_call_scientist"
             }
           ]
         }

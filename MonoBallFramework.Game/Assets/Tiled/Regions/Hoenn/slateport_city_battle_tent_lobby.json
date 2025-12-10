@@ -570,9 +570,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_battle_tent_lobby_event_script_attendant"
+              "value": "base:behavior:interaction/slateport_city_battle_tent_lobby_event_script_attendant"
             }
           ]
         },
@@ -612,9 +612,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_battle_tent_lobby_event_script_torment_giver"
+              "value": "base:behavior:interaction/slateport_city_battle_tent_lobby_event_script_torment_giver"
             }
           ]
         },
@@ -649,9 +649,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_battle_tent_lobby_event_script_man"
+              "value": "base:behavior:interaction/slateport_city_battle_tent_lobby_event_script_man"
             }
           ]
         },
@@ -681,9 +681,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_battle_tent_lobby_event_script_girl"
+              "value": "base:behavior:interaction/slateport_city_battle_tent_lobby_event_script_girl"
             }
           ]
         },
@@ -718,9 +718,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_battle_tent_lobby_event_script_woman"
+              "value": "base:behavior:interaction/slateport_city_battle_tent_lobby_event_script_woman"
             }
           ]
         }

@@ -2766,9 +2766,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/granite_cave_b1f_event_script_item_poke_ball"
+              "value": "base:behavior:interaction/granite_cave_b1f_event_script_item_poke_ball"
             },
             {
               "name": "visibilityFlag",

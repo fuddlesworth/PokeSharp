@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/underwater_sealed_chamber",
+  "DisplayName": "Underwater_SealedChamber",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/underwater_sealed_chamber.json"
+}

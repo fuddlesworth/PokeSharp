@@ -409,9 +409,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_mart_event_script_clerk"
+              "value": "base:behavior:interaction/lavaridge_town_mart_event_script_clerk"
             }
           ]
         },
@@ -446,9 +446,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_mart_event_script_expert_m"
+              "value": "base:behavior:interaction/lavaridge_town_mart_event_script_expert_m"
             }
           ]
         },
@@ -483,9 +483,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_mart_event_script_old_woman"
+              "value": "base:behavior:interaction/lavaridge_town_mart_event_script_old_woman"
             }
           ]
         }

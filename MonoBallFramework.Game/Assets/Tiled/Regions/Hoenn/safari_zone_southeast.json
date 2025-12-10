@@ -4928,9 +4928,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/safari_zone_southeast_event_script_rich_boy"
+              "value": "base:behavior:interaction/safari_zone_southeast_event_script_rich_boy"
             }
           ]
         },
@@ -4970,9 +4970,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/safari_zone_southeast_event_script_fat_man"
+              "value": "base:behavior:interaction/safari_zone_southeast_event_script_fat_man"
             }
           ]
         },
@@ -5012,9 +5012,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/safari_zone_southeast_event_script_little_girl"
+              "value": "base:behavior:interaction/safari_zone_southeast_event_script_little_girl"
             }
           ]
         },
@@ -5044,9 +5044,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/safari_zone_southeast_event_script_item_big_pearl"
+              "value": "base:behavior:interaction/safari_zone_southeast_event_script_item_big_pearl"
             },
             {
               "name": "visibilityFlag",
@@ -5086,9 +5086,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/safari_zone_southeast_event_script_expansion_zone_attendant"
+              "value": "base:behavior:interaction/safari_zone_southeast_event_script_expansion_zone_attendant"
             },
             {
               "name": "visibilityFlag",

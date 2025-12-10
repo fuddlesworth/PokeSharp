@@ -195,7 +195,7 @@ sceneManager.PushScene(popupScene);
 ## Adding New Popup Styles
 
 1. Extract graphics from pokeemerald using `porycon --extract-popups`
-2. Manifests are automatically created in `Assets/Data/Maps/Popups/`
+2. Manifests are automatically created in `Assets/Definitions/Maps/Popups/`
 3. PNG textures are placed in `Assets/Graphics/Maps/Popups/`
 4. Restart game to load new styles
 5. Update registry or map metadata to use new style

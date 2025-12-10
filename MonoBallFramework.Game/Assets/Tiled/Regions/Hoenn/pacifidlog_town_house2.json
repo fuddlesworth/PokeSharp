@@ -415,9 +415,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/pacifidlog_town_house2_event_script_fan_club_younger_brother"
+              "value": "base:behavior:interaction/pacifidlog_town_house2_event_script_fan_club_younger_brother"
             }
           ]
         },
@@ -447,9 +447,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/pacifidlog_town_house2_event_script_happy_azurill"
+              "value": "base:behavior:interaction/pacifidlog_town_house2_event_script_happy_azurill"
             }
           ]
         },
@@ -479,9 +479,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/pacifidlog_town_house2_event_script_unhappy_azurill"
+              "value": "base:behavior:interaction/pacifidlog_town_house2_event_script_unhappy_azurill"
             }
           ]
         }

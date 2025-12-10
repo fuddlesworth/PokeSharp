@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/mauville_city",
+  "DisplayName": "MauvilleCity",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/mauville_city.json"
+}

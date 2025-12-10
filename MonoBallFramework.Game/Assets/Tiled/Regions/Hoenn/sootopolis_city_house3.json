@@ -313,9 +313,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_house3_event_script_woman"
+              "value": "base:behavior:interaction/sootopolis_city_house3_event_script_woman"
             }
           ]
         },
@@ -355,9 +355,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_house3_event_script_girl"
+              "value": "base:behavior:interaction/sootopolis_city_house3_event_script_girl"
             }
           ]
         }

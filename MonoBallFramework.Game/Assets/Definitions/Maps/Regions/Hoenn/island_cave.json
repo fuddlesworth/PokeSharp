@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/island_cave",
+  "DisplayName": "IslandCave",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/island_cave.json"
+}

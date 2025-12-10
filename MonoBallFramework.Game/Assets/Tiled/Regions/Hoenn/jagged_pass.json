@@ -4555,9 +4555,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/jagged_pass_event_script_eric"
+              "value": "base:behavior:interaction/jagged_pass_event_script_eric"
             },
             {
               "name": "trainerType",
@@ -4602,9 +4602,9 @@
               "value": "left,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/jagged_pass_event_script_ethan"
+              "value": "base:behavior:interaction/jagged_pass_event_script_ethan"
             },
             {
               "name": "trainerType",
@@ -4644,9 +4644,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/jagged_pass_event_script_item_burn_heal"
+              "value": "base:behavior:interaction/jagged_pass_event_script_item_burn_heal"
             },
             {
               "name": "visibilityFlag",
@@ -4686,9 +4686,9 @@
               "value": "up,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/jagged_pass_event_script_diana"
+              "value": "base:behavior:interaction/jagged_pass_event_script_diana"
             },
             {
               "name": "trainerType",
@@ -4733,9 +4733,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/jagged_pass_event_script_magma_hideout_guard"
+              "value": "base:behavior:interaction/jagged_pass_event_script_magma_hideout_guard"
             },
             {
               "name": "visibilityFlag",
@@ -4775,9 +4775,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/jagged_pass_event_script_autumn"
+              "value": "base:behavior:interaction/jagged_pass_event_script_autumn"
             },
             {
               "name": "trainerType",
@@ -4822,9 +4822,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/jagged_pass_event_script_julio"
+              "value": "base:behavior:interaction/jagged_pass_event_script_julio"
             },
             {
               "name": "trainerType",

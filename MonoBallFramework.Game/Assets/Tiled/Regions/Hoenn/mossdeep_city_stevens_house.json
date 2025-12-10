@@ -516,9 +516,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_stevens_house_event_script_steven"
+              "value": "base:behavior:interaction/mossdeep_city_stevens_house_event_script_steven"
             },
             {
               "name": "visibilityFlag",
@@ -553,9 +553,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_stevens_house_event_script_beldum_pokeball"
+              "value": "base:behavior:interaction/mossdeep_city_stevens_house_event_script_beldum_pokeball"
             },
             {
               "name": "visibilityFlag",
@@ -590,9 +590,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_stevens_house_event_script_letter"
+              "value": "base:behavior:interaction/mossdeep_city_stevens_house_event_script_letter"
             },
             {
               "name": "visibilityFlag",

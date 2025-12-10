@@ -779,9 +779,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route119_weather_institute_2f_event_script_grunt2"
+              "value": "base:behavior:interaction/route119_weather_institute_2f_event_script_grunt2"
             },
             {
               "name": "visibilityFlag",
@@ -831,9 +831,9 @@
               "value": "down,up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route119_weather_institute_2f_event_script_grunt3"
+              "value": "base:behavior:interaction/route119_weather_institute_2f_event_script_grunt3"
             },
             {
               "name": "visibilityFlag",
@@ -883,9 +883,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route119_weather_institute_2f_event_script_shelly"
+              "value": "base:behavior:interaction/route119_weather_institute_2f_event_script_shelly"
             },
             {
               "name": "visibilityFlag",
@@ -962,9 +962,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route119_weather_institute_2f_event_script_weather_scientist"
+              "value": "base:behavior:interaction/route119_weather_institute_2f_event_script_weather_scientist"
             }
           ]
         },
@@ -1073,9 +1073,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route119_weather_institute_2f_event_script_grunt5"
+              "value": "base:behavior:interaction/route119_weather_institute_2f_event_script_grunt5"
             },
             {
               "name": "visibilityFlag",

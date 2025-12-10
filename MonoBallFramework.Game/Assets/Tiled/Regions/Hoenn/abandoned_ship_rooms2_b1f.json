@@ -634,9 +634,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_rooms2_b1f_event_script_camper"
+              "value": "base:behavior:interaction/abandoned_ship_rooms2_b1f_event_script_camper"
             }
           ]
         },
@@ -666,9 +666,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_rooms2_b1f_event_script_item_dive_ball"
+              "value": "base:behavior:interaction/abandoned_ship_rooms2_b1f_event_script_item_dive_ball"
             },
             {
               "name": "visibilityFlag",

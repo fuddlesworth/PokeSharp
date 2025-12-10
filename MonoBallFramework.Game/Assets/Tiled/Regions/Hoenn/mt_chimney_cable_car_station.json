@@ -613,9 +613,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mt_chimney_cable_car_station_event_script_attendant"
+              "value": "base:behavior:interaction/mt_chimney_cable_car_station_event_script_attendant"
             }
           ]
         },

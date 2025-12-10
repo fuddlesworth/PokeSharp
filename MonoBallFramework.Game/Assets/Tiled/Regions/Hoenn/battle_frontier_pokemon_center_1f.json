@@ -549,9 +549,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_pokemon_center_1f_event_script_nurse"
+              "value": "base:behavior:interaction/battle_frontier_pokemon_center_1f_event_script_nurse"
             }
           ]
         },
@@ -586,9 +586,9 @@
               "value": "left,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_pokemon_center_1f_event_script_school_kid"
+              "value": "base:behavior:interaction/battle_frontier_pokemon_center_1f_event_script_school_kid"
             }
           ]
         },
@@ -623,9 +623,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_pokemon_center_1f_event_script_man"
+              "value": "base:behavior:interaction/battle_frontier_pokemon_center_1f_event_script_man"
             }
           ]
         },
@@ -660,9 +660,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_pokemon_center_1f_event_script_picnicker"
+              "value": "base:behavior:interaction/battle_frontier_pokemon_center_1f_event_script_picnicker"
             }
           ]
         },
@@ -697,9 +697,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_pokemon_center_1f_event_script_skitty"
+              "value": "base:behavior:interaction/battle_frontier_pokemon_center_1f_event_script_skitty"
             }
           ]
         }

@@ -4032,9 +4032,9 @@
               "value": "square_cw"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_2f_1r_event_script_grunt4"
+              "value": "base:behavior:interaction/magma_hideout_2f_1r_event_script_grunt4"
             },
             {
               "name": "visibilityFlag",
@@ -4084,9 +4084,9 @@
               "value": "square_ccw"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_2f_1r_event_script_grunt5"
+              "value": "base:behavior:interaction/magma_hideout_2f_1r_event_script_grunt5"
             },
             {
               "name": "visibilityFlag",
@@ -4136,9 +4136,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_2f_1r_event_script_grunt14"
+              "value": "base:behavior:interaction/magma_hideout_2f_1r_event_script_grunt14"
             },
             {
               "name": "visibilityFlag",
@@ -4188,9 +4188,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/magma_hideout_2f_1r_event_script_grunt3"
+              "value": "base:behavior:interaction/magma_hideout_2f_1r_event_script_grunt3"
             },
             {
               "name": "visibilityFlag",

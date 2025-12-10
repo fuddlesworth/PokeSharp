@@ -916,9 +916,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_sterns_shipyard_2f_event_script_scientist1"
+              "value": "base:behavior:interaction/slateport_city_sterns_shipyard_2f_event_script_scientist1"
             }
           ]
         },
@@ -953,9 +953,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_sterns_shipyard_2f_event_script_scientist2"
+              "value": "base:behavior:interaction/slateport_city_sterns_shipyard_2f_event_script_scientist2"
             }
           ]
         }

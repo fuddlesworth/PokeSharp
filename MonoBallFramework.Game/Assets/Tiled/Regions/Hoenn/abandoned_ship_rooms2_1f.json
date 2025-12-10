@@ -630,9 +630,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_rooms2_1f_event_script_dan"
+              "value": "base:behavior:interaction/abandoned_ship_rooms2_1f_event_script_dan"
             },
             {
               "name": "trainerType",
@@ -677,9 +677,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_rooms2_1f_event_script_kira"
+              "value": "base:behavior:interaction/abandoned_ship_rooms2_1f_event_script_kira"
             },
             {
               "name": "trainerType",
@@ -719,9 +719,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_rooms2_1f_event_script_item_revive"
+              "value": "base:behavior:interaction/abandoned_ship_rooms2_1f_event_script_item_revive"
             },
             {
               "name": "visibilityFlag",
@@ -761,9 +761,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_rooms2_1f_event_script_garrison"
+              "value": "base:behavior:interaction/abandoned_ship_rooms2_1f_event_script_garrison"
             },
             {
               "name": "trainerType",
@@ -808,9 +808,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/abandoned_ship_rooms2_1f_event_script_jani"
+              "value": "base:behavior:interaction/abandoned_ship_rooms2_1f_event_script_jani"
             },
             {
               "name": "trainerType",

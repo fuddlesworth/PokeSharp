@@ -1311,9 +1311,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle2_event_script_ted"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle2_event_script_ted"
             },
             {
               "name": "trainerType",
@@ -1358,9 +1358,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle2_event_script_paul"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle2_event_script_paul"
             },
             {
               "name": "trainerType",
@@ -1405,9 +1405,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle2_event_script_georgia"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle2_event_script_georgia"
             },
             {
               "name": "trainerType",
@@ -1447,9 +1447,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle2_event_script_item_wave_mail"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle2_event_script_item_wave_mail"
             },
             {
               "name": "visibilityFlag",
@@ -1484,9 +1484,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route110_trick_house_puzzle2_event_script_item_harbor_mail"
+              "value": "base:behavior:interaction/route110_trick_house_puzzle2_event_script_item_harbor_mail"
             },
             {
               "name": "visibilityFlag",

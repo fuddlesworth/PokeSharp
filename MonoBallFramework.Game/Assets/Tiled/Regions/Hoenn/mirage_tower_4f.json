@@ -509,9 +509,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mirage_tower_4f_event_script_root_fossil"
+              "value": "base:behavior:interaction/mirage_tower_4f_event_script_root_fossil"
             },
             {
               "name": "visibilityFlag",
@@ -551,9 +551,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mirage_tower_4f_event_script_claw_fossil"
+              "value": "base:behavior:interaction/mirage_tower_4f_event_script_claw_fossil"
             },
             {
               "name": "visibilityFlag",
@@ -588,9 +588,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/event_script_rock_smash"
+              "value": "base:behavior:interaction/event_script_rock_smash"
             },
             {
               "name": "visibilityFlag",

@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/lavaridge_town_gym_b1f",
+  "DisplayName": "LavaridgeTown_Gym_B1F",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/lavaridge_town_gym_b1f.json"
+}

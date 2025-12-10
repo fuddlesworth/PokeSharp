@@ -1526,9 +1526,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/artisan_cave_1f_event_script_item_carbos"
+              "value": "base:behavior:interaction/artisan_cave_1f_event_script_item_carbos"
             },
             {
               "name": "visibilityFlag",

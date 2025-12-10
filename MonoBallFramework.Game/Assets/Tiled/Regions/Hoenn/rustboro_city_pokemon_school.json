@@ -672,9 +672,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_pokemon_school_event_script_gameboy_kid1"
+              "value": "base:behavior:interaction/rustboro_city_pokemon_school_event_script_gameboy_kid1"
             }
           ]
         },
@@ -709,9 +709,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_pokemon_school_event_script_gameboy_kid2"
+              "value": "base:behavior:interaction/rustboro_city_pokemon_school_event_script_gameboy_kid2"
             }
           ]
         },
@@ -746,9 +746,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_pokemon_school_event_script_rich_boy"
+              "value": "base:behavior:interaction/rustboro_city_pokemon_school_event_script_rich_boy"
             }
           ]
         },
@@ -783,9 +783,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_pokemon_school_event_script_lass"
+              "value": "base:behavior:interaction/rustboro_city_pokemon_school_event_script_lass"
             }
           ]
         },
@@ -820,9 +820,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_pokemon_school_event_script_school_kid_m"
+              "value": "base:behavior:interaction/rustboro_city_pokemon_school_event_script_school_kid_m"
             }
           ]
         },
@@ -857,9 +857,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_pokemon_school_event_script_teacher"
+              "value": "base:behavior:interaction/rustboro_city_pokemon_school_event_script_teacher"
             }
           ]
         },
@@ -894,9 +894,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_pokemon_school_event_script_scott"
+              "value": "base:behavior:interaction/rustboro_city_pokemon_school_event_script_scott"
             },
             {
               "name": "visibilityFlag",

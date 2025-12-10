@@ -443,9 +443,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rivals_house_2f_event_script_rival"
+              "value": "base:behavior:interaction/rivals_house_2f_event_script_rival"
             },
             {
               "name": "visibilityFlag",
@@ -901,9 +901,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/littleroot_town_brendans_house_2f_event_script_rivals_poke_ball"
+              "value": "base:behavior:interaction/littleroot_town_brendans_house_2f_event_script_rivals_poke_ball"
             },
             {
               "name": "visibilityFlag",

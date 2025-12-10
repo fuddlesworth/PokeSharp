@@ -450,9 +450,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route124_diving_treasure_hunters_house_event_script_treasure_hunter"
+              "value": "base:behavior:interaction/route124_diving_treasure_hunters_house_event_script_treasure_hunter"
             }
           ]
         }

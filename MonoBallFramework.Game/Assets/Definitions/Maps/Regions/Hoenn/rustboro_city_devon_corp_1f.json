@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/rustboro_city_devon_corp_1f",
+  "DisplayName": "RustboroCity_DevonCorp_1F",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/rustboro_city_devon_corp_1f.json"
+}

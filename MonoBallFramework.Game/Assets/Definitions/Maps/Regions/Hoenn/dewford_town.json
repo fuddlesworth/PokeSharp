@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/dewford_town",
+  "DisplayName": "DewfordTown",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/dewford_town.json"
+}

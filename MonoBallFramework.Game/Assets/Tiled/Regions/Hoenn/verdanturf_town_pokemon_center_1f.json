@@ -549,9 +549,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/verdanturf_town_pokemon_center_1f_event_script_nurse"
+              "value": "base:behavior:interaction/verdanturf_town_pokemon_center_1f_event_script_nurse"
             }
           ]
         },
@@ -591,9 +591,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/verdanturf_town_pokemon_center_1f_event_script_gentleman"
+              "value": "base:behavior:interaction/verdanturf_town_pokemon_center_1f_event_script_gentleman"
             }
           ]
         },
@@ -628,9 +628,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/verdanturf_town_pokemon_center_1f_event_script_expert_m"
+              "value": "base:behavior:interaction/verdanturf_town_pokemon_center_1f_event_script_expert_m"
             }
           ]
         },
@@ -665,9 +665,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/verdanturf_town_pokemon_center_1f_event_script_fury_cutter_tutor"
+              "value": "base:behavior:interaction/verdanturf_town_pokemon_center_1f_event_script_fury_cutter_tutor"
             }
           ]
         }

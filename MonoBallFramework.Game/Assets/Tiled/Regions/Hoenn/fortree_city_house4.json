@@ -294,9 +294,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_house4_event_script_woman"
+              "value": "base:behavior:interaction/fortree_city_house4_event_script_woman"
             }
           ]
         },
@@ -331,9 +331,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_house4_event_script_boy"
+              "value": "base:behavior:interaction/fortree_city_house4_event_script_boy"
             }
           ]
         },
@@ -368,9 +368,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fortree_city_house4_event_script_wingull"
+              "value": "base:behavior:interaction/fortree_city_house4_event_script_wingull"
             },
             {
               "name": "visibilityFlag",

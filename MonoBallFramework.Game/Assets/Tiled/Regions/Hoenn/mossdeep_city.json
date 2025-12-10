@@ -10436,9 +10436,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_event_script_sailor"
+              "value": "base:behavior:interaction/mossdeep_city_event_script_sailor"
             }
           ]
         },
@@ -10478,9 +10478,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_event_script_expert_m"
+              "value": "base:behavior:interaction/mossdeep_city_event_script_expert_m"
             }
           ]
         },
@@ -10520,9 +10520,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_event_script_pokefan_f"
+              "value": "base:behavior:interaction/mossdeep_city_event_script_pokefan_f"
             }
           ]
         },
@@ -10562,9 +10562,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_event_script_ninja_boy"
+              "value": "base:behavior:interaction/mossdeep_city_event_script_ninja_boy"
             }
           ]
         },
@@ -10599,9 +10599,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_event_script_girl"
+              "value": "base:behavior:interaction/mossdeep_city_event_script_girl"
             }
           ]
         },
@@ -10631,9 +10631,9 @@
               "value": 5
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_event_script_item_net_ball"
+              "value": "base:behavior:interaction/mossdeep_city_event_script_item_net_ball"
             },
             {
               "name": "visibilityFlag",
@@ -10673,9 +10673,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_event_script_man"
+              "value": "base:behavior:interaction/mossdeep_city_event_script_man"
             }
           ]
         },
@@ -10710,9 +10710,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_event_script_woman"
+              "value": "base:behavior:interaction/mossdeep_city_event_script_woman"
             }
           ]
         },
@@ -10752,9 +10752,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_event_script_kings_rock_boy"
+              "value": "base:behavior:interaction/mossdeep_city_event_script_kings_rock_boy"
             }
           ]
         },
@@ -10969,9 +10969,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_event_script_dynamic_punch_tutor"
+              "value": "base:behavior:interaction/mossdeep_city_event_script_dynamic_punch_tutor"
             }
           ]
         },
@@ -11006,9 +11006,9 @@
               "value": "down,left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_event_script_scott"
+              "value": "base:behavior:interaction/mossdeep_city_event_script_scott"
             },
             {
               "name": "visibilityFlag",
@@ -11043,9 +11043,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_event_script_black_belt"
+              "value": "base:behavior:interaction/mossdeep_city_event_script_black_belt"
             }
           ]
         }

@@ -7949,9 +7949,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_fat_man"
+              "value": "base:behavior:interaction/slateport_city_event_script_fat_man"
             }
           ]
         },
@@ -7991,9 +7991,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_man1"
+              "value": "base:behavior:interaction/slateport_city_event_script_man1"
             }
           ]
         },
@@ -8033,9 +8033,9 @@
               "value": 2
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_rich_boy"
+              "value": "base:behavior:interaction/slateport_city_event_script_rich_boy"
             }
           ]
         },
@@ -8065,9 +8065,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_woman1"
+              "value": "base:behavior:interaction/slateport_city_event_script_woman1"
             }
           ]
         },
@@ -8102,9 +8102,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_aqua_grunt1"
+              "value": "base:behavior:interaction/slateport_city_event_script_aqua_grunt1"
             },
             {
               "name": "visibilityFlag",
@@ -8144,9 +8144,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_cook"
+              "value": "base:behavior:interaction/slateport_city_event_script_cook"
             }
           ]
         },
@@ -8176,9 +8176,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_old_woman"
+              "value": "base:behavior:interaction/slateport_city_event_script_old_woman"
             }
           ]
         },
@@ -8218,9 +8218,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_girl"
+              "value": "base:behavior:interaction/slateport_city_event_script_girl"
             }
           ]
         },
@@ -8255,9 +8255,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_ty"
+              "value": "base:behavior:interaction/slateport_city_event_script_ty"
             },
             {
               "name": "visibilityFlag",
@@ -8297,9 +8297,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_gabby"
+              "value": "base:behavior:interaction/slateport_city_event_script_gabby"
             },
             {
               "name": "visibilityFlag",
@@ -8339,9 +8339,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_capt_stern"
+              "value": "base:behavior:interaction/slateport_city_event_script_capt_stern"
             },
             {
               "name": "visibilityFlag",
@@ -8381,9 +8381,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_sailor1"
+              "value": "base:behavior:interaction/slateport_city_event_script_sailor1"
             }
           ]
         },
@@ -8423,9 +8423,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_sailor2"
+              "value": "base:behavior:interaction/slateport_city_event_script_sailor2"
             }
           ]
         },
@@ -8465,9 +8465,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_pokefan_f"
+              "value": "base:behavior:interaction/slateport_city_event_script_pokefan_f"
             }
           ]
         },
@@ -8507,9 +8507,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_man2"
+              "value": "base:behavior:interaction/slateport_city_event_script_man2"
             }
           ]
         },
@@ -8549,9 +8549,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_maniac"
+              "value": "base:behavior:interaction/slateport_city_event_script_maniac"
             }
           ]
         },
@@ -8581,9 +8581,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_woman2"
+              "value": "base:behavior:interaction/slateport_city_event_script_woman2"
             }
           ]
         },
@@ -8618,9 +8618,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_aqua_grunt2"
+              "value": "base:behavior:interaction/slateport_city_event_script_aqua_grunt2"
             },
             {
               "name": "visibilityFlag",
@@ -8660,9 +8660,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_aqua_grunt3"
+              "value": "base:behavior:interaction/slateport_city_event_script_aqua_grunt3"
             },
             {
               "name": "visibilityFlag",
@@ -8702,9 +8702,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_decor_clerk"
+              "value": "base:behavior:interaction/slateport_city_event_script_decor_clerk"
             }
           ]
         },
@@ -8739,9 +8739,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_doll_clerk"
+              "value": "base:behavior:interaction/slateport_city_event_script_doll_clerk"
             }
           ]
         },
@@ -8776,9 +8776,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_man3"
+              "value": "base:behavior:interaction/slateport_city_event_script_man3"
             }
           ]
         },
@@ -8813,9 +8813,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_effort_ribbon_woman"
+              "value": "base:behavior:interaction/slateport_city_event_script_effort_ribbon_woman"
             }
           ]
         },
@@ -8850,9 +8850,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_power_tm_clerk"
+              "value": "base:behavior:interaction/slateport_city_event_script_power_tm_clerk"
             },
             {
               "name": "visibilityFlag",
@@ -8892,9 +8892,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_energy_guru"
+              "value": "base:behavior:interaction/slateport_city_event_script_energy_guru"
             }
           ]
         },
@@ -8929,9 +8929,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_aqua_grunt4"
+              "value": "base:behavior:interaction/slateport_city_event_script_aqua_grunt4"
             },
             {
               "name": "visibilityFlag",
@@ -8971,9 +8971,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_aqua_grunt5"
+              "value": "base:behavior:interaction/slateport_city_event_script_aqua_grunt5"
             },
             {
               "name": "visibilityFlag",
@@ -9013,9 +9013,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_aqua_grunt6"
+              "value": "base:behavior:interaction/slateport_city_event_script_aqua_grunt6"
             },
             {
               "name": "visibilityFlag",
@@ -9055,9 +9055,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_aqua_grunt7"
+              "value": "base:behavior:interaction/slateport_city_event_script_aqua_grunt7"
             },
             {
               "name": "visibilityFlag",
@@ -9097,9 +9097,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_aqua_grunt8"
+              "value": "base:behavior:interaction/slateport_city_event_script_aqua_grunt8"
             },
             {
               "name": "visibilityFlag",
@@ -9139,9 +9139,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_aqua_grunt9"
+              "value": "base:behavior:interaction/slateport_city_event_script_aqua_grunt9"
             },
             {
               "name": "visibilityFlag",
@@ -9181,9 +9181,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_aqua_grunt10"
+              "value": "base:behavior:interaction/slateport_city_event_script_aqua_grunt10"
             },
             {
               "name": "visibilityFlag",
@@ -9223,9 +9223,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_aqua_grunt11"
+              "value": "base:behavior:interaction/slateport_city_event_script_aqua_grunt11"
             },
             {
               "name": "visibilityFlag",
@@ -9265,9 +9265,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/slateport_city_event_script_berry_powder_clerk"
+              "value": "base:behavior:interaction/slateport_city_event_script_berry_powder_clerk"
             }
           ]
         },

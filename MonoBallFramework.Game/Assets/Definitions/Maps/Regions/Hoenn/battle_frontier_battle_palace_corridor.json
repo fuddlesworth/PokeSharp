@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/battle_frontier_battle_palace_corridor",
+  "DisplayName": "BattleFrontier_BattlePalaceCorridor",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/battle_frontier_battle_palace_corridor.json"
+}

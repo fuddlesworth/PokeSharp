@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/mossdeep_city_game_corner_1f",
+  "DisplayName": "MossdeepCity_GameCorner_1F",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/mossdeep_city_game_corner_1f.json"
+}

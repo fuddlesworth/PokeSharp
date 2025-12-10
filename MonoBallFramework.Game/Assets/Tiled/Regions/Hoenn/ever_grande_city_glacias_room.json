@@ -691,9 +691,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/ever_grande_city_glacias_room_event_script_glacia"
+              "value": "base:behavior:interaction/ever_grande_city_glacias_room_event_script_glacia"
             }
           ]
         }

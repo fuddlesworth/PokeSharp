@@ -5406,9 +5406,9 @@
               "value": 4
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_boy1"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_boy1"
             }
           ]
         },
@@ -5448,9 +5448,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_boy2"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_boy2"
             }
           ]
         },
@@ -5490,9 +5490,9 @@
               "value": 2
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_girl"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_girl"
             }
           ]
         },
@@ -5527,9 +5527,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_smart_contest_mc"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_smart_contest_mc"
             }
           ]
         },
@@ -5564,9 +5564,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_smart_contest_judge"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_smart_contest_judge"
             }
           ]
         },
@@ -5601,9 +5601,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_smart_contestant1"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_smart_contestant1"
             }
           ]
         },
@@ -5638,9 +5638,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_smart_contestant2"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_smart_contestant2"
             }
           ]
         },
@@ -5675,9 +5675,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_smart_contestant3"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_smart_contestant3"
             }
           ]
         },
@@ -5712,9 +5712,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_smart_contestant4"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_smart_contestant4"
             }
           ]
         },
@@ -5749,9 +5749,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_smart_contest_audience1"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_smart_contest_audience1"
             }
           ]
         },
@@ -5786,9 +5786,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_smart_contest_audience4"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_smart_contest_audience4"
             }
           ]
         },
@@ -5823,9 +5823,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_smart_contest_audience2"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_smart_contest_audience2"
             }
           ]
         },
@@ -5860,9 +5860,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_beauty_contest_mc"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_beauty_contest_mc"
             }
           ]
         },
@@ -5897,9 +5897,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_beauty_contest_judge"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_beauty_contest_judge"
             }
           ]
         },
@@ -5934,9 +5934,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_beauty_contestant1"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_beauty_contestant1"
             }
           ]
         },
@@ -5971,9 +5971,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_beauty_contestant2"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_beauty_contestant2"
             }
           ]
         },
@@ -6008,9 +6008,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_beauty_contestant3"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_beauty_contestant3"
             }
           ]
         },
@@ -6045,9 +6045,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_beauty_contestant4"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_beauty_contestant4"
             }
           ]
         },
@@ -6082,9 +6082,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_beauty_contest_audience1"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_beauty_contest_audience1"
             }
           ]
         },
@@ -6119,9 +6119,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_beauty_contest_audience3"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_beauty_contest_audience3"
             }
           ]
         },
@@ -6156,9 +6156,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_beauty_contest_audience2"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_beauty_contest_audience2"
             }
           ]
         },
@@ -6193,9 +6193,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_smart_contest_audience3"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_smart_contest_audience3"
             }
           ]
         },
@@ -6230,9 +6230,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_cute_contest_mc"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_cute_contest_mc"
             }
           ]
         },
@@ -6267,9 +6267,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_cute_contest_judge"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_cute_contest_judge"
             }
           ]
         },
@@ -6304,9 +6304,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_cute_contestant1"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_cute_contestant1"
             }
           ]
         },
@@ -6341,9 +6341,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_cute_contestant2"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_cute_contestant2"
             }
           ]
         },
@@ -6378,9 +6378,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_cute_contestant3"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_cute_contestant3"
             }
           ]
         },
@@ -6415,9 +6415,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_cute_contestant4"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_cute_contestant4"
             }
           ]
         },
@@ -6452,9 +6452,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_cute_contest_audience1"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_cute_contest_audience1"
             }
           ]
         },
@@ -6489,9 +6489,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_cute_contest_audience3"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_cute_contest_audience3"
             }
           ]
         },
@@ -6526,9 +6526,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_cute_contest_audience2"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_cute_contest_audience2"
             }
           ]
         },
@@ -6568,9 +6568,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lilycove_city_contest_hall_event_script_sailor"
+              "value": "base:behavior:interaction/lilycove_city_contest_hall_event_script_sailor"
             }
           ]
         }

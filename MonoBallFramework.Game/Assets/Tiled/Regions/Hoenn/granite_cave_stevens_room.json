@@ -744,9 +744,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/granite_cave_stevens_room_event_script_steven"
+              "value": "base:behavior:interaction/granite_cave_stevens_room_event_script_steven"
             },
             {
               "name": "visibilityFlag",

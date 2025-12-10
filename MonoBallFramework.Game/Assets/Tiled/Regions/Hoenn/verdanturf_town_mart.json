@@ -409,9 +409,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/verdanturf_town_mart_event_script_clerk"
+              "value": "base:behavior:interaction/verdanturf_town_mart_event_script_clerk"
             }
           ]
         },
@@ -446,9 +446,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/verdanturf_town_mart_event_script_boy"
+              "value": "base:behavior:interaction/verdanturf_town_mart_event_script_boy"
             }
           ]
         },
@@ -483,9 +483,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/verdanturf_town_mart_event_script_expert_f"
+              "value": "base:behavior:interaction/verdanturf_town_mart_event_script_expert_f"
             }
           ]
         },
@@ -520,9 +520,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/verdanturf_town_mart_event_script_lass"
+              "value": "base:behavior:interaction/verdanturf_town_mart_event_script_lass"
             }
           ]
         }

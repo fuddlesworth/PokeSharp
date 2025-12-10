@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/ever_grande_city_phoebes_room",
+  "DisplayName": "EverGrandeCity_PhoebesRoom",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/ever_grande_city_phoebes_room.json"
+}

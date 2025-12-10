@@ -313,9 +313,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_house7_event_script_old_man"
+              "value": "base:behavior:interaction/sootopolis_city_house7_event_script_old_man"
             }
           ]
         },
@@ -355,9 +355,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_house7_event_script_pokefan_f"
+              "value": "base:behavior:interaction/sootopolis_city_house7_event_script_pokefan_f"
             }
           ]
         }

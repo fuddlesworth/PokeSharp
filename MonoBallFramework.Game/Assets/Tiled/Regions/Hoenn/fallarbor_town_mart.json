@@ -409,9 +409,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fallarbor_town_mart_event_script_clerk"
+              "value": "base:behavior:interaction/fallarbor_town_mart_event_script_clerk"
             }
           ]
         },
@@ -451,9 +451,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fallarbor_town_mart_event_script_woman"
+              "value": "base:behavior:interaction/fallarbor_town_mart_event_script_woman"
             }
           ]
         },
@@ -488,9 +488,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fallarbor_town_mart_event_script_pokefan_m"
+              "value": "base:behavior:interaction/fallarbor_town_mart_event_script_pokefan_m"
             }
           ]
         },
@@ -520,9 +520,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fallarbor_town_mart_event_script_skitty"
+              "value": "base:behavior:interaction/fallarbor_town_mart_event_script_skitty"
             }
           ]
         },
@@ -557,9 +557,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fallarbor_town_mart_event_script_metronome_tutor"
+              "value": "base:behavior:interaction/fallarbor_town_mart_event_script_metronome_tutor"
             }
           ]
         }

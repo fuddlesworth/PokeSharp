@@ -442,9 +442,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_cutters_house_event_script_cutter"
+              "value": "base:behavior:interaction/rustboro_city_cutters_house_event_script_cutter"
             }
           ]
         },
@@ -484,9 +484,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/rustboro_city_cutters_house_event_script_lass"
+              "value": "base:behavior:interaction/rustboro_city_cutters_house_event_script_lass"
             }
           ]
         }

@@ -313,9 +313,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_house2_event_script_expert_f"
+              "value": "base:behavior:interaction/sootopolis_city_house2_event_script_expert_f"
             }
           ]
         }

@@ -420,9 +420,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/oldale_town_house1_event_script_woman"
+              "value": "base:behavior:interaction/oldale_town_house1_event_script_woman"
             }
           ]
         }

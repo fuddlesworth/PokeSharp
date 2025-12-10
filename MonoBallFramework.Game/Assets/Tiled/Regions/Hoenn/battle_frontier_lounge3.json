@@ -389,9 +389,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge3_event_script_gambler"
+              "value": "base:behavior:interaction/battle_frontier_lounge3_event_script_gambler"
             }
           ]
         },
@@ -426,9 +426,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge3_event_script_fat_man"
+              "value": "base:behavior:interaction/battle_frontier_lounge3_event_script_fat_man"
             }
           ]
         },
@@ -463,9 +463,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge3_event_script_woman"
+              "value": "base:behavior:interaction/battle_frontier_lounge3_event_script_woman"
             }
           ]
         },
@@ -500,9 +500,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge3_event_script_pokefan_f"
+              "value": "base:behavior:interaction/battle_frontier_lounge3_event_script_pokefan_f"
             }
           ]
         },
@@ -542,9 +542,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge3_event_script_man"
+              "value": "base:behavior:interaction/battle_frontier_lounge3_event_script_man"
             }
           ]
         }

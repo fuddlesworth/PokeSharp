@@ -3677,9 +3677,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route107_event_script_darrin"
+              "value": "base:behavior:interaction/route107_event_script_darrin"
             },
             {
               "name": "trainerType",
@@ -3724,9 +3724,9 @@
               "value": "square_cw"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route107_event_script_tony"
+              "value": "base:behavior:interaction/route107_event_script_tony"
             },
             {
               "name": "trainerType",
@@ -3771,9 +3771,9 @@
               "value": "down,up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route107_event_script_denise"
+              "value": "base:behavior:interaction/route107_event_script_denise"
             },
             {
               "name": "trainerType",
@@ -3813,9 +3813,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route107_event_script_beth"
+              "value": "base:behavior:interaction/route107_event_script_beth"
             },
             {
               "name": "trainerType",
@@ -3860,9 +3860,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route107_event_script_lisa"
+              "value": "base:behavior:interaction/route107_event_script_lisa"
             },
             {
               "name": "trainerType",
@@ -3907,9 +3907,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route107_event_script_ray"
+              "value": "base:behavior:interaction/route107_event_script_ray"
             },
             {
               "name": "trainerType",
@@ -3949,9 +3949,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route107_event_script_camron"
+              "value": "base:behavior:interaction/route107_event_script_camron"
             },
             {
               "name": "trainerType",

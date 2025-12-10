@@ -575,9 +575,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_pokemon_center_1f_event_script_nurse"
+              "value": "base:behavior:interaction/lavaridge_town_pokemon_center_1f_event_script_nurse"
             }
           ]
         },
@@ -612,9 +612,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_pokemon_center_1f_event_script_youngster"
+              "value": "base:behavior:interaction/lavaridge_town_pokemon_center_1f_event_script_youngster"
             }
           ]
         },
@@ -649,9 +649,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_pokemon_center_1f_event_script_woman"
+              "value": "base:behavior:interaction/lavaridge_town_pokemon_center_1f_event_script_woman"
             }
           ]
         },
@@ -686,9 +686,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/lavaridge_town_pokemon_center_1f_event_script_gentleman"
+              "value": "base:behavior:interaction/lavaridge_town_pokemon_center_1f_event_script_gentleman"
             }
           ]
         }

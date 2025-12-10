@@ -803,9 +803,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_arena_lobby_event_script_attendant"
+              "value": "base:behavior:interaction/battle_frontier_battle_arena_lobby_event_script_attendant"
             }
           ]
         },
@@ -845,9 +845,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_arena_lobby_event_script_woman"
+              "value": "base:behavior:interaction/battle_frontier_battle_arena_lobby_event_script_woman"
             }
           ]
         },
@@ -882,9 +882,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_arena_lobby_event_script_man"
+              "value": "base:behavior:interaction/battle_frontier_battle_arena_lobby_event_script_man"
             }
           ]
         },
@@ -919,9 +919,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_arena_lobby_event_script_camper"
+              "value": "base:behavior:interaction/battle_frontier_battle_arena_lobby_event_script_camper"
             }
           ]
         },
@@ -956,9 +956,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_battle_arena_lobby_event_script_youngster"
+              "value": "base:behavior:interaction/battle_frontier_battle_arena_lobby_event_script_youngster"
             }
           ]
         }

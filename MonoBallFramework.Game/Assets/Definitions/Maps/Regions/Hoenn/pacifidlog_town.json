@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/pacifidlog_town",
+  "DisplayName": "PacifidlogTown",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/pacifidlog_town.json"
+}

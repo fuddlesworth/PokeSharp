@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/battle_colosseum_4p",
+  "DisplayName": "BattleColosseum_4P",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/battle_colosseum_4p.json"
+}

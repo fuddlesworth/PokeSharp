@@ -2887,9 +2887,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_event_script_boy"
+              "value": "base:behavior:interaction/mauville_city_event_script_boy"
             }
           ]
         },
@@ -2929,9 +2929,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_event_script_rich_boy"
+              "value": "base:behavior:interaction/mauville_city_event_script_rich_boy"
             }
           ]
         },
@@ -2966,9 +2966,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_event_script_maniac"
+              "value": "base:behavior:interaction/mauville_city_event_script_maniac"
             }
           ]
         },
@@ -2998,9 +2998,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_event_script_woman"
+              "value": "base:behavior:interaction/mauville_city_event_script_woman"
             }
           ]
         },
@@ -3035,9 +3035,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_event_script_school_kid_m"
+              "value": "base:behavior:interaction/mauville_city_event_script_school_kid_m"
             }
           ]
         },
@@ -3072,9 +3072,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_event_script_wally"
+              "value": "base:behavior:interaction/mauville_city_event_script_wally"
             },
             {
               "name": "visibilityFlag",
@@ -3114,9 +3114,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_event_script_wallys_uncle"
+              "value": "base:behavior:interaction/mauville_city_event_script_wallys_uncle"
             },
             {
               "name": "visibilityFlag",
@@ -3151,9 +3151,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_event_script_wattson"
+              "value": "base:behavior:interaction/mauville_city_event_script_wattson"
             },
             {
               "name": "visibilityFlag",
@@ -3188,9 +3188,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_event_script_item_x_speed"
+              "value": "base:behavior:interaction/mauville_city_event_script_item_x_speed"
             },
             {
               "name": "visibilityFlag",
@@ -3230,9 +3230,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mauville_city_event_script_rollout_tutor"
+              "value": "base:behavior:interaction/mauville_city_event_script_rollout_tutor"
             }
           ]
         },

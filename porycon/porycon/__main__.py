@@ -15,6 +15,7 @@ from .map_worker import convert_single_map
 from .logging_config import setup_logging, get_logger
 from .popup_extractor import extract_popups
 from .section_extractor import extract_sections
+from .text_window_extractor import extract_text_windows
 
 # Set multiprocessing start method to 'spawn' for cross-platform compatibility
 # This ensures functions can be pickled correctly when running as a module
@@ -64,6 +65,11 @@ def main():
         action="store_true",
         help="Extract map section (MAPSEC) definitions and popup theme mappings from pokeemerald"
     )
+    parser.add_argument(
+        "--extract-text-windows",
+        action="store_true",
+        help="Extract text window graphics from pokeemerald"
+    )
     
     args = parser.parse_args()
     
@@ -95,6 +101,14 @@ def main():
         logger.info("Extracting map section definitions...")
         section_count, theme_count = extract_sections(str(input_dir), str(output_dir))
         logger.info(f"Section extraction complete: {section_count} sections, {theme_count} themes")
+        return
+    
+    # Handle text window extraction if requested
+    if args.extract_text_windows:
+        logger.info("Extracting text window graphics...")
+        count = extract_text_windows(str(input_dir), str(output_dir))
+        logger.info(f"Text window extraction complete: {count} text windows extracted")
+        logger.info("Text window sprites converted with transparency")
         return
     
     logger.info("Finding maps...")

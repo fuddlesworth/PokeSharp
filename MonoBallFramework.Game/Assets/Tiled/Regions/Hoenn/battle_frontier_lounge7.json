@@ -394,9 +394,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge7_event_script_sailor"
+              "value": "base:behavior:interaction/battle_frontier_lounge7_event_script_sailor"
             }
           ]
         },
@@ -431,9 +431,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge7_event_script_left_move_tutor"
+              "value": "base:behavior:interaction/battle_frontier_lounge7_event_script_left_move_tutor"
             }
           ]
         },
@@ -468,9 +468,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge7_event_script_right_move_tutor"
+              "value": "base:behavior:interaction/battle_frontier_lounge7_event_script_right_move_tutor"
             }
           ]
         },
@@ -505,9 +505,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/battle_frontier_lounge7_event_script_gentleman"
+              "value": "base:behavior:interaction/battle_frontier_lounge7_event_script_gentleman"
             }
           ]
         }

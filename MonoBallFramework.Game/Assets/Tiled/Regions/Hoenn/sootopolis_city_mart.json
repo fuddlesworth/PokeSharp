@@ -409,9 +409,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_mart_event_script_clerk"
+              "value": "base:behavior:interaction/sootopolis_city_mart_event_script_clerk"
             }
           ]
         },
@@ -446,9 +446,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_mart_event_script_fat_man"
+              "value": "base:behavior:interaction/sootopolis_city_mart_event_script_fat_man"
             }
           ]
         },
@@ -483,9 +483,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/sootopolis_city_mart_event_script_gentleman"
+              "value": "base:behavior:interaction/sootopolis_city_mart_event_script_gentleman"
             }
           ]
         }

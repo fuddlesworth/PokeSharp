@@ -1,0 +1,8 @@
+{
+  "Id": "base:map:hoenn/trainer_hill_1f",
+  "DisplayName": "TrainerHill_1F",
+  "Type": "map",
+  "Region": "hoenn",
+  "Description": "",
+  "TiledPath": "Tiled/Regions/Hoenn/trainer_hill_1f.json"
+}

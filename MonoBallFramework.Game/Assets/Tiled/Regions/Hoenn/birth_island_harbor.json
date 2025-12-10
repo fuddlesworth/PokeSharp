@@ -782,9 +782,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/birth_island_harbor_event_script_sailor"
+              "value": "base:behavior:interaction/birth_island_harbor_event_script_sailor"
             }
           ]
         },

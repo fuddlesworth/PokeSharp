@@ -4061,9 +4061,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/meteor_falls_1f_1r_event_script_item_tm_iron_tail"
+              "value": "base:behavior:interaction/meteor_falls_1f_1r_event_script_item_tm_iron_tail"
             },
             {
               "name": "visibilityFlag",
@@ -4098,9 +4098,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/meteor_falls_1f_1r_event_script_item_moon_stone"
+              "value": "base:behavior:interaction/meteor_falls_1f_1r_event_script_item_moon_stone"
             },
             {
               "name": "visibilityFlag",
@@ -4135,9 +4135,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/meteor_falls_1f_1r_event_script_item_full_heal"
+              "value": "base:behavior:interaction/meteor_falls_1f_1r_event_script_item_full_heal"
             },
             {
               "name": "visibilityFlag",
@@ -4172,9 +4172,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/meteor_falls_1f_1r_event_script_item_ppup"
+              "value": "base:behavior:interaction/meteor_falls_1f_1r_event_script_item_ppup"
             },
             {
               "name": "visibilityFlag",
@@ -4394,9 +4394,9 @@
               "value": "up,left,right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/meteor_falls_1f_1r_event_script_prof_cozmo"
+              "value": "base:behavior:interaction/meteor_falls_1f_1r_event_script_prof_cozmo"
             },
             {
               "name": "visibilityFlag",

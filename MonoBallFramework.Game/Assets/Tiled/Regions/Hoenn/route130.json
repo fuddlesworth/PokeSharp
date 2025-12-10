@@ -9682,9 +9682,9 @@
               "value": "square_cw"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route130_event_script_rodney"
+              "value": "base:behavior:interaction/route130_event_script_rodney"
             },
             {
               "name": "trainerType",
@@ -9729,9 +9729,9 @@
               "value": "vertical"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route130_event_script_katie"
+              "value": "base:behavior:interaction/route130_event_script_katie"
             },
             {
               "name": "trainerType",
@@ -9776,9 +9776,9 @@
               "value": true
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/berry_tree_script"
+              "value": "base:behavior:interaction/berry_tree_script"
             },
             {
               "name": "visibilityFlag",
@@ -9818,9 +9818,9 @@
               "value": "vertical"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/route130_event_script_santiago"
+              "value": "base:behavior:interaction/route130_event_script_santiago"
             },
             {
               "name": "trainerType",

@@ -409,9 +409,9 @@
               "value": "right"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_mart_event_script_clerk"
+              "value": "base:behavior:interaction/mossdeep_city_mart_event_script_clerk"
             }
           ]
         },
@@ -446,9 +446,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_mart_event_script_woman"
+              "value": "base:behavior:interaction/mossdeep_city_mart_event_script_woman"
             }
           ]
         },
@@ -488,9 +488,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_mart_event_script_boy"
+              "value": "base:behavior:interaction/mossdeep_city_mart_event_script_boy"
             }
           ]
         },
@@ -530,9 +530,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/mossdeep_city_mart_event_script_sailor"
+              "value": "base:behavior:interaction/mossdeep_city_mart_event_script_sailor"
             }
           ]
         }

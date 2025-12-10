@@ -114,7 +114,7 @@ public class PopupRegistry
     }
 
     /// <summary>
-    ///     Loads all popup definitions from the Data/Maps/Popups folder.
+    ///     Loads all popup definitions from the Definitions/Maps/Popups folder.
     /// </summary>
     public void LoadDefinitions(bool loadFromJson = true)
     {

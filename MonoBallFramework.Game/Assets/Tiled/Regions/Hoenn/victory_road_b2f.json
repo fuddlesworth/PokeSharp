@@ -4526,9 +4526,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_b2f_event_script_vito"
+              "value": "base:behavior:interaction/victory_road_b2f_event_script_vito"
             },
             {
               "name": "trainerType",
@@ -4573,9 +4573,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_b2f_event_script_owen"
+              "value": "base:behavior:interaction/victory_road_b2f_event_script_owen"
             },
             {
               "name": "trainerType",
@@ -4620,9 +4620,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_b2f_event_script_caroline"
+              "value": "base:behavior:interaction/victory_road_b2f_event_script_caroline"
             },
             {
               "name": "trainerType",
@@ -4667,9 +4667,9 @@
               "value": "left"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_b2f_event_script_julie"
+              "value": "base:behavior:interaction/victory_road_b2f_event_script_julie"
             },
             {
               "name": "trainerType",
@@ -4709,9 +4709,9 @@
               "value": 3
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_b2f_event_script_item_full_heal"
+              "value": "base:behavior:interaction/victory_road_b2f_event_script_item_full_heal"
             },
             {
               "name": "visibilityFlag",
@@ -4751,9 +4751,9 @@
               "value": "down"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_b2f_event_script_dianne"
+              "value": "base:behavior:interaction/victory_road_b2f_event_script_dianne"
             },
             {
               "name": "trainerType",
@@ -4798,9 +4798,9 @@
               "value": "up"
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/victory_road_b2f_event_script_felix"
+              "value": "base:behavior:interaction/victory_road_b2f_event_script_felix"
             },
             {
               "name": "trainerType",

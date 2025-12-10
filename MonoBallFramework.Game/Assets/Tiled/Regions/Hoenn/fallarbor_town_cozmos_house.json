@@ -420,9 +420,9 @@
               "value": 1
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fallarbor_town_cozmos_house_event_script_prof_cozmo"
+              "value": "base:behavior:interaction/fallarbor_town_cozmos_house_event_script_prof_cozmo"
             },
             {
               "name": "visibilityFlag",
@@ -467,9 +467,9 @@
               "value": 0
             },
             {
-              "name": "scriptId",
+              "name": "interactionId",
               "type": "string",
-              "value": "base:script:map/fallarbor_town_cozmos_house_event_script_cozmos_wife"
+              "value": "base:behavior:interaction/fallarbor_town_cozmos_house_event_script_cozmos_wife"
             }
           ]
         }
