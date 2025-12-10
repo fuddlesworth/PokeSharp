@@ -1477,6 +1477,212 @@ public class UITheme
             TabBarBackground = new Color(238, 232, 213, 255), // #eee8d5
         };
 
+    /// <summary>Pokéball Light theme - Light variant with Pokéball red accents</summary>
+    public static UITheme PokeballLight { get; } =
+        new()
+        {
+            // ═══════════════════════════════════════════════════════════════
+            // POKÉBALL LIGHT COLOR PALETTE
+            // ═══════════════════════════════════════════════════════════════
+            // Background:    #eaeae9 (234, 234, 233) - Logo edge color
+            // Foreground:    #2a2a2d (42, 42, 45) - Dark text
+            // Red:           #eb483c (235, 72, 60) - Pokéball red from logo
+            // Yellow:        #ffcb05 (255, 203, 5) - Pikachu electric
+            // Blue:          #3d7dca (61, 125, 202) - Great Ball
+            // Green:         #78c850 (120, 200, 80) - Grass type
+            // Orange:        #f08030 (240, 128, 48) - Fire type
+            // ═══════════════════════════════════════════════════════════════
+
+            // Background colors - Light like the logo edge
+            BackgroundPrimary = new Color(234, 234, 233, 250), // Logo edge color
+            BackgroundSecondary = new Color(245, 245, 244, 255), // Slightly lighter
+            BackgroundElevated = new Color(255, 255, 254, 255), // Near white
+
+            // Text colors - Dark on light
+            TextPrimary = new Color(42, 42, 45), // Dark gray
+            TextSecondary = new Color(80, 80, 85),
+            TextDim = new Color(140, 140, 145),
+
+            // Interactive element colors - Pokéball red accents
+            ButtonNormal = new Color(220, 220, 218),
+            ButtonHover = new Color(235, 72, 60, 200), // Pokéball red on hover
+            ButtonPressed = new Color(200, 60, 50),
+            ButtonText = new Color(42, 42, 45),
+
+            // Input colors
+            InputBackground = new Color(255, 255, 254),
+            InputText = new Color(42, 42, 45),
+            InputCursor = new Color(235, 72, 60), // Pokéball red cursor
+            InputSelection = new Color(235, 72, 60, 80), // Red selection
+
+            // Border colors
+            BorderPrimary = new Color(200, 200, 198),
+            BorderFocus = new Color(235, 72, 60), // Pokéball red focus
+
+            // Status colors - Pokémon type inspired
+            Success = new Color(100, 180, 60), // Grass type green (darker for light bg)
+            SuccessDim = new Color(80, 150, 50),
+            Warning = new Color(220, 175, 0), // Darker yellow for contrast
+            WarningDim = new Color(180, 145, 0),
+            WarningMild = new Color(240, 200, 60),
+            Error = new Color(235, 72, 60), // Pokéball red
+            ErrorDim = new Color(200, 60, 50),
+            Info = new Color(61, 125, 202), // Great Ball blue
+            InfoDim = new Color(50, 100, 170),
+
+            // Special purpose colors
+            Prompt = new Color(235, 72, 60), // Pokéball red prompt
+            Highlight = new Color(255, 203, 5),
+            ScrollbarTrack = new Color(220, 220, 218, 200),
+            ScrollbarThumb = new Color(235, 72, 60, 150), // Red scrollbar thumb
+            ScrollbarThumbHover = new Color(235, 72, 60, 220),
+            HoverBackground = new Color(235, 72, 60, 40),
+            CursorLineHighlight = new Color(235, 72, 60, 50),
+
+            // Spacing
+            PaddingTiny = 2,
+            PaddingSmall = 4,
+            PaddingMedium = 8,
+            PaddingLarge = 12,
+            PaddingXLarge = 20,
+            MarginTiny = 2,
+            MarginSmall = 4,
+            MarginMedium = 8,
+            MarginLarge = 12,
+            MarginXLarge = 20,
+            FontSize = 16,
+            LineHeight = 20,
+            ScrollbarWidth = 10,
+            ScrollbarPadding = 4,
+            ScrollbarMinThumbHeight = 20,
+            ScrollbarDragSensitivity = 3,
+            BorderWidth = 1,
+            ButtonHeight = 30,
+            InputHeight = 30,
+            DropdownItemHeight = 25,
+            PanelRowHeight = 25,
+            AnimationSpeed = 1200f,
+            FadeSpeed = 4f,
+            CursorBlinkRate = 0.5f,
+
+            // Console colors - Light theme
+            ConsolePrimary = new Color(235, 72, 60), // Pokéball red
+            ConsolePrimaryDim = new Color(200, 60, 50),
+            ConsolePrimaryBright = new Color(245, 90, 80),
+            ConsolePrompt = new Color(235, 72, 60),
+            ConsoleOutputDefault = new Color(42, 42, 45),
+            ConsoleOutputSuccess = new Color(100, 180, 60), // Grass type
+            ConsoleOutputInfo = new Color(61, 125, 202), // Great Ball blue
+            ConsoleOutputWarning = new Color(220, 140, 30), // Fire type (darker)
+            ConsoleOutputError = new Color(235, 72, 60), // Pokéball red
+            ConsoleOutputCommand = new Color(235, 72, 60),
+            ConsoleOutputAliasExpansion = new Color(140, 140, 145),
+            ConsoleBackground = new Color(234, 234, 233, 250),
+            ConsoleOutputBackground = new Color(245, 245, 244, 255),
+            ConsoleInputBackground = new Color(255, 255, 254, 255),
+            ConsoleSearchBackground = new Color(255, 255, 254, 255),
+            ConsoleHintText = new Color(140, 140, 145, 200),
+
+            // Syntax highlighting - Type-based colors (adjusted for light bg)
+            SyntaxKeyword = new Color(235, 72, 60), // Pokéball red
+            SyntaxString = new Color(100, 180, 60), // Grass type green
+            SyntaxStringInterpolation = new Color(200, 155, 0),
+            SyntaxNumber = new Color(220, 110, 30), // Fire type orange
+            SyntaxComment = new Color(140, 140, 145),
+            SyntaxType = new Color(61, 125, 202), // Great Ball blue
+            SyntaxMethod = new Color(180, 100, 0), // Darker orange
+            SyntaxOperator = new Color(42, 42, 45),
+            SyntaxDefault = new Color(42, 42, 45),
+
+            // Autocomplete
+            AutoCompleteSelected = new Color(235, 72, 60),
+            AutoCompleteUnselected = new Color(42, 42, 45),
+            AutoCompleteHover = new Color(235, 72, 60, 180),
+            AutoCompleteDescription = new Color(140, 140, 145),
+            AutoCompleteLoading = new Color(140, 140, 145),
+
+            // Search
+            SearchCurrentMatch = new Color(255, 203, 5, 180),
+            SearchOtherMatches = new Color(235, 72, 60, 100),
+            SearchPrompt = new Color(235, 72, 60),
+            SearchSuccess = new Color(100, 180, 60),
+            SearchDisabled = new Color(140, 140, 145),
+            ReverseSearchPrompt = new Color(235, 72, 60),
+            ReverseSearchMatchHighlight = new Color(255, 203, 5),
+
+            // Brackets
+            BracketMatch = new Color(100, 180, 60, 150),
+            BracketMismatch = new Color(235, 72, 60, 150),
+
+            // Line numbers
+            LineNumberDim = new Color(180, 180, 178),
+            LineNumberCurrent = new Color(235, 72, 60),
+
+            // Help/Documentation
+            HelpTitle = new Color(235, 72, 60),
+            HelpText = new Color(42, 42, 45),
+            HelpSectionHeader = new Color(235, 72, 60),
+            HelpExample = new Color(100, 180, 60),
+            DocumentationTypeInfo = new Color(61, 125, 202),
+            DocumentationLabel = new Color(235, 72, 60),
+            DocumentationInstruction = new Color(140, 140, 145),
+
+            // Sections
+            SectionCommand = new Color(235, 72, 60),
+            SectionError = new Color(235, 72, 60),
+            SectionCategory = new Color(220, 110, 30),
+            SectionManual = new Color(112, 88, 152), // Ghost type purple
+            SectionSearch = new Color(235, 72, 60),
+            SectionFoldBackground = new Color(245, 245, 244, 255),
+            SectionFoldHover = new Color(235, 72, 60, 80),
+            SectionFoldHoverOutline = new Color(235, 72, 60, 255),
+
+            // Layout
+            MinInputHeight = 35f,
+            MaxSuggestionsHeight = 300f,
+            TooltipGap = 5f,
+            ComponentGap = 10f,
+            PanelEdgeGap = 20f,
+            SuggestionPadding = 20f,
+            PanelMaxWidth = 800f,
+            PanelMaxHeight = 600f,
+            DropdownMaxHeight = 300f,
+            DocumentationMinWidth = 400f,
+            DocumentationMaxWidth = 600f,
+            ScrollSpeed = 30,
+            ScrollWheelSensitivity = 3,
+            TableColumnWidth = 80,
+            SectionSpacing = 8,
+            SpacingTight = 4,
+            SpacingNormal = 6,
+            SpacingRelaxed = 8,
+            InteractiveClickPadding = 10,
+            ProfilerBarWarningThreshold = 0.5f,
+            ProfilerBarMildThreshold = 0.25f,
+            ProfilerBarMaxScale = 2.0f,
+            ProfilerBarInset = 2f,
+            ProfilerBudgetLineOpacity = 0.7f,
+
+            // Event Inspector visualization
+            EventInspectorBarInset = 2f,
+            EventInspectorBarMaxScale = 2.0f,
+            EventInspectorMarkerOpacity = 0.5f,
+            EventInspectorWarningThreshold = 0.5f,
+            EventInspectorMildThreshold = 0.25f,
+            DragThreshold = 5f,
+            DoubleClickMaxDistance = 5f,
+            DoubleClickThreshold = 0.5f,
+
+            // Tabs - Pokéball light inspired
+            TabActive = new Color(255, 255, 254, 255),
+            TabInactive = new Color(234, 234, 233, 255),
+            TabHover = new Color(235, 72, 60, 80),
+            TabPressed = new Color(235, 72, 60, 150),
+            TabBorder = new Color(200, 200, 198),
+            TabActiveIndicator = new Color(235, 72, 60), // Pokéball red indicator
+            TabBarBackground = new Color(234, 234, 233, 255),
+        };
+
     // Background colors
     public Color BackgroundPrimary { get; init; }
     public Color BackgroundSecondary { get; init; }

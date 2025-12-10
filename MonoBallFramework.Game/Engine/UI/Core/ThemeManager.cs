@@ -85,6 +85,7 @@ public static class ThemeManager
         _themes["solarized"] = UITheme.SolarizedDark;
         _themes["solarized-light"] = UITheme.SolarizedLight;
         _themes["pokeball"] = UITheme.Pokeball;
+        _themes["pokeball-light"] = UITheme.PokeballLight;
 
         // Load saved theme preference, or use default from config
         string? savedTheme = LoadThemePreference();

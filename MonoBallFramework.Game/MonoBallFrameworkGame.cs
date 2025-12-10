@@ -2,6 +2,7 @@ using Arch.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.Engine.Scenes;
 using MonoBallFramework.Game.Engine.Scenes.Scenes;
@@ -290,21 +291,34 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
         // Start async initialization (non-blocking)
         _initializationTask = InitializeGameplaySceneAsync(_loadingProgress);
 
-        // Create and show loading scene immediately
-        ILogger<LoadingScene> loadingSceneLogger = _loggerFactory.CreateLogger<LoadingScene>();
-        // Convert Task<GameplayScene> to Task<IScene> for LoadingScene
-        Task<IScene> initializationTaskAsIScene = _initializationTask.ContinueWith(t =>
-            (IScene)t.Result
-        );
-        var loadingScene = new LoadingScene(
+        // Create IntroScene that will transition to LoadingScene after animation completes
+        ILogger<IntroScene> introSceneLogger = _loggerFactory.CreateLogger<IntroScene>();
+
+        // Factory function to create the LoadingScene when intro is done
+        Func<IScene> createLoadingScene = () =>
+        {
+            ILogger<LoadingScene> loadingSceneLogger = _loggerFactory.CreateLogger<LoadingScene>();
+            // Convert Task<GameplayScene> to Task<IScene> for LoadingScene
+            Task<IScene> initializationTaskAsIScene = _initializationTask!.ContinueWith(t =>
+                (IScene)t.Result
+            );
+            return new LoadingScene(
+                GraphicsDevice,
+                loadingSceneLogger,
+                _loadingProgress!,
+                initializationTaskAsIScene,
+                _sceneManager!
+            );
+        };
+
+        var introScene = new IntroScene(
             GraphicsDevice,
-            loadingSceneLogger,
-            _loadingProgress,
-            initializationTaskAsIScene,
-            _sceneManager
+            introSceneLogger,
+            _sceneManager,
+            createLoadingScene
         );
 
-        _sceneManager.ChangeScene(loadingScene);
+        _sceneManager.ChangeScene(introScene);
     }
 
     /// <summary>

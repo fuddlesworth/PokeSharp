@@ -20,14 +20,15 @@ public class LoadingScene : SceneBase
     private const int FontSize = 24;
     private const int FontSizeSmall = 18;
 
-    // Colors
-    private static readonly Color BackgroundColor = new(20, 20, 25);
-    private static readonly Color ProgressBarBackgroundColor = new(40, 40, 45);
-    private static readonly Color ProgressBarFillColor = new(200, 60, 60); // Pokemon red
-    private static readonly Color ProgressBarBorderColor = new(60, 60, 65);
-    private static readonly Color TextColor = Color.White;
-    private static readonly Color TextSecondaryColor = new(180, 180, 180);
-    private static readonly Color ErrorColor = new(255, 100, 100);
+    // Colors - Pokéball Light theme
+    private static readonly Color BackgroundColor = new(234, 234, 233); // Logo edge color
+    private static readonly Color ProgressBarBackgroundColor = new(220, 220, 218); // Light gray
+    private static readonly Color ProgressBarFillColor = new(235, 72, 60); // Pokéball red from logo
+    private static readonly Color ProgressBarBorderColor = new(200, 200, 198); // Border
+    private static readonly Color TextColor = new(42, 42, 45); // Dark text
+    private static readonly Color TextSecondaryColor = new(80, 80, 85); // Secondary text
+    private static readonly Color ErrorColor = new(235, 72, 60); // Pokéball red for errors
+    private static readonly Color ErrorBackgroundColor = new(255, 220, 220); // Light red background
     private readonly Task<IScene> _initializationTask;
     private readonly LoadingProgress _progress;
     private readonly SceneManager _sceneManager;
@@ -309,7 +310,7 @@ public class LoadingScene : SceneBase
                 errorY - 5,
                 (int)errorSize.X + 20,
                 (int)errorSize.Y + 10,
-                new Color(80, 0, 0)
+                ErrorBackgroundColor
             );
             _spriteBatch.DrawString(_fontSmall, errorText, new Vector2(errorX, errorY), ErrorColor);
         }

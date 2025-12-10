@@ -51,9 +51,9 @@ public abstract class UIComponent
     protected UIContext? Context { get; private set; }
 
     /// <summary>
-    ///     Gets the current theme.
+    ///     Gets the current theme. Always uses ThemeManager.Current for consistency.
     /// </summary>
-    protected UITheme Theme => Context?.Theme ?? UITheme.Dark;
+    protected UITheme Theme => ThemeManager.Current;
 
     /// <summary>
     ///     Gets the renderer.
