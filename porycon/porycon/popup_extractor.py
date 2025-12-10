@@ -33,8 +33,8 @@ class PopupExtractor:
         # Output paths
         self.output_graphics_bg = self.output_dir / "Graphics" / "Maps" / "Popups" / "Backgrounds"
         self.output_graphics_outline = self.output_dir / "Graphics" / "Maps" / "Popups" / "Outlines"
-        self.output_data_bg = self.output_dir / "Data" / "Maps" / "Popups" / "Backgrounds"
-        self.output_data_outline = self.output_dir / "Data" / "Maps" / "Popups" / "Outlines"
+        self.output_data_bg = self.output_dir / "Definitions" / "Maps" / "Popups" / "Backgrounds"
+        self.output_data_outline = self.output_dir / "Definitions" / "Maps" / "Popups" / "Outlines"
         
     def extract_all(self) -> Tuple[int, int]:
         """

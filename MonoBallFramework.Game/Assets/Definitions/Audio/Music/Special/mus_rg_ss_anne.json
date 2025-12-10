@@ -1,0 +1,9 @@
+{
+  "id": "base:audio:music/special/mus_rg_ss_anne",
+  "displayName": "RG Ss Anne",
+  "audioPath": "Audio/Music/Special/mus_rg_ss_anne.ogg",
+  "volume": 0.709,
+  "loop": true,
+  "fadeIn": 0.5,
+  "fadeOut": 0.5
+}

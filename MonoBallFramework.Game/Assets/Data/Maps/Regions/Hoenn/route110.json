@@ -1,8 +1,0 @@
-{
-  "Id": "base:map:hoenn/route110",
-  "DisplayName": "Route110",
-  "Type": "map",
-  "Region": "hoenn",
-  "Description": "",
-  "TiledPath": "Tiled/Regions/Hoenn/route110.json"
-}

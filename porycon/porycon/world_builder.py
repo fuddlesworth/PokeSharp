@@ -216,7 +216,7 @@ class WorldBuilder:
         if world is None:
             return
         
-        world_path = self.output_dir / "Data" / "Worlds" / f"{world_name}.world"
+        world_path = self.output_dir / "Definitions" / "Worlds" / f"{world_name}.world"
         world_path.parent.mkdir(parents=True, exist_ok=True)
         save_json(world, str(world_path))
     

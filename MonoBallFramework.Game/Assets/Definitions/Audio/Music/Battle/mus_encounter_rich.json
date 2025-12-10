@@ -1,0 +1,9 @@
+{
+  "id": "base:audio:music/battle/mus_encounter_rich",
+  "displayName": "Encounter Rich",
+  "audioPath": "Audio/Music/Battle/mus_encounter_rich.ogg",
+  "volume": 0.74,
+  "loop": true,
+  "fadeIn": 0.5,
+  "fadeOut": 0.5
+}

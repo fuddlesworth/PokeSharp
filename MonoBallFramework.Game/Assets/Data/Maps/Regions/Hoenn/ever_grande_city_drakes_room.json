@@ -1,8 +1,0 @@
-{
-  "Id": "base:map:hoenn/ever_grande_city_drakes_room",
-  "DisplayName": "EverGrandeCity_DrakesRoom",
-  "Type": "map",
-  "Region": "hoenn",
-  "Description": "",
-  "TiledPath": "Tiled/Regions/Hoenn/ever_grande_city_drakes_room.json"
-}

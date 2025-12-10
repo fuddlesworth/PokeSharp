@@ -30,7 +30,7 @@ class TextWindowExtractor:
         # Pokeemerald paths
         self.emerald_graphics = self.input_dir / "graphics" / "text_window"
         
-        # Output paths - updated to use Definitions instead of Data
+        # Output paths - updated to use Definitions instead of Definitions
         self.output_graphics = self.output_dir / "Graphics" / "Sprites" / "TextWindow"
         self.output_definitions = self.output_dir / "Definitions" / "TextWindow"
         

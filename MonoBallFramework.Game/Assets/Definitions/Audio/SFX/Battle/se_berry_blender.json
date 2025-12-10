@@ -1,0 +1,9 @@
+{
+  "id": "base:audio:sfx/battle/se_berry_blender",
+  "displayName": "Berry Blender",
+  "audioPath": "Audio/SFX/Battle/se_berry_blender.ogg",
+  "volume": 0.709,
+  "loop": false,
+  "fadeIn": 0.0,
+  "fadeOut": 0.0
+}

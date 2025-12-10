@@ -1,8 +1,0 @@
-{
-  "Id": "base:map:hoenn/route114_fossil_maniacs_house",
-  "DisplayName": "Route114_FossilManiacsHouse",
-  "Type": "map",
-  "Region": "hoenn",
-  "Description": "",
-  "TiledPath": "Tiled/Regions/Hoenn/route114_fossil_maniacs_house.json"
-}

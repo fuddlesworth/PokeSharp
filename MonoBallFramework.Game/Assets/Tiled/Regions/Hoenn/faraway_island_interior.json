@@ -2448,11 +2448,6 @@
       "value": "Hoenn"
     },
     {
-      "name": "music",
-      "type": "string",
-      "value": "MUS_ABANDONED_SHIP"
-    },
-    {
       "name": "weather",
       "type": "string",
       "value": "WEATHER_SHADE"
@@ -2491,6 +2486,11 @@
       "name": "battleScene",
       "type": "string",
       "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "base:audio:music/special/mus_abandoned_ship"
     },
     {
       "name": "regionMapSection",

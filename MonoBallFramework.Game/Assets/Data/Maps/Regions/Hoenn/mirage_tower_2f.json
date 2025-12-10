@@ -1,8 +1,0 @@
-{
-  "Id": "base:map:hoenn/mirage_tower_2f",
-  "DisplayName": "MirageTower_2F",
-  "Type": "map",
-  "Region": "hoenn",
-  "Description": "",
-  "TiledPath": "Tiled/Regions/Hoenn/mirage_tower_2f.json"
-}

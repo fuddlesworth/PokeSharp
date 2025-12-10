@@ -1,0 +1,9 @@
+{
+  "id": "base:audio:music/routes/mus_route113",
+  "displayName": "Route113",
+  "audioPath": "Audio/Music/Routes/mus_route113.ogg",
+  "volume": 0.661,
+  "loop": true,
+  "fadeIn": 0.5,
+  "fadeOut": 0.5
+}

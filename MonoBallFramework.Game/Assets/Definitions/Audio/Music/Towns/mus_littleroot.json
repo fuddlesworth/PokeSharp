@@ -1,0 +1,9 @@
+{
+  "id": "base:audio:music/towns/mus_littleroot",
+  "displayName": "Littleroot",
+  "audioPath": "Audio/Music/Towns/mus_littleroot.ogg",
+  "volume": 0.787,
+  "loop": true,
+  "fadeIn": 0.5,
+  "fadeOut": 0.5
+}

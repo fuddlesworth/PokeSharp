@@ -1,0 +1,9 @@
+{
+  "id": "base:audio:music/battle/mus_vs_mew",
+  "displayName": "VS Mew",
+  "audioPath": "Audio/Music/Battle/mus_vs_mew.ogg",
+  "volume": 0.709,
+  "loop": true,
+  "fadeIn": 0.5,
+  "fadeOut": 0.5
+}

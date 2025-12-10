@@ -16,6 +16,7 @@ from .logging_config import setup_logging, get_logger
 from .popup_extractor import extract_popups
 from .section_extractor import extract_sections
 from .text_window_extractor import extract_text_windows
+from .audio_converter import AudioConverter, extract_audio
 
 # Set multiprocessing start method to 'spawn' for cross-platform compatibility
 # This ensures functions can be pickled correctly when running as a module
@@ -70,7 +71,41 @@ def main():
         action="store_true",
         help="Extract text window graphics from pokeemerald"
     )
-    
+    parser.add_argument(
+        "--extract-audio",
+        action="store_true",
+        help="Extract and convert audio (MIDI to OGG) from pokeemerald"
+    )
+    parser.add_argument(
+        "--audio-music",
+        action="store_true",
+        default=True,
+        help="Include music tracks when extracting audio (default: True)"
+    )
+    parser.add_argument(
+        "--audio-sfx",
+        action="store_true",
+        default=True,
+        help="Include sound effects when extracting audio (default: True)"
+    )
+    parser.add_argument(
+        "--audio-phonemes",
+        action="store_true",
+        default=False,
+        help="Include phoneme tracks when extracting audio (default: False)"
+    )
+    parser.add_argument(
+        "--soundfont",
+        type=str,
+        default=None,
+        help="Path to soundfont file for MIDI conversion (recommended for better quality)"
+    )
+    parser.add_argument(
+        "--list-audio",
+        action="store_true",
+        help="List all audio tracks from midi.cfg without converting"
+    )
+
     args = parser.parse_args()
     
     # Setup logging
@@ -110,7 +145,59 @@ def main():
         logger.info(f"Text window extraction complete: {count} text windows extracted")
         logger.info("Text window sprites converted with transparency")
         return
-    
+
+    # Handle audio listing if requested
+    if args.list_audio:
+        logger.info("Listing audio tracks from midi.cfg...")
+        converter = AudioConverter(str(input_dir), str(output_dir), args.soundfont)
+        tracks = converter.list_tracks()
+
+        # Group by category
+        by_category = {}
+        for track in tracks:
+            cat = track['category']
+            if cat not in by_category:
+                by_category[cat] = []
+            by_category[cat].append(track)
+
+        print(f"\nFound {len(tracks)} audio tracks:\n")
+        for category in sorted(by_category.keys()):
+            cat_tracks = by_category[category]
+            print(f"  {category}: {len(cat_tracks)} tracks")
+            if args.verbose:
+                for t in cat_tracks[:5]:
+                    print(f"    - {t['id']} (vol: {t['volume']})")
+                if len(cat_tracks) > 5:
+                    print(f"    ... and {len(cat_tracks) - 5} more")
+        return
+
+    # Handle audio extraction if requested
+    if args.extract_audio:
+        logger.info("Extracting and converting audio from pokeemerald...")
+
+        stats = extract_audio(
+            str(input_dir),
+            str(output_dir),
+            include_music=args.audio_music,
+            include_sfx=args.audio_sfx,
+            include_phonemes=args.audio_phonemes,
+            soundfont=args.soundfont,
+            parallel=True
+        )
+
+        logger.info(f"Audio extraction complete:")
+        logger.info(f"  Total tracks: {stats['total']}")
+        logger.info(f"  Converted: {stats['converted']}")
+        logger.info(f"  Failed: {stats['failed']}")
+        logger.info(f"  Skipped: {stats['skipped']}")
+
+        if stats['failed'] > 0 and not args.soundfont:
+            logger.warning("Some conversions failed. Install timidity or fluidsynth for MIDI conversion:")
+            logger.warning("  Ubuntu/Debian: sudo apt install timidity ffmpeg")
+            logger.warning("  macOS: brew install timidity ffmpeg")
+            logger.warning("  Or specify --soundfont for FluidSynth")
+        return
+
     logger.info("Finding maps...")
     maps = find_map_files(str(input_dir))
     logger.info(f"Found {len(maps)} maps")
@@ -383,7 +470,7 @@ def main():
     # Update firstgid values in all maps based on actual tileset tilecounts
     logger.info("Updating firstgid values in maps...")
     updated_maps = 0
-    maps_dir = output_dir / "Data" / "Maps" / "Regions"
+    maps_dir = output_dir / "Definitions" / "Maps" / "Regions"
     if maps_dir.exists():
         for region_dir in maps_dir.iterdir():
             if region_dir.is_dir():
@@ -440,7 +527,7 @@ def main():
         
         # Find all map files
         map_files = []
-        maps_dir = output_dir / "Data" / "Maps" / "Regions"
+        maps_dir = output_dir / "Definitions" / "Maps" / "Regions"
         if maps_dir.exists():
             for region_dir in maps_dir.iterdir():
                 if region_dir.is_dir():

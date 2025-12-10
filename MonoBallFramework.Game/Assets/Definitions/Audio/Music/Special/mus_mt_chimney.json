@@ -1,0 +1,9 @@
+{
+  "id": "base:audio:music/special/mus_mt_chimney",
+  "displayName": "Mt. Chimney",
+  "audioPath": "Audio/Music/Special/mus_mt_chimney.ogg",
+  "volume": 0.614,
+  "loop": true,
+  "fadeIn": 0.5,
+  "fadeOut": 0.5
+}

@@ -20230,11 +20230,6 @@
       "value": "Hoenn"
     },
     {
-      "name": "music",
-      "type": "string",
-      "value": "MUS_ROUTE110"
-    },
-    {
       "name": "weather",
       "type": "string",
       "value": "WEATHER_SUNNY"
@@ -20273,6 +20268,11 @@
       "name": "battleScene",
       "type": "string",
       "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "base:audio:music/routes/mus_route110"
     },
     {
       "name": "regionMapSection",

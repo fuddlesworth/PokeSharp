@@ -2596,11 +2596,6 @@
       "value": "Hoenn"
     },
     {
-      "name": "music",
-      "type": "string",
-      "value": "MUS_CONTEST_LOBBY"
-    },
-    {
       "name": "weather",
       "type": "string",
       "value": "WEATHER_NONE"
@@ -2639,6 +2634,11 @@
       "name": "battleScene",
       "type": "string",
       "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "base:audio:music/towns/mus_contest_lobby"
     },
     {
       "name": "regionMapSection",

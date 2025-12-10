@@ -1,0 +1,9 @@
+{
+  "id": "base:audio:music/towns/mus_dewford",
+  "displayName": "Dewford",
+  "audioPath": "Audio/Music/Towns/mus_dewford.ogg",
+  "volume": 0.614,
+  "loop": true,
+  "fadeIn": 0.5,
+  "fadeOut": 0.5
+}

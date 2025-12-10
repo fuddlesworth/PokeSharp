@@ -1,0 +1,9 @@
+{
+  "id": "base:audio:music/special/mus_rg_rocket_hideout",
+  "displayName": "RG Rocket Hideout",
+  "audioPath": "Audio/Music/Special/mus_rg_rocket_hideout.ogg",
+  "volume": 0.709,
+  "loop": true,
+  "fadeIn": 0.5,
+  "fadeOut": 0.5
+}

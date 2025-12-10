@@ -1,8 +1,0 @@
-{
-  "Id": "base:map:hoenn/route119_weather_institute_1f",
-  "DisplayName": "Route119_WeatherInstitute_1F",
-  "Type": "map",
-  "Region": "hoenn",
-  "Description": "",
-  "TiledPath": "Tiled/Regions/Hoenn/route119_weather_institute_1f.json"
-}

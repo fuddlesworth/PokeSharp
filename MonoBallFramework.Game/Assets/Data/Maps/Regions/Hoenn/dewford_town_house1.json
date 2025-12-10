@@ -1,8 +1,0 @@
-{
-  "Id": "base:map:hoenn/dewford_town_house1",
-  "DisplayName": "DewfordTown_House1",
-  "Type": "map",
-  "Region": "hoenn",
-  "Description": "",
-  "TiledPath": "Tiled/Regions/Hoenn/dewford_town_house1.json"
-}

@@ -1,8 +1,0 @@
-{
-  "Id": "base:map:hoenn/route121_safari_zone_entrance",
-  "DisplayName": "Route121_SafariZoneEntrance",
-  "Type": "map",
-  "Region": "hoenn",
-  "Description": "",
-  "TiledPath": "Tiled/Regions/Hoenn/route121_safari_zone_entrance.json"
-}

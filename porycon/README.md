@@ -174,9 +174,114 @@ This ensures popups render correctly with proper transparency and no distortion.
 
 ## Command Line Options
 
+### Map Conversion
 - `--input <path>`: Input directory (pokeemerald root) [required]
 - `--output <path>`: Output directory for Tiled files [required]
 - `--region <name>`: Region name for organizing output folders
 - `--extract-popups`: Extract map popup graphics instead of converting maps
+- `--extract-sections`: Extract map section definitions and popup theme mappings
+- `--extract-text-windows`: Extract text window graphics
+
+### Audio Extraction
+- `--extract-audio`: Extract and convert MIDI audio to OGG format
+- `--list-audio`: List all audio tracks without converting
+- `--audio-music`: Include music tracks (default: True)
+- `--audio-sfx`: Include sound effects (default: True)
+- `--audio-phonemes`: Include phoneme tracks (default: False)
+- `--soundfont <path>`: Path to soundfont file for MIDI conversion
+
+### General
 - `--verbose, -v`: Show detailed progress information
 - `--debug, -d`: Show debug information (implies verbose)
+
+## Audio Extraction
+
+Extract and convert audio from pokeemerald MIDI files to OGG format:
+
+```bash
+python -m porycon --input /path/to/pokeemerald \
+    --output /path/to/PokeSharp/MonoBallFramework.Game/Assets \
+    --extract-audio
+```
+
+### Prerequisites for MIDI Conversion
+
+MIDI to OGG conversion requires one of the following tools:
+- **TiMidity++** (recommended): `sudo apt install timidity ffmpeg`
+- **FluidSynth** (with soundfont): `sudo apt install fluidsynth ffmpeg`
+- **FFmpeg** (limited MIDI support)
+
+For best quality with a GBA-style soundfont:
+```bash
+python -m porycon --input /path/to/pokeemerald \
+    --output /path/to/PokeSharp/MonoBallFramework.Game/Assets \
+    --extract-audio --soundfont /path/to/soundfont.sf2
+```
+
+### List Audio Tracks
+
+View all available audio tracks before extracting:
+```bash
+python -m porycon --input /path/to/pokeemerald --output . --list-audio -v
+```
+
+### Output Structure
+
+Audio extraction creates the following structure in the output directory:
+```
+output/
+├── Audio/
+│   ├── Music/
+│   │   ├── Battle/      # Battle and encounter music
+│   │   ├── Fanfares/    # Short victory/obtain jingles
+│   │   ├── Routes/      # Route and cycling music
+│   │   ├── Special/     # Gyms, caves, special areas
+│   │   └── Towns/       # Town and city themes
+│   └── SFX/
+│       ├── Battle/      # Battle sound effects
+│       ├── Environment/ # Weather, ambient sounds
+│       ├── UI/          # Menu, selection sounds
+│       └── Phonemes/    # Bard singing phonemes
+└── Definitions/Audio/
+    ├── audio_index.json      # Master index of all tracks
+    ├── music_battle.json     # Battle music definitions
+    ├── music_towns.json      # Town music definitions
+    └── ...
+```
+
+**Example:** To extract audio to PokeSharp's Assets folder:
+```bash
+python -m porycon --input /path/to/pokeemerald \
+    --output /path/to/PokeSharp/MonoBallFramework.Game/Assets \
+    --extract-audio
+```
+
+### Audio Definition Format
+
+Each track definition includes:
+```json
+{
+  "id": "mus_littleroot",
+  "name": "Littleroot",
+  "filename": "Music/Towns/mus_littleroot.ogg",
+  "category": "Music/Towns",
+  "volume": 0.787,
+  "loop": true,
+  "fade_in": 0.5,
+  "fade_out": 0.5,
+  "tags": ["music", "emerald", "ruby", "sapphire"]
+}
+```
+
+### Track Categories
+
+| Category | Description | Example Tracks |
+|----------|-------------|----------------|
+| Music/Battle | Battle themes, encounters | mus_vs_wild, mus_vs_trainer |
+| Music/Towns | Town/city themes | mus_littleroot, mus_lilycove |
+| Music/Routes | Routes, cycling, surfing | mus_route101, mus_cycling |
+| Music/Special | Gyms, caves, special areas | mus_gym, mus_cave_of_origin |
+| Music/Fanfares | Short jingles | mus_heal, mus_caught |
+| SFX/Battle | Battle effects | se_ball_throw, se_effective |
+| SFX/UI | Menu sounds | se_select, se_door |
+| SFX/Environment | Ambient effects | se_rain, se_thunder |

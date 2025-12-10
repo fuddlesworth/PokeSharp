@@ -1,8 +1,0 @@
-{
-  "Id": "base:map:hoenn/lilycove_city_unused_mart",
-  "DisplayName": "LilycoveCity_UnusedMart",
-  "Type": "map",
-  "Region": "hoenn",
-  "Description": "",
-  "TiledPath": "Tiled/Regions/Hoenn/lilycove_city_unused_mart.json"
-}

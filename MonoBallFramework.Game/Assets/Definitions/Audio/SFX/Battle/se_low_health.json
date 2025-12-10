@@ -1,0 +1,9 @@
+{
+  "id": "base:audio:sfx/battle/se_low_health",
+  "displayName": "Low Health",
+  "audioPath": "Audio/SFX/Battle/se_low_health.ogg",
+  "volume": 0.787,
+  "loop": false,
+  "fadeIn": 0.0,
+  "fadeOut": 0.0
+}

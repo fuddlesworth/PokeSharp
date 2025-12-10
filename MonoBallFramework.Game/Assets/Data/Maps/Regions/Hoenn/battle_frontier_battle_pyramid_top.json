@@ -1,8 +1,0 @@
-{
-  "Id": "base:map:hoenn/battle_frontier_battle_pyramid_top",
-  "DisplayName": "BattleFrontier_BattlePyramidTop",
-  "Type": "map",
-  "Region": "hoenn",
-  "Description": "",
-  "TiledPath": "Tiled/Regions/Hoenn/battle_frontier_battle_pyramid_top.json"
-}

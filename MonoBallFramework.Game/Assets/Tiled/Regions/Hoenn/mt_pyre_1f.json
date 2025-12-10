@@ -1608,11 +1608,6 @@
       "value": "Hoenn"
     },
     {
-      "name": "music",
-      "type": "string",
-      "value": "MUS_MT_PYRE"
-    },
-    {
       "name": "weather",
       "type": "string",
       "value": "WEATHER_NONE"
@@ -1651,6 +1646,11 @@
       "name": "battleScene",
       "type": "string",
       "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "base:audio:music/special/mus_mt_pyre"
     },
     {
       "name": "regionMapSection",

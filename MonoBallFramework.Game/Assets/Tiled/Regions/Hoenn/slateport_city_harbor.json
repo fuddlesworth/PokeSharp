@@ -1697,11 +1697,6 @@
       "value": "Hoenn"
     },
     {
-      "name": "music",
-      "type": "string",
-      "value": "MUS_SLATEPORT"
-    },
-    {
       "name": "weather",
       "type": "string",
       "value": "WEATHER_NONE"
@@ -1740,6 +1735,11 @@
       "name": "battleScene",
       "type": "string",
       "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "base:audio:music/towns/mus_slateport"
     },
     {
       "name": "regionMapSection",

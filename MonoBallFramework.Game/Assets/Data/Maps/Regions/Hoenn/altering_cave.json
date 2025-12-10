@@ -1,8 +1,0 @@
-{
-  "Id": "base:map:hoenn/altering_cave",
-  "DisplayName": "AlteringCave",
-  "Type": "map",
-  "Region": "hoenn",
-  "Description": "",
-  "TiledPath": "Tiled/Regions/Hoenn/altering_cave.json"
-}

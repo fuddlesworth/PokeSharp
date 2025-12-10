@@ -1839,11 +1839,6 @@
       "value": "Hoenn"
     },
     {
-      "name": "music",
-      "type": "string",
-      "value": "MUS_VERDANTURF"
-    },
-    {
       "name": "weather",
       "type": "string",
       "value": "WEATHER_SUNNY"
@@ -1882,6 +1877,11 @@
       "name": "battleScene",
       "type": "string",
       "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "base:audio:music/towns/mus_verdanturf"
     },
     {
       "name": "regionMapSection",

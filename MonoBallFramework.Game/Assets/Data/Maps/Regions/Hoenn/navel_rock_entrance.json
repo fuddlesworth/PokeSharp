@@ -1,8 +1,0 @@
-{
-  "Id": "base:map:hoenn/navel_rock_entrance",
-  "DisplayName": "NavelRock_Entrance",
-  "Type": "map",
-  "Region": "hoenn",
-  "Description": "",
-  "TiledPath": "Tiled/Regions/Hoenn/navel_rock_entrance.json"
-}

@@ -1,8 +1,0 @@
-{
-  "Id": "base:map:hoenn/lilycove_city_pokemon_center_2f",
-  "DisplayName": "LilycoveCity_PokemonCenter_2F",
-  "Type": "map",
-  "Region": "hoenn",
-  "Description": "",
-  "TiledPath": "Tiled/Regions/Hoenn/lilycove_city_pokemon_center_2f.json"
-}

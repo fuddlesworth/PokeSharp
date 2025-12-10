@@ -1,8 +1,0 @@
-{
-  "Id": "base:map:hoenn/battle_frontier_ranking_hall",
-  "DisplayName": "BattleFrontier_RankingHall",
-  "Type": "map",
-  "Region": "hoenn",
-  "Description": "",
-  "TiledPath": "Tiled/Regions/Hoenn/battle_frontier_ranking_hall.json"
-}

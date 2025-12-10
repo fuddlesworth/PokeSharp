@@ -436,11 +436,6 @@
       "value": "Hoenn"
     },
     {
-      "name": "music",
-      "type": "string",
-      "value": "MUS_B_TOWER_RS"
-    },
-    {
       "name": "weather",
       "type": "string",
       "value": "WEATHER_NONE"
@@ -479,6 +474,11 @@
       "name": "battleScene",
       "type": "string",
       "value": "MAP_BATTLE_SCENE_NORMAL"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "base:audio:music/special/mus_b_tower_rs"
     },
     {
       "name": "regionMapSection",

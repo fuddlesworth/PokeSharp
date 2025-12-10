@@ -1,8 +1,0 @@
-{
-  "Id": "base:map:hoenn/ever_grande_city_champions_room",
-  "DisplayName": "EverGrandeCity_ChampionsRoom",
-  "Type": "map",
-  "Region": "hoenn",
-  "Description": "",
-  "TiledPath": "Tiled/Regions/Hoenn/ever_grande_city_champions_room.json"
-}

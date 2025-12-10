@@ -1,0 +1,9 @@
+{
+  "id": "base:audio:music/special/mus_b_palace",
+  "displayName": "Battle Palace",
+  "audioPath": "Audio/Music/Special/mus_b_palace.ogg",
+  "volume": 0.827,
+  "loop": true,
+  "fadeIn": 0.5,
+  "fadeOut": 0.5
+}

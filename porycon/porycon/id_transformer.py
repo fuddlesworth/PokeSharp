@@ -42,6 +42,7 @@ class EntityType:
     WARP = "warp"
     BEHAVIOR = "behavior"
     SCRIPT = "script"
+    AUDIO = "audio"
 
 
 class IdTransformer:
@@ -732,6 +733,74 @@ class IdTransformer:
 
         return cls.create_id(EntityType.BEHAVIOR, "interaction", script_name)
 
+    # =========================================================================
+    # AUDIO IDs
+    # =========================================================================
+
+    # Music category keywords for categorization
+    MUSIC_CATEGORIES = {
+        "towns": ["town", "city", "village", "littleroot", "oldale", "petalburg",
+                  "rustboro", "dewford", "slateport", "mauville", "verdanturf",
+                  "fallarbor", "lavaridge", "fortree", "lilycove", "mossdeep",
+                  "sootopolis", "pacifidlog", "ever_grande", "pallet", "viridian",
+                  "pewter", "cerulean", "vermillion", "lavender", "celadon",
+                  "fuchsia", "saffron", "cinnabar", "museum", "pokemon_center",
+                  "mart", "gym", "game_corner", "safari", "contest", "trick_house"],
+        "routes": ["route", "cycling", "surf", "sailing", "diving", "underwater"],
+        "battle": ["battle", "vs_", "encounter", "trainer_battle", "wild_battle",
+                   "gym_leader", "elite", "champion", "frontier", "victory"],
+        "fanfares": ["fanfare", "jingle", "level_up", "evolution", "heal",
+                     "obtained", "pokemon_get", "badge_get", "intro"],
+        "special": ["cave", "forest", "desert", "abandoned", "team_aqua",
+                    "team_magma", "legendary", "credits", "title", "ending",
+                    "hall_of_fame", "mystery", "weather_institute", "space_center",
+                    "mt_pyre", "sealed_chamber", "sky_pillar", "meteor_falls"]
+    }
+
+    @classmethod
+    def audio_id(cls, pokeemerald_music: str) -> str:
+        """
+        Transform pokeemerald music constant to unified audio format.
+
+        Args:
+            pokeemerald_music: e.g., "MUS_LITTLEROOT", "MUS_ROUTE101", "MUS_VS_WILD"
+
+        Returns:
+            e.g., "base:audio:music/towns/mus_littleroot"
+        """
+        if not pokeemerald_music:
+            return ""
+
+        # Normalize the name (convert to lowercase with underscores)
+        name = cls._normalize(pokeemerald_music)
+
+        # Determine category based on keywords
+        subcategory = cls._categorize_music(name)
+
+        # Use "music" as category and the music type as subcategory
+        # e.g., base:audio:music/towns/mus_littleroot
+        return cls.create_id(EntityType.AUDIO, "music", name, subcategory=subcategory)
+
+    @classmethod
+    def _categorize_music(cls, name: str) -> str:
+        """
+        Categorize music track based on name keywords.
+
+        Args:
+            name: Normalized track name (e.g., "mus_littleroot", "mus_route101")
+
+        Returns:
+            Category string: "towns", "routes", "battle", "fanfares", or "special"
+        """
+        # Check each category's keywords
+        for category, keywords in cls.MUSIC_CATEGORIES.items():
+            for keyword in keywords:
+                if keyword in name:
+                    return category
+
+        # Default to special for uncategorized tracks
+        return "special"
+
 
 # Convenience functions for direct import
 def map_id(pokeemerald_id: str, region: Optional[str] = None) -> str:
@@ -753,3 +822,7 @@ def normalize(value: str) -> str:
 def flag_id(pokeemerald_flag: str, region: Optional[str] = None) -> str:
     """Shortcut for IdTransformer.flag_id()"""
     return IdTransformer.flag_id(pokeemerald_flag, region)
+
+def audio_id(pokeemerald_music: str) -> str:
+    """Shortcut for IdTransformer.audio_id()"""
+    return IdTransformer.audio_id(pokeemerald_music)

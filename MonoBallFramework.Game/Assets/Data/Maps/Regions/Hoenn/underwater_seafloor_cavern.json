@@ -1,8 +1,0 @@
-{
-  "Id": "base:map:hoenn/underwater_seafloor_cavern",
-  "DisplayName": "Underwater_SeafloorCavern",
-  "Type": "map",
-  "Region": "hoenn",
-  "Description": "",
-  "TiledPath": "Tiled/Regions/Hoenn/underwater_seafloor_cavern.json"
-}

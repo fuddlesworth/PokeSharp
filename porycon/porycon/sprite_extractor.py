@@ -90,7 +90,7 @@ class SpriteExtractor:
         self.palettes_path = self.pokeemerald_path / "graphics" / "object_events" / "palettes"
 
         # Split output paths for data and graphics
-        self.data_output_path = self.output_path / "Data" / "Sprites"
+        self.data_output_path = self.output_path / "Definitions" / "Sprites"
         self.graphics_output_path = self.output_path / "Graphics" / "Sprites"
         self.data_output_path.mkdir(parents=True, exist_ok=True)
         self.graphics_output_path.mkdir(parents=True, exist_ok=True)
@@ -282,7 +282,7 @@ class SpriteExtractor:
         graphics_dir = self.graphics_output_path / sprite_type / sprite_category
         graphics_dir.mkdir(parents=True, exist_ok=True)
 
-        # Data directory
+        # Definitions directory
         data_dir = self.data_output_path / sprite_type / sprite_category
         data_dir.mkdir(parents=True, exist_ok=True)
 
@@ -360,7 +360,7 @@ class SpriteExtractor:
             Animations=animations
         )
 
-        # Save manifest to Data directory
+        # Save manifest to Definitions directory
         manifest_path = data_dir / f"{sprite_name}.json"
         manifest_dict = asdict(manifest)
         save_json(manifest_dict, str(manifest_path))
@@ -406,7 +406,7 @@ class SpriteExtractor:
         graphics_dir = self.graphics_output_path / sprite_type / sprite_category
         graphics_dir.mkdir(parents=True, exist_ok=True)
 
-        # Data directory
+        # Definitions directory
         data_dir = self.data_output_path / sprite_type / sprite_category
         data_dir.mkdir(parents=True, exist_ok=True)
 
@@ -482,7 +482,7 @@ class SpriteExtractor:
             Animations=animations
         )
 
-        # Save manifest to Data directory
+        # Save manifest to Definitions directory
         manifest_path = data_dir / f"{sprite_name}.json"
         manifest_dict = asdict(manifest)
         save_json(manifest_dict, str(manifest_path))

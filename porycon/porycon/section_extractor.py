@@ -171,7 +171,7 @@ class MapSectionExtractor:
         Returns:
             Number of sections saved
         """
-        output_path = Path(output_dir) / "Data" / "Maps" / "Sections"
+        output_path = Path(output_dir) / "Definitions" / "Maps" / "Sections"
         output_path.mkdir(parents=True, exist_ok=True)
         
         count = 0
@@ -201,7 +201,7 @@ class MapSectionExtractor:
         Returns:
             Number of theme files created
         """
-        output_path = Path(output_dir) / "Data" / "Maps" / "Popups" / "Themes"
+        output_path = Path(output_dir) / "Definitions" / "Maps" / "Popups" / "Themes"
         output_path.mkdir(parents=True, exist_ok=True)
 
         # Theme definitions with unified IDs

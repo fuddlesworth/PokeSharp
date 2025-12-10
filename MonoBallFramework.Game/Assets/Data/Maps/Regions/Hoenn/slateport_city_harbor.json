@@ -1,8 +1,0 @@
-{
-  "Id": "base:map:hoenn/slateport_city_harbor",
-  "DisplayName": "SlateportCity_Harbor",
-  "Type": "map",
-  "Region": "hoenn",
-  "Description": "",
-  "TiledPath": "Tiled/Regions/Hoenn/slateport_city_harbor.json"
-}

@@ -894,8 +894,8 @@ class MapConverter:
         
         # Add other properties from pokeemerald map.json
         # Map pokeemerald property names to Tiled property names (camelCase)
+        # Note: "music" is handled separately below with ID transformation
         property_mapping = {
-            "music": "music",
             "weather": "weather",
             "map_type": "mapType",
             "show_map_name": "showMapName",
@@ -916,6 +916,16 @@ class MapConverter:
                     "type": prop_type,
                     "value": value
                 })
+
+        # Transform music to unified audio ID format
+        if "music" in map_data:
+            music_value = map_data["music"]
+            # Transform MUS_LITTLEROOT to base:audio:music/towns/mus_littleroot format
+            tiled_map["properties"].append({
+                "name": "music",
+                "type": "string",
+                "value": IdTransformer.audio_id(music_value)
+            })
 
         # Transform region_map_section to unified ID format
         if "region_map_section" in map_data:

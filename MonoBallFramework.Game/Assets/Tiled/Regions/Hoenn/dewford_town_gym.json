@@ -2118,11 +2118,6 @@
       "value": "Hoenn"
     },
     {
-      "name": "music",
-      "type": "string",
-      "value": "MUS_GYM"
-    },
-    {
       "name": "weather",
       "type": "string",
       "value": "WEATHER_NONE"
@@ -2161,6 +2156,11 @@
       "name": "battleScene",
       "type": "string",
       "value": "MAP_BATTLE_SCENE_GYM"
+    },
+    {
+      "name": "music",
+      "type": "string",
+      "value": "base:audio:music/towns/mus_gym"
     },
     {
       "name": "regionMapSection",

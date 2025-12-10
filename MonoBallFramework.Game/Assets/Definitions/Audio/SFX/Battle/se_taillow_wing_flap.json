@@ -1,0 +1,9 @@
+{
+  "id": "base:audio:sfx/battle/se_taillow_wing_flap",
+  "displayName": "Taillow Wing Flap",
+  "audioPath": "Audio/SFX/Battle/se_taillow_wing_flap.ogg",
+  "volume": 0.827,
+  "loop": false,
+  "fadeIn": 0.0,
+  "fadeOut": 0.0
+}

@@ -1,0 +1,9 @@
+{
+  "id": "base:audio:music/routes/mus_sailing",
+  "displayName": "Sailing",
+  "audioPath": "Audio/Music/Routes/mus_sailing.ogg",
+  "volume": 0.677,
+  "loop": true,
+  "fadeIn": 0.5,
+  "fadeOut": 0.5
+}

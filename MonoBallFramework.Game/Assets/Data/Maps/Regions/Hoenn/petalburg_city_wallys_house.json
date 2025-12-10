@@ -1,8 +1,0 @@
-{
-  "Id": "base:map:hoenn/petalburg_city_wallys_house",
-  "DisplayName": "PetalburgCity_WallysHouse",
-  "Type": "map",
-  "Region": "hoenn",
-  "Description": "",
-  "TiledPath": "Tiled/Regions/Hoenn/petalburg_city_wallys_house.json"
-}

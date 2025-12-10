@@ -1,8 +1,0 @@
-{
-  "Id": "base:map:hoenn/lilycove_city_department_store_rooftop",
-  "DisplayName": "LilycoveCity_DepartmentStoreRooftop",
-  "Type": "map",
-  "Region": "hoenn",
-  "Description": "",
-  "TiledPath": "Tiled/Regions/Hoenn/lilycove_city_department_store_rooftop.json"
-}
