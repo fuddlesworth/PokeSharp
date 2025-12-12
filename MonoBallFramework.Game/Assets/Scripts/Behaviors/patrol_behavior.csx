@@ -47,6 +47,7 @@ public class PatrolBehavior : ScriptBase
                             WaitDuration = 0f,
                             Speed = 0f,
                             IsWaiting = true, // Stay idle
+                            RandomSeed = 0, // Not used in invalid state
                         }
                     );
                     return;
@@ -66,15 +67,27 @@ public class PatrolBehavior : ScriptBase
                     waypointStr
                 );
 
+                // Use entity position to seed randomization (prevents synchronization)
+                ref var position = ref Context.Position;
+                var entitySeed = (position.X * 73856093) ^ (position.Y * 19349663) ^ (int)evt.TotalTime;
+                var entityRandom = new System.Random(entitySeed);
+                
+                // Randomize initial wait timer to prevent synchronization (Pokemon Emerald pattern)
+                // If waypoint wait time is > 0, randomize initial delay; otherwise start immediately
+                var initialWait = initPath.WaypointWaitTime > 0 
+                    ? (float)entityRandom.NextDouble() * initPath.WaypointWaitTime 
+                    : 0f;
+                
                 Context.World.Add(
                     Context.Entity.Value,
                     new PatrolState
                     {
                         CurrentWaypoint = 0,
-                        WaitTimer = 0f,
+                        WaitTimer = initialWait,
                         WaitDuration = initPath.WaypointWaitTime,
                         Speed = 4.0f,
-                        IsWaiting = false,
+                        IsWaiting = initialWait > 0,
+                        RandomSeed = entitySeed, // Store seed for consistent randomization
                     }
                 );
                 return; // Skip first tick after initialization
@@ -135,7 +148,11 @@ public class PatrolBehavior : ScriptBase
                     state.CurrentWaypoint = path.Loop ? 0 : path.Waypoints.Length - 1;
                 }
 
-                state.WaitTimer = state.WaitDuration;
+                // Randomize wait time to prevent synchronization (Pokemon Emerald pattern)
+                // Add ±20% variation to wait duration
+                var variation = state.WaitDuration * 0.2f;
+                var entityRandom = new System.Random(state.RandomSeed + (int)(evt.TotalTime * 1000));
+                state.WaitTimer = (float)entityRandom.NextDouble() * (variation * 2) + (state.WaitDuration - variation);
 
                 // Deactivate any existing MovementRequest when reaching waypoint
                 if (Context.World.Has<MovementRequest>(Context.Entity.Value))

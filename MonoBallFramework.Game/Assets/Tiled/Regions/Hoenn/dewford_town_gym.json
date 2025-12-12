@@ -2160,7 +2160,7 @@
     {
       "name": "music",
       "type": "string",
-      "value": "base:audio:music/towns/mus_gym"
+      "value": "base:audio:music/special/mus_gym"
     },
     {
       "name": "regionMapSection",

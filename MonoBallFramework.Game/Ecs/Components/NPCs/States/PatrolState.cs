@@ -34,4 +34,10 @@ public struct PatrolState
     ///     Whether the patrol is currently waiting at a waypoint.
     /// </summary>
     public bool IsWaiting;
+
+    /// <summary>
+    ///     Entity-specific random seed for consistent but unique randomization.
+    ///     Prevents synchronization between NPCs with the same behavior.
+    /// </summary>
+    public int RandomSeed;
 }

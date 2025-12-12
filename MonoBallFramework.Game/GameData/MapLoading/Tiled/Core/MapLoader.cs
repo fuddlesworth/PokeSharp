@@ -9,7 +9,6 @@ using MonoBallFramework.Game.Ecs.Components.Movement;
 using MonoBallFramework.Game.Engine.Common.Logging;
 using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
-using MonoBallFramework.Game.Engine.Systems.Factories;
 using MonoBallFramework.Game.Engine.Systems.Management;
 using MonoBallFramework.Game.GameData.Entities;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Processors;
@@ -26,7 +25,6 @@ namespace MonoBallFramework.Game.GameData.MapLoading.Tiled.Core;
 
 /// <summary>
 ///     Loads Tiled maps and converts them to ECS components.
-///     Supports template-based tile creation when EntityFactoryService is provided.
 ///     Uses PropertyMapperRegistry for extensible property-to-component mapping.
 ///     Uses NpcDefinitionService for NPC/Trainer definition lookups.
 ///     Uses MapDefinitionService for definition-based map loading.
@@ -38,7 +36,6 @@ public class MapLoader(
     IAnimatedTileProcessor animatedTileProcessor,
     IBorderProcessor borderProcessor,
     PropertyMapperRegistry? propertyMapperRegistry = null,
-    IEntityFactoryService? entityFactory = null,
     NpcDefinitionService? npcDefinitionService = null,
     MapDefinitionService? mapDefinitionService = null,
     IGameStateApi? gameStateApi = null,
@@ -62,8 +59,6 @@ public class MapLoader(
     private readonly IBorderProcessor _borderProcessor =
         borderProcessor ?? throw new ArgumentNullException(nameof(borderProcessor));
 
-    private readonly IEntityFactoryService? _entityFactory = entityFactory;
-
     // Initialize ImageLayerProcessor (logger handled by MapLoader, so pass null)
     private readonly ImageLayerProcessor _imageLayerProcessor = new(
         assetManager ?? throw new ArgumentNullException(nameof(assetManager))
@@ -83,29 +78,20 @@ public class MapLoader(
     private readonly MapMetadataFactory _mapMetadataFactory = new();
 
     // Initialize EntitySpawnerRegistry with all available spawners
-    private readonly EntitySpawnerRegistry _entitySpawnerRegistry = CreateSpawnerRegistry(entityFactory, npcDefinitionService);
+    private readonly EntitySpawnerRegistry _entitySpawnerRegistry = CreateSpawnerRegistry();
 
     // Initialize MapObjectSpawner using registry (lazy init to use already-created registry)
     // Pass GameStateApi for flag-based NPC visibility at spawn time
     private MapObjectSpawner? _mapObjectSpawnerBacking;
     private MapObjectSpawner _mapObjectSpawner => _mapObjectSpawnerBacking ??= new(_entitySpawnerRegistry, gameStateApi);
 
-    private static EntitySpawnerRegistry CreateSpawnerRegistry(
-        IEntityFactoryService? entityFactory,
-        NpcDefinitionService? npcDefinitionService)
+    private static EntitySpawnerRegistry CreateSpawnerRegistry()
     {
         var registry = new EntitySpawnerRegistry();
 
         // Register spawners in priority order (higher priority = checked first)
-        // Priority 100: Exact type match spawners
         registry.Register(new WarpEntitySpawner());
         registry.Register(new NpcSpawner());
-
-        // Priority 50: Template-based fallback spawner
-        if (entityFactory != null)
-        {
-            registry.Register(new TemplateEntitySpawner(entityFactory, npcDefinitionService));
-        }
 
         return registry;
     }

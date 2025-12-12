@@ -160,20 +160,6 @@ public static partial class LogTemplates
         string systemName,
         string dependencyName);
 
-    /// <summary>Pathfinding computation completed</summary>
-    [LoggerMessage(
-        EventId = 2007,
-        Level = LogLevel.Debug,
-        Message = "[orange3]SYS[/] Pathfinding | from [cyan]{StartX},{StartY}[/] to [magenta]{EndX},{EndY}[/] | nodes: [yellow]{NodesExplored}[/] | {TimeMs:F2}ms")]
-    public static partial void LogPathfindingCompleted(
-        this ILogger logger,
-        int startX,
-        int startY,
-        int endX,
-        int endY,
-        int nodesExplored,
-        double timeMs);
-
     // ═══════════════════════════════════════════════════════════════
     // MAP LOADING TEMPLATES (Event IDs: 3000-3999)
     // ═══════════════════════════════════════════════════════════════

@@ -83,30 +83,6 @@ public static class AudioServicesExtensions
             return service;
         });
 
-        // Register Pokemon cry manager (NAudio-based)
-        services.AddSingleton<IPokemonCryManager>(sp =>
-        {
-            var soundEffectManager = sp.GetRequiredService<INAudioSoundEffectManager>();
-            var audioRegistry = sp.GetRequiredService<AudioRegistry>();
-            var logger = sp.GetService<ILogger<PokemonCryManager>>();
-
-            return new PokemonCryManager(
-                soundEffectManager,
-                audioRegistry,
-                logger);
-        });
-
-        // Register battle audio manager
-        services.AddSingleton<IBattleAudioManager>(sp =>
-        {
-            var audioService = sp.GetRequiredService<IAudioService>();
-            var pokemonCryManager = sp.GetRequiredService<IPokemonCryManager>();
-
-            return new BattleAudioManager(
-                audioService,
-                pokemonCryManager);
-        });
-
         // Note: MapMusicOrchestrator is created in InitializeMapMusicStep (needs World instance)
         // and stored in InitializationContext for lifecycle management
 

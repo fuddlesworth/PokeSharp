@@ -26,23 +26,55 @@ public class LookAroundBehavior : ScriptBase
             {
                 // Default directions: all 4 cardinals
                 var directions = new[] { Direction.North, Direction.South, Direction.East, Direction.West };
-
+                
+                // Use entity position to seed randomization (prevents synchronization)
+                // This ensures each NPC gets unique random values even if initialized in same frame
+                ref var position = ref Context.Position;
+                var entitySeed = (position.X * 73856093) ^ (position.Y * 19349663) ^ (int)evt.TotalTime;
+                var entityRandom = new System.Random(entitySeed);
+                
+                // Randomize initial timer to prevent synchronization (Pokemon Emerald pattern)
+                // Use random value between 0.5 and 2.0 seconds for initial delay
+                var initialDelay = (float)entityRandom.NextDouble() * 1.5f + 0.5f;
+                
+                // Get current facing from GridMovement (already set by map)
+                Direction currentFacing = Direction.South;
+                if (Context.World.Has<GridMovement>(Context.Entity.Value))
+                {
+                    currentFacing = Context.World.Get<GridMovement>(Context.Entity.Value).FacingDirection;
+                }
+                
+                // Find initial direction index based on current facing
+                int initialIndex = 0;
+                for (int i = 0; i < directions.Length; i++)
+                {
+                    if (directions[i] == currentFacing)
+                    {
+                        initialIndex = i;
+                        break;
+                    }
+                }
+                
                 Context.World.Add(
                     Context.Entity.Value,
                     new LookAroundState
                     {
-                        LookTimer = 0f,
-                        LookInterval = 2.0f, // Default 2 seconds between looks
-                        CurrentDirectionIndex = 0,
+                        LookTimer = initialDelay,
+                        LookInterval = 2.0f, // Base interval
+                        MinInterval = 1.5f,  // Minimum random interval
+                        MaxInterval = 3.0f,  // Maximum random interval
+                        CurrentDirectionIndex = initialIndex,
                         Directions = directions,
-                        CurrentFacing = directions[0],
+                        CurrentFacing = currentFacing,
+                        RandomSeed = entitySeed, // Store seed for consistent randomization
                     }
                 );
 
                 Context.Logger.LogInformation(
-                    "Look around initialized | directions: {Count}, interval: {Interval}s",
+                    "Look around initialized | directions: {Count}, interval: {MinInterval}-{MaxInterval}s",
                     directions.Length,
-                    2.0f
+                    1.5f,
+                    3.0f
                 );
                 return; // Skip first tick after initialization
             }
@@ -58,7 +90,10 @@ public class LookAroundBehavior : ScriptBase
                 // Time to look in a new direction
                 state.CurrentDirectionIndex = (state.CurrentDirectionIndex + 1) % state.Directions.Length;
                 state.CurrentFacing = state.Directions[state.CurrentDirectionIndex];
-                state.LookTimer = state.LookInterval;
+                
+                // Use entity-specific random seed for consistent but unique randomization
+                var entityRandom = new System.Random(state.RandomSeed + (int)(evt.TotalTime * 1000));
+                state.LookTimer = (float)entityRandom.NextDouble() * (state.MaxInterval - state.MinInterval) + state.MinInterval;
 
                 // Update facing direction in GridMovement component
                 if (Context.World.Has<GridMovement>(Context.Entity.Value))
@@ -96,10 +131,13 @@ public class LookAroundBehavior : ScriptBase
 public struct LookAroundState
 {
     public float LookTimer;
-    public float LookInterval;
+    public float LookInterval;  // Base interval (for backwards compatibility)
+    public float MinInterval;    // Minimum random interval
+    public float MaxInterval;    // Maximum random interval
     public int CurrentDirectionIndex;
     public Direction[] Directions;
     public Direction CurrentFacing;
+    public int RandomSeed;       // Entity-specific seed for consistent randomization
 }
 
 return new LookAroundBehavior();

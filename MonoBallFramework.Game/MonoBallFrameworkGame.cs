@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.Engine.Scenes;
 using MonoBallFramework.Game.Engine.Scenes.Scenes;
-using MonoBallFramework.Game.Engine.Systems.Factories;
 using MonoBallFramework.Game.Engine.Systems.Management;
 using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game.GameData.Loading;
@@ -39,7 +38,6 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
     private readonly IScriptingApiProvider _apiProvider;
     private readonly TypeRegistry<BehaviorDefinition> _behaviorRegistry;
     private readonly GameDataLoader _dataLoader;
-    private readonly IEntityFactoryService _entityFactory;
     private readonly GameConfiguration _gameConfig;
     private readonly IGameTimeService _gameTime;
     private readonly GraphicsDeviceManager _graphics;
@@ -56,7 +54,6 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
 
     // Services that depend on GraphicsDevice (created in Initialize)
     private readonly SystemManager _systemManager;
-    private readonly TemplateCacheInitializer _templateCacheInitializer;
     private readonly TypeRegistry<TileBehaviorDefinition> _tileBehaviorRegistry;
     private readonly World _world;
 
@@ -116,12 +113,6 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
             ?? throw new ArgumentNullException(
                 nameof(options),
                 $"{nameof(options.SystemManager)} cannot be null"
-            );
-        _entityFactory =
-            options.EntityFactory
-            ?? throw new ArgumentNullException(
-                nameof(options),
-                $"{nameof(options.EntityFactory)} cannot be null"
             );
         _scriptService =
             options.ScriptService
@@ -200,12 +191,6 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
             ?? throw new ArgumentNullException(
                 nameof(options),
                 $"{nameof(options.SpriteRegistry)} cannot be null"
-            );
-        _templateCacheInitializer =
-            options.TemplateCacheInitializer
-            ?? throw new ArgumentNullException(
-                nameof(options),
-                $"{nameof(options.TemplateCacheInitializer)} cannot be null"
             );
 
         // Service provider is required for SceneManager and scenes that use dependency injection
@@ -355,10 +340,8 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
                 GraphicsDevice,
                 _loggerFactory,
                 _dataLoader,
-                _templateCacheInitializer,
                 _world,
                 _systemManager,
-                _entityFactory,
                 _poolManager,
                 _spriteRegistry,
                 _behaviorRegistry,
@@ -419,9 +402,8 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
             _loggerFactory.CreateLogger<InitializationPipeline>();
         var pipeline = new InitializationPipeline(pipelineLogger);
 
-        // Phase 1: Load game data and templates
+        // Phase 1: Load game data
         pipeline.AddStep(new LoadGameDataStep());
-        pipeline.AddStep(new InitializeTemplateCacheStep());
 
         // Phase 2: Create services that depend on GraphicsDevice
         pipeline.AddStep(new CreateGraphicsServicesStep());

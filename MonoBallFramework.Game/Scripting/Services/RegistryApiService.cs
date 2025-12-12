@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Logging;
 using MonoBallFramework.Game.Engine.Core.Types;
-using MonoBallFramework.Game.Engine.Systems.Factories;
 using MonoBallFramework.Game.GameData.Entities;
 using MonoBallFramework.Game.GameData.Services;
 using MonoBallFramework.Game.GameData.Sprites;
@@ -18,7 +17,6 @@ public class RegistryApiService(
     NpcDefinitionService npcDefinitionService,
     MapRegistry mapRegistry,
     SpriteRegistry spriteRegistry,
-    IEntityFactoryService entityFactoryService,
     ILogger<RegistryApiService> logger
 ) : IRegistryApi
 {
@@ -33,9 +31,6 @@ public class RegistryApiService(
 
     private readonly SpriteRegistry _spriteRegistry =
         spriteRegistry ?? throw new ArgumentNullException(nameof(spriteRegistry));
-
-    private readonly IEntityFactoryService _entityFactoryService =
-        entityFactoryService ?? throw new ArgumentNullException(nameof(entityFactoryService));
 
     private readonly ILogger<RegistryApiService> _logger =
         logger ?? throw new ArgumentNullException(nameof(logger));
@@ -338,46 +333,6 @@ public class RegistryApiService(
         // Check if map is currently loaded
         // Note: MapRegistry doesn't track all available maps, only loaded ones
         return _mapRegistry.IsMapLoaded(mapId);
-    }
-
-    #endregion
-
-    #region Template Registry
-
-    /// <inheritdoc />
-    public IEnumerable<string> GetAllTemplateIds()
-    {
-        _logger.LogDebug("Getting all template IDs");
-
-        // Note: EntityFactoryService doesn't expose GetAllTemplateIds directly
-        // We could get all by iterating through empty tag filter, but that's not ideal
-        _logger.LogWarning(
-            "GetAllTemplateIds not directly supported - use GetTemplateIdsByTag for specific entity types"
-        );
-
-        return [];
-    }
-
-    /// <inheritdoc />
-    public IEnumerable<string> GetTemplateIdsByTag(string tag)
-    {
-        if (string.IsNullOrWhiteSpace(tag))
-            return [];
-
-        _logger.LogDebug("Getting template IDs by tag: {Tag}", tag);
-
-        // Use EntityFactoryService to get templates by tag
-        return _entityFactoryService.GetTemplateIdsByTag(tag);
-    }
-
-    /// <inheritdoc />
-    public bool TemplateExists(string templateId)
-    {
-        if (string.IsNullOrWhiteSpace(templateId))
-            return false;
-
-        // Check EntityFactoryService template cache
-        return _entityFactoryService.HasTemplate(templateId);
     }
 
     #endregion

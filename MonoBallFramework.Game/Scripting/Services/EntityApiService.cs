@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using MonoBallFramework.Game.Ecs.Components.Movement;
 using MonoBallFramework.Game.Ecs.Components.NPCs;
 using MonoBallFramework.Game.Engine.Core.Types;
-using MonoBallFramework.Game.Engine.Systems.Factories;
 using MonoBallFramework.Game.Scripting.Api;
 using EcsQueries = MonoBallFramework.Game.Engine.Systems.Queries.Queries;
 
@@ -11,19 +10,15 @@ namespace MonoBallFramework.Game.Scripting.Services;
 
 /// <summary>
 ///     Entity spawning and lifecycle management service implementation.
-///     Wraps EntityFactoryService to provide script-friendly entity creation.
+///     Provides script-friendly entity creation directly using ECS components.
 /// </summary>
 public class EntityApiService(
     World world,
-    IEntityFactoryService entityFactory,
     NpcApiService npcService,
     IMapApi mapApi,
     ILogger<EntityApiService> logger
 ) : IEntityApi
 {
-    private readonly IEntityFactoryService _entityFactory =
-        entityFactory ?? throw new ArgumentNullException(nameof(entityFactory));
-
     private readonly ILogger<EntityApiService> _logger =
         logger ?? throw new ArgumentNullException(nameof(logger));
 
@@ -46,110 +41,6 @@ public class EntityApiService(
     #endregion
 
     #region NPC Spawning
-
-    /// <inheritdoc />
-    public Entity SpawnNpc(GameNpcId npcId, int x, int y)
-    {
-        ArgumentNullException.ThrowIfNull(npcId);
-
-        _logger.LogDebug("Spawning NPC {NpcId} at ({X}, {Y})", npcId, x, y);
-
-        return _entityFactory.SpawnFromTemplate(
-            npcId.ToString(),
-            _world,
-            builder =>
-            {
-                builder.OverrideComponent(new MonoBallFramework.Game.Ecs.Components.Movement.Position(x, y));
-            }
-        );
-    }
-
-    /// <inheritdoc />
-    public Entity SpawnNpc(GameNpcId npcId, int x, int y, GameSpriteId spriteId)
-    {
-        ArgumentNullException.ThrowIfNull(npcId);
-        ArgumentNullException.ThrowIfNull(spriteId);
-
-        _logger.LogDebug(
-            "Spawning NPC {NpcId} at ({X}, {Y}) with sprite {SpriteId}",
-            npcId,
-            x,
-            y,
-            spriteId
-        );
-
-        return _entityFactory.SpawnFromTemplate(
-            npcId.ToString(),
-            _world,
-            builder =>
-            {
-                builder
-                    .OverrideComponent(new MonoBallFramework.Game.Ecs.Components.Movement.Position(x, y))
-                    .OverrideComponent(new MonoBallFramework.Game.Ecs.Components.Rendering.Sprite(spriteId));
-            }
-        );
-    }
-
-    /// <inheritdoc />
-    public Entity SpawnNpc(GameNpcId npcId, int x, int y, GameBehaviorId behaviorId)
-    {
-        ArgumentNullException.ThrowIfNull(npcId);
-        ArgumentNullException.ThrowIfNull(behaviorId);
-
-        _logger.LogDebug(
-            "Spawning NPC {NpcId} at ({X}, {Y}) with behavior {BehaviorId}",
-            npcId,
-            x,
-            y,
-            behaviorId
-        );
-
-        return _entityFactory.SpawnFromTemplate(
-            npcId.ToString(),
-            _world,
-            builder =>
-            {
-                builder
-                    .OverrideComponent(new MonoBallFramework.Game.Ecs.Components.Movement.Position(x, y))
-                    .OverrideComponent(new MonoBallFramework.Game.Ecs.Components.NPCs.Behavior(behaviorId.ToString()));
-            }
-        );
-    }
-
-    /// <inheritdoc />
-    public Entity SpawnNpc(
-        GameNpcId npcId,
-        int x,
-        int y,
-        GameSpriteId spriteId,
-        GameBehaviorId behaviorId
-    )
-    {
-        ArgumentNullException.ThrowIfNull(npcId);
-        ArgumentNullException.ThrowIfNull(spriteId);
-        ArgumentNullException.ThrowIfNull(behaviorId);
-
-        _logger.LogDebug(
-            "Spawning NPC {NpcId} at ({X}, {Y}) with sprite {SpriteId} and behavior {BehaviorId}",
-            npcId,
-            x,
-            y,
-            spriteId,
-            behaviorId
-        );
-
-        return _entityFactory.SpawnFromTemplate(
-            npcId.ToString(),
-            _world,
-            builder =>
-            {
-                builder
-                    .OverrideComponent(new MonoBallFramework.Game.Ecs.Components.Movement.Position(x, y))
-                    .OverrideComponent(new MonoBallFramework.Game.Ecs.Components.Rendering.Sprite(spriteId))
-                    .OverrideComponent(new MonoBallFramework.Game.Ecs.Components.NPCs.Behavior(behaviorId.ToString()));
-            }
-        );
-    }
 
     /// <inheritdoc />
     public Entity SpawnNpcAt(
@@ -192,32 +83,6 @@ public class EntityApiService(
         _logger.LogDebug("Created generic NPC entity {EntityId} at ({X}, {Y})", entity.Id, x, y);
 
         return entity;
-    }
-
-    #endregion
-
-    #region Template Spawning
-
-    /// <inheritdoc />
-    public Entity SpawnFromTemplate(string templateId, int x, int y)
-    {
-        if (string.IsNullOrWhiteSpace(templateId))
-            throw new ArgumentException("Template ID cannot be null or whitespace", nameof(templateId));
-
-        _logger.LogDebug("Spawning entity from template {TemplateId} at ({X}, {Y})", templateId, x, y);
-
-        // TODO: Implement using EntityFactoryService.SpawnFromTemplate
-        throw new NotImplementedException("Template spawning not yet implemented");
-    }
-
-    /// <inheritdoc />
-    public bool TemplateExists(string templateId)
-    {
-        if (string.IsNullOrWhiteSpace(templateId))
-            return false;
-
-        // TODO: Check EntityFactoryService template cache
-        return false;
     }
 
     #endregion

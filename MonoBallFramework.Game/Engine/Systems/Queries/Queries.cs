@@ -181,7 +181,7 @@ public static class Queries
 
     /// <summary>
     ///     NPCs with movement routes (patrol paths).
-    ///     Used by PathfindingSystem for NPC movement.
+    ///     Used for NPC patrol movement processing.
     /// </summary>
     public static readonly QueryDescription NpcsWithRoutes = QueryCache.Get<
         Position,
@@ -286,20 +286,6 @@ public static class Queries
         GridMovement,
         Player,
         Animation
-    >();
-
-    // ============================================================================
-    // PATHFINDING QUERIES
-    // ============================================================================
-
-    /// <summary>
-    ///     Entities with position, movement, and movement routes.
-    ///     Used by PathfindingSystem for path following.
-    /// </summary>
-    public static readonly QueryDescription PathFollowers = QueryCache.Get<
-        Position,
-        GridMovement,
-        MovementRoute
     >();
 
     // ============================================================================

@@ -1302,7 +1302,7 @@
     {
       "name": "music",
       "type": "string",
-      "value": "base:audio:music/towns/mus_trick_house"
+      "value": "base:audio:music/special/mus_trick_house"
     },
     {
       "name": "regionMapSection",

@@ -2,6 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MonoBallFramework.Game.Engine.Audio.Configuration;
 using MonoBallFramework.Game.Engine.Debug;
+using MonoBallFramework.Game.Engine.Rendering.Configuration;
 using MonoBallFramework.Game.Infrastructure.Configuration;
 using MonoBallFramework.Game.Infrastructure.ServiceRegistration;
 
@@ -51,7 +52,6 @@ public static class ServiceCollectionExtensions
         services.AddCoreEcsServices();
         services.AddDataServices();
         services.AddModdingServices();
-        services.AddTemplateServices();
         services.AddGameRuntimeServices(); // Must be before scripting (provides IGameStateService)
         services.AddScriptingServices();
 
@@ -63,6 +63,12 @@ public static class ServiceCollectionExtensions
             ? AudioConfiguration.Development
             : AudioConfiguration.Production;
         services.AddAudioServices(audioConfig);
+
+        // Rendering Configuration (sprite batching, layers, performance tuning)
+        var renderingConfig = environment == "Development"
+            ? RenderingConfiguration.Default
+            : RenderingConfiguration.Production;
+        services.AddSingleton(renderingConfig);
 
         return services;
     }

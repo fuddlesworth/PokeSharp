@@ -2,7 +2,9 @@ using Arch.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MonoBallFramework.Game.Engine.Core.Events;
+using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.GameData.PropertyMapping;
+using MonoBallFramework.Game.GameSystems.Services;
 using MonoBallFramework.Game.Infrastructure.Services;
 using MonoBallFramework.Game.Scripting.Api;
 using MonoBallFramework.Game.Scripting.Services;
@@ -46,6 +48,13 @@ public static class ScriptingServicesExtensions
 
         // Entity API Service (for runtime entity spawning)
         services.AddSingleton<EntityApiService>();
+
+        // Behavior Registry Adapter (wraps TypeRegistry<BehaviorDefinition> for IBehaviorRegistry interface)
+        services.AddSingleton<IBehaviorRegistry>(sp =>
+        {
+            var behaviorRegistry = sp.GetRequiredService<TypeRegistry<BehaviorDefinition>>();
+            return new BehaviorRegistryAdapter(behaviorRegistry);
+        });
 
         // Registry API Service (for querying game definitions)
         services.AddSingleton<RegistryApiService>();

@@ -265,7 +265,10 @@ class MidiTrackInfo:
             self.category = AudioCategory.SFX_BATTLE
 
     def _categorize_music(self, name: str):
-        """Categorize music tracks."""
+        """Categorize music tracks.
+
+        IMPORTANT: Keep in sync with id_transformer.py MUSIC_CATEGORIES
+        """
         if any(x in name for x in ["route", "cycling", "surf", "sailing"]):
             self.category = AudioCategory.MUSIC_ROUTE
         elif any(x in name for x in ["town", "city", "village", "littleroot", "oldale", "petalburg",
@@ -281,6 +284,8 @@ class MidiTrackInfo:
                                      "fanfare", "too_bad", "register", "move_deleted"]):
             self.category = AudioCategory.FANFARE
         else:
+            # Special category: caves, dungeons, facilities, etc.
+            # Includes: museum, pokemon_center, poke_mart, gym, game_corner, safari, contest, trick_house
             self.category = AudioCategory.MUSIC_SPECIAL
 
 

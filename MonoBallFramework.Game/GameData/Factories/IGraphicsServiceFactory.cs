@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
-using MonoBallFramework.Game.Engine.Systems.Factories;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Core;
 
 namespace MonoBallFramework.Game.GameData.Factories;
@@ -21,13 +20,9 @@ public interface IGraphicsServiceFactory
     AssetManager CreateAssetManager(GraphicsDevice graphicsDevice, string assetRoot = "Assets");
 
     /// <summary>
-    ///     Creates a MapLoader instance with the provided AssetManager and optional EntityFactory.
+    ///     Creates a MapLoader instance with the provided AssetManager.
     /// </summary>
     /// <param name="assetManager">The AssetManager for loading textures.</param>
-    /// <param name="entityFactory">Optional EntityFactory for template-based entity creation.</param>
     /// <returns>A configured MapLoader instance.</returns>
-    MapLoader CreateMapLoader(
-        AssetManager assetManager,
-        IEntityFactoryService? entityFactory = null
-    );
+    MapLoader CreateMapLoader(AssetManager assetManager);
 }

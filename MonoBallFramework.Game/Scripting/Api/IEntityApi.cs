@@ -5,13 +5,12 @@ namespace MonoBallFramework.Game.Scripting.Api;
 
 /// <summary>
 ///     Entity spawning and lifecycle management API for scripts.
-///     Provides runtime entity creation from templates and definitions.
+///     Provides runtime entity creation directly using ECS components.
 /// </summary>
 /// <remarks>
 ///     <para>
 ///         This API enables scripts to dynamically spawn and manage entities at runtime.
-///         All spawning methods integrate with the EntityFactoryService and respect
-///         template inheritance, pooling, and validation.
+///         Entities are created directly with components for efficient spawning.
 ///     </para>
 ///     <para>
 ///         Spawned entities are automatically added to the current map's entity collection
@@ -53,49 +52,8 @@ public interface IEntityApi
     #region NPC Spawning
 
     /// <summary>
-    ///     Spawns an NPC from its definition at the specified position.
-    /// </summary>
-    /// <param name="npcId">The NPC definition ID.</param>
-    /// <param name="x">Tile X coordinate.</param>
-    /// <param name="y">Tile Y coordinate.</param>
-    /// <returns>The spawned entity.</returns>
-    /// <exception cref="ArgumentException">Thrown when NPC definition is not found.</exception>
-    Entity SpawnNpc(GameNpcId npcId, int x, int y);
-
-    /// <summary>
-    ///     Spawns an NPC with a custom sprite override.
-    /// </summary>
-    /// <param name="npcId">The NPC definition ID.</param>
-    /// <param name="x">Tile X coordinate.</param>
-    /// <param name="y">Tile Y coordinate.</param>
-    /// <param name="spriteId">Sprite to use instead of the definition's default.</param>
-    /// <returns>The spawned entity.</returns>
-    Entity SpawnNpc(GameNpcId npcId, int x, int y, GameSpriteId spriteId);
-
-    /// <summary>
-    ///     Spawns an NPC with a custom behavior override.
-    /// </summary>
-    /// <param name="npcId">The NPC definition ID.</param>
-    /// <param name="x">Tile X coordinate.</param>
-    /// <param name="y">Tile Y coordinate.</param>
-    /// <param name="behaviorId">Behavior to use instead of the definition's default.</param>
-    /// <returns>The spawned entity.</returns>
-    Entity SpawnNpc(GameNpcId npcId, int x, int y, GameBehaviorId behaviorId);
-
-    /// <summary>
-    ///     Spawns an NPC with both sprite and behavior overrides.
-    /// </summary>
-    /// <param name="npcId">The NPC definition ID.</param>
-    /// <param name="x">Tile X coordinate.</param>
-    /// <param name="y">Tile Y coordinate.</param>
-    /// <param name="spriteId">Sprite to use instead of the definition's default.</param>
-    /// <param name="behaviorId">Behavior to use instead of the definition's default.</param>
-    /// <returns>The spawned entity.</returns>
-    Entity SpawnNpc(GameNpcId npcId, int x, int y, GameSpriteId spriteId, GameBehaviorId behaviorId);
-
-    /// <summary>
     ///     Spawns a generic NPC at the specified position with explicit sprite and behavior.
-    ///     Does not require an NPC definition - creates entity directly from components.
+    ///     Creates entity directly from components without requiring an NPC definition.
     /// </summary>
     /// <param name="x">Tile X coordinate.</param>
     /// <param name="y">Tile Y coordinate.</param>
@@ -104,27 +62,6 @@ public interface IEntityApi
     /// <param name="displayName">Optional display name shown during interaction.</param>
     /// <returns>The spawned entity.</returns>
     Entity SpawnNpcAt(int x, int y, GameSpriteId spriteId, GameBehaviorId? behaviorId = null, string? displayName = null);
-
-    #endregion
-
-    #region Template Spawning
-
-    /// <summary>
-    ///     Spawns an entity from a template at the specified position.
-    /// </summary>
-    /// <param name="templateId">The entity template ID (e.g., "npc/generic", "trigger/warp").</param>
-    /// <param name="x">Tile X coordinate.</param>
-    /// <param name="y">Tile Y coordinate.</param>
-    /// <returns>The spawned entity.</returns>
-    /// <exception cref="ArgumentException">Thrown when template is not found.</exception>
-    Entity SpawnFromTemplate(string templateId, int x, int y);
-
-    /// <summary>
-    ///     Checks if a template exists in the template cache.
-    /// </summary>
-    /// <param name="templateId">The template ID to check.</param>
-    /// <returns>True if template exists.</returns>
-    bool TemplateExists(string templateId);
 
     #endregion
 

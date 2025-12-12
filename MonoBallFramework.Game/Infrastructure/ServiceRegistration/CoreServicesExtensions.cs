@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MonoBallFramework.Game.Engine.Core.Events;
 using MonoBallFramework.Game.Engine.Core.Modding;
+using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.Engine.Systems.Management;
 using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game.GameData;
@@ -107,6 +108,26 @@ public static class CoreServicesExtensions
             );
 
             return poolManager;
+        });
+
+        // Behavior Type Registries - For NPC and Tile behavior definitions
+        // These provide O(1) lookup for moddable behaviors loaded from JSON
+        services.AddSingleton(sp =>
+        {
+            IAssetPathResolver pathResolver = sp.GetRequiredService<IAssetPathResolver>();
+            ILogger<TypeRegistry<BehaviorDefinition>> logger =
+                sp.GetRequiredService<ILogger<TypeRegistry<BehaviorDefinition>>>();
+            string behaviorPath = pathResolver.Resolve("Definitions/Behaviors");
+            return new TypeRegistry<BehaviorDefinition>(behaviorPath, logger);
+        });
+
+        services.AddSingleton(sp =>
+        {
+            IAssetPathResolver pathResolver = sp.GetRequiredService<IAssetPathResolver>();
+            ILogger<TypeRegistry<TileBehaviorDefinition>> logger =
+                sp.GetRequiredService<ILogger<TypeRegistry<TileBehaviorDefinition>>>();
+            string tileBehaviorPath = pathResolver.Resolve("Definitions/TileBehaviors");
+            return new TypeRegistry<TileBehaviorDefinition>(tileBehaviorPath, logger);
         });
 
         return services;

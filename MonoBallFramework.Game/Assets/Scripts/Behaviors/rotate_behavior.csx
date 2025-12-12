@@ -24,22 +24,40 @@ public class RotateBehavior : ScriptBase
             // Initialize state on first tick (when entity is available)
             if (!Context.HasState<RotateState>())
             {
-                // Default: clockwise rotation every 1 second
+                // Use entity position to seed randomization (prevents synchronization)
+                ref var position = ref Context.Position;
+                var entitySeed = (position.X * 73856093) ^ (position.Y * 19349663) ^ (int)evt.TotalTime;
+                var entityRandom = new System.Random(entitySeed);
+                
+                // Randomize initial timer to prevent synchronization (Pokemon Emerald pattern)
+                var initialDelay = (float)entityRandom.NextDouble() * 0.8f + 0.2f; // 0.2-1.0 seconds
+                
+                // Get current facing from GridMovement (already set by map)
+                Direction currentFacing = Direction.South;
+                if (Context.World.Has<GridMovement>(Context.Entity.Value))
+                {
+                    currentFacing = Context.World.Get<GridMovement>(Context.Entity.Value).FacingDirection;
+                }
+                
                 Context.World.Add(
                     Context.Entity.Value,
                     new RotateState
                     {
-                        RotateTimer = 0f,
-                        RotateInterval = 1.0f,
+                        RotateTimer = initialDelay,
+                        RotateInterval = 1.0f,  // Base interval
+                        MinInterval = 0.8f,     // Minimum random interval
+                        MaxInterval = 1.5f,     // Maximum random interval
                         Clockwise = true,
-                        CurrentFacing = Direction.South, // Start facing south
+                        CurrentFacing = currentFacing,
+                        RandomSeed = entitySeed, // Store seed for consistent randomization
                     }
                 );
 
                 Context.Logger.LogInformation(
-                    "Rotate initialized | clockwise: {Clockwise}, interval: {Interval}s",
+                    "Rotate initialized | clockwise: {Clockwise}, interval: {MinInterval}-{MaxInterval}s",
                     true,
-                    1.0f
+                    0.8f,
+                    1.5f
                 );
                 return; // Skip first tick after initialization
             }
@@ -54,7 +72,10 @@ public class RotateBehavior : ScriptBase
             {
                 // Time to rotate
                 state.CurrentFacing = RotateDirection(state.CurrentFacing, state.Clockwise);
-                state.RotateTimer = state.RotateInterval;
+                
+                // Use entity-specific random seed for consistent but unique randomization
+                var entityRandom = new System.Random(state.RandomSeed + (int)(evt.TotalTime * 1000));
+                state.RotateTimer = (float)entityRandom.NextDouble() * (state.MaxInterval - state.MinInterval) + state.MinInterval;
 
                 // Update facing direction in GridMovement component
                 if (Context.World.Has<GridMovement>(Context.Entity.Value))
@@ -118,9 +139,12 @@ public class RotateBehavior : ScriptBase
 public struct RotateState
 {
     public float RotateTimer;
-    public float RotateInterval;
+    public float RotateInterval;  // Base interval (for backwards compatibility)
+    public float MinInterval;      // Minimum random interval
+    public float MaxInterval;      // Maximum random interval
     public bool Clockwise;
     public Direction CurrentFacing;
+    public int RandomSeed;         // Entity-specific seed for consistent randomization
 }
 
 return new RotateBehavior();

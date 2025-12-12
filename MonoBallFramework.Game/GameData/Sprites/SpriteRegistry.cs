@@ -23,6 +23,7 @@ namespace MonoBallFramework.Game.GameData.Sprites;
 public class SpriteRegistry
 {
     private readonly ConcurrentDictionary<GameSpriteId, SpriteDefinition> _sprites = new();
+    private readonly ConcurrentDictionary<string, SpriteDefinition> _pathCache = new();
     private readonly SemaphoreSlim _loadLock = new(1, 1);
     private readonly IAssetPathResolver _pathResolver;
     private readonly ILogger<SpriteRegistry> _logger;
@@ -66,6 +67,10 @@ public class SpriteRegistry
         if (_sprites.TryAdd(spriteId, definition))
         {
             _logger.LogDebug("Registered sprite: {SpriteId}", definition.Id);
+
+            // Cache by LocalId for O(1) path lookups
+            // LocalId: "npcs/generic/twin" (from "base:sprite:npcs/generic/twin")
+            _pathCache.TryAdd(spriteId.LocalId, definition);
         }
         else
         {
@@ -88,36 +93,21 @@ public class SpriteRegistry
     ///     Format: {category}/{name} or {category}/{subcategory}/{name}
     ///     Examples: "npcs/prof_birch", "npcs/generic/boy_1", "players/may/normal"
     /// </summary>
-    /// <param name="path">The sprite path (e.g., "npcs/generic_prof_birch").</param>
+    /// <param name="path">The sprite path (e.g., "npcs/generic/prof_birch").</param>
     /// <returns>The sprite definition if found; otherwise, null.</returns>
     public SpriteDefinition? GetSpriteByPath(string path)
     {
         if (string.IsNullOrWhiteSpace(path))
-        {
             return null;
-        }
 
-        // Normalize path separators
         string normalizedPath = path.Replace('\\', '/').Trim('/');
 
-        // Search for sprite with matching path
-        var match = _sprites.FirstOrDefault(kvp =>
-        {
-            var parts = kvp.Key.Value.Split(':');
-            if (parts.Length >= 3)
-            {
-                string spritePath = parts[2]; // Extract the path portion (e.g., "npcs/generic_twin")
-                return spritePath.Equals(normalizedPath, StringComparison.OrdinalIgnoreCase);
-            }
-            return false;
-        }).Value;
+        // O(1) lookup using path cache (keyed by sprite path e.g., "npcs/generic/twin")
+        if (_pathCache.TryGetValue(normalizedPath, out var definition))
+            return definition;
 
-        if (match == null)
-        {
-            _logger.LogDebug("Sprite not found by path: {Path}", path);
-        }
-
-        return match;
+        _logger.LogDebug("Sprite not found by path: {Path}", path);
+        return null;
     }
 
     /// <summary>

@@ -14,7 +14,6 @@ using MonoBallFramework.Game.GameData.Services;
 using MonoBallFramework.Game.GameData.Sprites;
 using MonoBallFramework.Game.GameSystems;
 using MonoBallFramework.Game.GameSystems.Movement;
-using MonoBallFramework.Game.GameSystems.NPCs;
 using MonoBallFramework.Game.GameSystems.Spatial;
 using MonoBallFramework.Game.GameSystems.Tiles;
 using MonoBallFramework.Game.GameSystems.Warps;
@@ -179,12 +178,6 @@ public class GameInitializer(
         WarpExecutionSystem = new WarpExecutionSystem(warpExecLogger);
         systemManager.RegisterUpdateSystem(WarpExecutionSystem);
 
-        // Register PathfindingSystem (Priority: 300, processes MovementRoute waypoints with A* pathfinding)
-        ILogger<PathfindingSystem> pathfindingLogger =
-            loggerFactory.CreateLogger<PathfindingSystem>();
-        var pathfindingSystem = new PathfindingSystem(SpatialHashSystem, pathfindingLogger);
-        systemManager.RegisterUpdateSystem(pathfindingSystem);
-
         // Register MapStreamingSystem (Priority: 100, same as movement for seamless streaming)
         ILogger<MapStreamingSystem> mapStreamingLogger =
             loggerFactory.CreateLogger<MapStreamingSystem>();
@@ -212,7 +205,7 @@ public class GameInitializer(
         FlagVisibilitySystem = new FlagVisibilitySystem(eventBus, gameStateApi, flagVisibilityLogger);
         systemManager.RegisterEventDrivenSystem(FlagVisibilitySystem);
 
-        // Register CameraFollowSystem (Priority: 825, after PathfindingSystem, before CameraUpdate)
+        // Register CameraFollowSystem (Priority: 825, before CameraUpdate)
         ILogger<CameraFollowSystem> cameraFollowLogger =
             loggerFactory.CreateLogger<CameraFollowSystem>();
         systemManager.RegisterUpdateSystem(new CameraFollowSystem(cameraFollowLogger));

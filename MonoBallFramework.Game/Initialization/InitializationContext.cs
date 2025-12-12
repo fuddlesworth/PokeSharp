@@ -7,7 +7,6 @@ using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
 using MonoBallFramework.Game.Engine.Rendering.Services;
 using MonoBallFramework.Game.Engine.Scenes;
-using MonoBallFramework.Game.Engine.Systems.Factories;
 using MonoBallFramework.Game.Engine.Systems.Management;
 using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game.GameData.Loading;
@@ -42,10 +41,8 @@ public class InitializationContext
         GraphicsDevice graphicsDevice,
         ILoggerFactory loggerFactory,
         GameDataLoader dataLoader,
-        TemplateCacheInitializer templateCacheInitializer,
         World world,
         SystemManager systemManager,
-        IEntityFactoryService entityFactory,
         EntityPoolManager poolManager,
         SpriteRegistry spriteRegistry,
         TypeRegistry<BehaviorDefinition> behaviorRegistry,
@@ -66,12 +63,8 @@ public class InitializationContext
         GraphicsDevice = graphicsDevice ?? throw new ArgumentNullException(nameof(graphicsDevice));
         LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
         DataLoader = dataLoader ?? throw new ArgumentNullException(nameof(dataLoader));
-        TemplateCacheInitializer =
-            templateCacheInitializer
-            ?? throw new ArgumentNullException(nameof(templateCacheInitializer));
         World = world ?? throw new ArgumentNullException(nameof(world));
         SystemManager = systemManager ?? throw new ArgumentNullException(nameof(systemManager));
-        EntityFactory = entityFactory ?? throw new ArgumentNullException(nameof(entityFactory));
         PoolManager = poolManager ?? throw new ArgumentNullException(nameof(poolManager));
         SpriteRegistry = spriteRegistry ?? throw new ArgumentNullException(nameof(spriteRegistry));
         BehaviorRegistry =
@@ -161,10 +154,8 @@ public class InitializationContext
 
     // Game dependencies (available from start)
     public GameDataLoader DataLoader { get; }
-    public TemplateCacheInitializer TemplateCacheInitializer { get; }
     public World World { get; }
     public SystemManager SystemManager { get; }
-    public IEntityFactoryService EntityFactory { get; }
     public EntityPoolManager PoolManager { get; }
     public SpriteRegistry SpriteRegistry { get; }
     public TypeRegistry<BehaviorDefinition> BehaviorRegistry { get; }

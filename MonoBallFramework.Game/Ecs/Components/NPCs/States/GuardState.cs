@@ -39,4 +39,20 @@ public struct GuardState
     ///     How far the guard can see (in tiles).
     /// </summary>
     public int ViewRange;
+
+    /// <summary>
+    ///     Minimum random interval for scan timer (in seconds).
+    /// </summary>
+    public float MinInterval;
+
+    /// <summary>
+    ///     Maximum random interval for scan timer (in seconds).
+    /// </summary>
+    public float MaxInterval;
+
+    /// <summary>
+    ///     Entity-specific random seed for consistent but unique randomization.
+    ///     Prevents synchronization between NPCs with the same behavior.
+    /// </summary>
+    public int RandomSeed;
 }

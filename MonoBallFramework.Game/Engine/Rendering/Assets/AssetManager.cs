@@ -4,6 +4,7 @@ using FontStashSharp;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework.Graphics;
 using MonoBallFramework.Game.Engine.Common.Logging;
+using MonoBallFramework.Game.Engine.Rendering.Configuration;
 
 namespace MonoBallFramework.Game.Engine.Rendering.Assets;
 

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework.Graphics;
+using MonoBallFramework.Game.Engine.Rendering.Configuration;
 
 namespace MonoBallFramework.Game.Engine.Rendering.Services;
 
@@ -10,18 +11,24 @@ namespace MonoBallFramework.Game.Engine.Rendering.Services;
 public class RenderingService : IRenderingService
 {
     private readonly ILogger<RenderingService> _logger;
+    private readonly RenderingConfiguration _config;
     private bool _disposed;
 
     public RenderingService(
         GraphicsDevice graphicsDevice,
-        ILogger<RenderingService> logger)
+        ILogger<RenderingService> logger,
+        RenderingConfiguration? config = null)
     {
         GraphicsDevice = graphicsDevice ?? throw new ArgumentNullException(nameof(graphicsDevice));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _config = config ?? RenderingConfiguration.Default;
 
         SpriteBatch = new SpriteBatch(graphicsDevice);
 
-        _logger.LogInformation("RenderingService initialized with shared SpriteBatch");
+        _logger.LogInformation(
+            "RenderingService initialized with shared SpriteBatch | MaxBatchSize: {MaxBatchSize}, VSync: {VSync}",
+            _config.MaxSpriteBatchSize,
+            _config.EnableVSync);
     }
 
     public SpriteBatch SpriteBatch { get; }

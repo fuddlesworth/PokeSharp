@@ -74,33 +74,6 @@ public class CollisionException : SystemException
 }
 
 /// <summary>
-///     Exception thrown when pathfinding fails.
-/// </summary>
-public class PathfindingException : SystemException
-{
-    public PathfindingException(int entityId, string message)
-        : base("SYSTEM_PATHFINDING_ERROR", message)
-    {
-        WithContext("EntityId", entityId);
-    }
-
-    public PathfindingException(int entityId, string message, Exception innerException)
-        : base("SYSTEM_PATHFINDING_ERROR", message, innerException)
-    {
-        WithContext("EntityId", entityId);
-    }
-
-    public int EntityId => Context.TryGetValue("EntityId", out object? id) && id is int i ? i : 0;
-
-    public override bool IsRecoverable => true; // NPC can stay idle
-
-    public override string GetUserFriendlyMessage()
-    {
-        return "NPC pathfinding error. Some NPCs may not move correctly.";
-    }
-}
-
-/// <summary>
 ///     Exception thrown when tile animation system fails.
 /// </summary>
 public class TileAnimationException : SystemException

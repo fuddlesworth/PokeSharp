@@ -1,6 +1,5 @@
 using Arch.Core;
 using MonoBallFramework.Game.Engine.Core.Types;
-using MonoBallFramework.Game.Engine.Systems.Factories;
 using MonoBallFramework.Game.Engine.Systems.Management;
 using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game.GameData.Loading;
@@ -10,7 +9,6 @@ using MonoBallFramework.Game.GameSystems.Services;
 using MonoBallFramework.Game.Infrastructure.Diagnostics;
 using MonoBallFramework.Game.Infrastructure.Services;
 using MonoBallFramework.Game.Initialization.Factories;
-using MonoBallFramework.Game.Initialization.Initializers;
 using MonoBallFramework.Game.Input;
 using MonoBallFramework.Game.Scripting.Api;
 using MonoBallFramework.Game.Scripting.Services;
@@ -32,11 +30,6 @@ public sealed class MonoBallFrameworkGameOptions
     ///     Gets or sets the system manager.
     /// </summary>
     public SystemManager SystemManager { get; init; } = null!;
-
-    /// <summary>
-    ///     Gets or sets the entity factory service.
-    /// </summary>
-    public IEntityFactoryService EntityFactory { get; init; } = null!;
 
     /// <summary>
     ///     Gets or sets the script service.
@@ -102,9 +95,4 @@ public sealed class MonoBallFrameworkGameOptions
     ///     Gets or sets the sprite registry.
     /// </summary>
     public SpriteRegistry SpriteRegistry { get; init; } = null!;
-
-    /// <summary>
-    ///     Gets or sets the template cache initializer.
-    /// </summary>
-    public TemplateCacheInitializer TemplateCacheInitializer { get; init; } = null!;
 }

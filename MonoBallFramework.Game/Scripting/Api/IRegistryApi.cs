@@ -5,7 +5,7 @@ namespace MonoBallFramework.Game.Scripting.Api;
 
 /// <summary>
 ///     Registry lookup API for accessing game definitions and IDs.
-///     Provides read-only access to NPC, sprite, map, behavior, and template registries.
+///     Provides read-only access to NPC, sprite, map, and behavior registries.
 /// </summary>
 /// <remarks>
 ///     <para>
@@ -195,30 +195,6 @@ public interface IRegistryApi
     /// <param name="mapId">The map identifier to check.</param>
     /// <returns>True if the map exists.</returns>
     bool MapExists(GameMapId mapId);
-
-    #endregion
-
-    #region Template Registry
-
-    /// <summary>
-    ///     Gets all registered entity template IDs.
-    /// </summary>
-    /// <returns>Collection of all template identifiers.</returns>
-    IEnumerable<string> GetAllTemplateIds();
-
-    /// <summary>
-    ///     Gets all template IDs with a specific tag.
-    /// </summary>
-    /// <param name="tag">The tag to filter by (e.g., "npc", "trigger", "item").</param>
-    /// <returns>Collection of matching template identifiers.</returns>
-    IEnumerable<string> GetTemplateIdsByTag(string tag);
-
-    /// <summary>
-    ///     Checks if an entity template exists.
-    /// </summary>
-    /// <param name="templateId">The template identifier to check.</param>
-    /// <returns>True if the template exists.</returns>
-    bool TemplateExists(string templateId);
 
     #endregion
 

@@ -19,7 +19,6 @@ public static class SystemPriority
     public const int AI = 50;
     public const int TileBehavior = 60;
     public const int NpcBehavior = 75;
-    public const int Pathfinding = 85;
 
     // Weather and environment
     public const int Weather = 90;

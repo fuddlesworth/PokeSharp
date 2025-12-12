@@ -19,6 +19,15 @@ public abstract record MovementEventBase : TypeEventBase
     ///     The entity that this movement event relates to.
     /// </summary>
     public Entity Entity { get; set; }
+
+    /// <summary>
+    ///     Resets the event to a clean state for pool reuse.
+    /// </summary>
+    public override void Reset()
+    {
+        base.Reset();
+        Entity = default;
+    }
 }
 
 /// <summary>
@@ -127,6 +136,19 @@ public record MovementCompletedEvent : MovementEventBase
     ///     Map ID where movement occurred.
     /// </summary>
     public GameMapId? MapId { get; set; }
+
+    /// <summary>
+    ///     Resets the event to a clean state for pool reuse.
+    /// </summary>
+    public override void Reset()
+    {
+        base.Reset();
+        OldPosition = default;
+        NewPosition = default;
+        Direction = Direction.None;
+        MovementTime = 0f;
+        MapId = null;
+    }
 }
 
 /// <summary>
@@ -154,26 +176,53 @@ public record MovementBlockedEvent : MovementEventBase
     ///     Map ID where block occurred.
     /// </summary>
     public GameMapId? MapId { get; set; }
+
+    /// <summary>
+    ///     Resets the event to a clean state for pool reuse.
+    /// </summary>
+    public override void Reset()
+    {
+        base.Reset();
+        BlockReason = string.Empty;
+        TargetPosition = default;
+        Direction = Direction.None;
+        MapId = null;
+    }
 }
 
 /// <summary>
 ///     Event fired every frame during movement (for progress tracking).
 ///     Useful for smooth camera following, particle effects, etc.
 /// </summary>
+/// <remarks>
+///     CRITICAL: This event is fired EVERY FRAME during movement.
+///     Pooling is essential to avoid GC pressure. Properties changed from 'init' to 'set' for pooling support.
+/// </remarks>
 public record MovementProgressEvent : MovementEventBase
 {
     /// <summary>
     ///     Current movement progress (0.0 to 1.0).
     /// </summary>
-    public required float Progress { get; init; }
+    public float Progress { get; set; }
 
     /// <summary>
     ///     Current interpolated pixel position.
     /// </summary>
-    public required Vector2 CurrentPosition { get; init; }
+    public Vector2 CurrentPosition { get; set; }
 
     /// <summary>
     ///     Direction of movement.
     /// </summary>
-    public required Direction Direction { get; init; }
+    public Direction Direction { get; set; }
+
+    /// <summary>
+    ///     Resets the event to a clean state for pool reuse.
+    /// </summary>
+    public override void Reset()
+    {
+        base.Reset();
+        Progress = 0f;
+        CurrentPosition = default;
+        Direction = Direction.None;
+    }
 }

@@ -9,6 +9,7 @@ using MonoBallFramework.Game.Engine.Common.Logging;
 using MonoBallFramework.Game.Engine.Core.Systems;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
 using MonoBallFramework.Game.Engine.Rendering.Components;
+using MonoBallFramework.Game.Engine.Rendering.Configuration;
 using MonoBallFramework.Game.Engine.Rendering.Constants;
 using MonoBallFramework.Game.Engine.Rendering.Context;
 using MonoBallFramework.Game.Engine.Systems.Management;

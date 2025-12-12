@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
+using MonoBallFramework.Game.Engine.Rendering.Configuration;
 using MonoBallFramework.Game.Engine.Rendering.Services;
 using MonoBallFramework.Game.Engine.Scenes;
 using MonoBallFramework.Game.GameData.Factories;
@@ -47,12 +48,14 @@ public class CreateGraphicsServicesStep : InitializationStepBase
         context.AssetManager = assetManager;
 
         // Create MapLoader via factory (factory handles all processor creation)
-        MapLoader mapLoader = factory.CreateMapLoader(assetManager, context.EntityFactory);
+        MapLoader mapLoader = factory.CreateMapLoader(assetManager);
         context.MapLoader = mapLoader;
 
         // Create RenderingService for shared SpriteBatch (eliminates GPU resource churn)
         ILogger<RenderingService> renderingLogger = context.LoggerFactory.CreateLogger<RenderingService>();
-        var renderingService = new RenderingService(context.GraphicsDevice, renderingLogger);
+        RenderingConfiguration renderingConfig = context.Services.GetService<RenderingConfiguration>()
+            ?? RenderingConfiguration.Default;
+        var renderingService = new RenderingService(context.GraphicsDevice, renderingLogger, renderingConfig);
         context.RenderingService = renderingService;
 
         logger.LogInformation("Graphics services created successfully (includes RenderingService)");

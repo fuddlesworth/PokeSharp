@@ -738,14 +738,14 @@ class IdTransformer:
     # =========================================================================
 
     # Music category keywords for categorization
+    # IMPORTANT: Keep in sync with audio_converter.py MidiTrackInfo._categorize_music()
     MUSIC_CATEGORIES = {
         "towns": ["town", "city", "village", "littleroot", "oldale", "petalburg",
                   "rustboro", "dewford", "slateport", "mauville", "verdanturf",
                   "fallarbor", "lavaridge", "fortree", "lilycove", "mossdeep",
                   "sootopolis", "pacifidlog", "ever_grande", "pallet", "viridian",
                   "pewter", "cerulean", "vermillion", "lavender", "celadon",
-                  "fuchsia", "saffron", "cinnabar", "museum", "pokemon_center",
-                  "mart", "gym", "game_corner", "safari", "contest", "trick_house"],
+                  "fuchsia", "saffron", "cinnabar"],
         "routes": ["route", "cycling", "surf", "sailing", "diving", "underwater"],
         "battle": ["battle", "vs_", "encounter", "trainer_battle", "wild_battle",
                    "gym_leader", "elite", "champion", "frontier", "victory"],
@@ -754,7 +754,9 @@ class IdTransformer:
         "special": ["cave", "forest", "desert", "abandoned", "team_aqua",
                     "team_magma", "legendary", "credits", "title", "ending",
                     "hall_of_fame", "mystery", "weather_institute", "space_center",
-                    "mt_pyre", "sealed_chamber", "sky_pillar", "meteor_falls"]
+                    "mt_pyre", "sealed_chamber", "sky_pillar", "meteor_falls",
+                    "museum", "pokemon_center", "poke_mart", "mart", "gym",
+                    "game_corner", "safari", "contest", "trick_house"]
     }
 
     @classmethod

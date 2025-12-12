@@ -6641,7 +6641,7 @@
     {
       "name": "music",
       "type": "string",
-      "value": "base:audio:music/towns/mus_contest_lobby"
+      "value": "base:audio:music/special/mus_contest_lobby"
     },
     {
       "name": "regionMapSection",

@@ -5064,7 +5064,7 @@
     {
       "name": "music",
       "type": "string",
-      "value": "base:audio:music/towns/mus_safari_zone"
+      "value": "base:audio:music/special/mus_safari_zone"
     },
     {
       "name": "regionMapSection",

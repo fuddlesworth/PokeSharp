@@ -22,6 +22,8 @@ public class PopupRegistry
 {
     private readonly ConcurrentDictionary<string, PopupBackgroundDefinition> _backgrounds = new();
     private readonly ConcurrentDictionary<string, PopupOutlineDefinition> _outlines = new();
+    private readonly ConcurrentDictionary<string, PopupBackgroundDefinition> _backgroundsByTheme = new();
+    private readonly ConcurrentDictionary<string, PopupOutlineDefinition> _outlinesByTheme = new();
     private readonly SemaphoreSlim _loadLock = new(1, 1);
     private string _defaultBackgroundId = "base:popup:background/wood";
     private string _defaultOutlineId = "base:popup:outline/wood_outline";
@@ -41,6 +43,14 @@ public class PopupRegistry
         ArgumentNullException.ThrowIfNull(definition);
         ArgumentException.ThrowIfNullOrEmpty(definition.Id);
         _backgrounds.TryAdd(definition.Id, definition);
+
+        // Also cache by theme name for quick lookups
+        // Extract theme name from ID (e.g., "base:popup:background/wood" -> "wood")
+        var themeName = ExtractThemeName(definition.Id);
+        if (!string.IsNullOrEmpty(themeName))
+        {
+            _backgroundsByTheme.TryAdd(themeName, definition);
+        }
     }
 
     /// <summary>
@@ -52,6 +62,14 @@ public class PopupRegistry
         ArgumentNullException.ThrowIfNull(definition);
         ArgumentException.ThrowIfNullOrEmpty(definition.Id);
         _outlines.TryAdd(definition.Id, definition);
+
+        // Also cache by theme name for quick lookups
+        // Extract theme name from ID (e.g., "base:popup:outline/wood_outline" -> "wood_outline")
+        var themeName = ExtractThemeName(definition.Id);
+        if (!string.IsNullOrEmpty(themeName))
+        {
+            _outlinesByTheme.TryAdd(themeName, definition);
+        }
     }
 
     /// <summary>
@@ -68,6 +86,22 @@ public class PopupRegistry
     public PopupOutlineDefinition? GetOutline(string outlineId)
     {
         return _outlines.TryGetValue(outlineId, out PopupOutlineDefinition? definition) ? definition : null;
+    }
+
+    /// <summary>
+    ///     Gets a background definition by theme name (short name).
+    /// </summary>
+    public PopupBackgroundDefinition? GetBackgroundByTheme(string themeName)
+    {
+        return _backgroundsByTheme.TryGetValue(themeName, out var def) ? def : null;
+    }
+
+    /// <summary>
+    ///     Gets an outline definition by theme name (short name).
+    /// </summary>
+    public PopupOutlineDefinition? GetOutlineByTheme(string themeName)
+    {
+        return _outlinesByTheme.TryGetValue(themeName, out var def) ? def : null;
     }
 
     /// <summary>
@@ -313,5 +347,16 @@ public class PopupRegistry
             }
         }
 
+    }
+
+    /// <summary>
+    ///     Extracts the theme name from a full ID.
+    ///     E.g., "base:popup:background/wood" -> "wood"
+    /// </summary>
+    private static string? ExtractThemeName(string id)
+    {
+        if (string.IsNullOrEmpty(id)) return null;
+        var lastSlash = id.LastIndexOf('/');
+        return lastSlash >= 0 ? id.Substring(lastSlash + 1) : id;
     }
 }

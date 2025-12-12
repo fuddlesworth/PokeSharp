@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MonoBallFramework.Game.Engine.Common.Logging;
 using MonoBallFramework.Game.Engine.Core.Types;
-using MonoBallFramework.Game.Engine.Systems.Factories;
 using MonoBallFramework.Game.Engine.Systems.Management;
 using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game;
@@ -19,7 +18,6 @@ using MonoBallFramework.Game.Infrastructure.Configuration;
 using MonoBallFramework.Game.Infrastructure.Diagnostics;
 using MonoBallFramework.Game.Infrastructure.Services;
 using MonoBallFramework.Game.Initialization.Factories;
-using MonoBallFramework.Game.Initialization.Initializers;
 using MonoBallFramework.Game.Input;
 using MonoBallFramework.Game.Scripting.Api;
 using MonoBallFramework.Game.Scripting.Services;
@@ -82,7 +80,6 @@ try
         {
             World = sp.GetRequiredService<World>(),
             SystemManager = sp.GetRequiredService<SystemManager>(),
-            EntityFactory = sp.GetRequiredService<IEntityFactoryService>(),
             ScriptService = sp.GetRequiredService<ScriptService>(),
             BehaviorRegistry = sp.GetRequiredService<TypeRegistry<BehaviorDefinition>>(),
             TileBehaviorRegistry = sp.GetRequiredService<TypeRegistry<TileBehaviorDefinition>>(),
@@ -96,7 +93,6 @@ try
             NpcDefinitionService = sp.GetRequiredService<NpcDefinitionService>(),
             MapDefinitionService = sp.GetRequiredService<MapDefinitionService>(),
             SpriteRegistry = sp.GetRequiredService<SpriteRegistry>(),
-            TemplateCacheInitializer = sp.GetRequiredService<TemplateCacheInitializer>(),
         };
         return new MonoBallFrameworkGame(loggerFactory, options, sp, gameConfig);
     });

@@ -28,14 +28,31 @@ public class GuardBehavior : ScriptBase
             {
                 ref var initPos = ref Context.Position;
 
+                // Use entity position to seed randomization (prevents synchronization)
+                var entitySeed = (initPos.X * 73856093) ^ (initPos.Y * 19349663) ^ (int)evt.TotalTime;
+                var entityRandom = new System.Random(entitySeed);
+                
+                // Randomize initial scan timer to prevent synchronization (Pokemon Emerald pattern)
+                var initialDelay = (float)entityRandom.NextDouble() * 1.5f + 0.5f; // 0.5-2.0 seconds
+                
+                // Get current facing from GridMovement (already set by map)
+                Direction currentFacing = Direction.South;
+                if (Context.World.Has<GridMovement>(Context.Entity.Value))
+                {
+                    currentFacing = Context.World.Get<GridMovement>(Context.Entity.Value).FacingDirection;
+                }
+                
                 Context.World.Add(
                     Context.Entity.Value,
                     new GuardState
                     {
                         GuardPosition = new Point(initPos.X, initPos.Y),
-                        FacingDirection = Direction.South,
-                        ScanTimer = 0f,
-                        ScanInterval = 2.0f,
+                        FacingDirection = currentFacing,
+                        ScanTimer = initialDelay,
+                        ScanInterval = 2.0f,  // Base interval
+                        MinInterval = 1.5f,    // Minimum random interval
+                        MaxInterval = 3.0f,    // Maximum random interval
+                        RandomSeed = entitySeed, // Store seed for consistent randomization
                     }
                 );
 
@@ -87,7 +104,10 @@ public class GuardBehavior : ScriptBase
             if (state.ScanTimer <= 0)
             {
                 state.FacingDirection = RotateDirection(state.FacingDirection);
-                state.ScanTimer = state.ScanInterval;
+                
+                // Use entity-specific random seed for consistent but unique randomization
+                var entityRandom = new System.Random(state.RandomSeed + (int)(evt.TotalTime * 1000));
+                state.ScanTimer = (float)entityRandom.NextDouble() * (state.MaxInterval - state.MinInterval) + state.MinInterval;
 
                 // Update NPC facing direction (if we had that component)
                 Context.Logger.LogTrace("Guard facing {Direction}", state.FacingDirection);
@@ -127,7 +147,10 @@ public struct GuardState
     public Point GuardPosition;
     public Direction FacingDirection;
     public float ScanTimer;
-    public float ScanInterval;
+    public float ScanInterval;  // Base interval (for backwards compatibility)
+    public float MinInterval;    // Minimum random interval
+    public float MaxInterval;    // Maximum random interval
+    public int RandomSeed;       // Entity-specific seed for consistent randomization
 }
 
 return new GuardBehavior();

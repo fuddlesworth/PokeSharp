@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework.Graphics;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
-using MonoBallFramework.Game.Engine.Systems.Factories;
 using MonoBallFramework.Game.Engine.Systems.Management;
 using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Core;
@@ -72,10 +71,7 @@ public class GraphicsServiceFactory : IGraphicsServiceFactory
     }
 
     /// <inheritdoc />
-    public MapLoader CreateMapLoader(
-        AssetManager assetManager,
-        IEntityFactoryService? entityFactory = null
-    )
+    public MapLoader CreateMapLoader(AssetManager assetManager)
     {
         if (assetManager == null)
         {
@@ -103,7 +99,6 @@ public class GraphicsServiceFactory : IGraphicsServiceFactory
             animatedTileProcessor,
             borderProcessor,
             _propertyMapperRegistry,
-            entityFactory,
             _npcDefinitionService,
             _mapDefinitionService,
             _gameStateApi,

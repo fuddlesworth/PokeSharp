@@ -168,6 +168,22 @@ public record CollisionDetectedEvent : TypeEventBase
     ///     Optional collision normal vector.
     /// </summary>
     public (float X, float Y)? CollisionNormal { get; set; }
+
+    /// <summary>
+    ///     Resets the event to a clean state for pool reuse.
+    /// </summary>
+    public override void Reset()
+    {
+        base.Reset();
+        Entity = default;
+        CollidedWith = default;
+        MapId = null;
+        TilePosition = default;
+        CollisionDirection = Direction.None;
+        CollisionType = default;
+        ContactPoint = null;
+        CollisionNormal = null;
+    }
 }
 
 /// <summary>
@@ -213,6 +229,21 @@ public record CollisionResolvedEvent : TypeEventBase
     ///     Resolution strategy used (blocked, slid, bounced, etc.).
     /// </summary>
     public ResolutionStrategy Strategy { get; set; } = ResolutionStrategy.Blocked;
+
+    /// <summary>
+    ///     Resets the event to a clean state for pool reuse.
+    /// </summary>
+    public override void Reset()
+    {
+        base.Reset();
+        Entity = default;
+        MapId = null;
+        OriginalTarget = default;
+        FinalPosition = default;
+        WasBlocked = false;
+        ResolutionVector = null;
+        Strategy = ResolutionStrategy.Blocked;
+    }
 }
 
 /// <summary>

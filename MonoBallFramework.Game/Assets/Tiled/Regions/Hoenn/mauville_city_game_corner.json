@@ -1950,7 +1950,7 @@
     {
       "name": "music",
       "type": "string",
-      "value": "base:audio:music/towns/mus_game_corner"
+      "value": "base:audio:music/special/mus_game_corner"
     },
     {
       "name": "regionMapSection",

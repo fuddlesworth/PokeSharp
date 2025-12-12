@@ -64,6 +64,17 @@ public class AnimationEvent
     }
 
     /// <summary>
+    ///     Resets this animation event to default values for reuse/pooling.
+    ///     Clears event name, callback, and data to prevent accidental reuse.
+    /// </summary>
+    public void Reset()
+    {
+        EventName = string.Empty;
+        Callback = null;
+        Data = null;
+    }
+
+    /// <summary>
     ///     Returns a string representation of this animation event.
     /// </summary>
     public override string ToString()
