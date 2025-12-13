@@ -77,7 +77,7 @@ public interface ITrackCache : IDisposable
     bool TryGetTrack(string trackId, out CachedTrack? track);
 
     /// <summary>Loads a track from disk and caches it</summary>
-    CachedTrack? LoadAndCache(string trackId, AudioDefinition definition);
+    CachedTrack? LoadAndCache(string trackId, AudioEntity definition);
 
     /// <summary>Evicts a specific track from the cache</summary>
     void Evict(string trackId);
@@ -156,7 +156,7 @@ public class TrackCache : ITrackCache
         return false;
     }
 
-    public CachedTrack? LoadAndCache(string trackId, AudioDefinition definition)
+    public CachedTrack? LoadAndCache(string trackId, AudioEntity definition)
     {
         if (_disposed || string.IsNullOrEmpty(trackId) || definition == null)
             return null;

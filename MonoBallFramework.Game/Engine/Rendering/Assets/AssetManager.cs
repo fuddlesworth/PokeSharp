@@ -52,7 +52,7 @@ public class AssetManager(
     public long TextureCacheSizeBytes => _textures.CurrentSize;
 
     // REMOVED: LoadManifest() and LoadManifestInternal() - obsolete
-    // manifest.json has been replaced by EF Core MapDefinition and on-demand texture loading
+    // manifest.json has been replaced by EF Core MapEntity and on-demand texture loading
 
     /// <summary>
     ///     Loads a texture from a PNG file and caches it.

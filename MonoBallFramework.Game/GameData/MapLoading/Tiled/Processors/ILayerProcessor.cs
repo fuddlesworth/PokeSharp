@@ -19,8 +19,8 @@ public interface ILayerProcessor
     /// <param name="mapInfoEntity">The map entity for establishing relationships.</param>
     /// <param name="mapId">The map's game map ID.</param>
     /// <param name="tilesets">Loaded tilesets.</param>
-    /// <returns>Total number of tiles created.</returns>
-    int ProcessLayers(
+    /// <returns>Tuple of (Total number of tiles created, List of all created tile entities)</returns>
+    (int Count, List<Entity> Tiles) ProcessLayers(
         World world,
         TmxDocument tmxDoc,
         Entity mapInfoEntity,

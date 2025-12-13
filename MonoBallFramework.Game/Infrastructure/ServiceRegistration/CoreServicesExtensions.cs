@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using MonoBallFramework.Game.Engine.Core.Events;
 using MonoBallFramework.Game.Engine.Core.Modding;
 using MonoBallFramework.Game.Engine.Core.Types;
+using MonoBallFramework.Game.Engine.Rendering.Popups;
 using MonoBallFramework.Game.Engine.Systems.Management;
 using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game.GameData;
@@ -163,12 +164,29 @@ public static class CoreServicesExtensions
 
         // Data loading and services
         services.AddSingleton<GameDataLoader>();
-        services.AddSingleton<NpcDefinitionService>();
-        services.AddSingleton<MapDefinitionService>();
+        services.AddSingleton<MapEntityService>();
         services.AddSingleton<IMapPopupDataService, MapPopupDataService>();
 
         // Sprite Registry - for loading sprite definitions following the registry pattern
-        services.AddSingleton<SpriteRegistry>();
+        // Uses EF Core as the source of truth with in-memory caching
+        services.AddSingleton<SpriteRegistry>(sp =>
+        {
+            var contextFactory = sp.GetRequiredService<IDbContextFactory<GameDataContext>>();
+            var logger = sp.GetRequiredService<ILogger<SpriteRegistry>>();
+            return new SpriteRegistry(contextFactory, logger);
+        });
+
+        // Popup Registry - for popup background and outline definitions
+        // Uses EF Core as the source of truth with in-memory caching
+        // Inject the singleton GameDataContext to ensure data is read from the same context
+        // that GameDataLoader writes to (required for EF Core In-Memory provider to share data)
+        services.AddSingleton<PopupRegistry>(sp =>
+        {
+            var contextFactory = sp.GetRequiredService<IDbContextFactory<GameDataContext>>();
+            var sharedContext = sp.GetRequiredService<GameDataContext>();
+            var logger = sp.GetRequiredService<ILogger<PopupRegistry>>();
+            return new PopupRegistry(contextFactory, logger, sharedContext);
+        });
 
         // Map Registry - tracks loaded maps and provides map ID management
         services.AddSingleton<MapRegistry>();

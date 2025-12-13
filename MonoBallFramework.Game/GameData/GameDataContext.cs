@@ -40,82 +40,52 @@ public class GameDataContext : DbContext
     public GameDataContext(DbContextOptions<GameDataContext> options)
         : base(options) { }
 
-    // NPC-related entities
-    public DbSet<NpcDefinition> Npcs { get; set; } = null!;
-    public DbSet<TrainerDefinition> Trainers { get; set; } = null!;
-
     // Map entities
-    public DbSet<MapDefinition> Maps { get; set; } = null!;
+    public DbSet<MapEntity> Maps { get; set; } = null!;
 
     // Audio entities
-    public DbSet<AudioDefinition> AudioDefinitions { get; set; } = null!;
+    public DbSet<AudioEntity> Audios { get; set; } = null!;
 
     // Popup entities
     public DbSet<PopupTheme> PopupThemes { get; set; } = null!;
     public DbSet<MapSection> MapSections { get; set; } = null!;
 
+    // === NEW: Unified Definition DbSets ===
+
+    // Sprite entities
+    public DbSet<SpriteEntity> Sprites { get; set; } = null!;
+
+    // Popup background and outline entities
+    public DbSet<PopupBackgroundEntity> PopupBackgrounds { get; set; } = null!;
+    public DbSet<PopupOutlineEntity> PopupOutlines { get; set; } = null!;
+
+    // Behavior entities
+    public DbSet<BehaviorEntity> Behaviors { get; set; } = null!;
+    public DbSet<TileBehaviorEntity> TileBehaviors { get; set; } = null!;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        ConfigureNpcDefinition(modelBuilder);
-        ConfigureTrainerDefinition(modelBuilder);
-        ConfigureMapDefinition(modelBuilder);
-        ConfigureAudioDefinition(modelBuilder);
+        ConfigureMapEntity(modelBuilder);
+        ConfigureAudioEntity(modelBuilder);
         ConfigurePopupTheme(modelBuilder);
         ConfigureMapSection(modelBuilder);
+
+        // NEW: Configure unified definition entities
+        ConfigureSpriteDefinition(modelBuilder);
+        ConfigurePopupBackground(modelBuilder);
+        ConfigurePopupOutline(modelBuilder);
+        ConfigureBehaviorDefinition(modelBuilder);
+        ConfigureTileBehaviorDefinition(modelBuilder);
     }
 
     /// <summary>
-    ///     Configure NpcDefinition entity.
+    ///     Configure MapEntity entity.
     /// </summary>
-    private void ConfigureNpcDefinition(ModelBuilder modelBuilder)
+    private void ConfigureMapEntity(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<NpcDefinition>(entity =>
-        {
-            entity.HasKey(n => n.NpcId);
-
-            // Indexes for common queries
-            entity.HasIndex(n => n.NpcType);
-            entity.HasIndex(n => n.DisplayName);
-
-            // Value converter for GameNpcId
-            entity.Property(n => n.NpcId).HasConversion(new GameNpcIdValueConverter());
-
-            // Value converter for GameSpriteId
-            entity.Property(n => n.SpriteId).HasConversion(new GameSpriteIdValueConverter());
-        });
-    }
-
-    /// <summary>
-    ///     Configure TrainerDefinition entity.
-    /// </summary>
-    private void ConfigureTrainerDefinition(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<TrainerDefinition>(entity =>
-        {
-            entity.HasKey(t => t.TrainerId);
-
-            // Indexes for common queries
-            entity.HasIndex(t => t.TrainerClass);
-            entity.HasIndex(t => t.DisplayName);
-
-            // Value converter for GameTrainerId
-            entity.Property(t => t.TrainerId).HasConversion(new GameTrainerIdValueConverter());
-
-            // Value converter for GameSpriteId
-            entity.Property(t => t.SpriteId).HasConversion(new GameSpriteIdValueConverter());
-
-            // PartyJson will be deserialized on-demand
-        });
-    }
-
-    /// <summary>
-    ///     Configure MapDefinition entity.
-    /// </summary>
-    private void ConfigureMapDefinition(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<MapDefinition>(entity =>
+        modelBuilder.Entity<MapEntity>(entity =>
         {
             entity.HasKey(m => m.MapId);
 
@@ -171,11 +141,11 @@ public class GameDataContext : DbContext
     }
 
     /// <summary>
-    ///     Configure AudioDefinition entity.
+    ///     Configure AudioEntity entity.
     /// </summary>
-    private void ConfigureAudioDefinition(ModelBuilder modelBuilder)
+    private void ConfigureAudioEntity(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<AudioDefinition>(entity =>
+        modelBuilder.Entity<AudioEntity>(entity =>
         {
             entity.HasKey(a => a.AudioId);
 
@@ -211,6 +181,131 @@ public class GameDataContext : DbContext
 
             // Composite index for region map coordinates
             entity.HasIndex(s => new { s.X, s.Y });
+        });
+    }
+
+    // ============================================================================
+    // NEW: Unified Definition Entity Configurations
+    // ============================================================================
+
+    /// <summary>
+    ///     Configure SpriteEntity with owned entity collections.
+    ///     In-memory provider stores nested collections directly without JSON serialization.
+    /// </summary>
+    private void ConfigureSpriteDefinition(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<SpriteEntity>(entity =>
+        {
+            entity.HasKey(s => s.SpriteId);
+
+            // Value converter for GameSpriteId
+            entity.Property(s => s.SpriteId).HasConversion(new GameSpriteIdNonNullableValueConverter());
+
+            // Indexes for common queries
+            entity.HasIndex(s => s.DisplayName);
+            entity.HasIndex(s => s.Type);
+            entity.HasIndex(s => s.TexturePath);
+
+            // Configure Frames as owned collection
+            // In-memory provider stores these directly without JSON serialization
+            entity.OwnsMany(s => s.Frames, framesBuilder =>
+            {
+                framesBuilder.WithOwner().HasForeignKey("SpriteEntitySpriteId");
+                framesBuilder.Property<int>("Id").ValueGeneratedOnAdd();
+                framesBuilder.HasKey("Id");
+            });
+
+            // Configure Animations as owned collection
+            // EF Core 8+ natively supports primitive collections (List<int>, List<double>)
+            entity.OwnsMany(s => s.Animations, animBuilder =>
+            {
+                animBuilder.WithOwner().HasForeignKey("SpriteEntitySpriteId");
+                animBuilder.Property<int>("Id").ValueGeneratedOnAdd();
+                animBuilder.HasKey("Id");
+            });
+        });
+    }
+
+    /// <summary>
+    ///     Configure PopupBackgroundEntity.
+    /// </summary>
+    private void ConfigurePopupBackground(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<PopupBackgroundEntity>(entity =>
+        {
+            entity.HasKey(b => b.BackgroundId);
+
+            // Value converter for GamePopupBackgroundId
+            entity.Property(b => b.BackgroundId).HasConversion(new GamePopupBackgroundIdValueConverter());
+
+            // Indexes for common queries
+            entity.HasIndex(b => b.DisplayName);
+            entity.HasIndex(b => b.Type);
+        });
+    }
+
+    /// <summary>
+    ///     Configure PopupOutlineEntity with owned entity collections.
+    ///     In-memory provider stores nested collections directly without JSON serialization.
+    /// </summary>
+    private void ConfigurePopupOutline(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<PopupOutlineEntity>(entity =>
+        {
+            entity.HasKey(o => o.OutlineId);
+
+            // Value converter for GamePopupOutlineId
+            entity.Property(o => o.OutlineId).HasConversion(new GamePopupOutlineIdValueConverter());
+
+            // Indexes for common queries
+            entity.HasIndex(o => o.DisplayName);
+            entity.HasIndex(o => o.Type);
+
+            // Configure Tiles as owned collection
+            entity.OwnsMany(o => o.Tiles, tilesBuilder =>
+            {
+                tilesBuilder.WithOwner().HasForeignKey("PopupOutlineEntityOutlineId");
+                tilesBuilder.Property<int>("Id").ValueGeneratedOnAdd();
+                tilesBuilder.HasKey("Id");
+            });
+
+            // Configure TileUsage as owned single object
+            entity.OwnsOne(o => o.TileUsage);
+        });
+    }
+
+    /// <summary>
+    ///     Configure BehaviorEntity.
+    /// </summary>
+    private void ConfigureBehaviorDefinition(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<BehaviorEntity>(entity =>
+        {
+            entity.HasKey(b => b.BehaviorId);
+
+            // Value converter for GameBehaviorId
+            entity.Property(b => b.BehaviorId).HasConversion(new GameBehaviorIdValueConverter());
+
+            // Indexes for common queries
+            entity.HasIndex(b => b.DisplayName);
+        });
+    }
+
+    /// <summary>
+    ///     Configure TileBehaviorEntity.
+    /// </summary>
+    private void ConfigureTileBehaviorDefinition(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<TileBehaviorEntity>(entity =>
+        {
+            entity.HasKey(t => t.TileBehaviorId);
+
+            // Value converter for GameTileBehaviorId
+            entity.Property(t => t.TileBehaviorId).HasConversion(new GameTileBehaviorIdValueConverter());
+
+            // Indexes for common queries
+            entity.HasIndex(t => t.DisplayName);
+            entity.HasIndex(t => t.Flags);
         });
     }
 }

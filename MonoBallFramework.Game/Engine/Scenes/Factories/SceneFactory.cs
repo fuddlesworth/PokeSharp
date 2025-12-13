@@ -2,9 +2,9 @@ using Arch.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework.Graphics;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
-using MonoBallFramework.Game.Engine.Rendering.Popups;
 using MonoBallFramework.Game.Engine.Rendering.Services;
 using MonoBallFramework.Game.Engine.Scenes.Scenes;
+using MonoBallFramework.Game.GameData.Entities;
 
 namespace MonoBallFramework.Game.Engine.Scenes.Factories;
 
@@ -39,8 +39,8 @@ public class SceneFactory : ISceneFactory
     }
 
     public MapPopupScene CreateMapPopupScene(
-        PopupBackgroundDefinition backgroundDefinition,
-        PopupOutlineDefinition outlineDefinition,
+        PopupBackgroundEntity backgroundDefinition,
+        PopupOutlineEntity outlineDefinition,
         string mapName
     )
     {

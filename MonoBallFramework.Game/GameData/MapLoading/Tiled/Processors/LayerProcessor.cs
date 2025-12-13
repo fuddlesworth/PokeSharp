@@ -9,7 +9,6 @@ using MonoBallFramework.Game.Ecs.Components.Tiles;
 using MonoBallFramework.Game.Engine.Common.Logging;
 using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.Engine.Systems.BulkOperations;
-using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Services;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Tmx;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Utilities;
@@ -20,31 +19,26 @@ namespace MonoBallFramework.Game.GameData.MapLoading.Tiled.Processors;
 /// <summary>
 ///     Handles processing of map layers and creation of tile entities.
 ///     Responsible for parsing layer data, determining elevation, and creating tile entities.
-///     Supports entity pooling for improved performance when EntityPoolManager is provided.
 /// </summary>
 public class LayerProcessor : ILayerProcessor
 {
-    private const string TilePoolName = "tile";
     private readonly ILogger<LayerProcessor>? _logger;
-    private readonly EntityPoolManager? _poolManager;
     private readonly PropertyMapperRegistry? _propertyMapperRegistry;
 
     public LayerProcessor(
         PropertyMapperRegistry? propertyMapperRegistry = null,
-        EntityPoolManager? poolManager = null,
         ILogger<LayerProcessor>? logger = null
     )
     {
         _propertyMapperRegistry = propertyMapperRegistry;
-        _poolManager = poolManager;
         _logger = logger;
     }
 
     /// <summary>
     ///     Processes all tile layers and creates tile entities.
     /// </summary>
-    /// <returns>Total number of tiles created</returns>
-    public int ProcessLayers(
+    /// <returns>Tuple of (Total number of tiles created, List of all created tile entities)</returns>
+    public (int Count, List<Entity> Tiles) ProcessLayers(
         World world,
         TmxDocument tmxDoc,
         Entity mapInfoEntity,
@@ -53,6 +47,7 @@ public class LayerProcessor : ILayerProcessor
     )
     {
         int tilesCreated = 0;
+        var allTiles = new List<Entity>();
 
         for (int layerIndex = 0; layerIndex < tmxDoc.Layers.Count; layerIndex++)
         {
@@ -71,7 +66,7 @@ public class LayerProcessor : ILayerProcessor
                     ? new LayerOffset(layer.OffsetX, layer.OffsetY)
                     : null;
 
-            tilesCreated += CreateTileEntities(
+            var (count, layerTiles) = CreateTileEntities(
                 world,
                 tmxDoc,
                 mapInfoEntity,
@@ -81,9 +76,12 @@ public class LayerProcessor : ILayerProcessor
                 elevation,
                 layerOffset
             );
+
+            tilesCreated += count;
+            allTiles.AddRange(layerTiles);
         }
 
-        return tilesCreated;
+        return (tilesCreated, allTiles);
     }
 
     /// <summary>
@@ -125,7 +123,7 @@ public class LayerProcessor : ILayerProcessor
     /// <summary>
     ///     Creates tile entities for a single layer using bulk operations for performance.
     /// </summary>
-    private int CreateTileEntities(
+    private (int Count, List<Entity> Tiles) CreateTileEntities(
         World world,
         TmxDocument tmxDoc,
         Entity mapInfoEntity,
@@ -136,8 +134,20 @@ public class LayerProcessor : ILayerProcessor
         LayerOffset? layerOffset
     )
     {
-        // Collect tile data for bulk creation
-        var tileDataList = new List<TileData>();
+        // Pre-compute tileset FirstGid boundaries for O(1) lookup instead of O(N) per tile
+        // Tilesets are already sorted by FirstGid ascending
+        int tilesetCount = tilesets.Count;
+        Span<int> tilesetFirstGids = tilesetCount <= 8
+            ? stackalloc int[tilesetCount]
+            : new int[tilesetCount];
+        for (int i = 0; i < tilesetCount; i++)
+        {
+            tilesetFirstGids[i] = tilesets[i].Tileset.FirstGid;
+        }
+
+        // Pre-allocate list with estimated capacity (reduces reallocations)
+        int estimatedTiles = tmxDoc.Width * tmxDoc.Height;
+        var tileDataList = new List<TileData>(estimatedTiles);
 
         for (int y = 0; y < tmxDoc.Height; y++)
         for (int x = 0; x < tmxDoc.Width; x++)
@@ -155,7 +165,17 @@ public class LayerProcessor : ILayerProcessor
                 continue; // Skip empty tiles
             }
 
-            int tilesetIndex = FindTilesetIndexForGid(tileGid, tilesets);
+            // Inline tileset lookup using pre-computed boundaries (avoids function call overhead)
+            int tilesetIndex = -1;
+            for (int i = tilesetCount - 1; i >= 0; i--)
+            {
+                if (tileGid >= tilesetFirstGids[i])
+                {
+                    tilesetIndex = i;
+                    break;
+                }
+            }
+
             if (tilesetIndex < 0)
             {
                 _logger?.LogResourceNotFound(
@@ -181,67 +201,38 @@ public class LayerProcessor : ILayerProcessor
 
         if (tileDataList.Count == 0)
         {
-            return 0;
+            return (0, new List<Entity>());
         }
 
-        // Try to use entity pool for better performance (reuses entities instead of allocating)
-        EntityPool? tilePool = null;
-        bool usePooling = _poolManager != null && _poolManager.HasPool(TilePoolName);
-        if (usePooling)
-        {
-            tilePool = _poolManager!.GetPool(TilePoolName);
-        }
-
-        Entity[] tileEntities;
-
-        if (usePooling && tilePool != null)
-        {
-            // Acquire entities from pool
-            tileEntities = AcquireEntitiesFromPool(world, tilePool, tileDataList, tilesets, mapId);
-            _logger?.LogDebug(
-                "Acquired {Count} tile entities from pool for map {MapId}",
-                tileEntities.Length,
-                mapId
-            );
-        }
-        else
-        {
-            // Fallback: Use bulk operations for creating tiles (no pooling)
-            var bulkOps = new BulkEntityOperations(world);
-            tileEntities = bulkOps.CreateEntities(
-                tileDataList.Count,
-                i =>
-                {
-                    TileData data = tileDataList[i];
-                    return new TilePosition(data.X, data.Y, mapId);
-                },
-                i =>
-                {
-                    TileData data = tileDataList[i];
-                    LoadedTileset tileset = tilesets[data.TilesetIndex];
-                    return CreateTileSprite(
-                        data.TileGid,
-                        tileset,
-                        data.FlipH,
-                        data.FlipV,
-                        data.FlipD
-                    );
-                }
-            );
-        }
+        // Create tile entities using bulk operations (no pooling)
+        var bulkOps = new BulkEntityOperations(world);
+        Entity[] tileEntities = bulkOps.CreateEntities(
+            tileDataList.Count,
+            i =>
+            {
+                TileData data = tileDataList[i];
+                return new TilePosition(data.X, data.Y, mapId);
+            },
+            i =>
+            {
+                TileData data = tileDataList[i];
+                LoadedTileset tileset = tilesets[data.TilesetIndex];
+                return CreateTileSprite(
+                    data.TileGid,
+                    tileset,
+                    data.FlipH,
+                    data.FlipV,
+                    data.FlipD
+                );
+            }
+        );
 
         // Process additional tile properties and components
-        // Create relationship data once for all tiles
-        var parentOfData = new ParentOf();
-
         for (int i = 0; i < tileEntities.Length; i++)
         {
             Entity entity = tileEntities[i];
             TileData data = tileDataList[i];
             TmxTileset tileset = tilesets[data.TilesetIndex].Tileset;
-
-            // Add ParentOf relationship - map is parent of all tiles
-            mapInfoEntity.AddRelationship(entity, parentOfData);
 
             // Get tile properties from tileset
             int localTileId = data.TileGid - tileset.FirstGid;
@@ -251,7 +242,7 @@ public class LayerProcessor : ILayerProcessor
                 tileset.TileProperties.TryGetValue(localTileId, out props);
             }
 
-            // Add/Set Elevation component (Pokemon Emerald-style elevation system)
+            // Add Elevation component (Pokemon Emerald-style elevation system)
             // Check if tile has custom elevation property, otherwise use layer elevation
             byte tileElevation = elevation;
             if (props != null && props.TryGetValue("elevation", out object? elevProp))
@@ -259,87 +250,19 @@ public class LayerProcessor : ILayerProcessor
                 tileElevation = Convert.ToByte(elevProp);
             }
 
-            // Use Set if entity already has component (pooled), Add if not
-            if (entity.Has<Elevation>())
-            {
-                entity.Set(new Elevation(tileElevation));
-            }
-            else
-            {
-                world.Add(entity, new Elevation(tileElevation));
-            }
+            world.Add(entity, new Elevation(tileElevation));
 
             // Add LayerOffset if needed
             if (layerOffset.HasValue)
             {
-                if (entity.Has<LayerOffset>())
-                {
-                    entity.Set(layerOffset.Value);
-                }
-                else
-                {
-                    world.Add(entity, layerOffset.Value);
-                }
+                world.Add(entity, layerOffset.Value);
             }
 
             // Process additional tile properties (collision, ledges, encounters, etc.)
             ProcessTileProperties(world, entity, props);
         }
 
-        return tileDataList.Count;
-    }
-
-    /// <summary>
-    ///     Acquires entities from the tile pool and sets their components.
-    /// </summary>
-    private Entity[] AcquireEntitiesFromPool(
-        World world,
-        EntityPool pool,
-        List<TileData> tileDataList,
-        IReadOnlyList<LoadedTileset> tilesets,
-        GameMapId mapId
-    )
-    {
-        var entities = new Entity[tileDataList.Count];
-
-        for (int i = 0; i < tileDataList.Count; i++)
-        {
-            TileData data = tileDataList[i];
-            Entity entity = pool.Acquire();
-
-            // Set TilePosition component
-            var tilePos = new TilePosition(data.X, data.Y, mapId);
-            if (entity.Has<TilePosition>())
-            {
-                entity.Set(tilePos);
-            }
-            else
-            {
-                world.Add(entity, tilePos);
-            }
-
-            // Set TileSprite component
-            LoadedTileset tileset = tilesets[data.TilesetIndex];
-            TileSprite tileSprite = CreateTileSprite(
-                data.TileGid,
-                tileset,
-                data.FlipH,
-                data.FlipV,
-                data.FlipD
-            );
-            if (entity.Has<TileSprite>())
-            {
-                entity.Set(tileSprite);
-            }
-            else
-            {
-                world.Add(entity, tileSprite);
-            }
-
-            entities[i] = entity;
-        }
-
-        return entities;
+        return (tileDataList.Count, tileEntities.ToList());
     }
 
     /// <summary>

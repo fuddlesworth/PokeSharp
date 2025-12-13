@@ -207,4 +207,28 @@ public class SpatialHash
 
         return count;
     }
+
+    /// <summary>
+    ///     Removes all entities belonging to the specified map from the spatial hash.
+    ///     Used during map unloading to incrementally remove tiles without full rebuild.
+    /// </summary>
+    /// <param name="mapId">The map identifier whose entities should be removed.</param>
+    /// <returns>True if the map was found and removed, false if map was not in the hash.</returns>
+    public bool RemoveMap(GameMapId mapId)
+    {
+        if (!_grid.TryGetValue(mapId, out Dictionary<(int x, int y), List<Entity>>? mapGrid))
+        {
+            return false;
+        }
+
+        // Clear all entity lists in this map
+        foreach (List<Entity> entities in mapGrid.Values)
+        {
+            entities.Clear();
+        }
+
+        // Remove the map entirely from the grid
+        _grid.Remove(mapId);
+        return true;
+    }
 }

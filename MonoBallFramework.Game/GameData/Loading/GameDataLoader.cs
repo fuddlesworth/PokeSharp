@@ -40,17 +40,9 @@ public class GameDataLoader
 
         var loadedCounts = new Dictionary<string, int>();
 
-        // Load NPCs
-        string npcsPath = Path.Combine(dataPath, "NPCs");
-        loadedCounts["NPCs"] = await LoadNpcsAsync(npcsPath, ct);
-
-        // Load Trainers
-        string trainersPath = Path.Combine(dataPath, "Trainers");
-        loadedCounts["Trainers"] = await LoadTrainersAsync(trainersPath, ct);
-
         // Load Maps (from Regions subdirectory)
         string mapsPath = Path.Combine(dataPath, "Maps", "Regions");
-        loadedCounts["Maps"] = await LoadMapDefinitionsAsync(mapsPath, ct);
+        loadedCounts["Maps"] = await LoadMapEntitysAsync(mapsPath, ct);
 
         // Load Popup Themes
         string themesPath = Path.Combine(dataPath, "Maps", "Popups", "Themes");
@@ -62,168 +54,32 @@ public class GameDataLoader
 
         // Load Audio Definitions
         string audioPath = Path.Combine(dataPath, "Audio");
-        loadedCounts["AudioDefinitions"] = await LoadAudioDefinitionsAsync(audioPath, ct);
+        loadedCounts["Audios"] = await LoadAudioEntitysAsync(audioPath, ct);
+
+        // === NEW: Load unified definition types ===
+
+        // Load Sprite Definitions (replaces SpriteRegistry JSON loading)
+        string spritesPath = Path.Combine(dataPath, "Sprites");
+        loadedCounts["Sprites"] = await LoadSpriteDefinitionsAsync(spritesPath, ct);
+
+        // Load Popup Backgrounds (replaces PopupRegistry JSON loading)
+        string backgroundsPath = Path.Combine(dataPath, "Maps", "Popups", "Backgrounds");
+        loadedCounts["PopupBackgrounds"] = await LoadPopupBackgroundsAsync(backgroundsPath, ct);
+
+        // Load Popup Outlines (replaces PopupRegistry JSON loading)
+        string outlinesPath = Path.Combine(dataPath, "Maps", "Popups", "Outlines");
+        loadedCounts["PopupOutlines"] = await LoadPopupOutlinesAsync(outlinesPath, ct);
+
+        // Load Behavior Definitions (replaces TypeRegistry<BehaviorDefinition>)
+        string behaviorsPath = Path.Combine(dataPath, "Behaviors");
+        loadedCounts["Behaviors"] = await LoadBehaviorDefinitionsAsync(behaviorsPath, ct);
+
+        // Load Tile Behavior Definitions (replaces TypeRegistry<TileBehaviorDefinition>)
+        string tileBehaviorsPath = Path.Combine(dataPath, "TileBehaviors");
+        loadedCounts["TileBehaviors"] = await LoadTileBehaviorDefinitionsAsync(tileBehaviorsPath, ct);
 
         // Log summary
         _logger.LogGameDataLoaded(loadedCounts);
-    }
-
-    /// <summary>
-    ///     Load NPC definitions from JSON files.
-    /// </summary>
-    private async Task<int> LoadNpcsAsync(string path, CancellationToken ct)
-    {
-        if (!Directory.Exists(path))
-        {
-            _logger.LogDirectoryNotFound("NPC", path);
-            return 0;
-        }
-
-        string[] files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories);
-        int count = 0;
-
-        foreach (string file in files)
-        {
-            ct.ThrowIfCancellationRequested();
-
-            try
-            {
-                string json = await File.ReadAllTextAsync(file, ct);
-                NpcDefinitionDto? dto = JsonSerializer.Deserialize<NpcDefinitionDto>(
-                    json,
-                    _jsonOptions
-                );
-
-                if (dto == null)
-                {
-                    _logger.LogNpcDeserializeFailed(file);
-                    continue;
-                }
-
-                // Validate required fields
-                if (string.IsNullOrWhiteSpace(dto.NpcId))
-                {
-                    _logger.LogNpcMissingField(file, "npcId");
-                    continue;
-                }
-
-                // Convert DTO to entity
-                var npc = new NpcDefinition
-                {
-                    NpcId = GameNpcId.Create(dto.NpcId),
-                    DisplayName = dto.DisplayName ?? dto.NpcId,
-                    NpcType = dto.NpcType,
-                    SpriteId = GameSpriteId.TryCreate(dto.SpriteId),
-                    BehaviorScript = dto.BehaviorScript,
-                    DialogueScript = dto.DialogueScript,
-                    MovementSpeed = dto.MovementSpeed ?? 3.75f, // Matches pokeemerald MOVE_SPEED_NORMAL
-                    CustomPropertiesJson =
-                        dto.CustomProperties != null
-                            ? JsonSerializer.Serialize(dto.CustomProperties, _jsonOptions)
-                            : null,
-                    SourceMod = dto.SourceMod,
-                    Version = dto.Version ?? "1.0.0",
-                };
-
-                _context.Npcs.Add(npc);
-                count++;
-
-                _logger.LogNpcLoaded(npc.NpcId);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogNpcLoadFailed(file, ex);
-            }
-        }
-
-        // Save to in-memory database
-        await _context.SaveChangesAsync(ct);
-
-        _logger.LogNpcsLoaded(count);
-        return count;
-    }
-
-    /// <summary>
-    ///     Load trainer definitions from JSON files.
-    /// </summary>
-    private async Task<int> LoadTrainersAsync(string path, CancellationToken ct)
-    {
-        if (!Directory.Exists(path))
-        {
-            _logger.LogDirectoryNotFound("Trainer", path);
-            return 0;
-        }
-
-        string[] files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories);
-        int count = 0;
-
-        foreach (string file in files)
-        {
-            ct.ThrowIfCancellationRequested();
-
-            try
-            {
-                string json = await File.ReadAllTextAsync(file, ct);
-                TrainerDefinitionDto? dto = JsonSerializer.Deserialize<TrainerDefinitionDto>(
-                    json,
-                    _jsonOptions
-                );
-
-                if (dto == null)
-                {
-                    _logger.LogTrainerDeserializeFailed(file);
-                    continue;
-                }
-
-                // Validate required fields
-                if (string.IsNullOrWhiteSpace(dto.TrainerId))
-                {
-                    _logger.LogTrainerMissingField(file, "trainerId");
-                    continue;
-                }
-
-                // Convert DTO to entity
-                var trainer = new TrainerDefinition
-                {
-                    TrainerId = GameTrainerId.Create(dto.TrainerId),
-                    DisplayName = dto.DisplayName ?? dto.TrainerId,
-                    TrainerClass = dto.TrainerClass ?? "trainer",
-                    SpriteId = GameSpriteId.TryCreate(dto.SpriteId),
-                    PrizeMoney = dto.PrizeMoney ?? 100,
-                    Items = dto.Items != null ? string.Join(",", dto.Items) : null,
-                    AiScript = dto.AiScript,
-                    IntroDialogue = dto.IntroDialogue,
-                    DefeatDialogue = dto.DefeatDialogue,
-                    OnDefeatScript = dto.OnDefeatScript,
-                    IsRematchable = dto.IsRematchable ?? false,
-                    PartyJson =
-                        dto.Party != null
-                            ? JsonSerializer.Serialize(dto.Party, _jsonOptions)
-                            : "[]",
-                    CustomPropertiesJson =
-                        dto.CustomProperties != null
-                            ? JsonSerializer.Serialize(dto.CustomProperties, _jsonOptions)
-                            : null,
-                    SourceMod = dto.SourceMod,
-                    Version = dto.Version ?? "1.0.0",
-                };
-
-                _context.Trainers.Add(trainer);
-                count++;
-
-                _logger.LogTrainerLoaded(trainer.TrainerId);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogTrainerLoadFailed(file, ex);
-            }
-        }
-
-        // Save to in-memory database
-        await _context.SaveChangesAsync(ct);
-
-        _logger.LogTrainersLoaded(count);
-        return count;
     }
 
     /// <summary>
@@ -231,7 +87,7 @@ public class GameDataLoader
     ///     Simple schema: Id, DisplayName, Type, Region, Description, TiledPath.
     ///     Gameplay metadata (music, weather, connections) is read from Tiled at runtime.
     /// </summary>
-    private async Task<int> LoadMapDefinitionsAsync(string path, CancellationToken ct)
+    private async Task<int> LoadMapEntitysAsync(string path, CancellationToken ct)
     {
         if (!Directory.Exists(path))
         {
@@ -246,7 +102,7 @@ public class GameDataLoader
         int count = 0;
 
         // OPTIMIZATION: Load all existing maps once to avoid N+1 queries
-        Dictionary<GameMapId, MapDefinition> existingMaps = await _context
+        Dictionary<GameMapId, MapEntity> existingMaps = await _context
             .Maps.AsNoTracking()
             .ToDictionaryAsync(m => m.MapId, ct);
 
@@ -257,7 +113,7 @@ public class GameDataLoader
             try
             {
                 string json = await File.ReadAllTextAsync(file, ct);
-                MapDefinitionDto? dto = JsonSerializer.Deserialize<MapDefinitionDto>(json, _jsonOptions);
+                MapEntityDto? dto = JsonSerializer.Deserialize<MapEntityDto>(json, _jsonOptions);
 
                 if (dto == null)
                 {
@@ -281,7 +137,7 @@ public class GameDataLoader
                 }
 
                 // Convert DTO to entity - only core fields from definition
-                var mapDef = new MapDefinition
+                var mapDef = new MapEntity
                 {
                     MapId = gameMapId,
                     DisplayName = dto.DisplayName ?? gameMapId.Name,
@@ -293,7 +149,7 @@ public class GameDataLoader
                 };
 
                 // Support mod overrides
-                if (existingMaps.TryGetValue(gameMapId, out MapDefinition? existing))
+                if (existingMaps.TryGetValue(gameMapId, out MapEntity? existing))
                 {
                     _context.Maps.Attach(existing);
                     _context.Entry(existing).CurrentValues.SetValues(mapDef);
@@ -594,9 +450,10 @@ public class GameDataLoader
                 }
 
                 // Convert DTO to entity
+                // Use TryCreate first for full ID format, fall back to Create for simple names
                 var theme = new PopupTheme
                 {
-                    Id = GameThemeId.Create(dto.Id),
+                    Id = GameThemeId.TryCreate(dto.Id) ?? GameThemeId.Create(dto.Id),
                     Name = dto.Name ?? dto.Id,
                     Description = dto.Description,
                     Background = dto.Background ?? dto.Id,
@@ -663,11 +520,12 @@ public class GameDataLoader
                 }
 
                 // Convert DTO to entity
+                // Use TryCreate first for full ID format, fall back to Create for simple names
                 var section = new MapSection
                 {
-                    Id = GameMapSectionId.Create(dto.Id),
+                    Id = GameMapSectionId.TryCreate(dto.Id) ?? GameMapSectionId.Create(dto.Id),
                     Name = dto.Name ?? dto.Id,
-                    ThemeId = GameThemeId.Create(dto.Theme),
+                    ThemeId = GameThemeId.TryCreate(dto.Theme) ?? GameThemeId.Create(dto.Theme),
                     X = dto.X,
                     Y = dto.Y,
                     Width = dto.Width,
@@ -698,11 +556,11 @@ public class GameDataLoader
     ///     Load audio definitions from JSON files.
     ///     Recursively processes all subdirectories (Music/Battle, Music/Towns, SFX/Battle, etc.).
     /// </summary>
-    private async Task<int> LoadAudioDefinitionsAsync(string path, CancellationToken ct)
+    private async Task<int> LoadAudioEntitysAsync(string path, CancellationToken ct)
     {
         if (!Directory.Exists(path))
         {
-            _logger.LogDirectoryNotFound("AudioDefinitions", path);
+            _logger.LogDirectoryNotFound("AudioEntitys", path);
             return 0;
         }
 
@@ -718,7 +576,7 @@ public class GameDataLoader
             try
             {
                 string json = await File.ReadAllTextAsync(file, ct);
-                AudioDefinitionDto? dto = JsonSerializer.Deserialize<AudioDefinitionDto>(json, _jsonOptions);
+                AudioEntityDto? dto = JsonSerializer.Deserialize<AudioEntityDto>(json, _jsonOptions);
 
                 if (dto == null)
                 {
@@ -746,7 +604,7 @@ public class GameDataLoader
                 string? subcategory = audioId.AudioSubcategory;
 
                 // Convert DTO to entity
-                var audioDef = new AudioDefinition
+                var audioDef = new AudioEntity
                 {
                     AudioId = audioId,
                     DisplayName = dto.DisplayName ?? audioId.Name,
@@ -765,7 +623,7 @@ public class GameDataLoader
                     Version = dto.Version ?? "1.0.0"
                 };
 
-                _context.AudioDefinitions.Add(audioDef);
+                _context.Audios.Add(audioDef);
                 count++;
 
                 _logger.LogDebug("Loaded audio definition: {AudioId}", audioDef.AudioId.Value);
@@ -782,48 +640,457 @@ public class GameDataLoader
         _logger.LogInformation("Loaded {Count} audio definitions", count);
         return count;
     }
+
+    // ============================================================================
+    // NEW: Unified Definition Loading Methods
+    // ============================================================================
+
+    /// <summary>
+    ///     Load sprite definitions from JSON files into EF Core.
+    ///     Replaces SpriteRegistry JSON loading.
+    /// </summary>
+    private async Task<int> LoadSpriteDefinitionsAsync(string path, CancellationToken ct)
+    {
+        if (!Directory.Exists(path))
+        {
+            _logger.LogDirectoryNotFound("SpriteDefinitions", path);
+            return 0;
+        }
+
+        string[] files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories)
+            .Where(f => !IsHiddenOrSystemDirectory(f))
+            .ToArray();
+        int count = 0;
+
+        foreach (string file in files)
+        {
+            ct.ThrowIfCancellationRequested();
+
+            try
+            {
+                string json = await File.ReadAllTextAsync(file, ct);
+                SpriteDefinitionDto? dto = JsonSerializer.Deserialize<SpriteDefinitionDto>(json, _jsonOptions);
+
+                if (dto == null)
+                {
+                    _logger.LogWarning("Failed to deserialize sprite definition: {File}", file);
+                    continue;
+                }
+
+                // Validate required fields
+                if (string.IsNullOrWhiteSpace(dto.Id) || string.IsNullOrWhiteSpace(dto.TexturePath))
+                {
+                    _logger.LogWarning("Sprite definition missing required fields: {File}", file);
+                    continue;
+                }
+
+                // Parse GameSpriteId from the Id field
+                GameSpriteId? spriteId = GameSpriteId.TryCreate(dto.Id);
+                if (spriteId == null)
+                {
+                    _logger.LogWarning("Invalid sprite ID format in: {File}", file);
+                    continue;
+                }
+
+                // Convert DTO to entity with typed collections (EF Core handles JSON serialization)
+                var spriteDef = new SpriteEntity
+                {
+                    SpriteId = spriteId,
+                    DisplayName = dto.DisplayName ?? spriteId.Name,
+                    Type = dto.Type ?? "Sprite",
+                    TexturePath = dto.TexturePath,
+                    FrameWidth = dto.FrameWidth ?? 16,
+                    FrameHeight = dto.FrameHeight ?? 32,
+                    FrameCount = dto.FrameCount ?? 1,
+                    // Map DTO frames to owned entity type
+                    Frames = dto.Frames?.Select(f => new SpriteFrame
+                    {
+                        Index = f.Index,
+                        X = f.X,
+                        Y = f.Y,
+                        Width = f.Width,
+                        Height = f.Height
+                    }).ToList() ?? new List<SpriteFrame>(),
+                    // Map DTO animations to owned entity type
+                    Animations = dto.Animations?.Select(a => new SpriteAnimation
+                    {
+                        Name = a.Name ?? string.Empty,
+                        Loop = a.Loop,
+                        FrameIndices = a.FrameIndices?.ToList() ?? new List<int>(),
+                        FrameDurations = a.FrameDurations?.ToList() ?? new List<double>(),
+                        FlipHorizontal = a.FlipHorizontal
+                    }).ToList() ?? new List<SpriteAnimation>(),
+                    SourceMod = dto.SourceMod,
+                    Version = dto.Version ?? "1.0.0"
+                };
+
+                _context.Sprites.Add(spriteDef);
+                count++;
+
+                _logger.LogDebug("Loaded sprite definition: {SpriteId}", spriteDef.SpriteId.Value);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to load sprite definition: {File}", file);
+            }
+        }
+
+        // Save to in-memory database
+        await _context.SaveChangesAsync(ct);
+
+        _logger.LogInformation("Loaded {Count} sprite definitions", count);
+        return count;
+    }
+
+    /// <summary>
+    ///     Load popup background definitions from JSON files into EF Core.
+    ///     Replaces PopupRegistry background JSON loading.
+    /// </summary>
+    private async Task<int> LoadPopupBackgroundsAsync(string path, CancellationToken ct)
+    {
+        if (!Directory.Exists(path))
+        {
+            _logger.LogDirectoryNotFound("PopupBackgrounds", path);
+            return 0;
+        }
+
+        string[] files = Directory.GetFiles(path, "*.json", SearchOption.TopDirectoryOnly)
+            .Where(f => !IsHiddenOrSystemDirectory(f))
+            .ToArray();
+        int count = 0;
+
+        foreach (string file in files)
+        {
+            ct.ThrowIfCancellationRequested();
+
+            try
+            {
+                string json = await File.ReadAllTextAsync(file, ct);
+                PopupBackgroundDto? dto = JsonSerializer.Deserialize<PopupBackgroundDto>(json, _jsonOptions);
+
+                if (dto == null)
+                {
+                    _logger.LogWarning("Failed to deserialize popup background: {File}", file);
+                    continue;
+                }
+
+                // Validate required fields
+                if (string.IsNullOrWhiteSpace(dto.Id) || string.IsNullOrWhiteSpace(dto.TexturePath))
+                {
+                    _logger.LogWarning("Popup background missing required fields: {File}", file);
+                    continue;
+                }
+
+                // Convert DTO to entity - TryCreate parses full IDs, Create for short names
+                var backgroundDef = new PopupBackgroundEntity
+                {
+                    BackgroundId = GamePopupBackgroundId.TryCreate(dto.Id) ?? GamePopupBackgroundId.Create(dto.Id),
+                    DisplayName = dto.DisplayName ?? Path.GetFileNameWithoutExtension(file),
+                    Type = dto.Type ?? "Bitmap",
+                    TexturePath = dto.TexturePath,
+                    Width = dto.Width ?? 80,
+                    Height = dto.Height ?? 24,
+                    Description = dto.Description,
+                    SourceMod = dto.SourceMod,
+                    Version = dto.Version ?? "1.0.0"
+                };
+
+                _context.PopupBackgrounds.Add(backgroundDef);
+                count++;
+
+                _logger.LogDebug("Loaded popup background: {BackgroundId}", backgroundDef.BackgroundId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to load popup background: {File}", file);
+            }
+        }
+
+        // Save to in-memory database
+        await _context.SaveChangesAsync(ct);
+
+        _logger.LogInformation("Loaded {Count} popup backgrounds", count);
+        return count;
+    }
+
+    /// <summary>
+    ///     Load popup outline definitions from JSON files into EF Core.
+    ///     Replaces PopupRegistry outline JSON loading.
+    /// </summary>
+    private async Task<int> LoadPopupOutlinesAsync(string path, CancellationToken ct)
+    {
+        if (!Directory.Exists(path))
+        {
+            _logger.LogDirectoryNotFound("PopupOutlines", path);
+            return 0;
+        }
+
+        string[] files = Directory.GetFiles(path, "*.json", SearchOption.TopDirectoryOnly)
+            .Where(f => !IsHiddenOrSystemDirectory(f))
+            .ToArray();
+        int count = 0;
+
+        foreach (string file in files)
+        {
+            ct.ThrowIfCancellationRequested();
+
+            try
+            {
+                string json = await File.ReadAllTextAsync(file, ct);
+                PopupOutlineDto? dto = JsonSerializer.Deserialize<PopupOutlineDto>(json, _jsonOptions);
+
+                if (dto == null)
+                {
+                    _logger.LogWarning("Failed to deserialize popup outline: {File}", file);
+                    continue;
+                }
+
+                // Validate required fields
+                if (string.IsNullOrWhiteSpace(dto.Id) || string.IsNullOrWhiteSpace(dto.TexturePath))
+                {
+                    _logger.LogWarning("Popup outline missing required fields: {File}", file);
+                    continue;
+                }
+
+                // Convert DTO to entity with typed collections (EF Core handles JSON serialization)
+                // TryCreate parses full IDs, Create for short names
+                var outlineDef = new PopupOutlineEntity
+                {
+                    OutlineId = GamePopupOutlineId.TryCreate(dto.Id) ?? GamePopupOutlineId.Create(dto.Id),
+                    DisplayName = dto.DisplayName ?? Path.GetFileNameWithoutExtension(file),
+                    Type = dto.Type ?? "TileSheet",
+                    TexturePath = dto.TexturePath,
+                    TileWidth = dto.TileWidth ?? 8,
+                    TileHeight = dto.TileHeight ?? 8,
+                    TileCount = dto.TileCount ?? 0,
+                    // Map DTO tiles to owned entity type
+                    Tiles = dto.Tiles?.Select(t => new OutlineTile
+                    {
+                        Index = t.Index,
+                        X = t.X,
+                        Y = t.Y,
+                        Width = t.Width,
+                        Height = t.Height
+                    }).ToList() ?? new List<OutlineTile>(),
+                    // Map DTO tile usage to owned entity type
+                    TileUsage = dto.TileUsage != null ? new OutlineTileUsage
+                    {
+                        TopEdge = dto.TileUsage.TopEdge?.ToList() ?? new List<int>(),
+                        LeftEdge = dto.TileUsage.LeftEdge?.ToList() ?? new List<int>(),
+                        RightEdge = dto.TileUsage.RightEdge?.ToList() ?? new List<int>(),
+                        BottomEdge = dto.TileUsage.BottomEdge?.ToList() ?? new List<int>()
+                    } : null,
+                    CornerWidth = dto.CornerWidth ?? 8,
+                    CornerHeight = dto.CornerHeight ?? 8,
+                    BorderWidth = dto.BorderWidth ?? 8,
+                    BorderHeight = dto.BorderHeight ?? 8,
+                    SourceMod = dto.SourceMod,
+                    Version = dto.Version ?? "1.0.0"
+                };
+
+                _context.PopupOutlines.Add(outlineDef);
+                count++;
+
+                _logger.LogDebug("Loaded popup outline: {OutlineId}", outlineDef.OutlineId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to load popup outline: {File}", file);
+            }
+        }
+
+        // Save to in-memory database
+        await _context.SaveChangesAsync(ct);
+
+        _logger.LogInformation("Loaded {Count} popup outlines", count);
+        return count;
+    }
+
+    /// <summary>
+    ///     Load behavior definitions from JSON files into EF Core.
+    ///     Replaces TypeRegistry&lt;BehaviorDefinition&gt;.
+    /// </summary>
+    private async Task<int> LoadBehaviorDefinitionsAsync(string path, CancellationToken ct)
+    {
+        if (!Directory.Exists(path))
+        {
+            _logger.LogDirectoryNotFound("BehaviorDefinitions", path);
+            return 0;
+        }
+
+        string[] files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories)
+            .Where(f => !IsHiddenOrSystemDirectory(f))
+            .ToArray();
+        int count = 0;
+
+        foreach (string file in files)
+        {
+            ct.ThrowIfCancellationRequested();
+
+            try
+            {
+                string json = await File.ReadAllTextAsync(file, ct);
+                BehaviorDefinitionDto? dto = JsonSerializer.Deserialize<BehaviorDefinitionDto>(json, _jsonOptions);
+
+                if (dto == null)
+                {
+                    _logger.LogWarning("Failed to deserialize behavior definition: {File}", file);
+                    continue;
+                }
+
+                // Validate required fields
+                if (string.IsNullOrWhiteSpace(dto.TypeId))
+                {
+                    _logger.LogWarning("Behavior definition missing required fields: {File}", file);
+                    continue;
+                }
+
+                // Extract the behavior ID from the typeId
+                // Format: "base:behavior:movement/patrol" -> "patrol"
+                string behaviorId = dto.TypeId;
+                int lastSlash = behaviorId.LastIndexOf('/');
+                if (lastSlash >= 0)
+                {
+                    behaviorId = behaviorId[(lastSlash + 1)..];
+                }
+                // Also handle colon-based format
+                int lastColon = behaviorId.LastIndexOf(':');
+                if (lastColon >= 0)
+                {
+                    behaviorId = behaviorId[(lastColon + 1)..];
+                }
+
+                // Convert DTO to entity
+                var behaviorDef = new BehaviorEntity
+                {
+                    BehaviorId = GameBehaviorId.Create(behaviorId),
+                    DisplayName = dto.DisplayName ?? behaviorId,
+                    Description = dto.Description,
+                    DefaultSpeed = dto.DefaultSpeed ?? 4.0f,
+                    PauseAtWaypoint = dto.PauseAtWaypoint ?? 1.0f,
+                    AllowInteractionWhileMoving = dto.AllowInteractionWhileMoving ?? false,
+                    BehaviorScript = dto.BehaviorScript,
+                    SourceMod = dto.SourceMod,
+                    Version = dto.Version ?? "1.0.0"
+                };
+
+                _context.Behaviors.Add(behaviorDef);
+                count++;
+
+                _logger.LogDebug("Loaded behavior definition: {BehaviorId}", behaviorDef.BehaviorId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to load behavior definition: {File}", file);
+            }
+        }
+
+        // Save to in-memory database
+        await _context.SaveChangesAsync(ct);
+
+        _logger.LogInformation("Loaded {Count} behavior definitions", count);
+        return count;
+    }
+
+    /// <summary>
+    ///     Load tile behavior definitions from JSON files into EF Core.
+    ///     Replaces TypeRegistry&lt;TileBehaviorDefinition&gt;.
+    /// </summary>
+    private async Task<int> LoadTileBehaviorDefinitionsAsync(string path, CancellationToken ct)
+    {
+        if (!Directory.Exists(path))
+        {
+            _logger.LogDirectoryNotFound("TileBehaviorDefinitions", path);
+            return 0;
+        }
+
+        string[] files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories)
+            .Where(f => !IsHiddenOrSystemDirectory(f))
+            .ToArray();
+        int count = 0;
+
+        foreach (string file in files)
+        {
+            ct.ThrowIfCancellationRequested();
+
+            try
+            {
+                string json = await File.ReadAllTextAsync(file, ct);
+                TileBehaviorDefinitionDto? dto = JsonSerializer.Deserialize<TileBehaviorDefinitionDto>(json, _jsonOptions);
+
+                if (dto == null)
+                {
+                    _logger.LogWarning("Failed to deserialize tile behavior definition: {File}", file);
+                    continue;
+                }
+
+                // Validate required fields
+                if (string.IsNullOrWhiteSpace(dto.TypeId))
+                {
+                    _logger.LogWarning("Tile behavior definition missing required fields: {File}", file);
+                    continue;
+                }
+
+                // Parse flags from string (e.g., "ForcesMovement, DisablesRunning")
+                int flags = 0;
+                if (!string.IsNullOrWhiteSpace(dto.Flags))
+                {
+                    flags = ParseTileBehaviorFlags(dto.Flags);
+                }
+
+                // Convert DTO to entity
+                // Use TryCreate first for full ID format, fall back to Create for simple names
+                var tileBehaviorDef = new TileBehaviorEntity
+                {
+                    TileBehaviorId = GameTileBehaviorId.TryCreate(dto.TypeId) ?? GameTileBehaviorId.Create(dto.TypeId),
+                    DisplayName = dto.DisplayName ?? dto.TypeId,
+                    Description = dto.Description,
+                    Flags = flags,
+                    BehaviorScript = dto.BehaviorScript,
+                    SourceMod = dto.SourceMod,
+                    Version = dto.Version ?? "1.0.0"
+                };
+
+                _context.TileBehaviors.Add(tileBehaviorDef);
+                count++;
+
+                _logger.LogDebug("Loaded tile behavior definition: {TileBehaviorId}", tileBehaviorDef.TileBehaviorId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to load tile behavior definition: {File}", file);
+            }
+        }
+
+        // Save to in-memory database
+        await _context.SaveChangesAsync(ct);
+
+        _logger.LogInformation("Loaded {Count} tile behavior definitions", count);
+        return count;
+    }
+
+    /// <summary>
+    ///     Parses TileBehaviorFlags from a comma-separated string.
+    /// </summary>
+    private static int ParseTileBehaviorFlags(string flagsString)
+    {
+        int result = 0;
+
+        // Parse each flag name and combine using bitwise OR
+        string[] flagNames = flagsString.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        foreach (string flagName in flagNames)
+        {
+            if (Enum.TryParse<TileBehaviorFlags>(flagName, ignoreCase: true, out TileBehaviorFlags flag))
+            {
+                result |= (int)flag;
+            }
+        }
+
+        return result;
+    }
 }
 
 #region DTOs for JSON Deserialization
-
-/// <summary>
-///     DTO for deserializing NPC JSON files.
-/// </summary>
-internal record NpcDefinitionDto
-{
-    public string? NpcId { get; init; }
-    public string? DisplayName { get; init; }
-    public string? NpcType { get; init; }
-    public string? SpriteId { get; init; }
-    public string? BehaviorScript { get; init; }
-    public string? DialogueScript { get; init; }
-    public float? MovementSpeed { get; init; }
-    public Dictionary<string, object>? CustomProperties { get; init; }
-    public string? SourceMod { get; init; }
-    public string? Version { get; init; }
-}
-
-/// <summary>
-///     DTO for deserializing Trainer JSON files.
-/// </summary>
-internal record TrainerDefinitionDto
-{
-    public string? TrainerId { get; init; }
-    public string? DisplayName { get; init; }
-    public string? TrainerClass { get; init; }
-    public string? SpriteId { get; init; }
-    public int? PrizeMoney { get; init; }
-    public string[]? Items { get; init; }
-    public string? AiScript { get; init; }
-    public string? IntroDialogue { get; init; }
-    public string? DefeatDialogue { get; init; }
-    public string? OnDefeatScript { get; init; }
-    public bool? IsRematchable { get; init; }
-    public TrainerPartyMemberDto[]? Party { get; init; }
-    public Dictionary<string, object>? CustomProperties { get; init; }
-    public string? SourceMod { get; init; }
-    public string? Version { get; init; }
-}
 
 /// <summary>
 ///     Lightweight DTO for extracting metadata from Tiled JSON.
@@ -877,10 +1144,10 @@ internal record MapSectionDto
 }
 
 /// <summary>
-///     DTO for deserializing MapDefinition JSON files.
+///     DTO for deserializing MapEntity JSON files.
 ///     Simple schema: Id, DisplayName, Type, Region, Description, TiledPath
 /// </summary>
-internal record MapDefinitionDto
+internal record MapEntityDto
 {
     public string? Id { get; init; }
     public string? DisplayName { get; init; }
@@ -893,10 +1160,10 @@ internal record MapDefinitionDto
 }
 
 /// <summary>
-///     DTO for deserializing AudioDefinition JSON files.
+///     DTO for deserializing AudioEntity JSON files.
 ///     Matches the format generated by porycon audio extraction.
 /// </summary>
-internal record AudioDefinitionDto
+internal record AudioEntityDto
 {
     public string? Id { get; init; }
     public string? DisplayName { get; init; }
@@ -909,6 +1176,140 @@ internal record AudioDefinitionDto
     public int? LoopLengthSamples { get; init; }
     public float? LoopStartSec { get; init; }
     public float? LoopEndSec { get; init; }
+    public string? SourceMod { get; init; }
+    public string? Version { get; init; }
+}
+
+/// <summary>
+///     DTO for deserializing SpriteDefinition JSON files.
+/// </summary>
+internal record SpriteDefinitionDto
+{
+    public string? Id { get; init; }
+    public string? DisplayName { get; init; }
+    public string? Type { get; init; }
+    public string? TexturePath { get; init; }
+    public int? FrameWidth { get; init; }
+    public int? FrameHeight { get; init; }
+    public int? FrameCount { get; init; }
+    public List<SpriteFrameDto>? Frames { get; init; }
+    public List<SpriteAnimationDto>? Animations { get; init; }
+    public string? SourceMod { get; init; }
+    public string? Version { get; init; }
+}
+
+/// <summary>
+///     DTO for sprite frame definition.
+/// </summary>
+internal record SpriteFrameDto
+{
+    public int Index { get; init; }
+    public int X { get; init; }
+    public int Y { get; init; }
+    public int Width { get; init; }
+    public int Height { get; init; }
+}
+
+/// <summary>
+///     DTO for sprite animation definition.
+/// </summary>
+internal record SpriteAnimationDto
+{
+    public string? Name { get; init; }
+    public bool Loop { get; init; }
+    public List<int>? FrameIndices { get; init; }
+    public List<double>? FrameDurations { get; init; }
+    public bool FlipHorizontal { get; init; }
+}
+
+/// <summary>
+///     DTO for deserializing PopupBackground JSON files.
+/// </summary>
+internal record PopupBackgroundDto
+{
+    public string? Id { get; init; }
+    public string? DisplayName { get; init; }
+    public string? Type { get; init; }
+    public string? TexturePath { get; init; }
+    public int? Width { get; init; }
+    public int? Height { get; init; }
+    public string? Description { get; init; }
+    public string? SourceMod { get; init; }
+    public string? Version { get; init; }
+}
+
+/// <summary>
+///     DTO for deserializing PopupOutline JSON files.
+/// </summary>
+internal record PopupOutlineDto
+{
+    public string? Id { get; init; }
+    public string? DisplayName { get; init; }
+    public string? Type { get; init; }
+    public string? TexturePath { get; init; }
+    public int? TileWidth { get; init; }
+    public int? TileHeight { get; init; }
+    public int? TileCount { get; init; }
+    public List<OutlineTileDto>? Tiles { get; init; }
+    public OutlineTileUsageDto? TileUsage { get; init; }
+    public int? CornerWidth { get; init; }
+    public int? CornerHeight { get; init; }
+    public int? BorderWidth { get; init; }
+    public int? BorderHeight { get; init; }
+    public string? Description { get; init; }
+    public string? SourceMod { get; init; }
+    public string? Version { get; init; }
+}
+
+/// <summary>
+///     DTO for outline tile definition.
+/// </summary>
+internal record OutlineTileDto
+{
+    public int Index { get; init; }
+    public int X { get; init; }
+    public int Y { get; init; }
+    public int Width { get; init; }
+    public int Height { get; init; }
+}
+
+/// <summary>
+///     DTO for outline tile usage mapping.
+/// </summary>
+internal record OutlineTileUsageDto
+{
+    public List<int>? TopEdge { get; init; }
+    public List<int>? LeftEdge { get; init; }
+    public List<int>? RightEdge { get; init; }
+    public List<int>? BottomEdge { get; init; }
+}
+
+/// <summary>
+///     DTO for deserializing BehaviorDefinition JSON files.
+/// </summary>
+internal record BehaviorDefinitionDto
+{
+    public string? TypeId { get; init; }
+    public string? DisplayName { get; init; }
+    public string? Description { get; init; }
+    public string? BehaviorScript { get; init; }
+    public float? DefaultSpeed { get; init; }
+    public float? PauseAtWaypoint { get; init; }
+    public bool? AllowInteractionWhileMoving { get; init; }
+    public string? SourceMod { get; init; }
+    public string? Version { get; init; }
+}
+
+/// <summary>
+///     DTO for deserializing TileBehaviorDefinition JSON files.
+/// </summary>
+internal record TileBehaviorDefinitionDto
+{
+    public string? TypeId { get; init; }
+    public string? DisplayName { get; init; }
+    public string? Description { get; init; }
+    public string? BehaviorScript { get; init; }
+    public string? Flags { get; init; }
     public string? SourceMod { get; init; }
     public string? Version { get; init; }
 }

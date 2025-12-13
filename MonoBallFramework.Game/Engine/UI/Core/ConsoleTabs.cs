@@ -20,28 +20,35 @@ public static class ConsoleTabs
         Keys.D4
     );
 
-    public static readonly TabDefinition Entities = new(
+    public static readonly TabDefinition Data = new(
         4,
-        "Entities",
-        ["entities", "entity", "e"],
+        "Data",
+        ["data", "gamedata", "ef", "db", "database"],
         Keys.D5
     );
 
-    public static readonly TabDefinition Events = new(
+    public static readonly TabDefinition Entities = new(
         5,
-        "Events",
-        ["events", "event", "ev"],
+        "Entities",
+        ["entities", "entity", "e"],
         Keys.D6
     );
 
-    public static readonly TabDefinition Profiler = new(
+    public static readonly TabDefinition Events = new(
         6,
-        "Profiler",
-        ["profiler", "perf", "p"],
+        "Events",
+        ["events", "event", "ev"],
         Keys.D7
     );
 
-    public static readonly TabDefinition Stats = new(7, "Stats", ["stats", "stat", "s"], Keys.D8);
+    public static readonly TabDefinition Profiler = new(
+        7,
+        "Profiler",
+        ["profiler", "perf", "p"],
+        Keys.D8
+    );
+
+    public static readonly TabDefinition Stats = new(8, "Stats", ["stats", "stat", "s"], Keys.D9);
 
     /// <summary>
     ///     All tab definitions in order.
@@ -52,6 +59,7 @@ public static class ConsoleTabs
         Logs,
         Watch,
         Variables,
+        Data,
         Entities,
         Events,
         Profiler,

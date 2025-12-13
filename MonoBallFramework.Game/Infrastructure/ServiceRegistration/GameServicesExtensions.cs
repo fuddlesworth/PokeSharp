@@ -50,8 +50,7 @@ public static class GameServicesExtensions
             PropertyMapperRegistry propertyMapperRegistry =
                 PropertyMapperServiceExtensions.CreatePropertyMapperRegistry(mapperLogger);
 
-            NpcDefinitionService? npcDefinitionService = sp.GetService<NpcDefinitionService>();
-            MapDefinitionService? mapDefinitionService = sp.GetService<MapDefinitionService>();
+            MapEntityService? mapDefinitionService = sp.GetService<MapEntityService>();
             IGameStateApi? gameStateApi = sp.GetService<IGameStateApi>();
 
             return new GraphicsServiceFactory(
@@ -59,7 +58,6 @@ public static class GameServicesExtensions
                 systemManager,
                 poolManager,
                 propertyMapperRegistry,
-                npcDefinitionService,
                 mapDefinitionService,
                 gameStateApi
             );

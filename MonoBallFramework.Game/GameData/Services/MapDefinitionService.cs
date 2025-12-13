@@ -11,15 +11,15 @@ namespace MonoBallFramework.Game.GameData.Services;
 ///     Service for querying map definitions with caching.
 ///     Provides O(1) lookups for hot paths while maintaining EF Core query capabilities.
 /// </summary>
-public class MapDefinitionService
+public class MapEntityService
 {
     private readonly GameDataContext _context;
-    private readonly ILogger<MapDefinitionService> _logger;
+    private readonly ILogger<MapEntityService> _logger;
 
     // Cache for O(1) lookups (hot paths like map loading)
-    private readonly ConcurrentDictionary<string, MapDefinition> _mapCache = new(); // Key is GameMapId.Value
+    private readonly ConcurrentDictionary<string, MapEntity> _mapCache = new(); // Key is GameMapId.Value
 
-    public MapDefinitionService(GameDataContext context, ILogger<MapDefinitionService> logger)
+    public MapEntityService(GameDataContext context, ILogger<MapEntityService> logger)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -61,16 +61,16 @@ public class MapDefinitionService
     ///     Get map definition by ID (O(1) cached).
     ///     Uses AsNoTracking for read-only access to prevent memory tracking.
     /// </summary>
-    public MapDefinition? GetMap(GameMapId mapId)
+    public MapEntity? GetMap(GameMapId mapId)
     {
         // Check cache first
-        if (_mapCache.TryGetValue(mapId.Value, out MapDefinition? cached))
+        if (_mapCache.TryGetValue(mapId.Value, out MapEntity? cached))
         {
             return cached;
         }
 
         // Query database with AsNoTracking (read-only, no change tracking overhead)
-        MapDefinition? map = _context.Maps.AsNoTracking().FirstOrDefault(m => m.MapId == mapId);
+        MapEntity? map = _context.Maps.AsNoTracking().FirstOrDefault(m => m.MapId == mapId);
 
         // Cache for next time
         if (map != null)
@@ -86,7 +86,7 @@ public class MapDefinitionService
     ///     Get all maps in a region.
     ///     Uses AsNoTracking for read-only query performance.
     /// </summary>
-    public async Task<List<MapDefinition>> GetMapsByRegionAsync(string region)
+    public async Task<List<MapEntity>> GetMapsByRegionAsync(string region)
     {
         return await _context
             .Maps.AsNoTracking()
@@ -99,7 +99,7 @@ public class MapDefinitionService
     ///     Get all maps of a specific type.
     ///     Uses AsNoTracking for read-only query performance.
     /// </summary>
-    public async Task<List<MapDefinition>> GetMapsByTypeAsync(string mapType)
+    public async Task<List<MapEntity>> GetMapsByTypeAsync(string mapType)
     {
         return await _context.Maps.AsNoTracking().Where(m => m.MapType == mapType).ToListAsync();
     }
@@ -108,7 +108,7 @@ public class MapDefinitionService
     ///     Get all flyable maps.
     ///     Uses AsNoTracking for read-only query performance.
     /// </summary>
-    public async Task<List<MapDefinition>> GetFlyableMapsAsync()
+    public async Task<List<MapEntity>> GetFlyableMapsAsync()
     {
         return await _context
             .Maps.AsNoTracking()
@@ -120,9 +120,9 @@ public class MapDefinitionService
     /// <summary>
     ///     Get connected map in a specific direction.
     /// </summary>
-    public MapDefinition? GetConnectedMap(GameMapId mapId, MapDirection direction)
+    public MapEntity? GetConnectedMap(GameMapId mapId, MapDirection direction)
     {
-        MapDefinition? map = GetMap(mapId);
+        MapEntity? map = GetMap(mapId);
         if (map == null)
         {
             return null;
@@ -144,7 +144,7 @@ public class MapDefinitionService
     ///     Get all maps from a specific mod.
     ///     Uses AsNoTracking for read-only query performance.
     /// </summary>
-    public async Task<List<MapDefinition>> GetMapsByModAsync(string modId)
+    public async Task<List<MapEntity>> GetMapsByModAsync(string modId)
     {
         return await _context.Maps.AsNoTracking().Where(m => m.SourceMod == modId).ToListAsync();
     }

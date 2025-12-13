@@ -1,113 +1,176 @@
-using System.Collections.Concurrent;
-using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using MonoBallFramework.Game.GameData;
+using MonoBallFramework.Game.GameData.Entities;
+using MonoBallFramework.Game.GameData.Registries;
 
 namespace MonoBallFramework.Game.Engine.Rendering.Popups;
 
 /// <summary>
 ///     Registry for popup definitions (backgrounds and outlines).
-///     Manages available backgrounds and outlines for region/map popups.
-///     Based on pokeemerald's region popup system where backgrounds and outlines
-///     are separate and can be mixed and matched per map.
+///     Composite registry that manages two separate EF Core registries.
+///     Maintains an in-memory cache for fast lookups during gameplay.
+///     Follows the same pattern as AudioRegistry - EF Core is the source of truth.
 /// </summary>
 /// <remarks>
-///     <para>
-///         <b>Phase 5 Optimizations:</b>
-///         - Thread-safe concurrent dictionaries for registration during parallel loading
-///         - Async loading with parallel file I/O for backgrounds and outlines
-///         - SemaphoreSlim to prevent concurrent LoadDefinitionsAsync calls
-///         - CancellationToken support for graceful shutdown
-///     </para>
+///     This registry manages TWO entity types: PopupBackgroundEntity and PopupOutlineEntity.
+///     Rather than creating a complex dual-entity base class, we use composition:
+///     two specialized registries (PopupBackgroundRegistry + PopupOutlineRegistry)
+///     wrapped in this public facade that preserves the existing API.
 /// </remarks>
 public class PopupRegistry
 {
-    private readonly ConcurrentDictionary<string, PopupBackgroundDefinition> _backgrounds = new();
-    private readonly ConcurrentDictionary<string, PopupOutlineDefinition> _outlines = new();
-    private readonly ConcurrentDictionary<string, PopupBackgroundDefinition> _backgroundsByTheme = new();
-    private readonly ConcurrentDictionary<string, PopupOutlineDefinition> _outlinesByTheme = new();
-    private readonly SemaphoreSlim _loadLock = new(1, 1);
+    private readonly PopupBackgroundRegistry _backgroundRegistry;
+    private readonly PopupOutlineRegistry _outlineRegistry;
+    private readonly ILogger<PopupRegistry> _logger;
     private string _defaultBackgroundId = "base:popup:background/wood";
     private string _defaultOutlineId = "base:popup:outline/wood_outline";
-    private volatile bool _isLoaded = false;
 
     /// <summary>
-    /// Gets whether definitions have been loaded.
+    ///     Creates a PopupRegistry with optional shared context.
+    ///     When sharedContext is provided, it's used for initial loading to ensure
+    ///     data is read from the same context that GameDataLoader wrote to.
     /// </summary>
-    public bool IsLoaded => _isLoaded;
-
-    /// <summary>
-    ///     Registers a background definition.
-    ///     Thread-safe for parallel loading.
-    /// </summary>
-    public void RegisterBackground(PopupBackgroundDefinition definition)
+    public PopupRegistry(IDbContextFactory<GameDataContext> contextFactory, ILogger<PopupRegistry> logger, GameDataContext? sharedContext = null)
     {
-        ArgumentNullException.ThrowIfNull(definition);
-        ArgumentException.ThrowIfNullOrEmpty(definition.Id);
-        _backgrounds.TryAdd(definition.Id, definition);
+        ArgumentNullException.ThrowIfNull(contextFactory);
+        ArgumentNullException.ThrowIfNull(logger);
 
-        // Also cache by theme name for quick lookups
-        // Extract theme name from ID (e.g., "base:popup:background/wood" -> "wood")
-        var themeName = ExtractThemeName(definition.Id);
-        if (!string.IsNullOrEmpty(themeName))
-        {
-            _backgroundsByTheme.TryAdd(themeName, definition);
-        }
+        _logger = logger;
+        _backgroundRegistry = new PopupBackgroundRegistry(contextFactory, logger, sharedContext);
+        _outlineRegistry = new PopupOutlineRegistry(contextFactory, logger, sharedContext);
     }
 
     /// <summary>
-    ///     Registers an outline definition.
-    ///     Thread-safe for parallel loading.
+    ///     Gets whether definitions have been loaded into cache.
     /// </summary>
-    public void RegisterOutline(PopupOutlineDefinition definition)
-    {
-        ArgumentNullException.ThrowIfNull(definition);
-        ArgumentException.ThrowIfNullOrEmpty(definition.Id);
-        _outlines.TryAdd(definition.Id, definition);
+    public bool IsLoaded => _backgroundRegistry.IsLoaded && _outlineRegistry.IsLoaded;
 
-        // Also cache by theme name for quick lookups
-        // Extract theme name from ID (e.g., "base:popup:outline/wood_outline" -> "wood_outline")
-        var themeName = ExtractThemeName(definition.Id);
-        if (!string.IsNullOrEmpty(themeName))
-        {
-            _outlinesByTheme.TryAdd(themeName, definition);
-        }
+    /// <summary>
+    ///     Gets the total number of backgrounds in the database.
+    /// </summary>
+    public int BackgroundCount => _backgroundRegistry.Count;
+
+    /// <summary>
+    ///     Gets the total number of outlines in the database.
+    /// </summary>
+    public int OutlineCount => _outlineRegistry.Count;
+
+    /// <summary>
+    ///     Loads all popup definitions from EF Core into memory cache.
+    ///     Call this during initialization for optimal runtime performance.
+    /// </summary>
+    public void LoadDefinitions()
+    {
+        _backgroundRegistry.LoadDefinitions();
+        _outlineRegistry.LoadDefinitions();
+    }
+
+    /// <summary>
+    ///     Loads popup definitions asynchronously into cache.
+    ///     Thread-safe - concurrent calls will wait for the first load to complete.
+    /// </summary>
+    public async Task LoadDefinitionsAsync(CancellationToken cancellationToken = default)
+    {
+        _logger.LogInformation("Loading popup definitions from EF Core...");
+
+        // Load backgrounds and outlines in parallel
+        await Task.WhenAll(
+            _backgroundRegistry.LoadDefinitionsAsync(cancellationToken),
+            _outlineRegistry.LoadDefinitionsAsync(cancellationToken)
+        );
+
+        _logger.LogInformation(
+            "Loaded {BackgroundCount} backgrounds and {OutlineCount} outlines into cache from EF Core",
+            BackgroundCount, OutlineCount);
     }
 
     /// <summary>
     ///     Gets a background definition by ID.
     /// </summary>
-    public PopupBackgroundDefinition? GetBackground(string backgroundId)
+    public PopupBackgroundEntity? GetBackground(string backgroundId)
     {
-        return _backgrounds.TryGetValue(backgroundId, out PopupBackgroundDefinition? definition) ? definition : null;
+        _logger.LogDebug(
+            "GetBackground called for ID='{BackgroundId}', CacheLoaded={CacheLoaded}, CacheCount={Count}",
+            backgroundId, _backgroundRegistry.IsLoaded, BackgroundCount);
+
+        var result = _backgroundRegistry.GetBackground(backgroundId);
+
+        if (result != null)
+        {
+            _logger.LogDebug("GetBackground: Found - TexturePath='{Path}'", result.TexturePath);
+        }
+        else
+        {
+            _logger.LogWarning(
+                "GetBackground: ID '{BackgroundId}' not found. Available IDs: [{AvailableIds}]",
+                backgroundId,
+                string.Join(", ", _backgroundRegistry.GetAllKeys().Take(10)));
+        }
+
+        return result;
     }
 
     /// <summary>
     ///     Gets an outline definition by ID.
     /// </summary>
-    public PopupOutlineDefinition? GetOutline(string outlineId)
+    public PopupOutlineEntity? GetOutline(string outlineId)
     {
-        return _outlines.TryGetValue(outlineId, out PopupOutlineDefinition? definition) ? definition : null;
+        _logger.LogDebug(
+            "GetOutline called for ID='{OutlineId}', CacheLoaded={CacheLoaded}, CacheCount={Count}",
+            outlineId, _outlineRegistry.IsLoaded, OutlineCount);
+
+        var result = _outlineRegistry.GetOutline(outlineId);
+
+        if (result != null)
+        {
+            _logger.LogDebug(
+                "GetOutline: Found - TilesCount={TilesCount}, TileUsage={HasTileUsage}, IsTileSheet={IsTileSheet}",
+                result.Tiles?.Count ?? 0,
+                result.TileUsage != null,
+                result.IsTileSheet);
+
+            if (result.TileUsage != null)
+            {
+                _logger.LogDebug(
+                    "GetOutline: TileUsage - TopEdge={Top}, LeftEdge={Left}, RightEdge={Right}, BottomEdge={Bottom}",
+                    result.TileUsage.TopEdge?.Count ?? 0,
+                    result.TileUsage.LeftEdge?.Count ?? 0,
+                    result.TileUsage.RightEdge?.Count ?? 0,
+                    result.TileUsage.BottomEdge?.Count ?? 0);
+            }
+        }
+        else
+        {
+            _logger.LogWarning(
+                "GetOutline: ID '{OutlineId}' not found. Available IDs: [{AvailableIds}]",
+                outlineId,
+                string.Join(", ", _outlineRegistry.GetAllKeys().Take(10)));
+        }
+
+        return result;
     }
 
     /// <summary>
     ///     Gets a background definition by theme name (short name).
     /// </summary>
-    public PopupBackgroundDefinition? GetBackgroundByTheme(string themeName)
+    public PopupBackgroundEntity? GetBackgroundByTheme(string themeName)
     {
-        return _backgroundsByTheme.TryGetValue(themeName, out var def) ? def : null;
+        return _backgroundRegistry.GetByTheme(themeName);
     }
 
     /// <summary>
     ///     Gets an outline definition by theme name (short name).
     /// </summary>
-    public PopupOutlineDefinition? GetOutlineByTheme(string themeName)
+    public PopupOutlineEntity? GetOutlineByTheme(string themeName)
     {
-        return _outlinesByTheme.TryGetValue(themeName, out var def) ? def : null;
+        return _outlineRegistry.GetByTheme(themeName);
     }
 
     /// <summary>
     ///     Gets the default background definition.
     /// </summary>
-    public PopupBackgroundDefinition? GetDefaultBackground()
+    public PopupBackgroundEntity? GetDefaultBackground()
     {
         return GetBackground(_defaultBackgroundId);
     }
@@ -115,7 +178,7 @@ public class PopupRegistry
     /// <summary>
     ///     Gets the default outline definition.
     /// </summary>
-    public PopupOutlineDefinition? GetDefaultOutline()
+    public PopupOutlineEntity? GetDefaultOutline()
     {
         return GetOutline(_defaultOutlineId);
     }
@@ -136,7 +199,7 @@ public class PopupRegistry
     /// </summary>
     public IEnumerable<string> GetAllBackgroundIds()
     {
-        return _backgrounds.Keys;
+        return _backgroundRegistry.GetAllKeys();
     }
 
     /// <summary>
@@ -144,219 +207,51 @@ public class PopupRegistry
     /// </summary>
     public IEnumerable<string> GetAllOutlineIds()
     {
-        return _outlines.Keys;
+        return _outlineRegistry.GetAllKeys();
     }
 
     /// <summary>
-    ///     Loads all popup definitions from the Definitions/Maps/Popups folder.
+    ///     Gets all background definitions.
     /// </summary>
-    public void LoadDefinitions(bool loadFromJson = true)
+    public IEnumerable<PopupBackgroundEntity> GetAllBackgrounds()
     {
-        if (loadFromJson)
-        {
-            LoadDefinitionsFromJson();
-        }
-        _isLoaded = true;
+        return _backgroundRegistry.GetAll();
     }
 
     /// <summary>
-    ///     Loads popup definitions asynchronously with parallel file I/O.
-    ///     Thread-safe - concurrent calls will wait for the first load to complete.
+    ///     Gets all outline definitions.
     /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         <b>Performance:</b> Backgrounds and outlines are loaded in parallel using Task.WhenAll,
-    ///         reducing total load time by ~50% compared to sequential loading.
-    ///     </para>
-    /// </remarks>
-    public async Task LoadDefinitionsAsync(CancellationToken cancellationToken = default)
+    public IEnumerable<PopupOutlineEntity> GetAllOutlines()
     {
-        // Fast path: already loaded
-        if (_isLoaded) return;
-
-        // Prevent concurrent loads
-        await _loadLock.WaitAsync(cancellationToken);
-        try
-        {
-            // Double-check after acquiring lock
-            if (_isLoaded) return;
-
-            string dataPath = Path.Combine(AppContext.BaseDirectory, "Assets", "Definitions", "Maps", "Popups");
-
-            if (!Directory.Exists(dataPath))
-            {
-                _isLoaded = true;
-                return;
-            }
-
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-                ReadCommentHandling = JsonCommentHandling.Skip
-            };
-
-            // Load backgrounds and outlines IN PARALLEL
-            string backgroundsPath = Path.Combine(dataPath, "Backgrounds");
-            string outlinesPath = Path.Combine(dataPath, "Outlines");
-
-            Task backgroundsTask = LoadBackgroundsAsync(backgroundsPath, options, cancellationToken);
-            Task outlinesTask = LoadOutlinesAsync(outlinesPath, options, cancellationToken);
-
-            await Task.WhenAll(backgroundsTask, outlinesTask);
-
-            _isLoaded = true;
-        }
-        finally
-        {
-            _loadLock.Release();
-        }
+        return _outlineRegistry.GetAll();
     }
 
     /// <summary>
-    ///     Loads background definitions from JSON files asynchronously.
+    ///     Clears the in-memory cache. Does not affect database.
     /// </summary>
-    private async Task LoadBackgroundsAsync(string path, JsonSerializerOptions options, CancellationToken ct)
+    public void Clear()
     {
-        if (!Directory.Exists(path)) return;
-
-        string[] jsonFiles = Directory.GetFiles(path, "*.json");
-
-        // Load all background files in parallel
-        var tasks = jsonFiles.Select(async jsonFile =>
-        {
-            try
-            {
-                string json = await File.ReadAllTextAsync(jsonFile, ct);
-                var definition = JsonSerializer.Deserialize<PopupBackgroundDefinition>(json, options);
-                if (definition != null)
-                {
-                    RegisterBackground(definition);
-                }
-            }
-            catch (OperationCanceledException) { throw; }
-            catch (Exception) { /* Skip invalid files */ }
-        });
-
-        await Task.WhenAll(tasks);
+        _backgroundRegistry.Clear();
+        _outlineRegistry.Clear();
     }
 
     /// <summary>
-    ///     Loads outline definitions from JSON files asynchronously.
+    ///     Refreshes the cache from the database.
     /// </summary>
-    private async Task LoadOutlinesAsync(string path, JsonSerializerOptions options, CancellationToken ct)
+    public void RefreshCache()
     {
-        if (!Directory.Exists(path)) return;
-
-        string[] jsonFiles = Directory.GetFiles(path, "*.json");
-
-        // Load all outline files in parallel
-        var tasks = jsonFiles.Select(async jsonFile =>
-        {
-            try
-            {
-                string json = await File.ReadAllTextAsync(jsonFile, ct);
-                var definition = JsonSerializer.Deserialize<PopupOutlineDefinition>(json, options);
-                if (definition != null)
-                {
-                    RegisterOutline(definition);
-                }
-            }
-            catch (OperationCanceledException) { throw; }
-            catch (Exception) { /* Skip invalid files */ }
-        });
-
-        await Task.WhenAll(tasks);
+        _backgroundRegistry.RefreshCache();
+        _outlineRegistry.RefreshCache();
     }
 
-    private void LoadDefinitionsFromJson()
+    /// <summary>
+    ///     Refreshes the cache from the database asynchronously.
+    /// </summary>
+    public async Task RefreshCacheAsync(CancellationToken cancellationToken = default)
     {
-        string dataPath = Path.Combine(
-            AppContext.BaseDirectory,
-            "Assets",
-            "Definitions",
-            "Maps",
-            "Popups"
+        await Task.WhenAll(
+            _backgroundRegistry.RefreshCacheAsync(cancellationToken),
+            _outlineRegistry.RefreshCacheAsync(cancellationToken)
         );
-
-        if (!Directory.Exists(dataPath))
-        {
-            return;
-        }
-
-        // Load background definitions
-        string backgroundsPath = Path.Combine(dataPath, "Backgrounds");
-        if (Directory.Exists(backgroundsPath))
-        {
-            foreach (string jsonFile in Directory.GetFiles(backgroundsPath, "*.json"))
-            {
-                try
-                {
-                    string json = File.ReadAllText(jsonFile);
-                    var options = new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true,
-                        ReadCommentHandling = JsonCommentHandling.Skip
-                    };
-
-                    PopupBackgroundDefinition? definition = JsonSerializer.Deserialize<PopupBackgroundDefinition>(
-                        json,
-                        options
-                    );
-
-                    if (definition != null)
-                    {
-                        RegisterBackground(definition);
-                    }
-                }
-                catch (Exception)
-                {
-                    // Skip invalid files
-                }
-            }
-        }
-
-        // Load outline definitions
-        string outlinesPath = Path.Combine(dataPath, "Outlines");
-        if (Directory.Exists(outlinesPath))
-        {
-            foreach (string jsonFile in Directory.GetFiles(outlinesPath, "*.json"))
-            {
-                try
-                {
-                    string json = File.ReadAllText(jsonFile);
-                    var options = new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true,
-                        ReadCommentHandling = JsonCommentHandling.Skip
-                    };
-
-                    PopupOutlineDefinition? definition = JsonSerializer.Deserialize<PopupOutlineDefinition>(
-                        json,
-                        options
-                    );
-
-                    if (definition != null)
-                    {
-                        RegisterOutline(definition);
-                    }
-                }
-                catch (Exception)
-                {
-                    // Skip invalid files
-                }
-            }
-        }
-
-    }
-
-    /// <summary>
-    ///     Extracts the theme name from a full ID.
-    ///     E.g., "base:popup:background/wood" -> "wood"
-    /// </summary>
-    private static string? ExtractThemeName(string id)
-    {
-        if (string.IsNullOrEmpty(id)) return null;
-        var lastSlash = id.LastIndexOf('/');
-        return lastSlash >= 0 ? id.Substring(lastSlash + 1) : id;
     }
 }

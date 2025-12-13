@@ -5,6 +5,7 @@ using MonoBallFramework.Game.Ecs.Components.Movement;
 using MonoBallFramework.Game.Ecs.Components.Rendering;
 using MonoBallFramework.Game.Engine.Core.Systems;
 using MonoBallFramework.Game.Engine.Core.Systems.Base;
+using MonoBallFramework.Game.GameData.Entities;
 using MonoBallFramework.Game.GameData.Sprites;
 using EcsQueries = MonoBallFramework.Game.Engine.Systems.Queries.Queries;
 
@@ -19,13 +20,16 @@ namespace MonoBallFramework.Game.Systems.Rendering;
 public class SpriteAnimationSystem : SystemBase, IUpdateSystem
 {
     // Cache animation lookups by definition to avoid repeated LINQ queries
-    private readonly Dictionary<string, Dictionary<string, SpriteAnimationDefinition>> _animationCache =
+    private readonly Dictionary<string, Dictionary<string, SpriteAnimation>> _animationCache =
         new();
+
+    // Cache frame lookups by Index property (EF Core owned collections don't guarantee order)
+    private readonly Dictionary<string, Dictionary<int, SpriteFrame>> _frameCache = new();
 
     private readonly ILogger<SpriteAnimationSystem>? _logger;
 
     // Cache definitions for performance (avoid repeated registry lookups)
-    private readonly Dictionary<string, SpriteDefinition> _definitionCache = new();
+    private readonly Dictionary<string, SpriteEntity> _definitionCache = new();
 
     // Track missing sprites to avoid repeated lookup attempts and log spam
     private readonly HashSet<string> _missingSprites = new();
@@ -93,7 +97,7 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
             return;
         }
 
-        if (!_definitionCache.TryGetValue(definitionKey, out SpriteDefinition? definition))
+        if (!_definitionCache.TryGetValue(definitionKey, out SpriteEntity? definition))
         {
             // Load definition from registry
             // CRITICAL FIX: Use category + name to avoid loading wrong sprite
@@ -115,7 +119,7 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
 
         // Find the current animation in the definition
         string currentAnimName = animation.CurrentAnimation;
-        SpriteAnimationDefinition? animData = GetCachedAnimation(definition, currentAnimName, definitionKey);
+        SpriteAnimation? animData = GetCachedAnimation(definition, currentAnimName, definitionKey);
 
         if (animData == null)
         {
@@ -126,7 +130,7 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
         sprite.FlipHorizontal = animData.FlipHorizontal;
 
         // Validate animation has frames
-        if (animData.FrameIndices == null || animData.FrameIndices.Length == 0)
+        if (animData.FrameIndices == null || animData.FrameIndices.Count == 0)
         {
             return;
         }
@@ -144,7 +148,7 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
             animation.CurrentFrame++;
 
             // Handle looping
-            if (animation.CurrentFrame >= animData.FrameIndices.Length)
+            if (animation.CurrentFrame >= animData.FrameIndices.Count)
             {
                 // PlayOnce overrides Loop setting - treat as non-looping
                 if (animData.Loop && !animation.PlayOnce)
@@ -155,7 +159,7 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
                 else
                 {
                     // Non-looping animation completed (or PlayOnce completed one cycle)
-                    animation.CurrentFrame = animData.FrameIndices.Length - 1;
+                    animation.CurrentFrame = animData.FrameIndices.Count - 1;
                     animation.IsComplete = true;
                     animation.IsPlaying = false;
                 }
@@ -166,14 +170,15 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
         }
 
         // Update sprite's current frame index from animation sequence
-        int frameIndexInSequence = animation.CurrentFrame % animData.FrameIndices.Length;
+        int frameIndexInSequence = animation.CurrentFrame % animData.FrameIndices.Count;
         int frameIndexInSpriteSheet = animData.FrameIndices[frameIndexInSequence];
         sprite.CurrentFrame = frameIndexInSpriteSheet;
 
         // Update source rectangle from frame data
-        if (frameIndexInSpriteSheet >= 0 && frameIndexInSpriteSheet < definition.Frames.Count)
+        // Use cached frame lookup by Index property (EF Core owned collections don't guarantee order)
+        SpriteFrame? frame = GetCachedFrame(definition, frameIndexInSpriteSheet, definitionKey);
+        if (frame != null)
         {
-            SpriteFrameDefinition frame = definition.Frames[frameIndexInSpriteSheet];
             sprite.SourceRect = new Rectangle(frame.X, frame.Y, frame.Width, frame.Height);
 
             // Set origin to bottom-left for grid alignment
@@ -186,8 +191,8 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
     ///     Gets an animation from the cache, building the cache if necessary.
     ///     Avoids repeated LINQ queries for animation lookup.
     /// </summary>
-    private SpriteAnimationDefinition? GetCachedAnimation(
-        SpriteDefinition definition,
+    private SpriteAnimation? GetCachedAnimation(
+        SpriteEntity definition,
         string animName,
         string definitionKey
     )
@@ -195,13 +200,13 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
         if (
             !_animationCache.TryGetValue(
                 definitionKey,
-                out Dictionary<string, SpriteAnimationDefinition>? animDict
+                out Dictionary<string, SpriteAnimation>? animDict
             )
         )
         {
             // Build lookup dictionary once per definition
-            animDict = new Dictionary<string, SpriteAnimationDefinition>();
-            foreach (SpriteAnimationDefinition anim in definition.Animations)
+            animDict = new Dictionary<string, SpriteAnimation>();
+            foreach (SpriteAnimation anim in definition.Animations)
             {
                 animDict[anim.Name] = anim;
             }
@@ -209,7 +214,33 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
             _animationCache[definitionKey] = animDict;
         }
 
-        animDict.TryGetValue(animName, out SpriteAnimationDefinition? result);
+        animDict.TryGetValue(animName, out SpriteAnimation? result);
+        return result;
+    }
+
+    /// <summary>
+    ///     Gets a frame from the cache by its Index property, building the cache if necessary.
+    ///     EF Core owned collections don't guarantee order, so we lookup by Index, not array position.
+    /// </summary>
+    private SpriteFrame? GetCachedFrame(
+        SpriteEntity definition,
+        int frameIndex,
+        string definitionKey
+    )
+    {
+        if (!_frameCache.TryGetValue(definitionKey, out Dictionary<int, SpriteFrame>? frameDict))
+        {
+            // Build lookup dictionary once per definition, keyed by Index property
+            frameDict = new Dictionary<int, SpriteFrame>();
+            foreach (SpriteFrame f in definition.Frames)
+            {
+                frameDict[f.Index] = f;
+            }
+
+            _frameCache[definitionKey] = frameDict;
+        }
+
+        frameDict.TryGetValue(frameIndex, out SpriteFrame? result);
         return result;
     }
 
@@ -217,17 +248,17 @@ public class SpriteAnimationSystem : SystemBase, IUpdateSystem
     ///     Gets the duration for a specific frame in an animation.
     ///     Uses per-frame durations if available.
     /// </summary>
-    private static float GetFrameDuration(SpriteAnimationDefinition animData, int frameIndex)
+    private static float GetFrameDuration(SpriteAnimation animData, int frameIndex)
     {
         // Use per-frame durations if available and valid
         if (
             animData.FrameDurations != null
-            && animData.FrameDurations.Length > 0
+            && animData.FrameDurations.Count > 0
             && frameIndex >= 0
-            && frameIndex < animData.FrameDurations.Length
+            && frameIndex < animData.FrameDurations.Count
         )
         {
-            return animData.FrameDurations[frameIndex];
+            return (float)animData.FrameDurations[frameIndex];
         }
 
         // Fall back to default duration (1/8 second)

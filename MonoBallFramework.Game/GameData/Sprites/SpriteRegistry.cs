@@ -1,81 +1,62 @@
 using System.Collections.Concurrent;
-using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MonoBallFramework.Game.Engine.Core.Types;
-using MonoBallFramework.Game.Infrastructure.Services;
+using MonoBallFramework.Game.GameData.Entities;
+using MonoBallFramework.Game.GameData.Registries;
 
 namespace MonoBallFramework.Game.GameData.Sprites;
 
 /// <summary>
 ///     Registry for sprite definitions.
-///     Manages available sprite assets from the Data/Sprites directory.
-///     Provides thread-safe registration and lookup of sprite definitions by ID or path.
+///     Queries sprite definitions from EF Core GameDataContext using IDbContextFactory.
+///     Maintains an in-memory cache for fast lookups during gameplay.
+///     Follows the same pattern as AudioRegistry - EF Core is the source of truth.
 /// </summary>
-/// <remarks>
-///     <para>
-///         <b>Thread Safety:</b>
-///         - ConcurrentDictionary for thread-safe registration during parallel loading
-///         - Async loading with parallel file I/O for improved performance
-///         - SemaphoreSlim to prevent concurrent LoadDefinitionsAsync calls
-///         - CancellationToken support for graceful shutdown
-///     </para>
-/// </remarks>
-public class SpriteRegistry
+public class SpriteRegistry : EfCoreRegistry<SpriteEntity, GameSpriteId>
 {
-    private readonly ConcurrentDictionary<GameSpriteId, SpriteDefinition> _sprites = new();
-    private readonly ConcurrentDictionary<string, SpriteDefinition> _pathCache = new();
-    private readonly SemaphoreSlim _loadLock = new(1, 1);
-    private readonly IAssetPathResolver _pathResolver;
-    private readonly ILogger<SpriteRegistry> _logger;
-    private volatile bool _isLoaded = false;
+    private readonly ConcurrentDictionary<string, SpriteEntity> _pathCache = new();
 
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="SpriteRegistry"/> class.
-    /// </summary>
-    /// <param name="pathResolver">Asset path resolver for locating sprite data files.</param>
-    /// <param name="logger">Logger for diagnostic information.</param>
-    public SpriteRegistry(IAssetPathResolver pathResolver, ILogger<SpriteRegistry> logger)
+    public SpriteRegistry(IDbContextFactory<GameDataContext> contextFactory, ILogger<SpriteRegistry> logger)
+        : base(contextFactory, logger)
     {
-        _pathResolver = pathResolver ?? throw new ArgumentNullException(nameof(pathResolver));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     /// <summary>
-    ///     Gets whether sprite definitions have been loaded.
+    ///     Defines the queryable for loading sprite entities from the database.
+    ///     Includes Frames and Animations for complete sprite data.
     /// </summary>
-    public bool IsLoaded => _isLoaded;
-
-    /// <summary>
-    ///     Gets the total number of registered sprites.
-    /// </summary>
-    public int Count => _sprites.Count;
-
-    /// <summary>
-    ///     Registers a sprite definition.
-    ///     Thread-safe for parallel loading.
-    /// </summary>
-    /// <param name="definition">The sprite definition to register.</param>
-    /// <exception cref="ArgumentNullException">Thrown if definition is null.</exception>
-    /// <exception cref="ArgumentException">Thrown if definition.Id is null or empty.</exception>
-    public void RegisterSprite(SpriteDefinition definition)
+    protected override IQueryable<SpriteEntity> GetQueryable(GameDataContext context)
     {
-        ArgumentNullException.ThrowIfNull(definition);
-        ArgumentException.ThrowIfNullOrEmpty(definition.Id);
+        return context.Sprites
+            .Include(s => s.Frames)
+            .Include(s => s.Animations)
+            .AsNoTracking();
+    }
 
-        // Parse the ID string directly - format: base:sprite:category/name
-        var spriteId = new GameSpriteId(definition.Id);
-        if (_sprites.TryAdd(spriteId, definition))
-        {
-            _logger.LogDebug("Registered sprite: {SpriteId}", definition.Id);
+    /// <summary>
+    ///     Extracts the SpriteId key from a sprite entity.
+    /// </summary>
+    protected override GameSpriteId GetKey(SpriteEntity entity)
+    {
+        return entity.SpriteId;
+    }
 
-            // Cache by LocalId for O(1) path lookups
-            // LocalId: "npcs/generic/twin" (from "base:sprite:npcs/generic/twin")
-            _pathCache.TryAdd(spriteId.LocalId, definition);
-        }
-        else
-        {
-            _logger.LogWarning("Sprite {SpriteId} already registered, skipping", definition.Id);
-        }
+    /// <summary>
+    ///     Maintains the secondary path cache when entities are cached.
+    /// </summary>
+    protected override void OnEntityCached(GameSpriteId key, SpriteEntity entity)
+    {
+        // Cache by LocalId for O(1) path lookups
+        _pathCache[entity.SpriteId.LocalId] = entity;
+    }
+
+    /// <summary>
+    ///     Clears the secondary path cache when the main cache is cleared.
+    /// </summary>
+    protected override void OnClearCache()
+    {
+        _pathCache.Clear();
     }
 
     /// <summary>
@@ -83,9 +64,9 @@ public class SpriteRegistry
     /// </summary>
     /// <param name="spriteId">The full sprite ID (e.g., "base:sprite:npcs/generic/prof_birch").</param>
     /// <returns>The sprite definition if found; otherwise, null.</returns>
-    public SpriteDefinition? GetSprite(GameSpriteId spriteId)
+    public SpriteEntity? GetSprite(GameSpriteId spriteId)
     {
-        return _sprites.TryGetValue(spriteId, out SpriteDefinition? definition) ? definition : null;
+        return GetEntity(spriteId);
     }
 
     /// <summary>
@@ -95,16 +76,28 @@ public class SpriteRegistry
     /// </summary>
     /// <param name="path">The sprite path (e.g., "npcs/generic/prof_birch").</param>
     /// <returns>The sprite definition if found; otherwise, null.</returns>
-    public SpriteDefinition? GetSpriteByPath(string path)
+    public SpriteEntity? GetSpriteByPath(string path)
     {
         if (string.IsNullOrWhiteSpace(path))
             return null;
 
         string normalizedPath = path.Replace('\\', '/').Trim('/');
 
-        // O(1) lookup using path cache (keyed by sprite path e.g., "npcs/generic/twin")
+        // O(1) lookup using path cache
         if (_pathCache.TryGetValue(normalizedPath, out var definition))
             return definition;
+
+        // If cache not loaded, query database
+        if (!_isCacheLoaded)
+        {
+            // Build the full sprite ID and query
+            var fullId = $"base:sprite:{normalizedPath}";
+            var spriteId = GameSpriteId.TryCreate(fullId);
+            if (spriteId != null)
+            {
+                return GetSprite(spriteId);
+            }
+        }
 
         _logger.LogDebug("Sprite not found by path: {Path}", path);
         return null;
@@ -116,9 +109,10 @@ public class SpriteRegistry
     /// <param name="spriteId">The full sprite ID.</param>
     /// <param name="definition">The sprite definition if found; otherwise, null.</param>
     /// <returns>True if the sprite was found; otherwise, false.</returns>
-    public bool TryGetSprite(GameSpriteId spriteId, out SpriteDefinition? definition)
+    public bool TryGetSprite(GameSpriteId spriteId, out SpriteEntity? definition)
     {
-        return _sprites.TryGetValue(spriteId, out definition);
+        definition = GetSprite(spriteId);
+        return definition != null;
     }
 
     /// <summary>
@@ -127,168 +121,15 @@ public class SpriteRegistry
     /// <returns>An enumerable collection of all sprite IDs.</returns>
     public IEnumerable<GameSpriteId> GetAllSpriteIds()
     {
-        return _sprites.Keys;
+        return GetAllKeys();
     }
 
     /// <summary>
-    ///     Loads all sprite definitions from the Data/Sprites folder synchronously.
+    ///     Gets all sprites in a specific category.
     /// </summary>
-    public void LoadDefinitions()
+    public IEnumerable<SpriteEntity> GetByCategory(string category)
     {
-        LoadDefinitionsFromJson();
-        _isLoaded = true;
-        _logger.LogInformation("Loaded {Count} sprite definitions synchronously", _sprites.Count);
-    }
-
-    /// <summary>
-    ///     Loads sprite definitions asynchronously with parallel file I/O.
-    ///     Thread-safe - concurrent calls will wait for the first load to complete.
-    /// </summary>
-    /// <param name="cancellationToken">Cancellation token for graceful shutdown.</param>
-    /// <remarks>
-    ///     <para>
-    ///         <b>Performance:</b> Sprite files are loaded in parallel using Task.WhenAll,
-    ///         reducing total load time significantly compared to sequential loading.
-    ///         Recursively scans all subdirectories under Data/Sprites.
-    ///     </para>
-    /// </remarks>
-    public async Task LoadDefinitionsAsync(CancellationToken cancellationToken = default)
-    {
-        // Fast path: already loaded
-        if (_isLoaded)
-        {
-            _logger.LogDebug("Sprite definitions already loaded, skipping");
-            return;
-        }
-
-        // Prevent concurrent loads
-        await _loadLock.WaitAsync(cancellationToken);
-        try
-        {
-            // Double-check after acquiring lock
-            if (_isLoaded)
-            {
-                return;
-            }
-
-            _logger.LogInformation("Loading sprite definitions asynchronously...");
-
-            string spritesPath = _pathResolver.ResolveData("Sprites");
-
-            if (!Directory.Exists(spritesPath))
-            {
-                _logger.LogWarning("Sprites directory not found at {Path}", spritesPath);
-                _isLoaded = true;
-                return;
-            }
-
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-                ReadCommentHandling = JsonCommentHandling.Skip
-            };
-
-            // Load all sprite definition files recursively in parallel
-            await LoadSpritesRecursiveAsync(spritesPath, options, cancellationToken);
-
-            _isLoaded = true;
-            _logger.LogInformation("Loaded {Count} sprite definitions asynchronously", _sprites.Count);
-        }
-        finally
-        {
-            _loadLock.Release();
-        }
-    }
-
-    /// <summary>
-    ///     Recursively loads sprite definitions from a directory and its subdirectories.
-    /// </summary>
-    private async Task LoadSpritesRecursiveAsync(string path, JsonSerializerOptions options, CancellationToken ct)
-    {
-        if (!Directory.Exists(path))
-        {
-            return;
-        }
-
-        // Get all JSON files in the current directory
-        string[] jsonFiles = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories);
-
-        _logger.LogDebug("Found {Count} sprite definition files in {Path}", jsonFiles.Length, path);
-
-        // Load all sprite files in parallel
-        var tasks = jsonFiles.Select(async jsonFile =>
-        {
-            try
-            {
-                string json = await File.ReadAllTextAsync(jsonFile, ct);
-                var definition = JsonSerializer.Deserialize<SpriteDefinition>(json, options);
-                if (definition != null)
-                {
-                    RegisterSprite(definition);
-                }
-                else
-                {
-                    _logger.LogWarning("Failed to deserialize sprite definition from {File}", jsonFile);
-                }
-            }
-            catch (OperationCanceledException)
-            {
-                _logger.LogInformation("Sprite loading cancelled for {File}", jsonFile);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error loading sprite definition from {File}", jsonFile);
-            }
-        });
-
-        await Task.WhenAll(tasks);
-    }
-
-    /// <summary>
-    ///     Loads sprite definitions from JSON files synchronously.
-    /// </summary>
-    private void LoadDefinitionsFromJson()
-    {
-        string spritesPath = _pathResolver.ResolveData("Sprites");
-
-        if (!Directory.Exists(spritesPath))
-        {
-            _logger.LogWarning("Sprites directory not found at {Path}", spritesPath);
-            return;
-        }
-
-        var options = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true,
-            ReadCommentHandling = JsonCommentHandling.Skip
-        };
-
-        // Load all JSON files recursively
-        string[] jsonFiles = Directory.GetFiles(spritesPath, "*.json", SearchOption.AllDirectories);
-
-        _logger.LogDebug("Found {Count} sprite definition files in {Path}", jsonFiles.Length, spritesPath);
-
-        foreach (string jsonFile in jsonFiles)
-        {
-            try
-            {
-                string json = File.ReadAllText(jsonFile);
-                SpriteDefinition? definition = JsonSerializer.Deserialize<SpriteDefinition>(json, options);
-
-                if (definition != null)
-                {
-                    RegisterSprite(definition);
-                }
-                else
-                {
-                    _logger.LogWarning("Failed to deserialize sprite definition from {File}", jsonFile);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error loading sprite definition from {File}", jsonFile);
-            }
-        }
+        // Filter in memory since Category is computed from SpriteId
+        return GetAll().Where(s => s.SpriteCategory.Equals(category, StringComparison.OrdinalIgnoreCase));
     }
 }

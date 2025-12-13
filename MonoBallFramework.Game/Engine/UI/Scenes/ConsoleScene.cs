@@ -1,4 +1,5 @@
 using FontStashSharp;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,6 +14,7 @@ using MonoBallFramework.Game.Engine.UI.Interfaces;
 using MonoBallFramework.Game.Engine.UI.Layout;
 using MonoBallFramework.Game.Engine.UI.Models;
 using MonoBallFramework.Game.Engine.UI.Utilities;
+using MonoBallFramework.Game.GameData;
 
 namespace MonoBallFramework.Game.Engine.UI.Scenes;
 
@@ -28,6 +30,7 @@ public class ConsoleScene : SceneBase
     private float _consoleHeightPercent = 0.5f; // 50% of screen height by default
     private ConsolePanel? _consolePanel;
     private EntitiesPanelDualPane? _entitiesPanel;
+    private EntityFrameworkPanel? _entityFrameworkPanel;
     private LogsPanel? _logsPanel;
     private ProfilerPanel? _profilerPanel;
     private StatsPanel? _statsPanel;
@@ -294,6 +297,14 @@ public class ConsoleScene : SceneBase
     }
 
     /// <summary>
+    ///     Sets the DbContext factory for the EntityFramework panel.
+    /// </summary>
+    public void SetEntityFrameworkContextFactory(IDbContextFactory<GameDataContext>? factory)
+    {
+        _entityFrameworkPanel?.SetContextFactory(factory);
+    }
+
+    /// <summary>
     ///     Sets the active tab by index.
     /// </summary>
     public void SetActiveTab(int index)
@@ -500,11 +511,19 @@ public class ConsoleScene : SceneBase
                 Padding = 0,
             };
 
+            // Create EntityFramework panel
+            _entityFrameworkPanel = EntityFrameworkPanelBuilder.Create().Build();
+            _entityFrameworkPanel.BackgroundColor = Color.Transparent;
+            _entityFrameworkPanel.BorderColor = Color.Transparent;
+            _entityFrameworkPanel.BorderThickness = 0;
+            _entityFrameworkPanel.Constraint = new LayoutConstraint { Anchor = Anchor.Fill, Padding = 0 };
+
             // Add tabs to container
             _tabContainer.AddTab("Console", _consolePanel);
             _tabContainer.AddTab("Logs", _logsPanel);
             _tabContainer.AddTab("Watch", _watchPanel);
             _tabContainer.AddTab("Variables", _variablesPanel);
+            _tabContainer.AddTab("Data", _entityFrameworkPanel);
             _tabContainer.AddTab("Entities", _entitiesPanel);
             _tabContainer.AddTab("Events", EventInspectorPanel);
             _tabContainer.AddTab("Profiler", _profilerPanel);

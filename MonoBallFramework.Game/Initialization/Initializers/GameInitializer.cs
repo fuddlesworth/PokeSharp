@@ -40,7 +40,7 @@ public class GameInitializer(
     EntityPoolManager poolManager,
     SpriteRegistry spriteRegistry,
     MapLoader mapLoader,
-    MapDefinitionService mapDefinitionService,
+    MapEntityService mapDefinitionService,
     IEventBus eventBus,
     IGameStateApi gameStateApi,
     IGameStateService? gameStateService = null
@@ -257,7 +257,7 @@ public class GameInitializer(
         SpriteTextureLoader =
             spriteTextureLoader ?? throw new ArgumentNullException(nameof(spriteTextureLoader));
 
-        // Initialize MapLifecycleManager with SpriteTextureLoader, SpatialHashSystem, EventBus, and EntityPoolManager dependencies
+        // Initialize MapLifecycleManager with SpriteTextureLoader, SpatialHashSystem, and EventBus dependencies
         ILogger<MapLifecycleManager> mapLifecycleLogger =
             loggerFactory.CreateLogger<MapLifecycleManager>();
         MapLifecycleManager = new MapLifecycleManager(
@@ -266,11 +266,10 @@ public class GameInitializer(
             spriteTextureLoader,
             SpatialHashSystem,
             eventBus,
-            poolManager,
             mapLifecycleLogger
         );
         logger.LogInformation(
-            "MapLifecycleManager initialized with event bus, sprite texture, spatial hash, and pooling support"
+            "MapLifecycleManager initialized with event bus, sprite texture, and spatial hash support"
         );
 
         // Wire up MapLifecycleManager to MapStreamingSystem for proper entity cleanup during unloading

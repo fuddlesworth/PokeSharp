@@ -90,8 +90,7 @@ try
             GameTime = sp.GetRequiredService<IGameTimeService>(),
             PoolManager = sp.GetRequiredService<EntityPoolManager>(),
             DataLoader = sp.GetRequiredService<GameDataLoader>(),
-            NpcDefinitionService = sp.GetRequiredService<NpcDefinitionService>(),
-            MapDefinitionService = sp.GetRequiredService<MapDefinitionService>(),
+            MapEntityService = sp.GetRequiredService<MapEntityService>(),
             SpriteRegistry = sp.GetRequiredService<SpriteRegistry>(),
         };
         return new MonoBallFrameworkGame(loggerFactory, options, sp, gameConfig);

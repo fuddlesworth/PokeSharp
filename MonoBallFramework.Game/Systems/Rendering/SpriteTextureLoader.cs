@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoBallFramework.Game.Engine.Common.Logging;
 using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
+using MonoBallFramework.Game.GameData.Entities;
 using MonoBallFramework.Game.GameData.Sprites;
 using MonoBallFramework.Game.Infrastructure.Services;
 
@@ -70,7 +71,7 @@ public class SpriteTextureLoader
         {
             try
             {
-                SpriteDefinition? definition = _spriteRegistry.GetSprite(spriteId);
+                SpriteEntity? definition = _spriteRegistry.GetSprite(spriteId);
                 if (definition == null)
                 {
                     failedCount++;
@@ -150,7 +151,7 @@ public class SpriteTextureLoader
         }
 
         // Use SpriteRegistry to get the definition using full path
-        SpriteDefinition? definition = _spriteRegistry.GetSpriteByPath(spritePath);
+        SpriteEntity? definition = _spriteRegistry.GetSpriteByPath(spritePath);
 
         if (definition == null)
         {
@@ -287,7 +288,7 @@ public class SpriteTextureLoader
             await _spriteRegistry.LoadDefinitionsAsync();
         }
 
-        SpriteDefinition? definition = _spriteRegistry.GetSpriteByPath(spritePath);
+        SpriteEntity? definition = _spriteRegistry.GetSpriteByPath(spritePath);
 
         if (definition == null)
         {

@@ -24,7 +24,7 @@ public abstract record EntityId
     ///     Format: namespace:type:category/name OR namespace:type:category/subcategory/name
     /// </summary>
     private static readonly Regex IdPattern = new(
-        @"^[a-z0-9_]+:[a-z]+:[a-z0-9_]+/[a-z0-9_]+(/[a-z0-9_]+)?$",
+        @"^[a-z0-9_]+:[a-z_]+:[a-z0-9_]+/[a-z0-9_]+(/[a-z0-9_]+)?$",
         RegexOptions.Compiled);
 
     /// <summary>

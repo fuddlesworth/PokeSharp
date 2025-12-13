@@ -1,10 +1,8 @@
 using Arch.Core;
 using Arch.Core.Extensions;
-using Arch.Relationships;
 using Microsoft.Extensions.Logging;
 using MonoBallFramework.Game.Ecs.Components.Maps;
 using MonoBallFramework.Game.Ecs.Components.Movement;
-using MonoBallFramework.Game.Ecs.Components.Relationships;
 using MonoBallFramework.Game.Engine.Common.Logging;
 using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Tmx;
@@ -103,9 +101,6 @@ public class WarpSpawner
                 new Position(tileX, tileY, mapId, tileHeight),
                 new WarpPoint(targetMapId, targetX, targetY)
             );
-
-            // Add ParentOf relationship - map is parent of warps
-            mapInfoEntity.AddRelationship(warpEntity, new ParentOf());
 
             // Register warp in MapWarps spatial index for O(1) lookup
             ref MapWarps mapWarps = ref mapInfoEntity.Get<MapWarps>();

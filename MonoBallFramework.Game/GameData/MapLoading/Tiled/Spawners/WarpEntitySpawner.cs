@@ -1,11 +1,9 @@
 using Arch.Core;
 using Arch.Core.Extensions;
-using Arch.Relationships;
 using Microsoft.Extensions.Logging;
 using MonoBallFramework.Game.Ecs.Components.Common;
 using MonoBallFramework.Game.Ecs.Components.Maps;
 using MonoBallFramework.Game.Ecs.Components.Movement;
-using MonoBallFramework.Game.Ecs.Components.Relationships;
 using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Utilities;
 
@@ -73,9 +71,6 @@ public sealed class WarpEntitySpawner : IEntitySpawner
             new Position(tileX, tileY, context.MapId, context.TileHeight),
             new WarpPoint(targetMapId, targetX, targetY)
         );
-
-        // Add parent relationship - map owns this warp
-        context.MapInfoEntity.AddRelationship(warpEntity, new ParentOf());
 
         // Register warp in spatial index for O(1) lookup during collision
         ref MapWarps mapWarps = ref context.MapInfoEntity.Get<MapWarps>();

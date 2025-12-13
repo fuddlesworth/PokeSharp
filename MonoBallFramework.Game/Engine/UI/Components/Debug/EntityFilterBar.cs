@@ -68,6 +68,7 @@ public class EntityFilterBar : UIComponent
     private float _tagDropdownWidth = MinDropdownWidth;
     private float _componentDropdownWidth = MinDropdownWidth;
     private bool _dropdownWidthsCalculated;
+    private bool _showComponentDropdown = true;
 
     /// <summary>
     ///     Event fired when any filter changes.
@@ -129,6 +130,23 @@ public class EntityFilterBar : UIComponent
     public float PreferredHeight => BarHeight;
 
     /// <summary>
+    ///     Gets or sets whether to show the component dropdown.
+    ///     When false, only tag dropdown and search are shown.
+    /// </summary>
+    public bool ShowComponentDropdown
+    {
+        get => _showComponentDropdown;
+        set
+        {
+            if (_showComponentDropdown != value)
+            {
+                _showComponentDropdown = value;
+                _dropdownWidthsCalculated = false; // Recalculate layout
+            }
+        }
+    }
+
+    /// <summary>
     ///     Sets the available tags for the dropdown.
     /// </summary>
     public void SetTags(IEnumerable<string> tags)
@@ -177,7 +195,7 @@ public class EntityFilterBar : UIComponent
     /// <summary>
     ///     Gets whether any dropdown is currently open.
     /// </summary>
-    public bool HasOpenDropdown => _tagDropdownOpen || _componentDropdownOpen;
+    public bool HasOpenDropdown => _tagDropdownOpen || (_showComponentDropdown && _componentDropdownOpen);
 
     /// <summary>
     ///     Gets whether the search input is currently focused.
@@ -188,7 +206,7 @@ public class EntityFilterBar : UIComponent
     ///     Gets whether the filter bar has exclusive input focus
     ///     (dropdown open or search focused).
     /// </summary>
-    public bool HasExclusiveFocus => _tagDropdownOpen || _componentDropdownOpen || _searchFocused;
+    public bool HasExclusiveFocus => _tagDropdownOpen || (_showComponentDropdown && _componentDropdownOpen) || _searchFocused;
 
     /// <summary>
     ///     Gets the bounds of any open dropdown (for hit-testing by parent).
@@ -233,9 +251,17 @@ public class EntityFilterBar : UIComponent
         _tagDropdownRect = new LayoutRect(x, rect.Y + 4, _tagDropdownWidth, BarHeight - 8);
         x += _tagDropdownWidth + ItemSpacing;
 
-        // Component dropdown (width calculated from content)
-        _componentDropdownRect = new LayoutRect(x, rect.Y + 4, _componentDropdownWidth, BarHeight - 8);
-        x += _componentDropdownWidth + ItemSpacing;
+        // Component dropdown (width calculated from content) - only if enabled
+        if (_showComponentDropdown)
+        {
+            _componentDropdownRect = new LayoutRect(x, rect.Y + 4, _componentDropdownWidth, BarHeight - 8);
+            x += _componentDropdownWidth + ItemSpacing;
+        }
+        else
+        {
+            // Set to empty rect when hidden
+            _componentDropdownRect = new LayoutRect(0, 0, 0, 0);
+        }
 
         // Skip search icon
         x += SearchIconWidth;
@@ -319,8 +345,8 @@ public class EntityFilterBar : UIComponent
             return;
         }
 
-        // Check if clicking on component dropdown button
-        if (_componentDropdownRect.Contains(mousePos))
+        // Check if clicking on component dropdown button (only if enabled)
+        if (_showComponentDropdown && _componentDropdownRect.Contains(mousePos))
         {
             _componentDropdownOpen = !_componentDropdownOpen;
             if (_componentDropdownOpen)
@@ -368,8 +394,8 @@ public class EntityFilterBar : UIComponent
             return;
         }
 
-        // Handle component dropdown clicks
-        if (_componentDropdownOpen)
+        // Handle component dropdown clicks (only if enabled)
+        if (_showComponentDropdown && _componentDropdownOpen)
         {
             HandleComponentDropdownInteraction(input, mousePos);
             return;
@@ -560,9 +586,12 @@ public class EntityFilterBar : UIComponent
         DrawTagDropdown(context!, renderer, _tagDropdownRect);
         x += _tagDropdownWidth + ItemSpacing;
 
-        // Component dropdown (rendering only)
-        DrawComponentDropdown(context!, renderer, _componentDropdownRect);
-        x += _componentDropdownWidth + ItemSpacing;
+        // Component dropdown (rendering only) - only show if enabled
+        if (_showComponentDropdown)
+        {
+            DrawComponentDropdown(context!, renderer, _componentDropdownRect);
+            x += _componentDropdownWidth + ItemSpacing;
+        }
 
         // Search icon
         renderer.DrawText(NerdFontIcons.Search, x, centerY - 8, theme.TextSecondary);

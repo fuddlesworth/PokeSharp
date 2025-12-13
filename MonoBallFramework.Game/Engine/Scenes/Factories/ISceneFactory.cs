@@ -1,5 +1,5 @@
-using MonoBallFramework.Game.Engine.Rendering.Popups;
 using MonoBallFramework.Game.Engine.Scenes.Scenes;
+using MonoBallFramework.Game.GameData.Entities;
 
 namespace MonoBallFramework.Game.Engine.Scenes.Factories;
 
@@ -17,8 +17,8 @@ public interface ISceneFactory
     /// <param name="mapName">The map name to display.</param>
     /// <returns>A fully configured MapPopupScene.</returns>
     MapPopupScene CreateMapPopupScene(
-        PopupBackgroundDefinition backgroundDefinition,
-        PopupOutlineDefinition outlineDefinition,
+        PopupBackgroundEntity backgroundDefinition,
+        PopupOutlineEntity outlineDefinition,
         string mapName
     );
 }

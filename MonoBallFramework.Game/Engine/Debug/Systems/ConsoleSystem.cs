@@ -3,11 +3,13 @@ using System.Reflection;
 using System.Text;
 using Arch.Core;
 using Arch.Relationships;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoBallFramework.Game.GameData;
 using MonoBallFramework.Game.Ecs.Components.Relationships;
 using MonoBallFramework.Game.Engine.Core.Events;
 using MonoBallFramework.Game.Engine.Core.Services;
@@ -402,6 +404,18 @@ public class ConsoleSystem : IUpdateSystem
 
         // Set up stats provider for the Stats panel
         _consoleScene?.SetStatsProvider(CreateStatsProvider());
+
+        // Set up EntityFramework panel context factory
+        try
+        {
+            IDbContextFactory<GameDataContext>? contextFactory =
+                _services.GetService<IDbContextFactory<GameDataContext>>();
+            _consoleScene?.SetEntityFrameworkContextFactory(contextFactory);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to set EntityFramework context factory");
+        }
 
         // Set up Event Inspector provider for the Events panel
         try

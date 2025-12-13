@@ -1,7 +1,5 @@
 using Microsoft.Extensions.Logging;
 using MonoBallFramework.Game.Engine.Core.Types;
-using MonoBallFramework.Game.GameData.Entities;
-using MonoBallFramework.Game.GameData.Services;
 using MonoBallFramework.Game.GameData.Sprites;
 using MonoBallFramework.Game.GameSystems.Services;
 using MonoBallFramework.Game.Scripting.Api;
@@ -14,7 +12,6 @@ namespace MonoBallFramework.Game.Scripting.Services;
 /// </summary>
 public class RegistryApiService(
     IBehaviorRegistry behaviorRegistry,
-    NpcDefinitionService npcDefinitionService,
     MapRegistry mapRegistry,
     SpriteRegistry spriteRegistry,
     ILogger<RegistryApiService> logger
@@ -22,9 +19,6 @@ public class RegistryApiService(
 {
     private readonly IBehaviorRegistry _behaviorRegistry =
         behaviorRegistry ?? throw new ArgumentNullException(nameof(behaviorRegistry));
-
-    private readonly NpcDefinitionService _npcDefinitionService =
-        npcDefinitionService ?? throw new ArgumentNullException(nameof(npcDefinitionService));
 
     private readonly MapRegistry _mapRegistry =
         mapRegistry ?? throw new ArgumentNullException(nameof(mapRegistry));
@@ -34,114 +28,6 @@ public class RegistryApiService(
 
     private readonly ILogger<RegistryApiService> _logger =
         logger ?? throw new ArgumentNullException(nameof(logger));
-
-    #region NPC Registry
-
-    /// <inheritdoc />
-    public NpcDefinition? GetNpcDefinition(GameNpcId npcId)
-    {
-        ArgumentNullException.ThrowIfNull(npcId);
-
-        _logger.LogDebug("Looking up NPC definition: {NpcId}", npcId);
-
-        // Use NpcDefinitionService for cached lookup
-        return _npcDefinitionService.GetNpc(npcId);
-    }
-
-    /// <inheritdoc />
-    public IEnumerable<GameNpcId> GetAllNpcIds()
-    {
-        _logger.LogDebug("Getting all NPC IDs");
-
-        // Note: This requires async call to database - using synchronous warning pattern
-        _logger.LogWarning(
-            "GetAllNpcIds requires database query - consider using async GetNpcsByTypeAsync instead"
-        );
-
-        // Return empty collection for now - proper implementation would need async support
-        return [];
-    }
-
-    /// <inheritdoc />
-    public IEnumerable<GameNpcId> GetNpcIdsByCategory(string category)
-    {
-        if (string.IsNullOrWhiteSpace(category))
-            return [];
-
-        _logger.LogDebug("Getting NPC IDs by category: {Category}", category);
-
-        // Note: NpcDefinitionService uses "NpcType" for categorization
-        // Async method GetNpcsByTypeAsync is available but not accessible from sync context
-        _logger.LogWarning(
-            "GetNpcIdsByCategory requires async database query - returning empty collection"
-        );
-
-        return [];
-    }
-
-    /// <inheritdoc />
-    public bool NpcExists(GameNpcId npcId)
-    {
-        ArgumentNullException.ThrowIfNull(npcId);
-
-        return _npcDefinitionService.HasNpc(npcId);
-    }
-
-    #endregion
-
-    #region Trainer Registry
-
-    /// <inheritdoc />
-    public TrainerDefinition? GetTrainerDefinition(GameTrainerId trainerId)
-    {
-        ArgumentNullException.ThrowIfNull(trainerId);
-
-        _logger.LogDebug("Looking up trainer definition: {TrainerId}", trainerId);
-
-        // Use NpcDefinitionService for cached trainer lookup
-        return _npcDefinitionService.GetTrainer(trainerId);
-    }
-
-    /// <inheritdoc />
-    public IEnumerable<GameTrainerId> GetAllTrainerIds()
-    {
-        _logger.LogDebug("Getting all trainer IDs");
-
-        // Note: This requires async call to database
-        _logger.LogWarning(
-            "GetAllTrainerIds requires database query - consider using async GetTrainersByClassAsync instead"
-        );
-
-        // Return empty collection for now - proper implementation would need async support
-        return [];
-    }
-
-    /// <inheritdoc />
-    public IEnumerable<GameTrainerId> GetTrainerIdsByCategory(string category)
-    {
-        if (string.IsNullOrWhiteSpace(category))
-            return [];
-
-        _logger.LogDebug("Getting trainer IDs by category: {Category}", category);
-
-        // Note: NpcDefinitionService uses "TrainerClass" for categorization
-        // Async method GetTrainersByClassAsync is available but not accessible from sync context
-        _logger.LogWarning(
-            "GetTrainerIdsByCategory requires async database query - returning empty collection"
-        );
-
-        return [];
-    }
-
-    /// <inheritdoc />
-    public bool TrainerExists(GameTrainerId trainerId)
-    {
-        ArgumentNullException.ThrowIfNull(trainerId);
-
-        return _npcDefinitionService.HasTrainer(trainerId);
-    }
-
-    #endregion
 
     #region Sprite Registry
 

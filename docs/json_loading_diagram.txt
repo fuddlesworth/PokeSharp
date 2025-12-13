@@ -1,0 +1,384 @@
+# JSON Loading Pathways - Visual Diagram
+
+## Initialization Pipeline Execution Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│ MonoBallFrameworkGame.cs - Pipeline Configuration                      │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                    ┌───────────────┴───────────────┐
+                    │ InitializationPipeline        │
+                    │ (Executes steps in order)     │
+                    └───────────────┬───────────────┘
+                                    │
+        ┌───────────────────────────┼───────────────────────────┐
+        │                           │                           │
+        ▼                           ▼                           ▼
+   STEP 1              STEP 2                    STEP 3       STEP 4
+  ┌──────────┐      ┌──────────┐           ┌──────────┐   ┌──────────────┐
+  │  Load    │      │ Load     │           │  Load    │   │ Initialize  │
+  │ Game     │      │ Sprite   │           │ Sprite   │   │ Map Popup   │
+  │ Data     │      │ Defs     │           │ Textures │   │ System      │
+  └─────┬────┘      └─────┬────┘           └──────────┘   └─────┬───────┘
+        │                 │                                      │
+        ▼                 ▼                                      ▼
+    GameDataLoader   SpriteRegistry                        PopupRegistry
+    ┌────────────┐   ┌──────────────┐                     ┌────────────────┐
+    │ EF Core DB │   │ Async/Sync   │                     │ Async/Sync     │
+    │            │   │              │                     │                │
+    │ NPCs       │   │ Sprite       │                     │ Backgrounds    │
+    │ Trainers   │   │ Definitions  │                     │ Outlines       │
+    │ Maps       │   │              │                     │                │
+    │ Pop Themes │   │              │                     │                │
+    │ Sections   │   │              │                     │                │
+    │ Audio      │   │              │                     │                │
+    └────────────┘   └──────────────┘                     └────────────────┘
+        │                 │                                      │
+        └─────────────────┴──────────────────────────────────────┘
+                          │
+                          ▼
+                  ✅ Game Ready
+
+
+## Data Flow: GameDataLoader (Best Practice)
+
+Assets/Definitions/
+├── NPCs/
+│   └── [*.json files]
+├── Trainers/
+│   └── [*.json files]
+├── Maps/
+│   ├── Regions/
+│   │   └── [*.json files]
+│   ├── Popups/Themes/
+│   │   └── [*.json files]
+│   └── Sections/
+│       └── [*.json files]
+└── Audio/
+    └── [*.json files]
+
+                ┌──────────────────────┐
+                │ GameDataLoader.cs    │
+                │                      │
+                │ _jsonOptions = new   │ ← CREATED ONCE
+                │ {                    │   (Cached in field)
+                │   Insensitive: true  │
+                │   Comments: Skip     │
+                │   Trailing: true     │
+                │   Indented: true     │
+                │ }                    │
+                └──────────┬───────────┘
+                           │
+        ┌──────────────────┼──────────────────┬────────────────┐
+        │                  │                  │                │
+        ▼                  ▼                  ▼                ▼
+    NPC Defs       Trainer Defs        Map Defs         Audio Defs
+    (6 files)      (12 files)          (20 files)       (30 files)
+        │                  │                  │                │
+        └──────────────────┼──────────────────┴────────────────┘
+                           │
+                           ▼
+            JsonSerializer.Deserialize(json, _jsonOptions)
+            ✅ Reuses same options for ALL
+                           │
+                           ▼
+        ┌──────────────────────────────────────┐
+        │ Convert DTO → Entity                 │
+        │ Add to _context                      │
+        └──────────────────────────────────────┘
+                           │
+                           ▼
+        ┌──────────────────────────────────────┐
+        │ _context.SaveChangesAsync()          │
+        │ (After each data type)               │
+        └──────────────────────────────────────┘
+                           │
+                           ▼
+                    ✅ EF Core DB
+                    (In-memory)
+
+
+## Data Flow: SpriteRegistry (Parallel Loading)
+
+Assets/Sprites/
+├── npcs/
+│   ├── generic/
+│   │   ├── prof_birch.json
+│   │   └── [...]
+│   └── [...]
+├── players/
+│   └── [...]
+└── pokemon/
+    └── [...]
+
+                    ┌─────────────────────────┐
+                    │ SpriteRegistry.cs       │
+                    │ LoadDefinitionsAsync    │
+                    └────────────┬────────────┘
+                                 │
+                        ┌────────┴────────┐
+                        │                 │
+                        ▼                 ▼
+                      ASYNC           SYNC
+                   (Parallel)      (Sequential)
+                        │                 │
+        ┌───────────────────┐  ┌─────────────────┐
+        │ options = new { } │  │ options = new {}│
+        │ (line 185)        │  │ (line 261)      │
+        │ CREATED ONCE      │  │ CREATED ONCE    │
+        └────────┬──────────┘  └────────┬────────┘
+                 │                      │
+                 ▼                      ▼
+        Task.WhenAll(            foreach file in
+        [                        files
+          Load(file1, opts),        Load(file, opts)
+          Load(file2, opts),     }
+          Load(file3, opts),
+          ...                  ✅ Reuses options
+        ])                         properly
+
+        ✅ Reuses options
+        across all parallel
+        tasks
+
+                    │                      │
+                    └──────────────┬───────┘
+                                   │
+                                   ▼
+                    ┌────────────────────────────┐
+                    │ SpriteRegistry (Dict)      │
+                    │ {                          │
+                    │   "base:sprite:...": {...} │
+                    │ }                          │
+                    └────────────────────────────┘
+
+
+## Data Flow: PopupRegistry (PROBLEM AREA)
+
+Assets/Definitions/Maps/Popups/
+├── Backgrounds/
+│   ├── wood.json
+│   ├── stone.json
+│   └── [18 more files]
+└── Outlines/
+    ├── wood_outline.json
+    ├── stone_outline.json
+    └── [18 more files]
+
+                    ┌──────────────────────────┐
+                    │ PopupRegistry.cs         │
+                    │ LoadDefinitionsAsync     │
+                    └────────────┬─────────────┘
+                                 │
+                ┌────────────────┴────────────────┐
+                │                                 │
+                ▼                                 ▼
+        ASYNC PATH              SYNC PATH
+        (Good ✅)               (Bad ❌)
+                │                                 │
+        ┌───────┴────────┐            ┌──────────┴───────────┐
+        │ options = new  │            │                      │
+        │ (line 192)     │            ▼                      ▼
+        │ CREATED ONCE   │       BG Loop              Outline Loop
+        └────────┬───────┘       (Line 290-315)       (Line 322-347)
+                 │               │                    │
+                 │               ▼                    ▼
+        ┌───────────────┐  foreach file {     foreach file {
+        │               │    options =       options =
+        │ Parallel:     │      new { }         new { }
+        │               │    ❌ RECREATED  ❌ RECREATED
+        │ Backgrounds   │                  FOR EACH FILE
+        │ AND           │
+        │ Outlines      │
+        │               │
+        │ (Task.WhenAll)│
+        └───────┬───────┘
+                │
+                ▼
+        ✅ Options
+        passed to
+        both
+
+
+## Data Flow: TypeRegistry (CRITICAL PROBLEM)
+
+Assets/Definitions/[Behavior Types]/
+├── npc_types.json
+├── item_types.json
+├── status_types.json
+└── [197 more definition files]
+
+                ┌────────────────────────┐
+                │ TypeRegistry.cs        │
+                │ LoadAllAsync()         │
+                │ (Line 98-128)          │
+                └─────────────┬──────────┘
+                              │
+                ┌─────────────────────────┐
+                │ jsonFiles = [200 files] │
+                └────────────┬────────────┘
+                             │
+                ┌────────────┴────────────┐
+                │                         │
+        Loop: foreach jsonFile       (Or concurrent calls)
+                │
+                ▼
+        RegisterFromJsonAsync(path)
+        (Line 136-168)
+                │
+        ┌───────┴──────┐
+        │              │
+        ▼              ▼
+        Line 139:   Line 146:
+        options =   Deserialize(
+        new {       json, options)
+        }
+        ❌ RECREATED
+        FOR EACH
+        FILE
+
+
+        TOTAL IMPACT:
+        ┌─────────────────────────────┐
+        │ 200 JsonSerializerOptions   │
+        │ allocations                 │
+        │                             │
+        │ ~500-1000 bytes each        │
+        │ = 100-200 KB waste          │
+        │                             │
+        │ + GC pressure               │
+        │ + CPU time for each         │
+        │                             │
+        │ Estimated: 5-10ms overhead  │
+        └─────────────────────────────┘
+
+
+## Options Configuration Matrix
+
+┌─────────────────────┬──────────────────┬──────┬─────────┬─────────────┐
+│ Registry            │ Property          │ Case │ Comments│ Trailing    │
+│                     │ Insensitive       │ Skip │ Commas  │             │
+├─────────────────────┼──────────────────┼──────┼─────────┼─────────────┤
+│ GameDataLoader      │ ✅ true          │ ✅   │ ✅      │ WriteIndent │
+├─────────────────────┼──────────────────┼──────┼─────────┼─────────────┤
+│ SpriteRegistry A    │ ✅ true          │ ✅   │ ❌      │ ❌          │
+├─────────────────────┼──────────────────┼──────┼─────────┼─────────────┤
+│ SpriteRegistry S    │ ✅ true          │ ✅   │ ❌      │ ❌          │
+├─────────────────────┼──────────────────┼──────┼─────────┼─────────────┤
+│ PopupRegistry A     │ ✅ true          │ ✅   │ ❌      │ ❌          │
+├─────────────────────┼──────────────────┼──────┼─────────┼─────────────┤
+│ PopupRegistry S     │ ✅ true          │ ✅   │ ❌      │ ❌          │
+├─────────────────────┼──────────────────┼──────┼─────────┼─────────────┤
+│ TypeRegistry        │ ✅ true          │ ✅   │ ✅      │ ❌          │
+└─────────────────────┴──────────────────┴──────┴─────────┴─────────────┘
+
+A = Async
+S = Sync
+
+
+## Redundancy Heat Map
+
+╔════════════════════════════════════════════════════════════════╗
+║               REDUNDANCY SEVERITY CHART                        ║
+╠════════════════════════════════════════════════════════════════╣
+║                                                                ║
+║ TypeRegistry         ████████████████████ 200+ allocations   ║
+║ PopupRegistry Sync   ██████ 40 allocations                   ║
+║ SpriteRegistry Sync  ████ 1 (inefficient placement)          ║
+║ GameDataLoader       ✅ None - optimal                        ║
+║ SpriteRegistry Async ✅ None - optimal                        ║
+║ PopupRegistry Async  ✅ None - optimal                        ║
+║                                                                ║
+╠════════════════════════════════════════════════════════════════╣
+║ Impact Priority: TypeRegistry >> PopupRegistry >> Sprite      ║
+╚════════════════════════════════════════════════════════════════╝
+
+
+## Race Condition Analysis
+
+SCENARIO: All steps run in InitializationPipeline order
+
+Step 1: LoadGameDataStep
+  └─ GameDataLoader.LoadAllAsync()
+     ├─ Sequential loading (no concurrency)
+     └─ SaveChangesAsync called per type
+        ✅ NO RACE CONDITIONS
+
+Step 2: LoadSpriteDefinitionsStep
+  └─ SpriteRegistry.LoadDefinitionsAsync()
+     ├─ SemaphoreSlim prevents concurrent loads ✅
+     └─ Parallel file I/O within single load ✅
+        ✅ NO RACE CONDITIONS
+
+Step 3: LoadSpriteTexturesStep
+  └─ Texture loading (not JSON)
+     ✅ NO ISSUES
+
+Step 4: InitializeMapPopupStep
+  ├─ Creates NEW PopupRegistry instance
+  ├─ PopupRegistry.LoadDefinitionsAsync()
+  │  ├─ SemaphoreSlim prevents concurrent loads ✅
+  │  └─ Parallel background + outline loading ✅
+  └─ Creates MapPopupOrchestrator
+     ⚠️ DATA MODEL ISSUE (not race condition)
+
+ARCHITECTURAL ISSUE DISCOVERED:
+
+  Popup Data Split Across TWO Systems:
+
+  GameDataLoader                    PopupRegistry
+  ├─ PopupTheme                     ├─ PopupBackground
+  │  (EF Core DB)                   │  (ConcurrentDict)
+  │                                 │
+  └─ Used by: Map system            └─ Used by: UI popup system
+
+  PROBLEM: Independent loading = inconsistent state possible
+  SOLUTION: Sync at initialization or merge into single registry
+
+
+## File Access Pattern
+
+Concurrent File Access During Init:
+
+Step 1:2:3:4 can run in sequence (no overlap currently)
+
+       GameDataLoader        SpriteRegistry        PopupRegistry
+       │                     │                     │
+    Read NPCs               Read Sprites          Read Backgrounds
+       │                     │                     │
+    Save to DB              Register              Register
+       │                     │                     │
+    Read Trainers           ────────────────────────
+       │
+    Save to DB
+       │
+    Read Maps
+    ...
+
+✅ NO FILE CONFLICTS - Different data directories
+⚠️ TypeRegistry not shown - would scan broadly (SearchOption.AllDirectories)
+   Could overlap if definitions mixed with other data
+
+
+## Initialization Timeline (Estimated)
+
+Without optimization:
+  ┌─ GameDataLoader: ~50ms (6+ JSON files, EF Core saves)
+  ├─ SpriteRegistry: ~30ms (500 files, parallel read)
+  ├─ SpriteTextures: ~20ms
+  └─ PopupRegistry: ~5ms (40 files, parallel)
+     └─ PopupRegistry sync fallback: ~8ms
+     └─ TypeRegistry: ~200ms (200 files × options alloc)
+     ─────────────────────────
+     TOTAL: ~305ms
+
+With Priority 1 fixes:
+  └─ TypeRegistry: ~50ms (reused options)
+     ─────────────────────────
+     TOTAL: ~155ms (50% improvement!)
+
+With Priority 2 fixes:
+  └─ Shared factory + static options
+     ─────────────────────────
+     TOTAL: ~135ms (additional 10% improvement)

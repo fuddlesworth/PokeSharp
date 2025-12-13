@@ -1,6 +1,5 @@
 using Arch.Core;
 using Arch.Core.Extensions;
-using Arch.Relationships;
 using Microsoft.Extensions.Logging;
 using MonoBallFramework.Game.Engine.Common.Logging;
 using MonoBallFramework.Game.Engine.Core.Events;
@@ -8,15 +7,12 @@ using MonoBallFramework.Game.Engine.Core.Events.Map;
 using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
 using MonoBallFramework.Game.Engine.Systems.Management;
-using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game.Components;
 using MonoBallFramework.Game.Ecs.Components;
 using MonoBallFramework.Game.Ecs.Components.Maps;
 using MonoBallFramework.Game.Ecs.Components.Movement;
-using MonoBallFramework.Game.Ecs.Components.Relationships;
-using MonoBallFramework.Game.Ecs.Components.Rendering;
 using MonoBallFramework.Game.Ecs.Components.NPCs;
-using MonoBallFramework.Game.Ecs.Components.Tiles;
+using MonoBallFramework.Game.Ecs.Components.Player;
 using MonoBallFramework.Game.GameSystems.Spatial;
 using MonoBallFramework.Game.Scripting.Systems;
 using MonoBallFramework.Game.Systems.Rendering;
@@ -26,7 +22,7 @@ namespace MonoBallFramework.Game.Systems;
 /// <summary>
 ///     Manages map lifecycle: loading, unloading, and memory cleanup.
 ///     Ensures only active maps remain in memory to prevent entity/texture accumulation.
-///     Supports entity pooling for tile entities to reduce GC pressure.
+///     Uses tile cache for efficient cleanup without relationship traversal.
 /// </summary>
 public class MapLifecycleManager(
     World world,
@@ -34,11 +30,11 @@ public class MapLifecycleManager(
     SpriteTextureLoader spriteTextureLoader,
     SpatialHashSystem spatialHashSystem,
     IEventBus? eventBus = null,
-    EntityPoolManager? poolManager = null,
     ILogger<MapLifecycleManager>? logger = null
 )
 {
     private readonly Dictionary<string, MapMetadata> _loadedMaps = new();
+    private readonly Dictionary<GameMapId, List<Entity>> _mapTileCache = new();
     private GameMapId? _currentMapId;
     private GameMapId? _previousMapId;
     private NPCBehaviorSystem? _npcBehaviorSystem;
@@ -57,6 +53,31 @@ public class MapLifecycleManager(
     ///     Gets the current active map ID
     /// </summary>
     public GameMapId? CurrentMapId => _currentMapId;
+
+    /// <summary>
+    ///     Registers tile entities for a map. Called by MapLoader after creating tiles.
+    /// </summary>
+    public void RegisterMapTiles(GameMapId mapId, List<Entity> tiles)
+    {
+        _mapTileCache[mapId] = tiles;
+        logger?.LogDebug("Registered {Count} tiles for map {MapId}", tiles.Count, mapId.Value);
+    }
+
+    /// <summary>
+    ///     Gets all tile entities for a map.
+    /// </summary>
+    public IReadOnlyList<Entity>? GetMapTiles(GameMapId mapId)
+    {
+        return _mapTileCache.TryGetValue(mapId, out var tiles) ? tiles : null;
+    }
+
+    /// <summary>
+    ///     Clears tile cache for a map (called after tiles are destroyed).
+    /// </summary>
+    public void ClearMapTileCache(GameMapId mapId)
+    {
+        _mapTileCache.Remove(mapId);
+    }
 
     /// <summary>
     ///     Registers a newly loaded map with tileset and sprite textures
@@ -218,191 +239,91 @@ public class MapLifecycleManager(
     }
 
     /// <summary>
-    ///     Destroys or releases all entities belonging to a specific map.
-    ///     Uses BelongsToMap relationship for unified entity collection.
-    ///     Pooled tile entities are released back to pool for reuse.
+    ///     Destroys all entities belonging to a specific map.
+    ///     Uses tile cache for efficient cleanup without relationship traversal.
+    ///     Also queries Position.MapId to catch NPCs and other dynamic entities.
+    ///     No pooling - entities are destroyed directly.
     /// </summary>
     private int DestroyMapEntities(GameMapId mapId)
     {
-        // CRITICAL FIX: Collect entities first, then process (can't modify during query)
-        var pooledEntities = new List<Entity>();
-        var entitiesToDestroy = new List<Entity>();
+        int destroyedCount = 0;
 
-        // 1. Find the MapInfo entity for this map
-        Entity? mapInfoEntity = null;
-        QueryDescription mapInfoQuery = QueryCache.Get<MapInfo>();
-        world.Query(
-            mapInfoQuery,
-            (Entity entity, ref MapInfo info) =>
+        // 0. Remove tiles from spatial hash FIRST (incremental removal, avoids full rebuild)
+        spatialHashSystem.RemoveMapTiles(mapId);
+
+        // 1. Destroy all cached tile entities (no relationships, no pooling)
+        if (_mapTileCache.TryGetValue(mapId, out var tiles))
+        {
+            foreach (var tile in tiles)
             {
-                if (info.MapId == mapId)
+                if (world.IsAlive(tile))
                 {
-                    mapInfoEntity = entity;
-                    entitiesToDestroy.Add(entity);
+                    world.Destroy(tile);
+                    destroyedCount++;
                 }
             }
-        );
-
-        // Debug: Check poolManager status
-        if (poolManager == null)
-        {
-            logger?.LogWarning(
-                "PoolManager is NULL - all entities will be destroyed instead of released to pool!"
-            );
+            _mapTileCache.Remove(mapId);
+            logger?.LogDebug("Destroyed {Count} cached tiles for map {MapId}", destroyedCount, mapId.Value);
         }
 
-        // 2. If we found the map entity, iterate its children using ParentOf relationships
-        if (
-            mapInfoEntity.HasValue
-            && world.IsAlive(mapInfoEntity.Value)
-            && mapInfoEntity.Value.HasRelationship<ParentOf>()
-        )
+        // 2. Find and destroy all entities with Position.MapId matching this map (NPCs, warps, etc.)
+        // Explicitly exclude Player entities to avoid destroying the player during map transitions
+        var dynamicEntities = new List<Entity>();
+        QueryDescription positionQuery = QueryCache.Get<Position>();
+        world.Query(positionQuery, (Entity entity, ref Position pos) =>
         {
-            ref Relationship<ParentOf> mapChildren =
-                ref mapInfoEntity.Value.GetRelationships<ParentOf>();
-            foreach (KeyValuePair<Entity, ParentOf> kvp in mapChildren)
+            if (pos.MapId == mapId && !entity.Has<Player>())
             {
-                Entity childEntity = kvp.Key;
-                if (!world.IsAlive(childEntity))
-                {
-                    continue;
-                }
-
-                // Separate pooled tile entities from non-pooled for reuse
-                if (poolManager != null && childEntity.Has<Pooled>())
-                {
-                    pooledEntities.Add(childEntity);
-                }
-                else
-                {
-                    entitiesToDestroy.Add(childEntity);
-                }
+                dynamicEntities.Add(entity);
             }
-        }
+        });
 
-        logger?.LogInformation(
-            "Collected entities for map {MapId}: {PooledCount} pooled, {DestroyCount} to destroy",
-            mapId.Value,
-            pooledEntities.Count,
-            entitiesToDestroy.Count
-        );
-
-        // Release pooled entities back to pool for reuse
-        int releasedCount = 0;
-        foreach (Entity entity in pooledEntities)
-        {
-            try
-            {
-                // CRITICAL: Remove ParentOf relationship BEFORE releasing to pool
-                // The automatic cleanup only happens when the parent is destroyed,
-                // but we're releasing children to pool BEFORE destroying the parent!
-                if (mapInfoEntity.HasValue && world.IsAlive(mapInfoEntity.Value))
-                {
-                    mapInfoEntity.Value.RemoveRelationship<ParentOf>(entity);
-                }
-
-                // Strip tile-specific components before releasing
-                StripTileComponents(entity);
-                poolManager!.Release(entity);
-                releasedCount++;
-            }
-            catch (Exception ex)
-            {
-                // If release fails, destroy the entity instead
-                logger?.LogWarning(
-                    ex,
-                    "Failed to release entity {EntityId} to pool, destroying",
-                    entity.Id
-                );
-                world.Destroy(entity);
-            }
-        }
-
-        // Destroy non-pooled entities
-        int behaviorsCleanedUp = 0;
-        foreach (Entity entity in entitiesToDestroy)
+        int dynamicCount = 0;
+        foreach (var entity in dynamicEntities)
         {
             if (world.IsAlive(entity))
             {
-                // CRITICAL: Clean up behavior scripts BEFORE destroying entity
-                // This ensures event subscriptions are disposed to prevent AccessViolationException
+                // Clean up NPC behaviors before destroying
                 if (_npcBehaviorSystem != null && entity.Has<Behavior>())
                 {
                     _npcBehaviorSystem.CleanupEntityBehavior(entity);
-                    behaviorsCleanedUp++;
                 }
-
                 world.Destroy(entity);
+                dynamicCount++;
+                destroyedCount++;
             }
         }
+        if (dynamicCount > 0)
+        {
+            logger?.LogDebug("Destroyed {Count} dynamic entities (NPCs, etc.) for map {MapId}", dynamicCount, mapId.Value);
+        }
 
-        int totalProcessed = releasedCount + entitiesToDestroy.Count;
-        logger?.LogInformation(
-            "Processed {Count} entities for map {MapId} (released: {Released}, destroyed: {Destroyed}, behaviors: {Behaviors})",
-            totalProcessed,
-            mapId.Value,
-            releasedCount,
-            entitiesToDestroy.Count,
-            behaviorsCleanedUp
-        );
+        // 3. Find and destroy the MapInfo entity
+        Entity? mapInfoEntity = null;
+        QueryDescription mapInfoQuery = QueryCache.Get<MapInfo>();
+        world.Query(mapInfoQuery, (Entity entity, ref MapInfo info) =>
+        {
+            if (info.MapId == mapId)
+            {
+                mapInfoEntity = entity;
+            }
+        });
 
-        return totalProcessed;
+        if (mapInfoEntity.HasValue && world.IsAlive(mapInfoEntity.Value))
+        {
+            // Clean up NPC behaviors if any (though MapInfo shouldn't have behaviors)
+            if (_npcBehaviorSystem != null && mapInfoEntity.Value.Has<Behavior>())
+            {
+                _npcBehaviorSystem.CleanupEntityBehavior(mapInfoEntity.Value);
+            }
+            world.Destroy(mapInfoEntity.Value);
+            destroyedCount++;
+        }
+
+        logger?.LogInformation("Destroyed {Count} entities for map {MapId}", destroyedCount, mapId.Value);
+        return destroyedCount;
     }
 
-    /// <summary>
-    ///     Strips tile-specific components from an entity before releasing to pool.
-    ///     This ensures clean reuse without stale component data.
-    ///     CRITICAL: Elevation, AnimatedTile, and BelongsToMap MUST be removed to prevent
-    ///     rendering corruption and stale relationships when tiles are reused.
-    /// </summary>
-    private void StripTileComponents(Entity entity)
-    {
-        // CRITICAL: Remove Elevation first - this makes the tile invisible to the renderer!
-        // The renderer queries for TilePosition + TileSprite + Elevation, so removing
-        // Elevation prevents pooled tiles from being rendered at stale positions.
-        // Without this, pooled tiles with old MapIds render at (0,0) causing visual overlap.
-        if (entity.Has<Elevation>())
-        {
-            world.Remove<Elevation>(entity);
-        }
-
-        // CRITICAL: Remove AnimatedTile - this component contains tileset-specific
-        // data (FrameSourceRects, TilesetFirstGid) that becomes invalid when reused
-        // for a different map. Failure to remove this causes rendering corruption.
-        if (entity.Has<AnimatedTile>())
-        {
-            world.Remove<AnimatedTile>(entity);
-        }
-
-        // Note: ParentOf relationship is now manually removed in DestroyMapEntities BEFORE
-        // releasing to pool (see line ~190). It must be removed explicitly because tiles
-        // are released to pool BEFORE the parent map entity is destroyed.
-
-        // Remove optional tile components that may have been added
-        // Keep TilePosition, TileSprite - they'll be overwritten on reuse
-        // Remove variable components that may not be present on next use
-
-        if (entity.Has<LayerOffset>())
-        {
-            world.Remove<LayerOffset>(entity);
-        }
-
-        if (entity.Has<TerrainType>())
-        {
-            world.Remove<TerrainType>(entity);
-        }
-
-        if (entity.Has<TileScript>())
-        {
-            world.Remove<TileScript>(entity);
-        }
-
-        // Remove collision component if present (added via property mappers)
-        if (entity.Has<Collision>())
-        {
-            world.Remove<Collision>(entity);
-        }
-    }
 
     /// <summary>
     ///     Unloads textures for a map (if AssetManager supports UnregisterTexture)
@@ -493,6 +414,9 @@ public class MapLifecycleManager(
         // Clear registered map metadata
         _loadedMaps.Clear();
 
+        // Clear tile cache
+        _mapTileCache.Clear();
+
         // Reset map tracking state
         _currentMapId = null;
         _previousMapId = null;
@@ -511,96 +435,52 @@ public class MapLifecycleManager(
     }
 
     /// <summary>
-    ///     Destroys ALL map-related entities in the world, regardless of registration status.
-    ///     Uses BelongsToMap relationship for unified cleanup.
+    ///     Destroys ALL map-related entities in the world.
+    ///     Uses tile cache for efficient cleanup without relationship traversal.
+    ///     Also queries Position to catch all dynamic entities (NPCs, warps, etc.).
     ///     Used for complete world cleanup during warp transitions.
-    ///     IMPORTANT: Pooled entities are released back to pool, not destroyed.
     /// </summary>
     private int DestroyAllMapEntities()
     {
-        var pooledEntities = new List<(Entity parent, Entity child)>();
-        var entitiesToDestroy = new List<Entity>();
-
-        // 1. Collect ALL MapInfo entities and their children
-        QueryDescription mapInfoQuery = QueryCache.Get<MapInfo>();
-        world.Query(
-            mapInfoQuery,
-            entity =>
-            {
-                // Add the map entity itself (MapInfo entities are never pooled)
-                entitiesToDestroy.Add(entity);
-
-                // If it has children, collect them all
-                if (entity.HasRelationship<ParentOf>())
-                {
-                    ref Relationship<ParentOf> mapChildren =
-                        ref entity.GetRelationships<ParentOf>();
-                    foreach (KeyValuePair<Entity, ParentOf> kvp in mapChildren)
-                    {
-                        Entity childEntity = kvp.Key;
-                        if (world.IsAlive(childEntity))
-                        {
-                            // Separate pooled entities from non-pooled for reuse
-                            if (poolManager != null && childEntity.Has<Pooled>())
-                            {
-                                // Store both parent and child for relationship cleanup
-                                pooledEntities.Add((entity, childEntity));
-                            }
-                            else
-                            {
-                                entitiesToDestroy.Add(childEntity);
-                            }
-                        }
-                    }
-                }
-            }
-        );
-
-        logger?.LogInformation(
-            "Collected ALL map entities: {PooledCount} pooled, {DestroyCount} to destroy",
-            pooledEntities.Count,
-            entitiesToDestroy.Count
-        );
-
-        // Release pooled entities back to pool for reuse
-        int releasedCount = 0;
-        foreach ((Entity parentEntity, Entity childEntity) in pooledEntities)
-        {
-            try
-            {
-                // CRITICAL: Remove ParentOf relationship BEFORE releasing to pool
-                // The automatic cleanup only happens when the parent is destroyed,
-                // but we're releasing children to pool BEFORE destroying the parent!
-                if (world.IsAlive(parentEntity))
-                {
-                    parentEntity.RemoveRelationship<ParentOf>(childEntity);
-                }
-
-                // Strip tile-specific components before releasing
-                StripTileComponents(childEntity);
-                poolManager!.Release(childEntity);
-                releasedCount++;
-            }
-            catch (Exception ex)
-            {
-                // If release fails, destroy the entity instead
-                logger?.LogWarning(
-                    ex,
-                    "Failed to release entity {EntityId} to pool during full cleanup, destroying",
-                    childEntity.Id
-                );
-                world.Destroy(childEntity);
-            }
-        }
-
-        // Destroy non-pooled entities
+        int destroyedCount = 0;
         int behaviorsCleanedUp = 0;
-        foreach (Entity entity in entitiesToDestroy)
+
+        // 1. Destroy all cached tile entities from all maps
+        foreach (var kvp in _mapTileCache.ToList())
+        {
+            var mapId = kvp.Key;
+            var tiles = kvp.Value;
+
+            foreach (var tile in tiles)
+            {
+                if (world.IsAlive(tile))
+                {
+                    world.Destroy(tile);
+                    destroyedCount++;
+                }
+            }
+
+            logger?.LogDebug("Destroyed {Count} cached tiles for map {MapId}", tiles.Count, mapId.Value);
+        }
+        _mapTileCache.Clear();
+
+        // 2. Destroy all entities with Position (NPCs, warps, etc.) - explicitly excludes player
+        var dynamicEntities = new List<Entity>();
+        QueryDescription positionQuery = QueryCache.Get<Position>();
+        world.Query(positionQuery, (Entity entity, ref Position pos) =>
+        {
+            // Only destroy entities that have a MapId AND are not the player
+            if (pos.MapId != null && !entity.Has<Player>())
+            {
+                dynamicEntities.Add(entity);
+            }
+        });
+
+        foreach (var entity in dynamicEntities)
         {
             if (world.IsAlive(entity))
             {
-                // CRITICAL: Clean up behavior scripts BEFORE destroying entity
-                // This ensures event subscriptions are disposed to prevent AccessViolationException
+                // Clean up behavior scripts BEFORE destroying entity
                 if (_npcBehaviorSystem != null && entity.Has<Behavior>())
                 {
                     _npcBehaviorSystem.CleanupEntityBehavior(entity);
@@ -608,18 +488,40 @@ public class MapLifecycleManager(
                 }
 
                 world.Destroy(entity);
+                destroyedCount++;
             }
         }
 
-        int totalProcessed = releasedCount + entitiesToDestroy.Count;
+        // 3. Destroy all MapInfo entities
+        var mapInfoEntities = new List<Entity>();
+        QueryDescription mapInfoQuery = QueryCache.Get<MapInfo>();
+        world.Query(mapInfoQuery, entity =>
+        {
+            mapInfoEntities.Add(entity);
+        });
+
+        foreach (var entity in mapInfoEntities)
+        {
+            if (world.IsAlive(entity))
+            {
+                // Clean up behavior scripts BEFORE destroying entity
+                if (_npcBehaviorSystem != null && entity.Has<Behavior>())
+                {
+                    _npcBehaviorSystem.CleanupEntityBehavior(entity);
+                    behaviorsCleanedUp++;
+                }
+
+                world.Destroy(entity);
+                destroyedCount++;
+            }
+        }
+
         logger?.LogInformation(
-            "Destroyed {Count} map entities during full cleanup (released: {Released}, destroyed: {Destroyed}, behaviors: {Behaviors})",
-            totalProcessed,
-            releasedCount,
-            entitiesToDestroy.Count,
+            "Destroyed {Count} map entities during full cleanup (behaviors: {Behaviors})",
+            destroyedCount,
             behaviorsCleanedUp
         );
-        return totalProcessed;
+        return destroyedCount;
     }
 
     private record MapMetadata(

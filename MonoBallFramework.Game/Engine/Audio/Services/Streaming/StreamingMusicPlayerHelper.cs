@@ -32,7 +32,7 @@ public class StreamingMusicPlayerHelper
     /// <returns>Streaming track data, or null if the file cannot be accessed.</returns>
     public StreamingTrackData? GetOrCreateTrackData(
         string trackName,
-        AudioDefinition definition,
+        AudioEntity definition,
         string baseDirectory)
     {
         // Check cache first
@@ -54,7 +54,7 @@ public class StreamingMusicPlayerHelper
     /// </summary>
     private StreamingTrackData? CreateTrackDataInternal(
         string trackName,
-        AudioDefinition definition,
+        AudioEntity definition,
         string baseDirectory)
     {
         try

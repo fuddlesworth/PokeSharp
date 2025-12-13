@@ -82,14 +82,9 @@ public sealed class MonoBallFrameworkGameOptions
     public GameDataLoader DataLoader { get; init; } = null!;
 
     /// <summary>
-    ///     Gets or sets the NPC definition service.
-    /// </summary>
-    public NpcDefinitionService NpcDefinitionService { get; init; } = null!;
-
-    /// <summary>
     ///     Gets or sets the map definition service.
     /// </summary>
-    public MapDefinitionService MapDefinitionService { get; init; } = null!;
+    public MapEntityService MapEntityService { get; init; } = null!;
 
     /// <summary>
     ///     Gets or sets the sprite registry.

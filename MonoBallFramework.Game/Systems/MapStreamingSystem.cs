@@ -1,6 +1,5 @@
 using Arch.Core;
 using Arch.Core.Extensions;
-using Arch.Relationships;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using MonoBallFramework.Game.Engine.Core.Events;
@@ -12,7 +11,6 @@ using MonoBallFramework.Game.Ecs.Components;
 using MonoBallFramework.Game.Ecs.Components.Maps;
 using MonoBallFramework.Game.Ecs.Components.Movement;
 using MonoBallFramework.Game.Ecs.Components.Player;
-using MonoBallFramework.Game.Ecs.Components.Relationships;
 using MonoBallFramework.Game.Engine.Core.Systems.Base;
 using MonoBallFramework.Game.Engine.Systems.Management;
 using MonoBallFramework.Game.GameData.Entities;
@@ -45,15 +43,20 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
 {
     private readonly IEventBus? _eventBus;
     private readonly ILogger<MapStreamingSystem>? _logger;
-    private readonly MapDefinitionService _mapDefinitionService;
+    private readonly MapEntityService _mapDefinitionService;
 
     // Map info cache to avoid nested queries (O(N×M) -> O(N))
     private readonly Dictionary<
         string,
-        (MapInfo Info, MapWorldPosition WorldPos, MapDefinition? Definition)
+        (MapInfo Info, MapWorldPosition WorldPos, MapEntity? Definition)
     > _mapInfoCache = new(10);
 
     private readonly MapLoader _mapLoader;
+
+    // Maximum number of maps to keep loaded simultaneously
+    // Current + 4 directions + buffer for recently visited maps
+    // Pokemon-style: keeps maps loaded to prevent excessive load/unload churn
+    private const int MaxLoadedMaps = 8;
 
     // Optional lifecycle manager for proper entity cleanup (set after initialization)
     private MapLifecycleManager? _lifecycleManager;
@@ -61,6 +64,12 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
     // Optional movement system for cache invalidation during map transitions
     private MovementSystem? _movementSystem;
     private QueryDescription _mapInfoQuery;
+
+    // Dirty flag to avoid rebuilding cache every frame - only rebuild when maps change
+    private bool _mapCacheDirty = true;
+
+    // Invalidation batching flag - set when maps are loaded/unloaded, processed once at end of frame
+    private bool _invalidationNeeded = false;
 
     // Cached queries for performance
     private QueryDescription _playerQuery;
@@ -74,7 +83,7 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
     /// <param name="logger">Optional logger for debugging streaming operations.</param>
     public MapStreamingSystem(
         MapLoader mapLoader,
-        MapDefinitionService mapDefinitionService,
+        MapEntityService mapDefinitionService,
         IEventBus? eventBus = null,
         ILogger<MapStreamingSystem>? logger = null
     )
@@ -151,11 +160,25 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
     }
 
     /// <summary>
+    ///     Invalidates the map info cache, forcing a rebuild on next update.
+    ///     Call this when maps are loaded or unloaded.
+    /// </summary>
+    public void InvalidateMapCache()
+    {
+        _mapCacheDirty = true;
+    }
+
+    /// <summary>
     ///     Updates the map info cache with current map data.
-    ///     Called once per frame to avoid nested queries during streaming checks.
+    ///     Only rebuilds when cache is dirty (maps loaded/unloaded) to avoid per-frame overhead.
     /// </summary>
     private void UpdateMapInfoCache(World world)
     {
+        if (!_mapCacheDirty)
+        {
+            return;
+        }
+
         _mapInfoCache.Clear();
         world.Query(
             in _mapInfoQuery,
@@ -164,6 +187,7 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
                 _mapInfoCache[info.MapName] = (info, pos, null);
             }
         );
+        _mapCacheDirty = false;
     }
 
     /// <summary>
@@ -193,10 +217,12 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
         MapLoadContext? context = TryGetMapContext(streamingCopy.CurrentMapId);
         if (!context.HasValue)
         {
-            // This can happen during warp transitions when the player's MapStreaming.CurrentMapId
-            // hasn't been updated yet but the old map is already unloaded
-            _logger?.LogDebug(
-                "Current map not found for streaming (may be transitioning): {MapId}",
+            // This happens for indoor maps (Pokemon Centers, buildings, caves) which don't have
+            // map streaming connections - they're loaded via warps, not boundary streaming.
+            // Also happens during warp transitions when the old map is already unloaded.
+            // Use Trace level to avoid log spam since this check runs every frame.
+            _logger?.LogTrace(
+                "Map not in streaming cache (indoor/warp map): {MapId}",
                 streamingCopy.CurrentMapId.Value
             );
             return;
@@ -217,6 +243,15 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
         // Unload distant maps
         UnloadDistantMaps(world, ref position, ref streamingCopy);
 
+        // Batch all cache invalidations at the end of the frame
+        // This prevents multiple spatial hash rebuilds during multi-map transitions
+        if (_invalidationNeeded)
+        {
+            InvalidateMapCache();
+            _movementSystem?.InvalidateMapWorldOffset();
+            _invalidationNeeded = false;
+        }
+
         // Apply changes back to the ref parameter
         streaming = streamingCopy;
     }
@@ -229,7 +264,7 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
         if (
             !_mapInfoCache.TryGetValue(
                 mapId.Name,
-                out (MapInfo Info, MapWorldPosition WorldPos, MapDefinition? Definition) mapData
+                out (MapInfo Info, MapWorldPosition WorldPos, MapEntity? Definition) mapData
             )
         )
         {
@@ -354,9 +389,8 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
                 );
             }
 
-            // Invalidate MovementSystem cache for the newly loaded map
-            // This ensures correct pixel position calculations for entities on the new map
-            _movementSystem?.InvalidateMapWorldOffset(connection.MapId);
+            // Mark invalidation as needed - will be batched at end of ProcessMapStreaming
+            _invalidationNeeded = true;
 
             _logger?.LogInformation(
                 "Successfully loaded adjacent map: {MapId}",
@@ -378,7 +412,7 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
     )
     {
         // Get adjacent map definition
-        MapDefinition? adjacentMapDef = _mapDefinitionService.GetMap(mapId);
+        MapEntity? adjacentMapDef = _mapDefinitionService.GetMap(mapId);
         if (adjacentMapDef == null)
         {
             _logger?.LogWarning("Adjacent map definition not found: {MapId}", mapId.Value);
@@ -569,7 +603,7 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
                 !offset.HasValue
                 || !_mapInfoCache.TryGetValue(
                     loadedMapId.Name,
-                    out (MapInfo Info, MapWorldPosition WorldPos, MapDefinition? Definition) mapData
+                    out (MapInfo Info, MapWorldPosition WorldPos, MapEntity? Definition) mapData
                 )
             )
             {
@@ -618,7 +652,7 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
         if (
             _mapInfoCache.TryGetValue(
                 newMapId.Name,
-                out (MapInfo Info, MapWorldPosition WorldPos, MapDefinition? Definition) newMapData
+                out (MapInfo Info, MapWorldPosition WorldPos, MapEntity? Definition) newMapData
             )
         )
         {
@@ -651,7 +685,7 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
     private void PublishMapTransitionEvent(
         GameMapId? oldMapId,
         string? oldMapName,
-        (MapInfo Info, MapWorldPosition WorldPos, MapDefinition? Definition) newMapData
+        (MapInfo Info, MapWorldPosition WorldPos, MapEntity? Definition) newMapData
     )
     {
         if (_eventBus == null)
@@ -709,9 +743,24 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
     /// <summary>
     ///     Unloads maps that are not connected to the current map.
     ///     Pokemon-style: only keep current map and its direct connections.
+    ///     Uses capacity-based unloading to prevent excessive load/unload churn.
     /// </summary>
     private void UnloadDistantMaps(World world, ref Position position, ref MapStreaming streaming)
     {
+        // Don't unload if we're under the capacity limit
+        // This provides a buffer so recently-visited maps stay loaded
+        // Prevents load/unload/load cycles when walking back and forth
+        if (streaming.LoadedMaps.Count() <= MaxLoadedMaps)
+        {
+            // Use Trace level to avoid log spam - this check runs every frame
+            _logger?.LogTrace(
+                "Skipping unload - under capacity limit ({Count}/{Max} maps loaded)",
+                streaming.LoadedMaps.Count(),
+                MaxLoadedMaps
+            );
+            return;
+        }
+
         // Create local copy to avoid ref struct capture
         GameMapId currentMapId = streaming.CurrentMapId;
 
@@ -791,7 +840,7 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
                         out (
                             MapInfo Info,
                             MapWorldPosition WorldPos,
-                            MapDefinition? Definition
+                            MapEntity? Definition
                         ) mapData
                     )
                 )
@@ -828,15 +877,11 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
                     );
                 }
 
-                // Invalidate MovementSystem cache for the unloaded map
-                // This prevents stale cached offsets from corrupting position calculations
-                _movementSystem?.InvalidateMapWorldOffset(mapId);
+                // Mark invalidation as needed - will be batched at end of ProcessMapStreaming
+                _invalidationNeeded = true;
 
                 // Remove from streaming tracking
                 streaming.RemoveLoadedMap(mapId);
-
-                // Remove from our local cache (keyed by Name)
-                _mapInfoCache.Remove(mapId.Name);
 
                 _logger?.LogDebug("Successfully unloaded map: {MapId}", mapId.Value);
             }
@@ -848,14 +893,35 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
     }
 
     /// <summary>
-    ///     Destroys all entities belonging to a specific map using Arch.Relationships.
+    ///     Destroys all entities belonging to a specific map using the tile cache.
     ///     Used for cleaning up streaming-loaded maps which aren't registered with MapLifecycleManager.
+    ///     Note: This is a fallback when MapLifecycleManager is not available. Prefer using
+    ///     MapLifecycleManager.UnloadMap() for proper cleanup with tile cache.
     /// </summary>
     private int DestroyMapEntities(World world, GameMapId mapId)
     {
-        var entitiesToDestroy = new List<Entity>();
+        int destroyedCount = 0;
 
-        // Find the MapInfo entity and iterate its relationships
+        // Try to get tiles from the lifecycle manager's cache (if available)
+        if (_lifecycleManager != null)
+        {
+            IReadOnlyList<Entity>? tiles = _lifecycleManager.GetMapTiles(mapId);
+            if (tiles != null)
+            {
+                foreach (Entity tile in tiles)
+                {
+                    if (world.IsAlive(tile))
+                    {
+                        world.Destroy(tile);
+                        destroyedCount++;
+                    }
+                }
+                _lifecycleManager.ClearMapTileCache(mapId);
+            }
+        }
+
+        // Find and destroy the MapInfo entity
+        Entity? mapInfoEntity = null;
         QueryDescription mapInfoQuery = QueryCache.Get<MapInfo>();
         world.Query(
             in mapInfoQuery,
@@ -863,42 +929,23 @@ public class MapStreamingSystem : SystemBase, IUpdateSystem
             {
                 if (info.MapId == mapId)
                 {
-                    // Add the map entity itself
-                    entitiesToDestroy.Add(entity);
-
-                    // If it has children, collect them all
-                    if (entity.HasRelationship<ParentOf>())
-                    {
-                        ref Relationship<ParentOf> mapChildren =
-                            ref entity.GetRelationships<ParentOf>();
-                        foreach (KeyValuePair<Entity, ParentOf> kvp in mapChildren)
-                        {
-                            Entity childEntity = kvp.Key;
-                            if (world.IsAlive(childEntity))
-                            {
-                                entitiesToDestroy.Add(childEntity);
-                            }
-                        }
-                    }
+                    mapInfoEntity = entity;
                 }
             }
         );
 
-        // Destroy all collected entities (outside the query to avoid modification during iteration)
-        foreach (Entity entity in entitiesToDestroy)
+        if (mapInfoEntity.HasValue && world.IsAlive(mapInfoEntity.Value))
         {
-            if (world.IsAlive(entity))
-            {
-                world.Destroy(entity);
-            }
+            world.Destroy(mapInfoEntity.Value);
+            destroyedCount++;
         }
 
         _logger?.LogDebug(
             "Destroyed {Count} entities for map {MapId}",
-            entitiesToDestroy.Count,
+            destroyedCount,
             mapId.Value
         );
 
-        return entitiesToDestroy.Count;
+        return destroyedCount;
     }
 }

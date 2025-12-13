@@ -8,7 +8,7 @@ namespace MonoBallFramework.Game.GameData.MapLoading;
 /// </summary>
 /// <remarks>
 ///     Connections are parsed from Tiled's custom properties (e.g., "connection_North")
-///     and stored in the MapDefinition entity for runtime map streaming.
+///     and stored in the MapEntity entity for runtime map streaming.
 /// </remarks>
 public readonly struct MapConnection
 {

@@ -231,6 +231,7 @@ public class EntityPool
             if (entity.Has<Pooled>())
             {
                 Pooled pooled = entity.Get<Pooled>();
+                pooled.InPool = false; // Mark as active (out of pool)
                 pooled.AcquiredAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 pooled.ReuseCount++;
                 entity.Set(pooled);
@@ -367,6 +368,7 @@ public class EntityPool
                 PoolName = _poolName,
                 AcquiredAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
                 ReuseCount = 0,
+                InPool = false, // Entity starts active, not in pool
             }
         );
 
@@ -376,46 +378,26 @@ public class EntityPool
 
     private void ResetEntityToPoolState(Entity entity)
     {
-        // CRITICAL FIX: Must remove ALL components except Pooled to prevent tile corruption
-        // Bug: Pooled tiles were keeping old component data (TileSprite, Elevation, etc.)
-        // causing visual corruption when reused for different tiles
-        
-        // Store the Pooled component data before clearing
-        Pooled pooled = entity.Has<Pooled>() ? entity.Get<Pooled>() : new Pooled();
+        // PERFORMANCE FIX: DON'T strip components - archetype migrations are the main killer
+        // Instead, just mark as in-pool and hide from renderer/spatial hash
+        // This avoids expensive archetype migrations while keeping entity properly pooled
 
-        // Manually remove all known tile components
-        // Arch.Core doesn't have a "remove all" API, so we enumerate known component types
-        // This list should be kept in sync with components that can be added to tiles
-        
-        // Core tile components (always present on tiles)
-        if (entity.Has<TilePosition>()) entity.Remove<TilePosition>();
-        if (entity.Has<TileSprite>()) entity.Remove<TileSprite>();
-        if (entity.Has<Elevation>()) entity.Remove<Elevation>();
-        
-        // Optional tile components
-        if (entity.Has<LayerOffset>()) entity.Remove<LayerOffset>();
-        if (entity.Has<TilesetInfo>()) entity.Remove<TilesetInfo>();
-        
-        // Tile properties (added via property mappers)
-        if (entity.Has<TerrainType>()) entity.Remove<TerrainType>();
-        if (entity.Has<TileScript>()) entity.Remove<TileScript>();
-        
-        // Animation components
-        if (entity.Has<AnimatedTile>()) entity.Remove<AnimatedTile>();
-        
-        // Note: PropertyMapperRegistry can add custom components dynamically
-        // If you add new tile component types via property mappers, add them here
-        // Otherwise pooled tiles will retain old data and cause corruption
-        
-        // Re-add or update Pooled component
-        if (!entity.Has<Pooled>())
+        // Mark entity as in-pool
+        ref var pooled = ref entity.Get<Pooled>();
+        pooled.InPool = true;
+        pooled.AcquiredAt = 0;
+
+        // Hide from renderer and spatial hash by clearing MapId
+        // The renderer and spatial hash systems skip tiles with null MapId
+        if (entity.Has<TilePosition>())
         {
-            entity.Add(pooled);
+            ref var pos = ref entity.Get<TilePosition>();
+            pos.MapId = null;
         }
-        else
-        {
-            entity.Set(pooled);
-        }
+
+        // Note: Components remain attached to avoid archetype migration cost.
+        // When entity is acquired, caller should update components with new data.
+        // The InPool flag lets systems skip these entities until they're active again.
     }
 }
 

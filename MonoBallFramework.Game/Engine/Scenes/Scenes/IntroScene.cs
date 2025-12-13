@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using NAudio.Wave;
 
 namespace MonoBallFramework.Game.Engine.Scenes.Scenes;
 
@@ -14,9 +15,9 @@ namespace MonoBallFramework.Game.Engine.Scenes.Scenes;
 public class IntroScene : SceneBase
 {
     // Animation timing (in seconds)
-    private const float PauseBeforeSpinDuration = 0.5f;
+    private const float PauseBeforeSpinDuration = 1.5f;
     private const float SpinInDuration = 2.5f;
-    private const float HoldDuration = 2.0f;
+    private const float HoldDuration = 5.0f;
     private const float FadeOutDuration = 1.0f;
     private const float TotalDuration = PauseBeforeSpinDuration + SpinInDuration + HoldDuration + FadeOutDuration;
 
@@ -36,6 +37,10 @@ public class IntroScene : SceneBase
     private Texture2D? _pixel;
     private SpriteBatch? _spriteBatch;
     private bool _transitionStarted;
+
+    // Audio playback
+    private WaveOutEvent? _waveOut;
+    private AudioFileReader? _audioReader;
 
     /// <summary>
     ///     Initializes a new instance of the IntroScene class.
@@ -90,6 +95,29 @@ public class IntroScene : SceneBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to load logo texture");
+        }
+
+        // Load and play intro audio
+        try
+        {
+            string audioPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "MonoBall.wav");
+
+            if (File.Exists(audioPath))
+            {
+                _audioReader = new AudioFileReader(audioPath);
+                _waveOut = new WaveOutEvent();
+                _waveOut.Init(_audioReader);
+                _waveOut.Play();
+                _logger.LogInformation("Intro audio playing from {Path}", audioPath);
+            }
+            else
+            {
+                _logger.LogWarning("Intro audio file not found at {Path}", audioPath);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to load or play intro audio");
         }
     }
 
@@ -330,6 +358,11 @@ public class IntroScene : SceneBase
             _spriteBatch?.Dispose();
             _pixel?.Dispose();
             _logoTexture?.Dispose();
+
+            // Clean up audio resources
+            _waveOut?.Stop();
+            _waveOut?.Dispose();
+            _audioReader?.Dispose();
         }
 
         base.Dispose(disposing);

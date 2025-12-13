@@ -1,11 +1,10 @@
 using MonoBallFramework.Game.Engine.Core.Types;
-using MonoBallFramework.Game.GameData.Entities;
 
 namespace MonoBallFramework.Game.Scripting.Api;
 
 /// <summary>
 ///     Registry lookup API for accessing game definitions and IDs.
-///     Provides read-only access to NPC, sprite, map, and behavior registries.
+///     Provides read-only access to sprite, map, and behavior registries.
 /// </summary>
 /// <remarks>
 ///     <para>
@@ -20,68 +19,6 @@ namespace MonoBallFramework.Game.Scripting.Api;
 /// </remarks>
 public interface IRegistryApi
 {
-    #region NPC Registry
-
-    /// <summary>
-    ///     Gets an NPC definition by its ID.
-    /// </summary>
-    /// <param name="npcId">The NPC identifier.</param>
-    /// <returns>The NPC definition, or null if not found.</returns>
-    NpcDefinition? GetNpcDefinition(GameNpcId npcId);
-
-    /// <summary>
-    ///     Gets all registered NPC IDs.
-    /// </summary>
-    /// <returns>Collection of all NPC identifiers.</returns>
-    IEnumerable<GameNpcId> GetAllNpcIds();
-
-    /// <summary>
-    ///     Gets all NPC IDs in a specific category.
-    /// </summary>
-    /// <param name="category">The category to filter by (e.g., "townfolk", "trainer").</param>
-    /// <returns>Collection of matching NPC identifiers.</returns>
-    IEnumerable<GameNpcId> GetNpcIdsByCategory(string category);
-
-    /// <summary>
-    ///     Checks if an NPC definition exists.
-    /// </summary>
-    /// <param name="npcId">The NPC identifier to check.</param>
-    /// <returns>True if the NPC exists.</returns>
-    bool NpcExists(GameNpcId npcId);
-
-    #endregion
-
-    #region Trainer Registry
-
-    /// <summary>
-    ///     Gets a trainer definition by its ID.
-    /// </summary>
-    /// <param name="trainerId">The trainer identifier.</param>
-    /// <returns>The trainer definition, or null if not found.</returns>
-    TrainerDefinition? GetTrainerDefinition(GameTrainerId trainerId);
-
-    /// <summary>
-    ///     Gets all registered trainer IDs.
-    /// </summary>
-    /// <returns>Collection of all trainer identifiers.</returns>
-    IEnumerable<GameTrainerId> GetAllTrainerIds();
-
-    /// <summary>
-    ///     Gets all trainer IDs in a specific category.
-    /// </summary>
-    /// <param name="category">The category to filter by (e.g., "youngster", "lass").</param>
-    /// <returns>Collection of matching trainer identifiers.</returns>
-    IEnumerable<GameTrainerId> GetTrainerIdsByCategory(string category);
-
-    /// <summary>
-    ///     Checks if a trainer definition exists.
-    /// </summary>
-    /// <param name="trainerId">The trainer identifier to check.</param>
-    /// <returns>True if the trainer exists.</returns>
-    bool TrainerExists(GameTrainerId trainerId);
-
-    #endregion
-
     #region Sprite Registry
 
     /// <summary>

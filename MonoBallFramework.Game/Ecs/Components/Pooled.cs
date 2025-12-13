@@ -21,4 +21,10 @@ public struct Pooled
     ///     Number of times this entity has been reused from the pool.
     /// </summary>
     public int ReuseCount;
+
+    /// <summary>
+    ///     Whether this entity is currently in the pool (true) or actively in use (false).
+    ///     This flag prevents archetype migrations by keeping components attached.
+    /// </summary>
+    public bool InPool;
 }

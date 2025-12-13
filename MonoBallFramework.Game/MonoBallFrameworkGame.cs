@@ -43,8 +43,7 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
     private readonly GraphicsDeviceManager _graphics;
     private readonly InputManager _inputManager;
     private readonly ILoggerFactory _loggerFactory;
-    private readonly MapDefinitionService _mapDefinitionService;
-    private readonly NpcDefinitionService _npcDefinitionService;
+    private readonly MapEntityService _mapDefinitionService;
     private readonly PerformanceMonitor _performanceMonitor;
     private readonly PlayerFactory _playerFactory;
     private readonly EntityPoolManager _poolManager;
@@ -174,17 +173,11 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
                 nameof(options),
                 $"{nameof(options.DataLoader)} cannot be null"
             );
-        _npcDefinitionService =
-            options.NpcDefinitionService
-            ?? throw new ArgumentNullException(
-                nameof(options),
-                $"{nameof(options.NpcDefinitionService)} cannot be null"
-            );
         _mapDefinitionService =
-            options.MapDefinitionService
+            options.MapEntityService
             ?? throw new ArgumentNullException(
                 nameof(options),
-                $"{nameof(options.MapDefinitionService)} cannot be null"
+                $"{nameof(options.MapEntityService)} cannot be null"
             );
         _spriteRegistry =
             options.SpriteRegistry
@@ -348,7 +341,6 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
                 _tileBehaviorRegistry,
                 _scriptService,
                 _apiProvider,
-                _npcDefinitionService,
                 _mapDefinitionService,
                 _playerFactory,
                 _inputManager,

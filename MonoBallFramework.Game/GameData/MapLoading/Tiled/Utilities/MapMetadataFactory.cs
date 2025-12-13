@@ -25,13 +25,13 @@ public class MapMetadataFactory
     }
 
     /// <summary>
-    ///     Creates MapInfo and TilesetInfo metadata entities from MapDefinition.
+    ///     Creates MapInfo and TilesetInfo metadata entities from MapEntity.
     ///     Used for definition-based map loading.
     /// </summary>
     public Entity CreateMapMetadataFromDefinition(
         World world,
         TmxDocument tmxDoc,
-        MapDefinition mapDef,
+        MapEntity mapDef,
         GameMapId mapId,
         IReadOnlyList<LoadedTileset> tilesets
     )
@@ -46,7 +46,7 @@ public class MapMetadataFactory
             tmxDoc.TileWidth
         );
 
-        // Create map property components from MapDefinition
+        // Create map property components from MapEntity
         var displayName = new DisplayName(mapDef.DisplayName);
         var region = new Region(mapDef.Region);
         var weather = new Weather(mapDef.Weather);
@@ -62,7 +62,7 @@ public class MapMetadataFactory
             battleScene
         );
 
-        // Add music component - prefer Tiled property, fall back to MapDefinition
+        // Add music component - prefer Tiled property, fall back to MapEntity
         GameAudioId? musicId = null;
         if (tmxDoc.Properties != null && tmxDoc.Properties.TryGetValue("music", out object? musicValue))
         {
@@ -120,7 +120,7 @@ public class MapMetadataFactory
 
         // Add map connection components from Tiled properties (runtime data)
         // Connection data is stored in Tiled JSON as custom properties (connection_north, etc.)
-        // Fall back to MapDefinition for any statically-defined connections
+        // Fall back to MapEntity for any statically-defined connections
         AddConnectionsFromTiledProperties(mapInfoEntity, tmxDoc.Properties, mapDef);
 
         // Create TilesetInfo if map has tilesets
@@ -166,12 +166,12 @@ public class MapMetadataFactory
 
     /// <summary>
     ///     Adds connection components from Tiled properties (connection_north, etc.).
-    ///     Falls back to MapDefinition for statically-defined connections.
+    ///     Falls back to MapEntity for statically-defined connections.
     /// </summary>
     private static void AddConnectionsFromTiledProperties(
         Entity mapInfoEntity,
         Dictionary<string, object> properties,
-        MapDefinition mapDef)
+        MapEntity mapDef)
     {
         // Try to get connections from Tiled properties first
         var (northId, northOffset) = ExtractConnectionFromProperty(properties, "connection_north");
@@ -179,7 +179,7 @@ public class MapMetadataFactory
         var (eastId, eastOffset) = ExtractConnectionFromProperty(properties, "connection_east");
         var (westId, westOffset) = ExtractConnectionFromProperty(properties, "connection_west");
 
-        // Fall back to MapDefinition if Tiled doesn't have the connection
+        // Fall back to MapEntity if Tiled doesn't have the connection
         if (northId == null && mapDef.NorthMapId != null)
         {
             northId = mapDef.NorthMapId;

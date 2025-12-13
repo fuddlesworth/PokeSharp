@@ -1,7 +1,5 @@
 using Arch.Core;
-using Arch.Relationships;
 using Microsoft.Extensions.Logging;
-using MonoBallFramework.Game.Ecs.Components.Relationships;
 using MonoBallFramework.Game.Ecs.Components.Rendering;
 using MonoBallFramework.Game.Engine.Common.Logging;
 using MonoBallFramework.Game.Engine.Core.Types;
@@ -127,9 +125,6 @@ public class ImageLayerProcessor
             );
 
             Entity entity = world.Create(imageLayerComponent);
-
-            // Add ParentOf relationship - map is parent of image layers
-            mapInfoEntity.AddRelationship(entity, new ParentOf());
 
             _logger?.LogDebug(
                 "Created image layer '{LayerName}' with texture '{TextureId}' at ({X}, {Y}) depth {Depth:F2}",

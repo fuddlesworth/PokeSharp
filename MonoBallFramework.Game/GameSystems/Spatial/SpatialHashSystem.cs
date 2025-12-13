@@ -156,6 +156,53 @@ public class SpatialHashSystem(ILogger<SpatialHashSystem>? logger = null)
     }
 
     /// <summary>
+    ///     Adds tiles from a newly loaded map to the spatial hash without full rebuild.
+    ///     This is an O(n) operation where n = number of tiles in the new map, much faster
+    ///     than InvalidateStaticTiles() which queries ALL tiles in the world.
+    /// </summary>
+    /// <param name="mapId">The map identifier for the loaded map.</param>
+    /// <param name="tiles">List of tile entities to add to the spatial hash.</param>
+    public void AddMapTiles(GameMapId mapId, IReadOnlyList<Entity> tiles)
+    {
+        int tilesAdded = 0;
+
+        foreach (Entity tile in tiles)
+        {
+            // Get the TilePosition component from the entity
+            if (World?.TryGet(tile, out TilePosition pos) == true && pos.MapId != null)
+            {
+                _staticHash.Add(tile, pos.MapId, pos.X, pos.Y);
+                tilesAdded++;
+            }
+        }
+
+        _logger?.LogDebug(
+            "Incrementally added {TilesAdded} tiles for map {MapId} to spatial hash",
+            tilesAdded,
+            mapId
+        );
+    }
+
+    /// <summary>
+    ///     Removes all tiles belonging to a specific map from the spatial hash.
+    ///     This is an O(1) operation for map removal, much faster than full rebuild.
+    /// </summary>
+    /// <param name="mapId">The map identifier whose tiles should be removed.</param>
+    public void RemoveMapTiles(GameMapId mapId)
+    {
+        bool removed = _staticHash.RemoveMap(mapId);
+
+        if (removed)
+        {
+            _logger?.LogDebug("Removed all tiles for map {MapId} from spatial hash", mapId);
+        }
+        else
+        {
+            _logger?.LogDebug("Map {MapId} not found in spatial hash (already unloaded?)", mapId);
+        }
+    }
+
+    /// <summary>
     ///     Gets diagnostic information about the spatial hash.
     /// </summary>
     /// <returns>A tuple with (entity count, occupied position count).</returns>

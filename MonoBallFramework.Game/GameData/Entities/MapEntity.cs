@@ -9,7 +9,7 @@ namespace MonoBallFramework.Game.GameData.Entities;
 ///     Stores Tiled map data and metadata for runtime map loading.
 /// </summary>
 [Table("Maps")]
-public class MapDefinition
+public class MapEntity
 {
     /// <summary>
     ///     Unique map identifier in unified format (e.g., "base:map:hoenn/littleroot_town").
@@ -180,14 +180,14 @@ public class MapDefinition
     // Navigation properties for map connections (optional, for complex queries)
     // Commented out for now to avoid circular references
     // [ForeignKey(nameof(NorthMapId))]
-    // public MapDefinition? NorthMap { get; set; }
+    // public MapEntity? NorthMap { get; set; }
 
     // [ForeignKey(nameof(SouthMapId))]
-    // public MapDefinition? SouthMap { get; set; }
+    // public MapEntity? SouthMap { get; set; }
 
     // [ForeignKey(nameof(EastMapId))]
-    // public MapDefinition? EastMap { get; set; }
+    // public MapEntity? EastMap { get; set; }
 
     // [ForeignKey(nameof(WestMapId))]
-    // public MapDefinition? WestMap { get; set; }
+    // public MapEntity? WestMap { get; set; }
 }

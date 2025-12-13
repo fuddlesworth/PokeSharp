@@ -60,7 +60,7 @@ public class CreateGameInitializerStep : InitializationStepBase
             context.PoolManager,
             context.SpriteRegistry,
             context.MapLoader,
-            context.MapDefinitionService,
+            context.MapEntityService,
             eventBus,
             gameStateApi,
             gameStateService

@@ -49,8 +49,7 @@ public class InitializationContext
         TypeRegistry<TileBehaviorDefinition> tileBehaviorRegistry,
         ScriptService scriptService,
         IScriptingApiProvider apiProvider,
-        NpcDefinitionService npcDefinitionService,
-        MapDefinitionService mapDefinitionService,
+        MapEntityService mapDefinitionService,
         PlayerFactory playerFactory,
         InputManager inputManager,
         PerformanceMonitor performanceMonitor,
@@ -73,9 +72,7 @@ public class InitializationContext
             tileBehaviorRegistry ?? throw new ArgumentNullException(nameof(tileBehaviorRegistry));
         ScriptService = scriptService ?? throw new ArgumentNullException(nameof(scriptService));
         ApiProvider = apiProvider ?? throw new ArgumentNullException(nameof(apiProvider));
-        NpcDefinitionService =
-            npcDefinitionService ?? throw new ArgumentNullException(nameof(npcDefinitionService));
-        MapDefinitionService =
+        MapEntityService =
             mapDefinitionService ?? throw new ArgumentNullException(nameof(mapDefinitionService));
         PlayerFactory = playerFactory ?? throw new ArgumentNullException(nameof(playerFactory));
         InputManager = inputManager ?? throw new ArgumentNullException(nameof(inputManager));
@@ -162,8 +159,7 @@ public class InitializationContext
     public TypeRegistry<TileBehaviorDefinition> TileBehaviorRegistry { get; }
     public ScriptService ScriptService { get; }
     public IScriptingApiProvider ApiProvider { get; }
-    public NpcDefinitionService NpcDefinitionService { get; }
-    public MapDefinitionService MapDefinitionService { get; }
+    public MapEntityService MapEntityService { get; }
     public PlayerFactory PlayerFactory { get; }
     public InputManager InputManager { get; }
     public PerformanceMonitor PerformanceMonitor { get; }

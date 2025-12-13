@@ -4,8 +4,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
 using MonoBallFramework.Game.Engine.Rendering.Components;
-using MonoBallFramework.Game.Engine.Rendering.Popups;
 using MonoBallFramework.Game.Engine.Rendering.Services;
+using MonoBallFramework.Game.GameData.Entities;
 
 namespace MonoBallFramework.Game.Engine.Scenes.Scenes;
 
@@ -18,8 +18,8 @@ namespace MonoBallFramework.Game.Engine.Scenes.Scenes;
 public class MapPopupScene : SceneBase
 {
     private readonly IAssetProvider _assetProvider;
-    private readonly PopupBackgroundDefinition _backgroundDef;
-    private readonly PopupOutlineDefinition _outlineDef;
+    private readonly PopupBackgroundEntity _backgroundDef;
+    private readonly PopupOutlineEntity _outlineDef;
     private readonly string _mapName;
     private readonly SceneManager _sceneManager;
     private readonly ICameraProvider _cameraProvider;
@@ -95,8 +95,8 @@ public class MapPopupScene : SceneBase
         GraphicsDevice graphicsDevice,
         ILogger<MapPopupScene> logger,
         IAssetProvider assetProvider,
-        PopupBackgroundDefinition backgroundDefinition,
-        PopupOutlineDefinition outlineDefinition,
+        PopupBackgroundEntity backgroundDefinition,
+        PopupOutlineEntity outlineDefinition,
         string mapName,
         SceneManager sceneManager,
         ICameraProvider cameraProvider,
@@ -128,8 +128,8 @@ public class MapPopupScene : SceneBase
         logger.LogDebug(
             "MapPopupScene created - Map: '{MapName}', Background: {BgId}, Outline: {OutlineId}",
             mapName,
-            backgroundDefinition.Id,
-            outlineDefinition.Id
+            backgroundDefinition.BackgroundId,
+            outlineDefinition.OutlineId
         );
     }
 
@@ -201,23 +201,31 @@ public class MapPopupScene : SceneBase
                 return;
             }
 
+            Logger.LogDebug(
+                "LoadPopupTextures: Background ID='{BgId}', TexturePath='{BgPath}', Outline ID='{OutId}', TexturePath='{OutPath}'",
+                _backgroundDef.BackgroundId, _backgroundDef.TexturePath,
+                _outlineDef.OutlineId, _outlineDef.TexturePath);
+
             // Load outline texture
-            string outlineKey = $"popup_outline_{_outlineDef.Id}";
+            string outlineKey = $"popup_outline_{_outlineDef.OutlineId}";
             if (!_assetProvider.HasTexture(outlineKey))
             {
+                Logger.LogDebug("Loading outline texture from: {Path}", _outlineDef.TexturePath);
                 _assetProvider.LoadTexture(outlineKey, _outlineDef.TexturePath);
             }
             _outlineTexture = assetManager.GetTexture(outlineKey);
 
             // Load background texture
-            string backgroundKey = $"popup_background_{_backgroundDef.Id}";
+            string backgroundKey = $"popup_background_{_backgroundDef.BackgroundId}";
             if (!_assetProvider.HasTexture(backgroundKey))
             {
+                Logger.LogDebug("Loading background texture from: {Path}", _backgroundDef.TexturePath);
                 _assetProvider.LoadTexture(backgroundKey, _backgroundDef.TexturePath);
             }
             _backgroundTexture = assetManager.GetTexture(backgroundKey);
 
-            Logger.LogDebug("Popup textures loaded successfully");
+            Logger.LogDebug("Popup textures loaded - Background={BgLoaded}, Outline={OutLoaded}",
+                _backgroundTexture != null, _outlineTexture != null);
         }
         catch (Exception ex)
         {
@@ -590,26 +598,29 @@ public class MapPopupScene : SceneBase
     /// <param name="scale">The viewport scale factor to apply to tile dimensions.</param>
     private void DrawTileSheetBorder(int x, int y, int width, int height, int scale)
     {
-        if (_outlineTexture == null || _spriteBatch == null || _outlineDef.Tiles == null || _outlineDef.TileUsage == null)
+        if (_outlineTexture == null || _spriteBatch == null || _outlineDef.Tiles.Count == 0 || _outlineDef.TileUsage == null)
             return;
 
         // Scale tile dimensions to match viewport scaling
         int tileW = _outlineDef.TileWidth * scale;
         int tileH = _outlineDef.TileHeight * scale;
 
-        // Helper to draw a single tile
+        // Build a lookup dictionary for tiles by their Index property
+        // EF Core owned collections don't guarantee order, so we can't use array position
+        var tileLookup = _outlineDef.Tiles.ToDictionary(t => t.Index);
+
+        // Helper to draw a single tile by its Index property (not array position)
         void DrawTile(int tileIndex, int destX, int destY)
         {
-            if (tileIndex < 0 || tileIndex >= _outlineDef.Tiles.Count)
+            if (!tileLookup.TryGetValue(tileIndex, out OutlineTile? tile))
                 return;
 
-            var tile = _outlineDef.Tiles[tileIndex];
             var srcRect = new Rectangle(tile.X, tile.Y, tile.Width, tile.Height);
             var destRect = new Rectangle(destX, destY, tileW, tileH);
             _spriteBatch.Draw(_outlineTexture, destRect, srcRect, Color.White);
         }
 
-        var usage = _outlineDef.TileUsage;
+        OutlineTileUsage usage = _outlineDef.TileUsage;
 
         // Pokeemerald draws the window interior at (x, y) with size (deltaX, deltaY)
         // The frame is drawn AROUND it

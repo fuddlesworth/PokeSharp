@@ -8,8 +8,8 @@ namespace MonoBallFramework.Game.GameData.Entities;
 ///     EF Core entity for audio definitions (music tracks and sound effects).
 ///     Stores audio track metadata loaded from JSON definition files.
 /// </summary>
-[Table("AudioDefinitions")]
-public class AudioDefinition
+[Table("Audios")]
+public class AudioEntity
 {
     /// <summary>
     ///     Unique audio identifier in unified format.

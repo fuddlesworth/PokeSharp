@@ -6,11 +6,11 @@ using MonoBallFramework.Game.Ecs.Components.Maps;
 using MonoBallFramework.Game.Engine.Core.Events;
 using MonoBallFramework.Game.Engine.Core.Events.Map;
 using MonoBallFramework.Game.Engine.Core.Types;
-using MonoBallFramework.Game.Engine.Rendering.Popups;
 using MonoBallFramework.Game.Engine.Scenes.Factories;
 using MonoBallFramework.Game.Engine.Scenes.Scenes;
 using MonoBallFramework.Game.Engine.Systems.Management;
 using MonoBallFramework.Game.GameData.Entities;
+using MonoBallFramework.Game.Engine.Rendering.Popups;
 
 namespace MonoBallFramework.Game.Engine.Scenes.Services;
 
@@ -134,8 +134,8 @@ public class MapPopupOrchestrator : IMapPopupOrchestrator
             }
 
             // Get background and outline definitions based on region section
-            PopupBackgroundDefinition? backgroundDef = null;
-            PopupOutlineDefinition? outlineDef = null;
+            PopupBackgroundEntity? backgroundDef = null;
+            PopupOutlineEntity? outlineDef = null;
             string? usedThemeId = null;
 
             // Try to get theme from region section if available
@@ -174,6 +174,24 @@ public class MapPopupOrchestrator : IMapPopupOrchestrator
                         popupInfo.BackgroundAssetId,
                         popupInfo.OutlineAssetId
                     );
+
+                    // Log if lookups failed
+                    if (backgroundDef == null)
+                    {
+                        _logger.LogError(
+                            "FAILED to find background '{BackgroundId}' in PopupRegistry! Registry loaded: {IsLoaded}, Count: {Count}",
+                            popupInfo.BackgroundAssetId,
+                            _popupRegistry.IsLoaded,
+                            _popupRegistry.BackgroundCount);
+                    }
+                    if (outlineDef == null)
+                    {
+                        _logger.LogError(
+                            "FAILED to find outline '{OutlineId}' in PopupRegistry! Registry loaded: {IsLoaded}, Count: {Count}",
+                            popupInfo.OutlineAssetId,
+                            _popupRegistry.IsLoaded,
+                            _popupRegistry.OutlineCount);
+                    }
                 }
                 else
                 {
@@ -232,8 +250,8 @@ public class MapPopupOrchestrator : IMapPopupOrchestrator
                 displayName,
                 regionName ?? "None",
                 usedThemeId,
-                backgroundDef.Id,
-                outlineDef.Id
+                backgroundDef.BackgroundId,
+                outlineDef.OutlineId
             );
         }
         catch (Exception ex)

@@ -16,8 +16,8 @@ public class AudioRegistry
 {
     private readonly IDbContextFactory<GameDataContext> _contextFactory;
     private readonly ILogger<AudioRegistry> _logger;
-    private readonly ConcurrentDictionary<string, AudioDefinition> _cache = new();
-    private readonly ConcurrentDictionary<string, AudioDefinition> _trackIdCache = new();
+    private readonly ConcurrentDictionary<string, AudioEntity> _cache = new();
+    private readonly ConcurrentDictionary<string, AudioEntity> _trackIdCache = new();
     private readonly SemaphoreSlim _loadLock = new(1, 1);
     private volatile bool _isCacheLoaded;
 
@@ -43,7 +43,7 @@ public class AudioRegistry
                 return _cache.Count;
 
             using var context = _contextFactory.CreateDbContext();
-            return context.AudioDefinitions.Count();
+            return context.Audios.Count();
         }
     }
 
@@ -61,7 +61,7 @@ public class AudioRegistry
             if (_isCacheLoaded) return;
 
             using var context = _contextFactory.CreateDbContext();
-            var definitions = context.AudioDefinitions.AsNoTracking().ToList();
+            var definitions = context.Audios.AsNoTracking().ToList();
 
             foreach (var def in definitions)
             {
@@ -92,7 +92,7 @@ public class AudioRegistry
             if (_isCacheLoaded) return;
 
             using var context = _contextFactory.CreateDbContext();
-            var definitions = await context.AudioDefinitions
+            var definitions = await context.Audios
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
 
@@ -115,7 +115,7 @@ public class AudioRegistry
     ///     Gets an audio definition by its full ID.
     ///     Example: "base:audio:music/towns/mus_dewford"
     /// </summary>
-    public AudioDefinition? GetById(string id)
+    public AudioEntity? GetById(string id)
     {
         // Try cache first
         if (_cache.TryGetValue(id, out var cached))
@@ -125,7 +125,7 @@ public class AudioRegistry
         if (!_isCacheLoaded)
         {
             using var context = _contextFactory.CreateDbContext();
-            var def = context.AudioDefinitions
+            var def = context.Audios
                 .AsNoTracking()
                 .FirstOrDefault(a => a.AudioId.Value == id);
 
@@ -145,7 +145,7 @@ public class AudioRegistry
     ///     Gets an audio definition by track ID (short name).
     ///     Example: "mus_dewford"
     /// </summary>
-    public AudioDefinition? GetByTrackId(string trackId)
+    public AudioEntity? GetByTrackId(string trackId)
     {
         // Try cache first
         if (_trackIdCache.TryGetValue(trackId, out var cached))
@@ -164,7 +164,7 @@ public class AudioRegistry
 
             // Query database - need to load all and filter since TrackId is computed
             using var context = _contextFactory.CreateDbContext();
-            var allDefinitions = context.AudioDefinitions.AsNoTracking().ToList();
+            var allDefinitions = context.Audios.AsNoTracking().ToList();
             var def = allDefinitions.FirstOrDefault(d => d.TrackId == trackId);
 
             if (def != null)
@@ -182,20 +182,20 @@ public class AudioRegistry
     /// <summary>
     ///     Gets all audio definitions.
     /// </summary>
-    public IEnumerable<AudioDefinition> GetAll()
+    public IEnumerable<AudioEntity> GetAll()
     {
         if (_isCacheLoaded)
             return _cache.Values;
 
         using var context = _contextFactory.CreateDbContext();
-        return context.AudioDefinitions.AsNoTracking().ToList();
+        return context.Audios.AsNoTracking().ToList();
     }
 
     /// <summary>
     ///     Gets all audio definitions in a specific category.
     ///     Example: "music" or "sfx"
     /// </summary>
-    public IEnumerable<AudioDefinition> GetByCategory(string category)
+    public IEnumerable<AudioEntity> GetByCategory(string category)
     {
         if (_isCacheLoaded)
         {
@@ -204,7 +204,7 @@ public class AudioRegistry
         }
 
         using var context = _contextFactory.CreateDbContext();
-        return context.AudioDefinitions
+        return context.Audios
             .AsNoTracking()
             .Where(d => d.Category == category)
             .ToList();
@@ -214,7 +214,7 @@ public class AudioRegistry
     ///     Gets all audio definitions in a specific category and subcategory.
     ///     Example: category="music", subcategory="towns"
     /// </summary>
-    public IEnumerable<AudioDefinition> GetByCategoryAndSubcategory(string category, string subcategory)
+    public IEnumerable<AudioEntity> GetByCategoryAndSubcategory(string category, string subcategory)
     {
         if (_isCacheLoaded)
         {
@@ -225,7 +225,7 @@ public class AudioRegistry
         }
 
         using var context = _contextFactory.CreateDbContext();
-        return context.AudioDefinitions
+        return context.Audios
             .AsNoTracking()
             .Where(d => d.Category == category && d.Subcategory == subcategory)
             .ToList();
@@ -234,7 +234,7 @@ public class AudioRegistry
     /// <summary>
     ///     Gets all music track definitions.
     /// </summary>
-    public IEnumerable<AudioDefinition> GetAllMusic()
+    public IEnumerable<AudioEntity> GetAllMusic()
     {
         return GetByCategory("music");
     }
@@ -242,7 +242,7 @@ public class AudioRegistry
     /// <summary>
     ///     Gets all sound effect definitions.
     /// </summary>
-    public IEnumerable<AudioDefinition> GetAllSoundEffects()
+    public IEnumerable<AudioEntity> GetAllSoundEffects()
     {
         return GetByCategory("sfx");
     }
@@ -256,7 +256,7 @@ public class AudioRegistry
             return _cache.Keys;
 
         using var context = _contextFactory.CreateDbContext();
-        return context.AudioDefinitions
+        return context.Audios
             .AsNoTracking()
             .Select(d => d.AudioId.Value)
             .ToList();
@@ -273,7 +273,7 @@ public class AudioRegistry
         if (!_isCacheLoaded)
         {
             using var context = _contextFactory.CreateDbContext();
-            return context.AudioDefinitions.Any(d => d.AudioId.Value == id);
+            return context.Audios.Any(d => d.AudioId.Value == id);
         }
 
         return false;

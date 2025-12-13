@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MonoBallFramework.Game.Engine.Core.Events;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
@@ -36,8 +37,8 @@ public class InitializeMapPopupStep : InitializationStepBase
         ILogger<InitializeMapPopupStep> logger =
             context.LoggerFactory.CreateLogger<InitializeMapPopupStep>();
 
-        // Create and register popup registry (backgrounds and outlines) - async loading
-        var popupRegistry = new PopupRegistry();
+        // Get popup registry from DI (already registered in CoreServicesExtensions)
+        var popupRegistry = context.Services.GetRequiredService<PopupRegistry>();
         await popupRegistry.LoadDefinitionsAsync(cancellationToken);
         logger.LogInformation(
             "Registered {BgCount} popup backgrounds and {OutlineCount} popup outlines (async)",

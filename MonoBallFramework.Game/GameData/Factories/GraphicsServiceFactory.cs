@@ -13,14 +13,13 @@ namespace MonoBallFramework.Game.GameData.Factories;
 
 /// <summary>
 ///     Concrete implementation of IGraphicsServiceFactory using Dependency Injection.
-///     Resolves loggers, PropertyMapperRegistry, SystemManager, NpcDefinitionService,
-///     EntityPoolManager, and MapDefinitionService from the service provider.
+///     Resolves loggers, PropertyMapperRegistry, SystemManager,
+///     EntityPoolManager, and MapEntityService from the service provider.
 /// </summary>
 public class GraphicsServiceFactory : IGraphicsServiceFactory
 {
     private readonly ILoggerFactory _loggerFactory;
-    private readonly MapDefinitionService? _mapDefinitionService;
-    private readonly NpcDefinitionService? _npcDefinitionService;
+    private readonly MapEntityService? _mapDefinitionService;
     private readonly EntityPoolManager? _poolManager;
     private readonly PropertyMapperRegistry? _propertyMapperRegistry;
     private readonly SystemManager _systemManager;
@@ -33,7 +32,6 @@ public class GraphicsServiceFactory : IGraphicsServiceFactory
     /// <param name="systemManager">System manager for accessing SpatialHashSystem.</param>
     /// <param name="poolManager">Entity pool manager for tile pooling.</param>
     /// <param name="propertyMapperRegistry">Optional property mapper registry for map loading.</param>
-    /// <param name="npcDefinitionService">Optional NPC definition service for data-driven NPC loading.</param>
     /// <param name="mapDefinitionService">Optional map definition service for definition-based map loading.</param>
     /// <param name="gameStateApi">Optional game state API for flag-based NPC visibility.</param>
     public GraphicsServiceFactory(
@@ -41,8 +39,7 @@ public class GraphicsServiceFactory : IGraphicsServiceFactory
         SystemManager systemManager,
         EntityPoolManager poolManager,
         PropertyMapperRegistry? propertyMapperRegistry = null,
-        NpcDefinitionService? npcDefinitionService = null,
-        MapDefinitionService? mapDefinitionService = null,
+        MapEntityService? mapDefinitionService = null,
         IGameStateApi? gameStateApi = null
     )
     {
@@ -50,7 +47,6 @@ public class GraphicsServiceFactory : IGraphicsServiceFactory
         _systemManager = systemManager ?? throw new ArgumentNullException(nameof(systemManager));
         _poolManager = poolManager ?? throw new ArgumentNullException(nameof(poolManager));
         _propertyMapperRegistry = propertyMapperRegistry;
-        _npcDefinitionService = npcDefinitionService;
         _mapDefinitionService = mapDefinitionService;
         _gameStateApi = gameStateApi;
     }
@@ -79,10 +75,8 @@ public class GraphicsServiceFactory : IGraphicsServiceFactory
         }
 
         // Create processors with proper loggers
-        // Pass EntityPoolManager to LayerProcessor for tile entity pooling
         var layerProcessor = new LayerProcessor(
             _propertyMapperRegistry,
-            _poolManager,
             _loggerFactory.CreateLogger<LayerProcessor>()
         );
 
@@ -99,9 +93,9 @@ public class GraphicsServiceFactory : IGraphicsServiceFactory
             animatedTileProcessor,
             borderProcessor,
             _propertyMapperRegistry,
-            _npcDefinitionService,
             _mapDefinitionService,
             _gameStateApi,
+            null, // MapLifecycleManager - not yet wired through DI
             _loggerFactory.CreateLogger<MapLoader>()
         );
     }
