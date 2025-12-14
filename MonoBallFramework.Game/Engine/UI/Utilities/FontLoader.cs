@@ -45,21 +45,6 @@ public static class FontLoader
         return LoadFontFromPath(PokemonFontPath, "Pokemon");
     }
 
-    /// <summary>
-    ///     Checks if the bundled debug font is available.
-    /// </summary>
-    public static bool IsBundledFontAvailable()
-    {
-        return File.Exists(DebugFontPath);
-    }
-
-    /// <summary>
-    ///     Checks if the Pokemon font is available.
-    /// </summary>
-    public static bool IsPokemonFontAvailable()
-    {
-        return File.Exists(PokemonFontPath);
-    }
 
     private static FontSystem? LoadFontFromPath(string fontPath, string fontName)
     {

@@ -374,14 +374,11 @@ public class ConsoleScene : SceneBase
 
         try
         {
-            // Load font system (bundled Iosevka Nerd Font with system fallback)
+            // Load debug font (0xProtoNerdFontMono)
             FontSystem? fontSystem = FontLoader.LoadFont();
             if (fontSystem == null)
             {
-                Logger.LogError(
-                    "Failed to load font system for console. Bundled: {Available}",
-                    FontLoader.IsBundledFontAvailable()
-                );
+                Logger.LogError("Failed to load debug font for console");
                 throw new InvalidOperationException("Font system loading failed");
             }
 
