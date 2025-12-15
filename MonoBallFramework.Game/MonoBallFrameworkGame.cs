@@ -1,13 +1,15 @@
+using System;
 using Arch.Core;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoBallFramework.Game.Engine.Content;
 using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.Engine.Scenes;
 using MonoBallFramework.Game.Engine.Scenes.Scenes;
 using MonoBallFramework.Game.Engine.Systems.Management;
-using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game.GameData.Loading;
 using MonoBallFramework.Game.GameData.Services;
 using MonoBallFramework.Game.GameData.Sprites;
@@ -46,10 +48,10 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
     private readonly MapEntityService _mapDefinitionService;
     private readonly PerformanceMonitor _performanceMonitor;
     private readonly PlayerFactory _playerFactory;
-    private readonly EntityPoolManager _poolManager;
     private readonly ScriptService _scriptService;
     private readonly IServiceProvider _services; // Required for SceneManager and scenes that need DI
     private readonly SpriteRegistry _spriteRegistry;
+    private IContentProvider _contentProvider = null!; // Initialized in Initialize() from services
 
     // Services that depend on GraphicsDevice (created in Initialize)
     private readonly SystemManager _systemManager;
@@ -161,12 +163,6 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
                 nameof(options),
                 $"{nameof(options.GameTime)} cannot be null"
             );
-        _poolManager =
-            options.PoolManager
-            ?? throw new ArgumentNullException(
-                nameof(options),
-                $"{nameof(options.PoolManager)} cannot be null"
-            );
         _dataLoader =
             options.DataLoader
             ?? throw new ArgumentNullException(
@@ -259,6 +255,9 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
     {
         base.Initialize();
 
+        // Get IContentProvider from services
+        _contentProvider = _services.GetRequiredService<IContentProvider>();
+
         // Create SceneManager (GraphicsDevice is now available after base.Initialize())
         ILogger<SceneManager> sceneManagerLogger = _loggerFactory.CreateLogger<SceneManager>();
         _sceneManager = new SceneManager(GraphicsDevice, _services, sceneManagerLogger);
@@ -285,7 +284,8 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
                 loadingSceneLogger,
                 _loadingProgress!,
                 initializationTaskAsIScene,
-                _sceneManager!
+                _sceneManager!,
+                _contentProvider
             );
         };
 
@@ -293,7 +293,8 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
             GraphicsDevice,
             introSceneLogger,
             _sceneManager,
-            createLoadingScene
+            createLoadingScene,
+            _contentProvider
         );
 
         _sceneManager.ChangeScene(introScene);
@@ -335,7 +336,6 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
                 _dataLoader,
                 _world,
                 _systemManager,
-                _poolManager,
                 _spriteRegistry,
                 _behaviorRegistry,
                 _tileBehaviorRegistry,
@@ -394,7 +394,10 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
             _loggerFactory.CreateLogger<InitializationPipeline>();
         var pipeline = new InitializationPipeline(pipelineLogger);
 
-        // Phase 1: Load game data
+        // Phase 0: Discover mods (registers content folders for ContentProvider BEFORE game data loading)
+        pipeline.AddStep(new DiscoverModsStep());
+
+        // Phase 1: Load game data (ContentProvider can now resolve mod content paths)
         pipeline.AddStep(new LoadGameDataStep());
 
         // Phase 2: Create services that depend on GraphicsDevice
@@ -406,7 +409,8 @@ public class MonoBallFrameworkGame : Microsoft.Xna.Framework.Game, IAsyncDisposa
         pipeline.AddStep(new InitializeGameSystemsStep());
         pipeline.AddStep(new SetupApiProvidersStep());
 
-        // Phase 3.5: Load mods (after API providers are set up, before behavior systems)
+        // Phase 3.5: Load mod scripts (after API providers are set up, before behavior systems)
+        // Note: Mod discovery happens in Phase 0 so content overrides are available during game data loading
         pipeline.AddStep(new LoadModsStep());
 
         // Phase 4: Initialize behavior systems

@@ -59,6 +59,14 @@ public class TileBehaviorEntity
     [MaxLength(20)]
     public string Version { get; set; } = "1.0.0";
 
+    /// <summary>
+    ///     JSON-serialized extension data from mods.
+    ///     Contains arbitrary custom properties added by mods.
+    ///     Example: {"testProperty": "value", "modded": true}
+    /// </summary>
+    [Column(TypeName = "nvarchar(max)")]
+    public string? ExtensionData { get; set; }
+
     // Computed properties
 
     /// <summary>
@@ -94,4 +102,55 @@ public class TileBehaviorEntity
     /// </summary>
     [NotMapped]
     public bool ForcesMovement => BehaviorFlags.HasFlag(TileBehaviorFlags.ForcesMovement);
+
+    /// <summary>
+    ///     Gets whether this tile behavior is from a mod.
+    /// </summary>
+    [NotMapped]
+    public bool IsFromMod => !string.IsNullOrEmpty(SourceMod);
+
+    /// <summary>
+    ///     Gets the extension data as a parsed dictionary.
+    ///     Returns null if no extension data is present.
+    /// </summary>
+    [NotMapped]
+    public Dictionary<string, System.Text.Json.JsonElement>? ParsedExtensionData
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(ExtensionData))
+                return null;
+
+            try
+            {
+                return System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, System.Text.Json.JsonElement>>(ExtensionData);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Gets a custom property value from extension data.
+    /// </summary>
+    /// <typeparam name="T">The expected type of the property.</typeparam>
+    /// <param name="propertyName">The name of the property to retrieve.</param>
+    /// <returns>The property value, or default if not found or wrong type.</returns>
+    public T? GetExtensionProperty<T>(string propertyName)
+    {
+        var data = ParsedExtensionData;
+        if (data == null || !data.TryGetValue(propertyName, out var element))
+            return default;
+
+        try
+        {
+            return System.Text.Json.JsonSerializer.Deserialize<T>(element.GetRawText());
+        }
+        catch
+        {
+            return default;
+        }
+    }
 }

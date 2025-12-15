@@ -8,7 +8,6 @@ using Microsoft.Extensions.Options;
 using MonoBallFramework.Game.Engine.Common.Logging;
 using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.Engine.Systems.Management;
-using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game;
 using MonoBallFramework.Game.GameData.Loading;
 using MonoBallFramework.Game.GameData.Services;
@@ -88,7 +87,6 @@ try
             InputManager = sp.GetRequiredService<InputManager>(),
             PlayerFactory = sp.GetRequiredService<PlayerFactory>(),
             GameTime = sp.GetRequiredService<IGameTimeService>(),
-            PoolManager = sp.GetRequiredService<EntityPoolManager>(),
             DataLoader = sp.GetRequiredService<GameDataLoader>(),
             MapEntityService = sp.GetRequiredService<MapEntityService>(),
             SpriteRegistry = sp.GetRequiredService<SpriteRegistry>(),

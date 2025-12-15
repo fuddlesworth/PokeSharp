@@ -1,3 +1,4 @@
+using System;
 using Arch.Core;
 using Arch.Core.Extensions;
 using Microsoft.Extensions.Logging;
@@ -5,14 +6,15 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoBallFramework.Game.Ecs.Components.Maps;
 using MonoBallFramework.Game.Ecs.Components.Player;
+using MonoBallFramework.Game.Engine.Content;
 using MonoBallFramework.Game.Engine.Core.Events;
 using MonoBallFramework.Game.Engine.Core.Events.Map;
+using MonoBallFramework.Game.Engine.UI.Core;
 using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.Engine.Rendering.Components;
 using MonoBallFramework.Game.Engine.Rendering.Context;
 using MonoBallFramework.Game.Engine.Scenes;
 using MonoBallFramework.Game.Engine.Systems.Management;
-using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game.GameSystems.Services;
 using MonoBallFramework.Game.Infrastructure.Diagnostics;
 using MonoBallFramework.Game.Initialization.Initializers;
@@ -41,18 +43,21 @@ public class GameplayScene : SceneBase
     /// <param name="graphicsDevice">The graphics device.</param>
     /// <param name="logger">The logger.</param>
     /// <param name="context">The gameplay scene context containing all dependencies.</param>
-    /// <param name="poolManager">Optional entity pool manager for performance overlay.</param>
+    /// <param name="contentProvider">The content provider for resolving asset paths.</param>
     /// <param name="eventBus">Optional event bus for event inspector overlay.</param>
+    /// <param name="eventMetrics">Optional shared event metrics (from DI) for consistent tracking.</param>
     public GameplayScene(
         GraphicsDevice graphicsDevice,
         ILogger<GameplayScene> logger,
         GameplaySceneContext context,
-        EntityPoolManager? poolManager = null,
-        IEventBus? eventBus = null
+        IContentProvider contentProvider,
+        IEventBus? eventBus = null,
+        EventMetrics? eventMetrics = null
     )
         : base(graphicsDevice, logger)
     {
         ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(contentProvider);
 
         _context = context;
 
@@ -61,14 +66,15 @@ public class GameplayScene : SceneBase
             graphicsDevice,
             context.PerformanceMonitor,
             context.World,
-            poolManager
+            contentProvider
         );
 
         // Create Event Inspector if EventBus is available
+        // Pass shared EventMetrics to avoid creating duplicate metrics
         _eventBus = eventBus;
         if (_eventBus is EventBus concreteEventBus)
         {
-            _eventInspectorOverlay = new EventInspectorOverlay(graphicsDevice, concreteEventBus);
+            _eventInspectorOverlay = new EventInspectorOverlay(graphicsDevice, concreteEventBus, eventMetrics);
             logger.LogInformation("Event Inspector initialized (F9 to toggle)");
         }
 

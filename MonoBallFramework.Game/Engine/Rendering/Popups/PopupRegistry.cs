@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using MonoBallFramework.Game.GameData;
 using MonoBallFramework.Game.GameData.Entities;
 using MonoBallFramework.Game.GameData.Registries;
@@ -23,20 +24,30 @@ public class PopupRegistry
     private readonly PopupBackgroundRegistry _backgroundRegistry;
     private readonly PopupOutlineRegistry _outlineRegistry;
     private readonly ILogger<PopupRegistry> _logger;
-    private string _defaultBackgroundId = "base:popup:background/wood";
-    private string _defaultOutlineId = "base:popup:outline/wood_outline";
+    private string _defaultBackgroundId;
+    private string _defaultOutlineId;
 
     /// <summary>
     ///     Creates a PopupRegistry with optional shared context.
     ///     When sharedContext is provided, it's used for initial loading to ensure
     ///     data is read from the same context that GameDataLoader wrote to.
     /// </summary>
-    public PopupRegistry(IDbContextFactory<GameDataContext> contextFactory, ILogger<PopupRegistry> logger, GameDataContext? sharedContext = null)
+    public PopupRegistry(
+        IDbContextFactory<GameDataContext> contextFactory,
+        ILogger<PopupRegistry> logger,
+        IOptions<PopupRegistryOptions> options,
+        GameDataContext? sharedContext = null)
     {
         ArgumentNullException.ThrowIfNull(contextFactory);
         ArgumentNullException.ThrowIfNull(logger);
+        ArgumentNullException.ThrowIfNull(options);
 
         _logger = logger;
+
+        var opts = options.Value;
+        _defaultBackgroundId = opts.DefaultBackgroundId;
+        _defaultOutlineId = opts.DefaultOutlineId;
+
         _backgroundRegistry = new PopupBackgroundRegistry(contextFactory, logger, sharedContext);
         _outlineRegistry = new PopupOutlineRegistry(contextFactory, logger, sharedContext);
     }

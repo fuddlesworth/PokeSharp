@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using Arch.Core;
 using Arch.Core.Extensions;
 using Microsoft.Extensions.Logging;
@@ -11,7 +10,6 @@ using MonoBallFramework.Game.Engine.Core.Events.Tile;
 using MonoBallFramework.Game.Engine.Core.Systems;
 using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.Components.Interfaces;
-using MonoBallFramework.Game.Engine.Core.Systems.Base;
 using MonoBallFramework.Game.Scripting.Api;
 using MonoBallFramework.Game.Scripting.Runtime;
 
@@ -27,17 +25,10 @@ namespace MonoBallFramework.Game.Scripting.Systems;
 ///     Scripts are cached as singletons in TypeRegistry and executed with per-tick
 ///     ScriptContext instances to prevent state corruption.
 /// </remarks>
-public class TileBehaviorSystem : SystemBase, IUpdateSystem, ITileBehaviorSystem
+public class TileBehaviorSystem : BehaviorSystemBase, IUpdateSystem, ITileBehaviorSystem
 {
-    private readonly IScriptingApiProvider _apis;
-    private readonly PerformanceConfiguration _config;
-    private readonly IEventBus? _eventBus;
     private readonly ILogger<TileBehaviorSystem> _logger;
-    private readonly ILoggerFactory _loggerFactory;
-    private readonly ConcurrentDictionary<string, ILogger> _scriptLoggerCache = new();
     private TypeRegistry<TileBehaviorDefinition>? _behaviorRegistry;
-    private int _lastBehaviorSummaryCount;
-    private int _tickCounter;
 
     public TileBehaviorSystem(
         ILogger<TileBehaviorSystem> logger,
@@ -45,14 +36,16 @@ public class TileBehaviorSystem : SystemBase, IUpdateSystem, ITileBehaviorSystem
         IScriptingApiProvider apis,
         IEventBus? eventBus = null,
         PerformanceConfiguration? config = null
-    )
+    ) : base(loggerFactory, apis, eventBus, config)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
-        _apis = apis ?? throw new ArgumentNullException(nameof(apis));
-        _eventBus = eventBus;
-        _config = config ?? PerformanceConfiguration.Default;
     }
+
+    /// <inheritdoc />
+    protected override string LoggerPrefix => "TileBehavior";
+
+    /// <inheritdoc />
+    protected override ILogger SystemLogger => _logger;
 
     /// <summary>
     ///     Gets the update priority. Lower values execute first.
@@ -97,9 +90,8 @@ public class TileBehaviorSystem : SystemBase, IUpdateSystem, ITileBehaviorSystem
             world,
             tileEntity,
             _logger,
-            _apis,
-            _eventBus
-                ?? throw new InvalidOperationException("EventBus is required for ScriptContext")
+            Apis,
+            RequireEventBus()
         );
 
         // Check both directions (like Pokemon Emerald's two-way check)
@@ -148,9 +140,8 @@ public class TileBehaviorSystem : SystemBase, IUpdateSystem, ITileBehaviorSystem
             world,
             tileEntity,
             _logger,
-            _apis,
-            _eventBus
-                ?? throw new InvalidOperationException("EventBus is required for ScriptContext")
+            Apis,
+            RequireEventBus()
         );
         return script.GetForcedMovement(context, currentDirection);
     }
@@ -187,9 +178,8 @@ public class TileBehaviorSystem : SystemBase, IUpdateSystem, ITileBehaviorSystem
             world,
             tileEntity,
             _logger,
-            _apis,
-            _eventBus
-                ?? throw new InvalidOperationException("EventBus is required for ScriptContext")
+            Apis,
+            RequireEventBus()
         );
         return script.GetJumpDirection(context, fromDirection);
     }
@@ -226,9 +216,8 @@ public class TileBehaviorSystem : SystemBase, IUpdateSystem, ITileBehaviorSystem
             world,
             tileEntity,
             _logger,
-            _apis,
-            _eventBus
-                ?? throw new InvalidOperationException("EventBus is required for ScriptContext")
+            Apis,
+            RequireEventBus()
         );
         return script.GetRequiredMovementMode(context);
     }
@@ -265,9 +254,8 @@ public class TileBehaviorSystem : SystemBase, IUpdateSystem, ITileBehaviorSystem
             world,
             tileEntity,
             _logger,
-            _apis,
-            _eventBus
-                ?? throw new InvalidOperationException("EventBus is required for ScriptContext")
+            Apis,
+            RequireEventBus()
         );
         return script.AllowsRunning(context);
     }
@@ -337,16 +325,13 @@ public class TileBehaviorSystem : SystemBase, IUpdateSystem, ITileBehaviorSystem
 
                     // Create ScriptContext for this entity
                     string loggerKey = $"{behavior.BehaviorTypeId}.{entity.Id}";
-                    ILogger scriptLogger = GetOrCreateLogger(loggerKey);
+                    ILogger scriptLogger = base.GetOrCreateLogger(loggerKey);
                     var context = new ScriptContext(
                         world,
                         entity,
                         scriptLogger,
-                        _apis,
-                        _eventBus
-                            ?? throw new InvalidOperationException(
-                                "EventBus is required for ScriptContext"
-                            )
+                        Apis,
+                        RequireEventBus()
                     );
 
                     // Initialize on first tick
@@ -375,27 +360,8 @@ public class TileBehaviorSystem : SystemBase, IUpdateSystem, ITileBehaviorSystem
             }
         );
 
-        // Log performance metrics periodically
-        _tickCounter++;
-
-        bool shouldLogSummary =
-            errorCount > 0
-            || (_tickCounter % 60 == 0 && behaviorCount > 0)
-            || (behaviorCount > 0 && behaviorCount != _lastBehaviorSummaryCount);
-
-        if (shouldLogSummary)
-        {
-            _logger.LogWorkflowStatus(
-                "Tile behavior tick summary",
-                ("executed", behaviorCount),
-                ("errors", errorCount)
-            );
-        }
-
-        if (behaviorCount > 0)
-        {
-            _lastBehaviorSummaryCount = behaviorCount;
-        }
+        // Log performance metrics periodically using base class
+        LogPerformanceMetrics(behaviorCount, errorCount, "Tile behavior tick summary");
     }
 
     /// <summary>
@@ -433,7 +399,7 @@ public class TileBehaviorSystem : SystemBase, IUpdateSystem, ITileBehaviorSystem
         }
 
         // Publish TileSteppedOnEvent if EventBus is available
-        if (_eventBus != null)
+        if (EventBus != null)
         {
             var steppedOnEvent = new TileSteppedOnEvent
             {
@@ -445,7 +411,7 @@ public class TileBehaviorSystem : SystemBase, IUpdateSystem, ITileBehaviorSystem
                 Elevation = 0, // TODO: Get actual elevation if needed
             };
 
-            _eventBus.Publish(steppedOnEvent);
+            EventBus.Publish(steppedOnEvent);
 
             // If event was cancelled by a subscriber, block the step
             if (steppedOnEvent.IsCancelled)
@@ -476,11 +442,8 @@ public class TileBehaviorSystem : SystemBase, IUpdateSystem, ITileBehaviorSystem
                             world,
                             tileEntity,
                             _logger,
-                            _apis,
-                            _eventBus
-                                ?? throw new InvalidOperationException(
-                                    "EventBus is required for ScriptContext"
-                                )
+                            Apis,
+                            RequireEventBus()
                         );
                         script.OnStep(context, entity);
                     }
@@ -524,7 +487,7 @@ public class TileBehaviorSystem : SystemBase, IUpdateSystem, ITileBehaviorSystem
         }
 
         // Publish TileSteppedOffEvent if EventBus is available
-        if (_eventBus != null)
+        if (EventBus != null)
         {
             var steppedOffEvent = new TileSteppedOffEvent
             {
@@ -538,36 +501,11 @@ public class TileBehaviorSystem : SystemBase, IUpdateSystem, ITileBehaviorSystem
                 Elevation = 0, // TODO: Get actual elevation if needed
             };
 
-            _eventBus.Publish(steppedOffEvent);
+            EventBus.Publish(steppedOffEvent);
         }
 
         // Note: TileBehaviorScriptBase doesn't have an OnStepOff method yet
         // This is just for event publishing to support event-driven mods
     }
 
-    /// <summary>
-    ///     Gets or creates a logger for a specific tile behavior.
-    ///     Implements size limit to prevent unbounded memory growth.
-    /// </summary>
-    /// <param name="key">Logger key (behavior type + entity ID)</param>
-    /// <returns>Cached or newly created logger</returns>
-    private ILogger GetOrCreateLogger(string key)
-    {
-        return _scriptLoggerCache.GetOrAdd(
-            key,
-            k =>
-            {
-                // Check if we've hit the cache limit
-                if (_scriptLoggerCache.Count >= _config.MaxCachedLoggers)
-                {
-                    _logger.LogWarning(
-                        "Script logger cache limit reached ({Limit}). Consider increasing limit or checking for leaks.",
-                        _config.MaxCachedLoggers
-                    );
-                }
-
-                return _loggerFactory.CreateLogger($"TileBehavior.{k}");
-            }
-        );
-    }
 }

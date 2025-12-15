@@ -1,3 +1,4 @@
+using MonoBallFramework.Game.Engine.Content;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
 
 namespace MonoBallFramework.Game.GameData.MapLoading.Tiled.Services;
@@ -9,39 +10,45 @@ namespace MonoBallFramework.Game.GameData.MapLoading.Tiled.Services;
 public class MapPathResolver
 {
     private readonly IAssetProvider _assetProvider;
+    private readonly IContentProvider _contentProvider;
 
-    public MapPathResolver(IAssetProvider assetProvider)
+    public MapPathResolver(IAssetProvider assetProvider, IContentProvider contentProvider)
     {
         _assetProvider = assetProvider;
+        _contentProvider = contentProvider ?? throw new ArgumentNullException(nameof(contentProvider));
     }
 
     /// <summary>
     ///     Resolves the base directory for map files.
-    ///     Uses AssetManager's AssetRoot if available, otherwise falls back to a default path.
+    ///     Uses IContentProvider to resolve the Definitions directory.
     /// </summary>
-    /// <returns>Base directory path for maps.</returns>
+    /// <returns>Base directory path for maps (the Definitions folder).</returns>
     public string ResolveMapDirectoryBase()
     {
-        if (_assetProvider is AssetManager assetManager)
+        // Use IContentProvider to get the Definitions directory
+        string? definitionsPath = _contentProvider.GetContentDirectory("Definitions");
+        if (definitionsPath == null)
         {
-            return Path.Combine(assetManager.AssetRoot, "Definitions", "Maps");
+            throw new DirectoryNotFoundException("Definitions directory not found. Ensure content provider is configured correctly.");
         }
 
-        return Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Definitions", "Maps");
+        return definitionsPath;
     }
 
     /// <summary>
     ///     Resolves the asset root directory.
-    ///     Uses AssetManager's AssetRoot if available, otherwise falls back to a default path.
+    ///     Uses IContentProvider to resolve the Root content type directory.
     /// </summary>
     /// <returns>Asset root directory path.</returns>
     public string ResolveAssetRoot()
     {
-        if (_assetProvider is AssetManager assetManager)
+        // Use IContentProvider to get the Root directory (the Assets folder)
+        string? rootPath = _contentProvider.GetContentDirectory("Root");
+        if (rootPath == null)
         {
-            return assetManager.AssetRoot;
+            throw new DirectoryNotFoundException("Asset root directory not found. Ensure content provider is configured correctly.");
         }
 
-        return Path.Combine(Directory.GetCurrentDirectory(), "Assets");
+        return rootPath;
     }
 }

@@ -14,7 +14,7 @@ public interface ITypeDefinition
     ///     Unique identifier for this type (e.g., "rain", "lava", "warp_pad", "patrol").
     ///     Used as the key in TypeRegistry lookups.
     /// </summary>
-    string TypeId { get; }
+    string Id { get; }
 
     /// <summary>
     ///     Display name shown to players and in editor tools.

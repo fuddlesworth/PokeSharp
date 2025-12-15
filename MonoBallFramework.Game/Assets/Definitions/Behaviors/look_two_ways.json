@@ -1,5 +1,5 @@
 {
-  "typeId": "base:behavior:movement/look_two_ways",
+  "id": "base:behavior:movement/look_two_ways",
   "displayName": "Look Two Ways Behavior",
   "description": "NPC alternates between two facing directions",
   "behaviorScript": "Behaviors/look_around_behavior.csx",

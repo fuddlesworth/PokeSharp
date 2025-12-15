@@ -52,10 +52,11 @@
     <None Include="Assets\**\*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <!-- Copy Engine UI assets (fonts, etc.) to output directory -->
-    <None Include="Engine\UI\Assets\**\*.*">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+      <!-- Copy all mods to the output directory -->
+      <None Include="..\Mods\**\*.*">
+          <Link>Mods\%(RecursiveDir)%(Filename)%(Extension)</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     <!-- Copy configuration files to output directory -->
     <None Include="Config\appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -68,8 +69,5 @@
       <Link>Scripts\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\Tiled\" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,9 @@
+{
+  "id": "base:tile_behavior:movement/ice",
+  "displayName": "Modded Ice Tile",
+  "description": "Forces sliding movement (MODDED VERSION)",
+  "behaviorScript": "TileBehaviors/ice.csx",
+  "flags": "ForcesMovement, DisablesRunning",
+  "modded": true,
+  "testProperty": "This property validates the override system is working"
+}

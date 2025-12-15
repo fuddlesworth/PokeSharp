@@ -387,10 +387,16 @@ public class EntityFrameworkPanel : DebugPanelBase
             var simpleProps = new List<PropertyInfo>();
             var collectionProps = new List<PropertyInfo>();
             var complexProps = new List<PropertyInfo>();
+            PropertyInfo? extensionDataProp = null;
 
             foreach (PropertyInfo prop in properties.OrderBy(p => p.Name))
             {
-                if (prop.GetCustomAttribute<System.ComponentModel.DataAnnotations.KeyAttribute>() != null ||
+                // Special handling for ExtensionData - display as formatted JSON
+                if (prop.Name == "ExtensionData" && prop.PropertyType == typeof(string))
+                {
+                    extensionDataProp = prop;
+                }
+                else if (prop.GetCustomAttribute<System.ComponentModel.DataAnnotations.KeyAttribute>() != null ||
                     prop.Name.EndsWith("Id", StringComparison.OrdinalIgnoreCase))
                 {
                     keyProps.Add(prop);
@@ -431,7 +437,7 @@ public class EntityFrameworkPanel : DebugPanelBase
                 FormatPropertyToBuffer(prop, "  ", new Color(220, 200, 100)); // Yellow for complex
             }
 
-            // Display collections last with expanded view (green)
+            // Display collections with expanded view (green)
             if (collectionProps.Count > 0)
             {
                 _detailBuffer.AppendLine("", ThemeManager.Current.TextDim);
@@ -439,6 +445,12 @@ public class EntityFrameworkPanel : DebugPanelBase
                 {
                     FormatCollectionPropertyToBuffer(prop, "  ");
                 }
+            }
+
+            // Display extension data (mod custom properties) with special formatting (magenta)
+            if (extensionDataProp != null)
+            {
+                FormatExtensionDataToBuffer(extensionDataProp, "  ");
             }
         }
         else
@@ -568,6 +580,85 @@ public class EntityFrameworkPanel : DebugPanelBase
                 ThemeManager.Current.Error
             );
         }
+    }
+
+    /// <summary>
+    ///     Formats ExtensionData (mod custom properties) with parsed JSON display.
+    /// </summary>
+    private void FormatExtensionDataToBuffer(PropertyInfo prop, string indent)
+    {
+        try
+        {
+            object? value = prop.GetValue(_selectedEntity);
+            if (value == null || value is not string jsonString || string.IsNullOrWhiteSpace(jsonString))
+            {
+                return; // No extension data to display
+            }
+
+            // Parse JSON to display individual properties
+            try
+            {
+                var extensionData = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, System.Text.Json.JsonElement>>(jsonString);
+                if (extensionData == null || extensionData.Count == 0)
+                {
+                    return;
+                }
+
+                _detailBuffer.AppendLine("", ThemeManager.Current.TextDim);
+                _detailBuffer.AppendLine(
+                    $"{indent}{NerdFontIcons.Component} Mod Extension Data [{extensionData.Count} properties]",
+                    new Color(200, 120, 200) // Magenta for mod data
+                );
+
+                string itemIndent = indent + "    ";
+                foreach (var kvp in extensionData.OrderBy(k => k.Key))
+                {
+                    string valueStr = FormatJsonElement(kvp.Value);
+                    _detailBuffer.AppendLine(
+                        $"{itemIndent}{kvp.Key}: {valueStr}",
+                        new Color(180, 140, 200) // Lighter magenta for values
+                    );
+                }
+            }
+            catch (System.Text.Json.JsonException)
+            {
+                // If JSON parsing fails, show raw string
+                _detailBuffer.AppendLine("", ThemeManager.Current.TextDim);
+                _detailBuffer.AppendLine(
+                    $"{indent}{NerdFontIcons.Component} ExtensionData (raw):",
+                    new Color(200, 120, 200)
+                );
+                _detailBuffer.AppendLine(
+                    $"{indent}    {jsonString}",
+                    ThemeManager.Current.TextSecondary
+                );
+            }
+        }
+        catch (Exception ex)
+        {
+            _detailBuffer.AppendLine(
+                $"{indent}ExtensionData: [Error: {ex.Message}]",
+                ThemeManager.Current.Error
+            );
+        }
+    }
+
+    /// <summary>
+    ///     Formats a JsonElement for display.
+    /// </summary>
+    private string FormatJsonElement(System.Text.Json.JsonElement element)
+    {
+        return element.ValueKind switch
+        {
+            System.Text.Json.JsonValueKind.String => $"\"{element.GetString()}\"",
+            System.Text.Json.JsonValueKind.Number => element.ToString(),
+            System.Text.Json.JsonValueKind.True => "true",
+            System.Text.Json.JsonValueKind.False => "false",
+            System.Text.Json.JsonValueKind.Null => "[null]",
+            System.Text.Json.JsonValueKind.Array => $"[array: {element.GetArrayLength()} items]",
+            System.Text.Json.JsonValueKind.Object => "[object]",
+            _ => element.ToString()
+        };
     }
 
     /// <summary>

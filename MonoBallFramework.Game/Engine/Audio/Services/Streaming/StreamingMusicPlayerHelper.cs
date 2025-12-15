@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using Microsoft.Extensions.Logging;
+using MonoBallFramework.Game.Engine.Content;
 using MonoBallFramework.Game.GameData.Entities;
 using NAudio.Vorbis;
 using NAudio.Wave;
@@ -15,10 +16,12 @@ namespace MonoBallFramework.Game.Engine.Audio.Services.Streaming;
 public class StreamingMusicPlayerHelper
 {
     private readonly ConcurrentDictionary<string, StreamingTrackData> _trackMetadataCache = new();
+    private readonly IContentProvider _contentProvider;
     private readonly ILogger? _logger;
 
-    public StreamingMusicPlayerHelper(ILogger? logger = null)
+    public StreamingMusicPlayerHelper(IContentProvider contentProvider, ILogger? logger = null)
     {
+        _contentProvider = contentProvider ?? throw new ArgumentNullException(nameof(contentProvider));
         _logger = logger;
     }
 
@@ -28,19 +31,17 @@ public class StreamingMusicPlayerHelper
     /// </summary>
     /// <param name="trackName">The track identifier.</param>
     /// <param name="definition">The audio definition with file path and loop points.</param>
-    /// <param name="baseDirectory">Base directory for resolving relative paths (typically AppContext.BaseDirectory).</param>
     /// <returns>Streaming track data, or null if the file cannot be accessed.</returns>
     public StreamingTrackData? GetOrCreateTrackData(
         string trackName,
-        AudioEntity definition,
-        string baseDirectory)
+        AudioEntity definition)
     {
         // Check cache first
         if (_trackMetadataCache.TryGetValue(trackName, out var cached))
             return cached;
 
         // Create track data (may return null on failure)
-        var data = CreateTrackDataInternal(trackName, definition, baseDirectory);
+        var data = CreateTrackDataInternal(trackName, definition);
 
         // Only cache successful results (don't cache null!)
         if (data != null)
@@ -54,18 +55,18 @@ public class StreamingMusicPlayerHelper
     /// </summary>
     private StreamingTrackData? CreateTrackDataInternal(
         string trackName,
-        AudioEntity definition,
-        string baseDirectory)
+        AudioEntity definition)
     {
         try
         {
-            // Build full path to audio file
-            string fullPath = Path.Combine(baseDirectory, "Assets", definition.AudioPath);
+            // Resolve full path to audio file using content provider
+            // AudioPath includes content type prefix (e.g., "Audio/Music/..."), so use "Root"
+            string? fullPath = _contentProvider.ResolveContentPath("Root", definition.AudioPath);
 
-            if (!File.Exists(fullPath))
+            if (fullPath == null)
             {
-                _logger?.LogError("Audio file not found: {Path}", fullPath);
-                return null;
+                _logger?.LogError("Audio file not found: {Path}", definition.AudioPath);
+                throw new FileNotFoundException($"Audio file not found: {definition.AudioPath}");
             }
 
             // Briefly open the file to read metadata (wave format)

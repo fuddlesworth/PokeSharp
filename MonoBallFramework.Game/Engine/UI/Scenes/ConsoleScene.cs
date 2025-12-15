@@ -25,6 +25,7 @@ namespace MonoBallFramework.Game.Engine.UI.Scenes;
 public class ConsoleScene : SceneBase
 {
     private readonly InputState _inputState = new();
+    private readonly FontLoader _fontLoader;
 
     // Configuration
     private float _consoleHeightPercent = 0.5f; // 50% of screen height by default
@@ -41,10 +42,13 @@ public class ConsoleScene : SceneBase
 
     public ConsoleScene(
         GraphicsDevice graphicsDevice,
-        ILogger<ConsoleScene> logger
+        ILogger<ConsoleScene> logger,
+        FontLoader fontLoader
     )
         : base(graphicsDevice, logger)
     {
+        _fontLoader = fontLoader ?? throw new ArgumentNullException(nameof(fontLoader));
+
         // Console should block input to scenes below
         ExclusiveInput = true;
 
@@ -374,13 +378,8 @@ public class ConsoleScene : SceneBase
 
         try
         {
-            // Load debug font (0xProtoNerdFontMono)
-            FontSystem? fontSystem = FontLoader.LoadFont();
-            if (fontSystem == null)
-            {
-                Logger.LogError("Failed to load debug font for console");
-                throw new InvalidOperationException("Font system loading failed");
-            }
+            // Load debug font (0xProtoNerdFontMono) using injected FontLoader
+            FontSystem fontSystem = _fontLoader.LoadDebugFont();
 
             _uiContext?.SetFontSystem(fontSystem);
 

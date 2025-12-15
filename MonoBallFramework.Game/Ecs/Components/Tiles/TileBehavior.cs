@@ -1,3 +1,5 @@
+using MonoBallFramework.Game.Engine.Core.Types;
+
 namespace MonoBallFramework.Game.Ecs.Components.Tiles;
 
 /// <summary>
@@ -8,10 +10,16 @@ namespace MonoBallFramework.Game.Ecs.Components.Tiles;
 public struct TileBehavior
 {
     /// <summary>
-    ///     Type identifier for the behavior (e.g., "jump_south", "impassable_east", "ice").
+    ///     Type identifier for the behavior.
+    ///     Full format: "base:tile_behavior:movement/jump_south", "base:tile_behavior:blocking/impassable_east", etc.
     ///     References a type in the TileBehaviorDefinition TypeRegistry.
     /// </summary>
-    public string BehaviorTypeId { get; set; }
+    public GameTileBehaviorId BehaviorId { get; set; }
+
+    /// <summary>
+    ///     Gets the behavior type ID string for registry lookup.
+    /// </summary>
+    public string BehaviorTypeId => BehaviorId.Value;
 
     /// <summary>
     ///     Whether this behavior is currently active and should execute its logic.
@@ -25,11 +33,22 @@ public struct TileBehavior
     public bool IsInitialized { get; set; }
 
     /// <summary>
-    ///     Initializes a new tile behavior component with a type ID.
+    ///     Initializes a new tile behavior component with a behavior ID.
+    /// </summary>
+    public TileBehavior(GameTileBehaviorId behaviorId)
+    {
+        BehaviorId = behaviorId;
+        IsActive = true;
+        IsInitialized = false;
+    }
+
+    /// <summary>
+    ///     Initializes a new tile behavior component with a type ID string.
+    ///     The string should be the full ID format (e.g., "base:tile_behavior:movement/jump_south").
     /// </summary>
     public TileBehavior(string behaviorTypeId)
     {
-        BehaviorTypeId = behaviorTypeId;
+        BehaviorId = new GameTileBehaviorId(behaviorTypeId);
         IsActive = true;
         IsInitialized = false;
     }

@@ -121,7 +121,7 @@ public class MapMetadataFactory
         // Add map connection components from Tiled properties (runtime data)
         // Connection data is stored in Tiled JSON as custom properties (connection_north, etc.)
         // Fall back to MapEntity for any statically-defined connections
-        AddConnectionsFromTiledProperties(mapInfoEntity, tmxDoc.Properties, mapDef);
+        AddConnectionsFromTiledProperties(mapInfoEntity, tmxDoc.Properties ?? new Dictionary<string, object>(), mapDef);
 
         // Create TilesetInfo if map has tilesets
         foreach (LoadedTileset loadedTileset in tilesets)
@@ -176,22 +176,19 @@ public class MapMetadataFactory
         _logger?.LogDebug(
             "AddConnectionsFromTiledProperties: Processing map {MapId}, properties count={Count}",
             mapDef.MapId.Value,
-            properties?.Count ?? 0
+            properties.Count
         );
 
         // Log all property keys for debugging
-        if (properties != null)
+        foreach (var key in properties.Keys)
         {
-            foreach (var key in properties.Keys)
+            if (key.StartsWith("connection_"))
             {
-                if (key.StartsWith("connection_"))
-                {
-                    _logger?.LogInformation(
-                        "AddConnectionsFromTiledProperties: Found key '{Key}' with value type {ValueType}",
-                        key,
-                        properties[key]?.GetType().Name ?? "null"
-                    );
-                }
+                _logger?.LogInformation(
+                    "AddConnectionsFromTiledProperties: Found key '{Key}' with value type {ValueType}",
+                    key,
+                    properties[key]?.GetType().Name ?? "null"
+                );
             }
         }
 

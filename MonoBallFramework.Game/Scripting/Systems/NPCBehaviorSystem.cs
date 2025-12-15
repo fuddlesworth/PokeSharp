@@ -7,7 +7,6 @@ using MonoBallFramework.Game.Engine.Common.Logging;
 using MonoBallFramework.Game.Engine.Core.Events;
 using MonoBallFramework.Game.Engine.Core.Events.System;
 using MonoBallFramework.Game.Engine.Core.Systems;
-using MonoBallFramework.Game.Engine.Core.Systems.Base;
 using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.Scripting.Api;
 using MonoBallFramework.Game.Scripting.Runtime;
@@ -26,19 +25,12 @@ namespace MonoBallFramework.Game.Scripting.Systems;
 ///     NPC behaviors use per-entity script instances with event subscriptions.
 ///     Each NPC gets its own script instance with its own Context and event handlers.
 /// </remarks>
-public class NPCBehaviorSystem : SystemBase, IUpdateSystem
+public class NPCBehaviorSystem : BehaviorSystemBase, IUpdateSystem
 {
-    private readonly IScriptingApiProvider _apis;
-    private readonly PerformanceConfiguration _config;
     private readonly ConcurrentDictionary<Entity, ScriptBase> _entityScriptCache = new();
-    private readonly IEventBus? _eventBus;
     private readonly ILogger<NPCBehaviorSystem> _logger;
-    private readonly ILoggerFactory _loggerFactory;
-    private readonly ConcurrentDictionary<string, ILogger> _scriptLoggerCache = new();
     private readonly ScriptService _scriptService;
     private TypeRegistry<BehaviorDefinition>? _behaviorRegistry;
-    private int _lastBehaviorSummaryCount;
-    private int _tickCounter;
 
     public NPCBehaviorSystem(
         ILogger<NPCBehaviorSystem> logger,
@@ -47,15 +39,17 @@ public class NPCBehaviorSystem : SystemBase, IUpdateSystem
         ScriptService scriptService,
         IEventBus? eventBus = null,
         PerformanceConfiguration? config = null
-    )
+    ) : base(loggerFactory, apis, eventBus, config)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
-        _apis = apis ?? throw new ArgumentNullException(nameof(apis));
         _scriptService = scriptService ?? throw new ArgumentNullException(nameof(scriptService));
-        _eventBus = eventBus;
-        _config = config ?? PerformanceConfiguration.Default;
     }
+
+    /// <inheritdoc />
+    protected override string LoggerPrefix => "Script";
+
+    /// <inheritdoc />
+    protected override ILogger SystemLogger => _logger;
 
     /// <summary>
     ///     Gets the update priority. Lower values execute first.
@@ -126,14 +120,14 @@ public class NPCBehaviorSystem : SystemBase, IUpdateSystem
                     if (!behavior.IsInitialized)
                     {
                         string loggerKey = $"{behavior.BehaviorTypeId}.{npc.NpcId}";
-                        ILogger scriptLogger = GetOrCreateLogger(loggerKey);
+                        ILogger scriptLogger = base.GetOrCreateLogger(loggerKey);
 
                         var context = new ScriptContext(
                             world,
                             entity,
                             scriptLogger,
-                            _apis,
-                            _eventBus ?? throw new InvalidOperationException("EventBus is required")
+                            Apis,
+                            RequireEventBus()
                         );
 
                         _logger.LogWorkflowStatus(
@@ -178,32 +172,13 @@ public class NPCBehaviorSystem : SystemBase, IUpdateSystem
         );
 
         // Publish TickEvent for all registered script event handlers to react
-        if (behaviorCount > 0 && _eventBus != null)
+        if (behaviorCount > 0 && EventBus != null)
         {
-            _eventBus.Publish(new TickEvent { DeltaTime = deltaTime, TotalTime = 0f });
+            EventBus.Publish(new TickEvent { DeltaTime = deltaTime, TotalTime = 0f });
         }
 
-        // Log performance metrics periodically
-        _tickCounter++;
-
-        bool shouldLogSummary =
-            errorCount > 0
-            || (_tickCounter % 60 == 0 && behaviorCount > 0)
-            || (behaviorCount > 0 && behaviorCount != _lastBehaviorSummaryCount);
-
-        if (shouldLogSummary)
-        {
-            _logger.LogWorkflowStatus(
-                "Behavior tick summary",
-                ("executed", behaviorCount),
-                ("errors", errorCount)
-            );
-        }
-
-        if (behaviorCount > 0)
-        {
-            _lastBehaviorSummaryCount = behaviorCount;
-        }
+        // Log performance metrics periodically using base class
+        LogPerformanceMetrics(behaviorCount, errorCount, "Behavior tick summary");
     }
 
     /// <summary>
@@ -251,42 +226,6 @@ public class NPCBehaviorSystem : SystemBase, IUpdateSystem
         _logger.LogWorkflowStatus("Behavior registry linked", ("behaviors", registry.Count));
     }
 
-    /// <summary>
-    ///     Gets or creates a logger for a specific NPC behavior.
-    ///     Implements size limit to prevent unbounded memory growth.
-    /// </summary>
-    /// <param name="key">Logger key (behavior type + NPC ID)</param>
-    /// <returns>Cached or newly created logger</returns>
-    private ILogger GetOrCreateLogger(string key)
-    {
-        return _scriptLoggerCache.GetOrAdd(
-            key,
-            k =>
-            {
-                // Check if we've hit the cache limit
-                if (_scriptLoggerCache.Count >= _config.MaxCachedLoggers)
-                {
-                    _logger.LogWarning(
-                        "Script logger cache limit reached ({Limit}). Consider increasing limit or checking for leaks.",
-                        _config.MaxCachedLoggers
-                    );
-                }
-
-                return _loggerFactory.CreateLogger($"Script.{k}");
-            }
-        );
-    }
-
-    /// <summary>
-    ///     Removes a logger from the cache when a behavior is deactivated.
-    /// </summary>
-    /// <param name="behaviorTypeId">Behavior type ID</param>
-    /// <param name="npcId">NPC ID</param>
-    private void RemoveLogger(string behaviorTypeId, string npcId)
-    {
-        string key = $"{behaviorTypeId}.{npcId}";
-        _scriptLoggerCache.TryRemove(key, out _);
-    }
 
     /// <summary>
     ///     Cleans up behavior script for an entity that is about to be destroyed.

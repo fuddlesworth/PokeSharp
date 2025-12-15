@@ -59,7 +59,6 @@ public class CreateGameInitializerStep : InitializationStepBase
             context.World,
             context.SystemManager,
             context.AssetManager,
-            context.PoolManager,
             context.SpriteRegistry,
             context.MapLoader,
             context.MapEntityService,
@@ -74,3 +73,4 @@ public class CreateGameInitializerStep : InitializationStepBase
         return Task.CompletedTask;
     }
 }
+

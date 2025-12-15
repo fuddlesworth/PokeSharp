@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using MonoBallFramework.Game.Engine.Content;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Tmx;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.TiledJson;
@@ -13,11 +14,16 @@ namespace MonoBallFramework.Game.GameData.MapLoading.Tiled.Services;
 public class TilesetLoader
 {
     private readonly IAssetProvider _assetManager;
+    private readonly IContentProvider _contentProvider;
     private readonly ILogger<TilesetLoader>? _logger;
 
-    public TilesetLoader(IAssetProvider assetManager, ILogger<TilesetLoader>? logger = null)
+    public TilesetLoader(
+        IAssetProvider assetManager,
+        IContentProvider contentProvider,
+        ILogger<TilesetLoader>? logger = null)
     {
         _assetManager = assetManager ?? throw new ArgumentNullException(nameof(assetManager));
+        _contentProvider = contentProvider ?? throw new ArgumentNullException(nameof(contentProvider));
         _logger = logger;
     }
 
@@ -126,6 +132,11 @@ public class TilesetLoader
         // Load all external tilesets in parallel
         var loadTasks = externalTilesets.Select(async tileset =>
         {
+            if (string.IsNullOrEmpty(tileset.Source))
+            {
+                throw new InvalidOperationException($"External tileset has null or empty Source property");
+            }
+
             string tilesetPath = Path.Combine(mapBasePath, tileset.Source);
 
             if (!File.Exists(tilesetPath))
@@ -462,7 +473,8 @@ public class TilesetLoader
     }
 
     /// <summary>
-    ///     Gets the texture path for the asset loader, handling both AssetManager and test stubs.
+    ///     Gets the texture path for the asset loader.
+    ///     Resolves tileset image paths relative to the tileset JSON file location.
     /// </summary>
     private string GetTexturePathForLoader(TmxTileset tileset, string mapPath)
     {
@@ -471,22 +483,30 @@ public class TilesetLoader
             throw new InvalidOperationException("Tileset has no image source");
         }
 
-        string mapDirectory = Path.GetDirectoryName(mapPath) ?? string.Empty;
+        // The mapPath here is actually the tileset JSON path or map path
+        // The image source in tileset is relative to the tileset JSON file
+        string contextDirectory = Path.GetDirectoryName(mapPath) ?? string.Empty;
 
-        string tilesetImageAbsolutePath = Path.IsPathRooted(tileset.Image.Source)
+        // Resolve the image path relative to the context directory
+        string tilesetImagePath = Path.IsPathRooted(tileset.Image.Source)
             ? tileset.Image.Source
-            : Path.GetFullPath(Path.Combine(mapDirectory, tileset.Image.Source));
+            : Path.GetFullPath(Path.Combine(contextDirectory, tileset.Image.Source));
 
-        // If using AssetManager, make path relative to Assets root
-        // Otherwise (e.g., in tests with stub), use the path directly
-        if (_assetManager is AssetManager assetManager)
+        // If the computed path exists, use it directly
+        if (File.Exists(tilesetImagePath))
         {
-            return Path.GetRelativePath(assetManager.AssetRoot, tilesetImageAbsolutePath);
+            return tilesetImagePath;
         }
-        else
+
+        // Fallback: try to resolve via ContentProvider Tilesets type
+        string relativeTilesetPath = tileset.Image.Source;
+        string? resolvedPath = _contentProvider.ResolveContentPath("Tilesets", relativeTilesetPath);
+        if (resolvedPath != null)
         {
-            return tilesetImageAbsolutePath;
+            return resolvedPath;
         }
+
+        throw new FileNotFoundException($"Tileset image not found: {tilesetImagePath}");
     }
 
     /// <summary>
@@ -637,18 +657,17 @@ public class TilesetLoader
     }
 
     /// <summary>
-    ///     Converts an absolute path to a path suitable for the asset manager.
+    ///     Converts an absolute path to a path suitable for the asset manager using IContentProvider.
     /// </summary>
     private string GetPathForAssetManager(string absolutePath)
     {
-        if (_assetManager is AssetManager assetManager)
+        // Use IContentProvider to resolve the path
+        string? resolvedPath = _contentProvider.ResolveContentPath("Graphics", Path.GetFileName(absolutePath));
+        if (resolvedPath == null)
         {
-            return Path.GetRelativePath(assetManager.AssetRoot, absolutePath);
+            throw new FileNotFoundException($"Asset not found: {absolutePath}");
         }
-        else
-        {
-            return absolutePath;
-        }
+        return resolvedPath;
     }
 
     /// <summary>
@@ -710,16 +729,14 @@ public class TilesetLoader
                                     imagePath = tilesetData.Image;
                                     string tilesetDir = Path.GetDirectoryName(tilesetPath) ?? string.Empty;
 
-                                    // Make image path relative to map directory for asset manager
+                                    // Resolve image path through content provider
                                     string absoluteImagePath = Path.GetFullPath(Path.Combine(tilesetDir, imagePath));
-                                    if (_assetManager is AssetManager assetManager)
+                                    string? resolvedPath = _contentProvider.ResolveContentPath("Graphics", Path.GetFileName(absoluteImagePath));
+                                    if (resolvedPath == null)
                                     {
-                                        imagePath = Path.GetRelativePath(assetManager.AssetRoot, absoluteImagePath);
+                                        throw new FileNotFoundException($"Tileset image not found: {absoluteImagePath}");
                                     }
-                                    else
-                                    {
-                                        imagePath = absoluteImagePath;
-                                    }
+                                    imagePath = resolvedPath;
                                     tilesetId = Path.GetFileNameWithoutExtension(imagePath);
                                 }
                             }

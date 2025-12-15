@@ -13,7 +13,7 @@ namespace MonoBallFramework.Game.Engine.Core.Modding;
 ///     Unified mod loader that handles all mod types: scripts, patches, content overrides, and code mods.
 ///     Discovers, loads, and manages mods from the /Mods/ directory.
 /// </summary>
-public sealed class ModLoader
+public sealed class ModLoader : IModLoader
 {
     private const string ModManifestFileName = "mod.json";
     private const string ModsDirectoryName = "Mods";
@@ -73,7 +73,19 @@ public sealed class ModLoader
     /// </summary>
     public async Task LoadModsAsync()
     {
-        _logger.LogInformation("🔍 Scanning for mods in: {Path}", _modsBasePath);
+        // Two-phase loading for backward compatibility
+        await DiscoverModsAsync();
+        await LoadModScriptsAsync();
+    }
+
+    /// <summary>
+    ///     Phase 1: Discovers mod manifests and registers content folders.
+    ///     Call this BEFORE game data loading to enable content overrides.
+    ///     Does not load scripts or patches.
+    /// </summary>
+    public async Task DiscoverModsAsync()
+    {
+        _logger.LogInformation("🔍 Discovering mods in: {Path}", _modsBasePath);
 
         if (!Directory.Exists(_modsBasePath))
         {
@@ -87,7 +99,7 @@ public sealed class ModLoader
 
         try
         {
-            // Step 1: Discover all mod manifests
+            // Discover all mod manifests
             List<ModManifest> manifests = DiscoverMods();
 
             if (manifests.Count == 0)
@@ -98,7 +110,7 @@ public sealed class ModLoader
 
             _logger.LogInformation("📦 Found {Count} mod(s)", manifests.Count);
 
-            // Step 2: Resolve dependencies and determine load order
+            // Resolve dependencies and determine load order
             List<ModManifest> orderedManifests;
             try
             {
@@ -110,22 +122,119 @@ public sealed class ModLoader
                 throw;
             }
 
-            // Step 3: Load all mods in dependency order
+            // Register manifests (content folders become available to ContentProvider)
             foreach (ModManifest manifest in orderedManifests)
             {
-                await LoadModAsync(manifest);
+                if (_loadedMods.ContainsKey(manifest.Id))
+                {
+                    _logger.LogWarning("⚠️  Mod '{Id}' already registered. Skipping.", manifest.Id);
+                    continue;
+                }
+
+                _loadedMods[manifest.Id] = manifest;
+                _logger.LogInformation(
+                    "📁 Registered mod: {Name} v{Version} (priority {Priority}, {ContentCount} content folders)",
+                    manifest.Name, manifest.Version, manifest.Priority, manifest.ContentFolders.Count);
             }
 
-            _logger.LogInformation("✅ Successfully loaded {Count} mod(s)", _loadedMods.Count);
+            _logger.LogInformation("✅ Discovered and registered {Count} mod(s)", _loadedMods.Count);
         }
         catch (ModDependencyException)
         {
-            throw; // Re-throw dependency errors as-is
+            throw;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "❌ Unexpected error during mod loading");
+            _logger.LogError(ex, "❌ Unexpected error during mod discovery");
             throw;
+        }
+
+        await Task.CompletedTask; // Async for interface compatibility
+    }
+
+    /// <summary>
+    ///     Phase 2: Loads scripts and patches for previously discovered mods.
+    ///     Call this AFTER API providers are set up.
+    /// </summary>
+    public async Task LoadModScriptsAsync()
+    {
+        _logger.LogInformation("⚙️  Loading mod scripts and patches for {Count} mod(s)", _loadedMods.Count);
+
+        foreach (var manifest in _loadedMods.Values.OrderByDescending(m => m.Priority))
+        {
+            await LoadModScriptsAndPatchesAsync(manifest);
+        }
+
+        _logger.LogInformation("✅ Loaded scripts and patches for {Count} mod(s)", _loadedMods.Count);
+    }
+
+    /// <summary>
+    ///     Loads scripts and patches for a single mod (Phase 2).
+    /// </summary>
+    private async Task LoadModScriptsAndPatchesAsync(ModManifest manifest)
+    {
+        var scriptInstances = new List<object>();
+        var patches = new List<ModPatch>();
+
+        try
+        {
+            var loadedMod = new LoadedMod { Manifest = manifest, RootPath = manifest.DirectoryPath };
+
+            // Load patches
+            if (manifest.Patches.Count > 0)
+            {
+                patches = _patchFileLoader.LoadModPatches(loadedMod);
+                _modPatches[manifest.Id] = patches;
+                _logger.LogInformation("📝 Loaded {Count} patch(es) for mod '{Id}'", patches.Count, manifest.Id);
+            }
+
+            // Load scripts
+            if (manifest.Scripts.Count > 0)
+            {
+                foreach (string scriptFile in manifest.Scripts)
+                {
+                    string scriptPath = Path.Combine(manifest.DirectoryPath, scriptFile);
+
+                    if (!File.Exists(scriptPath))
+                    {
+                        _logger.LogError("❌ Script file not found for mod '{Id}': {Path}", manifest.Id, scriptPath);
+                        continue;
+                    }
+
+                    // Pass full absolute path - ScriptService handles both absolute and relative paths
+                    object? instance = await _scriptService.LoadScriptAsync(scriptPath);
+
+                    if (instance == null)
+                    {
+                        _logger.LogError("❌ Failed to load script '{Script}' for mod '{Id}'", scriptFile, manifest.Id);
+                        continue;
+                    }
+
+                    if (instance is ScriptBase scriptBase)
+                    {
+                        _scriptService.InitializeScript(scriptBase, _world, null, _logger);
+                        _logger.LogDebug("✅ Loaded and initialized script: {Script} ({Type})", scriptFile, instance.GetType().Name);
+                    }
+                    else
+                    {
+                        _logger.LogWarning("⚠️  Script '{Script}' is not a ScriptBase. Loaded but not initialized.", scriptFile);
+                    }
+
+                    scriptInstances.Add(instance);
+                }
+            }
+
+            if (scriptInstances.Count > 0)
+            {
+                _modScriptInstances[manifest.Id] = scriptInstances;
+            }
+
+            _logger.LogDebug("Mod '{Id}' scripts loaded: {Scripts} script(s), {Patches} patch(es)",
+                manifest.Id, scriptInstances.Count, patches.Count);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "❌ Failed to load scripts for mod '{Id}'", manifest.Id);
         }
     }
 
@@ -203,8 +312,38 @@ public sealed class ModLoader
             return null;
         }
 
+        // Validate content folder keys against known content types
+        ValidateContentFolderKeys(manifest, manifestPath);
+
         _logger.LogDebug("✅ Parsed manifest: {Mod}", manifest);
         return manifest;
+    }
+
+    /// <summary>
+    ///     Validates that content folder keys match known content types.
+    ///     Warns about unknown keys that won't be recognized by ContentProvider.
+    /// </summary>
+    private void ValidateContentFolderKeys(ModManifest manifest, string manifestPath)
+    {
+        // Known content type keys from ContentProviderOptions
+        var validContentTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "Root", "Definitions", "Graphics", "Audio", "Scripts", "Fonts", "Tiled", "Tilesets",
+            "TileBehaviors", "Behaviors", "Sprites", "MapDefinitions", "AudioDefinitions",
+            "PopupBackgrounds", "PopupOutlines", "PopupThemes", "MapSections"
+        };
+
+        foreach (string key in manifest.ContentFolders.Keys)
+        {
+            if (!validContentTypes.Contains(key))
+            {
+                _logger.LogWarning(
+                    "⚠️  Unknown content folder key '{Key}' in mod '{Id}' ({Path}). " +
+                    "Valid keys: {ValidKeys}. This content type will be ignored.",
+                    key, manifest.Id, manifestPath,
+                    string.Join(", ", validContentTypes.OrderBy(k => k)));
+            }
+        }
     }
 
     /// <summary>
@@ -272,10 +411,8 @@ public sealed class ModLoader
                         continue;
                     }
 
-                    // Load script using ScriptService (relative to mod directory)
-                    string relativeScriptPath = Path.GetRelativePath(_modsBasePath, scriptPath);
-
-                    object? instance = await _scriptService.LoadScriptAsync(relativeScriptPath);
+                    // Pass full absolute path - ScriptService handles both absolute and relative paths
+                    object? instance = await _scriptService.LoadScriptAsync(scriptPath);
 
                     if (instance == null)
                     {
@@ -470,6 +607,75 @@ public sealed class ModLoader
         }
 
         return result;
+    }
+
+    /// <summary>
+    /// Loads the base game content as a special mod.
+    /// Should be called before LoadModsAsync().
+    /// </summary>
+    public async Task LoadBaseGameAsync(string baseGameRoot)
+    {
+        string manifestPath = Path.Combine(baseGameRoot, "mod.json");
+
+        if (!File.Exists(manifestPath))
+        {
+            _logger.LogWarning(
+                "Base game mod.json not found at {Path}. Creating default manifest.",
+                manifestPath);
+            await CreateDefaultBaseManifestAsync(manifestPath, baseGameRoot);
+        }
+
+        ModManifest? manifest = ParseManifest(manifestPath, baseGameRoot);
+        if (manifest != null)
+        {
+            // Base game should have high priority but allow mods to override
+            _loadedMods[manifest.Id] = manifest;
+            _logger.LogInformation(
+                "Loaded base game: {Name} v{Version} (priority {Priority})",
+                manifest.Name, manifest.Version, manifest.Priority);
+        }
+    }
+
+    private async Task CreateDefaultBaseManifestAsync(string path, string baseGameRoot)
+    {
+        var manifest = new
+        {
+            id = "base:pokesharp-core",
+            name = "PokeSharp Core Content",
+            author = "PokeSharp Team",
+            version = "1.0.0",
+            description = "Base game content",
+            priority = 1000,
+            contentFolders = new Dictionary<string, string>
+            {
+                // Broad content categories
+                ["Root"] = "",
+                ["Definitions"] = "Definitions",
+                ["Graphics"] = "Graphics",
+                ["Audio"] = "Audio",
+                ["Scripts"] = "Scripts",
+                ["Fonts"] = "Fonts",
+                ["Tiled"] = "Tiled",
+                ["Tilesets"] = "Tilesets",
+                // Fine-grained definition types for mod overrides
+                ["TileBehaviors"] = "Definitions/TileBehaviors",
+                ["Behaviors"] = "Definitions/Behaviors",
+                ["Sprites"] = "Definitions/Sprites",
+                ["MapDefinitions"] = "Definitions/Maps/Regions",
+                ["AudioDefinitions"] = "Definitions/Audio",
+                ["PopupBackgrounds"] = "Definitions/Maps/Popups/Backgrounds",
+                ["PopupOutlines"] = "Definitions/Maps/Popups/Outlines",
+                ["PopupThemes"] = "Definitions/Maps/Popups/Themes",
+                ["MapSections"] = "Definitions/Maps/Sections"
+            },
+            scripts = Array.Empty<string>(),
+            patches = Array.Empty<string>(),
+            dependencies = Array.Empty<string>()
+        };
+
+        string json = JsonSerializer.Serialize(manifest, new JsonSerializerOptions { WriteIndented = true });
+        await File.WriteAllTextAsync(path, json);
+        _logger.LogInformation("Created default base game manifest at {Path}", path);
     }
 }
 

@@ -41,6 +41,9 @@ public static class ModdingExtensions
             );
         });
 
+        // Register IModLoader interface pointing to the same ModLoader singleton instance
+        services.AddSingleton<IModLoader>(sp => sp.GetRequiredService<ModLoader>());
+
         return services;
     }
 }

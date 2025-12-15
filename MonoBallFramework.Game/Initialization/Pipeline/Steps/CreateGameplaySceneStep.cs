@@ -1,10 +1,11 @@
+using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MonoBallFramework.Game.Engine.Audio.Services;
+using MonoBallFramework.Game.Engine.Content;
 using MonoBallFramework.Game.Engine.Core.Events;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
 using MonoBallFramework.Game.Engine.Scenes;
-using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game.Scenes;
 
 namespace MonoBallFramework.Game.Initialization.Pipeline.Steps;
@@ -52,9 +53,11 @@ public class CreateGameplaySceneStep : InitializationStepBase
 
         // Get optional services for context and overlays
         IAudioService? audioService = context.Services.GetService<IAudioService>();
-        EntityPoolManager? poolManager = context.Services.GetService<EntityPoolManager>();
         IEventBus? eventBus = context.Services.GetService<IEventBus>();
         IAssetProvider? assetProvider = context.Services.GetService<IAssetProvider>();
+
+        // Get required IContentProvider service
+        IContentProvider contentProvider = context.Services.GetRequiredService<IContentProvider>();
 
         // Create context facade to group dependencies (reduces constructor params from 11 to 4)
         var sceneContext = new GameplaySceneContext(
@@ -74,7 +77,7 @@ public class CreateGameplaySceneStep : InitializationStepBase
             context.GraphicsDevice,
             gameplaySceneLogger,
             sceneContext,
-            poolManager,
+            contentProvider,
             eventBus
         );
 

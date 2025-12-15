@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoBallFramework.Game.Engine.Content;
 using NAudio.Wave;
 
 namespace MonoBallFramework.Game.Engine.Scenes.Scenes;
@@ -28,6 +29,7 @@ public class IntroScene : SceneBase
     // Colors - matches the outer edge of the logo
     private static readonly Color BackgroundColor = new(234, 234, 233);
 
+    private readonly IContentProvider _contentProvider;
     private readonly Func<IScene> _createNextScene;
     private readonly ILogger<IntroScene> _logger;
     private readonly SceneManager _sceneManager;
@@ -49,20 +51,24 @@ public class IntroScene : SceneBase
     /// <param name="logger">The logger for this scene.</param>
     /// <param name="sceneManager">The scene manager for transitions.</param>
     /// <param name="createNextScene">Factory function to create the next scene (loading scene).</param>
+    /// <param name="contentProvider">The content provider for resolving asset paths.</param>
     public IntroScene(
         GraphicsDevice graphicsDevice,
         ILogger<IntroScene> logger,
         SceneManager sceneManager,
-        Func<IScene> createNextScene
+        Func<IScene> createNextScene,
+        IContentProvider contentProvider
     )
         : base(graphicsDevice, logger)
     {
         ArgumentNullException.ThrowIfNull(sceneManager);
         ArgumentNullException.ThrowIfNull(createNextScene);
+        ArgumentNullException.ThrowIfNull(contentProvider);
 
         _logger = logger;
         _sceneManager = sceneManager;
         _createNextScene = createNextScene;
+        _contentProvider = contentProvider;
     }
 
     /// <inheritdoc />
@@ -76,48 +82,44 @@ public class IntroScene : SceneBase
         _pixel = new Texture2D(GraphicsDevice, 1, 1);
         _pixel.SetData(new[] { Color.White });
 
-        // Load the logo texture from Assets folder
+        // Load the logo texture using content provider (root-level asset)
+        string? logoPath = _contentProvider.ResolveContentPath("Root", "logo.png");
+
+        if (logoPath == null)
+        {
+            throw new FileNotFoundException("Logo file not found: Root/logo.png");
+        }
+
         try
         {
-            string logoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "logo.png");
-
-            if (File.Exists(logoPath))
-            {
-                using FileStream stream = File.OpenRead(logoPath);
-                _logoTexture = Texture2D.FromStream(GraphicsDevice, stream);
-                _logger.LogInformation("Logo loaded successfully from {Path}", logoPath);
-            }
-            else
-            {
-                _logger.LogWarning("Logo file not found at {Path}", logoPath);
-            }
+            using FileStream stream = File.OpenRead(logoPath);
+            _logoTexture = Texture2D.FromStream(GraphicsDevice, stream);
+            _logger.LogInformation("Logo loaded successfully from {Path}", logoPath);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to load logo texture");
+            throw new InvalidOperationException($"Failed to load logo texture from {logoPath}", ex);
         }
 
-        // Load and play intro audio
+        // Load and play intro audio using content provider (root-level asset)
+        string? audioPath = _contentProvider.ResolveContentPath("Root", "MonoBall.wav");
+
+        if (audioPath == null)
+        {
+            throw new FileNotFoundException("Intro audio file not found: Root/MonoBall.wav");
+        }
+
         try
         {
-            string audioPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "MonoBall.wav");
-
-            if (File.Exists(audioPath))
-            {
-                _audioReader = new AudioFileReader(audioPath);
-                _waveOut = new WaveOutEvent();
-                _waveOut.Init(_audioReader);
-                _waveOut.Play();
-                _logger.LogInformation("Intro audio playing from {Path}", audioPath);
-            }
-            else
-            {
-                _logger.LogWarning("Intro audio file not found at {Path}", audioPath);
-            }
+            _audioReader = new AudioFileReader(audioPath);
+            _waveOut = new WaveOutEvent();
+            _waveOut.Init(_audioReader);
+            _waveOut.Play();
+            _logger.LogInformation("Intro audio playing from {Path}", audioPath);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to load or play intro audio");
+            throw new InvalidOperationException($"Failed to load or play intro audio from {audioPath}", ex);
         }
     }
 

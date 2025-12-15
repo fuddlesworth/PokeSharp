@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoBallFramework.Game.Engine.Core.Services;
 using MonoBallFramework.Game.Engine.Rendering.Systems;
-using MonoBallFramework.Game.Engine.Systems.Pooling;
+
 using MonoBallFramework.Game.GameSystems.Movement;
 using MonoBallFramework.Game.GameSystems.Spatial;
 using MonoBallFramework.Game.GameSystems.Warps;
@@ -25,11 +25,6 @@ public interface IGameInitializer
     ///     Gets the render system.
     /// </summary>
     ElevationRenderSystem RenderSystem { get; }
-
-    /// <summary>
-    ///     Gets the entity pool manager.
-    /// </summary>
-    EntityPoolManager PoolManager { get; }
 
     /// <summary>
     ///     Gets the map lifecycle manager.

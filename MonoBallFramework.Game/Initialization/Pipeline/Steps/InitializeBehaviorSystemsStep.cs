@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MonoBallFramework.Game.Engine.Core.Events;
 using MonoBallFramework.Game.Engine.Scenes;
+using MonoBallFramework.Game.GameData;
 using MonoBallFramework.Game.GameSystems.Movement;
 using MonoBallFramework.Game.Initialization.Behaviors;
 
@@ -39,6 +40,9 @@ public class InitializeBehaviorSystemsStep : InitializationStepBase
         ILogger<InitializeBehaviorSystemsStep> logger =
             context.LoggerFactory.CreateLogger<InitializeBehaviorSystemsStep>();
 
+        // Get GameDataContext for loading mod behaviors from EF Core
+        GameDataContext? gameDataContext = context.Services.GetService<GameDataContext>();
+
         // Initialize NPC behavior system
         ILogger<NPCBehaviorInitializer> npcBehaviorInitializerLogger =
             context.LoggerFactory.CreateLogger<NPCBehaviorInitializer>();
@@ -51,6 +55,7 @@ public class InitializeBehaviorSystemsStep : InitializationStepBase
             context.ScriptService,
             context.ApiProvider,
             eventBus,
+            gameDataContext,  // Pass GameDataContext for loading mod behaviors
             context.GameInitializer.MapLifecycleManager  // Pass MapLifecycleManager for behavior cleanup
         );
         await npcBehaviorInitializer.InitializeAsync();
@@ -67,6 +72,7 @@ public class InitializeBehaviorSystemsStep : InitializationStepBase
             context.ScriptService,
             context.ApiProvider,
             eventBus,
+            gameDataContext,  // Pass GameDataContext for loading mod behaviors
             context.GameInitializer.CollisionService
         );
         await tileBehaviorInitializer.InitializeAsync();

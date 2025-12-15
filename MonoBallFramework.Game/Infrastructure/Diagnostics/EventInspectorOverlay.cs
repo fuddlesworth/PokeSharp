@@ -14,6 +14,7 @@ public class EventInspectorOverlay : IDisposable
 {
     private readonly EventInspectorAdapter _adapter;
     private readonly InputState _inputState;
+    private readonly EventMetrics _metrics;
     private readonly EventInspectorPanel _panel;
     private readonly UIContext _uiContext;
     private bool _disposed;
@@ -21,16 +22,25 @@ public class EventInspectorOverlay : IDisposable
     /// <summary>
     ///     Creates a new Event Inspector overlay.
     /// </summary>
-    public EventInspectorOverlay(GraphicsDevice graphicsDevice, EventBus eventBus)
+    /// <param name="graphicsDevice">The graphics device for rendering.</param>
+    /// <param name="eventBus">The event bus to monitor.</param>
+    /// <param name="metrics">
+    ///     Optional shared EventMetrics instance. If null, creates a new instance.
+    ///     Pass the DI-registered singleton to share metrics with ConsoleSystem.
+    /// </param>
+    public EventInspectorOverlay(GraphicsDevice graphicsDevice, EventBus eventBus, EventMetrics? metrics = null)
     {
-        // Create metrics (disabled by default)
-        var metrics = new EventMetrics { IsEnabled = false };
+        // Use provided metrics or create new (for backwards compatibility)
+        _metrics = metrics ?? new EventMetrics { IsEnabled = false };
 
-        // Connect metrics to EventBus
-        eventBus.Metrics = metrics;
+        // Connect metrics to EventBus (only if not already connected)
+        if (eventBus.Metrics == null)
+        {
+            eventBus.Metrics = _metrics;
+        }
 
-        // Create adapter
-        _adapter = new EventInspectorAdapter(eventBus, metrics, 100);
+        // Create adapter using the shared metrics
+        _adapter = new EventInspectorAdapter(eventBus, _metrics, 100);
 
         // Create panel
         _panel = new EventInspectorPanelBuilder()

@@ -1,3 +1,4 @@
+using System;
 using Arch.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,7 +9,6 @@ using MonoBallFramework.Game.Engine.Input.Systems;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
 using MonoBallFramework.Game.Engine.Rendering.Systems;
 using MonoBallFramework.Game.Engine.Systems.Management;
-using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game.GameData.Factories;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Core;
 using MonoBallFramework.Game.GameData.Services;
@@ -38,7 +38,6 @@ public class GameInitializer(
     World world,
     SystemManager systemManager,
     AssetManager assetManager,
-    EntityPoolManager poolManager,
     SpriteRegistry spriteRegistry,
     MapLoader mapLoader,
     MapEntityService mapDefinitionService,
@@ -61,10 +60,6 @@ public class GameInitializer(
     /// </summary>
     public ElevationRenderSystem RenderSystem { get; private set; } = null!;
 
-    /// <summary>
-    ///     Gets the entity pool manager.
-    /// </summary>
-    public EntityPoolManager PoolManager => poolManager;
 
     /// <summary>
     ///     Gets the map lifecycle manager.
@@ -108,18 +103,8 @@ public class GameInitializer(
     /// <param name="inputBlocker">Optional input blocker (e.g., SceneManager) that systems can check to skip input processing.</param>
     public void Initialize(GraphicsDevice graphicsDevice, IInputBlocker? inputBlocker = null)
     {
-        // NOTE: Pools are now registered in CoreServicesExtensions.AddCoreEcsServices()
-        // when EntityPoolManager is created. This eliminates temporal coupling where
-        // LayerProcessor was created with the pool manager before pools were registered.
-        //
-        // GameDataLoader is also called earlier in MonoBallFrameworkGame.Initialize
+        // GameDataLoader is called earlier in MonoBallFrameworkGame.Initialize
         // before GameInitializer.Initialize is invoked.
-
-        logger.LogInformation(
-            "Entity pool manager ready with {PoolCount} pools: {Pools}",
-            poolManager.GetPoolNames().Count(),
-            string.Join(", ", poolManager.GetPoolNames())
-        );
 
         // Create and register systems in priority order
 
@@ -130,11 +115,6 @@ public class GameInitializer(
             loggerFactory.CreateLogger<SpatialHashSystem>();
         SpatialHashSystem = new SpatialHashSystem(spatialHashLogger);
         systemManager.RegisterUpdateSystem(SpatialHashSystem);
-
-        // Register pool management systems
-        ILogger<PoolCleanupSystem> poolCleanupLogger =
-            loggerFactory.CreateLogger<PoolCleanupSystem>();
-        systemManager.RegisterUpdateSystem(new PoolCleanupSystem(poolManager, poolCleanupLogger));
 
         // InputSystem with Pokemon-style input buffering
         // Pass inputBlocker so InputSystem can skip processing when console/menus have exclusive input

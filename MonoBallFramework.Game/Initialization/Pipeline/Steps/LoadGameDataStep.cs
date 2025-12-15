@@ -16,7 +16,7 @@ public class LoadGameDataStep : InitializationStepBase
     public LoadGameDataStep()
         : base(
             "Loading game data...",
-            InitializationProgress.Start,
+            InitializationProgress.ModsDiscovered,
             InitializationProgress.GameDataLoaded
         ) { }
 

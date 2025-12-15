@@ -25,16 +25,15 @@ public class EventMetrics : IEventMetrics
 
     /// <summary>
     ///     Records a publish operation for an event type.
+    ///     NOTE: Always tracks publish count regardless of IsEnabled,
+    ///     so events published before the inspector is opened are still counted.
+    ///     Timing is only recorded when IsEnabled is true.
     /// </summary>
     /// <param name="eventTypeName">Name of the event type.</param>
     /// <param name="elapsedNanoseconds">Time taken in nanoseconds (from Stopwatch).</param>
     public void RecordPublish(string eventTypeName, long elapsedNanoseconds)
     {
-        if (!IsEnabled)
-        {
-            return;
-        }
-
+        // Always track publish count (like RecordSubscription does for subscriber count)
         EventTypeMetrics metrics = _eventMetrics.GetOrAdd(
             eventTypeName,
             _ =>
@@ -43,9 +42,10 @@ public class EventMetrics : IEventMetrics
                 return new EventTypeMetrics(eventTypeName);
             }
         );
-        // Convert nanoseconds to milliseconds for consistent display
-        double elapsedMs = elapsedNanoseconds / 1_000_000.0;
-        metrics.RecordPublish(elapsedMs);
+
+        // Only record timing when enabled (for performance)
+        double elapsedMs = IsEnabled ? elapsedNanoseconds / 1_000_000.0 : 0.0;
+        metrics.RecordPublish(elapsedMs, trackTiming: IsEnabled);
     }
 
     /// <summary>
@@ -210,25 +210,44 @@ public class EventTypeMetrics
 
     public int SubscriberCount => _subscriberCount;
 
-    public double AveragePublishTimeMs =>
-        PublishCount > 0 ? _totalPublishTimeMs / PublishCount : 0.0;
+    public double AveragePublishTimeMs
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return PublishCount > 0 ? _totalPublishTimeMs / PublishCount : 0.0;
+            }
+        }
+    }
 
     public double MaxPublishTimeMs { get; private set; }
 
-    public double AverageHandlerTimeMs =>
-        HandlerInvocations > 0 ? _totalHandlerTimeMs / HandlerInvocations : 0.0;
+    public double AverageHandlerTimeMs
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return HandlerInvocations > 0 ? _totalHandlerTimeMs / HandlerInvocations : 0.0;
+            }
+        }
+    }
 
     public double MaxHandlerTimeMs { get; private set; }
 
-    public void RecordPublish(double elapsedMs)
+    public void RecordPublish(double elapsedMs, bool trackTiming = true)
     {
         lock (_lock)
         {
             PublishCount++;
-            _totalPublishTimeMs += elapsedMs;
-            if (elapsedMs > MaxPublishTimeMs)
+            if (trackTiming)
             {
-                MaxPublishTimeMs = elapsedMs;
+                _totalPublishTimeMs += elapsedMs;
+                if (elapsedMs > MaxPublishTimeMs)
+                {
+                    MaxPublishTimeMs = elapsedMs;
+                }
             }
         }
     }

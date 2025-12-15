@@ -1,0 +1,12 @@
+{
+  "id": "test.override",
+  "name": "Test Override Mod",
+  "author": "Test",
+  "version": "1.0.0",
+  "description": "Tests content override functionality",
+  "priority": 100,
+  "contentFolders": {
+    "TileBehaviors": "content/Definitions/TileBehaviors"
+  },
+  "dependencies": []
+}

@@ -12,6 +12,11 @@ This directory contains architectural decisions, design documents, and technical
 ### Design Documents
 - [Map Popup Service Refactoring Plan](./map-popup-service-refactoring-plan.md) - Detailed implementation plan for renaming services
 - [Map Popup Service Architecture](./diagrams/map-popup-service-architecture.md) - Visual diagrams and component interaction flows
+- [Base Game as Mod Architecture](./base-game-as-mod-architecture.md) - Comprehensive design for converting base game content into mod-based system
+- [Content Provider C4 Diagrams](./diagrams/content-provider-c4-context.md) - C4 model diagrams for ContentProvider architecture
+- [Content Resolution Sequences](./diagrams/content-resolution-sequence.md) - Sequence diagrams for content loading scenarios
+- [Technology Evaluation Matrix](./technology-evaluation-matrix.md) - Comparative analysis of architectural approaches
+- [Implementation Roadmap](./implementation-roadmap.md) - 4-week implementation plan with detailed tasks
 
 ---
 
@@ -39,6 +44,36 @@ Rename services to clearly indicate responsibilities:
 - 9 files to modify
 - ~4-6 hours effort
 - Low risk (compiler catches all references)
+
+---
+
+### 🟡 Medium Priority
+
+#### Base Game as Mod Architecture
+**Status:** DESIGN PHASE - Architecture Complete
+**Documentation:** [Base Game as Mod Architecture](./base-game-as-mod-architecture.md)
+**Implementation Plan:** [4-Week Roadmap](./implementation-roadmap.md)
+
+**Problem:**
+Base game content is loaded from hardcoded paths, preventing:
+- Mod overrides of base content
+- Unified content resolution
+- Hot-reload support for all content
+- Consistent content discovery
+
+**Solution:**
+Treat base game as special mod (`base:pokesharp-core`) with unified ContentProvider:
+- Priority-based content resolution
+- LRU caching for performance
+- Backward compatible API
+- Security-hardened path resolution
+
+**Impact:**
+- 4-week implementation timeline
+- New `IContentProvider` interface
+- Integration with AssetManager and GameDataLoader
+- Test coverage >90% required
+- Full architecture documentation complete
 
 ---
 

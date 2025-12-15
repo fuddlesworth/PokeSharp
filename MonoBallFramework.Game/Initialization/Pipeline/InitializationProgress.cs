@@ -12,6 +12,12 @@ public static class InitializationProgress
     public const float Start = 0.0f;
 
     /// <summary>
+    ///     Progress value after discovering mods (5%).
+    ///     Mod manifests are registered so ContentProvider can resolve mod content paths.
+    /// </summary>
+    public const float ModsDiscovered = 0.05f;
+
+    /// <summary>
     ///     Progress value after loading game data (20%).
     /// </summary>
     public const float GameDataLoaded = 0.2f;

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json;
 using MonoBallFramework.Game.Engine.Core.Types;
 
 namespace MonoBallFramework.Game.GameData.Entities;
@@ -68,4 +69,55 @@ public class BehaviorEntity
     /// </summary>
     [MaxLength(20)]
     public string Version { get; set; } = "1.0.0";
+
+    /// <summary>
+    ///     JSON-serialized extension data from mods.
+    /// </summary>
+    [Column(TypeName = "nvarchar(max)")]
+    public string? ExtensionData { get; set; }
+
+    /// <summary>
+    ///     Gets whether this behavior is from a mod.
+    /// </summary>
+    [NotMapped]
+    public bool IsFromMod => !string.IsNullOrEmpty(SourceMod);
+
+    /// <summary>
+    ///     Gets the extension data as a parsed dictionary.
+    /// </summary>
+    [NotMapped]
+    public Dictionary<string, JsonElement>? ParsedExtensionData
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(ExtensionData))
+                return null;
+            try
+            {
+                return JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(ExtensionData);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Gets a custom property value from extension data.
+    /// </summary>
+    public T? GetExtensionProperty<T>(string propertyName)
+    {
+        var data = ParsedExtensionData;
+        if (data == null || !data.TryGetValue(propertyName, out var element))
+            return default;
+        try
+        {
+            return JsonSerializer.Deserialize<T>(element.GetRawText());
+        }
+        catch
+        {
+            return default;
+        }
+    }
 }

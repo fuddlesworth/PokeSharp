@@ -2,6 +2,7 @@ using Arch.Core;
 using Arch.Core.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using MonoBallFramework.Game.Ecs.Components.Maps;
 using MonoBallFramework.Game.Engine.Core.Events;
 using MonoBallFramework.Game.Engine.Core.Events.Map;
@@ -26,6 +27,7 @@ public class MapPopupOrchestrator : IMapPopupOrchestrator
     private readonly PopupRegistry _popupRegistry;
     private readonly GameData.Services.IMapPopupDataService _mapPopupDataService;
     private readonly ILogger<MapPopupOrchestrator> _logger;
+    private readonly string _defaultTheme;
     private readonly IDisposable? _mapTransitionSubscription;
     private readonly IDisposable? _mapRenderReadySubscription;
 
@@ -41,7 +43,8 @@ public class MapPopupOrchestrator : IMapPopupOrchestrator
         PopupRegistry popupRegistry,
         GameData.Services.IMapPopupDataService mapPopupDataService,
         IEventBus eventBus,
-        ILogger<MapPopupOrchestrator> logger
+        ILogger<MapPopupOrchestrator> logger,
+        IOptions<PopupRegistryOptions> options
     )
     {
         ArgumentNullException.ThrowIfNull(world);
@@ -51,6 +54,7 @@ public class MapPopupOrchestrator : IMapPopupOrchestrator
         ArgumentNullException.ThrowIfNull(mapPopupDataService);
         ArgumentNullException.ThrowIfNull(eventBus);
         ArgumentNullException.ThrowIfNull(logger);
+        ArgumentNullException.ThrowIfNull(options);
 
         _world = world;
         _sceneManager = sceneManager;
@@ -58,6 +62,7 @@ public class MapPopupOrchestrator : IMapPopupOrchestrator
         _popupRegistry = popupRegistry;
         _mapPopupDataService = mapPopupDataService;
         _logger = logger;
+        _defaultTheme = options.Value.DefaultTheme;
 
         // Subscribe to map transition events (for warps and boundary crossings)
         _mapTransitionSubscription = eventBus.Subscribe<MapTransitionEvent>(OnMapTransition);
@@ -214,7 +219,7 @@ public class MapPopupOrchestrator : IMapPopupOrchestrator
             {
                 backgroundDef = _popupRegistry.GetDefaultBackground();
                 outlineDef = _popupRegistry.GetDefaultOutline();
-                usedThemeId = "wood"; // Default theme
+                usedThemeId = _defaultTheme;
 
                 if (backgroundDef == null || outlineDef == null)
                 {
@@ -222,7 +227,7 @@ public class MapPopupOrchestrator : IMapPopupOrchestrator
                     return;
                 }
 
-                _logger.LogDebug("Using default theme (wood) for popup");
+                _logger.LogDebug("Using default theme ({DefaultTheme}) for popup", _defaultTheme);
             }
 
             // Check if there's already a MapPopupScene on the stack

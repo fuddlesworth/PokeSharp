@@ -1,5 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using MonoBallFramework.Game.Engine.Content;
 using MonoBallFramework.Game.Engine.Core.Events;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
 using MonoBallFramework.Game.Engine.Rendering.Popups;
@@ -51,7 +53,8 @@ public class InitializeMapPopupStep : InitializationStepBase
         {
             try
             {
-                assetManager.LoadFont("pokemon", "Fonts/pokemon.ttf");
+                // Pass just the relative path - AssetManager.LoadFont will use ContentProvider internally
+                assetManager.LoadFont("pokemon", "pokemon.ttf");
                 logger.LogInformation("Preloaded pokemon font into cache");
             }
             catch (Exception ex)
@@ -95,6 +98,9 @@ public class InitializeMapPopupStep : InitializationStepBase
         }
         IRenderingService renderingService = context.RenderingService;
 
+        // Get IContentProvider from services
+        var contentProvider = context.Services.GetRequiredService<IContentProvider>();
+
         // Create SceneFactory for proper dependency injection
         var sceneFactory = new SceneFactory(
             context.GraphicsDevice,
@@ -102,11 +108,15 @@ public class InitializeMapPopupStep : InitializationStepBase
             context.GameInitializer.RenderSystem.AssetManager,
             context.SceneManager,
             cameraProvider,
-            renderingService
+            renderingService,
+            contentProvider
         );
 
         ILogger<MapPopupOrchestrator> mapPopupLogger =
             context.LoggerFactory.CreateLogger<MapPopupOrchestrator>();
+
+        // Get PopupRegistryOptions from DI
+        var popupOptions = context.Services.GetRequiredService<IOptions<PopupRegistryOptions>>();
 
         var mapPopupOrchestrator = new MapPopupOrchestrator(
             context.World,
@@ -115,7 +125,8 @@ public class InitializeMapPopupStep : InitializationStepBase
             popupRegistry,
             mapPopupDataService,
             eventBus,
-            mapPopupLogger
+            mapPopupLogger,
+            popupOptions
         );
 
         // Store orchestrator in context

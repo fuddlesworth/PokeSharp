@@ -1,9 +1,10 @@
+using System;
 using Arch.Core;
 using FontStashSharp;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoBallFramework.Game.Engine.Content;
 using MonoBallFramework.Game.Engine.Rendering.Components;
-using MonoBallFramework.Game.Engine.Systems.Pooling;
 
 namespace MonoBallFramework.Game.Infrastructure.Diagnostics;
 
@@ -14,9 +15,9 @@ namespace MonoBallFramework.Game.Infrastructure.Diagnostics;
 public class PerformanceOverlay : IDisposable
 {
     private readonly Texture2D _backgroundTexture;
+    private readonly IContentProvider _contentProvider;
     private readonly GraphicsDevice _graphicsDevice;
     private readonly PerformanceMonitor _performanceMonitor;
-    private readonly EntityPoolManager? _poolManager;
     private readonly SpriteBatch _spriteBatch;
     private readonly World _world;
 
@@ -31,14 +32,16 @@ public class PerformanceOverlay : IDisposable
         GraphicsDevice graphicsDevice,
         PerformanceMonitor performanceMonitor,
         World world,
-        EntityPoolManager? poolManager = null
+        IContentProvider contentProvider
     )
     {
+        ArgumentNullException.ThrowIfNull(contentProvider);
+
         _graphicsDevice = graphicsDevice;
         _spriteBatch = new SpriteBatch(graphicsDevice);
         _performanceMonitor = performanceMonitor;
         _world = world;
-        _poolManager = poolManager;
+        _contentProvider = contentProvider;
 
         // Create a 1x1 white texture for backgrounds
         _backgroundTexture = new Texture2D(graphicsDevice, 1, 1);
@@ -71,20 +74,22 @@ public class PerformanceOverlay : IDisposable
     {
         _fontSystem = new FontSystem();
 
-        // Load debug font (0xProtoNerdFontMono) - no system font fallback
-        const string debugFontPath = "Assets/Fonts/0xProtoNerdFontMono-Regular.ttf";
+        // Load debug font (0xProtoNerdFontMono) using content provider
+        string? debugFontPath = _contentProvider.ResolveContentPath("Fonts", "0xProtoNerdFontMono-Regular.ttf");
 
-        if (File.Exists(debugFontPath))
+        if (debugFontPath == null)
         {
-            try
-            {
-                _fontSystem.AddFont(File.ReadAllBytes(debugFontPath));
-                _font = _fontSystem.GetFont(14);
-            }
-            catch
-            {
-                // Font loading failed - _font will remain null
-            }
+            throw new FileNotFoundException("Debug font not found: Fonts/0xProtoNerdFontMono-Regular.ttf");
+        }
+
+        try
+        {
+            _fontSystem.AddFont(File.ReadAllBytes(debugFontPath));
+            _font = _fontSystem.GetFont(14);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Failed to load debug font from {debugFontPath}", ex);
         }
     }
 
@@ -129,14 +134,6 @@ public class PerformanceOverlay : IDisposable
             EntityCount = _world.Size,
         };
 
-        // Get pool stats if available
-        if (_poolManager != null)
-        {
-            AggregatePoolStatistics poolStats = _poolManager.GetStatistics();
-            stats.PooledEntities = poolStats.TotalActive;
-            stats.AvailablePooled = poolStats.TotalAvailable;
-        }
-
         return stats;
     }
 
@@ -165,16 +162,6 @@ public class PerformanceOverlay : IDisposable
             ("--- Entities ---", Color.Gray),
             ($"Entities: {stats.EntityCount:N0}", Color.Cyan),
         };
-
-        if (_poolManager != null)
-        {
-            lines.Add(
-                (
-                    $"Pooled: {stats.PooledEntities:N0} active, {stats.AvailablePooled:N0} available",
-                    Color.Yellow
-                )
-            );
-        }
 
         // Add camera information if available
         if (stats.Camera.HasValue)
@@ -295,8 +282,6 @@ public class PerformanceOverlay : IDisposable
         public int Gen1Collections;
         public int Gen2Collections;
         public int EntityCount;
-        public int PooledEntities;
-        public int AvailablePooled;
         public Camera? Camera;
         public int? TilesRendered;
     }

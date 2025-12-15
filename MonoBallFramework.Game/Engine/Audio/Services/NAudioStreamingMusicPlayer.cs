@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using Microsoft.Extensions.Logging;
 using MonoBallFramework.Game.Engine.Audio.Configuration;
 using MonoBallFramework.Game.Engine.Audio.Services.Streaming;
+using MonoBallFramework.Game.Engine.Content;
 using MonoBallFramework.Game.GameData.Entities;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
@@ -49,11 +50,14 @@ public class NAudioStreamingMusicPlayer : IMusicPlayer
     private CancellationTokenSource? _backgroundTaskCts;
     private bool _disposed;
 
-    public NAudioStreamingMusicPlayer(AudioRegistry audioRegistry, ILogger<NAudioStreamingMusicPlayer>? logger = null)
+    public NAudioStreamingMusicPlayer(
+        AudioRegistry audioRegistry,
+        IContentProvider contentProvider,
+        ILogger<NAudioStreamingMusicPlayer>? logger = null)
     {
         _audioRegistry = audioRegistry ?? throw new ArgumentNullException(nameof(audioRegistry));
         _logger = logger;
-        _helper = new StreamingMusicPlayerHelper(logger);
+        _helper = new StreamingMusicPlayerHelper(contentProvider, logger);
         _backgroundTaskCts = new CancellationTokenSource();
     }
 
@@ -152,7 +156,7 @@ public class NAudioStreamingMusicPlayer : IMusicPlayer
             }
 
             // Get or create track metadata (cached, but doesn't open file)
-            var trackData = _helper.GetOrCreateTrackData(trackName, definition, AppContext.BaseDirectory);
+            var trackData = _helper.GetOrCreateTrackData(trackName, definition);
             if (trackData == null)
             {
                 _logger?.LogError("Failed to get track data: {TrackName}", trackName);
@@ -390,7 +394,7 @@ public class NAudioStreamingMusicPlayer : IMusicPlayer
                 return;
             }
 
-            var trackData = _helper.GetOrCreateTrackData(newTrackName, definition, AppContext.BaseDirectory);
+            var trackData = _helper.GetOrCreateTrackData(newTrackName, definition);
             if (trackData == null)
             {
                 _logger?.LogError("Failed to get track data for crossfade: {TrackName}", newTrackName);
@@ -514,7 +518,7 @@ public class NAudioStreamingMusicPlayer : IMusicPlayer
         {
             // This caches track metadata only (file path, format, loop points)
             // Does NOT open the file or load audio data
-            _helper.GetOrCreateTrackData(trackName, definition, AppContext.BaseDirectory);
+            _helper.GetOrCreateTrackData(trackName, definition);
         }
     }
 

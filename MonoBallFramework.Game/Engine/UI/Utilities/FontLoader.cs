@@ -1,71 +1,111 @@
 using FontStashSharp;
+using Microsoft.Extensions.Logging;
+using MonoBallFramework.Game.Engine.Content;
 
 namespace MonoBallFramework.Game.Engine.UI.Utilities;
 
 /// <summary>
-///     Utility for loading game fonts.
-///     No system font fallback - only bundled fonts are used.
+/// Provides font loading and path resolution using the content provider system.
+/// Supports mod-overridable fonts.
 /// </summary>
-public static class FontLoader
+public sealed class FontLoader
 {
-    /// <summary>
-    ///     Path to the Pokemon font file (for loading screen and game UI).
-    /// </summary>
-    public const string PokemonFontPath = "Assets/Fonts/pokemon.ttf";
+    private readonly IContentProvider _contentProvider;
+    private readonly ILogger<FontLoader> _logger;
 
     /// <summary>
-    ///     Path to the debug font file (for console and debug overlays).
+    /// Default game font filename.
     /// </summary>
-    public const string DebugFontPath = "Assets/Fonts/0xProtoNerdFontMono-Regular.ttf";
+    public const string GameFont = "pokemon.ttf";
 
     /// <summary>
-    ///     Loads the debug font (0xProtoNerdFontMono) for console and debug UI.
+    /// Debug/developer font filename.
     /// </summary>
-    /// <returns>A FontSystem with the debug font, or null if not found.</returns>
-    public static FontSystem? LoadFont()
+    public const string DebugFont = "0xProtoNerdFontMono-Regular.ttf";
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FontLoader"/> class.
+    /// </summary>
+    public FontLoader(
+        IContentProvider contentProvider,
+        ILogger<FontLoader> logger)
     {
-        return LoadDebugFont();
+        _contentProvider = contentProvider ?? throw new ArgumentNullException(nameof(contentProvider));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     /// <summary>
-    ///     Loads the debug font (0xProtoNerdFontMono) for console and debug UI.
+    /// Resolves the full path to a font file.
     /// </summary>
-    /// <returns>A FontSystem with the debug font, or null if not found.</returns>
-    public static FontSystem? LoadDebugFont()
+    /// <param name="fontFileName">The font filename (e.g., "pokemon.ttf").</param>
+    /// <returns>The resolved path, or null if not found.</returns>
+    public string? ResolveFontPath(string fontFileName)
     {
-        return LoadFontFromPath(DebugFontPath, "Debug");
-    }
+        string? path = _contentProvider.ResolveContentPath("Fonts", fontFileName);
 
-    /// <summary>
-    ///     Loads the Pokemon font for loading screen and game UI.
-    /// </summary>
-    /// <returns>A FontSystem with the Pokemon font, or null if not found.</returns>
-    public static FontSystem? LoadPokemonFont()
-    {
-        return LoadFontFromPath(PokemonFontPath, "Pokemon");
-    }
-
-
-    private static FontSystem? LoadFontFromPath(string fontPath, string fontName)
-    {
-        if (!File.Exists(fontPath))
+        if (path == null)
         {
-            Console.WriteLine($"[FontLoader] {fontName} font not found at: {fontPath}");
-            return null;
+            _logger.LogWarning("Font not found: {Font}", fontFileName);
+        }
+        else
+        {
+            _logger.LogDebug("Resolved font {Font} to {Path}", fontFileName, path);
         }
 
-        try
-        {
-            byte[] fontData = File.ReadAllBytes(fontPath);
-            var fontSystem = new FontSystem();
-            fontSystem.AddFont(fontData);
-            Console.WriteLine($"[FontLoader] Loaded {fontName} font from: {fontPath}");
-            return fontSystem;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"[FontLoader] Failed to load {fontName} font: {ex.Message}");
-            return null;
-        }
+        return path;
     }
+
+    /// <summary>
+    /// Gets the path to the main game font.
+    /// </summary>
+    /// <exception cref="FileNotFoundException">Thrown if font not found.</exception>
+    public string GetGameFontPath() => ResolveFontPath(GameFont)
+        ?? throw new FileNotFoundException($"Game font not found: {GameFont}");
+
+    /// <summary>
+    /// Gets the path to the debug font.
+    /// </summary>
+    /// <exception cref="FileNotFoundException">Thrown if font not found.</exception>
+    public string GetDebugFontPath() => ResolveFontPath(DebugFont)
+        ?? throw new FileNotFoundException($"Debug font not found: {DebugFont}");
+
+    /// <summary>
+    /// Checks if a font exists.
+    /// </summary>
+    public bool FontExists(string fontFileName) =>
+        _contentProvider.ContentExists("Fonts", fontFileName);
+
+    /// <summary>
+    /// Loads a font and returns a FontSystem ready for use.
+    /// </summary>
+    /// <param name="fontFileName">The font filename to load.</param>
+    /// <returns>A FontSystem loaded with the specified font.</returns>
+    /// <exception cref="FileNotFoundException">Thrown if font not found.</exception>
+    public FontSystem LoadFont(string fontFileName)
+    {
+        string? fontPath = ResolveFontPath(fontFileName);
+
+        if (fontPath == null)
+        {
+            throw new FileNotFoundException($"Font not found: {fontFileName}");
+        }
+
+        var fontSystem = new FontSystem();
+        fontSystem.AddFont(File.ReadAllBytes(fontPath));
+
+        _logger.LogDebug("Loaded font {Font} from {Path}", fontFileName, fontPath);
+        return fontSystem;
+    }
+
+    /// <summary>
+    /// Loads the debug font.
+    /// </summary>
+    /// <returns>A FontSystem loaded with the debug font.</returns>
+    public FontSystem LoadDebugFont() => LoadFont(DebugFont);
+
+    /// <summary>
+    /// Loads the game font.
+    /// </summary>
+    /// <returns>A FontSystem loaded with the game font.</returns>
+    public FontSystem LoadGameFont() => LoadFont(GameFont);
 }

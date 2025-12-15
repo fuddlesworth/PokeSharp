@@ -59,10 +59,8 @@ public static class ServiceCollectionExtensions
         services.AddDebugConsole(configuration);
 
         // Audio Services (background music, sound effects, Pokemon cries)
-        var audioConfig = environment == "Development"
-            ? AudioConfiguration.Development
-            : AudioConfiguration.Production;
-        services.AddAudioServices(audioConfig);
+        // Note: Production config is used for all environments (Development preset is deprecated)
+        services.AddAudioServices(AudioConfiguration.Production);
 
         // Rendering Configuration (sprite batching, layers, performance tuning)
         var renderingConfig = environment == "Development"

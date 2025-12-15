@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using MonoBallFramework.Game.Engine.Audio;
 using MonoBallFramework.Game.Engine.Audio.Configuration;
 using MonoBallFramework.Game.Engine.Audio.Services;
+using MonoBallFramework.Game.Engine.Content;
 using MonoBallFramework.Game.Engine.Core.Events;
 using MonoBallFramework.Game.GameData;
 
@@ -55,8 +56,9 @@ public static class AudioServicesExtensions
         services.AddSingleton<IMusicPlayer>(sp =>
         {
             var audioRegistry = sp.GetRequiredService<AudioRegistry>();
+            var contentProvider = sp.GetRequiredService<IContentProvider>();
             var logger = sp.GetService<ILogger<NAudioStreamingMusicPlayer>>();
-            return new NAudioStreamingMusicPlayer(audioRegistry, logger);
+            return new NAudioStreamingMusicPlayer(audioRegistry, contentProvider, logger);
         });
 
         // Register NAudio-based audio service

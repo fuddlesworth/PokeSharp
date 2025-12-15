@@ -129,15 +129,15 @@ public sealed class ScriptContext
     /// </summary>
     /// <remarks>
     ///     Use this to interact with the player entity, manage money, position, and movement.
-    ///     Accessed via the API provider facade.
+    
     /// </remarks>
     /// <example>
-    ///     <code>
+    
     /// var playerMoney = ctx.Player.GetMoney();
     /// ctx.Player.GiveMoney(100);
     /// var facing = ctx.Player.GetPlayerFacing();
     /// </code>
-    /// </example>
+    
     public IPlayerApi Player => _apis.Player;
 
     /// <summary>
@@ -145,14 +145,14 @@ public sealed class ScriptContext
     /// </summary>
     /// <remarks>
     ///     Use this to control NPCs, move them, face directions, and manage paths.
-    ///     Accessed via the API provider facade.
+    
     /// </remarks>
     /// <example>
-    ///     <code>
+    
     /// ctx.Npc.FaceEntity(npcEntity, playerEntity);
     /// ctx.Npc.MoveNpc(npcEntity, Direction.North);
     /// </code>
-    /// </example>
+    
     public INpcApi Npc => _apis.Npc;
 
     /// <summary>
@@ -160,15 +160,15 @@ public sealed class ScriptContext
     /// </summary>
     /// <remarks>
     ///     Use this to check walkability, query entities at positions, and transition between maps.
-    ///     Accessed via the API provider facade.
+    
     /// </remarks>
     /// <example>
-    ///     <code>
+    
     /// var isWalkable = ctx.Map.IsPositionWalkable(mapId, x, y);
     /// var entities = ctx.Map.GetEntitiesAt(mapId, x, y);
     /// ctx.Map.TransitionToMap(2, 10, 10);
     /// </code>
-    /// </example>
+    
     public IMapApi Map => _apis.Map;
 
     /// <summary>
@@ -176,17 +176,17 @@ public sealed class ScriptContext
     /// </summary>
     /// <remarks>
     ///     Use this to manage game state through flags (booleans) and variables (strings).
-    ///     Accessed via the API provider facade.
+    
     /// </remarks>
     /// <example>
-    ///     <code>
+    
     /// ctx.GameState.SetFlag("quest_completed", true);
     /// if (ctx.GameState.GetFlag("has_key"))
     /// {
     ///     ctx.GameState.SetVariable("door_state", "unlocked");
     /// }
     /// </code>
-    /// </example>
+    
     public IGameStateApi GameState => _apis.GameState;
 
     /// <summary>
@@ -194,30 +194,30 @@ public sealed class ScriptContext
     /// </summary>
     /// <remarks>
     ///     Use this to show dialogue boxes, messages, and text to the player.
-    ///     Accessed via the API provider facade.
+    
     /// </remarks>
     /// <example>
-    ///     <code>
+    
     /// ctx.Dialogue.ShowMessage("Hello, traveler!");
     /// ctx.Dialogue.ShowDialogue(npcEntity, "Welcome to my shop.");
     /// </code>
-    /// </example>
+    
     public IDialogueApi Dialogue => _apis.Dialogue;
 
     /// <summary>
-    ///     Gets the Effects API service for spawning visual effects.
+    
     /// </summary>
     /// <remarks>
-    ///     Use this to create visual effects, animations, and particles in the game world.
-    ///     Accessed via the API provider facade.
+    
+    
     /// </remarks>
     /// <example>
-    ///     <code>
-    /// ctx.Effects.SpawnEffect("explosion", x, y);
-    /// ctx.Effects.PlayAnimation(entity, "hit");
+    
+    
+    
     /// </code>
-    /// </example>
-    public IEffectApi Effects => _apis.Effects;
+    
+    
 
     /// <summary>
     ///     Gets the Event Bus for subscribing to and publishing game events.
@@ -233,7 +233,7 @@ public sealed class ScriptContext
     ///     </para>
     /// </remarks>
     /// <example>
-    ///     <code>
+    
     /// // Subscribe to movement events
     /// ctx.OnMovementStarted(evt =>
     /// {
@@ -244,7 +244,7 @@ public sealed class ScriptContext
     /// // Subscribe to custom events
     /// ctx.On&lt;MyCustomEvent&gt;(evt => HandleCustomEvent(evt), priority: 1000);
     /// </code>
-    /// </example>
+    
     public IEventBus Events { get; }
 
     #endregion
@@ -290,11 +290,11 @@ public sealed class ScriptContext
     ///     Returns a reference for zero-allocation component modification.
     /// </remarks>
     /// <example>
-    ///     <code>
+    
     /// ref var health = ref ctx.GetState&lt;Health&gt;();
     /// health.Current -= 10; // Modifies component directly
     /// </code>
-    /// </example>
+    
     public ref T GetState<T>()
         where T : struct
     {
@@ -329,13 +329,13 @@ public sealed class ScriptContext
     ///     Returns false for global scripts or missing components without throwing.
     /// </remarks>
     /// <example>
-    ///     <code>
+    
     /// if (ctx.TryGetState&lt;Health&gt;(out var health))
     /// {
     ///     ctx.Logger.LogInformation("HP: {Current}/{Max}", health.Current, health.Max);
     /// }
     /// </code>
-    /// </example>
+    
     public bool TryGetState<T>(out T state)
         where T : struct
     {
@@ -368,12 +368,12 @@ public sealed class ScriptContext
     ///     The component is added with default struct values if it doesn't exist.
     /// </remarks>
     /// <example>
-    ///     <code>
+    
     /// // Ensure entity has a timer, create if needed
     /// ref var timer = ref ctx.GetOrAddState&lt;ScriptTimer&gt;();
     /// timer.ElapsedSeconds += deltaTime;
     /// </code>
-    /// </example>
+    
     public ref T GetOrAddState<T>()
         where T : struct
     {
@@ -410,14 +410,14 @@ public sealed class ScriptContext
     ///     Use this before calling <see cref="GetState{T}" /> if you're unsure whether the component exists.
     /// </remarks>
     /// <example>
-    ///     <code>
+    
     /// if (ctx.HasState&lt;Inventory&gt;())
     /// {
     ///     ref var inventory = ref ctx.GetState&lt;Inventory&gt;();
     ///     // Work with inventory
     /// }
     /// </code>
-    /// </example>
+    
     public bool HasState<T>()
         where T : struct
     {
@@ -434,14 +434,14 @@ public sealed class ScriptContext
     ///     Use this to clean up temporary or conditional components.
     /// </remarks>
     /// <example>
-    ///     <code>
+    
     /// // Remove temporary status effect
     /// if (ctx.RemoveState&lt;PoisonEffect&gt;())
     /// {
     ///     ctx.Logger.LogInformation("Poison effect removed");
     /// }
     /// </code>
-    /// </example>
+    
     public bool RemoveState<T>()
         where T : struct
     {
@@ -474,14 +474,14 @@ public sealed class ScriptContext
     ///     Use <see cref="HasPosition" /> to check existence first if you're unsure.
     /// </remarks>
     /// <example>
-    ///     <code>
+    
     /// if (ctx.HasPosition)
     /// {
     ///     ref var pos = ref ctx.Position;
     ///     pos.X += 10;
     /// }
     /// </code>
-    /// </example>
+    
     public ref Position Position => ref GetState<Position>();
 
     /// <summary>
@@ -525,7 +525,7 @@ public sealed class ScriptContext
     ///     </para>
     /// </remarks>
     /// <example>
-    ///     <code>
+    
     /// // Subscribe to any event type with custom priority
     /// var subscription = ctx.On&lt;MovementStartedEvent&gt;(evt =>
     /// {
@@ -538,7 +538,7 @@ public sealed class ScriptContext
     /// // Later: unsubscribe when no longer needed
     /// subscription.Dispose();
     /// </code>
-    /// </example>
+    
     public IDisposable On<TEvent>(Action<TEvent> handler, int priority = 500)
         where TEvent : class
     {
@@ -569,7 +569,7 @@ public sealed class ScriptContext
     ///     Equivalent to calling <c>On&lt;MovementStartedEvent&gt;(handler, priority: 500)</c>.
     /// </remarks>
     /// <example>
-    ///     <code>
+    
     /// ctx.OnMovementStarted(evt =>
     /// {
     ///     ctx.Logger.LogInformation("Entity {EntityId} moving to ({ToX},{ToY})",
@@ -582,7 +582,7 @@ public sealed class ScriptContext
     ///     }
     /// });
     /// </code>
-    /// </example>
+    
     public IDisposable OnMovementStarted(Action<MovementStartedEvent> handler)
     {
         return On(handler, 500);
@@ -598,7 +598,7 @@ public sealed class ScriptContext
     ///     Equivalent to calling <c>On&lt;MovementCompletedEvent&gt;(handler, priority: 500)</c>.
     /// </remarks>
     /// <example>
-    ///     <code>
+    
     /// ctx.OnMovementCompleted(evt =>
     /// {
     ///     ctx.Logger.LogInformation("Entity {EntityId} reached ({CurrentX},{CurrentY})",
@@ -608,7 +608,7 @@ public sealed class ScriptContext
     ///     CheckForRandomEncounter(evt.CurrentX, evt.CurrentY);
     /// });
     /// </code>
-    /// </example>
+    
     public IDisposable OnMovementCompleted(Action<MovementCompletedEvent> handler)
     {
         return On(handler, 500);
@@ -624,7 +624,7 @@ public sealed class ScriptContext
     ///     Equivalent to calling <c>On&lt;CollisionDetectedEvent&gt;(handler, priority: 500)</c>.
     /// </remarks>
     /// <example>
-    ///     <code>
+    
     /// ctx.OnCollisionDetected(evt =>
     /// {
     ///     ctx.Logger.LogInformation("Collision: Entity {A} hit Entity {B} at ({X},{Y})",
@@ -637,7 +637,7 @@ public sealed class ScriptContext
     ///     }
     /// });
     /// </code>
-    /// </example>
+    
     public IDisposable OnCollisionDetected(Action<CollisionDetectedEvent> handler)
     {
         return On(handler, 500);
@@ -653,7 +653,7 @@ public sealed class ScriptContext
     ///     Equivalent to calling <c>On&lt;TileSteppedOnEvent&gt;(handler, priority: 500)</c>.
     /// </remarks>
     /// <example>
-    ///     <code>
+    
     /// ctx.OnTileSteppedOn(evt =>
     /// {
     ///     ctx.Logger.LogInformation("Entity {EntityId} stepped on {TileType} at ({X},{Y})",
@@ -666,7 +666,7 @@ public sealed class ScriptContext
     ///     }
     /// });
     /// </code>
-    /// </example>
+    
     public IDisposable OnTileSteppedOn(Action<TileSteppedOnEvent> handler)
     {
         return On(handler, 500);

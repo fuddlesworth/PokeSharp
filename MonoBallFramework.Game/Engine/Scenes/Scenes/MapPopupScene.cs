@@ -2,6 +2,7 @@ using FontStashSharp;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoBallFramework.Game.Engine.Content;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
 using MonoBallFramework.Game.Engine.Rendering.Components;
 using MonoBallFramework.Game.Engine.Rendering.Services;
@@ -19,6 +20,7 @@ public class MapPopupScene : SceneBase
 {
     private readonly IAssetProvider _assetProvider;
     private readonly PopupBackgroundEntity _backgroundDef;
+    private readonly IContentProvider _contentProvider;
     private readonly PopupOutlineEntity _outlineDef;
     private readonly string _mapName;
     private readonly SceneManager _sceneManager;
@@ -100,7 +102,8 @@ public class MapPopupScene : SceneBase
         string mapName,
         SceneManager sceneManager,
         ICameraProvider cameraProvider,
-        IRenderingService renderingService
+        IRenderingService renderingService,
+        IContentProvider contentProvider
     )
         : base(graphicsDevice, logger)
     {
@@ -111,9 +114,11 @@ public class MapPopupScene : SceneBase
         ArgumentNullException.ThrowIfNull(sceneManager);
         ArgumentNullException.ThrowIfNull(cameraProvider);
         ArgumentNullException.ThrowIfNull(renderingService);
+        ArgumentNullException.ThrowIfNull(contentProvider);
 
         _assetProvider = assetProvider;
         _backgroundDef = backgroundDefinition;
+        _contentProvider = contentProvider;
         _outlineDef = outlineDefinition;
         _mapName = mapName;
         _sceneManager = sceneManager;
@@ -247,42 +252,27 @@ public class MapPopupScene : SceneBase
             }
         }
 
-        // Fallback: Create local FontSystem (will be disposed with scene)
+        // Fallback: Create local FontSystem using content provider
         Logger.LogDebug("Font not cached, loading from disk (slower path)");
         _fontSystem = new FontSystem();
-        bool fontLoaded = false;
+
+        string? fontPath = _contentProvider.ResolveContentPath("Fonts", "pokemon.ttf");
+
+        if (fontPath == null)
+        {
+            throw new FileNotFoundException("Pokemon font not found: Fonts/pokemon.ttf");
+        }
 
         try
         {
-            // Load the pokemon.ttf font from Assets/Fonts
-            string fontPath = Path.Combine(
-                AppContext.BaseDirectory,
-                "Assets",
-                "Fonts",
-                "pokemon.ttf"
-            );
-
-            if (File.Exists(fontPath))
-            {
-                byte[] fontData = File.ReadAllBytes(fontPath);
-                _fontSystem.AddFont(fontData);
-                _font = _fontSystem.GetFont(GbaBaseFontSize);
-                fontLoaded = true;
-                Logger.LogDebug("Loaded pokemon.ttf font from {FontPath}", fontPath);
-            }
-            else
-            {
-                Logger.LogWarning("Font file not found at {FontPath}", fontPath);
-            }
+            byte[] fontData = File.ReadAllBytes(fontPath);
+            _fontSystem.AddFont(fontData);
+            _font = _fontSystem.GetFont(GbaBaseFontSize);
+            Logger.LogDebug("Loaded pokemon.ttf font from {FontPath}", fontPath);
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Failed to load font for map popup");
-        }
-
-        if (!fontLoaded)
-        {
-            Logger.LogWarning("No font loaded for map popup - text will not be displayed");
+            throw new InvalidOperationException($"Failed to load font from {fontPath}", ex);
         }
     }
 

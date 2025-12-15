@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace MonoBallFramework.Game.Engine.Core.Types;
 
 /// <summary>
@@ -24,7 +26,9 @@ public record BehaviorDefinition : IScriptedType
     /// <summary>
     ///     Unique identifier for this behavior type (e.g., "patrol", "stationary", "trainer").
     /// </summary>
-    public required string TypeId { get; init; }
+    [JsonPropertyName("id")]
+    [JsonRequired]
+    public required string Id { get; init; }
 
     /// <summary>
     ///     Display name for this behavior (e.g., "Patrol Behavior").

@@ -1,6 +1,7 @@
 using Arch.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework.Graphics;
+using MonoBallFramework.Game.Engine.Content;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
 using MonoBallFramework.Game.Engine.Rendering.Services;
 using MonoBallFramework.Game.Engine.Scenes.Scenes;
@@ -20,6 +21,7 @@ public class SceneFactory : ISceneFactory
     private readonly SceneManager _sceneManager;
     private readonly ICameraProvider _cameraProvider;
     private readonly IRenderingService _renderingService;
+    private readonly IContentProvider _contentProvider;
 
     public SceneFactory(
         GraphicsDevice graphicsDevice,
@@ -27,7 +29,8 @@ public class SceneFactory : ISceneFactory
         IAssetProvider assetProvider,
         SceneManager sceneManager,
         ICameraProvider cameraProvider,
-        IRenderingService renderingService
+        IRenderingService renderingService,
+        IContentProvider contentProvider
     )
     {
         _graphicsDevice = graphicsDevice ?? throw new ArgumentNullException(nameof(graphicsDevice));
@@ -36,6 +39,7 @@ public class SceneFactory : ISceneFactory
         _sceneManager = sceneManager ?? throw new ArgumentNullException(nameof(sceneManager));
         _cameraProvider = cameraProvider ?? throw new ArgumentNullException(nameof(cameraProvider));
         _renderingService = renderingService ?? throw new ArgumentNullException(nameof(renderingService));
+        _contentProvider = contentProvider ?? throw new ArgumentNullException(nameof(contentProvider));
     }
 
     public MapPopupScene CreateMapPopupScene(
@@ -59,7 +63,8 @@ public class SceneFactory : ISceneFactory
             mapName,
             _sceneManager,
             _cameraProvider,
-            _renderingService
+            _renderingService,
+            _contentProvider
         );
     }
 }

@@ -1,7 +1,6 @@
 using Arch.Core;
 using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.Engine.Systems.Management;
-using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game.GameData.Loading;
 using MonoBallFramework.Game.GameData.Services;
 using MonoBallFramework.Game.GameData.Sprites;
@@ -74,7 +73,6 @@ public sealed class MonoBallFrameworkGameOptions
     /// <summary>
     ///     Gets or sets the entity pool manager.
     /// </summary>
-    public EntityPoolManager PoolManager { get; init; } = null!;
 
     /// <summary>
     ///     Gets or sets the game data loader.

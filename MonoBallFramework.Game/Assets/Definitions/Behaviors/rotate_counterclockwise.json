@@ -1,5 +1,5 @@
 {
-  "typeId": "base:behavior:movement/rotate_counterclockwise",
+  "id": "base:behavior:movement/rotate_counterclockwise",
   "displayName": "Rotate Counter-Clockwise Behavior",
   "description": "NPC rotates facing direction counter-clockwise periodically",
   "behaviorScript": "Behaviors/rotate_behavior.csx",

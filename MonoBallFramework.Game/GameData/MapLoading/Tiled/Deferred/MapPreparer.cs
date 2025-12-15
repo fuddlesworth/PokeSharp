@@ -74,7 +74,7 @@ public class MapPreparer
     public async Task<PreparedMapData> PrepareMapAsync(GameMapId mapId, Vector2 worldOffset = default, CancellationToken cancellationToken = default)
     {
         // Fast path: already prepared (no lock needed for read)
-        if (_preparedMaps.TryGetValue(mapId.Value, out var cached))
+        if (_preparedMaps.TryGetValue(mapId.Value, out PreparedMapData? cached) && cached != null)
         {
             _logger?.LogDebug("Using cached prepared map: {MapId}", mapId.Value);
             return cached;
@@ -86,7 +86,7 @@ public class MapPreparer
         lock (_prepareLock)
         {
             // Double-check after acquiring lock
-            if (_preparedMaps.TryGetValue(mapId.Value, out cached))
+            if (_preparedMaps.TryGetValue(mapId.Value, out cached) && cached != null)
             {
                 return cached;
             }

@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using Microsoft.Extensions.Logging;
+using MonoBallFramework.Game.Engine.Content;
 using MonoBallFramework.Game.GameData.Entities;
 using NAudio.Vorbis;
 using NAudio.Wave;
@@ -102,6 +103,7 @@ public class TrackCache : ITrackCache
 {
     private readonly ConcurrentDictionary<string, CachedTrack> _cache = new();
     private readonly int _maxCacheSize;
+    private readonly IContentProvider _contentProvider;
     private readonly ILogger<TrackCache>? _logger;
     private readonly object _evictionLock = new();
     private bool _disposed;
@@ -109,10 +111,13 @@ public class TrackCache : ITrackCache
     /// <summary>
     /// Creates a new track cache with the specified maximum size
     /// </summary>
+    /// <param name="contentProvider">Content provider for resolving audio paths</param>
     /// <param name="maxCacheSize">Maximum number of tracks to cache (0 = unlimited)</param>
     /// <param name="logger">Optional logger for diagnostics</param>
-    public TrackCache(int maxCacheSize = 50, ILogger<TrackCache>? logger = null)
+    public TrackCache(IContentProvider contentProvider, int maxCacheSize = 50, ILogger<TrackCache>? logger = null)
     {
+        _contentProvider = contentProvider ?? throw new ArgumentNullException(nameof(contentProvider));
+
         if (maxCacheSize < 0)
             throw new ArgumentOutOfRangeException(nameof(maxCacheSize), "Cache size must be non-negative");
 
@@ -173,13 +178,14 @@ public class TrackCache : ITrackCache
                     EvictLRU();
                 }
 
-                // Build full path to audio file
-                string fullPath = Path.Combine(AppContext.BaseDirectory, "Assets", definition.AudioPath);
+                // Resolve full path to audio file using content provider
+                // AudioPath includes content type prefix (e.g., "Audio/Music/..."), so use "Root"
+                string? fullPath = _contentProvider.ResolveContentPath("Root", definition.AudioPath);
 
-                if (!File.Exists(fullPath))
+                if (fullPath == null)
                 {
-                    _logger?.LogError("Audio file not found: {Path}", fullPath);
-                    return null!;
+                    _logger?.LogError("Audio file not found: {Path}", definition.AudioPath);
+                    throw new FileNotFoundException($"Audio file not found: {definition.AudioPath}");
                 }
 
                 // Load entire OGG file into memory for efficient playback

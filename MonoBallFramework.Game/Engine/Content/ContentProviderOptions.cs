@@ -1,0 +1,113 @@
+namespace MonoBallFramework.Game.Engine.Content;
+
+/// <summary>
+/// Configuration options for the content provider system.
+/// </summary>
+public class ContentProviderOptions
+{
+    /// <summary>
+    /// Maximum number of entries to store in the content path cache.
+    /// Default is 10,000 entries.
+    /// </summary>
+    public int MaxCacheSize { get; set; } = 10_000;
+
+    /// <summary>
+    /// The root directory for base game assets.
+    /// Default is "Assets".
+    /// </summary>
+    public string BaseGameRoot { get; set; } = "Assets";
+
+    /// <summary>
+    /// Whether to log cache misses for debugging and optimization.
+    /// Default is false.
+    /// </summary>
+    public bool LogCacheMisses { get; set; } = false;
+
+    /// <summary>
+    /// Whether to throw an exception when path traversal attempts (e.g., "..") are detected.
+    /// Default is true for security.
+    /// </summary>
+    public bool ThrowOnPathTraversal { get; set; } = true;
+
+    /// <summary>
+    /// Mapping of content types to their base folder names within the Assets directory.
+    /// This defines where each type of content is stored in the base game.
+    /// </summary>
+    public Dictionary<string, string> BaseContentFolders { get; set; } = new()
+    {
+        ["Root"] = "",  // Root-level assets (logo.png, MonoBall.wav, etc.)
+        ["Definitions"] = "Definitions",
+        ["Graphics"] = "Graphics",
+        ["Audio"] = "Audio",
+        ["Scripts"] = "Scripts",
+        ["Fonts"] = "Fonts",
+        ["Tiled"] = "Tiled",
+        ["Tilesets"] = "Tilesets",
+
+        // Definition subdirectories - allows mods to override specific definition types
+        ["TileBehaviors"] = "Definitions/TileBehaviors",
+        ["Behaviors"] = "Definitions/Behaviors",
+        ["Sprites"] = "Definitions/Sprites",
+        ["MapDefinitions"] = "Definitions/Maps/Regions",
+        ["AudioDefinitions"] = "Definitions/Audio",
+        ["PopupBackgrounds"] = "Definitions/Maps/Popups/Backgrounds",
+        ["PopupOutlines"] = "Definitions/Maps/Popups/Outlines",
+        ["PopupThemes"] = "Definitions/Maps/Popups/Themes",
+        ["MapSections"] = "Definitions/Maps/Sections"
+    };
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ContentProviderOptions"/> class with default values.
+    /// </summary>
+    public ContentProviderOptions()
+    {
+    }
+
+    /// <summary>
+    /// Gets the base content folder path for a specific content type.
+    /// </summary>
+    /// <param name="contentType">The content type to look up.</param>
+    /// <returns>The folder name for the content type, or the content type itself if not found in the mapping.</returns>
+    public string GetContentFolder(string contentType)
+    {
+        return BaseContentFolders.TryGetValue(contentType, out var folder)
+            ? folder
+            : contentType;
+    }
+
+    /// <summary>
+    /// Validates the configuration options.
+    /// </summary>
+    /// <exception cref="ArgumentException">Thrown when configuration is invalid.</exception>
+    public void Validate()
+    {
+        if (MaxCacheSize <= 0)
+        {
+            throw new ArgumentException("MaxCacheSize must be greater than zero.", nameof(MaxCacheSize));
+        }
+
+        if (string.IsNullOrWhiteSpace(BaseGameRoot))
+        {
+            throw new ArgumentException("BaseGameRoot cannot be null or empty.", nameof(BaseGameRoot));
+        }
+
+        if (BaseContentFolders == null || BaseContentFolders.Count == 0)
+        {
+            throw new ArgumentException("BaseContentFolders must contain at least one mapping.", nameof(BaseContentFolders));
+        }
+
+        foreach (var kvp in BaseContentFolders)
+        {
+            if (string.IsNullOrWhiteSpace(kvp.Key))
+            {
+                throw new ArgumentException("BaseContentFolders cannot contain null or empty keys.", nameof(BaseContentFolders));
+            }
+
+            // Allow empty value for "Root" content type (root-level assets)
+            if (kvp.Key != "Root" && string.IsNullOrWhiteSpace(kvp.Value))
+            {
+                throw new ArgumentException($"BaseContentFolders value for '{kvp.Key}' cannot be null or empty.", nameof(BaseContentFolders));
+            }
+        }
+    }
+}

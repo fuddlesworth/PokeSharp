@@ -2,12 +2,16 @@ using Arch.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using MonoBallFramework.Game.Engine.Content;
 using MonoBallFramework.Game.Engine.Core.Events;
 using MonoBallFramework.Game.Engine.Core.Modding;
 using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.Engine.Rendering.Popups;
 using MonoBallFramework.Game.Engine.Systems.Management;
-using MonoBallFramework.Game.Engine.Systems.Pooling;
+
+using MonoBallFramework.Game.Engine.UI.Core;
+using MonoBallFramework.Game.Engine.UI.Utilities;
 using MonoBallFramework.Game.GameData;
 using MonoBallFramework.Game.GameData.Loading;
 using MonoBallFramework.Game.GameData.Services;
@@ -15,7 +19,7 @@ using MonoBallFramework.Game.GameData.Sprites;
 using MonoBallFramework.Game.GameSystems.Services;
 using MonoBallFramework.Game.Infrastructure.Configuration;
 using MonoBallFramework.Game.Infrastructure.Services;
-using static MonoBallFramework.Game.Engine.Systems.Pooling.PoolNames;
+
 
 namespace MonoBallFramework.Game.Infrastructure.ServiceRegistration;
 
@@ -37,7 +41,7 @@ public static class CoreServicesExtensions
     }
 
     /// <summary>
-    ///     Registers core ECS services (World, SystemManager, EntityPoolManager, EventBus).
+    ///     Registers core ECS services (World, SystemManager, EventBus).
     /// </summary>
     public static IServiceCollection AddCoreEcsServices(this IServiceCollection services)
     {
@@ -56,59 +60,19 @@ public static class CoreServicesExtensions
             return new SystemManager(logger);
         });
 
+        // Event Metrics - Always track publish counts from startup
+        // Timing is only recorded when IsEnabled is true (when Event Inspector is active)
+        services.AddSingleton<EventMetrics>();
+
         // Event Bus - Optimized implementation with cached handlers and reduced allocations
         // Features: cached handler arrays, fast-path for zero subscribers, aggressive inlining
         services.AddSingleton<IEventBus>(sp =>
         {
             ILogger<EventBus>? logger = sp.GetService<ILogger<EventBus>>();
-            return new EventBus(logger);
-        });
-
-        // Entity Pool Manager - For entity recycling and pooling
-        // Register pools immediately to ensure they're available before any service that needs them
-        services.AddSingleton(sp =>
-        {
-            World world = sp.GetRequiredService<World>();
-            var poolManager = new EntityPoolManager(world);
-
-            // Register pools at creation time to eliminate temporal coupling
-            // Previously, pools were registered in GameInitializer.Initialize() which
-            // ran after services like LayerProcessor were created with the pool manager.
-            // Now pools are available immediately after EntityPoolManager is created.
-            var gameplayConfig = GameplayConfig.CreateDefault();
-            PoolConfig playerPool = gameplayConfig.Pools.Player;
-            PoolConfig npcPool = gameplayConfig.Pools.Npc;
-            PoolConfig tilePool = gameplayConfig.Pools.Tile;
-
-            poolManager.RegisterPool(
-                Player,
-                playerPool.InitialSize,
-                playerPool.MaxSize,
-                playerPool.Warmup,
-                playerPool.AutoResize,
-                playerPool.GrowthFactor,
-                playerPool.AbsoluteMaxSize
-            );
-            poolManager.RegisterPool(
-                Npc,
-                npcPool.InitialSize,
-                npcPool.MaxSize,
-                npcPool.Warmup,
-                npcPool.AutoResize,
-                npcPool.GrowthFactor,
-                npcPool.AbsoluteMaxSize
-            );
-            poolManager.RegisterPool(
-                Tile,
-                tilePool.InitialSize,
-                tilePool.MaxSize,
-                tilePool.Warmup,
-                tilePool.AutoResize,
-                tilePool.GrowthFactor,
-                tilePool.AbsoluteMaxSize
-            );
-
-            return poolManager;
+            EventMetrics metrics = sp.GetRequiredService<EventMetrics>();
+            var eventBus = new EventBus(logger);
+            eventBus.Metrics = metrics;
+            return eventBus;
         });
 
         // Behavior Type Registries - For NPC and Tile behavior definitions
@@ -176,6 +140,13 @@ public static class CoreServicesExtensions
             return new SpriteRegistry(contextFactory, logger);
         });
 
+        // Configure PopupRegistryOptions with default values
+        services.Configure<PopupRegistryOptions>(config =>
+        {
+            // Use default values from PopupRegistryOptions class
+            // These can be overridden via appsettings.json if needed
+        });
+
         // Popup Registry - for popup background and outline definitions
         // Uses EF Core as the source of truth with in-memory caching
         // Inject the singleton GameDataContext to ensure data is read from the same context
@@ -185,7 +156,8 @@ public static class CoreServicesExtensions
             var contextFactory = sp.GetRequiredService<IDbContextFactory<GameDataContext>>();
             var sharedContext = sp.GetRequiredService<GameDataContext>();
             var logger = sp.GetRequiredService<ILogger<PopupRegistry>>();
-            return new PopupRegistry(contextFactory, logger, sharedContext);
+            var options = sp.GetRequiredService<IOptions<PopupRegistryOptions>>();
+            return new PopupRegistry(contextFactory, logger, options, sharedContext);
         });
 
         // Map Registry - tracks loaded maps and provides map ID management
@@ -195,16 +167,35 @@ public static class CoreServicesExtensions
     }
 
     /// <summary>
-    ///     Registers modding services.
+    ///     Registers modding services and content provider.
+    ///     IMPORTANT: IContentProvider must be registered BEFORE services that depend on it.
     /// </summary>
     public static IServiceCollection AddModdingServices(
         this IServiceCollection services,
         string? gameBasePath = null
     )
     {
-        // Use AppContext.BaseDirectory if no path provided (same as AssetPathResolver)
+        // Step 1: Register ModLoader first (it's required by IContentProvider)
         string basePath = gameBasePath ?? AppContext.BaseDirectory;
         ModdingExtensions.AddModdingServices(services, basePath);
+
+        // Step 2: Register ContentProvider BEFORE services that depend on it
+        // This ensures IContentProvider is available when FontLoader, AssetManager, etc. are created
+        services.AddContentProvider(options =>
+        {
+            options.BaseGameRoot = "Assets";
+            options.MaxCacheSize = 10000;
+            options.ThrowOnPathTraversal = true;
+        });
+
+        // Step 3: Register FontLoader - depends on IContentProvider (non-optional)
+        services.AddSingleton<FontLoader>(sp =>
+        {
+            IContentProvider contentProvider = sp.GetRequiredService<IContentProvider>();
+            ILogger<FontLoader> logger = sp.GetRequiredService<ILogger<FontLoader>>();
+            return new FontLoader(contentProvider, logger);
+        });
+
         return services;
     }
 }

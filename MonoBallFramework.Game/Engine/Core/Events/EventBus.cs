@@ -66,16 +66,22 @@ public class EventBus(ILogger<EventBus>? logger = null) : IEventBus
         }
 
         // OPTIMIZATION 2: Use cached handler array - avoid dictionary enumeration
-        long startTicks = Metrics?.IsEnabled == true ? Stopwatch.GetTimestamp() : 0;
+        bool trackTiming = Metrics?.IsEnabled == true;
+        long startTicks = trackTiming ? Stopwatch.GetTimestamp() : 0;
 
         ExecuteHandlers(cache.Handlers, eventData, eventType);
 
-        // OPTIMIZATION 3: Efficient metrics recording
-        if (startTicks != 0)
+        // OPTIMIZATION 3: Always record publish count, only record timing when enabled
+        if (trackTiming)
         {
             long elapsedTicks = Stopwatch.GetTimestamp() - startTicks;
             long elapsedNanoseconds = elapsedTicks * 1_000_000_000 / Stopwatch.Frequency;
             Metrics?.RecordPublish(eventType.Name, elapsedNanoseconds);
+        }
+        else
+        {
+            // Still record the publish count even when timing is disabled
+            Metrics?.RecordPublish(eventType.Name, 0);
         }
     }
 

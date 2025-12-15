@@ -1,8 +1,7 @@
 {
-  "typeId": "jump_north",
+  "id": "base:tile_behavior:movement/jump_north",
   "displayName": "Jump North",
   "description": "Allows jumping north but blocks south movement",
   "behaviorScript": "TileBehaviors/jump_north.csx",
   "flags": "BlocksMovement"
 }
-

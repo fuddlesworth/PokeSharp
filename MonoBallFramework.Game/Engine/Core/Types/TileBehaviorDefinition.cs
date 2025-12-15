@@ -18,7 +18,9 @@ public record TileBehaviorDefinition : IScriptedType
     /// <summary>
     ///     Unique identifier for this behavior type (e.g., "jump_south", "ice", "tall_grass").
     /// </summary>
-    public required string TypeId { get; init; }
+    [JsonPropertyName("id")]
+    [JsonRequired]
+    public required string Id { get; init; }
 
     /// <summary>
     ///     Display name for this behavior.

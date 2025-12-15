@@ -2,6 +2,7 @@ using FontStashSharp;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoBallFramework.Game.Engine.Content;
 
 namespace MonoBallFramework.Game.Engine.Scenes.Scenes;
 
@@ -28,6 +29,7 @@ public class LoadingScene : SceneBase
     private static readonly Color TextSecondaryColor = new(80, 80, 85); // Secondary text
     private static readonly Color ErrorColor = new(235, 72, 60); // Pokéball red for errors
     private static readonly Color ErrorBackgroundColor = new(255, 220, 220); // Light red background
+    private readonly IContentProvider _contentProvider;
     private readonly Task<IScene> _initializationTask;
     private readonly LoadingProgress _progress;
     private readonly SceneManager _sceneManager;
@@ -51,17 +53,20 @@ public class LoadingScene : SceneBase
         ILogger<LoadingScene> logger,
         LoadingProgress progress,
         Task<IScene> initializationTask,
-        SceneManager sceneManager
+        SceneManager sceneManager,
+        IContentProvider contentProvider
     )
         : base(graphicsDevice, logger)
     {
         ArgumentNullException.ThrowIfNull(progress);
         ArgumentNullException.ThrowIfNull(initializationTask);
         ArgumentNullException.ThrowIfNull(sceneManager);
+        ArgumentNullException.ThrowIfNull(contentProvider);
 
         _progress = progress;
         _initializationTask = initializationTask;
         _sceneManager = sceneManager;
+        _contentProvider = contentProvider;
     }
 
     /// <inheritdoc />
@@ -75,25 +80,23 @@ public class LoadingScene : SceneBase
         _pixel = new Texture2D(GraphicsDevice, 1, 1);
         _pixel.SetData(new[] { Color.White });
 
-        // Initialize FontStashSharp with Pokemon font only - no system font fallback
+        // Initialize FontStashSharp with Pokemon font using content provider
         _fontSystem = new FontSystem();
-        const string pokemonFontPath = "Assets/Fonts/pokemon.ttf";
+        string? pokemonFontPath = _contentProvider.ResolveContentPath("Fonts", "pokemon.ttf");
 
-        if (File.Exists(pokemonFontPath))
+        if (pokemonFontPath == null)
         {
-            try
-            {
-                _fontSystem.AddFont(File.ReadAllBytes(pokemonFontPath));
-                Logger.LogDebug("Loaded Pokemon font from: {FontPath}", pokemonFontPath);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWarning(ex, "Failed to load Pokemon font");
-            }
+            throw new FileNotFoundException("Pokemon font not found: Fonts/pokemon.ttf");
         }
-        else
+
+        try
         {
-            Logger.LogWarning("Pokemon font not found at: {FontPath}", pokemonFontPath);
+            _fontSystem.AddFont(File.ReadAllBytes(pokemonFontPath));
+            Logger.LogDebug("Loaded Pokemon font from: {FontPath}", pokemonFontPath);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Failed to load Pokemon font from {pokemonFontPath}", ex);
         }
 
         _font = _fontSystem.GetFont(FontSize);

@@ -1,7 +1,9 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MonoBallFramework.Game.Engine.Common.Logging;
+using MonoBallFramework.Game.Engine.Content;
 using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.GameData.Entities;
 
@@ -16,11 +18,16 @@ public class GameDataLoader
     private readonly GameDataContext _context;
     private readonly JsonSerializerOptions _jsonOptions;
     private readonly ILogger<GameDataLoader> _logger;
+    private readonly IContentProvider? _contentProvider;
 
-    public GameDataLoader(GameDataContext context, ILogger<GameDataLoader> logger)
+    public GameDataLoader(
+        GameDataContext context,
+        ILogger<GameDataLoader> logger,
+        IContentProvider? contentProvider = null)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _contentProvider = contentProvider;
 
         _jsonOptions = new JsonSerializerOptions
         {
@@ -89,16 +96,27 @@ public class GameDataLoader
     /// </summary>
     private async Task<int> LoadMapEntitysAsync(string path, CancellationToken ct)
     {
-        if (!Directory.Exists(path))
+        // Use ContentProvider for mod-aware loading (handles mod overrides)
+        IEnumerable<string> files;
+        if (_contentProvider != null)
         {
-            _logger.LogDirectoryNotFound("Maps", path);
-            return 0;
+            // GetAllContentPaths returns files from mods (by priority) then base game
+            // Files with same relative path are deduplicated (mod wins over base)
+            files = _contentProvider.GetAllContentPaths("MapDefinitions", "*.json");
+            _logger.LogDebug("Using ContentProvider for MapDefinitions - found {Count} files", files.Count());
         }
-
-        string[] files = Directory
-            .GetFiles(path, "*.json", SearchOption.AllDirectories)
-            .Where(f => !IsHiddenOrSystemDirectory(f))
-            .ToArray();
+        else
+        {
+            // Fallback: direct file system access (no mod support)
+            if (!Directory.Exists(path))
+            {
+                _logger.LogDirectoryNotFound("Maps", path);
+                return 0;
+            }
+            files = Directory
+                .GetFiles(path, "*.json", SearchOption.AllDirectories)
+                .Where(f => !IsHiddenOrSystemDirectory(f));
+        }
         int count = 0;
 
         // OPTIMIZATION: Load all existing maps once to avoid N+1 queries
@@ -416,15 +434,26 @@ public class GameDataLoader
     /// </summary>
     private async Task<int> LoadPopupThemesAsync(string path, CancellationToken ct)
     {
-        if (!Directory.Exists(path))
+        // Use ContentProvider for mod-aware loading (handles mod overrides)
+        IEnumerable<string> files;
+        if (_contentProvider != null)
         {
-            _logger.LogDirectoryNotFound("PopupThemes", path);
-            return 0;
+            // GetAllContentPaths returns files from mods (by priority) then base game
+            // Files with same relative path are deduplicated (mod wins over base)
+            files = _contentProvider.GetAllContentPaths("PopupThemes", "*.json");
+            _logger.LogDebug("Using ContentProvider for PopupThemes - found {Count} files", files.Count());
         }
-
-        string[] files = Directory.GetFiles(path, "*.json", SearchOption.TopDirectoryOnly)
-            .Where(f => !Path.GetFileName(f).Equals("README.md", StringComparison.OrdinalIgnoreCase))
-            .ToArray();
+        else
+        {
+            // Fallback: direct file system access (no mod support)
+            if (!Directory.Exists(path))
+            {
+                _logger.LogDirectoryNotFound("PopupThemes", path);
+                return 0;
+            }
+            files = Directory.GetFiles(path, "*.json", SearchOption.TopDirectoryOnly)
+                .Where(f => !Path.GetFileName(f).Equals("README.md", StringComparison.OrdinalIgnoreCase));
+        }
         int count = 0;
 
         foreach (string file in files)
@@ -486,15 +515,26 @@ public class GameDataLoader
     /// </summary>
     private async Task<int> LoadMapSectionsAsync(string path, CancellationToken ct)
     {
-        if (!Directory.Exists(path))
+        // Use ContentProvider for mod-aware loading (handles mod overrides)
+        IEnumerable<string> files;
+        if (_contentProvider != null)
         {
-            _logger.LogDirectoryNotFound("MapSections", path);
-            return 0;
+            // GetAllContentPaths returns files from mods (by priority) then base game
+            // Files with same relative path are deduplicated (mod wins over base)
+            files = _contentProvider.GetAllContentPaths("MapSections", "*.json");
+            _logger.LogDebug("Using ContentProvider for MapSections - found {Count} files", files.Count());
         }
-
-        string[] files = Directory.GetFiles(path, "*.json", SearchOption.TopDirectoryOnly)
-            .Where(f => !Path.GetFileName(f).Equals("README.md", StringComparison.OrdinalIgnoreCase))
-            .ToArray();
+        else
+        {
+            // Fallback: direct file system access (no mod support)
+            if (!Directory.Exists(path))
+            {
+                _logger.LogDirectoryNotFound("MapSections", path);
+                return 0;
+            }
+            files = Directory.GetFiles(path, "*.json", SearchOption.TopDirectoryOnly)
+                .Where(f => !Path.GetFileName(f).Equals("README.md", StringComparison.OrdinalIgnoreCase));
+        }
         int count = 0;
 
         foreach (string file in files)
@@ -558,15 +598,26 @@ public class GameDataLoader
     /// </summary>
     private async Task<int> LoadAudioEntitysAsync(string path, CancellationToken ct)
     {
-        if (!Directory.Exists(path))
+        // Use ContentProvider for mod-aware loading (handles mod overrides)
+        IEnumerable<string> files;
+        if (_contentProvider != null)
         {
-            _logger.LogDirectoryNotFound("AudioEntitys", path);
-            return 0;
+            // GetAllContentPaths returns files from mods (by priority) then base game
+            // Files with same relative path are deduplicated (mod wins over base)
+            files = _contentProvider.GetAllContentPaths("AudioDefinitions", "*.json");
+            _logger.LogDebug("Using ContentProvider for AudioDefinitions - found {Count} files", files.Count());
         }
-
-        string[] files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories)
-            .Where(f => !IsHiddenOrSystemDirectory(f))
-            .ToArray();
+        else
+        {
+            // Fallback: direct file system access (no mod support)
+            if (!Directory.Exists(path))
+            {
+                _logger.LogDirectoryNotFound("AudioEntitys", path);
+                return 0;
+            }
+            files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories)
+                .Where(f => !IsHiddenOrSystemDirectory(f));
+        }
         int count = 0;
 
         foreach (string file in files)
@@ -651,15 +702,26 @@ public class GameDataLoader
     /// </summary>
     private async Task<int> LoadSpriteDefinitionsAsync(string path, CancellationToken ct)
     {
-        if (!Directory.Exists(path))
+        // Use ContentProvider for mod-aware loading (handles mod overrides)
+        IEnumerable<string> files;
+        if (_contentProvider != null)
         {
-            _logger.LogDirectoryNotFound("SpriteDefinitions", path);
-            return 0;
+            // GetAllContentPaths returns files from mods (by priority) then base game
+            // Files with same relative path are deduplicated (mod wins over base)
+            files = _contentProvider.GetAllContentPaths("Sprites", "*.json");
+            _logger.LogDebug("Using ContentProvider for Sprites - found {Count} files", files.Count());
         }
-
-        string[] files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories)
-            .Where(f => !IsHiddenOrSystemDirectory(f))
-            .ToArray();
+        else
+        {
+            // Fallback: direct file system access (no mod support)
+            if (!Directory.Exists(path))
+            {
+                _logger.LogDirectoryNotFound("SpriteDefinitions", path);
+                return 0;
+            }
+            files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories)
+                .Where(f => !IsHiddenOrSystemDirectory(f));
+        }
         int count = 0;
 
         foreach (string file in files)
@@ -748,15 +810,26 @@ public class GameDataLoader
     /// </summary>
     private async Task<int> LoadPopupBackgroundsAsync(string path, CancellationToken ct)
     {
-        if (!Directory.Exists(path))
+        // Use ContentProvider for mod-aware loading (handles mod overrides)
+        IEnumerable<string> files;
+        if (_contentProvider != null)
         {
-            _logger.LogDirectoryNotFound("PopupBackgrounds", path);
-            return 0;
+            // GetAllContentPaths returns files from mods (by priority) then base game
+            // Files with same relative path are deduplicated (mod wins over base)
+            files = _contentProvider.GetAllContentPaths("PopupBackgrounds", "*.json");
+            _logger.LogDebug("Using ContentProvider for PopupBackgrounds - found {Count} files", files.Count());
         }
-
-        string[] files = Directory.GetFiles(path, "*.json", SearchOption.TopDirectoryOnly)
-            .Where(f => !IsHiddenOrSystemDirectory(f))
-            .ToArray();
+        else
+        {
+            // Fallback: direct file system access (no mod support)
+            if (!Directory.Exists(path))
+            {
+                _logger.LogDirectoryNotFound("PopupBackgrounds", path);
+                return 0;
+            }
+            files = Directory.GetFiles(path, "*.json", SearchOption.TopDirectoryOnly)
+                .Where(f => !IsHiddenOrSystemDirectory(f));
+        }
         int count = 0;
 
         foreach (string file in files)
@@ -819,15 +892,26 @@ public class GameDataLoader
     /// </summary>
     private async Task<int> LoadPopupOutlinesAsync(string path, CancellationToken ct)
     {
-        if (!Directory.Exists(path))
+        // Use ContentProvider for mod-aware loading (handles mod overrides)
+        IEnumerable<string> files;
+        if (_contentProvider != null)
         {
-            _logger.LogDirectoryNotFound("PopupOutlines", path);
-            return 0;
+            // GetAllContentPaths returns files from mods (by priority) then base game
+            // Files with same relative path are deduplicated (mod wins over base)
+            files = _contentProvider.GetAllContentPaths("PopupOutlines", "*.json");
+            _logger.LogDebug("Using ContentProvider for PopupOutlines - found {Count} files", files.Count());
         }
-
-        string[] files = Directory.GetFiles(path, "*.json", SearchOption.TopDirectoryOnly)
-            .Where(f => !IsHiddenOrSystemDirectory(f))
-            .ToArray();
+        else
+        {
+            // Fallback: direct file system access (no mod support)
+            if (!Directory.Exists(path))
+            {
+                _logger.LogDirectoryNotFound("PopupOutlines", path);
+                return 0;
+            }
+            files = Directory.GetFiles(path, "*.json", SearchOption.TopDirectoryOnly)
+                .Where(f => !IsHiddenOrSystemDirectory(f));
+        }
         int count = 0;
 
         foreach (string file in files)
@@ -909,18 +993,31 @@ public class GameDataLoader
     /// <summary>
     ///     Load behavior definitions from JSON files into EF Core.
     ///     Replaces TypeRegistry&lt;BehaviorDefinition&gt;.
+    ///     Uses ContentProvider for mod-aware loading when available.
     /// </summary>
     private async Task<int> LoadBehaviorDefinitionsAsync(string path, CancellationToken ct)
     {
-        if (!Directory.Exists(path))
+        // Use ContentProvider for mod-aware loading (handles mod overrides)
+        IEnumerable<string> files;
+        if (_contentProvider != null)
         {
-            _logger.LogDirectoryNotFound("BehaviorDefinitions", path);
-            return 0;
+            // GetAllContentPaths returns files from mods (by priority) then base game
+            // Files with same relative path are deduplicated (mod wins over base)
+            files = _contentProvider.GetAllContentPaths("Behaviors", "*.json");
+            _logger.LogDebug("Using ContentProvider for Behaviors - found {Count} files", files.Count());
+        }
+        else
+        {
+            // Fallback: direct file system access (no mod support)
+            if (!Directory.Exists(path))
+            {
+                _logger.LogDirectoryNotFound("BehaviorDefinitions", path);
+                return 0;
+            }
+            files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories)
+                .Where(f => !IsHiddenOrSystemDirectory(f));
         }
 
-        string[] files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories)
-            .Where(f => !IsHiddenOrSystemDirectory(f))
-            .ToArray();
         int count = 0;
 
         foreach (string file in files)
@@ -939,40 +1036,34 @@ public class GameDataLoader
                 }
 
                 // Validate required fields
-                if (string.IsNullOrWhiteSpace(dto.TypeId))
+                if (string.IsNullOrWhiteSpace(dto.Id))
                 {
                     _logger.LogWarning("Behavior definition missing required fields: {File}", file);
                     continue;
                 }
 
-                // Extract the behavior ID from the typeId
-                // Format: "base:behavior:movement/patrol" -> "patrol"
-                string behaviorId = dto.TypeId;
-                int lastSlash = behaviorId.LastIndexOf('/');
-                if (lastSlash >= 0)
-                {
-                    behaviorId = behaviorId[(lastSlash + 1)..];
-                }
-                // Also handle colon-based format
-                int lastColon = behaviorId.LastIndexOf(':');
-                if (lastColon >= 0)
-                {
-                    behaviorId = behaviorId[(lastColon + 1)..];
-                }
+                // Detect source mod from file path (if file is under Mods/ directory)
+                string? sourceMod = dto.SourceMod ?? DetectSourceModFromPath(file);
 
                 // Convert DTO to entity
+                // Use TryCreate first for full ID format, fall back to Create for simple names
                 var behaviorDef = new BehaviorEntity
                 {
-                    BehaviorId = GameBehaviorId.Create(behaviorId),
-                    DisplayName = dto.DisplayName ?? behaviorId,
+                    BehaviorId = GameBehaviorId.TryCreate(dto.Id) ?? GameBehaviorId.Create(dto.Id),
+                    DisplayName = dto.DisplayName ?? dto.Id,
                     Description = dto.Description,
                     DefaultSpeed = dto.DefaultSpeed ?? 4.0f,
                     PauseAtWaypoint = dto.PauseAtWaypoint ?? 1.0f,
                     AllowInteractionWhileMoving = dto.AllowInteractionWhileMoving ?? false,
                     BehaviorScript = dto.BehaviorScript,
-                    SourceMod = dto.SourceMod,
+                    SourceMod = sourceMod,
                     Version = dto.Version ?? "1.0.0"
                 };
+
+                if (sourceMod != null)
+                {
+                    _logger.LogDebug("Loaded mod-overridden behavior: {Id} from {Mod}", dto.Id, sourceMod);
+                }
 
                 _context.Behaviors.Add(behaviorDef);
                 count++;
@@ -995,18 +1086,31 @@ public class GameDataLoader
     /// <summary>
     ///     Load tile behavior definitions from JSON files into EF Core.
     ///     Replaces TypeRegistry&lt;TileBehaviorDefinition&gt;.
+    ///     Uses ContentProvider for mod-aware loading when available.
     /// </summary>
     private async Task<int> LoadTileBehaviorDefinitionsAsync(string path, CancellationToken ct)
     {
-        if (!Directory.Exists(path))
+        // Use ContentProvider for mod-aware loading (handles mod overrides)
+        IEnumerable<string> files;
+        if (_contentProvider != null)
         {
-            _logger.LogDirectoryNotFound("TileBehaviorDefinitions", path);
-            return 0;
+            // GetAllContentPaths returns files from mods (by priority) then base game
+            // Files with same relative path are deduplicated (mod wins over base)
+            files = _contentProvider.GetAllContentPaths("TileBehaviors", "*.json");
+            _logger.LogDebug("Using ContentProvider for TileBehaviors - found {Count} files", files.Count());
+        }
+        else
+        {
+            // Fallback: direct file system access (no mod support)
+            if (!Directory.Exists(path))
+            {
+                _logger.LogDirectoryNotFound("TileBehaviorDefinitions", path);
+                return 0;
+            }
+            files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories)
+                .Where(f => !IsHiddenOrSystemDirectory(f));
         }
 
-        string[] files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories)
-            .Where(f => !IsHiddenOrSystemDirectory(f))
-            .ToArray();
         int count = 0;
 
         foreach (string file in files)
@@ -1025,7 +1129,7 @@ public class GameDataLoader
                 }
 
                 // Validate required fields
-                if (string.IsNullOrWhiteSpace(dto.TypeId))
+                if (string.IsNullOrWhiteSpace(dto.Id))
                 {
                     _logger.LogWarning("Tile behavior definition missing required fields: {File}", file);
                     continue;
@@ -1038,18 +1142,38 @@ public class GameDataLoader
                     flags = ParseTileBehaviorFlags(dto.Flags);
                 }
 
+                // Detect source mod from file path (if file is under Mods/ directory)
+                string? sourceMod = dto.SourceMod ?? DetectSourceModFromPath(file);
+
+                // Serialize extension data from mods (testProperty, modded, etc.)
+                string? extensionDataJson = null;
+                if (dto.ExtensionData != null && dto.ExtensionData.Count > 0)
+                {
+                    extensionDataJson = JsonSerializer.Serialize(dto.ExtensionData, _jsonOptions);
+                }
+
                 // Convert DTO to entity
                 // Use TryCreate first for full ID format, fall back to Create for simple names
                 var tileBehaviorDef = new TileBehaviorEntity
                 {
-                    TileBehaviorId = GameTileBehaviorId.TryCreate(dto.TypeId) ?? GameTileBehaviorId.Create(dto.TypeId),
-                    DisplayName = dto.DisplayName ?? dto.TypeId,
+                    TileBehaviorId = GameTileBehaviorId.TryCreate(dto.Id) ?? GameTileBehaviorId.Create(dto.Id),
+                    DisplayName = dto.DisplayName ?? dto.Id,
                     Description = dto.Description,
                     Flags = flags,
                     BehaviorScript = dto.BehaviorScript,
-                    SourceMod = dto.SourceMod,
-                    Version = dto.Version ?? "1.0.0"
+                    SourceMod = sourceMod,
+                    Version = dto.Version ?? "1.0.0",
+                    ExtensionData = extensionDataJson
                 };
+
+                if (sourceMod != null)
+                {
+                    _logger.LogDebug("Loaded mod-overridden tile behavior: {Id} from {Mod}", dto.Id, sourceMod);
+                    if (extensionDataJson != null)
+                    {
+                        _logger.LogDebug("  Extension data: {ExtensionData}", extensionDataJson);
+                    }
+                }
 
                 _context.TileBehaviors.Add(tileBehaviorDef);
                 count++;
@@ -1088,6 +1212,53 @@ public class GameDataLoader
 
         return result;
     }
+
+    /// <summary>
+    ///     Determines the source mod/base from a file path.
+    ///     Uses cross-platform path detection.
+    /// </summary>
+    private static string GetSourceFromPath(string filePath)
+    {
+        // Normalize path separators for cross-platform compatibility
+        string normalizedPath = filePath.Replace('\\', '/');
+
+        // Check for Mods directory in the path
+        const string modsMarker = "/Mods/";
+        int modsIndex = normalizedPath.IndexOf(modsMarker, StringComparison.OrdinalIgnoreCase);
+
+        if (modsIndex >= 0)
+        {
+            // Extract the mod folder name (first segment after /Mods/)
+            string afterMods = normalizedPath.Substring(modsIndex + modsMarker.Length);
+            int nextSeparator = afterMods.IndexOf('/');
+
+            if (nextSeparator > 0)
+            {
+                return afterMods.Substring(0, nextSeparator);
+            }
+            else if (afterMods.Length > 0)
+            {
+                return afterMods;
+            }
+        }
+
+        return "base";
+    }
+
+    /// <summary>
+    ///     Detects the source mod from a file path.
+    ///     Returns null for base game files, mod folder name for mod files.
+    /// </summary>
+    private static string? DetectSourceModFromPath(string filePath)
+    {
+        string source = GetSourceFromPath(filePath);
+        return source == "base" ? null : source;
+    }
+
+    /// <summary>
+    ///     Gets the content provider for mod-aware loading.
+    /// </summary>
+    public IContentProvider? ContentProvider => _contentProvider;
 }
 
 #region DTOs for JSON Deserialization
@@ -1289,7 +1460,7 @@ internal record OutlineTileUsageDto
 /// </summary>
 internal record BehaviorDefinitionDto
 {
-    public string? TypeId { get; init; }
+    public string? Id { get; init; }
     public string? DisplayName { get; init; }
     public string? Description { get; init; }
     public string? BehaviorScript { get; init; }
@@ -1302,16 +1473,24 @@ internal record BehaviorDefinitionDto
 
 /// <summary>
 ///     DTO for deserializing TileBehaviorDefinition JSON files.
+///     Supports mod extension data via JsonExtensionData.
 /// </summary>
 internal record TileBehaviorDefinitionDto
 {
-    public string? TypeId { get; init; }
+    public string? Id { get; init; }
     public string? DisplayName { get; init; }
     public string? Description { get; init; }
     public string? BehaviorScript { get; init; }
     public string? Flags { get; init; }
     public string? SourceMod { get; init; }
     public string? Version { get; init; }
+
+    /// <summary>
+    ///     Captures any additional properties from mods (e.g., testProperty, modded).
+    ///     These are stored in the entity's ExtensionData column.
+    /// </summary>
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? ExtensionData { get; init; }
 }
 
 #endregion

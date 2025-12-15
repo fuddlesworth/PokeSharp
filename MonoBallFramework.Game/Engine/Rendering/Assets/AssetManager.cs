@@ -5,6 +5,7 @@ using FontStashSharp;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework.Graphics;
 using MonoBallFramework.Game.Engine.Common.Logging;
+using MonoBallFramework.Game.Engine.Content;
 using MonoBallFramework.Game.Engine.Rendering.Configuration;
 
 namespace MonoBallFramework.Game.Engine.Rendering.Assets;
@@ -15,7 +16,7 @@ namespace MonoBallFramework.Game.Engine.Rendering.Assets;
 /// </summary>
 public class AssetManager(
     GraphicsDevice graphicsDevice,
-    string assetRoot = RenderingConstants.DefaultAssetRoot,
+    IContentProvider contentProvider,
     ILogger<AssetManager>? logger = null
 ) : IAssetProvider, IDisposable
 {
@@ -23,6 +24,8 @@ public class AssetManager(
         graphicsDevice ?? throw new ArgumentNullException(nameof(graphicsDevice));
 
     private readonly ILogger<AssetManager>? _logger = logger;
+    private readonly IContentProvider _contentProvider =
+        contentProvider ?? throw new ArgumentNullException(nameof(contentProvider));
 
     // LRU cache with 50MB budget for texture memory management
     private readonly LruCache<string, Texture2D> _textures = new(
@@ -43,11 +46,6 @@ public class AssetManager(
     private const int MaxTextureUploadsPerFrame = 2;
 
     private bool _disposed;
-
-    /// <summary>
-    ///     Gets the root directory path where assets are stored.
-    /// </summary>
-    public string AssetRoot { get; } = assetRoot;
 
     /// <summary>
     ///     Gets the number of loaded textures.
@@ -104,26 +102,30 @@ public class AssetManager(
         }
 
         // Fallback to synchronous file load
-        string normalizedRelative = relativePath.Replace('/', Path.DirectorySeparatorChar);
-        string fullPath = Path.Combine(AssetRoot, normalizedRelative);
+        string normalizedPath = relativePath.Replace('/', Path.DirectorySeparatorChar);
+
+        // Check if path is already absolute and file exists
+        string fullPath;
+        if (Path.IsPathRooted(normalizedPath) && File.Exists(normalizedPath))
+        {
+            // Use absolute path directly (bypasses ContentProvider for tileset images etc.)
+            fullPath = normalizedPath;
+        }
+        else
+        {
+            // Use ContentProvider to resolve relative path
+            // Paths from definitions include content type prefix (e.g., "Graphics/Maps/..."), so use "Root"
+            string? resolvedPath = _contentProvider.ResolveContentPath("Root", normalizedPath);
+            if (resolvedPath == null)
+            {
+                throw new FileNotFoundException($"Texture not found: {relativePath}");
+            }
+            fullPath = resolvedPath;
+        }
 
         if (!File.Exists(fullPath))
         {
-            string? fallbackPath = ResolveFallbackTexturePath(id, normalizedRelative);
-            if (fallbackPath is not null && File.Exists(fallbackPath))
-            {
-                _logger?.LogWarning(
-                    "Texture '{TextureId}' not found at '{OriginalPath}'. Using fallback '{FallbackPath}'.",
-                    id,
-                    fullPath,
-                    fallbackPath
-                );
-                fullPath = fallbackPath;
-            }
-            else
-            {
-                throw new FileNotFoundException($"Texture file not found: {fullPath}");
-            }
+            throw new FileNotFoundException($"Texture file not found: {fullPath}");
         }
 
         var swSync = Stopwatch.StartNew();
@@ -223,7 +225,14 @@ public class AssetManager(
             return;
         }
 
-        string fullPath = Path.Combine(AssetRoot, relativePath.Replace('/', Path.DirectorySeparatorChar));
+        string normalizedRelative = relativePath.Replace('/', Path.DirectorySeparatorChar);
+
+        // Use ContentProvider to resolve path
+        string? fullPath = _contentProvider.ResolveContentPath("Fonts", normalizedRelative);
+        if (fullPath == null)
+        {
+            throw new FileNotFoundException($"Font not found: {relativePath}");
+        }
 
         if (!File.Exists(fullPath))
         {
@@ -288,21 +297,31 @@ public class AssetManager(
             return;
         }
 
-        string normalizedRelative = relativePath.Replace('/', Path.DirectorySeparatorChar);
-        string fullPath = Path.Combine(AssetRoot, normalizedRelative);
+        string normalizedPath = relativePath.Replace('/', Path.DirectorySeparatorChar);
+
+        // Check if path is already absolute and file exists
+        string? fullPath;
+        if (Path.IsPathRooted(normalizedPath) && File.Exists(normalizedPath))
+        {
+            // Use absolute path directly (bypasses ContentProvider for tileset images etc.)
+            fullPath = normalizedPath;
+        }
+        else
+        {
+            // Use ContentProvider to resolve relative path
+            // Paths from definitions include content type prefix (e.g., "Graphics/Maps/..."), so use "Root"
+            fullPath = _contentProvider.ResolveContentPath("Root", normalizedPath);
+            if (fullPath == null)
+            {
+                _logger?.LogWarning("Texture not found for async preload: {Path}", relativePath);
+                return;
+            }
+        }
 
         if (!File.Exists(fullPath))
         {
-            string? fallbackPath = ResolveFallbackTexturePath(id, normalizedRelative);
-            if (fallbackPath is not null && File.Exists(fallbackPath))
-            {
-                fullPath = fallbackPath;
-            }
-            else
-            {
-                _logger?.LogWarning("Texture file not found for async preload: {Path}", fullPath);
-                return;
-            }
+            _logger?.LogWarning("Texture file not found for async preload: {Path}", fullPath);
+            return;
         }
 
         // Start async file read on background thread
@@ -401,78 +420,6 @@ public class AssetManager(
     public IEnumerable<string> GetLoadedTextureIds()
     {
         return _textures.Keys;
-    }
-
-    private string? ResolveFallbackTexturePath(string id, string normalizedRelativePath)
-    {
-        string normalized = normalizedRelativePath.Replace('\\', '/');
-
-        if (normalized.StartsWith("Tilesets/", StringComparison.OrdinalIgnoreCase))
-        {
-            string fileName = Path.GetFileName(normalizedRelativePath);
-            string tilesetsRoot = Path.Combine(AssetRoot, "Tilesets");
-            string tilesetDir = Path.Combine(tilesetsRoot, id);
-
-            if (!string.IsNullOrEmpty(fileName))
-            {
-                string nestedPath = Path.Combine(tilesetDir, fileName);
-                if (File.Exists(nestedPath))
-                {
-                    return nestedPath;
-                }
-            }
-
-            // Try reading the tileset JSON for the actual image name
-            string tilesetJson = Path.Combine(tilesetDir, $"{id}.json");
-            if (File.Exists(tilesetJson))
-            {
-                string? imageName = TryGetTilesetImageName(tilesetJson);
-                if (!string.IsNullOrEmpty(imageName))
-                {
-                    string jsonImagePath = Path.Combine(tilesetDir, imageName);
-                    if (File.Exists(jsonImagePath))
-                    {
-                        return jsonImagePath;
-                    }
-                }
-            }
-
-            // Fallback: pick the first PNG found in the tileset directory
-            if (Directory.Exists(tilesetDir))
-            {
-                string? pngMatch = Directory
-                    .EnumerateFiles(tilesetDir, "*.png", SearchOption.TopDirectoryOnly)
-                    .FirstOrDefault();
-                if (pngMatch is not null)
-                {
-                    return pngMatch;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    private string? TryGetTilesetImageName(string tilesetJsonPath)
-    {
-        try
-        {
-            using var doc = JsonDocument.Parse(File.ReadAllText(tilesetJsonPath));
-            if (doc.RootElement.TryGetProperty("image", out JsonElement imageProperty))
-            {
-                return imageProperty.GetString();
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger?.LogWarning(
-                ex,
-                "Failed to read tileset JSON '{TilesetJson}' while resolving fallback texture path.",
-                tilesetJsonPath
-            );
-        }
-
-        return null;
     }
 
     /// <summary>

@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Microsoft.Extensions.Options;
 
 namespace MonoBallFramework.Game.Engine.UI.Core;
 
@@ -22,6 +23,7 @@ public static class ThemeManager
 
     private static bool _initialized;
     private static string _defaultTheme = "pokeball";
+    private static IOptions<ThemeManagerOptions>? _options;
 
     /// <summary>
     ///     Gets the current active theme. Returns OneDark as default.
@@ -44,6 +46,21 @@ public static class ThemeManager
         {
             EnsureInitialized();
             return _themes.Keys;
+        }
+    }
+
+    /// <summary>
+    ///     Configures the ThemeManager with options from dependency injection.
+    ///     Should be called during application startup before any theme access.
+    /// </summary>
+    public static void Configure(IOptions<ThemeManagerOptions> options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+
+        if (!_initialized)
+        {
+            _options = options;
+            _defaultTheme = options.Value.DefaultTheme;
         }
     }
 
@@ -75,6 +92,12 @@ public static class ThemeManager
         }
 
         _initialized = true;
+
+        // Apply options if configured via DI
+        if (_options != null)
+        {
+            _defaultTheme = _options.Value.DefaultTheme;
+        }
 
         // Register all built-in themes
         _themes["onedark"] = UITheme.OneDark;

@@ -41,9 +41,10 @@ public record ConsoleConfig
 
     /// <summary>
     ///     Gets the UI theme name.
-    ///     Available themes: onedark, monokai, dracula, gruvbox, nord, solarized, solarized-light, pokeball
+    ///     Available themes: onedark, monokai, dracula, gruvbox, nord, solarized, solarized-light, pokeball, pokeball-light
+    ///     When null, uses the default from ThemeManagerOptions.
     /// </summary>
-    public string Theme { get; init; } = "pokeball";
+    public string? Theme { get; init; }
 
     /// <summary>
     ///     Gets whether syntax highlighting is enabled.

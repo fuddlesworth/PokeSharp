@@ -35,9 +35,9 @@ public interface IScriptingApiProvider
     IDialogueApi Dialogue { get; }
 
     /// <summary>
-    ///     Gets the Effects API for visual effect management.
+    
     /// </summary>
-    IEffectApi Effects { get; }
+    
 
     #endregion
 

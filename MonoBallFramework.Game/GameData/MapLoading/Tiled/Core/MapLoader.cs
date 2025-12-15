@@ -7,6 +7,7 @@ using MonoBallFramework.Game.Ecs.Components;
 using MonoBallFramework.Game.Ecs.Components.Maps;
 using MonoBallFramework.Game.Ecs.Components.Movement;
 using MonoBallFramework.Game.Engine.Common.Logging;
+using MonoBallFramework.Game.Engine.Content;
 using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
 using MonoBallFramework.Game.Engine.Systems.Management;
@@ -43,7 +44,8 @@ public class MapLoader(
     MapLifecycleManager? lifecycleManager = null,
     MapPreparer? mapPreparer = null,
     MapEntityApplier? mapEntityApplier = null,
-    ILogger<MapLoader>? logger = null
+    ILogger<MapLoader>? logger = null,
+    IContentProvider? contentProvider = null
 ) : ITmxDocumentProvider
 {
     // Tiled flip flags (stored in upper 3 bits of GID)
@@ -65,7 +67,8 @@ public class MapLoader(
 
     // Initialize ImageLayerProcessor (logger handled by MapLoader, so pass null)
     private readonly ImageLayerProcessor _imageLayerProcessor = new(
-        assetManager ?? throw new ArgumentNullException(nameof(assetManager))
+        assetManager ?? throw new ArgumentNullException(nameof(assetManager)),
+        contentProvider ?? throw new ArgumentNullException(nameof(contentProvider))
     );
 
     // Layer processor injected via DI (required dependency)
@@ -100,10 +103,28 @@ public class MapLoader(
         return registry;
     }
 
-    // Initialize MapPathResolver
-    private readonly MapPathResolver _mapPathResolver = new(
-        assetManager ?? throw new ArgumentNullException(nameof(assetManager))
-    );
+    /// <summary>
+    ///     Gets the MapPathResolver instance, creating it lazily if needed.
+    ///     Requires IContentProvider to be available.
+    /// </summary>
+    private MapPathResolver GetMapPathResolver()
+    {
+        if (_mapPathResolver == null)
+        {
+            if (contentProvider == null)
+            {
+                throw new InvalidOperationException(
+                    "IContentProvider is required for MapPathResolver initialization. " +
+                    "Pass IContentProvider to MapLoader constructor."
+                );
+            }
+            _mapPathResolver = new MapPathResolver(_assetManager, contentProvider);
+        }
+        return _mapPathResolver;
+    }
+
+    // MapPathResolver - initialized lazily since we need IContentProvider from DI
+    private MapPathResolver? _mapPathResolver;
 
     // Initialize MapTextureTracker
     private readonly MapTextureTracker _mapTextureTracker = new();
@@ -126,7 +147,8 @@ public class MapLoader(
 
     // Initialize TilesetLoader (logger handled by MapLoader, so pass null)
     private readonly TilesetLoader _tilesetLoader = new(
-        assetManager ?? throw new ArgumentNullException(nameof(assetManager))
+        assetManager ?? throw new ArgumentNullException(nameof(assetManager)),
+        contentProvider ?? throw new ArgumentNullException(nameof(contentProvider))
     );
 
     // TMX Document cache to avoid redundant file reads and parsing
@@ -212,7 +234,8 @@ public class MapLoader(
             throw new FileNotFoundException($"Map definition not found: {mapId.Value}");
         }
 
-        string assetRoot = _mapPathResolver.ResolveAssetRoot();
+        MapPathResolver pathResolver = GetMapPathResolver();
+        string assetRoot = pathResolver.ResolveAssetRoot();
         string fullPath = Path.Combine(assetRoot, mapDef.TiledDataPath);
 
         // Fast path: already cached
@@ -296,7 +319,8 @@ public class MapLoader(
             throw new FileNotFoundException($"Map definition not found: {mapId.Value}");
         }
 
-        string assetRoot = _mapPathResolver.ResolveAssetRoot();
+        MapPathResolver pathResolver = GetMapPathResolver();
+        string assetRoot = pathResolver.ResolveAssetRoot();
         string fullPath = Path.Combine(assetRoot, mapDef.TiledDataPath);
 
         if (!File.Exists(fullPath))
@@ -335,7 +359,8 @@ public class MapLoader(
             throw new FileNotFoundException($"Map definition not found: {mapId.Value}");
         }
 
-        string assetRoot = _mapPathResolver.ResolveAssetRoot();
+        MapPathResolver pathResolver = GetMapPathResolver();
+        string assetRoot = pathResolver.ResolveAssetRoot();
         string fullPath = Path.Combine(assetRoot, mapDef.TiledDataPath);
 
         // Fast path: already cached - return immediately
@@ -471,7 +496,8 @@ public class MapLoader(
         );
 
         // Read Tiled JSON from file using stored path
-        string assetRoot = _mapPathResolver.ResolveAssetRoot();
+        MapPathResolver pathResolver = GetMapPathResolver();
+        string assetRoot = pathResolver.ResolveAssetRoot();
         string fullPath = Path.Combine(assetRoot, mapDef.TiledDataPath);
 
         if (!File.Exists(fullPath))
@@ -485,8 +511,9 @@ public class MapLoader(
         TmxDocument tmxDoc = GetOrLoadTmxDocument(fullPath);
 
         // Load external tileset files (Tiled JSON format supports external tilesets)
+        MapPathResolver pathResolver2 = GetMapPathResolver();
         string mapDirectoryBase =
-            Path.GetDirectoryName(fullPath) ?? _mapPathResolver.ResolveMapDirectoryBase();
+            Path.GetDirectoryName(fullPath) ?? pathResolver2.ResolveMapDirectoryBase();
         _tilesetLoader.LoadExternalTilesets(tmxDoc, mapDirectoryBase);
 
         // Use scoped logging
@@ -547,7 +574,8 @@ public class MapLoader(
         );
 
         // Read Tiled JSON from file using stored path
-        string assetRoot = _mapPathResolver.ResolveAssetRoot();
+        MapPathResolver pathResolver = GetMapPathResolver();
+        string assetRoot = pathResolver.ResolveAssetRoot();
         string fullPath = Path.Combine(assetRoot, mapDef.TiledDataPath);
 
         if (!File.Exists(fullPath))
@@ -561,8 +589,9 @@ public class MapLoader(
         TmxDocument tmxDoc = GetOrLoadTmxDocument(fullPath);
 
         // Load external tileset files (Tiled JSON format supports external tilesets)
+        MapPathResolver pathResolver2 = GetMapPathResolver();
         string mapDirectoryBase =
-            Path.GetDirectoryName(fullPath) ?? _mapPathResolver.ResolveMapDirectoryBase();
+            Path.GetDirectoryName(fullPath) ?? pathResolver2.ResolveMapDirectoryBase();
         _tilesetLoader.LoadExternalTilesets(tmxDoc, mapDirectoryBase);
 
         // Use scoped logging
@@ -623,7 +652,8 @@ public class MapLoader(
         );
 
         // Read Tiled JSON from file using stored path
-        string assetRoot = _mapPathResolver.ResolveAssetRoot();
+        MapPathResolver pathResolver = GetMapPathResolver();
+        string assetRoot = pathResolver.ResolveAssetRoot();
         string fullPath = Path.Combine(assetRoot, mapDef.TiledDataPath);
 
         if (!File.Exists(fullPath))
@@ -686,7 +716,8 @@ public class MapLoader(
         }
 
         // Read Tiled JSON from file using stored path
-        string assetRoot = _mapPathResolver.ResolveAssetRoot();
+        MapPathResolver pathResolver = GetMapPathResolver();
+        string assetRoot = pathResolver.ResolveAssetRoot();
         string fullPath = Path.Combine(assetRoot, mapDef.TiledDataPath);
 
         if (!File.Exists(fullPath))
@@ -724,7 +755,8 @@ public class MapLoader(
         string mapName = mapDef.MapId.Name;
 
         // Resolve full path to Tiled file for tileset loading
-        string assetRoot = _mapPathResolver.ResolveAssetRoot();
+        MapPathResolver pathResolver = GetMapPathResolver();
+        string assetRoot = pathResolver.ResolveAssetRoot();
         string tiledFullPath = Path.Combine(assetRoot, mapDef.TiledDataPath);
         string tiledDirectory = Path.GetDirectoryName(tiledFullPath) ?? assetRoot;
 
@@ -1034,7 +1066,8 @@ public class MapLoader(
             return;
         }
 
-        string assetRoot = _mapPathResolver.ResolveAssetRoot();
+        MapPathResolver pathResolver = GetMapPathResolver();
+        string assetRoot = pathResolver.ResolveAssetRoot();
         string fullPath = Path.Combine(assetRoot, mapDef.TiledDataPath);
 
         if (!File.Exists(fullPath))

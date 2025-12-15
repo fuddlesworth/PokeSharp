@@ -14,6 +14,12 @@ public class EventInspectorAdapter
     private readonly int _maxLogEntries;
     private readonly EventMetrics _metrics;
 
+    // Caching for assembly discovery to avoid expensive reflection on every call
+    private List<Type>? _cachedEventTypes;
+    private int _cachedRegisteredTypesCount;
+    private DateTime _lastCacheRefresh = DateTime.MinValue;
+    private static readonly TimeSpan CacheRefreshInterval = TimeSpan.FromSeconds(5);
+
     public EventInspectorAdapter(EventBus eventBus, EventMetrics metrics, int maxLogEntries = 100)
     {
         _eventBus = eventBus;
@@ -115,17 +121,43 @@ public class EventInspectorAdapter
     }
 
     /// <summary>
-    ///     Discovers all event types in MonoBall Framework assemblies via reflection.
-    ///     Includes both IGameEvent and IPoolableEvent types to match stats panel counts.
+    ///     Discovers all event types from all loaded assemblies via reflection.
+    ///     Includes MonoBall Framework assemblies plus dynamically compiled script assemblies.
+    ///     Uses caching to avoid expensive reflection on every call.
     /// </summary>
     private List<Type> DiscoverAllEventTypes()
     {
+        // Check if cache is still valid
+        int currentRegisteredCount = _eventBus.GetRegisteredEventTypes().Count;
+        bool cacheExpired = DateTime.Now - _lastCacheRefresh > CacheRefreshInterval;
+        bool registeredTypesChanged = currentRegisteredCount != _cachedRegisteredTypesCount;
+
+        if (_cachedEventTypes != null && !cacheExpired && !registeredTypesChanged)
+        {
+            return _cachedEventTypes;
+        }
+
         var eventTypes = new HashSet<Type>();
 
-        // Get MonoBall Framework assemblies
+        // Get all loaded assemblies, including dynamic ones from scripts
         IEnumerable<Assembly> assemblies = AppDomain
             .CurrentDomain.GetAssemblies()
-            .Where(a => !a.IsDynamic && a.GetName().Name?.StartsWith("MonoBallFramework") == true);
+            .Where(a =>
+            {
+                string? name = a.GetName().Name;
+                // Include MonoBall Framework assemblies
+                if (name?.StartsWith("MonoBallFramework") == true)
+                    return true;
+                // Include Roslyn-compiled script assemblies (they have generated names)
+                // These are typically named like "ℛ*" or contain submission identifiers
+                if (name?.StartsWith("\u211B") == true) // Roslyn script prefix
+                    return true;
+                // Include assemblies that might contain script-defined types
+                // Dynamic assemblies from Roslyn often have names starting with numbers or special chars
+                if (a.IsDynamic && name != null && !name.StartsWith("System") && !name.StartsWith("Microsoft"))
+                    return true;
+                return false;
+            });
 
         foreach (Assembly assembly in assemblies)
         {
@@ -161,7 +193,23 @@ public class EventInspectorAdapter
             }
         }
 
-        return eventTypes.OrderBy(t => t.Name).ToList();
+        // Also include any event types that have been published to the EventBus
+        // This catches dynamically-defined events that may have been missed by reflection
+        foreach (Type registeredType in _eventBus.GetRegisteredEventTypes())
+        {
+            if (typeof(IGameEvent).IsAssignableFrom(registeredType) ||
+                typeof(IPoolableEvent).IsAssignableFrom(registeredType))
+            {
+                eventTypes.Add(registeredType);
+            }
+        }
+
+        // Update cache
+        _cachedEventTypes = eventTypes.OrderBy(t => t.Name).ToList();
+        _cachedRegisteredTypesCount = currentRegisteredCount;
+        _lastCacheRefresh = DateTime.Now;
+
+        return _cachedEventTypes;
     }
 
     /// <summary>

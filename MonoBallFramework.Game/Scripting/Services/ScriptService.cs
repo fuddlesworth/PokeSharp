@@ -131,7 +131,10 @@ public class ScriptService : IAsyncDisposable
             return cachedInstance;
         }
 
-        string fullPath = Path.Combine(_scriptsBasePath, scriptPath);
+        // Handle both absolute paths (from mods) and relative paths (from base game)
+        string fullPath = Path.IsPathRooted(scriptPath)
+            ? scriptPath
+            : Path.Combine(_scriptsBasePath, scriptPath);
         if (!File.Exists(fullPath))
         {
             _logger.LogError("Script file not found: {Path}", fullPath);

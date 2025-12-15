@@ -2,6 +2,7 @@ using Arch.Core;
 using Microsoft.Extensions.Logging;
 using MonoBallFramework.Game.Ecs.Components.Rendering;
 using MonoBallFramework.Game.Engine.Common.Logging;
+using MonoBallFramework.Game.Engine.Content;
 using MonoBallFramework.Game.Engine.Core.Types;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Tmx;
@@ -15,14 +16,17 @@ namespace MonoBallFramework.Game.GameData.MapLoading.Tiled.Processors;
 public class ImageLayerProcessor
 {
     private readonly IAssetProvider _assetManager;
+    private readonly IContentProvider _contentProvider;
     private readonly ILogger<ImageLayerProcessor>? _logger;
 
     public ImageLayerProcessor(
         IAssetProvider assetManager,
+        IContentProvider contentProvider,
         ILogger<ImageLayerProcessor>? logger = null
     )
     {
-        _assetManager = assetManager;
+        _assetManager = assetManager ?? throw new ArgumentNullException(nameof(assetManager));
+        _contentProvider = contentProvider ?? throw new ArgumentNullException(nameof(contentProvider));
         _logger = logger;
     }
 
@@ -83,19 +87,14 @@ public class ImageLayerProcessor
                     // Resolve relative path from map directory
                     string fullImagePath = Path.Combine(mapDirectory, imagePath);
 
-                    // If using AssetManager, make path relative to Assets root
-                    // Otherwise (e.g., in tests with stub), use the path directly
-                    string pathForLoader;
-                    if (_assetManager is AssetManager assetManager)
+                    // Resolve the image path through content provider
+                    string? resolvedPath = _contentProvider.ResolveContentPath("Graphics", fullImagePath);
+                    if (resolvedPath == null)
                     {
-                        pathForLoader = Path.GetRelativePath(assetManager.AssetRoot, fullImagePath);
-                    }
-                    else
-                    {
-                        pathForLoader = imagePath;
+                        throw new FileNotFoundException($"Image layer texture not found: {fullImagePath}");
                     }
 
-                    _assetManager.LoadTexture(textureId, pathForLoader);
+                    _assetManager.LoadTexture(textureId, resolvedPath);
                 }
                 catch (Exception ex)
                 {

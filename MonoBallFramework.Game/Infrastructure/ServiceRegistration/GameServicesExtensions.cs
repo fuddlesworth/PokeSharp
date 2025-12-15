@@ -1,12 +1,12 @@
 using Arch.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using MonoBallFramework.Game.Engine.Content;
 using MonoBallFramework.Game.Engine.Core.Events;
 using MonoBallFramework.Game.Engine.Core.Services;
 using MonoBallFramework.Game.Engine.Rendering.Services;
 using MonoBallFramework.Game.Engine.Scenes.Factories;
 using MonoBallFramework.Game.Engine.Systems.Management;
-using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game.GameData.Factories;
 using MonoBallFramework.Game.GameData.PropertyMapping;
 using MonoBallFramework.Game.GameData.Services;
@@ -40,8 +40,8 @@ public static class GameServicesExtensions
         services.AddSingleton<IGraphicsServiceFactory>(sp =>
         {
             ILoggerFactory loggerFactory = sp.GetRequiredService<ILoggerFactory>();
+            IContentProvider contentProvider = sp.GetRequiredService<IContentProvider>();
             SystemManager systemManager = sp.GetRequiredService<SystemManager>();
-            EntityPoolManager poolManager = sp.GetRequiredService<EntityPoolManager>();
             World world = sp.GetRequiredService<World>();
 
             // PropertyMapperRegistry is created lazily when needed
@@ -56,8 +56,8 @@ public static class GameServicesExtensions
 
             return new GraphicsServiceFactory(
                 loggerFactory,
+                contentProvider,
                 systemManager,
-                poolManager,
                 world,
                 propertyMapperRegistry,
                 mapDefinitionService,
@@ -121,3 +121,4 @@ public static class GameServicesExtensions
         return services;
     }
 }
+

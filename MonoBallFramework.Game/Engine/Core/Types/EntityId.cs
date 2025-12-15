@@ -22,9 +22,10 @@ public abstract record EntityId
     /// <summary>
     ///     Regex pattern for validating entity IDs.
     ///     Format: namespace:type:category/name OR namespace:type:category/subcategory/name
+    ///     Allows forward slashes and hyphens in the name part for hierarchical naming.
     /// </summary>
     private static readonly Regex IdPattern = new(
-        @"^[a-z0-9_]+:[a-z_]+:[a-z0-9_]+/[a-z0-9_]+(/[a-z0-9_]+)?$",
+        @"^[a-z0-9_]+:[a-z_]+:[a-z0-9_]+/[a-z0-9_/-]+(/[a-z0-9_]+)?$",
         RegexOptions.Compiled);
 
     /// <summary>

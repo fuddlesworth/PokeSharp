@@ -5,6 +5,7 @@ using MonoBallFramework.Game.Ecs.Components;
 using MonoBallFramework.Game.Ecs.Components.Maps;
 using MonoBallFramework.Game.Ecs.Components.Rendering;
 using MonoBallFramework.Game.Ecs.Components.Tiles;
+using MonoBallFramework.Game.Engine.Content;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
 using MonoBallFramework.Game.Engine.Systems.BulkOperations;
 using MonoBallFramework.Game.Engine.Systems.Management;
@@ -23,6 +24,7 @@ public class MapEntityApplier
     private readonly ILogger<MapEntityApplier>? _logger;
     private readonly SystemManager? _systemManager;
     private readonly IAssetProvider? _assetProvider;
+    private readonly IContentProvider? _contentProvider;
     private readonly TilesetLoader? _tilesetLoader;
     private readonly Lazy<MapLifecycleManager>? _lifecycleManager;
 
@@ -30,6 +32,7 @@ public class MapEntityApplier
         SystemManager? systemManager = null,
         Func<MapLifecycleManager>? lifecycleManagerFactory = null,
         IAssetProvider? assetProvider = null,
+        IContentProvider? contentProvider = null,
         TilesetLoader? tilesetLoader = null,
         ILogger<MapEntityApplier>? logger = null)
     {
@@ -38,6 +41,7 @@ public class MapEntityApplier
             ? new Lazy<MapLifecycleManager>(lifecycleManagerFactory)
             : null;
         _assetProvider = assetProvider;
+        _contentProvider = contentProvider;
         _tilesetLoader = tilesetLoader;
         _logger = logger;
     }
@@ -348,15 +352,17 @@ public class MapEntityApplier
                     string mapDirectory = Path.GetDirectoryName(data.MapPath) ?? string.Empty;
                     string imagePath = Path.Combine(mapDirectory, tileset.Image.Source);
 
-                    // Normalize path for asset manager
-                    if (_assetProvider is AssetManager am)
+                    // Resolve path through content provider
+                    if (_contentProvider != null)
                     {
-                        // Make path relative to asset root
-                        string assetRoot = am.AssetRoot;
-                        if (imagePath.StartsWith(assetRoot, StringComparison.OrdinalIgnoreCase))
+                        string? resolvedPath = _contentProvider.ResolveContentPath("Graphics", Path.GetFileName(imagePath));
+                        if (resolvedPath == null)
                         {
-                            imagePath = imagePath.Substring(assetRoot.Length).TrimStart(Path.DirectorySeparatorChar, '/');
+                            _logger?.LogError("Failed to resolve tileset texture path: {TilesetId} from {Path}",
+                                tilesetId, imagePath);
+                            continue;
                         }
+                        imagePath = resolvedPath;
                     }
 
                     try

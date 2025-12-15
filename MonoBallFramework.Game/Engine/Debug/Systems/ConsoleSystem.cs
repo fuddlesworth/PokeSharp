@@ -311,8 +311,9 @@ public class ConsoleSystem : IUpdateSystem
                 ILogger<ConsoleScene> consoleLogger = _services.GetRequiredService<
                     ILogger<ConsoleScene>
                 >();
+                FontLoader fontLoader = _services.GetRequiredService<FontLoader>();
 
-                _consoleScene = new ConsoleScene(_graphicsDevice, consoleLogger);
+                _consoleScene = new ConsoleScene(_graphicsDevice, consoleLogger, fontLoader);
 
                 // Wire up event handlers
                 _consoleScene.OnCommandSubmitted += HandleConsoleCommand;
@@ -353,6 +354,20 @@ public class ConsoleSystem : IUpdateSystem
     {
         if (_isConsoleOpen)
         {
+            // Disable metrics collection when console closes to reduce overhead
+            try
+            {
+                EventMetrics? eventMetrics = _services.GetService<EventMetrics>();
+                if (eventMetrics != null)
+                {
+                    eventMetrics.IsEnabled = false;
+                }
+            }
+            catch
+            {
+                // Ignore - metrics may not be registered
+            }
+
             ToggleConsole();
         }
     }
@@ -421,9 +436,11 @@ public class ConsoleSystem : IUpdateSystem
         try
         {
             IEventBus eventBus = _services.GetRequiredService<IEventBus>();
+            EventMetrics eventMetrics = _services.GetRequiredService<EventMetrics>();
             if (eventBus is EventBus concreteEventBus)
             {
-                var eventMetrics = new EventMetrics { IsEnabled = true }; // Enabled for Phase 6 testing
+                // Enable timing collection now that inspector is active
+                eventMetrics.IsEnabled = true;
                 _eventInspectorAdapter = new EventInspectorAdapter(concreteEventBus, eventMetrics);
                 _consoleScene?.SetEventInspectorProvider(() =>
                     _eventInspectorAdapter.GetInspectorData()
@@ -1476,85 +1493,11 @@ public class ConsoleSystem : IUpdateSystem
                 stats.SlowestSystemTimeMs = slowestTime;
             }
 
-            // Pool stats (via reflection to avoid direct reference)
-            TryPopulatePoolStats(stats);
-
             // Event pool stats (via reflection to avoid direct reference)
             TryPopulateEventPoolStats(stats);
 
             return stats;
         };
-    }
-
-    /// <summary>
-    ///     Attempts to populate pool statistics via reflection.
-    /// </summary>
-    private void TryPopulatePoolStats(StatsData stats)
-    {
-        try
-        {
-            var poolManagerType = Type.GetType(
-                "MonoBallFramework.Engine.Systems.Pooling.EntityPoolManager, MonoBallFramework.Engine.Systems"
-            );
-
-            if (poolManagerType == null)
-            {
-                return;
-            }
-
-            // Try to get EntityPoolManager from services
-            MethodInfo? getServiceMethod = typeof(ServiceProviderServiceExtensions)
-                .GetMethods()
-                .FirstOrDefault(m =>
-                    m.Name == "GetService" && m.IsGenericMethod && m.GetParameters().Length == 1
-                );
-
-            if (getServiceMethod == null)
-            {
-                return;
-            }
-
-            MethodInfo genericMethod = getServiceMethod.MakeGenericMethod(poolManagerType);
-            object? poolManager = genericMethod.Invoke(null, new object[] { _services });
-
-            if (poolManager == null)
-            {
-                return;
-            }
-
-            // Call GetStatistics()
-            MethodInfo? getStatsMethod = poolManagerType.GetMethod("GetStatistics");
-            if (getStatsMethod == null)
-            {
-                return;
-            }
-
-            object? aggregateStats = getStatsMethod.Invoke(poolManager, null);
-            if (aggregateStats == null)
-            {
-                return;
-            }
-
-            // Get fields from AggregatePoolStatistics struct
-            Type statsType = aggregateStats.GetType();
-            stats.PoolCount = (int)(
-                statsType.GetField("TotalPools")?.GetValue(aggregateStats) ?? 0
-            );
-            stats.PooledActive = (int)(
-                statsType.GetField("TotalActive")?.GetValue(aggregateStats) ?? 0
-            );
-            stats.PooledAvailable = (int)(
-                statsType.GetField("TotalAvailable")?.GetValue(aggregateStats) ?? 0
-            );
-
-            // Calculate reuse rate
-            PropertyInfo? reuseRateProp = statsType.GetProperty("OverallReuseRate");
-            stats.PoolReuseRate = (float)(reuseRateProp?.GetValue(aggregateStats) ?? 0f);
-        }
-        catch
-        {
-            // Silently fail - pool stats are optional
-        }
     }
 
     /// <summary>

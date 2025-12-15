@@ -1,0 +1,30 @@
+{
+  "id": "base:pokesharp-core",
+  "name": "PokeSharp Core Content",
+  "author": "PokeSharp Team",
+  "version": "1.0.0",
+  "description": "Base game content for PokeSharp - Pokemon-style game framework",
+  "priority": 1000,
+  "contentFolders": {
+    "Root": "",
+    "Definitions": "Definitions",
+    "Graphics": "Graphics",
+    "Audio": "Audio",
+    "Scripts": "Scripts",
+    "Fonts": "Fonts",
+    "Tiled": "Tiled",
+    "Tilesets": "Tilesets",
+    "TileBehaviors": "Definitions/TileBehaviors",
+    "Behaviors": "Definitions/Behaviors",
+    "Sprites": "Definitions/Sprites",
+    "MapDefinitions": "Definitions/Maps/Regions",
+    "AudioDefinitions": "Definitions/Audio",
+    "PopupBackgrounds": "Definitions/Maps/Popups/Backgrounds",
+    "PopupOutlines": "Definitions/Maps/Popups/Outlines",
+    "PopupThemes": "Definitions/Maps/Popups/Themes",
+    "MapSections": "Definitions/Maps/Sections"
+  },
+  "scripts": [],
+  "patches": [],
+  "dependencies": []
+}

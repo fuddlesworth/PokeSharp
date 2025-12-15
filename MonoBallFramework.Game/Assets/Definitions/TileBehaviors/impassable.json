@@ -1,8 +1,7 @@
 {
-  "typeId": "impassable",
+  "id": "base:tile_behavior:terrain/impassable",
   "displayName": "Impassable",
   "description": "Blocks movement",
   "behaviorScript": "TileBehaviors/impassable.csx",
   "flags": "BlocksMovement"
 }
-

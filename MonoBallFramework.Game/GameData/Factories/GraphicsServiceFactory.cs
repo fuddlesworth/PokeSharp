@@ -1,9 +1,10 @@
+using System;
 using Arch.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework.Graphics;
+using MonoBallFramework.Game.Engine.Content;
 using MonoBallFramework.Game.Engine.Rendering.Assets;
 using MonoBallFramework.Game.Engine.Systems.Management;
-using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Core;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Deferred;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Processors;
@@ -47,13 +48,13 @@ public class MapLifecycleManagerHolder
 /// <summary>
 ///     Concrete implementation of IGraphicsServiceFactory using Dependency Injection.
 ///     Resolves loggers, PropertyMapperRegistry, SystemManager,
-///     EntityPoolManager, and MapEntityService from the service provider.
+///     MapEntityService, and IContentProvider from the service provider.
 /// </summary>
 public class GraphicsServiceFactory : IGraphicsServiceFactory
 {
     private readonly ILoggerFactory _loggerFactory;
+    private readonly IContentProvider _contentProvider;
     private readonly MapEntityService? _mapDefinitionService;
-    private readonly EntityPoolManager? _poolManager;
     private readonly PropertyMapperRegistry? _propertyMapperRegistry;
     private readonly SystemManager _systemManager;
     private readonly IGameStateApi? _gameStateApi;
@@ -67,16 +68,16 @@ public class GraphicsServiceFactory : IGraphicsServiceFactory
     ///     Initializes a new instance of the GraphicsServiceFactory.
     /// </summary>
     /// <param name="loggerFactory">Factory for creating loggers for graphics services.</param>
+    /// <param name="contentProvider">Content provider for mod-aware asset resolution.</param>
     /// <param name="systemManager">System manager for accessing SpatialHashSystem.</param>
-    /// <param name="poolManager">Entity pool manager for tile pooling.</param>
     /// <param name="world">The ECS world instance.</param>
     /// <param name="propertyMapperRegistry">Optional property mapper registry for map loading.</param>
     /// <param name="mapDefinitionService">Optional map definition service for definition-based map loading.</param>
     /// <param name="gameStateApi">Optional game state API for flag-based NPC visibility.</param>
     public GraphicsServiceFactory(
         ILoggerFactory loggerFactory,
+        IContentProvider contentProvider,
         SystemManager systemManager,
-        EntityPoolManager poolManager,
         World world,
         PropertyMapperRegistry? propertyMapperRegistry = null,
         MapEntityService? mapDefinitionService = null,
@@ -84,8 +85,8 @@ public class GraphicsServiceFactory : IGraphicsServiceFactory
     )
     {
         _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+        _contentProvider = contentProvider ?? throw new ArgumentNullException(nameof(contentProvider));
         _systemManager = systemManager ?? throw new ArgumentNullException(nameof(systemManager));
-        _poolManager = poolManager ?? throw new ArgumentNullException(nameof(poolManager));
         _world = world ?? throw new ArgumentNullException(nameof(world));
         _propertyMapperRegistry = propertyMapperRegistry;
         _mapDefinitionService = mapDefinitionService;
@@ -104,7 +105,7 @@ public class GraphicsServiceFactory : IGraphicsServiceFactory
         }
 
         ILogger<AssetManager> logger = _loggerFactory.CreateLogger<AssetManager>();
-        return new AssetManager(graphicsDevice, assetRoot, logger);
+        return new AssetManager(graphicsDevice, _contentProvider, logger);
     }
 
     /// <inheritdoc />
@@ -140,7 +141,8 @@ public class GraphicsServiceFactory : IGraphicsServiceFactory
             null, // MapLifecycleManager - set later via SetLifecycleManager
             null, // MapPreparer - set below via SetDeferredServices
             null, // MapEntityApplier - set below via SetDeferredServices
-            _loggerFactory.CreateLogger<MapLoader>()
+            _loggerFactory.CreateLogger<MapLoader>(),
+            _contentProvider // IContentProvider for MapPathResolver
         );
 
         // Step 2: Create deferred loading services (requires ITmxDocumentProvider and MapEntityService)
@@ -161,6 +163,7 @@ public class GraphicsServiceFactory : IGraphicsServiceFactory
                 _systemManager, // SystemManager for spatial hash integration
                 () => _lifecycleManagerHolder.GetManager(), // Factory delegate using holder
                 assetManager, // IAssetProvider for texture loading
+                _contentProvider, // IContentProvider for content path resolution
                 mapLoader.TilesetLoader, // TilesetLoader for texture path resolution
                 _loggerFactory.CreateLogger<MapEntityApplier>()
             );

@@ -1,0 +1,18 @@
+{
+  "id": "pokesharp.achievements",
+  "name": "Achievement System",
+  "author": "PokeSharp",
+  "version": "1.0.0",
+  "description": "Tracks player progress and unlocks achievements for exploration, NPC interactions, and milestones",
+  "priority": 50,
+  "scripts": [
+    "scripts/achievement_tracker.csx"
+  ],
+  "permissions": [
+    "events:subscribe",
+    "gamestate:read",
+    "gamestate:write",
+    "dialogue:show"
+  ],
+  "dependencies": []
+}

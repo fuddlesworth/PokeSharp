@@ -8,7 +8,6 @@ using MonoBallFramework.Game.Engine.Rendering.Assets;
 using MonoBallFramework.Game.Engine.Rendering.Services;
 using MonoBallFramework.Game.Engine.Scenes;
 using MonoBallFramework.Game.Engine.Systems.Management;
-using MonoBallFramework.Game.Engine.Systems.Pooling;
 using MonoBallFramework.Game.GameData.Loading;
 using MonoBallFramework.Game.GameData.MapLoading.Tiled.Core;
 using MonoBallFramework.Game.GameData.Services;
@@ -43,7 +42,6 @@ public class InitializationContext
         GameDataLoader dataLoader,
         World world,
         SystemManager systemManager,
-        EntityPoolManager poolManager,
         SpriteRegistry spriteRegistry,
         TypeRegistry<BehaviorDefinition> behaviorRegistry,
         TypeRegistry<TileBehaviorDefinition> tileBehaviorRegistry,
@@ -64,7 +62,6 @@ public class InitializationContext
         DataLoader = dataLoader ?? throw new ArgumentNullException(nameof(dataLoader));
         World = world ?? throw new ArgumentNullException(nameof(world));
         SystemManager = systemManager ?? throw new ArgumentNullException(nameof(systemManager));
-        PoolManager = poolManager ?? throw new ArgumentNullException(nameof(poolManager));
         SpriteRegistry = spriteRegistry ?? throw new ArgumentNullException(nameof(spriteRegistry));
         BehaviorRegistry =
             behaviorRegistry ?? throw new ArgumentNullException(nameof(behaviorRegistry));
@@ -153,7 +150,6 @@ public class InitializationContext
     public GameDataLoader DataLoader { get; }
     public World World { get; }
     public SystemManager SystemManager { get; }
-    public EntityPoolManager PoolManager { get; }
     public SpriteRegistry SpriteRegistry { get; }
     public TypeRegistry<BehaviorDefinition> BehaviorRegistry { get; }
     public TypeRegistry<TileBehaviorDefinition> TileBehaviorRegistry { get; }
