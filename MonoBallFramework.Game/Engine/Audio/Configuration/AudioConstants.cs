@@ -96,6 +96,22 @@ public static class AudioConstants
     public const float MaxPan = 1.0f;
 
     /// <summary>
+    /// Default audio buffer size in frames. Lower = less latency, higher = more stable.
+    /// 1024 frames at 44.1kHz = ~23ms latency.
+    /// </summary>
+    public const int DefaultBufferSizeFrames = 1024;
+
+    /// <summary>
+    /// Minimum buffer size (very low latency, may cause glitches).
+    /// </summary>
+    public const int MinBufferSizeFrames = 256;
+
+    /// <summary>
+    /// Maximum buffer size (high latency, very stable).
+    /// </summary>
+    public const int MaxBufferSizeFrames = 4096;
+
+    /// <summary>
     /// Clamps a volume value to the valid range [MinVolume, MaxVolume].
     /// </summary>
     /// <param name="value">The volume value to clamp.</param>

@@ -116,6 +116,8 @@ public class StreamingLoopProvider : ISampleProvider, IDisposable
             }
 
             int totalRead = 0;
+            int consecutiveZeroReads = 0;
+            const int MaxZeroReads = 3;
 
             while (totalRead < count)
             {
@@ -128,6 +130,7 @@ public class StreamingLoopProvider : ISampleProvider, IDisposable
                 {
                     // At or past loop end - seek to loop start
                     _source.SeekToSample(_loopStartSample);
+                    consecutiveZeroReads = 0; // Reset counter on successful seek
                     continue;
                 }
 
@@ -137,6 +140,15 @@ public class StreamingLoopProvider : ISampleProvider, IDisposable
 
                 if (read == 0)
                 {
+                    consecutiveZeroReads++;
+
+                    if (consecutiveZeroReads >= MaxZeroReads)
+                    {
+                        // Too many consecutive zero reads - fill remaining with silence to prevent infinite loop
+                        Array.Clear(buffer, offset + totalRead, count - totalRead);
+                        return count;
+                    }
+
                     // Unexpected EOF (shouldn't happen if loop end is set correctly)
                     // Seek to loop start and try again
                     _source.SeekToSample(_loopStartSample);
@@ -151,6 +163,10 @@ public class StreamingLoopProvider : ISampleProvider, IDisposable
                         return count;
                     }
                 }
+                else
+                {
+                    consecutiveZeroReads = 0; // Reset counter on successful read
+                }
 
                 totalRead += read;
 
@@ -159,6 +175,7 @@ public class StreamingLoopProvider : ISampleProvider, IDisposable
                 {
                     // Loop back to start
                     _source.SeekToSample(_loopStartSample);
+                    consecutiveZeroReads = 0; // Reset counter on successful seek
                 }
             }
 

@@ -98,5 +98,44 @@ public sealed class AudioFormat
 
     public override string ToString() =>
         $"{SampleRate}Hz, {Channels}ch, {BitsPerSample}bit{(IsFloat ? " float" : "")}";
+
+    /// <summary>
+    /// Determines whether the specified object is equal to the current AudioFormat.
+    /// </summary>
+    public override bool Equals(object? obj)
+    {
+        if (obj is not AudioFormat other)
+            return false;
+
+        return SampleRate == other.SampleRate &&
+               Channels == other.Channels &&
+               BitsPerSample == other.BitsPerSample &&
+               IsFloat == other.IsFloat;
+    }
+
+    /// <summary>
+    /// Returns a hash code for the AudioFormat.
+    /// </summary>
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(SampleRate, Channels, BitsPerSample, IsFloat);
+    }
+
+    /// <summary>
+    /// Determines whether two AudioFormat instances are equal.
+    /// </summary>
+    public static bool operator ==(AudioFormat? left, AudioFormat? right)
+    {
+        if (left is null) return right is null;
+        return left.Equals(right);
+    }
+
+    /// <summary>
+    /// Determines whether two AudioFormat instances are not equal.
+    /// </summary>
+    public static bool operator !=(AudioFormat? left, AudioFormat? right)
+    {
+        return !(left == right);
+    }
 }
 

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using MonoBallFramework.Game.Engine.Audio.Configuration;
+using MonoBallFramework.Game.Engine.Audio.Core;
 using MonoBallFramework.Game.Engine.Audio.Events;
 using MonoBallFramework.Game.Engine.Core.Events;
 using MonoBallFramework.Game.GameData.Entities;
@@ -21,6 +22,7 @@ public class AudioService : IAudioService
 
     private readonly List<IDisposable> _subscriptions;
     private readonly Dictionary<ILoopingSoundHandle, string> _loopingSounds;
+    private readonly DuckingController _musicDucker = new();
 
     private float _masterVolume = AudioConstants.DefaultMasterVolume;
     private float _soundEffectVolume = AudioConstants.DefaultSoundEffectVolume;
@@ -172,6 +174,20 @@ public class AudioService : IAudioService
         _soundEffectManager.Update();
         _musicPlayer.Update(deltaTime);
 
+        // Update ducking
+        _musicDucker.Update(deltaTime);
+
+        // Apply ducking to music volume
+        if (_musicDucker.IsDucking)
+        {
+            _musicPlayer.Volume = GetEffectiveMusicVolume() * _musicDucker.CurrentVolume;
+        }
+        else
+        {
+            // Restore normal music volume when not ducking
+            _musicPlayer.Volume = GetEffectiveMusicVolume();
+        }
+
         // Clean up stopped looping sounds
         CleanupLoopingSounds();
     }
@@ -218,6 +234,29 @@ public class AudioService : IAudioService
             _logger?.LogError(ex, "Error playing sound: {SoundName}", soundName);
             return false;
         }
+    }
+
+    /// <summary>
+    ///     Plays a Pokemon cry sound effect, ducking the background music.
+    /// </summary>
+    /// <param name="cryName">The name/ID of the cry to play.</param>
+    /// <param name="cryDuration">Approximate duration of the cry in seconds.</param>
+    /// <param name="volume">Volume override (0.0 to 1.0), or null to use default cry volume.</param>
+    /// <returns>True if the cry was played successfully.</returns>
+    public bool PlayCry(string cryName, float cryDuration = 1.0f, float? volume = null)
+    {
+        if (!_isInitialized || _disposed)
+            return false;
+
+        // Duck the music
+        _musicDucker.Duck(
+            AudioConstants.CryDuckVolume,
+            AudioConstants.CryDuckDuration,
+            cryDuration  // Hold for cry duration
+        );
+
+        // Play the cry at full volume (or specified volume)
+        return PlaySound(cryName, volume ?? AudioConstants.DefaultCryVolume);
     }
 
     /// <summary>
@@ -336,6 +375,10 @@ public class AudioService : IAudioService
                 {
                     _musicPlayer.FadeOutAndPlay(musicName, loop);
                 }
+                catch (OperationCanceledException)
+                {
+                    // Expected during shutdown
+                }
                 catch (Exception ex)
                 {
                     _logger?.LogError(ex, "Background music fade-out-and-play task failed for {MusicName}", musicName);
@@ -352,6 +395,10 @@ public class AudioService : IAudioService
                 try
                 {
                     _musicPlayer.Play(musicName, loop, fadeDuration);
+                }
+                catch (OperationCanceledException)
+                {
+                    // Expected during shutdown
                 }
                 catch (Exception ex)
                 {

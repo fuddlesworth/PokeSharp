@@ -9,15 +9,20 @@ namespace MonoBallFramework.Game.Engine.Audio.Core;
 public class PortAudioOutput : IDisposable
 {
     private static bool _portAudioInitialized;
+    private static int _portAudioRefCount;
     private static readonly object _initLock = new();
 
     private readonly ISampleProvider _source;
     private readonly AudioFormat _format;
+    private readonly int _bufferSizeFrames;
     private PortAudioSharp.Stream? _stream;
     private readonly object _streamLock = new();
     private volatile bool _isPlaying;
     private volatile bool _isPaused;
     private bool _disposed;
+    private float[]? _callbackBuffer;
+    private int _deviceErrorCount;
+    private const int MaxDeviceErrorsBeforeRecovery = 5;
 
     /// <summary>
     /// Event raised when playback stops (either normally or due to error).
@@ -25,13 +30,20 @@ public class PortAudioOutput : IDisposable
     public event EventHandler<PlaybackStoppedEventArgs>? PlaybackStopped;
 
     /// <summary>
+    /// Event raised when a device error is detected (device disconnected, buffer issues, etc.).
+    /// </summary>
+    public event EventHandler<DeviceErrorEventArgs>? DeviceError;
+
+    /// <summary>
     /// Creates a new PortAudio output.
     /// </summary>
     /// <param name="source">The sample provider to read audio from.</param>
-    public PortAudioOutput(ISampleProvider source)
+    /// <param name="bufferSizeFrames">Buffer size in frames (default: 1024). Lower = less latency, higher = more stable.</param>
+    public PortAudioOutput(ISampleProvider source, int bufferSizeFrames = 1024)
     {
         _source = source ?? throw new ArgumentNullException(nameof(source));
         _format = source.Format;
+        _bufferSizeFrames = bufferSizeFrames;
 
         EnsurePortAudioInitialized();
     }
@@ -47,6 +59,32 @@ public class PortAudioOutput : IDisposable
             if (_isPaused) return PlaybackState.Paused;
             if (_isPlaying) return PlaybackState.Playing;
             return PlaybackState.Stopped;
+        }
+    }
+
+    /// <summary>
+    /// Gets whether the current audio device is valid and functioning properly.
+    /// </summary>
+    public bool IsDeviceValid
+    {
+        get
+        {
+            lock (_streamLock)
+            {
+                if (_disposed || _stream == null)
+                    return false;
+
+                try
+                {
+                    // Check if stream is still active and device is still available
+                    var defaultDevice = PortAudio.DefaultOutputDevice;
+                    return defaultDevice != -1 && _deviceErrorCount < MaxDeviceErrorsBeforeRecovery;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
         }
     }
 
@@ -80,11 +118,15 @@ public class PortAudioOutput : IDisposable
                 suggestedLatency = PortAudio.GetDeviceInfo(PortAudio.DefaultOutputDevice).defaultLowOutputLatency
             };
 
+            // Pre-allocate callback buffer to avoid GC pressure
+            int maxSamples = _bufferSizeFrames * _format.Channels;
+            _callbackBuffer = new float[maxSamples];
+
             _stream = new PortAudioSharp.Stream(
                 inParams: null,
                 outParams: outputParams,
                 sampleRate: _format.SampleRate,
-                framesPerBuffer: 1024,
+                framesPerBuffer: (uint)_bufferSizeFrames,
                 streamFlags: StreamFlags.ClipOff,
                 callback: AudioCallback,
                 userData: IntPtr.Zero
@@ -154,8 +196,41 @@ public class PortAudioOutput : IDisposable
     {
         try
         {
+            // Check for device issues via status flags
+            if (statusFlags.HasFlag(StreamCallbackFlags.OutputUnderflow) ||
+                statusFlags.HasFlag(StreamCallbackFlags.OutputOverflow))
+            {
+                _deviceErrorCount++;
+
+                var errorType = statusFlags.HasFlag(StreamCallbackFlags.OutputUnderflow)
+                    ? DeviceErrorType.BufferUnderrun
+                    : DeviceErrorType.BufferOverrun;
+
+                DeviceError?.Invoke(this, new DeviceErrorEventArgs(errorType, _deviceErrorCount));
+
+                // Attempt recovery if error count exceeds threshold
+                if (_deviceErrorCount >= MaxDeviceErrorsBeforeRecovery)
+                {
+                    // Signal recovery needed - will be handled outside callback
+                    return StreamCallbackResult.Abort;
+                }
+            }
+            else
+            {
+                // Reset error count on successful callback
+                if (_deviceErrorCount > 0)
+                    _deviceErrorCount = Math.Max(0, _deviceErrorCount - 1);
+            }
+
             int samplesNeeded = (int)frameCount * _format.Channels;
-            var buffer = new float[samplesNeeded];
+
+            // Reuse pre-allocated buffer to avoid GC pressure
+            var buffer = _callbackBuffer;
+            if (buffer == null || buffer.Length < samplesNeeded)
+            {
+                // Fallback: allocate if buffer not initialized or too small
+                buffer = new float[samplesNeeded];
+            }
 
             int samplesRead = _source.Read(buffer, 0, samplesNeeded);
 
@@ -172,7 +247,55 @@ public class PortAudioOutput : IDisposable
         }
         catch (Exception)
         {
+            _deviceErrorCount++;
+            DeviceError?.Invoke(this, new DeviceErrorEventArgs(DeviceErrorType.Unknown, _deviceErrorCount));
             return StreamCallbackResult.Abort;
+        }
+    }
+
+    /// <summary>
+    /// Attempts to recover the audio stream by recreating it on the current default device.
+    /// </summary>
+    /// <returns>True if recovery was successful, false otherwise.</returns>
+    public bool TryRecoverStream()
+    {
+        lock (_streamLock)
+        {
+            if (_disposed)
+                return false;
+
+            try
+            {
+                bool wasPlaying = _isPlaying;
+
+                // Stop current stream
+                StopInternal(null);
+
+                // Reset error counter
+                _deviceErrorCount = 0;
+
+                // Verify a valid output device exists
+                var defaultDevice = PortAudio.DefaultOutputDevice;
+                if (defaultDevice == -1)
+                {
+                    DeviceError?.Invoke(this, new DeviceErrorEventArgs(DeviceErrorType.DeviceNotFound, 0));
+                    return false;
+                }
+
+                // Restart if we were playing
+                if (wasPlaying)
+                {
+                    Play();
+                    return true;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                DeviceError?.Invoke(this, new DeviceErrorEventArgs(DeviceErrorType.RecoveryFailed, _deviceErrorCount, ex));
+                return false;
+            }
         }
     }
 
@@ -184,23 +307,33 @@ public class PortAudioOutput : IDisposable
             {
                 PortAudio.Initialize();
                 _portAudioInitialized = true;
+                _portAudioRefCount = 0;
 
-                // Register for cleanup on process exit
-                AppDomain.CurrentDomain.ProcessExit += (s, e) =>
+                // Register for cleanup on process exit and domain unload
+                EventHandler cleanupHandler = (s, e) =>
                 {
-                    if (_portAudioInitialized)
+                    lock (_initLock)
                     {
-                        try
+                        if (_portAudioInitialized)
                         {
-                            PortAudio.Terminate();
-                        }
-                        catch
-                        {
-                            // Ignore errors during shutdown
+                            try
+                            {
+                                PortAudio.Terminate();
+                                _portAudioInitialized = false;
+                            }
+                            catch
+                            {
+                                // Ignore errors during shutdown
+                            }
                         }
                     }
                 };
+
+                AppDomain.CurrentDomain.ProcessExit += cleanupHandler;
+                AppDomain.CurrentDomain.DomainUnload += cleanupHandler;
             }
+
+            _portAudioRefCount++;
         }
     }
 
@@ -216,6 +349,12 @@ public class PortAudioOutput : IDisposable
 
             _disposed = true;
             StopInternal(null);
+            _callbackBuffer = null;
+        }
+
+        lock (_initLock)
+        {
+            _portAudioRefCount--;
         }
 
         GC.SuppressFinalize(this);
@@ -246,5 +385,64 @@ public class PlaybackStoppedEventArgs : EventArgs
     {
         Exception = exception;
     }
+}
+
+/// <summary>
+/// Event args for device error events.
+/// </summary>
+public class DeviceErrorEventArgs : EventArgs
+{
+    /// <summary>
+    /// Gets the type of device error that occurred.
+    /// </summary>
+    public DeviceErrorType ErrorType { get; }
+
+    /// <summary>
+    /// Gets the consecutive error count.
+    /// </summary>
+    public int ErrorCount { get; }
+
+    /// <summary>
+    /// Gets the exception associated with the error, if any.
+    /// </summary>
+    public Exception? Exception { get; }
+
+    public DeviceErrorEventArgs(DeviceErrorType errorType, int errorCount, Exception? exception = null)
+    {
+        ErrorType = errorType;
+        ErrorCount = errorCount;
+        Exception = exception;
+    }
+}
+
+/// <summary>
+/// Types of device errors that can occur during audio playback.
+/// </summary>
+public enum DeviceErrorType
+{
+    /// <summary>
+    /// Buffer underrun - audio data not provided fast enough.
+    /// </summary>
+    BufferUnderrun,
+
+    /// <summary>
+    /// Buffer overrun - audio data provided too fast.
+    /// </summary>
+    BufferOverrun,
+
+    /// <summary>
+    /// No audio output device found.
+    /// </summary>
+    DeviceNotFound,
+
+    /// <summary>
+    /// Stream recovery attempt failed.
+    /// </summary>
+    RecoveryFailed,
+
+    /// <summary>
+    /// Unknown or unspecified error.
+    /// </summary>
+    Unknown
 }
 

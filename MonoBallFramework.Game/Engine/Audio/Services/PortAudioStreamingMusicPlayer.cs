@@ -22,17 +22,21 @@ namespace MonoBallFramework.Game.Engine.Audio.Services;
 /// </summary>
 public class PortAudioStreamingMusicPlayer : IMusicPlayer
 {
+    private const int TargetSampleRate = 44100;
+
     private readonly AudioRegistry _audioRegistry;
     private readonly ILogger<PortAudioStreamingMusicPlayer>? _logger;
     private readonly StreamingMusicPlayerHelper _helper;
     private readonly object _lock = new();
 
-    // Main playback channel
-    private PortAudioOutput? _audioOutput;
-    private StreamingPlaybackState? _currentPlayback;
+    // Shared mixer and output for all playback (prevents dual-stream issues on Linux)
+    private AudioMixer? _mixer;
+    private PortAudioOutput? _sharedOutput;
+    private AudioMixer.MixerInput? _currentMixerInput;
+    private AudioMixer.MixerInput? _crossfadeMixerInput;
 
-    // Crossfade channel
-    private PortAudioOutput? _crossfadeOutput;
+    // Playback state tracking
+    private StreamingPlaybackState? _currentPlayback;
     private StreamingPlaybackState? _crossfadePlayback;
 
     // Pending track info (for sequential fade-out-then-play like pokeemerald)
@@ -103,7 +107,7 @@ public class PortAudioStreamingMusicPlayer : IMusicPlayer
         get
         {
             if (_disposed) return false;
-            var output = _audioOutput;
+            var output = _sharedOutput;
             return output?.PlaybackState == PlaybackState.Playing;
         }
     }
@@ -113,7 +117,7 @@ public class PortAudioStreamingMusicPlayer : IMusicPlayer
         get
         {
             if (_disposed) return false;
-            var output = _audioOutput;
+            var output = _sharedOutput;
             return output?.PlaybackState == PlaybackState.Paused;
         }
     }
@@ -185,11 +189,21 @@ public class PortAudioStreamingMusicPlayer : IMusicPlayer
                 // Stop current playback (and dispose streaming provider)
                 StopInternal(0f);
 
-                // Initialize audio output with the streaming provider
-                _audioOutput = new PortAudioOutput(playbackState.VolumeProvider!);
-                _audioOutput.PlaybackStopped += OnPlaybackStopped;
-                _audioOutput.Play();
+                // Resample if needed to match target sample rate
+                ISampleProvider outputProvider = playbackState.VolumeProvider!;
+                outputProvider = ResampleProvider.CreateIfNeeded(outputProvider, TargetSampleRate);
 
+                // Initialize mixer and shared output if needed
+                if (_mixer == null || _sharedOutput == null)
+                {
+                    _mixer = new AudioMixer(outputProvider.Format);
+                    _sharedOutput = new PortAudioOutput(_mixer);
+                    _sharedOutput.PlaybackStopped += OnPlaybackStopped;
+                    _sharedOutput.Play();
+                }
+
+                // Add the track to the mixer
+                _currentMixerInput = _mixer.AddSource(outputProvider, 1.0f);
                 _currentPlayback = playbackState;
 
                 _logger?.LogDebug("Started streaming track: {TrackName} (Loop: {Loop}, FadeIn: {FadeIn}s)",
@@ -214,12 +228,12 @@ public class PortAudioStreamingMusicPlayer : IMusicPlayer
     {
         lock (_lock)
         {
-            if (_disposed || _audioOutput?.PlaybackState != PlaybackState.Playing)
+            if (_disposed || _sharedOutput?.PlaybackState != PlaybackState.Playing)
                 return;
 
             try
             {
-                _audioOutput.Pause();
+                _sharedOutput.Pause();
                 _logger?.LogDebug("Paused streaming playback");
             }
             catch (Exception ex)
@@ -233,12 +247,12 @@ public class PortAudioStreamingMusicPlayer : IMusicPlayer
     {
         lock (_lock)
         {
-            if (_disposed || _audioOutput?.PlaybackState != PlaybackState.Paused)
+            if (_disposed || _sharedOutput?.PlaybackState != PlaybackState.Paused)
                 return;
 
             try
             {
-                _audioOutput.Play();
+                _sharedOutput.Play();
                 _logger?.LogDebug("Resumed streaming playback");
             }
             catch (Exception ex)
@@ -255,7 +269,7 @@ public class PortAudioStreamingMusicPlayer : IMusicPlayer
             if (_disposed || string.IsNullOrEmpty(newTrackName))
                 return;
 
-            if (_currentPlayback == null || _audioOutput?.PlaybackState != PlaybackState.Playing)
+            if (_currentPlayback == null || _sharedOutput?.PlaybackState != PlaybackState.Playing)
             {
                 Play(newTrackName, loop);
                 return;
@@ -316,7 +330,7 @@ public class PortAudioStreamingMusicPlayer : IMusicPlayer
                 ? newDefinition.FadeIn
                 : AudioConstants.DefaultFallbackFadeDuration;
 
-            if (_currentPlayback == null || _audioOutput?.PlaybackState != PlaybackState.Playing)
+            if (_currentPlayback == null || _sharedOutput?.PlaybackState != PlaybackState.Playing)
             {
                 Play(newTrackName, loop, fadeInDuration);
                 return;
@@ -370,7 +384,7 @@ public class PortAudioStreamingMusicPlayer : IMusicPlayer
         bool needsCrossfade;
         lock (_lock)
         {
-            needsCrossfade = _currentPlayback != null && _audioOutput?.PlaybackState == PlaybackState.Playing;
+            needsCrossfade = _currentPlayback != null && _sharedOutput?.PlaybackState == PlaybackState.Playing;
         }
 
         if (!needsCrossfade)
@@ -423,11 +437,24 @@ public class PortAudioStreamingMusicPlayer : IMusicPlayer
                     return;
                 }
 
-                if (_currentPlayback == null || _audioOutput?.PlaybackState != PlaybackState.Playing)
+                if (_currentPlayback == null || _sharedOutput?.PlaybackState != PlaybackState.Playing)
                 {
                     Play(newTrackName, loop, crossfadeDuration);
                     newPlaybackState.Dispose();
                     return;
+                }
+
+                // Resample if needed to match target sample rate
+                ISampleProvider crossfadeOutputProvider = newPlaybackState.VolumeProvider!;
+                crossfadeOutputProvider = ResampleProvider.CreateIfNeeded(crossfadeOutputProvider, TargetSampleRate);
+
+                // Initialize mixer and shared output if needed
+                if (_mixer == null || _sharedOutput == null)
+                {
+                    _mixer = new AudioMixer(crossfadeOutputProvider.Format);
+                    _sharedOutput = new PortAudioOutput(_mixer);
+                    _sharedOutput.PlaybackStopped += OnPlaybackStopped;
+                    _sharedOutput.Play();
                 }
 
                 float fadeOutDuration = _currentPlayback.DefinitionFadeOut > 0f
@@ -439,10 +466,8 @@ public class PortAudioStreamingMusicPlayer : IMusicPlayer
                 _currentPlayback.FadeTimer = 0f;
                 _currentPlayback.CrossfadeStartVolume = _currentPlayback.CurrentVolume;
 
-                // Initialize crossfade output
-                _crossfadeOutput = new PortAudioOutput(newPlaybackState.VolumeProvider!);
-                _crossfadeOutput.Play();
-
+                // Add crossfade track to the same mixer (this is the key fix!)
+                _crossfadeMixerInput = _mixer.AddSource(crossfadeOutputProvider, 1.0f);
                 _crossfadePlayback = newPlaybackState;
 
                 _logger?.LogDebug("Started crossfade from {OldTrack} to {NewTrack} (fadeOut: {FadeOut}s, fadeIn: {FadeIn}s)",
@@ -548,9 +573,11 @@ public class PortAudioStreamingMusicPlayer : IMusicPlayer
             // Cancel all background tasks
             _backgroundTaskCts?.Cancel();
 
-            // Stop and dispose playback
-            StopAudioOutput(ref _audioOutput);
-            StopAudioOutput(ref _crossfadeOutput);
+            // Remove all sources from mixer
+            RemoveAllMixerSources();
+
+            // Stop and dispose shared output
+            StopSharedOutput();
 
             // Dispose streaming providers
             _currentPlayback?.Dispose();
@@ -558,6 +585,10 @@ public class PortAudioStreamingMusicPlayer : IMusicPlayer
 
             _currentPlayback = null;
             _crossfadePlayback = null;
+
+            // Dispose mixer
+            _mixer?.Dispose();
+            _mixer = null;
 
             // Clear metadata cache
             _helper.ClearCache();
@@ -574,10 +605,10 @@ public class PortAudioStreamingMusicPlayer : IMusicPlayer
 
     private void StopInternal(float fadeOutDuration)
     {
-        if (_currentPlayback == null || _audioOutput == null)
+        if (_currentPlayback == null)
             return;
 
-        if (fadeOutDuration > 0f && _audioOutput.PlaybackState == PlaybackState.Playing)
+        if (fadeOutDuration > 0f && _sharedOutput?.PlaybackState == PlaybackState.Playing)
         {
             _currentPlayback.FadeState = FadeState.FadingOut;
             _currentPlayback.FadeDuration = fadeOutDuration;
@@ -585,7 +616,7 @@ public class PortAudioStreamingMusicPlayer : IMusicPlayer
         }
         else
         {
-            StopAudioOutput(ref _audioOutput);
+            RemoveMixerInput(ref _currentMixerInput);
             _currentPlayback.Dispose();
             _currentPlayback = null;
         }
@@ -601,7 +632,7 @@ public class PortAudioStreamingMusicPlayer : IMusicPlayer
             case FadeManager.FadeUpdateResult.FadeOutComplete:
                 if (playback == _currentPlayback)
                 {
-                    StopAudioOutput(ref _audioOutput);
+                    RemoveMixerInput(ref _currentMixerInput);
                     _currentPlayback?.Dispose();
                     _currentPlayback = null;
                 }
@@ -612,7 +643,7 @@ public class PortAudioStreamingMusicPlayer : IMusicPlayer
                 {
                     _logger?.LogInformation("Sequential fade complete: stopping {OldTrack}, starting {NewTrack}",
                         playback.TrackName, _pendingTrackName);
-                    StopAudioOutput(ref _audioOutput);
+                    RemoveMixerInput(ref _currentMixerInput);
                     _currentPlayback?.Dispose();
                     _currentPlayback = null;
 
@@ -625,7 +656,7 @@ public class PortAudioStreamingMusicPlayer : IMusicPlayer
                 {
                     _logger?.LogDebug("Fade out complete, now fading in: {TrackName} ({FadeIn}s)",
                         _pendingTrackName, _pendingFadeInDuration);
-                    StopAudioOutput(ref _audioOutput);
+                    RemoveMixerInput(ref _currentMixerInput);
                     _currentPlayback?.Dispose();
                     _currentPlayback = null;
 
@@ -670,40 +701,77 @@ public class PortAudioStreamingMusicPlayer : IMusicPlayer
 
     private void CompleteCrossfade()
     {
-        if (_crossfadePlayback == null || _crossfadeOutput == null)
+        if (_crossfadePlayback == null || _crossfadeMixerInput == null)
             return;
 
-        StopAudioOutput(ref _audioOutput);
+        // Remove old track from mixer
+        RemoveMixerInput(ref _currentMixerInput);
         _currentPlayback?.Dispose();
-        _currentPlayback = null;
 
-        _audioOutput = _crossfadeOutput;
+        // Promote crossfade track to current
         _currentPlayback = _crossfadePlayback;
+        _currentMixerInput = _crossfadeMixerInput;
 
-        _crossfadeOutput = null;
         _crossfadePlayback = null;
+        _crossfadeMixerInput = null;
 
         _logger?.LogDebug("Crossfade completed to track: {TrackName}", _currentPlayback.TrackName);
     }
 
-    private void StopAudioOutput(ref PortAudioOutput? output)
+    private void RemoveMixerInput(ref AudioMixer.MixerInput? mixerInput)
     {
-        if (output == null)
+        if (mixerInput == null || _mixer == null)
             return;
 
         try
         {
-            output.PlaybackStopped -= OnPlaybackStopped;
-            output.Stop();
-            output.Dispose();
+            _mixer.RemoveSource(mixerInput);
         }
         catch (Exception ex)
         {
-            _logger?.LogError(ex, "Error stopping audio output");
+            _logger?.LogError(ex, "Error removing mixer input");
         }
         finally
         {
-            output = null;
+            mixerInput = null;
+        }
+    }
+
+    private void RemoveAllMixerSources()
+    {
+        if (_mixer == null)
+            return;
+
+        try
+        {
+            _mixer.ClearSources();
+            _currentMixerInput = null;
+            _crossfadeMixerInput = null;
+        }
+        catch (Exception ex)
+        {
+            _logger?.LogError(ex, "Error clearing mixer sources");
+        }
+    }
+
+    private void StopSharedOutput()
+    {
+        if (_sharedOutput == null)
+            return;
+
+        try
+        {
+            _sharedOutput.PlaybackStopped -= OnPlaybackStopped;
+            _sharedOutput.Stop();
+            _sharedOutput.Dispose();
+        }
+        catch (Exception ex)
+        {
+            _logger?.LogError(ex, "Error stopping shared audio output");
+        }
+        finally
+        {
+            _sharedOutput = null;
         }
     }
 

@@ -73,6 +73,13 @@ public class AudioConfiguration
     public float DefaultFadeDurationSeconds { get; set; } = AudioConstants.DefaultCrossfadeDuration;
 
     /// <summary>
+    ///     Audio buffer size in frames. Lower values reduce latency but may cause audio glitches.
+    ///     Higher values increase latency but provide more stable playback.
+    ///     Default: 1024 frames (~23ms latency at 44.1kHz).
+    /// </summary>
+    public int BufferSizeFrames { get; set; } = AudioConstants.DefaultBufferSizeFrames;
+
+    /// <summary>
     ///     Default configuration with balanced audio settings.
     ///     Equivalent to Production configuration.
     /// </summary>

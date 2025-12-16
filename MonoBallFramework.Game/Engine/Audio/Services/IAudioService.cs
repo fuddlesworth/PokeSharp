@@ -63,6 +63,16 @@ public interface IAudioService : IDisposable
     bool PlaySound(string soundName, float? volume = null, float? pitch = null, float? pan = null);
 
     /// <summary>
+    ///     Plays a Pokemon cry sound effect with automatic music ducking.
+    ///     Music volume is temporarily reduced during cry playback and restored afterward.
+    /// </summary>
+    /// <param name="cryName">The cry identifier from the audio registry.</param>
+    /// <param name="cryDuration">Approximate duration of the cry in seconds (default: 1.0s).</param>
+    /// <param name="volume">Volume override (0.0 to 1.0), or null to use default cry volume.</param>
+    /// <returns>True if the cry was played successfully; false if playback failed.</returns>
+    bool PlayCry(string cryName, float cryDuration = 1.0f, float? volume = null);
+
+    /// <summary>
     ///     Plays a looping sound effect by name and returns a control handle.
     /// </summary>
     /// <param name="soundName">The track identifier from the audio registry.</param>

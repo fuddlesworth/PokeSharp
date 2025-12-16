@@ -18,6 +18,9 @@ public class PortAudioSoundEffectManager : ISoundEffectManager
     private readonly int _maxConcurrentSounds;
     private readonly ConcurrentDictionary<Guid, SoundInstance> _activeSounds;
     private readonly object _lock = new();
+    private readonly AudioFormat _mixerFormat;
+    private AudioMixer? _mixer;
+    private PortAudioOutput? _outputDevice;
     private float _masterVolume = AudioConstants.DefaultMasterVolume;
     private bool _disposed;
 
@@ -40,6 +43,9 @@ public class PortAudioSoundEffectManager : ISoundEffectManager
 
         _maxConcurrentSounds = maxConcurrentSounds;
         _activeSounds = new ConcurrentDictionary<Guid, SoundInstance>();
+
+        // Initialize mixer format (44100Hz stereo - standard for audio playback)
+        _mixerFormat = new AudioFormat(44100, 2);
     }
 
     public float MasterVolume
@@ -51,6 +57,40 @@ public class PortAudioSoundEffectManager : ISoundEffectManager
     public int MaxConcurrentSounds => _maxConcurrentSounds;
 
     public int ActiveSoundCount => _activeSounds.Count;
+
+    /// <summary>
+    ///     Ensures the shared mixer and output device are initialized.
+    ///     Called lazily on first sound playback.
+    /// </summary>
+    private void EnsureMixerInitialized()
+    {
+        if (_mixer != null && _outputDevice != null)
+            return;
+
+        lock (_lock)
+        {
+            // Double-check after acquiring lock
+            if (_mixer != null && _outputDevice != null)
+                return;
+
+            try
+            {
+                _mixer = new AudioMixer(_mixerFormat);
+                _outputDevice = new PortAudioOutput(_mixer);
+                _outputDevice.Play();
+                _logger?.LogInformation("Initialized shared audio mixer with format: {Format}", _mixerFormat);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Failed to initialize audio mixer");
+                _mixer?.Dispose();
+                _outputDevice?.Dispose();
+                _mixer = null;
+                _outputDevice = null;
+                throw;
+            }
+        }
+    }
 
     public bool Play(string trackId, float volume = 1.0f, float pitch = 0.0f, float pan = 0.0f, SoundPriority priority = SoundPriority.Normal)
     {
@@ -94,6 +134,9 @@ public class PortAudioSoundEffectManager : ISoundEffectManager
 
         try
         {
+            // Ensure mixer is initialized before creating sound instances
+            EnsureMixerInitialized();
+
             var soundInstance = new SoundInstance(
                 filePath,
                 false,
@@ -102,7 +145,9 @@ public class PortAudioSoundEffectManager : ISoundEffectManager
                 pan,
                 priority,
                 _logger,
-                this);
+                this,
+                _mixer!,
+                _mixerFormat);
 
             _activeSounds.TryAdd(soundInstance.Id, soundInstance);
             return true;
@@ -152,6 +197,9 @@ public class PortAudioSoundEffectManager : ISoundEffectManager
 
         try
         {
+            // Ensure mixer is initialized before creating sound instances
+            EnsureMixerInitialized();
+
             var soundInstance = new SoundInstance(
                 filePath,
                 true,
@@ -160,7 +208,9 @@ public class PortAudioSoundEffectManager : ISoundEffectManager
                 pan,
                 priority,
                 _logger,
-                this);
+                this,
+                _mixer!,
+                _mixerFormat);
 
             _activeSounds.TryAdd(soundInstance.Id, soundInstance);
             return new LoopingSoundHandle(soundInstance, this);
@@ -251,6 +301,21 @@ public class PortAudioSoundEffectManager : ISoundEffectManager
                 sound.Dispose();
             }
             _activeSounds.Clear();
+
+            // Dispose shared output device and mixer
+            try
+            {
+                _outputDevice?.Stop();
+                _outputDevice?.Dispose();
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogWarning(ex, "Error disposing output device");
+            }
+
+            _mixer?.Dispose();
+            _mixer = null;
+            _outputDevice = null;
         }
 
         _disposed = true;
@@ -319,16 +384,17 @@ public class PortAudioSoundEffectManager : ISoundEffectManager
     }
 
     /// <summary>
-    ///     Represents a single playing sound instance using PortAudio.
+    ///     Represents a single playing sound instance using the shared mixer.
     /// </summary>
     private class SoundInstance : IDisposable
     {
-        private readonly PortAudioOutput _outputDevice;
         private readonly VorbisReader _reader;
         private readonly VolumeSampleProvider _volumeProvider;
         private readonly PanningSampleProvider? _panningProvider;
         private readonly ILogger? _logger;
         private readonly PortAudioSoundEffectManager _manager;
+        private readonly AudioMixer _mixer;
+        private AudioMixer.MixerInput? _mixerInput;
         private bool _disposed;
 
         public Guid Id { get; } = Guid.NewGuid();
@@ -340,17 +406,12 @@ public class PortAudioSoundEffectManager : ISoundEffectManager
         {
             get
             {
-                if (_disposed)
+                if (_disposed || _mixerInput == null)
                     return false;
 
-                try
-                {
-                    return _outputDevice.PlaybackState == PlaybackState.Playing;
-                }
-                catch
-                {
-                    return false;
-                }
+                // Sound is playing if it's still in the mixer
+                // The mixer automatically removes sources that have finished
+                return true;
             }
         }
 
@@ -378,10 +439,13 @@ public class PortAudioSoundEffectManager : ISoundEffectManager
             float pan,
             SoundPriority priority,
             ILogger? logger,
-            PortAudioSoundEffectManager manager)
+            PortAudioSoundEffectManager manager,
+            AudioMixer mixer,
+            AudioFormat mixerFormat)
         {
             _logger = logger;
             _manager = manager;
+            _mixer = mixer;
             IsLooping = isLooping;
             Priority = priority;
 
@@ -390,7 +454,8 @@ public class PortAudioSoundEffectManager : ISoundEffectManager
                 // Create the audio reader for OGG files
                 _reader = new VorbisReader(filePath);
 
-                // Build sample provider chain
+                // Build sample provider chain with proper order:
+                // 1. Start with base provider (looping or direct reader)
                 ISampleProvider sampleProvider;
 
                 if (isLooping)
@@ -403,22 +468,24 @@ public class PortAudioSoundEffectManager : ISoundEffectManager
                     sampleProvider = _reader;
                 }
 
-                // Apply pitch if needed (requires resampling - not implemented)
-                if (Math.Abs(pitch) > 0.001f)
-                {
-                    // Note: Pitch shifting is complex and requires additional libraries
-                    _logger?.LogWarning("Pitch adjustment not fully implemented in PortAudio version");
-                }
+                // 2. Apply pitch shifting if needed (before resampling)
+                sampleProvider = PitchShiftProvider.CreateIfNeeded(sampleProvider, pitch);
 
-                // Apply volume control
+                // 3. Resample to mixer format if sample rates differ
+                sampleProvider = ResampleProvider.CreateIfNeeded(sampleProvider, mixerFormat.SampleRate);
+
+                // 4. Convert mono to stereo if needed (before panning)
+                sampleProvider = MonoToStereoProvider.CreateIfNeeded(sampleProvider);
+
+                // 5. Apply volume control
                 _volumeProvider = new VolumeSampleProvider(sampleProvider)
                 {
                     Volume = Math.Clamp(volume, AudioConstants.MinVolume, AudioConstants.MaxVolume)
                 };
 
-                // Apply panning if stereo
+                // 6. Apply panning (now safe - audio is guaranteed stereo)
                 ISampleProvider finalProvider;
-                if (_reader.Format.Channels == 2)
+                if (sampleProvider.Format.Channels == 2)
                 {
                     _panningProvider = new PanningSampleProvider(_volumeProvider)
                     {
@@ -431,24 +498,14 @@ public class PortAudioSoundEffectManager : ISoundEffectManager
                     finalProvider = _volumeProvider;
                 }
 
-                // Create output device and start playback
-                _outputDevice = new PortAudioOutput(finalProvider);
-                _outputDevice.PlaybackStopped += OnPlaybackStopped;
-                _outputDevice.Play();
+                // Add to mixer and start playback
+                _mixerInput = _mixer.AddSource(finalProvider, 1.0f);
             }
             catch (Exception ex)
             {
                 _reader?.Dispose();
                 _logger?.LogError(ex, "Failed to initialize sound instance for: {FilePath}", filePath);
                 throw;
-            }
-        }
-
-        private void OnPlaybackStopped(object? sender, PlaybackStoppedEventArgs e)
-        {
-            if (e.Exception != null)
-            {
-                _logger?.LogWarning(e.Exception, "Sound playback stopped with error");
             }
         }
 
@@ -459,7 +516,12 @@ public class PortAudioSoundEffectManager : ISoundEffectManager
 
             try
             {
-                _outputDevice.Stop();
+                // Remove from mixer
+                if (_mixerInput != null)
+                {
+                    _mixer.RemoveSource(_mixerInput);
+                    _mixerInput = null;
+                }
             }
             catch (Exception ex)
             {
@@ -474,7 +536,11 @@ public class PortAudioSoundEffectManager : ISoundEffectManager
 
             try
             {
-                _outputDevice.Pause();
+                // Pause by setting volume to 0 (mixer doesn't support pause)
+                if (_mixerInput != null)
+                {
+                    _mixerInput.Volume = 0f;
+                }
             }
             catch (Exception ex)
             {
@@ -489,7 +555,11 @@ public class PortAudioSoundEffectManager : ISoundEffectManager
 
             try
             {
-                _outputDevice.Play();
+                // Resume by restoring volume (mixer doesn't support pause)
+                if (_mixerInput != null)
+                {
+                    _mixerInput.Volume = 1.0f;
+                }
             }
             catch (Exception ex)
             {
@@ -504,9 +574,13 @@ public class PortAudioSoundEffectManager : ISoundEffectManager
 
             try
             {
-                _outputDevice.PlaybackStopped -= OnPlaybackStopped;
-                _outputDevice.Stop();
-                _outputDevice.Dispose();
+                // Remove from mixer
+                if (_mixerInput != null)
+                {
+                    _mixer.RemoveSource(_mixerInput);
+                    _mixerInput = null;
+                }
+
                 _reader.Dispose();
             }
             catch (Exception ex)
@@ -524,6 +598,7 @@ public class PortAudioSoundEffectManager : ISoundEffectManager
     private class LoopingSampleProvider : ISampleProvider
     {
         private readonly VorbisReader _source;
+        private const int MaxResetRetries = 3;
 
         public LoopingSampleProvider(VorbisReader source)
         {
@@ -542,8 +617,30 @@ public class PortAudioSoundEffectManager : ISoundEffectManager
 
                 if (read == 0)
                 {
-                    // End of stream, reset to beginning
-                    _source.Reset();
+                    // End of stream, attempt to reset
+                    int retryCount = 0;
+                    bool resetSuccessful = false;
+
+                    while (retryCount < MaxResetRetries && !resetSuccessful)
+                    {
+                        _source.Reset();
+                        retryCount++;
+
+                        // Verify reset worked by attempting a small read
+                        int testRead = _source.Read(buffer, offset + totalRead, Math.Min(count - totalRead, 1));
+                        if (testRead > 0)
+                        {
+                            totalRead += testRead;
+                            resetSuccessful = true;
+                        }
+                    }
+
+                    if (!resetSuccessful)
+                    {
+                        // Reset failed after retries - fill remaining with silence to prevent infinite loop
+                        Array.Clear(buffer, offset + totalRead, count - totalRead);
+                        return totalRead;
+                    }
                 }
                 else
                 {
